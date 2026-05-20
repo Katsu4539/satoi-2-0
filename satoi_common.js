@@ -205,10 +205,25 @@
 
   /* ====== さがす ・ 全画面共通フローティングメニュー ====== */
   const SATOI_FIND_GROUPS = [
+    { title:'今の状況・全体像', items:[
+      { label:'ダッシュボード(同じ境遇の人数・全体像)', url:'SATOI_Mock_v1_DASHBOARD.html' },
+      { label:'患者ジャーニーマップ',                   url:'SATOI_Mock_v1_B1_hub.html' }
+    ]},
+    { title:'段階で見る(診断〜緩和)', items:[
+      { label:'診断・告知のとき',     url:'SATOI_Mock_v1_CHP_diagnosis.html' },
+      { label:'検査のこと',           url:'SATOI_Mock_v1_CHP_exam.html' },
+      { label:'治療を考える',         url:'SATOI_Mock_v1_CHP_consider.html' },
+      { label:'治療のこと',           url:'SATOI_Mock_v1_CHP_treatment.html' },
+      { label:'治療中の暮らし',       url:'SATOI_Mock_v1_CHP_living.html' },
+      { label:'治療後・フォロー',     url:'SATOI_Mock_v1_CHP_follow.html' },
+      { label:'お金のこと(段階別)', url:'SATOI_Mock_v1_CHP_money.html' },
+      { label:'緩和ケア',             url:'SATOI_Mock_v1_CHP_palliative.html' }
+    ]},
     { title:'治療を知る', items:[
       { label:'治療の全体像(マインドマップ)', url:'SATOI_Mock_v1_B1_mindmap.html' },
       { label:'治療法の詳しい説明',           url:'SATOI_Mock_v1_B3_treatment_detail.html' },
-      { label:'がん情報ハブ',                 url:'SATOI_Mock_v1_B1_hub.html' }
+      { label:'がん情報ハブ',                 url:'SATOI_Mock_v1_B1_hub.html' },
+      { label:'研究・治験の情報',             url:'SATOI_Mock_v1_ACAD_research.html' }
     ]},
     { title:'からだ・副作用', items:[
       { label:'副作用の記録・対処', url:'SATOI_Mock_v1_F4_side_effects.html' }
@@ -220,12 +235,30 @@
       { label:'家族との共有・伝え方', url:'SATOI_Mock_v1_FAM_view.html' }
     ]},
     { title:'仲間・物語', items:[
-      { label:'同じ境遇の方の物語', url:'SATOI_Mock_v1_D1_stories.html' },
-      { label:'音楽コミュニティ',   url:'SATOI_Mock_v1_MUS_community.html' }
+      { label:'同じ境遇の方の物語',   url:'SATOI_Mock_v1_D1_stories.html' },
+      { label:'物語を残す・投稿する', url:'SATOI_Mock_v1_D2_story_map.html' },
+      { label:'音楽コミュニティ',     url:'SATOI_Mock_v1_MUS_community.html' }
     ]},
     { title:'相談する', items:[
+      { label:'AIにゆっくり相談',            url:'SATOI_Mock_v1_A2_dialog.html' },
       { label:'コンシェルジュ(AI+電話)',   url:'SATOI_Mock_v1_CON_concierge.html' },
-      { label:'先生に聞きたいことカード',    url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' }
+      { label:'先生に聞きたいこと(SDMカード)', url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' }
+    ]},
+    { title:'あなたの記録', items:[
+      { label:'マイページ',       url:'SATOI_Mock_v1_C1_mypage.html' },
+      { label:'今日の振り返り',   url:'SATOI_Mock_v1_C1_review.html' }
+    ]},
+    { title:'大切な設定・備え', items:[
+      { label:'動的同意(同意・プライバシー設定)', url:'SATOI_Mock_v1_CONSENT.html' },
+      { label:'緊急時の医療情報・QR',             url:'SATOI_Mock_v1_EMG_qr.html' }
+    ]},
+    { title:'SATOIについて', items:[
+      { label:'Satoiにできること', url:'SATOI_Mock_v1_PHI_can_do.html' },
+      { label:'SATOIについて',     url:'SATOI_Mock_v1_I_about.html' },
+      { label:'SATOIの約束',       url:'SATOI_Mock_v1_PRO_promises.html' },
+      { label:'姿勢:道標',        url:'SATOI_Mock_v1_POSTURE_michishirube.html' },
+      { label:'姿勢:つながる',    url:'SATOI_Mock_v1_POSTURE_tsunagaru.html' },
+      { label:'姿勢:寄り添う',    url:'SATOI_Mock_v1_POSTURE_yorisou.html' }
     ]},
     { title:'がん種別で見る', items:[
       { label:'乳がん',     url:'SATOI_Mock_v1_CAN_breast.html' },
@@ -234,6 +267,10 @@
       { label:'胃がん',     url:'SATOI_Mock_v1_CAN_stomach.html' },
       { label:'前立腺がん', url:'SATOI_Mock_v1_CAN_prostate.html' },
       { label:'膵がん',     url:'SATOI_Mock_v1_CAN_pancreas.html' }
+    ]},
+    { title:'会員・法人向け', items:[
+      { label:'保険会員のページ',   url:'SATOI_Mock_v1_G3_insurance_mypage.html' },
+      { label:'法人・企業向け',     url:'SATOI_Mock_v1_G2_corporate_dashboard.html' }
     ]}
   ];
 
@@ -298,11 +335,11 @@
       .satoi-find-overlay.show .satoi-find-panel { transform: translateY(0); }
       .satoi-find-close { position: absolute; top: 14px; right: 16px; width: 34px; height: 34px; border-radius: 50%; background: rgba(248,246,240,0.12); border: 1px solid rgba(248,246,240,0.25); color: #F8F6F0; font-size: 18px; line-height: 1; cursor: pointer; }
       .satoi-find-close:hover { background: #D4A95E; color: #0B1736; border-color: #D4A95E; }
-      .satoi-find-title { font-size: 15px; letter-spacing: 0.1em; color: #F0C97A; margin-bottom: 20px; font-weight: 600; }
-      .satoi-find-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 22px 28px; }
-      .satoi-find-gtitle { font-size: 12px; letter-spacing: 0.14em; color: #7FA8C9; border-bottom: 1px solid rgba(127,168,201,0.3); padding-bottom: 7px; margin-bottom: 10px; }
-      .satoi-find-link { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; border-radius: 10px; color: #F8F6F0; text-decoration: none; font-size: 13.5px; transition: all 0.18s; }
-      .satoi-find-link span { color: #D4A95E; font-weight: 700; }
+      .satoi-find-title { font-size: 18px; letter-spacing: 0.08em; color: #F0C97A; margin-bottom: 22px; font-weight: 700; }
+      .satoi-find-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px 30px; }
+      .satoi-find-gtitle { font-size: 14px; letter-spacing: 0.12em; color: #7FA8C9; border-bottom: 1px solid rgba(127,168,201,0.3); padding-bottom: 8px; margin-bottom: 11px; font-weight: 600; }
+      .satoi-find-link { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px; border-radius: 11px; color: #F8F6F0; text-decoration: none; font-size: 16px; transition: all 0.18s; }
+      .satoi-find-link span { color: #D4A95E; font-weight: 700; font-size: 17px; }
       .satoi-find-link:hover { background: rgba(212,169,94,0.16); color: #F0C97A; }
       @media (max-width: 768px) { .satoi-find-overlay { padding: 18px 12px; } .satoi-find-panel { padding: 22px 18px 26px; } .satoi-find-groups { grid-template-columns: 1fr; gap: 16px; } }
       .satoi-md-p code, .satoi-md-table code, .satoi-md-ul code, .satoi-md-ol code { background: rgba(127,127,127,0.18); border-radius: 5px; padding: 1px 5px; font-size: 0.92em; }

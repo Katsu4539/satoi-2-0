@@ -2651,8 +2651,8 @@ setTimeout(() => {
   const dayLabel = days[dayDate.getDay()] + '曜日';
 
   if (hour >= 22 || hour < 5) {
-    // 深夜モード
-    document.body.classList.add('deep-night');
+    // 深夜モード(暗転は廃止:夜でも文字が見えるよう通常配色のまま。挨拶文のみ深夜用)
+    // document.body.classList.add('deep-night');  ← 2026-05-20 Katsujiさん指示で無効化
     eyebrow.textContent = `${dateStr} ・ ${dayLabel} ・ 深夜`;
     sub.innerHTML = '眠れない夜も、ここに、いてくれてありがとう。<br>何もしなくていい時間です。';
     bubble.textContent = '深夜、◯人が、言葉なく過ごしています。あなたも、ここにいて、いいんです。';
