@@ -1,0 +1,2701 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - マイページ・あなたの物語のホーム</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --night-glow: #2A3558;
+  --dawn-soft: #2E3A5C;
+  --dawn-pink: #D8A98A;
+  --dawn-rose: #E8B89E;
+  --morning-cream: #F6EFE3;
+  --morning-white: #FBF7F0;
+  --starlight: #D4A95E;
+  --starlight-soft: #E5C68A;
+  --starlight-strong: #F0C97A;
+  --healing-blue: #7FA8C9;
+  --teal: #0D7377;
+  --teal-deep: #0A5A5D;
+  --teal-soft: #14A6AB;
+  --warm-orange: #D4622A;
+  --warm-orange-soft: #E9874C;
+  --navy: #0A1628;
+  --bg-cream: #FBF8F2;
+  --bg-soft: #F4EFE6;
+  --line: rgba(10,22,40,0.10);
+  --line-soft: rgba(10,22,40,0.06);
+  --text-primary: #1A2A40;
+  --text-secondary: rgba(26,42,64,0.72);
+  --text-muted: rgba(26,42,64,0.50);
+  --text-on-dark: rgba(248,246,240,0.96);
+  --text-on-dark-soft: rgba(248,246,240,0.74);
+
+  --font: "Noto Sans JP", "Meiryo UI", "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: var(--morning-white);
+  position: relative;
+  line-height: 1.8;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+body.deep-night {
+  --bg-cream: #1A2548;
+  --bg-soft: #0F1A35;
+  --text-primary: rgba(248,246,240,0.94);
+  --text-secondary: rgba(248,246,240,0.72);
+  --text-muted: rgba(248,246,240,0.48);
+  --line: rgba(248,246,240,0.10);
+  --line-soft: rgba(248,246,240,0.06);
+  background: var(--night-deep);
+}
+
+/* === 朝焼けヒーロー === */
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 78vh;
+  padding: 130px 40px 90px;
+  background: linear-gradient(to bottom,
+    var(--night-deep) 0%,
+    var(--dawn-soft) 35%,
+    var(--dawn-pink) 75%,
+    var(--morning-cream) 100%);
+  overflow: hidden;
+  color: var(--text-on-dark);
+}
+
+body.deep-night .hero {
+  background: linear-gradient(to bottom,
+    var(--night-deep) 0%,
+    var(--night-medium) 60%,
+    var(--night-glow) 100%);
+}
+
+.hero-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.h-star {
+  position: absolute;
+  background: var(--starlight);
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 4s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.7); }
+  50% { opacity: 0.75; transform: scale(1.1); }
+}
+
+/* === ヘッダー === */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 18px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(11,23,54,0.85), rgba(11,23,54,0));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.logo-wrap { display: flex; align-items: center; gap: 12px; }
+
+.logo {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--text-on-dark);
+  display: flex; align-items: center;
+}
+
+.logo .dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: var(--starlight);
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 0 12px var(--starlight);
+}
+
+.day-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(248,246,240,0.10);
+  border: 1px solid rgba(248,246,240,0.22);
+  border-radius: 22px;
+  color: var(--text-on-dark);
+  font-size: 13px;
+}
+
+.day-badge .pulse {
+  width: 7px; height: 7px;
+  background: var(--starlight);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--starlight);
+  animation: pulse-soft 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.header-right { display: flex; align-items: center; gap: 14px; }
+
+.header-link {
+  color: var(--text-on-dark-soft);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  transition: background 0.2s;
+}
+.header-link:hover { background: rgba(248,246,240,0.08); }
+
+/* === ヒーロー中身 === */
+.hero-inner {
+  position: relative;
+  z-index: 3;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 40px;
+}
+
+.greeting-eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.28em;
+  color: var(--text-on-dark-soft);
+  margin-bottom: 18px;
+}
+
+.greeting {
+  font-size: 52px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  color: var(--text-on-dark);
+  margin-bottom: 22px;
+}
+.greeting .name { font-weight: 500; color: var(--starlight-strong); }
+
+.greeting-sub {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--text-on-dark-soft);
+  line-height: 1.9;
+  margin-bottom: 38px;
+}
+
+/* === companion lamp === */
+.companion-lamp {
+  position: fixed;
+  right: 32px;
+  bottom: 28px;
+  width: 76px; height: 76px;
+  z-index: 150;
+  cursor: pointer;
+}
+
+.lamp-orb {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%,
+    var(--starlight-strong) 0%,
+    var(--starlight) 35%,
+    rgba(212,169,94,0.20) 70%,
+    transparent 100%);
+  animation: lamp-breath 4.2s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+
+@keyframes lamp-breath {
+  0%, 100% { transform: scale(0.95); opacity: 0.85; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+.lamp-bubble {
+  position: absolute;
+  right: 84px;
+  bottom: 16px;
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(10,22,40,0.18);
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 0.4s, transform 0.4s;
+  pointer-events: none;
+}
+.lamp-bubble.show { opacity: 1; transform: translateX(0); pointer-events: auto; }
+
+.lamp-bubble::after {
+  content: '';
+  position: absolute;
+  right: -7px; top: 50%;
+  transform: translateY(-50%);
+  border: 7px solid transparent;
+  border-left-color: var(--morning-white);
+}
+
+/* === Hero CTA === */
+.hero-cta-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.btn-primary {
+  background: var(--starlight);
+  color: var(--navy);
+  border: none;
+  padding: 16px 36px;
+  border-radius: 30px;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 8px 24px rgba(212,169,94,0.35);
+  letter-spacing: 0.04em;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(212,169,94,0.5); }
+
+.btn-secondary {
+  background: rgba(248,246,240,0.08);
+  color: var(--text-on-dark);
+  border: 1px solid rgba(248,246,240,0.28);
+  padding: 16px 32px;
+  border-radius: 30px;
+  font-family: var(--font);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.btn-secondary:hover { background: rgba(248,246,240,0.16); }
+
+/* === ボディ ブロック === */
+.section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+
+.section-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  color: var(--teal);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-align: center;
+  margin-bottom: 14px;
+  color: var(--text-primary);
+}
+
+.section-sub {
+  font-size: 15px;
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 48px;
+  line-height: 2;
+}
+
+/* === 物語の壺 === */
+.jar-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, var(--bg-cream), var(--bg-soft));
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  padding: 50px 40px;
+  text-align: center;
+}
+
+.jar {
+  position: relative;
+  width: 360px;
+  height: 420px;
+  margin: 0 auto 32px;
+  filter: drop-shadow(0 18px 36px rgba(212,98,42,0.18));
+}
+
+.jar-svg { width: 100%; height: 100%; }
+
+.jar-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* 光の粒(ふんわり球体・大きさ変化) */
+.jar-p {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #FFF6D9 0%, var(--starlight-strong) 35%, var(--starlight) 75%, rgba(212,169,94,0.5) 100%);
+  box-shadow: 0 0 14px rgba(240,201,122,0.65), 0 0 28px rgba(212,169,94,0.30);
+  opacity: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.3s, opacity 0.3s, box-shadow 0.3s;
+}
+.jar-p:hover {
+  transform: scale(1.6);
+  box-shadow: 0 0 22px rgba(240,201,122,0.95), 0 0 44px rgba(212,169,94,0.5);
+}
+.jar-p.large {
+  background: radial-gradient(circle at 30% 28%, #FFF6D9 0%, var(--starlight-strong) 30%, var(--warm-orange-soft) 80%, rgba(212,98,42,0.6) 100%);
+  box-shadow: 0 0 22px rgba(240,201,122,0.75), 0 0 48px rgba(212,98,42,0.30);
+}
+.jar-p.teal {
+  background: radial-gradient(circle at 35% 30%, #B5E8EA 0%, var(--teal-soft) 35%, var(--teal) 80%, rgba(13,115,119,0.5) 100%);
+  box-shadow: 0 0 14px rgba(20,166,171,0.65), 0 0 28px rgba(13,115,119,0.30);
+}
+
+@keyframes p-shimmer {
+  0%, 100% { box-shadow: 0 0 12px rgba(240,201,122,0.45); opacity: 0.7; }
+  50% { box-shadow: 0 0 22px rgba(240,201,122,0.95), 0 0 40px rgba(212,169,94,0.3); opacity: 1; }
+}
+
+@keyframes p-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.jar-caption {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 2;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.jar-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 12px 22px;
+  background: rgba(13,115,119,0.08);
+  border-radius: 22px;
+  color: var(--teal);
+  font-size: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.jar-stir-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 18px;
+  background: transparent;
+  color: var(--teal);
+  border: 1px solid var(--teal);
+  padding: 8px 18px;
+  border-radius: 18px;
+  font-family: var(--font);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.jar-stir-btn:hover { background: var(--teal); color: var(--morning-white); }
+
+/* === EMPSe 5軸 === */
+.empse-card {
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: 38px 36px;
+  max-width: 980px;
+  margin: 0 auto;
+  box-shadow: 0 6px 28px rgba(10,22,40,0.04);
+}
+.empse-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 36px;
+  align-items: center;
+}
+.empse-chart-wrap {
+  position: relative;
+  width: 320px;
+  margin: 0 auto;
+}
+.empse-chart {
+  width: 100%;
+  height: 300px;
+}
+.empse-overall {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px 22px;
+  box-shadow: 0 6px 18px rgba(10,22,40,0.06);
+  min-width: 120px;
+}
+.empse-overall-num {
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--teal);
+  line-height: 1;
+}
+.empse-overall-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.18em;
+  margin-top: 4px;
+}
+.empse-overall-trend {
+  font-size: 11.5px;
+  color: var(--money-green, #2D8659);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.empse-axes-list { display: grid; gap: 12px; }
+.empse-axis-row {
+  display: grid;
+  grid-template-columns: 64px 1fr 44px;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+.empse-axis-row:hover { background: var(--bg-cream); }
+.empse-axis-pill {
+  text-align: center;
+  padding: 6px 0;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.empse-axis-bar {
+  height: 18px;
+  background: var(--bg-soft);
+  border-radius: 9px;
+  overflow: hidden;
+}
+.empse-axis-fill {
+  height: 100%;
+  border-radius: 9px;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.empse-axis-num {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.empse-foot {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 760px) {
+  .empse-card { padding: 26px 22px; }
+  .empse-grid { grid-template-columns: 1fr; gap: 24px; }
+  .empse-chart-wrap { width: 280px; }
+}
+
+/* === 気持ち軌跡グラフ === */
+.mood-card {
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: 48px 44px;
+  max-width: 920px;
+  margin: 0 auto;
+  box-shadow: 0 6px 28px rgba(10,22,40,0.04);
+}
+
+.mood-prompt {
+  text-align: center;
+  font-size: 18px;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.mood-ai-line {
+  text-align: center;
+  font-size: 13px;
+  color: var(--teal);
+  margin-bottom: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mood-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+.mood-ai-line-wrap { text-align: center; margin-bottom: 28px; }
+
+.mood-svg-wrap {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  margin: 24px 0;
+}
+
+.mood-svg { width: 100%; height: 100%; }
+
+.mood-today-pulse {
+  position: absolute;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--warm-orange);
+  animation: pulse-today 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-today {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,98,42,0.55); }
+  50% { box-shadow: 0 0 0 14px rgba(212,98,42,0); }
+}
+
+.mood-options {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.mood-opt {
+  padding: 12px 20px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: var(--morning-white);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mood-opt:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-1px); }
+.mood-opt.selected { background: var(--teal); color: var(--morning-white); border-color: var(--teal); }
+
+/* === マインドマップ現在地 === */
+.mindmap-now {
+  background: linear-gradient(135deg, var(--bg-cream), var(--bg-soft));
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: 44px;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 36px;
+  max-width: 980px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.mindmap-thumb {
+  position: relative;
+  width: 240px;
+  height: 240px;
+}
+.mindmap-thumb-svg { width: 100%; height: 100%; }
+
+.mindmap-info-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  color: var(--warm-orange);
+  margin-bottom: 12px;
+}
+.mindmap-info-where {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.mindmap-info-trail {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+  line-height: 1.9;
+}
+.mindmap-people {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: rgba(13,115,119,0.10);
+  border-radius: 22px;
+  color: var(--teal);
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+.mindmap-cta {
+  background: transparent;
+  color: var(--teal);
+  border: 1px solid var(--teal);
+  padding: 12px 22px;
+  border-radius: 22px;
+  font-family: var(--font);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mindmap-cta:hover { background: var(--teal); color: var(--morning-white); }
+
+/* === マイチーム === */
+.team-wheel-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+}
+.team-wheel {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, rgba(13,115,119,0.06), transparent 70%);
+  animation: wheel-rotate 60s linear infinite;
+}
+
+@keyframes wheel-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.team-member {
+  position: absolute;
+  width: 92px; height: 92px;
+  left: 50%; top: 50%;
+  margin-left: -46px;
+  margin-top: -46px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.25s;
+}
+.team-wheel-wrap:hover .team-wheel { animation-play-state: paused; }
+.team-member:hover { transform: scale(1.06); }
+
+.team-avatar {
+  width: 64px; height: 64px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: var(--morning-white);
+  border: 2px solid var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+
+.team-role {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+.team-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.team-center {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--starlight), var(--warm-orange));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--morning-white);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.5;
+  box-shadow: 0 10px 30px rgba(212,98,42,0.30);
+}
+
+.team-caption {
+  text-align: center;
+  margin-top: 32px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+/* === 対話の足跡 === */
+.trace-list {
+  max-width: 820px;
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+}
+.trace-item {
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px 26px;
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.trace-item:hover { border-color: var(--teal); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(10,22,40,0.06); }
+
+.trace-date {
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+.trace-snippet {
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+.trace-meta {
+  font-size: 12px;
+  color: var(--teal);
+}
+
+/* === SDM カード === */
+.sdm-block {
+  background: linear-gradient(135deg, #FFF5EB, #FFE8D6);
+  border-radius: 26px;
+  padding: 44px;
+  max-width: 920px;
+  margin: 0 auto;
+}
+.sdm-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+.sdm-title-row { display: flex; align-items: center; gap: 14px; }
+.sdm-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--warm-orange);
+  color: var(--morning-white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.sdm-title { font-size: 22px; font-weight: 500; color: var(--text-primary); }
+.sdm-countdown {
+  background: var(--warm-orange);
+  color: var(--morning-white);
+  padding: 10px 18px;
+  border-radius: 22px;
+  font-size: 13px;
+}
+.sdm-questions-summary {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 2;
+  margin-bottom: 20px;
+}
+.sdm-list-mini {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.sdm-q-mini {
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sdm-q-mini .check {
+  width: 18px; height: 18px;
+  border: 2px solid var(--warm-orange);
+  border-radius: 4px;
+  flex: 0 0 18px;
+}
+.sdm-q-mini.checked .check {
+  background: var(--warm-orange);
+  position: relative;
+}
+.sdm-q-mini.checked .check::after {
+  content: '✓';
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--morning-white);
+  font-size: 13px;
+}
+
+.sdm-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.sdm-act {
+  background: var(--morning-white);
+  color: var(--warm-orange);
+  border: 1px solid var(--warm-orange);
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sdm-act:hover { background: var(--warm-orange); color: var(--morning-white); }
+
+/* === 私が守りたいこと === */
+.value-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.value-card {
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 28px 26px;
+  transition: all 0.2s;
+}
+.value-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+.value-tag {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--teal);
+  padding: 4px 12px;
+  border: 1px solid var(--teal);
+  border-radius: 14px;
+  margin-bottom: 14px;
+}
+.value-text {
+  font-size: 17px;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+.value-source {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-style: italic;
+}
+
+/* === 小さな一歩 === */
+.step-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.step-card {
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.step-card:hover { border-color: var(--warm-orange); transform: translateY(-2px); }
+.step-card.done {
+  background: linear-gradient(135deg, rgba(13,115,119,0.06), rgba(13,115,119,0.10));
+  border-color: var(--teal);
+}
+.step-icon {
+  width: 48px; height: 48px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: rgba(212,98,42,0.10);
+  color: var(--warm-orange);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.step-card.done .step-icon { background: var(--teal); color: var(--morning-white); }
+.step-card.done .step-icon::after { content: '✓'; }
+.step-card.done .step-icon-inner { display: none; }
+.step-label {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.step-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* === 同じ道を歩いている人(ティッカー) === */
+.ticker {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(11,23,54,0.92);
+  color: var(--text-on-dark);
+  padding: 12px 20px;
+  font-size: 13px;
+  text-align: center;
+  z-index: 140;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.ticker .dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--starlight);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--starlight);
+  margin-right: 8px;
+  animation: pulse-soft 2.4s ease-in-out infinite;
+  vertical-align: middle;
+}
+.ticker-num {
+  color: var(--starlight-strong);
+  font-weight: 600;
+}
+
+/* === ナッジ === */
+.nudge {
+  position: fixed;
+  left: 28px;
+  bottom: 70px;
+  max-width: 340px;
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px 22px;
+  font-size: 13px;
+  color: var(--text-primary);
+  box-shadow: 0 14px 36px rgba(10,22,40,0.16);
+  z-index: 145;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s, transform 0.4s;
+  pointer-events: none;
+}
+.nudge.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.nudge-close {
+  position: absolute;
+  top: 8px; right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+}
+.nudge-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+.nudge-btn {
+  background: var(--teal);
+  color: var(--morning-white);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 14px;
+  font-family: var(--font);
+  font-size: 12px;
+  cursor: pointer;
+}
+.nudge-btn.outline {
+  background: transparent;
+  color: var(--teal);
+  border: 1px solid var(--teal);
+}
+
+/* === モーダル === */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11,23,54,0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+.overlay.show { display: flex; }
+
+.modal {
+  background: var(--morning-white);
+  border-radius: 22px;
+  padding: 40px;
+  max-width: 580px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  top: 16px; right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+.modal-title {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+.modal-date {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 22px;
+}
+.modal-body {
+  font-size: 14px;
+  line-height: 1.95;
+  color: var(--text-primary);
+}
+.modal-body .ai-line {
+  background: rgba(13,115,119,0.08);
+  border-left: 3px solid var(--teal);
+  padding: 14px 18px;
+  border-radius: 0 12px 12px 0;
+  margin: 12px 0;
+  font-size: 14px;
+}
+.modal-body .user-line {
+  background: rgba(212,98,42,0.08);
+  padding: 14px 18px;
+  border-radius: 14px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+/* === フッター === */
+.footer {
+  background: var(--navy);
+  color: var(--text-on-dark-soft);
+  padding: 60px 40px 80px;
+  text-align: center;
+}
+.footer-row {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+.footer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(248,246,240,0.06);
+  border: 1px solid rgba(248,246,240,0.14);
+  border-radius: 20px;
+  font-size: 12px;
+}
+.footer-logo {
+  font-size: 22px;
+  letter-spacing: 0.28em;
+  margin-bottom: 14px;
+  color: var(--text-on-dark);
+}
+.footer-link {
+  color: var(--text-on-dark-soft);
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+/* === レスポンシブ === */
+@media (max-width: 760px) {
+  .header { padding: 14px 18px; }
+  .logo { font-size: 18px; letter-spacing: 0.18em; }
+  .hero { padding: 110px 22px 70px; min-height: 60vh; }
+  .greeting { font-size: 32px; }
+  .greeting-sub { font-size: 15px; }
+  .section { padding: 60px 20px; }
+  .section-title { font-size: 26px; }
+  .jar { width: 240px; height: 280px; }
+  .mood-card, .mindmap-now, .sdm-block { padding: 28px 22px; }
+  .mindmap-now { grid-template-columns: 1fr; }
+  .mindmap-thumb { margin: 0 auto; }
+  .team-wheel-wrap { max-width: 360px; }
+  .team-member { width: 72px; height: 72px; margin-left: -36px; margin-top: -36px; }
+  .team-avatar { width: 50px; height: 50px; font-size: 20px; }
+  .team-center { width: 86px; height: 86px; font-size: 12px; }
+  .trace-item { grid-template-columns: 1fr; gap: 8px; }
+  .companion-lamp { right: 18px; bottom: 60px; width: 60px; height: 60px; }
+  .nudge { left: 12px; right: 12px; max-width: none; bottom: 60px; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) {
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+
+
+/* === SATOI 共通モバイル対応(iPad/iPhone)=== */
+@media (max-width: 1024px) {
+  /* iPad 縦 ・ ヘッダー狭め */
+  .header { padding: 14px 22px !important; }
+  .section, .wrap, .container, main, .main { padding-left: 22px !important; padding-right: 22px !important; }
+}
+@media (max-width: 768px) {
+  /* iPhone ・ 主要メトリクスをモバイル最適化 */
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title, .hero-title-l1 { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title, .nbm-title, .mission-line { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  .section, .container, .wrap, main, .main, section { padding-left: 14px !important; padding-right: 14px !important; }
+  section, .section { padding-top: 50px !important; padding-bottom: 50px !important; }
+  /* グリッドを1列に */
+  .grid, .cards, .types-grid, .stories-grid, .forum-grid, .family-grid, .promise-list, .partner-grid, .gov-grid, .numbers-grid, .empse-grid, .pubmed-list, .sources-grid, .criteria-grid, .tx-cat-grid, .map-wrap, .emg-grid, .emg-consent-grid, .emg-contacts, .kids-talk-wrap, .cat-grid, .videos-grid, .cat-cards, .partner-cards, .promise-cards, .principle-cards, .pricing-grid, .pricing-cards, .step-cards, .info-cards, .role-cards, .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* 横スクロールのみ許す要素は残す */
+  .b1-journey-bar, .journey-bar, .types-tabs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  /* ヒーローの padding 圧縮 */
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  /* 大きい見出し */
+  .opener-line { font-size: 24px !important; margin-bottom: 40px !important; }
+  /* タップ領域 44px 最低 */
+  .btn, button, .login-btn, .nav-mini a, .filter-chip, .cat-card, .type-card, .story-card, .forum-card { min-height: 40px; }
+  /* テーブル横スクロール */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* マイチーム ホイール → 縦並びに */
+  .team-wheel-wrap, .team-wheel { width: 100% !important; height: auto !important; min-height: 360px; }
+  /* モーダル系: 画面いっぱいに */
+  .modal, .overlay-modal, [class*='Modal'], [class*='modal'] { max-width: 100vw !important; }
+  /* ナビ縮小 */
+  .nav-mini, .nav { gap: 12px !important; font-size: 12px !important; }
+  /* フォーム入力 */
+  input, textarea, select { font-size: 16px !important; } /* iOSのズーム防止 */
+  /* SVG レーダーチャートの収まり */
+  .empse-chart, .empse-chart-wrap { width: 100% !important; max-width: 320px; height: auto !important; margin: 0 auto !important; }
+  /* B1 7ステップを横スクロールに */
+  .steps-row { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 10px; }
+  .steps-row .step { flex-shrink: 0; min-width: 80px; }
+  /* G2 サイドナビは画面下部固定 or hamburger 想定 */
+  .sidebar, .side-nav, .g2-sidebar { position: relative !important; width: 100% !important; height: auto !important; overflow-x: auto !important; display: flex !important; }
+}
+@media (max-width: 480px) {
+  /* 極小画面 */
+  .hero { padding: 80px 12px 40px !important; }
+  .b1-journey-bar { padding: 8px 10px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+
+/* === SATOI ユニバーサル横断ナビ(戻る/ホーム/言語) === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-univ-btn[title]::after { content: attr(title); position: absolute; right: 54px; background: rgba(11,23,54,0.92); color: #F8F6F0; font-size: 11px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.satoi-univ-btn:hover::after { opacity: 1; }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+
+/* === SATOI 横断ジャーニーバー(B3/C1共通)=== */
+.satoi-jbar { position: fixed; top: 64px; left: 0; right: 0; z-index: 95; padding: 10px 22px 8px; background: rgba(255,253,247,0.95); border-bottom: 1px solid rgba(11,23,54,0.08); backdrop-filter: blur(14px); overflow-x: auto; white-space: nowrap; box-shadow: 0 2px 12px rgba(11,23,54,0.05); }
+.satoi-jbar::-webkit-scrollbar { height: 3px; }
+.satoi-jbar::-webkit-scrollbar-thumb { background: rgba(212,169,94,0.45); border-radius: 2px; }
+.satoi-jbar-inner { display: inline-flex; align-items: center; gap: 6px; padding: 2px 0; }
+.satoi-jbar-meta { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px 3px 3px; border-radius: 14px; background: rgba(212,169,94,0.10); border: 1px dashed rgba(212,169,94,0.5); color: rgba(26,42,64,0.78); font-size: 10.5px; margin-right: 10px; flex-shrink: 0; font-family: "Noto Sans JP", sans-serif; }
+.satoi-jbar-meta-i { width: 20px; height: 20px; border-radius: 50%; background: #D4A95E; color: #0B1736; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.satoi-jchip { display: inline-flex; align-items: center; gap: 9px; padding: 10px 18px 10px 8px; border-radius: 20px; background: rgba(11,23,54,0.05); border: 1px solid rgba(11,23,54,0.10); color: rgba(26,42,64,0.65); font-size: 13px; flex-shrink: 0; cursor: pointer; transition: all 0.3s; font-family: "Noto Sans JP", sans-serif; }
+.satoi-jchip:hover { border-color: #D4622A; color: #D4622A; }
+.satoi-jchip.done { background: rgba(13,115,119,0.12); border-color: rgba(13,115,119,0.4); color: #0D7377; }
+.satoi-jchip.current { background: rgba(212,98,42,0.16); border-color: #D4622A; color: #D4622A; font-weight: 600; box-shadow: 0 0 12px rgba(212,98,42,0.25); animation: jchipPulse 2.4s infinite; }
+@keyframes jchipPulse { 0%,100%{ box-shadow: 0 0 12px rgba(212,98,42,0.25);} 50%{ box-shadow: 0 0 20px rgba(212,98,42,0.45);} }
+.satoi-jchip-n { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: rgba(11,23,54,0.08); font-size: 12px; font-weight: 700; }
+.satoi-jchip.done .satoi-jchip-n { background: #0D7377; color: #FBF7F0; }
+.satoi-jchip.current .satoi-jchip-n { background: #D4622A; color: #FBF7F0; }
+.satoi-jarrow { color: rgba(11,23,54,0.25); font-size: 12px; flex-shrink: 0; }
+.satoi-jbar-peers { display: inline-flex; align-items: center; gap: 7px; margin-left: 16px; padding: 8px 18px; border-radius: 18px; background: rgba(13,115,119,0.18); border: 1.5px solid rgba(13,115,119,0.5); color: #0D7377; font-size: 14px; font-weight: 600; flex-shrink: 0; font-family: "Noto Sans JP", sans-serif; }
+.satoi-jbar-peers strong { color: #0D7377; font-weight: 800; font-size: 16px; }
+body.satoi-has-jbar { padding-top: 50px !important; }
+body.satoi-has-jbar .header { top: 0 !important; }
+@media (max-width: 768px) { .satoi-jbar { top: 56px; padding: 8px 12px; } body.satoi-has-jbar { padding-top: 40px !important; } }
+
+</style>
+</head>
+<body>
+
+<!-- ===== ヘッダー ===== -->
+<header class="header">
+  <div class="logo-wrap">
+    <a href="SATOI_Mock_v1_A1_entrance.html" style="text-decoration:none;">
+      <div class="logo"><span class="dot"></span>SATOI</div>
+    </a>
+  </div>
+  <div class="header-right">
+    <div class="day-badge"><span class="pulse"></span><span id="dayBadgeText">物語の現在地・診断から 42日目</span></div>
+    <a class="header-link" href="SATOI_Mock_v1_B1_hub.html">マインドマップ</a>
+    <a class="header-link" href="SATOI_Mock_v1_A2_dialog.html">AI対話</a>
+    <a class="header-link" href="SATOI_Mock_v1_A1_entrance.html">ログアウト</a>
+  </div>
+</header>
+
+<!-- ===== ヒーロー(朝焼け) ===== -->
+<section class="hero">
+  <div class="hero-stars" id="heroStars"></div>
+  <div class="hero-inner">
+    <div class="greeting-eyebrow" id="greetingEyebrow">2026年5月19日 ・ 火曜日 ・ 朝</div>
+    <h1 class="greeting"><span class="name">あおいさん</span>、おかえりなさい</h1>
+    <p class="greeting-sub" id="greetingSub">
+      前回の続き、ゆっくり始めましょう。<br>
+      昨日の夜、あなたが残してくれた言葉を、覚えています。
+    </p>
+    <div class="hero-cta-row">
+      <button class="btn-primary" onclick="location.href='SATOI_Mock_v1_C1_resume_bridge.html'">前回の続きから話す →</button>
+      <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_B1_hub.html?from=c1'">マインドマップで治療を見る</button>
+      <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_C1_review.html'">📖 今日の振り返り</button>
+      <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_CONSENT.html'">🔒 だれに何を見せているか</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ニュース欄(SATOIからのお知らせ) ===== -->
+<section class="section" style="padding: 36px 40px 12px;">
+  <div style="max-width: 980px; margin: 0 auto; background: var(--bg-paper); border: 1px solid var(--line); border-radius: 18px; padding: 22px 26px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 14px;">
+      <div style="display:inline-flex; align-items:center; gap:10px;">
+        <span style="display:inline-block; width:8px; height:8px; background:var(--warm-orange); border-radius:50%; box-shadow:0 0 10px var(--warm-orange); animation:pulse-soft 2s infinite;"></span>
+        <span style="font-size:11px; letter-spacing:0.24em; color:var(--warm-orange); text-transform:uppercase;">NEWS ・ SATOI からのお知らせ</span>
+      </div>
+      <a href="#" onclick="satoiNotify('すべてのお知らせ・ニュースアーカイブ(プレースホルダ)'); return false;" style="font-size:11.5px; color:var(--teal); text-decoration:underline;">すべて見る</a>
+    </div>
+    <div style="display:grid; gap:10px;">
+      <div onclick="window.open('https://www.dipex-j.org/breast-cancer/', '_blank')" style="cursor:pointer; padding:14px 18px; background:var(--morning-white); border:1px solid var(--line-soft); border-radius:12px; display:grid; grid-template-columns:90px 1fr auto; gap:14px; align-items:center; transition: all .2s;">
+        <span style="font-size:11px; color:var(--text-muted); letter-spacing:0.06em;">2026.05.19</span>
+        <span style="font-size:13.5px; color:var(--text-primary); line-height:1.6;"><strong>新機能</strong> ・ 患者ジャーニーマップを拡張しました(全がん種・ステージ別動的表示)</span>
+        <span style="font-size:11px; color:var(--teal);">詳しく →</span>
+      </div>
+      <div onclick="location.href='SATOI_Mock_v1_E1_money.html'" style="cursor:pointer; padding:14px 18px; background:var(--morning-white); border:1px solid var(--line-soft); border-radius:12px; display:grid; grid-template-columns:90px 1fr auto; gap:14px; align-items:center; transition: all .2s;">
+        <span style="font-size:11px; color:var(--text-muted); letter-spacing:0.06em;">2026.05.17</span>
+        <span style="font-size:13.5px; color:var(--text-primary); line-height:1.6;"><strong>制度更新</strong> ・ 高額療養費制度の所得区分が改定されました(2026年4月から適用)</span>
+        <span style="font-size:11px; color:var(--teal);">詳しく →</span>
+      </div>
+      <div onclick="location.href='SATOI_Mock_v1_D1_stories.html'" style="cursor:pointer; padding:14px 18px; background:var(--morning-white); border:1px solid var(--line-soft); border-radius:12px; display:grid; grid-template-columns:90px 1fr auto; gap:14px; align-items:center; transition: all .2s;">
+        <span style="font-size:11px; color:var(--text-muted); letter-spacing:0.06em;">2026.05.10</span>
+        <span style="font-size:13.5px; color:var(--text-primary); line-height:1.6;"><strong>編集部特集</strong> ・ 5月「新学期・新生活と、治療のあいだで」6本の物語を公開しました</span>
+        <span style="font-size:11px; color:var(--teal);">詳しく →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+@keyframes pulse-soft { 0%,100%{opacity:.6;} 50%{opacity:1;} }
+</style>
+
+<!-- ===== 1. 物語の壺 ===== -->
+<section class="section">
+  <div class="section-eyebrow">YOUR STORY JAR</div>
+  <h2 class="section-title">物語の壺</h2>
+  <p class="section-sub">
+    あなたが過ごしてきた日々は、ひとつずつ光になって、ここに溜まっていきます。<br>
+    粒に触れると、その日の言葉と気持ちが、もう一度浮かび上がります。
+  </p>
+
+  <div class="jar-wrap">
+    <div class="jar">
+      <svg class="jar-svg" viewBox="0 0 360 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="jarGlass" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(212,169,94,0.04)"/>
+            <stop offset="50%" stop-color="rgba(212,169,94,0.10)"/>
+            <stop offset="100%" stop-color="rgba(212,98,42,0.16)"/>
+          </linearGradient>
+          <linearGradient id="jarRim2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#14A6AB"/>
+            <stop offset="100%" stop-color="#0A5A5D"/>
+          </linearGradient>
+          <radialGradient id="jarInnerGlow" cx="0.5" cy="0.65" r="0.45">
+            <stop offset="0%" stop-color="rgba(255,246,217,0.55)"/>
+            <stop offset="60%" stop-color="rgba(240,201,122,0.20)"/>
+            <stop offset="100%" stop-color="rgba(212,169,94,0)"/>
+          </radialGradient>
+          <linearGradient id="jarHighlight" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+            <stop offset="25%" stop-color="rgba(255,255,255,0.35)"/>
+            <stop offset="40%" stop-color="rgba(255,255,255,0.06)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+          </linearGradient>
+        </defs>
+
+        <!-- 壺の底の影 -->
+        <ellipse cx="180" cy="396" rx="90" ry="8" fill="rgba(10,22,40,0.10)"/>
+
+        <!-- 壺の本体(優雅な瓢箪型) -->
+        <path d="M 100 90 Q 70 145, 76 215 Q 60 270, 90 330 Q 110 380, 180 388 Q 250 380, 270 330 Q 300 270, 284 215 Q 290 145, 260 90 Z"
+              fill="url(#jarGlass)" stroke="url(#jarRim2)" stroke-width="2.5"/>
+
+        <!-- 壺の中の光(底面) -->
+        <ellipse cx="180" cy="310" rx="90" ry="50" fill="url(#jarInnerGlow)"/>
+
+        <!-- ガラスのハイライト -->
+        <path d="M 105 110 Q 95 180, 100 270 Q 105 320, 130 360"
+              stroke="url(#jarHighlight)" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.6"/>
+
+        <!-- 壺の口 -->
+        <ellipse cx="180" cy="80" rx="92" ry="14" fill="none" stroke="url(#jarRim2)" stroke-width="2.5"/>
+        <ellipse cx="180" cy="80" rx="92" ry="14" fill="rgba(11,23,54,0.06)"/>
+        <ellipse cx="180" cy="80" rx="80" ry="6" fill="rgba(248,246,240,0.20)"/>
+
+        <!-- 壺の口の縁ハイライト -->
+        <path d="M 92 78 Q 180 88, 268 78" stroke="url(#jarHighlight)" stroke-width="2" fill="none" opacity="0.6"/>
+      </svg>
+      <div class="jar-particles" id="jarParticles"></div>
+    </div>
+
+    <p class="jar-caption">
+      これまでに、<strong style="color:var(--teal);">142個の光</strong> が、ここに溜まっています。<br>
+      あなたの<strong style="color:var(--warm-orange);">物語の一部</strong> — 対話・気持ちの記録・選択・先生との会話、すべて。<br>
+      <span style="font-size:12px; color:var(--text-muted);">大きい光ほど、その日に深く考えた瞬間です。色は記録のタイプを表しています。</span>
+    </p>
+    <div class="jar-count">
+      <span style="font-size:18px;">✨</span>
+      <span><strong>142</strong> あなたの物語の一部</span>
+      <span style="opacity:0.5;">|</span>
+      <span><strong>38</strong> 回の対話</span>
+      <span style="opacity:0.5;">|</span>
+      <span><strong>12</strong> 個の選択</span>
+      <span style="opacity:0.5;">|</span>
+      <span><strong>5</strong> 通の手紙</span>
+    </div>
+    <button class="jar-stir-btn" onclick="stirJar()">
+      <span>🌀</span> 光を、揺らしてみる
+    </button>
+    <button class="jar-stir-btn" style="margin-left:8px;" onclick="shareJar()">
+      <span>📤</span> 物語の壺をSNSで共有
+    </button>
+  </div>
+</section>
+
+<!-- ===== 2. 気持ち軌跡 ===== -->
+<section class="section" style="background:var(--bg-cream);">
+  <div class="section-eyebrow">YOUR FEELINGS</div>
+  <h2 class="section-title">気持ちの、軌跡</h2>
+  <p class="section-sub">
+    良い日もある。つらい日もある。それを、無理にまっすぐにする必要はありません。<br>
+    今日のあなたの色を、教えてくれますか?
+  </p>
+
+  <div class="mood-card">
+    <div class="mood-ai-line-wrap">
+      <span class="mood-ai-line">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);"></span>
+        今日は、どんな気持ちですか?
+      </span>
+    </div>
+
+    <div class="mood-svg-wrap" id="moodWrap">
+      <svg class="mood-svg" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="moodLineGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#14A6AB"/>
+            <stop offset="50%" stop-color="#D4A95E"/>
+            <stop offset="100%" stop-color="#D4622A"/>
+          </linearGradient>
+          <linearGradient id="moodFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(212,169,94,0.22)"/>
+            <stop offset="100%" stop-color="rgba(212,169,94,0)"/>
+          </linearGradient>
+        </defs>
+        <!-- グリッド -->
+        <line x1="0" y1="60" x2="800" y2="60" stroke="rgba(10,22,40,0.06)" stroke-dasharray="3 4"/>
+        <line x1="0" y1="110" x2="800" y2="110" stroke="rgba(10,22,40,0.06)" stroke-dasharray="3 4"/>
+        <line x1="0" y1="160" x2="800" y2="160" stroke="rgba(10,22,40,0.06)" stroke-dasharray="3 4"/>
+        <!-- 波線(過去42日) -->
+        <path id="moodPath"
+              d="M 20 140 Q 60 160, 100 155 T 180 175 T 260 165 T 340 130 T 420 145 T 500 115 T 580 95 T 660 100 T 720 88"
+              stroke="url(#moodLineGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- 塗り -->
+        <path d="M 20 140 Q 60 160, 100 155 T 180 175 T 260 165 T 340 130 T 420 145 T 500 115 T 580 95 T 660 100 T 720 88 L 720 220 L 20 220 Z"
+              fill="url(#moodFill)"/>
+        <!-- ポイント -->
+        <circle cx="20" cy="140" r="4" fill="#0D7377"/>
+        <circle cx="180" cy="175" r="4" fill="#D4A95E"/>
+        <circle cx="340" cy="130" r="4" fill="#0D7377"/>
+        <circle cx="500" cy="115" r="4" fill="#0D7377"/>
+        <circle cx="660" cy="100" r="4" fill="#D4A95E"/>
+        <!-- ラベル -->
+        <text x="20" y="210" font-size="11" fill="rgba(26,42,64,0.5)" font-family="Noto Sans JP">告知</text>
+        <text x="180" y="210" font-size="11" fill="rgba(26,42,64,0.5)" font-family="Noto Sans JP">1週目</text>
+        <text x="340" y="210" font-size="11" fill="rgba(26,42,64,0.5)" font-family="Noto Sans JP">セカンドオピニオン</text>
+        <text x="500" y="210" font-size="11" fill="rgba(26,42,64,0.5)" font-family="Noto Sans JP">治療開始</text>
+        <text x="660" y="210" font-size="11" fill="rgba(26,42,64,0.5)" font-family="Noto Sans JP">3週目</text>
+      </svg>
+      <div class="mood-today-pulse" id="moodTodayPulse" style="right:60px; top:90px;"></div>
+    </div>
+
+    <div class="mood-options">
+      <button class="mood-opt" data-mood="穏やか" onclick="selectMood(this)">穏やか</button>
+      <button class="mood-opt" data-mood="少し疲れた" onclick="selectMood(this)">少し疲れた</button>
+      <button class="mood-opt" data-mood="不安" onclick="selectMood(this)">不安</button>
+      <button class="mood-opt" data-mood="希望が見える" onclick="selectMood(this)">希望が見える</button>
+      <button class="mood-opt" data-mood="言葉にならない" onclick="selectMood(this)">言葉にならない</button>
+      <button class="mood-opt" data-mood="その他" onclick="selectMood(this)">対話で話す →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2.5 EMPSe 5軸スコア(あなたの状態を多面的に) ===== -->
+<section class="section">
+  <div class="section-eyebrow">EMPSe ・ MULTI-DIMENSIONAL WELLBEING</div>
+  <h2 class="section-title">あなたの、5つの側面</h2>
+  <p class="section-sub">
+    身体・活力・共感・精神・社会 の5軸で、あなたの「いま」を多面的に見守ります。<br>
+    AI が日々の対話・記録から推定 + あなた自身の入力 で更新されます。各軸をタップして詳細へ。
+  </p>
+
+  <div class="empse-card">
+    <div class="empse-grid">
+      <div class="empse-chart-wrap">
+        <svg class="empse-chart" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="empseFill" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0%" stop-color="rgba(13,115,119,0.30)"/>
+              <stop offset="100%" stop-color="rgba(13,115,119,0.08)"/>
+            </radialGradient>
+            <linearGradient id="empseStroke" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#14A6AB"/>
+              <stop offset="100%" stop-color="#D4A95E"/>
+            </linearGradient>
+          </defs>
+          <!-- グリッド多角形 (10%,30%,50%,70%,90%) -->
+          <g stroke="rgba(10,22,40,0.10)" stroke-width="1" fill="none">
+            <polygon points="150,40 245,105 220,225 80,225 55,105"/>
+            <polygon points="150,75 215,120 195,210 105,210 85,120"/>
+            <polygon points="150,110 185,135 175,195 125,195 115,135"/>
+            <polygon points="150,145 158,150 154,180 146,180 142,150"/>
+          </g>
+          <!-- 軸線 -->
+          <g stroke="rgba(10,22,40,0.12)" stroke-width="1">
+            <line x1="150" y1="150" x2="150" y2="40"/>
+            <line x1="150" y1="150" x2="245" y2="105"/>
+            <line x1="150" y1="150" x2="220" y2="225"/>
+            <line x1="150" y1="150" x2="80" y2="225"/>
+            <line x1="150" y1="150" x2="55" y2="105"/>
+          </g>
+          <!-- 現在のスコア(Physical 60, Energy 45, Empathy 75, Mental 55, Social 65) -->
+          <polygon id="empsePoly"
+                   points="150,84 207,124 188,201 124,209 93,123"
+                   fill="url(#empseFill)" stroke="url(#empseStroke)" stroke-width="2.5"/>
+          <!-- スコア点 -->
+          <circle cx="150" cy="84" r="6" fill="#D4A95E" stroke="#FBF7F0" stroke-width="2"/>
+          <circle cx="207" cy="124" r="6" fill="#D4622A" stroke="#FBF7F0" stroke-width="2"/>
+          <circle cx="188" cy="201" r="6" fill="#0D7377" stroke="#FBF7F0" stroke-width="2"/>
+          <circle cx="124" cy="209" r="6" fill="#7FA8C9" stroke="#FBF7F0" stroke-width="2"/>
+          <circle cx="93" cy="123" r="6" fill="#0D7377" stroke="#FBF7F0" stroke-width="2"/>
+          <!-- ラベル(EMPSe アルファベット + 日本語) -->
+          <text x="150" y="12" text-anchor="middle" font-size="12" font-family="Noto Sans JP" fill="#D4A95E" font-weight="700">P</text>
+          <text x="150" y="27" text-anchor="middle" font-size="13" font-family="Noto Sans JP" fill="#1A2A40" font-weight="500">身体</text>
+          <text x="263" y="91" text-anchor="middle" font-size="12" font-family="Noto Sans JP" fill="#D4622A" font-weight="700">E</text>
+          <text x="263" y="106" text-anchor="middle" font-size="13" font-family="Noto Sans JP" fill="#1A2A40" font-weight="500">活力</text>
+          <text x="237" y="242" text-anchor="middle" font-size="12" font-family="Noto Sans JP" fill="#0D7377" font-weight="700">Em</text>
+          <text x="237" y="257" text-anchor="middle" font-size="13" font-family="Noto Sans JP" fill="#1A2A40" font-weight="500">共感</text>
+          <text x="63" y="242" text-anchor="middle" font-size="12" font-family="Noto Sans JP" fill="#5483A8" font-weight="700">M</text>
+          <text x="63" y="257" text-anchor="middle" font-size="13" font-family="Noto Sans JP" fill="#1A2A40" font-weight="500">精神</text>
+          <text x="38" y="91" text-anchor="middle" font-size="12" font-family="Noto Sans JP" fill="#0A5A5D" font-weight="700">S</text>
+          <text x="38" y="106" text-anchor="middle" font-size="13" font-family="Noto Sans JP" fill="#1A2A40" font-weight="500">社会</text>
+        </svg>
+        <div class="empse-overall">
+          <div class="empse-overall-num">60</div>
+          <div class="empse-overall-label">EMPSe 総合</div>
+          <div class="empse-overall-trend">↑ 先週比 +4</div>
+        </div>
+      </div>
+
+      <div class="empse-axes-list">
+        <div class="empse-axis-row" onclick="openEmpseAxis('physical')">
+          <div class="empse-axis-pill" style="background:rgba(212,169,94,0.18); color:#8B5A1F;"><strong style="font-weight:800; margin-right:5px;">P</strong>身体</div>
+          <div class="empse-axis-bar"><div class="empse-axis-fill" style="width:60%; background:#D4A95E;"></div></div>
+          <div class="empse-axis-num">60</div>
+        </div>
+        <div class="empse-axis-row" onclick="openEmpseAxis('energy')">
+          <div class="empse-axis-pill" style="background:rgba(212,98,42,0.15); color:#D4622A;"><strong style="font-weight:800; margin-right:5px;">E</strong>活力</div>
+          <div class="empse-axis-bar"><div class="empse-axis-fill" style="width:45%; background:#D4622A;"></div></div>
+          <div class="empse-axis-num">45</div>
+        </div>
+        <div class="empse-axis-row" onclick="openEmpseAxis('empathy')">
+          <div class="empse-axis-pill" style="background:rgba(13,115,119,0.15); color:#0D7377;"><strong style="font-weight:800; margin-right:5px;">Em</strong>共感</div>
+          <div class="empse-axis-bar"><div class="empse-axis-fill" style="width:75%; background:#0D7377;"></div></div>
+          <div class="empse-axis-num">75</div>
+        </div>
+        <div class="empse-axis-row" onclick="openEmpseAxis('mental')">
+          <div class="empse-axis-pill" style="background:rgba(127,168,201,0.20); color:#5483A8;"><strong style="font-weight:800; margin-right:5px;">M</strong>精神</div>
+          <div class="empse-axis-bar"><div class="empse-axis-fill" style="width:55%; background:#7FA8C9;"></div></div>
+          <div class="empse-axis-num">55</div>
+        </div>
+        <div class="empse-axis-row" onclick="openEmpseAxis('social')">
+          <div class="empse-axis-pill" style="background:rgba(20,166,171,0.15); color:#0A5A5D;"><strong style="font-weight:800; margin-right:5px;">S</strong>社会</div>
+          <div class="empse-axis-bar"><div class="empse-axis-fill" style="width:65%; background:#14A6AB;"></div></div>
+          <div class="empse-axis-num">65</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="empse-foot">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <span style="width:8px; height:8px; border-radius:50%; background:var(--teal); box-shadow:0 0 8px var(--teal);"></span>
+        <span style="font-size:12px; color:var(--teal); letter-spacing:0.04em;">AI 観察</span>
+      </div>
+      <div style="font-size:13.5px; color:var(--text-primary); line-height:1.95;">
+        今週は <strong>共感(75)</strong> が高く、家族・先輩との繋がりが活きています。<br>
+        一方 <strong>活力(45)</strong> がやや低め — Day 3-5 の副作用ピーク帯の影響です。<br>
+        <span style="color:var(--text-muted);">活力を上げるには、無理せず休息 + 短い散歩(5分でOK)が、先輩データで効いています。</span>
+      </div>
+      <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
+        <button class="sdm-act" onclick="satoiNotify('✓ 自己入力フォームを開く\n\n今のあなたの5軸を、自分の言葉で入力。AI 推定と統合されます。')">📝 自己入力で更新</button>
+        <button class="sdm-act" onclick="location.href='SATOI_Mock_v1_F4_side_effects.html'">📊 副作用記録(F4)と連動</button>
+        <button class="sdm-act" onclick="satoiNotify('✓ 過去90日の推移を表示(プレースホルダ)\n\n5軸それぞれの時系列推移を、線グラフで見ます。')">📈 90日の推移を見る</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. マインドマップ現在地 ===== -->
+<section class="section">
+  <div class="section-eyebrow">YOUR PATH</div>
+  <h2 class="section-title">あなたは今、ここにいます</h2>
+  <p class="section-sub">
+    広いマインドマップの中で、あなたが選んできた道と、これから広がる道。<br>
+    迷っても、戻っても、誰も責めません。
+  </p>
+
+  <div class="mindmap-now">
+    <div class="mindmap-thumb">
+      <svg class="mindmap-thumb-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+        <!-- ===== 全ての線を先に描画(下層) ===== -->
+        <line x1="60" y1="60" x2="120" y2="120" stroke="#0D7377" stroke-width="2"/>
+        <line x1="40" y1="140" x2="120" y2="120" stroke="#0D7377" stroke-width="2"/>
+        <line x1="120" y1="120" x2="190" y2="60" stroke="rgba(212,169,94,0.6)" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <line x1="120" y1="120" x2="200" y2="130" stroke="rgba(212,169,94,0.6)" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <line x1="120" y1="120" x2="180" y2="200" stroke="rgba(212,169,94,0.6)" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+        <!-- ===== 過去ノード(線の上) ===== -->
+        <circle cx="60" cy="60" r="14" fill="#0D7377"/>
+        <text x="60" y="64" text-anchor="middle" fill="#FBF7F0" font-size="9" font-family="Noto Sans JP">診断</text>
+        <circle cx="40" cy="140" r="14" fill="#0D7377"/>
+        <text x="40" y="144" text-anchor="middle" fill="#FBF7F0" font-size="8" font-family="Noto Sans JP">標準</text>
+
+        <!-- ===== 未来ノード(線の上・点線・薄色) ===== -->
+        <circle cx="190" cy="60" r="10" fill="rgba(212,169,94,0.85)" stroke="#D4A95E" stroke-width="1.5"/>
+        <circle cx="200" cy="130" r="10" fill="rgba(212,169,94,0.85)" stroke="#D4A95E" stroke-width="1.5"/>
+        <circle cx="180" cy="200" r="10" fill="rgba(212,169,94,0.85)" stroke="#D4A95E" stroke-width="1.5"/>
+
+        <!-- ===== 中央「いま」を最前面に ===== -->
+        <circle cx="120" cy="120" r="24" fill="#D4622A" stroke="#FBF7F0" stroke-width="2.5"/>
+        <text x="120" y="125" text-anchor="middle" fill="#FBF7F0" font-size="11" font-family="Noto Sans JP" font-weight="700">いま</text>
+      </svg>
+    </div>
+    <div class="mindmap-info">
+      <div class="mindmap-info-eyebrow">CURRENT POSITION</div>
+      <div class="mindmap-info-where">標準治療を選択 →<br>TC療法を、検討中</div>
+      <div class="mindmap-info-trail">
+        診断(4/8) → 検査結果待ち(4/15) → セカンドオピニオン(4/22) → 標準治療を選ぶ(5/2) → <strong style="color:var(--warm-orange);">今、TC療法か他のレジメンか考えている</strong>
+      </div>
+      <div class="mindmap-people">
+        <span>👥</span>
+        <span>同じ道を歩いている人:<strong>7,124人</strong></span>
+      </div>
+      <div>
+        <button class="mindmap-cta" onclick="location.href='SATOI_Mock_v1_B1_hub.html?from=c1'">マインドマップで広げて見る →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 緊急QR 常設ボタン -->
+<div style="position:fixed; bottom:24px; right:24px; z-index:300;">
+  <button onclick="location.href='SATOI_Mock_v1_EMG_qr.html?from=c1'" style="display:flex; align-items:center; gap:10px; padding:14px 22px; background:linear-gradient(135deg, #B85450, #D4622A); color:white; border:none; border-radius:32px; font-size:13px; font-weight:600; cursor:pointer; box-shadow:0 12px 28px rgba(184,84,80,0.4); letter-spacing:0.04em;" title="夜間・救急時にQRで医療情報を開示">
+    🚨 緊急QR
+  </button>
+</div>
+
+<!-- ===== 4. マイチーム ===== -->
+<section class="section" style="background:var(--bg-cream);">
+  <div class="section-eyebrow">YOUR TEAM</div>
+  <h2 class="section-title">あなたは、ひとりじゃない</h2>
+  <p class="section-sub">
+    関わっている人たちが、ここに集まっています。<br>
+    誰かと話したい時も、ただ「読むだけ」「リアクションするだけ」の日も、それでいいんです。
+  </p>
+
+  <div class="team-wheel-wrap">
+    <div class="team-wheel"></div>
+    <div class="team-center">あおいさん<br><span style="font-size:11px; opacity:0.85;">(あなた)</span></div>
+
+    <div class="team-member" style="left:50%; top:8%;" onclick="openTeamMember('doctor')">
+      <div class="team-avatar">🩺</div>
+      <div class="team-name">主治医の先生</div>
+      <div class="team-role">主治医・LCG</div>
+    </div>
+    <div class="team-member" style="left:90%; top:30%;" onclick="openTeamMember('nurse')">
+      <div class="team-avatar">👩‍⚕️</div>
+      <div class="team-name">看護師の方</div>
+      <div class="team-role">看護師</div>
+    </div>
+    <div class="team-member" style="left:90%; top:70%;" onclick="openTeamMember('senior')">
+      <div class="team-avatar">🌿</div>
+      <div class="team-name">M.K.さん</div>
+      <div class="team-role">1年先輩 ・ 同じがん種</div>
+    </div>
+    <div class="team-member" style="left:50%; top:92%;" onclick="openTeamMember('coord')">
+      <div class="team-avatar">🤝</div>
+      <div class="team-name">SATOI コーディネーター</div>
+      <div class="team-role">コーディネーター</div>
+    </div>
+    <div class="team-member" style="left:10%; top:70%;" onclick="openTeamMember('family')">
+      <div class="team-avatar">💛</div>
+      <div class="team-name">家族(夫)</div>
+      <div class="team-role">登録済み</div>
+    </div>
+    <div class="team-member" style="left:10%; top:30%;" onclick="openTeamMember('friend')">
+      <div class="team-avatar">✉️</div>
+      <div class="team-name">友人</div>
+      <div class="team-role">未登録 ・ 招待できます</div>
+    </div>
+  </div>
+  <p class="team-caption">
+    タップすると、その人とのメッセージや、過ごしてきた時間が見えます。<br>
+    一週間連絡がなくても、誰かはあなたを思っています。
+  </p>
+</section>
+
+<!-- ===== 5. 対話の足跡 ===== -->
+<section class="section">
+  <div class="section-eyebrow">CONVERSATION TRACE</div>
+  <h2 class="section-title">対話の、足跡</h2>
+  <p class="section-sub">
+    あなたが話してくれた言葉は、ちゃんと、ここに残っています。<br>
+    思い出したくない日もありますし、もう一度読み返したい日もあります。どちらでも、いいんです。
+  </p>
+
+  <div class="trace-list">
+    <div class="trace-item" onclick="openTrace('1')">
+      <div class="trace-date">2026.05.18 ・ 23:42</div>
+      <div class="trace-snippet">「副作用が、思っていたよりつらい。仕事に行けるか不安です…」</div>
+      <div class="trace-meta">12分・粒3個</div>
+    </div>
+    <div class="trace-item" onclick="openTrace('2')">
+      <div class="trace-date">2026.05.15 ・ 14:08</div>
+      <div class="trace-snippet">「次の診察で、何を聞けばいいのか、まだ整理できていない」</div>
+      <div class="trace-meta">8分・粒2個</div>
+    </div>
+    <div class="trace-item" onclick="openTrace('3')">
+      <div class="trace-date">2026.05.10 ・ 21:15</div>
+      <div class="trace-snippet">「子どもに、どこまで話したらいいか分からない」</div>
+      <div class="trace-meta">22分・粒5個</div>
+    </div>
+    <div class="trace-item" onclick="openTrace('4')">
+      <div class="trace-date">2026.05.02 ・ 11:30</div>
+      <div class="trace-snippet">「標準治療を選んだ。これでよかったのか、まだ揺れている」</div>
+      <div class="trace-meta">18分・粒4個</div>
+    </div>
+    <div class="trace-item" onclick="openTrace('5')">
+      <div class="trace-date">2026.04.22 ・ 16:05</div>
+      <div class="trace-snippet">「セカンドオピニオン、行ってよかった。けれど、決められない」</div>
+      <div class="trace-meta">25分・粒6個</div>
+    </div>
+    <div class="trace-item" onclick="openTrace('6')">
+      <div class="trace-date">2026.04.08 ・ 19:20</div>
+      <div class="trace-snippet">「告知された。まだ、頭が真っ白で、何も考えられない」</div>
+      <div class="trace-meta">最初の対話 ・ 粒8個</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. SDM 先生に聞きたいことカード ===== -->
+<section class="section">
+  <div class="section-eyebrow">SDM CARDS</div>
+  <h2 class="section-title">先生に、聞きたいことカード</h2>
+  <p class="section-sub">
+    診察室で「言いたかったことが言えなかった」をなくす。<br>
+    AIが、あなたの対話から、聞いておくべきことを準備しています。
+  </p>
+
+  <div class="sdm-block">
+    <div class="sdm-row">
+      <div>
+        <div class="sdm-title-row">
+          <div class="sdm-icon">📋</div>
+          <div>
+            <div class="sdm-title">次回の診察に向けて</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">準備中の質問:11個 ・ チェック済み:4個</div>
+          </div>
+        </div>
+      </div>
+      <div class="sdm-countdown">次回診察まで・あと 3日</div>
+    </div>
+
+    <div class="sdm-questions-summary">
+      これまでの対話から、AIが大切だと思う質問を集めています。<br>
+      不要なものはチェックを外し、必要なものを追加できます。
+    </div>
+
+    <div class="sdm-list-mini">
+      <div class="sdm-q-mini checked"><span class="check"></span><span>提案されたTC療法の <strong>目的</strong> は、完治・延命・症状緩和のどれですか?</span></div>
+      <div class="sdm-q-mini checked"><span class="check"></span><span>副作用の中で、特に注意すべきものは何ですか?</span></div>
+      <div class="sdm-q-mini checked"><span class="check"></span><span>治療を <strong>続けながら仕事</strong> は可能ですか?</span></div>
+      <div class="sdm-q-mini checked"><span class="check"></span><span>セカンドオピニオンの結果を、どう取り入れていきますか?</span></div>
+      <div class="sdm-q-mini"><span class="check"></span><span>治療費の見通しと、高額療養費の申請について教えてください</span></div>
+      <div class="sdm-q-mini"><span class="check"></span><span>家族(子ども)に、どこまで・どう伝えるのが良いでしょうか?</span></div>
+      <div class="sdm-q-mini"><span class="check"></span><span>もし副作用がつらすぎたら、どのタイミングで相談すべきですか?</span></div>
+    </div>
+
+    <div class="sdm-actions">
+      <button class="sdm-act" onclick="satoiNotify('✓ PDF出力(11問)\n\nA4一枚に整形・診察室にお持ちください。')">📄 PDFで印刷</button>
+      <button class="sdm-act" onclick="satoiNotify('✓ QRコード生成\n\n診察室で先生のスマホに飛ばせます。')">📱 QRで先生に共有</button>
+      <button class="sdm-act" onclick="satoiNotify('✓ メール送信\n\n登録済みのご家族・主治医に送信可能。')">✉️ メール送信</button>
+      <button class="sdm-act" onclick="satoiNotify('✓ 物語の壺に記録\n\nマイページの「対話の足跡」に保存しました。光の粒+1。')">💎 物語に記録</button>
+      <button class="sdm-act" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?resume=1&cancer=breast&stage=II&from=c1_dialog'">+ AIに質問を追加してもらう</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. 私が守りたいこと ===== -->
+<section class="section" style="background:var(--bg-cream);">
+  <div class="section-eyebrow">WHAT I CHERISH</div>
+  <h2 class="section-title">私が、守りたいこと</h2>
+  <p class="section-sub">
+    白紙のノートに「大切なこと」を書くのは、難しい。<br>
+    AIとの対話から、あなたが大切にしてきたことを、SATOIが少しずつ拾い上げています。
+  </p>
+
+  <div class="value-cards">
+    <div class="value-card">
+      <div class="value-tag">FAMILY</div>
+      <div class="value-text">子どもとの時間を、できるだけ普通に過ごしたい</div>
+      <div class="value-source">2026.05.10 の対話から</div>
+    </div>
+    <div class="value-card">
+      <div class="value-tag">WORK</div>
+      <div class="value-text">仕事は、可能な範囲で続けたい</div>
+      <div class="value-source">2026.05.02 の対話から</div>
+    </div>
+    <div class="value-card">
+      <div class="value-tag">BODY</div>
+      <div class="value-text">痛みは、できる限り少なくしたい</div>
+      <div class="value-source">2026.04.22 の対話から</div>
+    </div>
+    <div class="value-card">
+      <div class="value-tag">SELF</div>
+      <div class="value-text">私のことは、私が決めたい</div>
+      <div class="value-source">2026.04.08 の最初の対話から</div>
+    </div>
+    <div class="value-card" style="background:rgba(13,115,119,0.05); border-style:dashed;">
+      <div class="value-tag">+</div>
+      <div class="value-text" style="color:var(--text-secondary); font-weight:400;">対話を重ねると、ここに増えていきます</div>
+      <div class="value-source">AI が次の対話で拾います</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. 今日の小さな一歩 ===== -->
+<section class="section">
+  <div class="section-eyebrow">SMALL STEP TODAY</div>
+  <h2 class="section-title">今日の、小さな一歩</h2>
+  <p class="section-sub">
+    何もしなくていい日もあります。それでも、もし良かったら。<br>
+    やった一歩は、物語の壺に、ひとつ光の粒が増えます。
+  </p>
+
+  <div class="step-row">
+    <div class="step-card done" onclick="toggleStep(this)">
+      <div class="step-icon"><span class="step-icon-inner">💧</span></div>
+      <div class="step-label">水を、ひとくち</div>
+      <div class="step-meta">今朝 7:42 完了</div>
+    </div>
+    <div class="step-card" onclick="toggleStep(this)">
+      <div class="step-icon"><span class="step-icon-inner">🪟</span></div>
+      <div class="step-label">窓を、開ける</div>
+      <div class="step-meta">2分でOK</div>
+    </div>
+    <div class="step-card" onclick="toggleStep(this)">
+      <div class="step-icon"><span class="step-icon-inner">📩</span></div>
+      <div class="step-label">主治医にメッセージ</div>
+      <div class="step-meta">気になることを、ひとつだけ</div>
+    </div>
+    <div class="step-card" onclick="toggleStep(this)">
+      <div class="step-icon"><span class="step-icon-inner">🌱</span></div>
+      <div class="step-label">外の空気を吸う</div>
+      <div class="step-meta">玄関までで充分</div>
+    </div>
+    <div class="step-card" onclick="toggleStep(this)">
+      <div class="step-icon"><span class="step-icon-inner">📖</span></div>
+      <div class="step-label">先輩の物語を、1つ読む</div>
+      <div class="step-meta">3分</div>
+    </div>
+    <div class="step-card" onclick="toggleStep(this)">
+      <div class="step-icon"><span class="step-icon-inner">🌙</span></div>
+      <div class="step-label">今日の気持ちを、1行</div>
+      <div class="step-meta">対話で・声でもOK</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== companion lamp(常駐) ===== -->
+<div class="companion-lamp" id="companionLamp" onclick="toggleLampBubble()">
+  <div class="lamp-orb"></div>
+  <div class="lamp-bubble" id="lampBubble">
+    あおいさん、今日もここに来てくださって、ありがとう。
+  </div>
+</div>
+
+<!-- ===== ナッジ ===== -->
+<div class="nudge" id="nudge">
+  <button class="nudge-close" onclick="closeNudge()">×</button>
+  <div id="nudgeText">次回の診察まであと3日。聞きたいことカードを見直しませんか?</div>
+  <div class="nudge-actions">
+    <button class="nudge-btn" id="nudgeAccept" onclick="acceptNudge()">見る</button>
+    <button class="nudge-btn outline" onclick="closeNudge()">あとで</button>
+  </div>
+</div>
+
+<!-- ===== 同じ道を歩いている人(ティッカー) ===== -->
+<div class="ticker">
+  <span class="dot"></span>
+  <span>いま <span class="ticker-num" id="tickerNum">1,247</span> 人が、同じステージで今日を過ごしています</span>
+</div>
+
+<!-- ===== AI 対話モーダル(簡易版) ===== -->
+<div class="overlay" id="dialogOverlay">
+  <div class="modal" style="max-width: 640px;">
+    <button class="modal-close" onclick="closeDialog()">×</button>
+    <div class="modal-title">AI対話・前回の続きから</div>
+    <div class="modal-date">2026.05.19 ・ 朝</div>
+    <div class="modal-body">
+      <div class="ai-line">
+        あおいさん、おかえりなさい。<br>
+        昨日の夜、副作用がつらいとお話されていましたね。今朝はいかがですか?
+      </div>
+      <div style="margin-top:24px;">
+        <button class="btn-primary" style="width:100%;" onclick="location.href='SATOI_Mock_v1_A2_dialog.html'">フル対話画面を開く →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 対話の足跡モーダル ===== -->
+<div class="overlay" id="traceOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeTrace()">×</button>
+    <div class="modal-title" id="traceTitle">対話の記録</div>
+    <div class="modal-date" id="traceDate"></div>
+    <div class="modal-body" id="traceBody"></div>
+  </div>
+</div>
+
+<!-- ===== 物語の壺 粒モーダル ===== -->
+<div class="overlay" id="particleOverlay">
+  <div class="modal" style="max-width: 480px;">
+    <button class="modal-close" onclick="closeParticle()">×</button>
+    <div class="modal-title">この光の粒は</div>
+    <div class="modal-date" id="particleDate"></div>
+    <div class="modal-body" id="particleBody"></div>
+  </div>
+</div>
+
+<!-- ===== チームメンバー モーダル ===== -->
+<div class="overlay" id="teamOverlay">
+  <div class="modal" style="max-width: 480px;">
+    <button class="modal-close" onclick="closeTeam()">×</button>
+    <div class="modal-title" id="teamTitle"></div>
+    <div class="modal-date" id="teamRole"></div>
+    <div class="modal-body" id="teamBody"></div>
+  </div>
+</div>
+
+<!-- ===== フッター ===== -->
+<footer class="footer">
+  <div class="footer-logo">● SATOI</div>
+  <div style="font-size:13px; margin-bottom:18px; max-width:600px; margin-left:auto; margin-right:auto; line-height:1.9;">
+    あなたの物語は、あなたのものです。<br>
+    SATOIは、伴走するだけで、決して急かしません。
+  </div>
+  <div class="footer-row">
+    <div class="footer-badge"><span>🇯🇵</span><span>厚労省 副作用報告連携</span></div>
+    <div class="footer-badge"><span>🔒</span><span>SOC 2 ・ 本人同意ベース</span></div>
+    <div class="footer-badge"><span>🤝</span><span>JOInT 諮問委員会ガバナンス</span></div>
+  </div>
+  <div style="margin-top:24px;">
+    <a class="footer-link" href="#" onclick="satoiNotify('物語の壺データの取扱いについて(プライバシーポリシーへのリンク)'); return false;">物語の壺データの取扱いについて</a>
+  </div>
+</footer>
+
+<script>
+
+/* === SATOI 共通リッチトースト関数 === */
+(function ensureToastHost(){
+  if (document.getElementById('satoi-toast-host')) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div');
+      host.id = 'satoi-toast-host';
+      document.body.appendChild(host);
+    }
+  });
+  if (document.body && !document.getElementById('satoi-toast-host')) {
+    const host = document.createElement('div');
+    host.id = 'satoi-toast-host';
+    document.body.appendChild(host);
+  }
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) {
+    html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  }
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+// 既存の alert を全て satoiNotify にフォールバック(他コードからのalert呼び出しもキャッチ)
+window.__origAlert = window.alert;
+
+/* === SATOI ユニバーサル横断ナビ JS === */
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div');
+    nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る" aria-label="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム" aria-label="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ" aria-label="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語" aria-label="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html?from=c1');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn');
+    const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const lang = b.dataset.lang;
+        const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+        if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+        document.documentElement.lang = lang;
+        langPop.classList.remove('show');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+
+/* === SATOI 横断ジャーニーバー JS(B3/C1共通)=== */
+(function setupSatoiJBar(){
+  function inject(){
+    if (document.getElementById('satoi-jbar')) return;
+    // 現在地は URLパラメータ ?beat=xxx で指定可能、なければ未指定(どのチップもアクティブにしない)
+    // 2026-05-20: Katsujiさん指示により固定デフォルト'consider'を廃止。
+    const params = new URLSearchParams(location.search);
+    const currentBeat = params.get('beat') || null;
+    const beats = [
+      {id:'diagnosis', label:'診断', n:1},
+      {id:'exam', label:'検査', n:2},
+      {id:'consider', label:'治療法を考える', n:3},
+      {id:'treatment', label:'治療', n:4},
+      {id:'living', label:'治療中の暮らし', n:5},
+      {id:'follow', label:'治療後・経過観察', n:6},
+      {id:'money', label:'お金・制度', n:7},
+      {id:'palliative', label:'もしもの時', n:8},
+    ];
+    const curIdx = currentBeat ? beats.findIndex(b => b.id === currentBeat) : -1;
+    const idx = curIdx; // -1 ならどのチップも current にならず、done もつかない
+    const bar = document.createElement('nav');
+    bar.id = 'satoi-jbar';
+    bar.className = 'satoi-jbar';
+    bar.setAttribute('aria-label', 'ペーシェントジャーニー');
+    let inner = '<div class="satoi-jbar-inner">';
+    beats.forEach((b, i) => {
+      const cls = (i === idx) ? 'current' : (i < idx ? 'done' : '');
+      inner += '<div class="satoi-jchip '+cls+'" data-beat="'+b.id+'" data-i="'+i+'"><span class="satoi-jchip-n">'+b.n+'</span><span>'+b.label+'</span></div>';
+      if (i < beats.length - 1) inner += '<span class="satoi-jarrow">›</span>';
+    });
+    if (idx >= 0) {
+      inner += '<span class="satoi-jbar-peers">同じ段階に <strong>'+(3247 + Math.floor(Math.random()*60-30))+'</strong> 人</span>';
+    }
+    inner += '</div>';
+    bar.innerHTML = inner;
+    // ヘッダーの直後 or body 先頭に
+    const header = document.querySelector('.header');
+    if (header && header.nextSibling) header.parentNode.insertBefore(bar, header.nextSibling);
+    else document.body.insertBefore(bar, document.body.firstChild);
+    document.body.classList.add('satoi-has-jbar');
+    bar.querySelectorAll('.satoi-jchip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const beat = chip.dataset.beat;
+        // 国がんしおり準拠の CHP 系ページへ遷移
+        const beatToChp = {
+          diagnosis: 'SATOI_Mock_v1_CHP_diagnosis.html',
+          exam: 'SATOI_Mock_v1_CHP_exam.html',
+          consider: 'SATOI_Mock_v1_CHP_consider.html',
+          treatment: 'SATOI_Mock_v1_CHP_treatment.html',
+          living: 'SATOI_Mock_v1_CHP_living.html',
+          follow: 'SATOI_Mock_v1_CHP_follow.html',
+          money: 'SATOI_Mock_v1_CHP_money.html',
+          palliative: 'SATOI_Mock_v1_CHP_palliative.html'
+        };
+        const target = beatToChp[beat];
+        if (target) location.href = target + '?from=c1_jbar';
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+
+/* ===== 夜空の星 ===== */
+(function generateStars(){
+  const layer = document.getElementById('heroStars');
+  if (!layer) return;
+  for (let i=0; i<60; i++) {
+    const s = document.createElement('div');
+    s.className = 'h-star';
+    const size = Math.random()*2.4 + 0.6;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = (Math.random()*100) + '%';
+    s.style.top = (Math.random()*70) + '%';
+    s.style.animationDelay = (Math.random()*4) + 's';
+    s.style.animationDuration = (Math.random()*2 + 3) + 's';
+    layer.appendChild(s);
+  }
+})();
+
+/* ===== 物語の壺・光の粒 ===== */
+const PARTICLES = [
+  {date:'2026.05.18 23:42', text:'副作用がつらい、と話した夜。AIが「明日のあなたを、責めないで」と言ってくれた。'},
+  {date:'2026.05.15 14:08', text:'次回の診察で聞くことを、5つ整理した。少し肩の力が抜けた。'},
+  {date:'2026.05.10 21:15', text:'子どもに、どこまで話すか。1年先輩の方が「私はこう話したよ」と教えてくれた。'},
+  {date:'2026.05.02 11:30', text:'標準治療を選ぶ、と決めた日。揺れていてもいい、と先生も言ってくれた。'},
+  {date:'2026.04.22 16:05', text:'セカンドオピニオンに行った。違う先生の言葉も、同じくらい大事だった。'},
+  {date:'2026.04.15 09:50', text:'検査結果を聞きに行く前夜。眠れなかった。SATOIで「同じ夜」を見つけた。'},
+  {date:'2026.04.08 19:20', text:'告知された日。頭が真っ白で、最初に開いたのが、この画面だった。'},
+];
+
+(function fillJar(){
+  const layer = document.getElementById('jarParticles');
+  if (!layer) return;
+  // 壺の中(底〜中段)に粒を配置(SVG 360x420 の壺内側を %換算で)
+  // 壺の内側エリア:中央 cx=50%, cy=70%(壺の底寄り), rx≈22%, ry≈18%
+  const positions = [];
+  for (let i=0; i<80; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const r = Math.sqrt(Math.random()); // 中心寄りに密度
+    const cx = 50 + Math.cos(angle) * r * 22;  // %
+    const cy = 68 + Math.sin(angle) * r * 16;  // %
+    if (cy < 50) continue; // 壺の上半分には少なく
+    positions.push({x:cx, y:cy});
+  }
+  positions.forEach((pos, i) => {
+    const p = document.createElement('div');
+    p.className = 'jar-p';
+    // 大きさ変化:情報量を表現(粒の40%が小、40%が中、20%が大)
+    const sizeRoll = Math.random();
+    let size, cls = '';
+    if (sizeRoll > 0.80) { size = 14 + Math.random()*5; cls = 'large'; }      // 深い対話の日
+    else if (sizeRoll > 0.40) { size = 8 + Math.random()*3; }                  // 普通の記録
+    else { size = 5 + Math.random()*2; }                                       // 小さな一歩
+    // 色の変化:粒のタイプ(対話=金色/選択=オレンジ大/手紙=ティール)
+    const colorRoll = Math.random();
+    if (colorRoll > 0.85) cls += ' teal';
+    p.className = ('jar-p ' + cls).trim();
+    p.style.left = pos.x + '%';
+    p.style.top = pos.y + '%';
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    const animDur = 2.2 + Math.random()*2.4;
+    const floatDur = 4 + Math.random()*2;
+    p.style.animation = `p-shimmer ${animDur}s ease-in-out ${Math.random()*3}s infinite, p-float ${floatDur}s ease-in-out ${Math.random()*3}s infinite`;
+    const memIdx = i % PARTICLES.length;
+    p.addEventListener('click', () => openParticle(memIdx));
+    layer.appendChild(p);
+    setTimeout(() => { p.style.opacity = 0.7 + Math.random()*0.3; }, i*25);
+  });
+})();
+
+/* 「光を、揺らしてみる」 — 全粒に揺れアニメ */
+function stirJar() {
+  const ps = document.querySelectorAll('.jar-p');
+  ps.forEach((p, i) => {
+    setTimeout(() => {
+      p.style.transition = 'transform 0.8s cubic-bezier(0.4,0,0.2,1)';
+      const dx = (Math.random() - 0.5) * 16;
+      const dy = (Math.random() - 0.5) * 12;
+      p.style.transform = `translate(${dx}px, ${dy}px) scale(1.2)`;
+      setTimeout(() => {
+        p.style.transform = '';
+      }, 900);
+    }, i * 8);
+  });
+}
+
+/* === 物語の壺 SNS シェア === */
+function shareJar() {
+  // 簡易モーダル(動的生成)
+  if (document.getElementById('jarShareModal')) {
+    document.getElementById('jarShareModal').remove();
+    return;
+  }
+  const m = document.createElement('div');
+  m.id = 'jarShareModal';
+  m.style.cssText = 'position:fixed; inset:0; background:rgba(11,23,54,0.7); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation: fadeInModal 0.3s;';
+  m.innerHTML = `
+    <div style="background:white; border-radius:20px; padding:32px; max-width:480px; width:100%; box-shadow:0 24px 60px rgba(11,23,54,0.3);">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+        <div style="font-size:16px; font-weight:600; color:#1A2A40;">📤 物語の壺を、共有</div>
+        <button onclick="document.getElementById('jarShareModal').remove();" style="background:transparent; border:none; font-size:24px; cursor:pointer; color:rgba(26,42,64,0.5);">×</button>
+      </div>
+      <div style="font-size:13px; color:rgba(26,42,64,0.75); line-height:1.85; margin-bottom:18px;">
+        個人を特定する情報は隠し、抜粋とハッシュタグ <strong>#SATOI</strong> だけが共有されます。
+      </div>
+      <!-- 壺プレビュー(OG) -->
+      <div style="background:linear-gradient(135deg, #0B1736, #1A2548); border-radius:14px; padding:24px 22px; margin-bottom:18px; color:white; text-align:center;">
+        <div style="font-size:11px; letter-spacing:0.32em; color:#F0C97A; margin-bottom:10px;">MY STORY JAR ・ SATOI</div>
+        <div style="font-size:22px; font-weight:300; margin-bottom:6px;">28日間の、物語</div>
+        <div style="font-size:12px; opacity:0.8; margin-bottom:14px;">28個の光 ・ 12個の選択 ・ 5通の手紙</div>
+        <svg width="100" height="120" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg" style="margin:0 auto;">
+          <path d="M 22 22 L 22 14 Q 22 8 28 8 L 52 8 Q 58 8 58 14 L 58 22 Q 72 30 72 60 Q 72 92 40 92 Q 8 92 8 60 Q 8 30 22 22 Z" fill="rgba(248,246,240,0.15)" stroke="#D4A95E" stroke-width="1.5"/>
+          <path d="M 14 60 Q 14 88 40 88 Q 66 88 66 60 L 66 44 Q 40 54 14 44 Z" fill="rgba(212,169,94,0.65)"/>
+          <circle cx="28" cy="56" r="2" fill="#F0C97A"/>
+          <circle cx="48" cy="68" r="1.6" fill="#F0C97A"/>
+          <circle cx="56" cy="58" r="2.2" fill="#F0C97A"/>
+        </svg>
+        <div style="font-size:10.5px; opacity:0.7; margin-top:8px;">satoi.example/my-jar/${Date.now().toString(36)}</div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="c1-share" data-net="x" style="flex:1; min-width:90px; padding:11px; background:#000; color:white; border:none; border-radius:18px; font-size:12px; cursor:pointer;">𝕏</button>
+        <button class="c1-share" data-net="line" style="flex:1; min-width:90px; padding:11px; background:#06C755; color:white; border:none; border-radius:18px; font-size:12px; cursor:pointer;">LINE</button>
+        <button class="c1-share" data-net="instagram" style="flex:1; min-width:90px; padding:11px; background:linear-gradient(135deg,#F58529,#DD2A7B,#8134AF); color:white; border:none; border-radius:18px; font-size:12px; cursor:pointer;">Instagram</button>
+        <button class="c1-share" data-net="threads" style="flex:1; min-width:90px; padding:11px; background:#000; color:white; border:none; border-radius:18px; font-size:12px; cursor:pointer;">Threads</button>
+        <button class="c1-share" data-net="copy" style="flex:1; min-width:90px; padding:11px; background:#D4A95E; color:#0B1736; border:none; border-radius:18px; font-size:12px; cursor:pointer;">🔗 コピー</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(m);
+  m.addEventListener('click', (e) => { if (e.target === m) m.remove(); });
+  m.querySelectorAll('.c1-share').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const net = btn.dataset.net;
+      const url = encodeURIComponent('https://satoi.example/my-jar/sample');
+      const text = encodeURIComponent('SATOI で 28日間の物語を、紡いでいます。\n28個の光・12個の選択・5通の手紙。\n#SATOI #ナラティブメディスン');
+      const sharePath = 'https://satoi.example/my-jar/sample #SATOI';
+      let target = '';
+      switch(net) {
+        case 'x': target = `https://twitter.com/intent/tweet?text=${text}&url=${url}`; break;
+        case 'line': target = `https://social-plugins.line.me/lineit/share?url=${url}&text=${text}`; break;
+        case 'threads': target = `https://www.threads.net/intent/post?text=${text}%20${url}`; break;
+        case 'instagram':
+          alert('Instagram は直接シェアAPIが提供されていないため、画像を保存→Instagram アプリで投稿してください。\n\n✓ 物語の壺カードを画像として保存しました(プレースホルダ)');
+          return;
+        case 'copy':
+          navigator.clipboard.writeText(sharePath).then(() => alert('✓ コピーしました')).catch(() => prompt('コピーしてください:', sharePath));
+          return;
+      }
+      window.open(target, '_blank', 'noopener,noreferrer,width=600,height=600');
+    });
+  });
+}
+
+function openParticle(idx) {
+  const item = PARTICLES[idx];
+  document.getElementById('particleDate').textContent = item.date;
+  document.getElementById('particleBody').textContent = item.text;
+  document.getElementById('particleOverlay').classList.add('show');
+}
+function closeParticle() { document.getElementById('particleOverlay').classList.remove('show'); }
+
+/* ===== 気持ち軌跡 ===== */
+/* ===== EMPSe 軸ダイアログ ===== */
+const EMPSE_DETAIL = {
+  physical: { name:'身体(Physical)', score:60, color:'#D4A95E',
+    title:'からだの状態 ・ 60',
+    body:'治療開始後の体力・痛み・倦怠感の総合スコア。<br>Day 3-5 で一時的に下がる傾向(治療リズム影響)。Day 8-14 で回復します。<br><strong>AI観察:</strong>先週より +5。徐々に体力が戻ってきています。',
+    sources:'F4 副作用記録 / 体調入力 / 治療リズム推定'
+  },
+  energy: { name:'活力(Energy)', score:45, color:'#D4622A',
+    title:'活力 ・ 45',
+    body:'やる気・集中力・「動ける感じ」のスコア。<br><strong>AI観察:</strong>Day 3 のピーク帯で 45 まで低下。これは典型的なパターンで、心配は要りません。Day 7 で 60 まで戻る予測です。',
+    sources:'対話のテンポ / 短文記録の活力ワード / 自己入力'
+  },
+  empathy: { name:'共感(Empathy)', score:75, color:'#0D7377',
+    title:'共感 ・ 75 (今週高め)',
+    body:'家族・先輩・コーディネーターとの繋がりの密度。<br><strong>AI観察:</strong>今週は配偶者との対話・1年先輩との物語シェアが活発。SATOI内のネットワークが、しっかり機能しています。',
+    sources:'マイチーム内メッセージ / 先輩物語の閲覧 / コーディネーター対話'
+  },
+  mental: { name:'精神(Mental)', score:55, color:'#7FA8C9',
+    title:'精神 ・ 55',
+    body:'こころの安定・不安の度合い・希望の感覚。<br><strong>AI観察:</strong>5/10 の子どもへの伝え方相談以降、少しずつ上がっています。「決めなくていい」を実感できた日が、効いています。',
+    sources:'気持ち軌跡 / AI対話の感情ワード / 物語の壺の記録内容'
+  },
+  social: { name:'社会(Social)', score:65, color:'#14A6AB',
+    title:'社会 ・ 65',
+    body:'仕事・家族・友人との社会的接続感。<br><strong>AI観察:</strong>仕事を続けていることが、大きく寄与しています。友人(未登録)を招待すると、+10 程度の向上が見込めます。',
+    sources:'仕事継続フラグ / 招待状況 / 家族・友人との接続'
+  }
+};
+
+function openEmpseAxis(key) {
+  const d = EMPSE_DETAIL[key];
+  if (!d) return;
+  alert(`【${d.title}】\n\n${d.body.replace(/<br>/g,'\n').replace(/<[^>]+>/g,'')}\n\n— 推定の根拠:${d.sources}`);
+}
+
+/* === F4 → C1 EMPSe 連動受信(URLパラメータ反映) === */
+(function applyEmpseFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const empseStr = params.get('empse');
+  const from = params.get('from');
+  if (!empseStr) return;
+  // 形式: P55,E32,Em75,M50,S65
+  const parsed = {};
+  empseStr.split(',').forEach(pair => {
+    const m = pair.match(/^([A-Za-z]+)(\d+)$/);
+    if (m) parsed[m[1]] = parseInt(m[2], 10);
+  });
+  if (!parsed.P) return;
+  // SVG polygon 更新
+  const cx = 150, cy = 150, r = 110;
+  const angles = { P: -90, E: -18, Em: 54, M: 126, S: -162 };
+  const order = ['P', 'E', 'Em', 'M', 'S'];
+  const points = order.map(k => {
+    const rad = angles[k] * Math.PI / 180;
+    const dist = (parsed[k] / 100) * r;
+    return `${(cx + Math.cos(rad) * dist).toFixed(1)},${(cy + Math.sin(rad) * dist).toFixed(1)}`;
+  }).join(' ');
+  const poly = document.getElementById('empsePoly');
+  if (poly) {
+    poly.setAttribute('points', points);
+    poly.style.transition = 'all 1.2s ease';
+  }
+  // 軸バー更新
+  const axisMap = { P:'physical', E:'energy', Em:'empathy', M:'mental', S:'social' };
+  const axisColors = { P:'#D4A95E', E:'#D4622A', Em:'#0D7377', M:'#7FA8C9', S:'#14A6AB' };
+  Object.keys(parsed).forEach(k => {
+    const val = parsed[k];
+    const rows = document.querySelectorAll('.empse-axis-row');
+    rows.forEach(row => {
+      const onClick = row.getAttribute('onclick') || '';
+      if (onClick.includes(`'${axisMap[k]}'`)) {
+        const fill = row.querySelector('.empse-axis-fill');
+        const num = row.querySelector('.empse-axis-num');
+        if (fill) fill.style.width = val + '%';
+        if (num) num.textContent = val;
+      }
+    });
+  });
+  // 総合スコア更新
+  const total = Math.round((parsed.P + parsed.E + parsed.Em + parsed.M + parsed.S) / 5);
+  const totalEl = document.querySelector('.empse-overall-num');
+  if (totalEl) {
+    const oldTotal = parseInt(totalEl.textContent, 10) || 60;
+    totalEl.textContent = total;
+    const trendEl = document.querySelector('.empse-overall-trend');
+    if (trendEl) {
+      const d = total - oldTotal;
+      trendEl.textContent = (d >= 0 ? '↑ F4 反映 +' : '↓ F4 反映 ') + d;
+      trendEl.style.color = d >= 0 ? 'var(--teal)' : 'var(--warm-orange)';
+    }
+  }
+  // 反映通知バナー
+  if (from === 'f4') {
+    const banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed; top:90px; left:50%; transform:translateX(-50%); z-index:500; padding:14px 28px; background:linear-gradient(135deg,#D4622A,#E08461); color:white; border-radius:24px; font-size:13.5px; font-weight:500; box-shadow:0 12px 30px rgba(212,98,42,0.4); animation: slideDown 0.5s ease; cursor:pointer;';
+    banner.innerHTML = `✓ F4 副作用記録から EMPSe を更新しました ・ 総合 <strong>${total}</strong>`;
+    document.body.appendChild(banner);
+    setTimeout(() => { banner.style.opacity = '0'; banner.style.transition = 'opacity 0.6s'; }, 4200);
+    setTimeout(() => banner.remove(), 5000);
+    // EMPSe セクションへスムーススクロール
+    setTimeout(() => {
+      const empseCard = document.querySelector('.empse-card');
+      if (empseCard) empseCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 800);
+  }
+})();
+
+function selectMood(btn) {
+  document.querySelectorAll('.mood-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const mood = btn.dataset.mood;
+  if (mood === 'その他') {
+    openDialog();
+    return;
+  }
+  setTimeout(() => {
+    showNudgeWith({
+      text: `「${mood}」、記録しました。今日の点が、波に加わりました。物語の壺に光が1つ増えています。`,
+      btn: '対話で続ける',
+      action: () => { closeNudge(); openDialog(); }
+    });
+  }, 280);
+}
+
+/* ===== 対話の足跡モーダル ===== -- */
+const TRACES = {
+  '1': {
+    title: '副作用が、つらい',
+    date: '2026.05.18 ・ 23:42 ・ 12分',
+    body: `<div class="user-line">副作用が、思っていたよりつらい。仕事に行けるか不安です…</div>
+<div class="ai-line">それは、つらいですね。<br>身体がつらい時、心も一緒に弱くなります。今夜は、無理をしないでください。<br>明日の朝、もう一度、話しませんか?</div>
+<div class="user-line">…はい。明日、また。</div>
+<div class="ai-line">良かった。あなたが「明日」と言ってくれて、ほっとしました。<br>今日のこと、物語の壺に、そっとしまっておきます。</div>`
+  },
+  '2': {
+    title: '次回の診察で、何を聞くか',
+    date: '2026.05.15 ・ 14:08 ・ 8分',
+    body: `<div class="user-line">次の診察で、何を聞けばいいのか、まだ整理できていない</div>
+<div class="ai-line">わかりました。一緒に、整理しましょう。<br>今、いちばん気になっていることは、何ですか?</div>
+<div class="user-line">副作用のことと、仕事のこと…</div>
+<div class="ai-line">それでは「聞きたいことカード」に、その2つを書き出してみますね。<br>整理した質問は、先生にQRコードで渡せますよ。</div>`
+  },
+  '3': {
+    title: '子どもに、どう伝えるか',
+    date: '2026.05.10 ・ 21:15 ・ 22分',
+    body: `<div class="user-line">子どもに、どこまで話したらいいか分からない</div>
+<div class="ai-line">大事な、そして難しい問いですね。<br>お子さんのお歳と、これまでどんなことを話してきたかを、教えてもらえますか?</div>
+<div class="user-line">小学校4年。まだ詳しいことは話していない</div>
+<div class="ai-line">同じ年齢のお子さんを持つ先輩の物語が、3つあります。<br>「ぜんぶ言わなくていいけど、嘘もつかない」と話していた方が、多いです。<br>読んでみますか?</div>`
+  },
+  '4': {
+    title: '標準治療を、選んだ',
+    date: '2026.05.02 ・ 11:30 ・ 18分',
+    body: `<div class="user-line">標準治療を選んだ。これでよかったのか、まだ揺れている</div>
+<div class="ai-line">選んだ後でも、揺れていいんです。<br>選び直すこともできます。「選んだ自分」を責めないでください。</div>
+<div class="user-line">…ありがとう</div>
+<div class="ai-line">同じ選択をした方は、7,124人います。みんな、揺れながら、歩いています。</div>`
+  },
+  '5': {
+    title: 'セカンドオピニオン、行ってよかった',
+    date: '2026.04.22 ・ 16:05 ・ 25分',
+    body: `<div class="user-line">セカンドオピニオン、行ってよかった。けれど、決められない</div>
+<div class="ai-line">2つの意見があると、迷いますよね。<br>「決められない」のは、両方の意見が、あなたの中で、まだ生きている証拠です。</div>
+<div class="user-line">…そう、思っていいんですね</div>
+<div class="ai-line">今夜は、決めなくていいです。明日も、明後日も、まだ時間はあります。</div>`
+  },
+  '6': {
+    title: '告知された日',
+    date: '2026.04.08 ・ 19:20 ・ 最初の対話',
+    body: `<div class="user-line">告知された。まだ、頭が真っ白で、何も考えられない</div>
+<div class="ai-line">そうですよね。何も考えられない、と教えてくれて、ありがとうございます。<br>今夜は、何もしなくていいんです。ここに来てくださっただけで、充分です。</div>
+<div class="user-line">…ここに、いていいんですか</div>
+<div class="ai-line">はい。ずっと、いていいです。<br>同じ夜を、過ごしている人がいます。あなたは、一人じゃありません。</div>`
+  }
+};
+
+function openTrace(id) {
+  const t = TRACES[id];
+  if (!t) return;
+  document.getElementById('traceTitle').textContent = t.title;
+  document.getElementById('traceDate').textContent = t.date;
+  document.getElementById('traceBody').innerHTML = t.body;
+  document.getElementById('traceOverlay').classList.add('show');
+}
+function closeTrace() { document.getElementById('traceOverlay').classList.remove('show'); }
+
+/* ===== チームメンバー ===== */
+const TEAM = {
+  doctor:  {title:'主治医の先生', role:'主治医・乳腺腫瘍内科', body:'<div class="ai-line">最終診察:5/2 ・ 次回:5/22<br>診察メモ:「標準治療TC療法を提案。患者の生活背景を考慮して、4週ごとのスケジュール調整可能と説明済み」</div><div style="margin-top:18px;"><button class="sdm-act" onclick="satoiNotify(\'先生にメッセージを送信(プレースホルダ)\')">✉️ 先生にメッセージ</button> <button class="sdm-act" onclick="satoiNotify(\'カルテを表示(プレースホルダ)\')">📋 カルテを見る</button></div>'},
+  nurse:   {title:'看護師の方', role:'看護師・乳腺ケアチーム', body:'<div class="ai-line">「副作用の相談、いつでもどうぞ。夜間も電話受付しています」</div><div style="margin-top:18px;"><button class="sdm-act" onclick="satoiNotify(\'看護師チャットを開く(プレースホルダ)\')">💬 チャットを開く</button></div>'},
+  senior:  {title:'1年先輩の方', role:'同じがん種(乳がん・ステージII)', body:'<div class="ai-line">「同じ道を歩いてきた者として、つらい時はメッセージください。返事は遅いかもしれませんが、必ず読みます」</div><div style="margin-top:14px; font-size:13px; color:var(--text-secondary);">最近の物語:「治療と仕事の両立、私はこうしました」(7分・粒12個)</div><div style="margin-top:18px;"><button class="sdm-act" onclick="location.href=\'SATOI_Mock_v1_D1_stories.html\'">📖 物語を読む</button> <button class="sdm-act" onclick="satoiNotify(\'メッセージ送信(プレースホルダ)\')">💌 メッセージを送る</button></div>'},
+  coord:   {title:'SATOI コーディネーター', role:'あなたの伴走者', body:'<div class="ai-line">「分からないこと、迷っていること、なんでも聞いてください。私は、医療者でも、ただのAIでもありません。あなたの側にいる、人間です」</div><div style="margin-top:18px;"><button class="sdm-act" onclick="satoiNotify(\'通話を予約(プレースホルダ)\')">📞 通話を予約</button> <button class="sdm-act" onclick="satoiNotify(\'メッセージ(プレースホルダ)\')">✉️ メッセージ</button></div>'},
+  family:  {title:'登録済みのご家族', role:'配偶者 ・ 自動共有:選択中の項目のみ', body:'<div class="ai-line">「ご家族向けの場所」が、SATOI内に用意されています。<br>あなたが共有したいタイミングで、共有する範囲を選べます。ご家族はファミリービューで、あなたの状況を見守れます。</div><div style="margin-top:18px;"><button class="sdm-act" onclick="satoiNotify(\'✓ 共有設定を変更\\n\\nどの情報を家族に見せるか、項目ごとに細かく選べます。\')">⚙️ 共有設定を変える</button> <button class="sdm-act" onclick="window.open(\'SATOI_Mock_v1_FAM_view.html\', \'_blank\')">💛 家族のページを見る</button></div>'},
+  friend:  {title:'友人(未登録)', role:'招待できます', body:'<div class="ai-line">「一人で抱え込まないで」と思っている友人がいたら、招待することもできます。<br>共有する範囲は、あなたが選べます。「読むだけ」「励ますだけ」の関係でも、充分です。</div><div style="margin-top:18px;"><button class="sdm-act" onclick="satoiNotify(\'招待リンクをコピー\')">🔗 招待リンクをコピー</button></div>'}
+};
+
+function openTeamMember(key) {
+  const m = TEAM[key];
+  if (!m) return;
+  document.getElementById('teamTitle').textContent = m.title;
+  document.getElementById('teamRole').textContent = m.role;
+  document.getElementById('teamBody').innerHTML = m.body;
+  document.getElementById('teamOverlay').classList.add('show');
+}
+function closeTeam() { document.getElementById('teamOverlay').classList.remove('show'); }
+
+/* ===== 今日の小さな一歩 ===== */
+function toggleStep(card) {
+  if (card.classList.contains('done')) return;
+  card.classList.add('done');
+  const meta = card.querySelector('.step-meta');
+  if (meta) {
+    const now = new Date();
+    meta.textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')} 完了 ・ 光の粒 +1`;
+  }
+  // 壺に1粒追加(視覚的)
+  addParticleToJar();
+}
+
+function addParticleToJar() {
+  const layer = document.getElementById('jarParticles');
+  if (!layer) return;
+  const p = document.createElement('div');
+  p.className = 'jar-p';
+  p.style.left = (45 + Math.random()*15) + '%';
+  p.style.top = (44 + Math.random()*22) + '%';
+  const size = 6 + Math.random()*5;
+  p.style.width = size + 'px';
+  p.style.height = size + 'px';
+  p.style.background = 'var(--warm-orange)';
+  p.style.boxShadow = '0 0 14px var(--warm-orange)';
+  p.style.opacity = 0;
+  layer.appendChild(p);
+  requestAnimationFrame(() => {
+    p.style.transition = 'opacity 1.6s ease, transform 1.6s ease';
+    p.style.transform = 'scale(1.4)';
+    p.style.opacity = 1;
+    setTimeout(() => { p.style.transform = 'scale(1)'; }, 1600);
+  });
+}
+
+/* ===== ナッジ ===== */
+let nudgeTimer;
+const NUDGES = [
+  {text:'次回の診察まであと3日。聞きたいことカードを見直しませんか?', btn:'見る', target:'#sdmBlock'},
+  {text:'M.K.さん(1年先輩)が新しい物語を投稿しています。「副作用と仕事の両立」', btn:'読む', action:'modal:senior'},
+  {text:'今日の気持ちを、まだ記録していません。1行だけでも。', btn:'1行記録', action:'mood'},
+  {text:'家族(夫)に「今日のこと」を共有しますか?共有範囲は、あなたが選べます。', btn:'共有設定', action:'modal:family'},
+];
+
+let currentNudge = null;
+function scheduleNudges() {
+  let idx = 0;
+  nudgeTimer = setInterval(() => {
+    const n = NUDGES[idx % NUDGES.length];
+    showNudgeWith({
+      text: n.text,
+      btn: n.btn,
+      action: () => {
+        closeNudge();
+        if (n.action === 'mood') {
+          document.getElementById('moodWrap').scrollIntoView({behavior:'smooth', block:'center'});
+        } else if (n.action && n.action.startsWith('modal:')) {
+          openTeamMember(n.action.split(':')[1]);
+        } else if (n.target) {
+          document.querySelector(n.target)?.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      }
+    });
+    idx++;
+  }, 28000);
+}
+
+function showNudgeWith(opt) {
+  const n = document.getElementById('nudge');
+  document.getElementById('nudgeText').textContent = opt.text;
+  const acceptBtn = document.getElementById('nudgeAccept');
+  acceptBtn.textContent = opt.btn || '見る';
+  currentNudge = opt;
+  n.classList.add('show');
+}
+function acceptNudge() {
+  if (currentNudge && currentNudge.action) {
+    currentNudge.action();
+  } else {
+    closeNudge();
+  }
+}
+function closeNudge() { document.getElementById('nudge').classList.remove('show'); }
+
+setTimeout(() => {
+  showNudgeWith({
+    text: 'おかえりなさい。前回の対話の続きから、始めましょうか?',
+    btn: '続きから',
+    action: () => { closeNudge(); openDialog(); }
+  });
+}, 9000);
+setTimeout(scheduleNudges, 26000);
+
+/* ===== AI対話モーダル ===== */
+function openDialog() { document.getElementById('dialogOverlay').classList.add('show'); }
+function closeDialog() { document.getElementById('dialogOverlay').classList.remove('show'); }
+
+/* ===== companion lamp バブル ===== */
+function toggleLampBubble() {
+  const b = document.getElementById('lampBubble');
+  b.classList.toggle('show');
+}
+setTimeout(() => {
+  document.getElementById('lampBubble').classList.add('show');
+}, 2400);
+setTimeout(() => {
+  document.getElementById('lampBubble').classList.remove('show');
+}, 9000);
+
+/* ===== 深夜・早朝トーン切替 ===== */
+(function setTimeMode(){
+  const hour = new Date().getHours();
+  const eyebrow = document.getElementById('greetingEyebrow');
+  const sub = document.getElementById('greetingSub');
+  const bubble = document.getElementById('lampBubble');
+  const dayDate = new Date();
+  const dateStr = `${dayDate.getFullYear()}年${dayDate.getMonth()+1}月${dayDate.getDate()}日`;
+  const days = ['日','月','火','水','木','金','土'];
+  const dayLabel = days[dayDate.getDay()] + '曜日';
+
+  if (hour >= 22 || hour < 5) {
+    // 深夜モード
+    document.body.classList.add('deep-night');
+    eyebrow.textContent = `${dateStr} ・ ${dayLabel} ・ 深夜`;
+    sub.innerHTML = '眠れない夜も、ここに、いてくれてありがとう。<br>何もしなくていい時間です。';
+    bubble.textContent = '深夜、◯人が、言葉なく過ごしています。あなたも、ここにいて、いいんです。';
+    document.getElementById('tickerNum').textContent = '843';
+  } else if (hour >= 5 && hour < 9) {
+    eyebrow.textContent = `${dateStr} ・ ${dayLabel} ・ 早朝`;
+    sub.innerHTML = 'おはようございます。<br>新しい朝が来ました。少しずつで、いいんです。';
+    bubble.textContent = 'おはようございます。今日は、どこから始めますか?';
+  } else if (hour >= 9 && hour < 17) {
+    eyebrow.textContent = `${dateStr} ・ ${dayLabel} ・ ${hour < 12 ? '午前' : '午後'}`;
+    sub.innerHTML = '前回の続き、ゆっくり始めましょう。<br>昨日の夜、あなたが残してくれた言葉を、覚えています。';
+    bubble.textContent = 'あおいさん、今日もここに来てくださって、ありがとう。';
+  } else {
+    eyebrow.textContent = `${dateStr} ・ ${dayLabel} ・ 夕方`;
+    sub.innerHTML = '一日、おつかれさまでした。<br>今日のあなたの気持ちを、よかったら少しだけ。';
+    bubble.textContent = '夕方の時間、ゆっくり過ごしてください。';
+  }
+})();
+
+/* ===== ティッカー数値ふらつき ===== */
+setInterval(() => {
+  const el = document.getElementById('tickerNum');
+  if (!el) return;
+  const cur = parseInt(el.textContent.replace(/,/g,''));
+  const next = cur + Math.floor(Math.random()*5) - 2;
+  el.textContent = next.toLocaleString('en-US');
+}, 4200);
+
+/* ===== Esc でモーダル閉じる ===== */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.overlay.show').forEach(o => o.classList.remove('show'));
+  }
+});
+
+/* オーバーレイ背景クリックで閉じる */
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', (e) => {
+    if (e.target === o) o.classList.remove('show');
+  });
+});
+</script>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

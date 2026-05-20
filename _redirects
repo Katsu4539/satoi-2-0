@@ -1,0 +1,11 @@
+# Netlify _redirects (netlify.toml と二重保険)
+/hub              /SATOI_Mock_v1_B1_hub.html              200
+/mypage           /SATOI_Mock_v1_C1_mypage.html           200
+/dialog           /SATOI_Mock_v1_A2_dialog.html           200
+/concierge        /SATOI_Mock_v1_CON_concierge.html       200
+/about            /SATOI_Mock_v1_I_about.html             200
+/insurance        /SATOI_Mock_v1_G3_insurance_mypage.html 200
+/corporate        /SATOI_Mock_v1_G2_corporate_dashboard.html 200
+
+# 404 → A1 入口
+/*                /SATOI_Mock_v1_A1_entrance.html         404

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - 保険会員ログイン</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --starlight: #D4A95E;
+  --starlight-strong: #F0C97A;
+  --teal: #0D7377;
+  --teal-soft: #14A6AB;
+  --warm-orange: #D4622A;
+  --morning-white: #F8F6F0;
+  --text-primary: rgba(248,246,240,0.96);
+  --text-secondary: rgba(248,246,240,0.78);
+  --text-muted: rgba(248,246,240,0.55);
+  --font: "Noto Sans JP", "Meiryo UI", "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; }
+body {
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: linear-gradient(180deg, var(--night-deep) 0%, var(--night-medium) 50%, #2A3558 100%);
+  position: relative;
+  font-weight: 300;
+}
+
+.stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.star {
+  position: absolute; background: var(--starlight);
+  border-radius: 50%; opacity: 0;
+  animation: twinkle 4.5s infinite ease-in-out;
+}
+@keyframes twinkle { 0%,100%{opacity:.15;transform:scale(.7);} 50%{opacity:.75;transform:scale(1.1);} }
+
+.header {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 20px 36px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo {
+  font-size: 22px; font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--text-primary);
+  display: inline-flex; align-items: center;
+  text-decoration: none;
+}
+.logo .dot {
+  display: inline-block; width: 8px; height: 8px;
+  background: var(--starlight); border-radius: 50%;
+  margin-right: 10px; box-shadow: 0 0 12px var(--starlight);
+}
+.back-link {
+  color: var(--text-secondary); text-decoration: none;
+  font-size: 13px; padding: 8px 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(248,246,240,0.22);
+}
+.back-link:hover { background: rgba(248,246,240,0.06); }
+
+.main-wrap {
+  position: relative; z-index: 2;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 100px 24px 60px;
+}
+
+.card {
+  max-width: 560px;
+  width: 100%;
+  background: rgba(248,246,240,0.04);
+  border: 1px solid rgba(212,169,94,0.30);
+  border-radius: 24px;
+  padding: 50px 44px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 11.5px;
+  letter-spacing: 0.34em;
+  color: var(--starlight);
+  margin-bottom: 22px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  line-height: 1.55;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.title strong { color: var(--starlight-strong); font-weight: 500; }
+
+.sub {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 2.05;
+  margin-bottom: 36px;
+}
+
+.insurers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 36px;
+}
+.insurer {
+  background: rgba(248,246,240,0.06);
+  border: 1px solid rgba(248,246,240,0.12);
+  border-radius: 12px;
+  padding: 16px 8px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  text-align: center;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.insurer:hover { border-color: var(--starlight); color: var(--starlight); }
+.insurer.selected {
+  background: rgba(212,169,94,0.18);
+  border-color: var(--starlight);
+  color: var(--starlight-strong);
+}
+
+.id-input-wrap {
+  margin-bottom: 28px;
+}
+.id-input-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+  text-align: left;
+}
+.id-input {
+  width: 100%;
+  padding: 16px 18px;
+  background: rgba(11,23,54,0.45);
+  border: 1px solid rgba(248,246,240,0.18);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 17px;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+.id-input:focus { outline: none; border-color: var(--starlight); }
+.id-help {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: left;
+}
+
+.btn-primary {
+  width: 100%;
+  background: var(--starlight);
+  color: var(--night-deep);
+  border: none;
+  padding: 16px;
+  border-radius: 30px;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(212,169,94,0.32);
+  transition: all 0.25s;
+}
+.btn-primary:hover { background: var(--starlight-strong); transform: translateY(-1px); box-shadow: 0 12px 32px rgba(212,169,94,0.45); }
+
+.demo-note {
+  margin-top: 22px;
+  padding: 12px 16px;
+  background: rgba(13,115,119,0.10);
+  border: 1px solid rgba(13,115,119,0.30);
+  border-radius: 12px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+.demo-note strong { color: var(--teal-soft); }
+
+.foot-row {
+  margin-top: 36px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.foot-row a { color: var(--starlight); text-decoration: none; }
+.foot-row a:hover { text-decoration: underline; }
+
+.gov-band {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(248,246,240,0.10);
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+.gov-band span {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+
+@media (max-width: 580px) {
+  .card { padding: 36px 26px; }
+  .title { font-size: 22px; }
+  .insurers-grid { grid-template-columns: repeat(2, 1fr); }
+  .header { padding: 14px 18px; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) {
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+
+
+/* === SATOI 共通モバイル対応(iPad/iPhone)=== */
+@media (max-width: 1024px) {
+  /* iPad 縦 ・ ヘッダー狭め */
+  .header { padding: 14px 22px !important; }
+  .section, .wrap, .container, main, .main { padding-left: 22px !important; padding-right: 22px !important; }
+}
+@media (max-width: 768px) {
+  /* iPhone ・ 主要メトリクスをモバイル最適化 */
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title, .hero-title-l1 { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title, .nbm-title, .mission-line { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  .section, .container, .wrap, main, .main, section { padding-left: 14px !important; padding-right: 14px !important; }
+  section, .section { padding-top: 50px !important; padding-bottom: 50px !important; }
+  /* グリッドを1列に */
+  .grid, .cards, .types-grid, .stories-grid, .forum-grid, .family-grid, .promise-list, .partner-grid, .gov-grid, .numbers-grid, .empse-grid, .pubmed-list, .sources-grid, .criteria-grid, .tx-cat-grid, .map-wrap, .emg-grid, .emg-consent-grid, .emg-contacts, .kids-talk-wrap, .cat-grid, .videos-grid, .cat-cards, .partner-cards, .promise-cards, .principle-cards, .pricing-grid, .pricing-cards, .step-cards, .info-cards, .role-cards, .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* 横スクロールのみ許す要素は残す */
+  .b1-journey-bar, .journey-bar, .types-tabs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  /* ヒーローの padding 圧縮 */
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  /* 大きい見出し */
+  .opener-line { font-size: 24px !important; margin-bottom: 40px !important; }
+  /* タップ領域 44px 最低 */
+  .btn, button, .login-btn, .nav-mini a, .filter-chip, .cat-card, .type-card, .story-card, .forum-card { min-height: 40px; }
+  /* テーブル横スクロール */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* マイチーム ホイール → 縦並びに */
+  .team-wheel-wrap, .team-wheel { width: 100% !important; height: auto !important; min-height: 360px; }
+  /* モーダル系: 画面いっぱいに */
+  .modal, .overlay-modal, [class*='Modal'], [class*='modal'] { max-width: 100vw !important; }
+  /* ナビ縮小 */
+  .nav-mini, .nav { gap: 12px !important; font-size: 12px !important; }
+  /* フォーム入力 */
+  input, textarea, select { font-size: 16px !important; } /* iOSのズーム防止 */
+  /* SVG レーダーチャートの収まり */
+  .empse-chart, .empse-chart-wrap { width: 100% !important; max-width: 320px; height: auto !important; margin: 0 auto !important; }
+  /* B1 7ステップを横スクロールに */
+  .steps-row { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 10px; }
+  .steps-row .step { flex-shrink: 0; min-width: 80px; }
+  /* G2 サイドナビは画面下部固定 or hamburger 想定 */
+  .sidebar, .side-nav, .g2-sidebar { position: relative !important; width: 100% !important; height: auto !important; overflow-x: auto !important; display: flex !important; }
+}
+@media (max-width: 480px) {
+  /* 極小画面 */
+  .hero { padding: 80px 12px 40px !important; }
+  .b1-journey-bar { padding: 8px 10px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+
+/* === SATOI ユニバーサル横断ナビ(戻る/ホーム/言語) === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-univ-btn[title]::after { content: attr(title); position: absolute; right: 54px; background: rgba(11,23,54,0.92); color: #F8F6F0; font-size: 11px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.satoi-univ-btn:hover::after { opacity: 1; }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<header class="header">
+  <a class="logo" href="SATOI_Mock_v1_A1_entrance.html"><span class="dot"></span>SATOI</a>
+  <a class="back-link" href="SATOI_Mock_v1_A1_entrance.html">← 入口に戻る</a>
+</header>
+
+<main class="main-wrap">
+  <div class="card">
+    <div class="eyebrow">INSURANCE MEMBER LOGIN</div>
+    <h1 class="title">ご加入の保険から、<br>SATOI に <strong>もう、繋がっています</strong></h1>
+    <p class="sub">
+      がん保険の特約として、SATOI 連携 ID が発行されています。<br>
+      ID を入力するだけで、あなたの保証内容・治療オプションが、すぐに見えます。
+    </p>
+
+    <div class="id-input-wrap">
+      <label class="id-input-label">ご加入の保険会社をお選びください</label>
+      <div class="insurers-grid">
+        <div class="insurer selected" data-ins="daiichi">第一生命</div>
+        <div class="insurer" data-ins="nippon">日本生命</div>
+        <div class="insurer" data-ins="sumitomo">住友生命</div>
+        <div class="insurer" data-ins="meiji">明治安田</div>
+        <div class="insurer" data-ins="tokio">東京海上日動</div>
+        <div class="insurer" data-ins="aflac">アフラック</div>
+      </div>
+
+      <label class="id-input-label" style="margin-top:18px;">SATOI 連携 ID(保険証に記載)</label>
+      <input type="text" class="id-input" id="idInput" placeholder="0000-XXXX" maxlength="9" value="0000-7842">
+      <div class="id-help">保険証の右下、または契約書類の「特約サービス連携ID」をご確認ください。</div>
+    </div>
+
+    <button class="btn-primary" onclick="login()">マイページにログイン →</button>
+
+    <div class="demo-note">
+      <strong>デモ用:</strong> 上記の ID(0000-7842)で、即時マイページに遷移できます。
+    </div>
+
+    <div class="foot-row">
+      <a onclick="satoiNotify('ID再発行のご案内(プレースホルダ)'); return false;" href="#">ID を忘れた</a>
+      <a onclick="satoiNotify('保険会社カスタマー窓口(プレースホルダ)'); return false;" href="#">保険会社に問い合わせ</a>
+      <a href="SATOI_Mock_v1_A1_entrance.html">SATOI のみで始める</a>
+    </div>
+
+    <div class="gov-band">
+      <span>🔒 SOC 2</span>
+      <span>🇯🇵 PMDA連携</span>
+      <span>⚖️ JOInT諮問委員会</span>
+      <span>本人同意ベース</span>
+    </div>
+  </div>
+</main>
+
+<script>
+
+/* === SATOI 共通リッチトースト関数 === */
+(function ensureToastHost(){
+  if (document.getElementById('satoi-toast-host')) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div');
+      host.id = 'satoi-toast-host';
+      document.body.appendChild(host);
+    }
+  });
+  if (document.body && !document.getElementById('satoi-toast-host')) {
+    const host = document.createElement('div');
+    host.id = 'satoi-toast-host';
+    document.body.appendChild(host);
+  }
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) {
+    html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  }
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+// 既存の alert を全て satoiNotify にフォールバック(他コードからのalert呼び出しもキャッチ)
+window.__origAlert = window.alert;
+
+/* === SATOI ユニバーサル横断ナビ JS === */
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div');
+    nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る" aria-label="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム" aria-label="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ" aria-label="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語" aria-label="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn');
+    const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const lang = b.dataset.lang;
+        const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+        if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+        document.documentElement.lang = lang;
+        langPop.classList.remove('show');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+
+/* 星 */
+(function(){
+  const layer = document.getElementById('stars');
+  for (let i=0; i<60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random()*2 + 0.6;
+    s.style.width = sz + 'px'; s.style.height = sz + 'px';
+    s.style.left = (Math.random()*100) + '%';
+    s.style.top = (Math.random()*100) + '%';
+    s.style.animationDelay = (Math.random()*5) + 's';
+    s.style.animationDuration = (3 + Math.random()*2.5) + 's';
+    layer.appendChild(s);
+  }
+})();
+
+/* 保険会社選択 */
+document.querySelectorAll('.insurer').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('.insurer').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+  });
+});
+
+/* ログイン */
+function login() {
+  const id = document.getElementById('idInput').value.trim();
+  if (!id) {
+    alert('SATOI 連携 ID を入力してください。\n(デモ用: 0000-7842)');
+    return;
+  }
+  const ins = document.querySelector('.insurer.selected')?.dataset.ins || 'daiichi';
+  // 認証中演出
+  const btn = document.querySelector('.btn-primary');
+  btn.textContent = '認証中…保険情報を読み込んでいます…';
+  btn.disabled = true;
+  setTimeout(() => {
+    window.location.href = `SATOI_Mock_v1_G3_insurance_mypage.html?id=${encodeURIComponent(id)}&ins=${ins}&plan=premium`;
+  }, 1400);
+}
+
+/* Enter 送信 */
+document.getElementById('idInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
+</script>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

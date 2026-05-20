@@ -1,0 +1,11 @@
+# SATOI Mock - 検索エンジン制御
+# モック段階のため、検索エンジンによるクロールを一旦無効化
+# 本番公開時にこのファイルを更新してください
+
+User-agent: *
+Disallow: /
+
+# 本番公開時は以下に書き換え:
+# User-agent: *
+# Allow: /
+# Sitemap: https://satoi.example.com/sitemap.xml

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - あなたの物語マップ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --starlight: #D4A95E;
+  --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0;
+  --morning-cream: #F6EFE3;
+  --teal: #0D7377;
+  --teal-soft: #14A6AB;
+  --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A;
+  --warm-coral: #E08461;
+  --rose: #C76B7F;
+  --ink-deep: #1A2A40;
+  --ink-medium: rgba(26,42,64,0.78);
+  --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+body {
+  font-family: var(--font);
+  color: var(--morning-white);
+  background: linear-gradient(180deg, #0B1736 0%, #1A2548 60%, #2A3558 100%);
+  line-height: 1.85;
+  font-size: 16px;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); cursor: pointer; }
+
+/* === ヘッダー === */
+.header {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(11,23,54,0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(248,246,240,0.08);
+}
+.logo { font-size: 20px; font-weight: 500; letter-spacing: 0.22em; color: var(--morning-white); display: inline-flex; align-items: center; }
+.logo .dot { width: 8px; height: 8px; background: var(--starlight); border-radius: 50%; margin-right: 10px; box-shadow: 0 0 12px var(--starlight); }
+.back-btn { padding: 8px 18px; background: rgba(248,246,240,0.08); color: var(--morning-white); border: 1px solid rgba(248,246,240,0.22); border-radius: 20px; font-size: 12px; }
+
+/* === ヒーロー === */
+.hero {
+  padding: 140px 32px 60px;
+  text-align: center;
+  position: relative;
+}
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  color: var(--starlight);
+  padding: 6px 18px;
+  border: 1px solid rgba(212,169,94,0.4);
+  border-radius: 24px;
+  margin-bottom: 24px;
+}
+.hero-title {
+  font-size: clamp(28px, 4.5vw, 42px);
+  font-weight: 300;
+  line-height: 1.55;
+  letter-spacing: 0.06em;
+  margin-bottom: 18px;
+}
+.hero-title strong { color: var(--starlight-strong); font-weight: 500; }
+.hero-sub {
+  font-size: 15px;
+  color: rgba(248,246,240,0.78);
+  line-height: 2;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* === マップ === */
+.story-map-wrap {
+  max-width: 1180px;
+  margin: 30px auto;
+  padding: 40px 32px;
+  position: relative;
+}
+.story-map {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  background: radial-gradient(circle at 50% 50%, rgba(212,169,94,0.10), transparent 70%);
+  border-radius: 24px;
+  overflow: hidden;
+}
+.story-map svg { width: 100%; height: 100%; display: block; }
+
+/* マップ上の物語ノード */
+.story-node {
+  position: absolute;
+  cursor: pointer;
+  transition: transform 0.3s;
+  z-index: 5;
+}
+.story-node:hover { transform: scale(1.15); z-index: 10; }
+.story-node-orb {
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--starlight) 0%, rgba(212,169,94,0.3) 70%);
+  box-shadow: 0 0 24px rgba(212,169,94,0.55);
+  border: 2px solid rgba(248,246,240,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--night-deep);
+  font-weight: 700;
+  font-size: 14px;
+  animation: orbPulse 4s infinite;
+}
+@keyframes orbPulse {
+  0%, 100% { box-shadow: 0 0 24px rgba(212,169,94,0.55); }
+  50% { box-shadow: 0 0 40px rgba(212,169,94,0.85); }
+}
+.story-node-label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  margin-top: 8px;
+  background: rgba(11,23,54,0.85);
+  color: var(--morning-white);
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+.story-node.large .story-node-orb {
+  width: 72px; height: 72px;
+  font-size: 18px;
+  background: radial-gradient(circle, var(--warm-orange) 0%, rgba(212,98,42,0.4) 70%);
+  box-shadow: 0 0 32px rgba(212,98,42,0.6);
+}
+.story-node.special .story-node-orb {
+  background: radial-gradient(circle, var(--teal-soft) 0%, rgba(20,166,171,0.3) 70%);
+  box-shadow: 0 0 30px rgba(20,166,171,0.55);
+  color: white;
+}
+
+/* === タイムライン === */
+.timeline-section {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 0 32px;
+}
+.timeline-title {
+  font-size: 22px;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--morning-white);
+}
+.timeline {
+  position: relative;
+  padding-left: 30px;
+  border-left: 2px dashed rgba(212,169,94,0.4);
+  margin: 0 auto;
+  max-width: 700px;
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 26px;
+  padding: 16px 20px;
+  background: rgba(248,246,240,0.06);
+  border: 1px solid rgba(248,246,240,0.15);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.timeline-item:hover {
+  background: rgba(212,169,94,0.10);
+  border-color: var(--starlight);
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -38px;
+  top: 22px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--starlight);
+  border: 3px solid var(--night-deep);
+  box-shadow: 0 0 10px rgba(212,169,94,0.6);
+}
+.timeline-date {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--starlight);
+  margin-bottom: 4px;
+}
+.timeline-event {
+  font-size: 14px;
+  color: var(--morning-white);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.timeline-quote {
+  font-size: 12px;
+  color: rgba(248,246,240,0.7);
+  font-style: italic;
+}
+
+/* === 次のステップ === */
+.next-steps {
+  max-width: 1100px;
+  margin: 60px auto 100px;
+  padding: 40px 32px;
+  background: rgba(248,246,240,0.04);
+  border-radius: 22px;
+  text-align: center;
+  border: 1px solid rgba(212,169,94,0.25);
+}
+.next-steps h3 {
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 12px;
+  color: var(--starlight-strong);
+}
+.next-steps p {
+  font-size: 14px;
+  color: rgba(248,246,240,0.78);
+  margin-bottom: 22px;
+  line-height: 1.95;
+}
+.next-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 22px;
+}
+.next-card {
+  padding: 22px 20px;
+  background: rgba(11,23,54,0.6);
+  border: 1px solid rgba(212,169,94,0.3);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.next-card:hover {
+  background: rgba(212,169,94,0.15);
+  border-color: var(--starlight);
+  transform: translateY(-3px);
+}
+.next-card-icon { font-size: 24px; margin-bottom: 10px; }
+.next-card-title { font-size: 14px; color: var(--starlight-strong); margin-bottom: 4px; font-weight: 500; }
+.next-card-desc { font-size: 11.5px; color: rgba(248,246,240,0.7); line-height: 1.7; }
+
+@media (max-width: 768px) {
+  .story-map { height: 420px; }
+  .hero { padding: 110px 18px 40px; }
+  .next-grid { grid-template-columns: 1fr; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+
+/* === SATOI ユニバーサル横断ナビ === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+/* === SATOI 共通モバイル対応 === */
+@media (max-width: 1024px) {
+  .header { padding: 14px 22px !important; }
+}
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  section, .section { padding-left: 14px !important; padding-right: 14px !important; padding-top: 50px !important; padding-bottom: 50px !important; }
+  .grid, .cards { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  input, textarea, select { font-size: 16px !important; }
+}
+@media (max-width: 480px) {
+  .hero { padding: 80px 12px 40px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI ・ 物語マップ</a>
+  <button class="back-btn" onclick="history.back()">← 戻る</button>
+</header>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <div class="hero-eyebrow">YOUR STORY MAP</div>
+  <h1 class="hero-title">物語を、<strong>振り返る</strong>。<br>そして、<strong>続ける</strong>。</h1>
+  <p class="hero-sub">
+    対話で歩んだ8ビート ・ 選んだ言葉 ・ AI からの示唆。<br>
+    全てが、ここに「物語マップ」として残っています。
+  </p>
+</section>
+
+<!-- 物語マップ -->
+<div class="story-map-wrap">
+  <div class="story-map" id="storyMap">
+    <svg viewBox="0 0 1100 600" xmlns="http://www.w3.org/2000/svg">
+      <!-- 軌跡を曲線で結ぶ -->
+      <defs>
+        <linearGradient id="pathGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#D4A95E" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#D4622A" stop-opacity="0.7"/>
+        </linearGradient>
+      </defs>
+      <path d="M 80 480 Q 200 380, 320 420 T 560 360 Q 700 260, 820 320 T 1020 200" stroke="url(#pathGrad)" stroke-width="2" fill="none" stroke-dasharray="6,4" opacity="0.7"/>
+      <!-- 装飾の星 -->
+      <g fill="#F0C97A" opacity="0.4">
+        <circle cx="150" cy="100" r="1.5"/>
+        <circle cx="450" cy="80" r="1"/>
+        <circle cx="800" cy="120" r="1.8"/>
+        <circle cx="1000" cy="80" r="1"/>
+        <circle cx="200" cy="200" r="1.2"/>
+        <circle cx="650" cy="180" r="1.5"/>
+      </g>
+    </svg>
+
+    <!-- 物語ノード(対話のキーポイント) -->
+    <div class="story-node" style="left: 5%; top: 78%;" onclick="openNode('start')">
+      <div class="story-node-orb">1</div>
+      <div class="story-node-label">夜空に来た日</div>
+    </div>
+    <div class="story-node large" style="left: 18%; top: 60%;" onclick="openNode('diag')">
+      <div class="story-node-orb">!</div>
+      <div class="story-node-label">告知 ・ 4/8</div>
+    </div>
+    <div class="story-node" style="left: 30%; top: 68%;" onclick="openNode('test')">
+      <div class="story-node-orb">2</div>
+      <div class="story-node-label">検査・コンパニオン</div>
+    </div>
+    <div class="story-node special" style="left: 42%; top: 58%;" onclick="openNode('team')">
+      <div class="story-node-orb">⊕</div>
+      <div class="story-node-label">チーム結成</div>
+    </div>
+    <div class="story-node" style="left: 54%; top: 52%;" onclick="openNode('choose')">
+      <div class="story-node-orb">3</div>
+      <div class="story-node-label">治療を選んだ</div>
+    </div>
+    <div class="story-node large" style="left: 66%; top: 38%;" onclick="openNode('start_tx')">
+      <div class="story-node-orb">♫</div>
+      <div class="story-node-label">治療開始</div>
+    </div>
+    <div class="story-node" style="left: 78%; top: 46%;" onclick="openNode('side')">
+      <div class="story-node-orb">4</div>
+      <div class="story-node-label">副作用ピーク</div>
+    </div>
+    <div class="story-node special" style="left: 90%; top: 28%;" onclick="openNode('present')">
+      <div class="story-node-orb">○</div>
+      <div class="story-node-label">いまここ</div>
+    </div>
+  </div>
+</div>
+
+<!-- タイムライン詳細 -->
+<section class="timeline-section">
+  <h2 class="timeline-title">あなたの28日間 ・ 物語の足跡</h2>
+  <div class="timeline">
+    <div class="timeline-item" onclick="openNode('start')">
+      <div class="timeline-date">2026.04.08</div>
+      <div class="timeline-event">SATOI に来た日 ・ 告知の夜</div>
+      <div class="timeline-quote">「同じ夜を、過ごしている人がいる」と知った</div>
+    </div>
+    <div class="timeline-item" onclick="openNode('diag')">
+      <div class="timeline-date">2026.04.12</div>
+      <div class="timeline-event">診断結果を受け止める</div>
+      <div class="timeline-quote">AIと一緒に、最初の質問を整理した</div>
+    </div>
+    <div class="timeline-item" onclick="openNode('team')">
+      <div class="timeline-date">2026.04.18</div>
+      <div class="timeline-event">チームができた</div>
+      <div class="timeline-quote">主治医・看護師・先輩・コーディネーター・家族・AI</div>
+    </div>
+    <div class="timeline-item" onclick="openNode('choose')">
+      <div class="timeline-date">2026.05.02</div>
+      <div class="timeline-event">標準治療を選んだ</div>
+      <div class="timeline-quote">「迷っていい・選び直していい」を、覚えた</div>
+    </div>
+    <div class="timeline-item" onclick="openNode('start_tx')">
+      <div class="timeline-date">2026.05.12</div>
+      <div class="timeline-event">TC療法 1クール目 開始</div>
+      <div class="timeline-quote">物語の壺に、光が増えていく</div>
+    </div>
+    <div class="timeline-item" onclick="openNode('side')">
+      <div class="timeline-date">2026.05.15</div>
+      <div class="timeline-event">副作用ピーク Day 3-5</div>
+      <div class="timeline-quote">副作用記録で記録 ・ EMPSeが家族にも届く</div>
+    </div>
+    <div class="timeline-item" onclick="openNode('present')">
+      <div class="timeline-date">2026.05.19</div>
+      <div class="timeline-event">いまここ ・ 続きから</div>
+      <div class="timeline-quote">あなたの物語は、続いている</div>
+    </div>
+  </div>
+</section>
+
+<!-- 次のステップ -->
+<section class="next-steps">
+  <h3>ここから、どこへ?</h3>
+  <p>物語マップは、振り返るためだけでなく ・ 次の一歩を選ぶ場所でもあります。</p>
+  <div class="next-grid">
+    <div class="next-card" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?from=d2&beat=companion'">
+      <div class="next-card-icon">💬</div>
+      <div class="next-card-title">AI対話の続きから</div>
+      <div class="next-card-desc">で次の不安・次の選択を話す</div>
+    </div>
+    <div class="next-card" onclick="location.href='SATOI_Mock_v1_C1_mypage.html?from=d2'">
+      <div class="next-card-icon">🏠</div>
+      <div class="next-card-title">マイページへ</div>
+      <div class="next-card-desc">物語の壺・気持ち軌跡・EMPSeを見る</div>
+    </div>
+    <div class="next-card" onclick="location.href='SATOI_Mock_v1_D1_stories.html?from=d2'">
+      <div class="next-card-icon">📖</div>
+      <div class="next-card-title">先輩の物語へ</div>
+      <div class="next-card-desc">同じ道を歩いた人の物語を読む</div>
+    </div>
+    <div class="next-card" onclick="location.href='SATOI_Mock_v1_FAM_view.html?from=d2&share=story_map'">
+      <div class="next-card-icon">👨‍👩‍👧</div>
+      <div class="next-card-title">家族にも共有</div>
+      <div class="next-card-desc">ファミリービューに、物語マップを送る</div>
+    </div>
+    <div class="next-card" onclick="location.href='SATOI_Mock_v1_B1_hub.html?from=d2'">
+      <div class="next-card-icon">◎</div>
+      <div class="next-card-title">マインドマップへ</div>
+      <div class="next-card-desc">B1ハブで全体像を見渡す</div>
+    </div>
+    <div class="next-card" onclick="shareStoryMap()">
+      <div class="next-card-icon">📤</div>
+      <div class="next-card-title">物語マップを共有</div>
+      <div class="next-card-desc">SNS・LINEで紡いだ物語を共有</div>
+    </div>
+  </div>
+</section>
+
+<script>
+
+/* === SATOI 共通トースト + ユニバーサルナビ === */
+(function ensureToastHost(){
+  function inject(){
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host);
+    }
+  }
+  if (document.body) inject(); else document.addEventListener('DOMContentLoaded', inject);
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+window.__origAlert = window.alert;
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div'); nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn'); const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => { b.addEventListener('click', () => {
+      langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active')); b.classList.add('active');
+      const lang = b.dataset.lang;
+      const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+      if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+      document.documentElement.lang = lang; langPop.classList.remove('show');
+    }); });
+  }
+  if (document.body) inject(); else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+
+const NODE_DETAIL = {
+  start: {title: '夜空に来た日 ・ 告知の夜', date:'2026.04.08', body:'告知の夜、検索エンジンで「がん 不安 眠れない」と打って、SATOI に辿り着いた。
+
+「同じ夜を、過ごしている人がいる」のコピーで、涙が止まらなかった。何も決めなくていい、ただいていい、そう感じられたことが救いだった。
+
+■ この夜にできること
+・SATOI コンシェルジュに電話(0120-1234-5678)
+・物語の壺に「今日の気持ち」を記録
+・先輩の同じ夜の物語を読む', link: 'SATOI_Mock_v1_CON_concierge.html'},
+  diag: {title: '診断 ・ 告知の重みを受け止めた日', date:'2026.04.12', body:'乳がん StageII Luminal A の診断。AI と一緒に「最初に整理しておきたいこと」リストを作った。
+
+配偶者にどう伝えるか、子供にどう伝えるか、仕事をどうするか。AI は急がせず、ひとつずつ受け止めてくれた。
+
+■ 国がんガイド「がんと診断されたとき」(1章)
+・自分の病状と治療法を知る
+・大切にしていることを考える
+・がん相談支援センターの活用
+・心のケアを早めに受ける', link: 'SATOI_Mock_v1_B3_treatment_detail.html?cancer=breast'},
+  exam: {title: '検査 ・ 精密検査の日々', date:'2026.04.15', body:'病理検査(針生検)・MRI・骨シンチ・腫瘍マーカー。
+
+結果待ちの間が、いちばん怖かった。AI と話し、SATOI コーディネーターに電話して、夜を越えた。
+
+■ 実施した精密検査
+・病理検査:HER2陰性・ER陽性・PgR陽性確定
+・Oncotype DX:再発スコア14(低リスク)
+・MRI:腫瘍2.4cm、リンパ節転移なし
+・腫瘍マーカー CA15-3:正常範囲
+
+これらの結果で「TC療法 4サイクル」が標準と提示された。', link: 'SATOI_Mock_v1_B3_treatment_detail.html?from=d2_exam#precision-tests'},
+  team: {title: 'チームができた', date:'2026.04.18', body:'主治医・看護師・SATOI コーディネーター・1年先輩の M.K.さん・家族・そして AI。
+
+6人のチームで、これから歩いていく。「ひとりじゃない」が、実感に変わった瞬間。
+
+■ チームの役割
+・主治医:治療方針の決定者
+・看護師:日常の困りごとの最初の相談先
+・コーディネーター:医療外の伴走者
+・先輩:同じ道を歩いた経験者
+・家族:いちばん近い支え
+・AI:24時間いつでもそばにいる', link: 'SATOI_Mock_v1_C1_mypage.html?section=team'},
+  choose: {title: '治療法を考える ・ SDM(共同意思決定)', date:'2026.05.02', body:'TC療法 4クール → 放射線 → ホルモン療法。
+
+「迷ってもいい」「選び直してもいい」を、SATOI に教わった。揺れていることが、ちゃんと選んでいる証拠。
+
+■ 国がんガイド「治療法を考える」(3章)
+・手術 ・ 放射線治療 ・ 薬物療法 の選択肢
+・SDM(主治医との共同意思決定)
+・セカンドオピニオン活用
+・臨床試験 ・ がんゲノム医療
+・治療法を選ぶときに知っておきたい保険のしくみ', link: 'SATOI_Mock_v1_B3_treatment_detail.html'},
+  start_tx: {title: '治療開始 ・ TC療法 1クール目', date:'2026.05.12', body:'物語の壺に、新しい光が加わった。
+
+投与後 Day 0:意外と平気。Day 2-3: 倦怠感が強くなった。それも記録した。Day 6-7 で動けるリズムが分かった。
+
+■ 治療開始時の心得
+・副作用記録で毎日の体調を記録
+・EMPSe 5軸で多面評価
+・家族にも EMPSe を共有(同意ベース)
+・無理しない・休む日を作る', link: 'SATOI_Mock_v1_F4_side_effects.html'},
+  side: {title: '治療中の暮らし ・ 副作用ピーク Day 3-5', date:'2026.05.15', body:'吐き気 7/10、強い疲労 8/10。
+F4 で記録すると、EMPSe レーダーが連動して下がった。
+
+ファミリービューに自動共有され、配偶者が「今日は静かにしておくね」と返信してくれた。
+
+■ 国がんガイド「治療中の体に起こること」(4章) +「療養中の暮らし」(5章)
+・副作用と対処法
+・症状を的確に伝える
+・食事や水分の工夫
+・がんばりすぎずに上手に休む
+・仕事を続ける ・ 学びを続ける', link: 'SATOI_Mock_v1_F4_side_effects.html'},
+  follow: {title: '治療後 ・ 経過観察の時期へ', date:'予測 2026.10.15 (5サイクル完了後)', body:'治療が終わっても、SATOI はそばにいます。
+
+■ 国がんガイド「治療 そのあとは」(6章)
+・3か月ごとの経過観察(最初の2年)
+・1年ごと(3年以降)
+・もし再発と言われたら
+・がんの治療をせずに生活する選択(緩和ケア)
+
+「もう大丈夫」と「再発が怖い」の間で揺れる時期。SATOI で、その揺れも記録できます。', link: 'SATOI_Mock_v1_B1_hub.html'},
+  present: {title: 'いまここ', date:'2026.05.19', body:'物語の壺に、28個の光・12個の選択・5通の手紙。
+
+ここから先は、まだ書かれていない。あなたが、書いていく。
+
+■ いま、できること
+・今日の気持ちを記録する
+・先輩の物語を読む
+・家族に EMPSe を共有
+・主治医への質問を整理(SDM)
+・コンシェルジュに話す(電話 or AI)', link: 'SATOI_Mock_v1_C1_mypage.html'},
+};
+function openNode(id) {
+  const d = NODE_DETAIL[id];
+  if (!d) return;
+  if (typeof satoiNotify === 'function') {
+    const opts = {kind: 'info', duration: 14000};
+    if (d.link) {
+      opts.cta = '詳細ページへ';
+      opts.href = d.link;
+    }
+    satoiNotify('【' + d.title + '】 ' + d.date + '\n\n' + d.body, opts);
+  } else {
+    alert(d.title + ' (' + d.date + ')\n\n' + d.body);
+  }
+}
+function shareStoryMap() {
+  if (typeof satoiNotify === 'function') {
+    satoiNotify('✓ 物語マップの共有モーダルを開く\n\n5SNS(X/LINE/Facebook/Threads/Instagram)対応・OG画像自動生成', {kind:'success', cta:'マイページで詳細', href:'SATOI_Mock_v1_C1_mypage.html?share=jar'});
+  }
+}
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

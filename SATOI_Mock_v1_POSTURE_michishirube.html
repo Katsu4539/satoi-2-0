@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>道しるべ ・ SATOIの姿勢03 - いまどこにいるか、これからどこへ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --starlight: #D4A95E;
+  --starlight-soft: #E5C68A;
+  --starlight-strong: #F0C97A;
+  --teal: #0D7377;
+  --teal-soft: #14A6AB;
+  --warm-orange: #D4622A;
+  --warm-orange-soft: #E89060;
+  --rose: #C76B7F;
+  --text-on-dark: rgba(248,246,240,0.96);
+  --text-on-dark-soft: rgba(248,246,240,0.78);
+  --text-on-dark-quiet: rgba(248,246,240,0.55);
+  --line: rgba(248,246,240,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; overflow-x:hidden; }
+body {
+  font-family: var(--font);
+  color: var(--text-on-dark);
+  background: radial-gradient(ellipse at top, #2A1810 0%, var(--night-deep) 60%, #060d1f 100%);
+  background-attachment: fixed;
+  line-height: 2;
+  font-weight: 300;
+  min-height: 100vh;
+  padding-bottom: 120px;
+}
+.stars-layer { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.star { position: absolute; background: var(--warm-orange-soft); border-radius: 50%; opacity: 0; animation: twinkle 5s infinite ease-in-out; }
+@keyframes twinkle { 0%,100% { opacity:0.1; transform:scale(0.7);} 50% { opacity:0.6; transform:scale(1.1);} }
+
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding: 18px 36px; display:flex; align-items:center; justify-content:space-between; background: linear-gradient(to bottom, rgba(11,23,54,0.7), rgba(11,23,54,0)); backdrop-filter: blur(10px); }
+.logo { font-size: 22px; font-weight: 500; letter-spacing: 0.22em; color: var(--text-on-dark); text-decoration: none; display: inline-flex; align-items: center; }
+.logo .dot { display:inline-block; width:8px; height:8px; background: var(--warm-orange); border-radius:50%; margin: 0 10px 0 0; box-shadow: 0 0 12px var(--warm-orange); }
+.header-nav { display:flex; gap: 22px; }
+.header-nav a { color: var(--text-on-dark-soft); font-size: 12.5px; text-decoration: none; letter-spacing: 0.12em; transition: color 0.2s; }
+.header-nav a:hover { color: var(--warm-orange-soft); }
+
+.hero { padding: 160px 24px 80px; text-align: center; max-width: 920px; margin: 0 auto; }
+.hero-eyebrow { font-size: 11px; letter-spacing: 0.42em; color: var(--warm-orange-soft); margin-bottom: 22px; }
+.hero-title { font-size: clamp(38px, 6.5vw, 68px); font-weight: 200; line-height: 1.2; margin-bottom: 28px; letter-spacing: 0.06em; }
+.hero-title .accent { color: var(--warm-orange-soft); font-weight: 300; }
+.hero-sub { font-size: clamp(15px, 1.6vw, 18px); color: var(--text-on-dark-soft); font-weight: 300; max-width: 680px; margin: 0 auto; letter-spacing: 0.04em; }
+
+.section { max-width: 920px; margin: 60px auto; padding: 0 24px; }
+.section-title { font-size: 13px; letter-spacing: 0.32em; color: var(--warm-orange-soft); margin-bottom: 16px; }
+.section-heading { font-size: clamp(24px, 3.5vw, 36px); font-weight: 300; line-height: 1.5; margin-bottom: 28px; letter-spacing: 0.04em; }
+.section-body { font-size: 15px; line-height: 2.1; color: var(--text-on-dark-soft); font-weight: 300; }
+.section-body p { margin-bottom: 20px; }
+.section-body strong { color: var(--warm-orange-soft); font-weight: 500; }
+
+/* === マインドマップビジュアル === */
+.map-vis {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 50px auto;
+  padding: 30px;
+  background: rgba(11,23,54,0.6);
+  border: 1px solid rgba(212,98,42,0.3);
+  border-radius: 20px;
+}
+.map-svg {
+  width: 100%; height: auto;
+  display: block;
+}
+.map-svg .branch { stroke: rgba(212,98,42,0.4); stroke-width: 1.5; fill: none; }
+.map-svg .node-circle { fill: rgba(11,23,54,0.9); stroke: var(--warm-orange-soft); stroke-width: 1.5; }
+.map-svg .node-circle.you { fill: var(--warm-orange); stroke: var(--starlight); stroke-width: 2; }
+.map-svg .node-circle.current { fill: rgba(212,98,42,0.5); stroke: var(--starlight); stroke-width: 2; }
+.map-svg text { fill: var(--text-on-dark); font-family: var(--font); font-size: 11px; text-anchor: middle; }
+.map-svg .node-label { font-size: 10px; }
+
+/* === 8ビート === */
+.beats-row {
+  display: flex; flex-wrap: wrap;
+  gap: 8px; margin-top: 30px;
+  justify-content: center;
+}
+.beat-pill {
+  padding: 10px 18px;
+  background: rgba(248,246,240,0.04);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  color: var(--text-on-dark);
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.beat-pill:hover {
+  background: rgba(212,98,42,0.16);
+  border-color: var(--warm-orange);
+  transform: translateY(-2px);
+}
+.beat-pill .b-num { font-size: 10px; color: var(--warm-orange-soft); margin-right: 6px; letter-spacing: 0.2em; }
+
+/* === 機能カード === */
+.feature-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px; margin-top: 36px;
+}
+.feature-card {
+  background: rgba(248,246,240,0.04);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 26px 22px;
+  transition: all 0.3s;
+}
+.feature-card:hover {
+  border-color: rgba(212,98,42,0.4);
+  transform: translateY(-3px);
+}
+.feature-card .f-icon {
+  font-size: 32px; margin-bottom: 12px;
+}
+.feature-card h4 { font-size: 17px; font-weight: 400; margin-bottom: 10px; letter-spacing: 0.04em; }
+.feature-card p { font-size: 13px; line-height: 1.95; color: var(--text-on-dark-soft); font-weight: 300; }
+
+/* === 標準治療尊重ブロック === */
+.standard-block {
+  background: linear-gradient(135deg, rgba(212,169,94,0.08), rgba(212,98,42,0.06));
+  border: 1px solid rgba(212,169,94,0.3);
+  border-radius: 18px;
+  padding: 36px 32px;
+  margin: 40px 0;
+}
+.standard-block h4 {
+  font-size: 20px; font-weight: 400;
+  margin-bottom: 16px;
+  color: var(--starlight-strong);
+  letter-spacing: 0.04em;
+}
+.standard-block p {
+  font-size: 14px; line-height: 2;
+  color: var(--text-on-dark-soft);
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+.standard-block .src {
+  font-size: 11px;
+  color: var(--text-on-dark-quiet);
+  letter-spacing: 0.12em;
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+/* === 実装例 === */
+.example-block {
+  background: rgba(11,23,54,0.6);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 32px 30px;
+  margin: 32px 0;
+}
+.example-block .ex-eyebrow { font-size: 11px; letter-spacing: 0.3em; color: var(--warm-orange-soft); margin-bottom: 14px; }
+.example-block h4 { font-size: 20px; font-weight: 400; margin-bottom: 18px; }
+.example-block .ex-body { font-size: 14px; color: var(--text-on-dark-soft); line-height: 2; font-weight: 300; }
+.example-block .ex-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 20px; padding: 10px 22px;
+  background: rgba(212,98,42,0.16);
+  border: 1px solid var(--warm-orange);
+  border-radius: 24px;
+  color: var(--warm-orange-soft);
+  font-size: 12.5px; text-decoration: none;
+  letter-spacing: 0.1em; transition: all 0.3s;
+}
+.example-block .ex-cta:hover { background: rgba(212,98,42,0.28); transform: translateX(4px); }
+
+/* === 関連 === */
+.related {
+  max-width: 920px; margin: 80px auto 40px;
+  padding: 0 24px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.related a {
+  display: block;
+  background: rgba(248,246,240,0.04);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 20px;
+  color: var(--text-on-dark);
+  text-decoration: none; transition: all 0.3s;
+}
+.related a:hover { border-color: var(--warm-orange); background: rgba(212,98,42,0.08); }
+.related a .r-eyebrow { font-size: 10.5px; letter-spacing: 0.3em; color: var(--warm-orange-soft); margin-bottom: 6px; }
+.related a .r-title { font-size: 15px; letter-spacing: 0.04em; }
+.related a .r-sub { font-size: 12px; color: var(--text-on-dark-soft); margin-top: 6px; }
+
+/* === ユニバーサルナビ === */
+.uninav { position: fixed; right: 22px; bottom: 100px; z-index: 90; display: flex; flex-direction: column; gap: 12px; }
+.uninav a {
+  width: 48px; height: 48px;
+  background: rgba(11,23,54,0.85);
+  border: 1px solid var(--warm-orange);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--warm-orange-soft); text-decoration: none; font-size: 18px;
+  transition: all 0.3s; backdrop-filter: blur(8px);
+  position: relative;
+}
+.uninav a:hover { background: var(--warm-orange); color: var(--night-deep); transform: scale(1.1); }
+.uninav a .label {
+  position: absolute; right: 56px;
+  font-size: 11px; letter-spacing: 0.2em;
+  background: rgba(11,23,54,0.95);
+  padding: 4px 10px; border-radius: 4px;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  white-space: nowrap; color: var(--text-on-dark);
+}
+.uninav a:hover .label { opacity: 1; }
+
+.footer { text-align: center; padding: 40px 24px; font-size: 11px; letter-spacing: 0.22em; color: var(--text-on-dark-quiet); }
+
+@media (max-width: 700px) {
+  .header { padding: 14px 18px; }
+  .header-nav { gap: 12px; }
+  .header-nav a { font-size: 11px; }
+  .hero { padding: 130px 18px 60px; }
+  .uninav { right: 12px; bottom: 80px; }
+  .uninav a { width: 42px; height: 42px; font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars-layer" id="stars"></div>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <nav class="header-nav">
+    <a href="SATOI_Mock_v1_I_about.html">← About に戻る</a>
+    <a href="SATOI_Mock_v1_C1_mypage.html">マイページ</a>
+    <a href="SATOI_Mock_v1_CON_concierge.html">コンシェルジュ</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">03 ・ POSTURE ・ 道しるべ</div>
+  <h1 class="hero-title">あなたが今<br><span class="accent">どこにいるか</span>、<br>俯瞰できる場所。</h1>
+  <p class="hero-sub">
+    広いマインドマップで、あなたのいま・これから歩む道を、見渡せます。<br>
+    <strong>標準治療を尊重</strong> しながら、それを超える「あなただけの問い」を扱います。
+  </p>
+</section>
+
+<section class="section">
+  <div class="section-title">なぜ「道しるべ」が必要か</div>
+  <h2 class="section-heading">情報の量よりも、地図がほしい時があります。</h2>
+  <div class="section-body">
+    <p>
+      がんと診断された方の多くが直面するのは、情報不足ではなく <strong>情報の洪水</strong> です。
+      Googleで検索すれば、エビデンスのある情報も、不確かな情報も、商業的な情報も、同じ重さで出てきます。
+    </p>
+    <p>
+      SATOIの「道しるべ」は、<strong>あなたの現在地を中心に置いた地図</strong> を提供します。
+      今あなたが「治療法を考える」段階なら、その周りの選択肢・問い・関係者だけを表示し、
+      関係ない情報は遠くに配置します。地図は、進むにつれて広がります。
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">あなたの地図のイメージ</div>
+  <h2 class="section-heading">真ん中は、あなた。広がるのは、選択肢です。</h2>
+  <div class="map-vis">
+    <svg class="map-svg" viewBox="0 0 600 360" preserveAspectRatio="xMidYMid meet">
+      <!-- ブランチ -->
+      <path class="branch" d="M 300 180 L 130 60"/>
+      <path class="branch" d="M 300 180 L 300 50"/>
+      <path class="branch" d="M 300 180 L 470 60"/>
+      <path class="branch" d="M 300 180 L 470 180"/>
+      <path class="branch" d="M 300 180 L 470 300"/>
+      <path class="branch" d="M 300 180 L 300 320"/>
+      <path class="branch" d="M 300 180 L 130 300"/>
+      <path class="branch" d="M 300 180 L 130 180"/>
+
+      <!-- 中心:あなた -->
+      <circle class="node-circle you" cx="300" cy="180" r="46"/>
+      <text x="300" y="178" font-size="14" font-weight="500">あなた</text>
+      <text x="300" y="196" font-size="10" opacity="0.8">YOU ARE HERE</text>
+
+      <!-- 8つのビート -->
+      <circle class="node-circle current" cx="130" cy="60" r="32"/>
+      <text x="130" y="58" class="node-label">診断</text>
+      <text x="130" y="74" font-size="9" opacity="0.7">通過済</text>
+
+      <circle class="node-circle current" cx="300" cy="50" r="32"/>
+      <text x="300" y="48" class="node-label">検査</text>
+      <text x="300" y="64" font-size="9" opacity="0.7">通過済</text>
+
+      <circle class="node-circle" cx="470" cy="60" r="36" stroke="var(--starlight)" stroke-width="3"/>
+      <text x="470" y="56" class="node-label">治療法を</text>
+      <text x="470" y="68" class="node-label">考える</text>
+      <text x="470" y="84" font-size="9" fill="var(--starlight)">いまここ</text>
+
+      <circle class="node-circle" cx="470" cy="180" r="32"/>
+      <text x="470" y="184" class="node-label">治療</text>
+
+      <circle class="node-circle" cx="470" cy="300" r="32"/>
+      <text x="470" y="296" class="node-label">治療中の</text>
+      <text x="470" y="308" class="node-label">暮らし</text>
+
+      <circle class="node-circle" cx="300" cy="320" r="32"/>
+      <text x="300" y="324" class="node-label">治療後</text>
+
+      <circle class="node-circle" cx="130" cy="300" r="32"/>
+      <text x="130" y="304" class="node-label">お金</text>
+
+      <circle class="node-circle" cx="130" cy="180" r="32"/>
+      <text x="130" y="178" class="node-label">もしもの</text>
+      <text x="130" y="190" class="node-label">とき</text>
+    </svg>
+  </div>
+  <div style="text-align: center; font-size: 12px; color: var(--text-on-dark-quiet); margin-top: -20px;">
+    国立がん研究センター「がんになったら手にとるガイド」の8ステップに準拠
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">8つのビート(章)</div>
+  <h2 class="section-heading">いまどこにいても、必要な章にすぐ行けます。</h2>
+  <div class="beats-row">
+    <a class="beat-pill" href="SATOI_Mock_v1_CHP_diagnosis.html"><span class="b-num">01</span>診断</a>
+    <a class="beat-pill" href="SATOI_Mock_v1_CHP_exam.html"><span class="b-num">02</span>検査</a>
+    <a class="beat-pill" href="SATOI_Mock_v1_CHP_consider.html"><span class="b-num">03</span>治療法を考える</a>
+    <a class="beat-pill" href="SATOI_Mock_v1_CHP_treatment.html"><span class="b-num">04</span>治療</a>
+    <a class="beat-pill" href="SATOI_Mock_v1_CHP_living.html"><span class="b-num">05</span>治療中の暮らし</a>
+    <a class="beat-pill" href="SATOI_Mock_v1_CHP_follow.html"><span class="b-num">06</span>治療後</a>
+    <a class="beat-pill" href="SATOI_Mock_v1_CHP_money.html"><span class="b-num">07</span>お金</a>
+    <a class="beat-pill" href="SATOI_Mock_v1_CHP_palliative.html"><span class="b-num">08</span>もしものとき</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">道しるべを構成する4機能</div>
+  <h2 class="section-heading">迷ったら、戻ってこられる場所。</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="f-icon">🗺️</div>
+      <h4>マインドマップ・ハブ</h4>
+      <p>真ん中があなた、周りに6つの分野(医療/暮らし/お金/家族/気持ち/情報)。クリックで掘り下げ、戻りボタンで俯瞰、を自由に行き来できます。</p>
+    </div>
+    <div class="feature-card">
+      <div class="f-icon">🧭</div>
+      <h4>ジャーニーバー</h4>
+      <p>画面上部に常設。8ビートのどこにいても、他の章にすぐ移動できます。あなたの現在地が常に光ります。</p>
+    </div>
+    <div class="feature-card">
+      <div class="f-icon">📚</div>
+      <h4>章別のチャプターページ</h4>
+      <p>各ビートに専用ページ。「診断」「検査」「治療を考える」「お金」など、それぞれの段階で必要な情報・問い・選択肢をまとめています。</p>
+    </div>
+    <div class="feature-card">
+      <div class="f-icon">🌟</div>
+      <h4>原疾患別ガイド</h4>
+      <p>乳がん・大腸がん・肺がん・胃がん・前立腺がん・膵がんなど、原疾患ごとに、知っておきたいバイオマーカーや検査・治療を整理しています。</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="standard-block">
+    <h4>標準治療を、揺るがしません。</h4>
+    <p>
+      SATOIは「もう一つの選択肢」を提示する場所ではありません。
+      日本ではがんの標準治療は <strong>公的医療保険でカバーされ、もっとも科学的根拠の蓄積された治療</strong> です。
+      私たちは標準治療を常に出発点とし、その<strong>外側で語られにくいこと</strong> ——
+      気持ち・家族・お金・暮らし・もしもの時 —— にことばを与えることを役割としています。
+    </p>
+    <p>
+      AIが「この治療がおすすめ」と言うことは、絶対にありません。
+      治療判断は、あなたと主治医の先生のものです。SATOIは、その<strong>判断を支える地図</strong> を提供します。
+    </p>
+    <div class="src">参照:国立がん研究センター「がんになったら手にとるガイド」/ 厚生労働省 がん対策推進基本計画</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">道しるべ を、どこで体験できるか</div>
+  <h2 class="section-heading">SATOIの各画面に組み込まれています。</h2>
+
+  <div class="example-block">
+    <div class="ex-eyebrow">B1 ハブ</div>
+    <h4>マインドマップ・ハブ</h4>
+    <div class="ex-body">
+      6つの分野カード × 6つの原疾患カード × 8つのビート(章)を、ひとつのマップから掘り下げ・戻りができます。
+      迷ったら、ここに戻ってくれば、自分の現在地が分かります。
+    </div>
+    <a href="SATOI_Mock_v1_B1_hub.html" class="ex-cta">ハブを見る →</a>
+  </div>
+
+  <div class="example-block">
+    <div class="ex-eyebrow">CHP 章別ページ</div>
+    <h4>8つのチャプター</h4>
+    <div class="ex-body">
+      「診断」「検査」「治療法を考える」「治療」「治療中の暮らし」「治療後」「お金」「もしもの時」。
+      8ステップごとに、知っておきたいこと・聞きたいこと・整理したいことが、章単位でまとまっています。
+    </div>
+    <a href="SATOI_Mock_v1_CHP_consider.html" class="ex-cta">「治療法を考える」を見る →</a>
+  </div>
+
+  <div class="example-block">
+    <div class="ex-eyebrow">マイページ</div>
+    <h4>ジャーニーバー(常設ナビ)</h4>
+    <div class="ex-body">
+      画面上部に8ビートが常設されており、いつでもどこからでも、他の章に移れます。
+      あなたの現在地は、ジャーニーバー上で常にハイライトされます。
+    </div>
+    <a href="SATOI_Mock_v1_C1_mypage.html" class="ex-cta">マイページを見る →</a>
+  </div>
+</section>
+
+<section class="related">
+  <a href="SATOI_Mock_v1_POSTURE_yorisou.html">
+    <div class="r-eyebrow">01 ・ POSTURE</div>
+    <div class="r-title">寄り添う</div>
+    <div class="r-sub">数字より、言葉を信じる</div>
+  </a>
+  <a href="SATOI_Mock_v1_POSTURE_tsunagaru.html">
+    <div class="r-eyebrow">02 ・ CONNECT</div>
+    <div class="r-title">つながる</div>
+    <div class="r-sub">家族・先輩・チームを、同意ベースで</div>
+  </a>
+  <a href="SATOI_Mock_v1_PRO_promises.html">
+    <div class="r-eyebrow">PROMISES</div>
+    <div class="r-title">5つの約束</div>
+    <div class="r-sub">SATOIから、あなたへの約束</div>
+  </a>
+</section>
+
+<div class="uninav">
+  <a href="SATOI_Mock_v1_I_about.html" title="About に戻る"><span class="label">About に戻る</span>←</a>
+  <a href="SATOI_Mock_v1_A1_entrance.html" title="ホーム"><span class="label">ホーム</span>⌂</a>
+  <a href="SATOI_Mock_v1_B1_hub.html" title="ハブ"><span class="label">ハブ</span>◉</a>
+  <a href="SATOI_Mock_v1_C1_mypage.html" title="マイページ"><span class="label">マイページ</span>☆</a>
+  <a href="SATOI_Mock_v1_CON_concierge.html" title="コンシェルジュ"><span class="label">相談</span>☎</a>
+</div>
+
+<footer class="footer">
+  SATOI ・ Narrative-Based Care for Cancer ・ © 2026
+</footer>
+
+<script>
+(function(){
+  const layer = document.getElementById('stars');
+  if(!layer) return;
+  for(let i=0;i<60;i++){
+    const s = document.createElement('div'); s.className = 'star';
+    const size = Math.random()*2 + 0.6;
+    s.style.width = size+'px'; s.style.height = size+'px';
+    s.style.left = (Math.random()*100)+'%';
+    s.style.top = (Math.random()*100)+'%';
+    s.style.animationDelay = (Math.random()*5)+'s';
+    s.style.animationDuration = (3+Math.random()*4)+'s';
+    layer.appendChild(s);
+  }
+})();
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

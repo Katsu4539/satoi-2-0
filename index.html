@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - 同じ夜を、過ごしている人がいます。</title>
+<meta name="description" content="SATOI(Satoi)は、がんと向き合う方とご家族のための、物語に基づく医療(NBM)プラットフォームです。気持ち・治療・お金・家族・もしものとき、すべてに寄り添います。">
+
+<!-- OGP -->
+<meta property="og:title" content="SATOI - 同じ夜を、過ごしている人がいます。">
+<meta property="og:description" content="がんと向き合う方とご家族のための、物語に基づく医療(NBM)プラットフォーム">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="SATOI">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- 即リダイレクト(JSが無効でも動く) -->
+<meta http-equiv="refresh" content="0; url=SATOI_Mock_v1_A1_entrance.html">
+<link rel="canonical" href="SATOI_Mock_v1_A1_entrance.html">
+
+<style>
+  body {
+    margin: 0;
+    background: linear-gradient(180deg, #0B1736 0%, #1A2548 50%, #2A3558 100%);
+    color: #F8F6F0;
+    font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+  }
+  .logo {
+    font-size: 32px;
+    letter-spacing: 0.32em;
+    font-weight: 500;
+    margin-bottom: 24px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .logo .dot {
+    display: inline-block;
+    width: 12px; height: 12px;
+    background: #D4A95E;
+    border-radius: 50%;
+    margin-right: 12px;
+    box-shadow: 0 0 18px #D4A95E;
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.2); }
+  }
+  .loading {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: rgba(248,246,240,0.6);
+    margin-top: 12px;
+  }
+  .manual {
+    margin-top: 36px;
+    padding: 12px 26px;
+    background: rgba(212,169,94,0.16);
+    border: 1px solid #D4A95E;
+    border-radius: 22px;
+    color: #F0C97A;
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    transition: all 0.3s;
+  }
+  .manual:hover {
+    background: rgba(212,169,94,0.32);
+  }
+</style>
+</head>
+<body>
+  <div class="logo"><span class="dot"></span>SATOI</div>
+  <div class="loading">読み込み中...</div>
+  <a class="manual" href="SATOI_Mock_v1_A1_entrance.html">こちらをクリック →</a>
+<script>
+  // JSが有効なら即遷移(meta refresh より早い)
+  location.replace('SATOI_Mock_v1_A1_entrance.html');
+</script>
+</body>
+</html>

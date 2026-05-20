@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大腸がん | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10); --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --accent: #0D7377; --accent-bg: rgba(13,115,119,0.06); --accent-border: rgba(13,115,119,0.4);
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --font: "Noto Sans JP", "Meiryo UI", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: var(--morning-white); line-height: 1.85; font-size: 16px; }
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); cursor: pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; justify-content:space-between; align-items:center; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom: 1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--accent); border-radius:50%; margin-right:10px; box-shadow:0 0 12px var(--accent-border); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+
+.hero { padding: 110px 32px 60px; position:relative; }
+.hero-bg { position:absolute; inset:0; opacity:0.28; background-image: url('https://images.unsplash.com/photo-1763202364530-b8d9ce87af18?fm=jpg&q=80&w=1200&auto=format&fit=crop'); background-size: cover; background-position: center; filter: blur(2px); }
+.hero-overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(248,246,240,0.85), rgba(248,246,240,0.98)); }
+.hero-content { position:relative; z-index:2; max-width: 1100px; margin: 0 auto; text-align: center; }
+.hero-eyebrow { display: inline-block; font-size: 12px; letter-spacing: 0.42em; color: var(--accent); padding: 6px 18px; border: 1px solid var(--accent-border); border-radius: 24px; margin-bottom: 24px; }
+.hero-title { font-size: clamp(36px, 5vw, 52px); font-weight: 300; letter-spacing: 0.06em; line-height: 1.4; color: var(--ink-deep); margin-bottom: 14px; }
+.hero-title strong { color: var(--accent); font-weight: 500; }
+.hero-meta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+.meta-card { padding: 14px 22px; background: white; border-radius: 14px; border:1px solid var(--line); font-size: 13px; }
+.meta-card strong { color: var(--accent); font-weight: 600; font-size: 15px; }
+
+.section { padding: 60px 32px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size: 11px; letter-spacing: 0.36em; color: var(--accent); margin-bottom: 10px; font-weight: 600; }
+.section-title { font-size: clamp(24px, 3vw, 30px); font-weight: 500; color: var(--ink-deep); margin-bottom: 16px; }
+.info-card { background: white; border-radius: 18px; padding: 28px 32px; border: 1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); }
+.info-card p { font-size: 14px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 10px; white-space: pre-line; }
+
+.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 26px; }
+.action-card { padding: 22px 24px; background: var(--accent-bg); border-radius: 14px; border: 1px solid var(--accent-border); cursor: pointer; transition: all 0.3s; text-decoration: none; color: var(--ink-deep); }
+.action-card:hover { background: white; transform: translateY(-3px); box-shadow: 0 10px 26px rgba(11,23,54,0.08); }
+.action-card-icon { font-size: 24px; margin-bottom: 8px; }
+.action-card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.action-card-desc { font-size: 11.5px; color: var(--ink-light); line-height: 1.7; }
+
+.voices { background: var(--morning-cream); padding: 30px 32px; border-radius: 18px; border-left: 4px solid var(--accent); margin: 30px 0; }
+.voices p { font-size: 13.5px; color: var(--ink-medium); font-style: italic; line-height: 1.9; margin-bottom: 8px; }
+
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; }
+.satoi-univ-btn { width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) { .action-grid { grid-template-columns: 1fr; } #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="history.back()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Colorectal Cancer</div>
+    <h1 class="hero-title">大腸がん</h1>
+    <div class="hero-meta">
+      <div class="meta-card">罹患 <strong>15.5万人/年(男女合計で罹患数第1位)</strong></div>
+      <div class="meta-card"><strong>5年生存率 71.4%(全ステージ平均)</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-eyebrow">TYPES ・ がんの種類とタイプ</div>
+  <h2 class="section-title">大腸がんの、種類・サブタイプ</h2>
+  <div class="info-card"><p>・ 結腸がん:60%・ 直腸がん:40%・ KRAS/BRAF変異の有無で治療が分岐</p></div>
+</section>
+
+<section class="section">
+  <div class="section-eyebrow">EXAMINATIONS ・ 精密検査</div>
+  <h2 class="section-title">必要な、精密検査</h2>
+  <div class="info-card"><p>便潜血・大腸内視鏡・CT・MRI・腫瘍マーカー CEA・RAS/BRAF・MSI(免疫療法適応判定)</p></div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_CHP_exam.html"><div class="action-card-icon">🔬</div><div class="action-card-title">検査の詳細</div><div class="action-card-desc">画像・病理・遺伝子・腫瘍マーカー</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_B3_treatment_detail.html?cancer=colon#precision-tests"><div class="action-card-icon">📋</div><div class="action-card-title">治療詳細へ</div><div class="action-card-desc">検査の結果から治療を選ぶ</div></a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-eyebrow">STAGING ・ ステージ分類</div>
+  <h2 class="section-title">ステージ別の、考え方</h2>
+  <div class="info-card"><p>・ Stage 0:粘膜内・ Stage I:粘膜下層〜固有筋層・ Stage II:漿膜越え・ Stage III:リンパ節転移あり・ Stage IV:遠隔転移(肝・肺など)</p></div>
+</section>
+
+<section class="section">
+  <div class="section-eyebrow">TREATMENTS ・ 治療法の選択肢</div>
+  <h2 class="section-title">大腸がんの、標準治療</h2>
+  <div class="info-card"><p>・ 手術(腹腔鏡・ロボット支援)・ 補助化学療法(StageIII)・ FOLFOX療法・FOLFIRI療法・CapeOX療法・ 分子標的薬:ベバシズマブ・セツキシマブ(RAS野生型)・パニツムマブ・ MSI-Highでは免疫療法(ペムブロリズマブ)</p></div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_B3_treatment_detail.html?cancer=colon"><div class="action-card-icon">💊</div><div class="action-card-title">治療レジメン詳細</div><div class="action-card-desc">治療詳細ページへ</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CHP_consider.html"><div class="action-card-icon">🧭</div><div class="action-card-title">治療法を考える</div><div class="action-card-desc">SDM・セカンドオピニオン</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_ACAD_research.html?cancer=colon"><div class="action-card-icon">📚</div><div class="action-card-title">学術エビデンス</div><div class="action-card-desc">RCT・ガイドライン・PubMed</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_FREE_map.html"><div class="action-card-icon">🗺</div><div class="action-card-title">自由診療マップ</div><div class="action-card-desc">標準外の選択肢</div></a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-eyebrow">VOICES ・ 先輩の声</div>
+  <h2 class="section-title">同じ道を歩んだ、先輩の言葉</h2>
+  <div class="voices"><p>「FOLFOX 8クール完走。点滴室で同じ患者さんと友達になった」・ 「ストーマは最初不安だったけど、慣れたら全然問題ない」</p></div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_D1_stories.html?cancer=colon"><div class="action-card-icon">📖</div><div class="action-card-title">物語ライブラリ</div><div class="action-card-desc">15+件のナラティブ</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_MUS_community.html"><div class="action-card-icon">🎵</div><div class="action-card-title">音楽コミュニティ</div><div class="action-card-desc">同じ夜を過ごす音楽</div></a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-eyebrow">NEXT STEP ・ 次の一歩</div>
+  <h2 class="section-title">いま、できること</h2>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_A2_dialog.html?cancer=colon&resume=1&from=can_colon"><div class="action-card-icon">💬</div><div class="action-card-title">AIと話す</div><div class="action-card-desc">大腸がんについて深掘り</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CON_concierge.html"><div class="action-card-icon">📞</div><div class="action-card-title">コンシェルジュ</div><div class="action-card-desc">電話 or AI で相談</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_C1_mypage.html"><div class="action-card-icon">👤</div><div class="action-card-title">マイページ</div><div class="action-card-desc">物語の壺・気持ち軌跡</div></a>
+  </div>
+</section>
+
+<script>
+(function(){
+  const nav = document.createElement('div'); nav.id='satoi-univ-nav';
+  nav.innerHTML='<button class="satoi-univ-btn" title="戻る">←</button><button class="satoi-univ-btn" title="夜空ホーム">⌂</button><button class="satoi-univ-btn" title="マイページ">👤</button><button class="satoi-univ-btn" title="全体マップ">◎</button><button class="satoi-univ-btn" title="コンシェルジュ">💬</button>';
+  document.body.appendChild(nav);
+  const b = nav.querySelectorAll('.satoi-univ-btn');
+  b[0].onclick = ()=>history.back(); b[1].onclick = ()=>location.href='SATOI_Mock_v1_A1_entrance.html'; b[2].onclick = ()=>location.href='SATOI_Mock_v1_C1_mypage.html'; b[3].onclick = ()=>location.href='SATOI_Mock_v1_B1_hub.html'; b[4].onclick = ()=>location.href='SATOI_Mock_v1_CON_concierge.html';
+})();
+</script>
+<script src="satoi_chp_insight.js"></script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

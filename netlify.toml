@@ -1,0 +1,74 @@
+# SATOI Mock - Netlify 設定
+# Netlify Drop / GitHub 連携いずれでもこの設定が読まれます
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Claude API プロキシのエイリアス
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+  force = true
+
+# きれいなURL(短縮パス)
+[[redirects]]
+  from = "/hub"
+  to = "/SATOI_Mock_v1_B1_hub.html"
+  status = 200
+
+[[redirects]]
+  from = "/mypage"
+  to = "/SATOI_Mock_v1_C1_mypage.html"
+  status = 200
+
+[[redirects]]
+  from = "/dialog"
+  to = "/SATOI_Mock_v1_A2_dialog.html"
+  status = 200
+
+[[redirects]]
+  from = "/concierge"
+  to = "/SATOI_Mock_v1_CON_concierge.html"
+  status = 200
+
+[[redirects]]
+  from = "/about"
+  to = "/SATOI_Mock_v1_I_about.html"
+  status = 200
+
+[[redirects]]
+  from = "/insurance"
+  to = "/SATOI_Mock_v1_G3_insurance_mypage.html"
+  status = 200
+
+[[redirects]]
+  from = "/corporate"
+  to = "/SATOI_Mock_v1_G2_corporate_dashboard.html"
+  status = 200
+
+# 404 フォールバック → A1 入口へ
+[[redirects]]
+  from = "/*"
+  to = "/SATOI_Mock_v1_A1_entrance.html"
+  status = 404
+
+# セキュリティヘッダー
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# キャッシュ制御(JSは短め)
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"

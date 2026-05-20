@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - 物語ライブラリ・同じ夜を過ごしてきた人たち</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --dawn-pink: #D8A98A;
+  --morning-cream: #F6EFE3;
+  --morning-white: #FBF7F0;
+  --starlight: #D4A95E;
+  --starlight-soft: #E5C68A;
+  --starlight-strong: #F0C97A;
+  --teal: #0D7377;
+  --teal-deep: #0A5A5D;
+  --teal-soft: #14A6AB;
+  --warm-orange: #D4622A;
+  --warm-orange-soft: #E9874C;
+  --navy: #0A1628;
+  --bg-cream: #FBF8F2;
+  --bg-soft: #F4EFE6;
+  --bg-paper: #FFFCF6;
+  --line: rgba(10,22,40,0.10);
+  --line-soft: rgba(10,22,40,0.06);
+  --text-primary: #1A2A40;
+  --text-secondary: rgba(26,42,64,0.72);
+  --text-muted: rgba(26,42,64,0.50);
+  --text-on-dark: rgba(248,246,240,0.96);
+  --text-on-dark-soft: rgba(248,246,240,0.74);
+  --font: "Noto Sans JP", "Meiryo UI", "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+body {
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: var(--morning-white);
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+/* === ヘッダー === */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 16px 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(11,23,54,0.92), rgba(11,23,54,0));
+  backdrop-filter: blur(12px);
+}
+.logo {
+  font-size: 22px; font-weight: 500; letter-spacing: 0.22em;
+  color: var(--text-on-dark);
+  display: inline-flex; align-items: center; text-decoration: none;
+}
+.logo .dot {
+  display: inline-block; width: 8px; height: 8px;
+  background: var(--starlight); border-radius: 50%;
+  margin-right: 10px; box-shadow: 0 0 12px var(--starlight);
+}
+.header-right { display: flex; align-items: center; gap: 12px; }
+.h-link {
+  color: var(--text-on-dark-soft);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 18px;
+  transition: background 0.2s;
+}
+.h-link:hover { background: rgba(248,246,240,0.08); }
+
+/* === ヒーロー === */
+.hero {
+  position: relative;
+  padding: 120px 40px 80px;
+  background: linear-gradient(180deg, var(--night-deep) 0%, var(--night-medium) 38%, var(--dawn-pink) 80%, var(--morning-cream) 100%);
+  color: var(--text-on-dark);
+  overflow: hidden;
+  text-align: center;
+}
+.hero-stars { position: absolute; inset: 0; pointer-events: none; }
+.h-star {
+  position: absolute; background: var(--starlight); border-radius: 50%;
+  opacity: 0; animation: twinkle 4.5s infinite ease-in-out;
+}
+@keyframes twinkle { 0%,100%{opacity:.15;transform:scale(.7);} 50%{opacity:.75;transform:scale(1.1);} }
+
+.hero-eyebrow {
+  font-size: 12px; letter-spacing: 0.34em;
+  color: var(--text-on-dark-soft); margin-bottom: 18px;
+}
+.hero-title {
+  font-size: 48px; font-weight: 300;
+  letter-spacing: 0.04em; line-height: 1.3;
+  color: var(--text-on-dark); margin-bottom: 22px;
+}
+.hero-title .accent { color: var(--starlight-strong); font-weight: 500; }
+.hero-sub {
+  font-size: 15px; font-weight: 300;
+  color: var(--text-on-dark-soft);
+  line-height: 1.95; max-width: 640px;
+  margin: 0 auto 30px;
+}
+.hero-stat {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 22px;
+  background: rgba(248,246,240,0.10);
+  border: 1px solid rgba(248,246,240,0.22);
+  border-radius: 22px;
+  font-size: 13px; color: var(--text-on-dark);
+}
+.hero-stat .num {
+  color: var(--starlight-strong);
+  font-weight: 600; font-size: 17px;
+}
+
+/* === セクション === */
+.section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 70px 36px;
+}
+.section.bg {
+  background: var(--bg-cream);
+  max-width: none; padding-left: 0; padding-right: 0;
+}
+.section.bg > .section-inner {
+  max-width: 1180px; margin: 0 auto;
+  padding: 0 36px;
+}
+.section-eyebrow {
+  font-size: 12px; letter-spacing: 0.32em;
+  color: var(--teal); text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.section-title {
+  font-size: 30px; font-weight: 400;
+  letter-spacing: 0.04em; line-height: 1.4;
+  margin-bottom: 12px; color: var(--text-primary);
+}
+.section-sub {
+  font-size: 14px; color: var(--text-secondary);
+  line-height: 2; margin-bottom: 32px;
+  max-width: 720px;
+}
+
+/* === AI推薦バッジ === */
+.ai-rec-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px;
+}
+.ai-rec-orb {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--starlight-strong), var(--starlight) 60%, rgba(212,169,94,0.2));
+  box-shadow: 0 0 14px rgba(212,169,94,0.5);
+  animation: lamp-breath 3s ease-in-out infinite;
+}
+@keyframes lamp-breath { 0%,100%{transform:scale(.95);opacity:.85;} 50%{transform:scale(1.08);opacity:1;} }
+.ai-rec-text {
+  font-size: 14px;
+  color: var(--teal);
+}
+
+/* === フィルタチップ === */
+.filter-bar {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 22px 26px;
+  margin-bottom: 30px;
+}
+.filter-row {
+  display: flex; gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.filter-row:last-child { margin-bottom: 0; }
+.filter-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  margin-right: 6px;
+  flex-shrink: 0;
+  width: 80px;
+}
+.filter-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--morning-white);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: all 0.2s;
+}
+.filter-chip:hover { border-color: var(--teal); color: var(--teal); }
+.filter-chip.active {
+  background: var(--teal); color: var(--morning-white);
+  border-color: var(--teal);
+}
+.filter-smart {
+  background: linear-gradient(135deg, var(--starlight), var(--warm-orange));
+  color: var(--morning-white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 22px;
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 6px;
+}
+.filter-smart::before {
+  content: '✦';
+  font-size: 14px;
+}
+
+/* === 物語グリッド === */
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+.story-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.story-card:hover {
+  border-color: var(--teal);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(10,22,40,0.08);
+}
+.story-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #2A3558, #4A5578);
+  position: relative;
+  overflow: hidden;
+}
+.story-img img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.4s;
+}
+.story-card:hover .story-img img { transform: scale(1.05); }
+.story-format {
+  position: absolute; top: 12px; right: 12px;
+  padding: 4px 10px;
+  background: rgba(11,23,54,0.78);
+  color: var(--text-on-dark);
+  border-radius: 12px;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+}
+.story-body {
+  padding: 18px 20px 20px;
+}
+.story-meta {
+  font-size: 11px; color: var(--teal);
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.story-title {
+  font-size: 16px; font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+.story-quote {
+  font-size: 13px; color: var(--text-secondary);
+  line-height: 1.85;
+  font-style: italic;
+  margin-bottom: 14px;
+}
+.story-foot {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.story-name {
+  flex: 1; color: var(--text-primary);
+  font-weight: 500; font-size: 12px;
+}
+.story-stat {
+  display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* === AI推薦カード(特別装飾)=== */
+.ai-rec-card {
+  border: 2px solid var(--starlight);
+  background: linear-gradient(135deg, rgba(212,169,94,0.06), var(--bg-paper));
+  position: relative;
+}
+.ai-rec-tag {
+  position: absolute; top: 12px; left: 12px;
+  background: var(--starlight);
+  color: var(--navy);
+  font-size: 10px; font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  letter-spacing: 0.06em;
+  z-index: 2;
+}
+
+/* === 編集部 === */
+.editor-feature {
+  background: linear-gradient(135deg, rgba(212,98,42,0.05), var(--bg-paper));
+  border: 1px solid rgba(212,98,42,0.20);
+  border-radius: 22px;
+  padding: 36px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 28px;
+  align-items: center;
+}
+.editor-month {
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--warm-orange), var(--warm-orange-soft));
+  color: var(--morning-white);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-family: var(--font);
+}
+.editor-month-num { font-size: 64px; font-weight: 300; line-height: 1; }
+.editor-month-text { font-size: 13px; letter-spacing: 0.16em; margin-top: 4px; }
+.editor-tag {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: var(--warm-orange);
+  margin-bottom: 8px;
+}
+.editor-title {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+.editor-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.95;
+  margin-bottom: 16px;
+}
+.editor-cta {
+  display: inline-block;
+  color: var(--warm-orange);
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* === 投稿入口 === */
+.submit-block {
+  background: linear-gradient(135deg, var(--night-medium), var(--night-deep));
+  color: var(--text-on-dark);
+  border-radius: 24px;
+  padding: 50px 44px;
+  text-align: center;
+}
+.submit-title {
+  font-size: 26px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.submit-sub {
+  font-size: 14px;
+  color: var(--text-on-dark-soft);
+  line-height: 2;
+  margin-bottom: 32px;
+  max-width: 540px;
+  margin-left: auto; margin-right: auto;
+}
+.submit-row {
+  display: flex; gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.submit-btn {
+  background: rgba(248,246,240,0.10);
+  border: 1px solid rgba(248,246,240,0.25);
+  color: var(--text-on-dark);
+  padding: 14px 24px;
+  border-radius: 26px;
+  font-family: var(--font);
+  font-size: 13.5px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 10px;
+  transition: all 0.25s;
+}
+.submit-btn:hover {
+  background: rgba(248,246,240,0.18);
+  border-color: var(--starlight);
+}
+.submit-foot {
+  font-size: 11.5px;
+  color: rgba(248,246,240,0.5);
+  letter-spacing: 0.04em;
+  margin-top: 24px;
+  line-height: 1.8;
+}
+
+/* === メディア展開 === */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.media-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 26px 22px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.media-card:hover {
+  border-color: var(--teal);
+  transform: translateY(-3px);
+}
+.media-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: rgba(13,115,119,0.10);
+  color: var(--teal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 14px;
+}
+.media-name {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+.media-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* === ガバナンス === */
+.governance {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 36px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+.gov-item {
+  padding: 16px;
+}
+.gov-icon {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: rgba(13,115,119,0.10);
+  color: var(--teal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+.gov-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+.gov-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+
+/* === 物語詳細モーダル === */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(11,23,54,0.86);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 500;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px 18px 30px;
+  overflow-y: auto;
+}
+.overlay.show { display: flex; }
+.story-modal {
+  background: var(--morning-white);
+  border-radius: 22px;
+  max-width: 760px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.story-modal-close {
+  position: absolute; top: 16px; right: 18px;
+  background: rgba(11,23,54,0.6);
+  color: var(--morning-white);
+  border: none;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 10;
+}
+.modal-hero {
+  width: 100%;
+  height: 280px;
+  position: relative;
+  overflow: hidden;
+}
+.modal-hero img { width: 100%; height: 100%; object-fit: cover; }
+.modal-hero-grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(11,23,54,0.7));
+}
+.modal-hero-meta {
+  position: absolute;
+  bottom: 20px; left: 28px; right: 28px;
+  color: var(--text-on-dark);
+}
+.modal-tag {
+  display: inline-block;
+  padding: 5px 12px;
+  background: rgba(212,169,94,0.85);
+  color: var(--navy);
+  border-radius: 12px;
+  font-size: 11px;
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+.modal-name-line { font-size: 13px; opacity: 0.85; margin-bottom: 4px; }
+.modal-title {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.modal-body { padding: 32px 36px; }
+.modal-ai-summary {
+  background: rgba(13,115,119,0.06);
+  border-left: 3px solid var(--teal);
+  border-radius: 0 12px 12px 0;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.85;
+  margin-bottom: 22px;
+}
+.modal-ai-summary-tab {
+  display: inline-block;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+.modal-ai-switch {
+  display: inline-flex; gap: 4px;
+  margin-bottom: 14px;
+  background: var(--bg-soft);
+  padding: 3px;
+  border-radius: 14px;
+}
+.modal-ai-switch button {
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-family: var(--font);
+  border-radius: 12px;
+  cursor: pointer;
+}
+.modal-ai-switch button.active {
+  background: var(--morning-white);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.modal-text {
+  font-size: 15px;
+  line-height: 2;
+  color: var(--text-primary);
+  margin-bottom: 26px;
+}
+.modal-text p { margin-bottom: 16px; }
+.modal-text p:last-child { margin-bottom: 0; }
+.modal-text strong { color: var(--teal-deep); font-weight: 500; }
+
+.modal-react {
+  background: var(--bg-cream);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 24px;
+}
+.modal-react-q {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  text-align: center;
+}
+.modal-react-row {
+  display: flex; gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.react-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px;
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  font-family: var(--font);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-primary);
+}
+.react-btn:hover { border-color: var(--warm-orange); }
+.react-btn.heart:hover, .react-btn.heart.active {
+  background: rgba(201,112,112,0.10);
+  border-color: var(--rare-pink, #C97070);
+  color: #C97070;
+}
+.react-btn.thanks:hover, .react-btn.thanks.active {
+  background: rgba(212,169,94,0.10);
+  border-color: var(--starlight);
+  color: #8B5A1F;
+}
+
+.modal-related {
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+}
+.modal-related-label {
+  font-size: 11.5px;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.related-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.related-card:hover { border-color: var(--teal); }
+.related-meta {
+  font-size: 10.5px;
+  color: var(--teal);
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+.related-name {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+.related-snippet {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* === companion lamp === */
+.companion-lamp {
+  position: fixed; right: 28px; bottom: 28px;
+  width: 70px; height: 70px;
+  z-index: 150;
+  cursor: pointer;
+}
+.lamp-orb {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%,
+    var(--starlight-strong) 0%,
+    var(--starlight) 38%,
+    rgba(212,169,94,0.18) 70%,
+    transparent 100%);
+  animation: lamp-breath 4s ease-in-out infinite;
+}
+.lamp-bubble {
+  position: absolute;
+  right: 84px; bottom: 12px;
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(10,22,40,0.18);
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 0.4s, transform 0.4s;
+  pointer-events: none;
+}
+.lamp-bubble.show { opacity: 1; transform: translateX(0); }
+.lamp-bubble::after {
+  content: ''; position: absolute;
+  right: -7px; top: 50%; transform: translateY(-50%);
+  border: 7px solid transparent; border-left-color: var(--morning-white);
+}
+
+/* === ティッカー === */
+.ticker {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(11,23,54,0.92);
+  color: var(--text-on-dark);
+  padding: 11px 20px;
+  font-size: 12.5px;
+  text-align: center;
+  z-index: 140;
+  backdrop-filter: blur(10px);
+}
+.ticker .dot {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--starlight); border-radius: 50%;
+  box-shadow: 0 0 8px var(--starlight);
+  margin-right: 8px; vertical-align: middle;
+  animation: pulse-soft 2.4s infinite;
+}
+@keyframes pulse-soft { 0%,100%{opacity:.6;} 50%{opacity:1;} }
+.ticker-num { color: var(--starlight-strong); font-weight: 600; }
+
+/* === フッター === */
+.footer {
+  background: var(--navy);
+  color: var(--text-on-dark-soft);
+  padding: 50px 40px 90px;
+  text-align: center;
+}
+.footer-logo { font-size: 20px; letter-spacing: 0.28em; margin-bottom: 12px; color: var(--text-on-dark); }
+.footer-row { display: flex; justify-content: center; gap: 22px; margin-bottom: 18px; flex-wrap: wrap; }
+.footer-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px;
+  background: rgba(248,246,240,0.06);
+  border: 1px solid rgba(248,246,240,0.14);
+  border-radius: 18px;
+  font-size: 11.5px;
+}
+
+/* === レスポンシブ === */
+@media (max-width: 760px) {
+  .header { padding: 14px 18px; }
+  .hero { padding: 100px 22px 70px; }
+  .hero-title { font-size: 32px; }
+  .section { padding: 50px 20px; }
+  .section.bg > .section-inner { padding: 0 20px; }
+  .section-title { font-size: 22px; }
+  .filter-bar { padding: 18px 18px; }
+  .filter-label { width: auto; margin-bottom: 4px; }
+  .editor-feature { grid-template-columns: 1fr; text-align: center; }
+  .editor-month { margin: 0 auto; }
+  .submit-block { padding: 36px 22px; }
+  .companion-lamp { right: 14px; bottom: 56px; width: 60px; height: 60px; }
+  .story-modal { border-radius: 16px; }
+  .modal-body { padding: 24px 22px; }
+  .modal-hero { height: 220px; }
+  .modal-hero-meta { left: 20px; right: 20px; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) {
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+
+
+/* === SATOI 共通モバイル対応(iPad/iPhone)=== */
+@media (max-width: 1024px) {
+  /* iPad 縦 ・ ヘッダー狭め */
+  .header { padding: 14px 22px !important; }
+  .section, .wrap, .container, main, .main { padding-left: 22px !important; padding-right: 22px !important; }
+}
+@media (max-width: 768px) {
+  /* iPhone ・ 主要メトリクスをモバイル最適化 */
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title, .hero-title-l1 { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title, .nbm-title, .mission-line { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  .section, .container, .wrap, main, .main, section { padding-left: 14px !important; padding-right: 14px !important; }
+  section, .section { padding-top: 50px !important; padding-bottom: 50px !important; }
+  /* グリッドを1列に */
+  .grid, .cards, .types-grid, .stories-grid, .forum-grid, .family-grid, .promise-list, .partner-grid, .gov-grid, .numbers-grid, .empse-grid, .pubmed-list, .sources-grid, .criteria-grid, .tx-cat-grid, .map-wrap, .emg-grid, .emg-consent-grid, .emg-contacts, .kids-talk-wrap, .cat-grid, .videos-grid, .cat-cards, .partner-cards, .promise-cards, .principle-cards, .pricing-grid, .pricing-cards, .step-cards, .info-cards, .role-cards, .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* 横スクロールのみ許す要素は残す */
+  .b1-journey-bar, .journey-bar, .types-tabs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  /* ヒーローの padding 圧縮 */
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  /* 大きい見出し */
+  .opener-line { font-size: 24px !important; margin-bottom: 40px !important; }
+  /* タップ領域 44px 最低 */
+  .btn, button, .login-btn, .nav-mini a, .filter-chip, .cat-card, .type-card, .story-card, .forum-card { min-height: 40px; }
+  /* テーブル横スクロール */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* マイチーム ホイール → 縦並びに */
+  .team-wheel-wrap, .team-wheel { width: 100% !important; height: auto !important; min-height: 360px; }
+  /* モーダル系: 画面いっぱいに */
+  .modal, .overlay-modal, [class*='Modal'], [class*='modal'] { max-width: 100vw !important; }
+  /* ナビ縮小 */
+  .nav-mini, .nav { gap: 12px !important; font-size: 12px !important; }
+  /* フォーム入力 */
+  input, textarea, select { font-size: 16px !important; } /* iOSのズーム防止 */
+  /* SVG レーダーチャートの収まり */
+  .empse-chart, .empse-chart-wrap { width: 100% !important; max-width: 320px; height: auto !important; margin: 0 auto !important; }
+  /* B1 7ステップを横スクロールに */
+  .steps-row { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 10px; }
+  .steps-row .step { flex-shrink: 0; min-width: 80px; }
+  /* G2 サイドナビは画面下部固定 or hamburger 想定 */
+  .sidebar, .side-nav, .g2-sidebar { position: relative !important; width: 100% !important; height: auto !important; overflow-x: auto !important; display: flex !important; }
+}
+@media (max-width: 480px) {
+  /* 極小画面 */
+  .hero { padding: 80px 12px 40px !important; }
+  .b1-journey-bar { padding: 8px 10px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+
+/* === SATOI ユニバーサル横断ナビ(戻る/ホーム/言語) === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-univ-btn[title]::after { content: attr(title); position: absolute; right: 54px; background: rgba(11,23,54,0.92); color: #F8F6F0; font-size: 11px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.satoi-univ-btn:hover::after { opacity: 1; }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <div class="header-right">
+    <a class="h-link" href="SATOI_Mock_v1_B1_hub.html">マインドマップ</a>
+    <a class="h-link" href="SATOI_Mock_v1_C1_mypage.html">マイページ</a>
+    <a class="h-link" href="SATOI_Mock_v1_A2_dialog.html">AI対話</a>
+  </div>
+</header>
+
+<!-- ===== ヒーロー ===== -->
+<section class="hero">
+  <div class="hero-stars" id="heroStars"></div>
+  <div class="hero-eyebrow">STORIES LIBRARY</div>
+  <h1 class="hero-title">同じ夜を、<span class="accent">過ごしてきた</span>人たちの物語</h1>
+  <p class="hero-sub">
+    「正解」を見つけに来た方の物語ではありません。<br>
+    揺れながら、迷いながら、それでも歩いてきた人たちの言葉が、ここにあります。
+  </p>
+  <div class="hero-stat">
+    <span>これまでに集まった物語 ・</span>
+    <span class="num" id="storyTotal">2,847</span>
+    <span>件</span>
+  </div>
+</section>
+
+<!-- ===== 1. AI推薦 ===== -->
+<section class="section">
+  <div class="ai-rec-head">
+    <div class="ai-rec-orb"></div>
+    <div>
+      <div class="section-eyebrow" style="margin-bottom:4px;">FOR YOU</div>
+      <h2 class="section-title" style="margin-bottom:0;">あなたへ、おすすめの物語</h2>
+    </div>
+  </div>
+  <p class="section-sub">
+    あなたの状況(乳がん・ステージII・TC療法を検討中・35-45歳・家族と暮らす方)に近い場所を、歩いてきた方の物語です。<br>
+    <span style="color:var(--teal);">同じ場所からはじまった方が、これだけいらっしゃいます。</span>
+  </p>
+
+  <div class="stories-grid" id="aiRecGrid">
+    <!-- JS で生成 -->
+  </div>
+</section>
+
+<!-- ===== 2. 物語の探し方 ===== -->
+<section class="section bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">02 / FIND</div>
+    <h2 class="section-title">物語の、探し方</h2>
+    <p class="section-sub">気になるテーマを選んで、絞ってみてください。「あなたと似ている人」スマートフィルタもあります。</p>
+
+    <div class="filter-bar">
+      <div class="filter-row">
+        <span class="filter-label">がん種</span>
+        <button class="filter-chip" data-filter="cancer" data-value="all">すべて</button>
+        <button class="filter-chip active" data-filter="cancer" data-value="breast">乳がん</button>
+        <button class="filter-chip" data-filter="cancer" data-value="colon">大腸がん</button>
+        <button class="filter-chip" data-filter="cancer" data-value="lung">肺がん</button>
+        <button class="filter-chip" data-filter="cancer" data-value="stomach">胃がん</button>
+        <button class="filter-chip" data-filter="cancer" data-value="prostate">前立腺がん</button>
+        <button class="filter-chip" data-filter="cancer" data-value="pancreas">膵がん</button>
+        <button class="filter-chip" data-filter="cancer" data-value="ovary">卵巣がん</button>
+        <button class="filter-chip" data-filter="cancer" data-value="blood">血液がん</button>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">ステージ</span>
+        <button class="filter-chip active" data-filter="stage" data-value="all">すべて</button>
+        <button class="filter-chip" data-filter="stage" data-value="I">I</button>
+        <button class="filter-chip" data-filter="stage" data-value="II">II</button>
+        <button class="filter-chip" data-filter="stage" data-value="III">III</button>
+        <button class="filter-chip" data-filter="stage" data-value="IV">IV</button>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">テーマ</span>
+        <button class="filter-chip active" data-filter="theme" data-value="all">すべて</button>
+        <button class="filter-chip" data-filter="theme" data-value="work">仕事との両立</button>
+        <button class="filter-chip" data-filter="theme" data-value="family">家族・伝え方</button>
+        <button class="filter-chip" data-filter="theme" data-value="children">子育て</button>
+        <button class="filter-chip" data-filter="theme" data-value="money">お金・制度</button>
+        <button class="filter-chip" data-filter="theme" data-value="choice">治療選択</button>
+        <button class="filter-chip" data-filter="theme" data-value="recur">再発・サバイバー</button>
+        <button class="filter-chip" data-filter="theme" data-value="palliative">緩和ケア</button>
+        <button class="filter-chip" data-filter="theme" data-value="just-diag">告知直後</button>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">形式</span>
+        <button class="filter-chip active" data-filter="format" data-value="all">すべて</button>
+        <button class="filter-chip" data-filter="format" data-value="text">テキスト</button>
+        <button class="filter-chip" data-filter="format" data-value="audio">音声</button>
+        <button class="filter-chip" data-filter="format" data-value="video">動画</button>
+      </div>
+      <div class="filter-row" style="justify-content: space-between; margin-top:6px; padding-top:14px; border-top: 1px solid var(--line-soft);">
+        <button class="filter-smart" onclick="smartFilter()">あなたと似ている人を、探す</button>
+        <span id="filterCount" style="font-size:12px; color:var(--text-muted);">15件の物語が見つかりました</span>
+      </div>
+    </div>
+
+    <div class="stories-grid" id="storiesGrid">
+      <!-- JS で生成 -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 編集部おすすめ ===== -->
+<section class="section">
+  <div class="section-eyebrow">03 / EDITOR'S PICK</div>
+  <h2 class="section-title">編集部おすすめ ・ 今月の特集</h2>
+  <p class="section-sub">季節や、社会の動きに合わせて、編集部が選んだ物語を毎月お届けしています。</p>
+
+  <div class="editor-feature">
+    <div class="editor-month">
+      <div class="editor-month-num">5</div>
+      <div class="editor-month-text">MAY 2026</div>
+    </div>
+    <div>
+      <div class="editor-tag">EDITORIAL FEATURE</div>
+      <div class="editor-title">新学期・新生活と、治療のあいだで</div>
+      <div class="editor-desc">
+        4-5月は、お子さんの新学期・新しい職場・引っ越し。生活が動く季節に、治療が始まった方の物語を集めました。<br>
+        「学校に何を伝えるか」「新しい職場でどう話すか」「家族の生活リズムをどう整え直すか」。<br>
+        6本の物語が、それぞれの工夫を語っています。
+      </div>
+      <a class="editor-cta" onclick="satoiNotify('5月特集ページへ(プレースホルダ・編集部キュレーション)')">6本の物語を、読む →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. 物語投稿入口 ===== -->
+<section class="section">
+  <div class="submit-block">
+    <h2 class="submit-title">あなたの物語も、<br>残しませんか?</h2>
+    <p class="submit-sub">
+      書きたくなった時に、書きたいだけで、いいです。<br>
+      あなたの物語が、今夜どこかの誰かを、救うかもしれません。<br>
+      <span style="font-size:12px; opacity:0.7;">承認制(医療者・JOInT諮問委員会レビュー)・全ての権利はあなたのものです</span>
+    </p>
+    <div class="submit-row">
+      <button class="submit-btn" onclick="satoiNotify('テキストで書く・投稿フォームへ(D2プレースホルダ)')">
+        <span>✏️</span> 文字で、書く
+      </button>
+      <button class="submit-btn" onclick="satoiNotify('音声で話す・録音フォームへ(D2プレースホルダ)')">
+        <span>🎙️</span> 声で、話す
+      </button>
+      <button class="submit-btn" onclick="satoiNotify('動画で残す・録画フォームへ(D2プレースホルダ)')">
+        <span>🎥</span> 動画で、残す
+      </button>
+      <button class="submit-btn" onclick="satoiNotify('家族の物語として書く(D2プレースホルダ)')">
+        <span>💛</span> 家族として
+      </button>
+    </div>
+    <div class="submit-foot">
+      投稿で得られるもの:あなたの物語に「ありがとう」が届く / 編集部からのお礼 / 物語の壺に永久保存 / 家族にも共有可
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. メディア展開 ===== -->
+<section class="section bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">07 / OTHER PLACES</div>
+    <h2 class="section-title">物語を、聴ける場所</h2>
+    <p class="section-sub">SATOI内だけでなく、お好きな場所で。あなたのペースで、好きな形で。</p>
+
+    <div class="media-grid">
+            <div class="media-card" onclick="window.open('https://www.dipex-j.org/breast-cancer/', '_blank')">
+        <div class="media-icon">📚</div>
+        <div class="media-name">DIPEx-Japan</div>
+        <div class="media-sub">健康と病いの語り<br>質的研究200+ナラティブ(外部リンク)</div>
+      </div>
+      <div class="media-card" onclick="window.open('https://www.youtube.com/results?search_query=SATOI+stories+cancer', '_blank')">
+        <div class="media-icon">📺</div>
+        <div class="media-name">YouTube</div>
+        <div class="media-sub">SATOI Stories チャンネル<br>動画インタビュー(外部リンク)</div>
+      </div>
+      <div class="media-card" onclick="window.open('https://open.spotify.com/search/SATOI', '_blank')">
+        <div class="media-icon">🎧</div>
+        <div class="media-name">Spotify Podcast</div>
+        <div class="media-sub">音声物語シリーズ<br>通勤・家事中に(外部リンク)</div>
+      </div>
+      <div class="media-card" onclick="window.open('https://music.apple.com/jp/search?term=SATOI', '_blank')">
+        <div class="media-icon">🎵</div>
+        <div class="media-name">Apple Music</div>
+        <div class="media-sub">音声物語・ヒーリング<br>(外部リンク)</div>
+      </div>
+      <div class="media-card" onclick="window.open('https://www.amazon.co.jp/s?k=SATOI+%E7%89%A9%E8%AA%9E%E9%9B%86', '_blank')">
+        <div class="media-icon">📚</div>
+        <div class="media-name">書籍・編集部選集</div>
+        <div class="media-sub">毎年12本を厳選<br>(外部リンク)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. ガバナンス ===== -->
+<section class="section">
+  <div class="section-eyebrow">08 / ETHICS</div>
+  <h2 class="section-title">物語の、倫理 と ガバナンス</h2>
+  <p class="section-sub">「物語を書いてくださる方」と「読む方」の両方を守るために、SATOIは下記の原則を厳守しています。</p>
+
+  <div class="governance">
+    <div class="gov-item">
+      <div class="gov-icon">✓</div>
+      <div class="gov-title">本人の同意が、絶対</div>
+      <div class="gov-desc">すべての物語は、ご本人の明示的な同意のもとに掲載されています。いつでも撤回できます。</div>
+    </div>
+    <div class="gov-item">
+      <div class="gov-icon">🩺</div>
+      <div class="gov-title">医療情報は、医療者が監修</div>
+      <div class="gov-desc">物語内の医療情報は、SATOI医療アドバイザリーボードが確認しています。事実誤認は丁寧に修正。</div>
+    </div>
+    <div class="gov-item">
+      <div class="gov-icon">⚖️</div>
+      <div class="gov-title">JOInT 諮問委員会のレビュー</div>
+      <div class="gov-desc">編集方針・承認基準は、独立した諮問委員会(JOInT)がガバナンスしています。</div>
+    </div>
+    <div class="gov-item">
+      <div class="gov-icon">💝</div>
+      <div class="gov-title">投稿者への、お礼の仕組み</div>
+      <div class="gov-desc">物語を書いてくださった方には、読者からの「ありがとう」が届きます。また、編集部からのお礼の品も。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== companion lamp ===== -->
+<div class="companion-lamp" onclick="toggleLamp()">
+  <div class="lamp-orb"></div>
+  <div class="lamp-bubble" id="lampBubble">焦らず、ゆっくり、好きな物語から。</div>
+</div>
+
+<!-- ===== ティッカー ===== -->
+<div class="ticker">
+  <span class="dot"></span>
+  いま、<span class="ticker-num" id="tickerNum">428</span> 人が、ここで物語を読んでいます
+</div>
+
+<!-- ===== 物語詳細モーダル ===== -->
+<div class="overlay" id="storyOverlay" onclick="if(event.target===this) closeStory()">
+  <div class="story-modal" id="storyModal">
+    <button class="story-modal-close" onclick="closeStory()">×</button>
+    <div class="modal-hero">
+      <img id="modalImg" src="" alt="">
+      <div class="modal-hero-grad"></div>
+      <div class="modal-hero-meta">
+        <span class="modal-tag" id="modalTag">乳がんII・TC療法</span>
+        <div class="modal-name-line" id="modalName">M.K.さん・38歳</div>
+        <div class="modal-title" id="modalTitle">タイトル</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-ai-summary-tab">AI 要約</div>
+      <div class="modal-ai-switch">
+        <button class="active" data-tab="patient" onclick="switchAiTab(this, 'patient')">患者・家族向け</button>
+        <button data-tab="medical" onclick="switchAiTab(this, 'medical')">医療者向け</button>
+      </div>
+      <div class="modal-ai-summary" id="modalSummary">要約</div>
+      <div class="modal-text" id="modalText">本文</div>
+
+      <div class="modal-react">
+        <div class="modal-react-q">この物語を読んで、何を残しますか?</div>
+        <div class="modal-react-row">
+          <button class="react-btn heart" onclick="reactStory(this, 'heart')">♡ 同じ気持ち <span id="rcHeart">156</span></button>
+          <button class="react-btn thanks" onclick="reactStory(this, 'thanks')">✨ ありがとう を送る</button>
+          <button class="react-btn" onclick="location.href='SATOI_Mock_v1_FAM_view.html?from=d1&share=story'">📨 家族にも共有</button>
+          <button class="react-btn" onclick="location.href='SATOI_Mock_v1_C1_mypage.html?from=d1&jar=true'">💎 物語の壺に</button>
+          <button class="react-btn" onclick="openShareModal()">📤 SNSで共有</button>
+          <button class="react-btn" onclick="generateVideo()">🎬 この物語を動画化</button>
+          <button class="react-btn" onclick="location.href='SATOI_Mock_v1_MUS_community.html?from=d1'">🎵 音楽コミュニティ</button>
+        </div>
+      </div>
+
+      <!-- SNS シェアモーダル(内部) -->
+      <div id="shareModalInline" style="display:none; background:linear-gradient(135deg, rgba(212,169,94,0.10), rgba(13,115,119,0.10)); padding:22px; border-radius:16px; margin-top:18px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+          <div style="font-size:14px; font-weight:600; color:var(--ink-deep);">📤 この物語を、SNSで共有</div>
+          <button onclick="closeShareModal()" style="background:transparent; border:none; font-size:18px; cursor:pointer; color:var(--ink-light);">×</button>
+        </div>
+        <div style="font-size:12px; color:var(--ink-medium); margin-bottom:14px; line-height:1.85;">
+          ハッシュタグ <strong>#SATOI</strong> で繋がれます。<br>
+          OG画像が自動生成され、安全な抜粋(個人情報を除く)で共有されます。
+        </div>
+        <div id="shareOgPreview" style="background:white; border:1px solid rgba(11,23,54,0.10); border-radius:12px; padding:14px; margin-bottom:14px; display:flex; gap:12px; align-items:center;">
+          <div style="width:48px; height:48px; border-radius:10px; background:linear-gradient(135deg, #0B1736, #D4A95E); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:11px; letter-spacing:0.18em;">SATOI</div>
+          <div style="flex:1;">
+            <div id="ogTitle" style="font-size:13.5px; font-weight:600; color:#1A2A40; margin-bottom:3px;">物語のタイトル</div>
+            <div id="ogQuote" style="font-size:11.5px; color:rgba(26,42,64,0.7); line-height:1.6;">「ここに物語の引用が入ります」</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="sns-share-btn" data-net="x" style="flex:1; min-width:90px; padding:12px; background:#000; color:white; border:none; border-radius:18px; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">𝕏 (Twitter)</button>
+          <button class="sns-share-btn" data-net="line" style="flex:1; min-width:90px; padding:12px; background:#06C755; color:white; border:none; border-radius:18px; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">LINE</button>
+          <button class="sns-share-btn" data-net="facebook" style="flex:1; min-width:90px; padding:12px; background:#1877F2; color:white; border:none; border-radius:18px; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">Facebook</button>
+          <button class="sns-share-btn" data-net="threads" style="flex:1; min-width:90px; padding:12px; background:#000; color:white; border:none; border-radius:18px; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">Threads</button>
+          <button class="sns-share-btn" data-net="copy" style="flex:1; min-width:90px; padding:12px; background:var(--starlight); color:var(--night-deep); border:none; border-radius:18px; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">🔗 リンクコピー</button>
+        </div>
+        <div style="font-size:10.5px; color:var(--ink-light); margin-top:12px; line-height:1.7;">
+          ※ 共有内容は事前に編集できます ・ 個人を特定する情報は自動的にマスクされます
+        </div>
+      </div>
+
+      <div class="modal-related">
+        <div class="modal-related-label">RELATED STORIES ・ 関連する物語</div>
+        <div class="related-grid" id="relatedGrid">
+          <!-- JS で生成 -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== フッター ===== -->
+<footer class="footer">
+  <div class="footer-logo">● SATOI</div>
+  <div style="font-size:13px; margin-bottom:16px; max-width:540px; margin-left:auto; margin-right:auto; line-height:1.85;">
+    ここに集まっている言葉は、すべて、誰かの夜から生まれたものです。<br>
+    読んでくださって、ありがとうございます。
+  </div>
+  <div class="footer-row">
+    <div class="footer-badge"><span>🇯🇵</span><span>厚労省 副作用報告連携</span></div>
+    <div class="footer-badge"><span>⚖️</span><span>JOInT 倫理ガバナンス</span></div>
+    <div class="footer-badge"><span>🤝</span><span>本人同意・撤回いつでも可能</span></div>
+  </div>
+</footer>
+
+<script>
+
+/* === SATOI 共通リッチトースト関数 === */
+(function ensureToastHost(){
+  if (document.getElementById('satoi-toast-host')) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div');
+      host.id = 'satoi-toast-host';
+      document.body.appendChild(host);
+    }
+  });
+  if (document.body && !document.getElementById('satoi-toast-host')) {
+    const host = document.createElement('div');
+    host.id = 'satoi-toast-host';
+    document.body.appendChild(host);
+  }
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) {
+    html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  }
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+// 既存の alert を全て satoiNotify にフォールバック(他コードからのalert呼び出しもキャッチ)
+window.__origAlert = window.alert;
+
+/* === SATOI ユニバーサル横断ナビ JS === */
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div');
+    nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る" aria-label="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム" aria-label="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ" aria-label="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語" aria-label="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn');
+    const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const lang = b.dataset.lang;
+        const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+        if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+        document.documentElement.lang = lang;
+        langPop.classList.remove('show');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+
+/* ===== 物語データ ===== */
+const STORIES = [
+  {
+    id: 1, cancer: 'breast', cancerJa: '乳がん', stage: 'II', age: 38, gender: 'F',
+    theme: ['choice','children','work'], format: 'text',
+    name: 'M.K.さん', title: '子ども2人と、TC療法と、私と',
+    img: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: 'Day 3が一番きつかった。Day 6-7で動けるようになるリズムをつかんだら、少し楽になりました。',
+    summaryPatient: '38歳・小学生2人を育てながら乳がんII期と告知。TC療法を選び、副作用のリズムを家族と共有しながら完走。「ピーク帯と回復帯」を可視化することで子どもとの関係も保てた。',
+    summaryMedical: '乳がんII期・HER2陰性・ホルモン受容体陽性・Ki-67 中等度。TC療法4サイクル完走。副作用は予測可能パターン(Day2-4ピーク、Day6-7回復)。家族支援システムが治療継続率を担保した症例。',
+    text: '<p>告知された日のことは、いまでもよく覚えています。3月の最初の月曜日、上の子の卒園式の準備で頭がいっぱいだった日でした。</p><p>「ステージII・乳がん」と聞いた瞬間、頭の中が真っ白になって、お医者さんが何を話しているのか、半分くらいしか入ってきませんでした。帰り道、車を運転していたら涙が止まらなくて、コンビニの駐車場で30分くらい泣きました。</p><p>TC療法を勧められて、最初は「もっと優しい治療がいいのに」と思いました。でも、いろいろな選択肢を比べて、家族とも話して、これが <strong>「子どもたちにとっての私の未来」を一番守る選択</strong> だと納得しました。</p><p>始めてみて分かったのは、副作用には <strong>リズム</strong> があるということ。Day 2-4 が一番つらくて、Day 5 から少しずつ食べられるようになり、Day 7 にはまた動けるようになる。このリズムを家族と共有したら、子どもたちも「今日はママがしんどい日?」「明日からは元気な日?」って聞いてくれるようになりました。</p><p>4サイクル完走したあと、ホルモン療法に切り替わって、いまは5年目です。再発の不安がゼロになることは、たぶんないんですけど、毎日の検査の予定がカレンダーにあって、SATOIに記録を残せて、「あなたは一人じゃない」というメッセージを毎晩見られる。それが、わたしの夜を、守ってくれています。</p><p>もし、いまこれを読んでいるあなたが、告知されたばかりなら——焦らないでください。決めなくていいです。<strong>「リズムを知るだけで、不安は半分になる」</strong>、それだけは伝えたいです。</p>',
+    hearts: 156
+  },
+  {
+    id: 2, cancer: 'breast', cancerJa: '乳がん', stage: 'II', age: 52, theme: ['work','choice'], format: 'audio',
+    name: 'A.S.さん', title: '仕事を、続けたかった',
+    img: 'https://images.unsplash.com/photo-1556139966-56c3df1ddc63?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: 'Day 1-4 は休み、Day 5以降は在宅勤務に切り替えた。会社の理解が、本当にありがたかった。',
+    summaryPatient: '52歳・管理職としてキャリアを積んできた女性が、TC療法を受けながら在宅勤務で仕事を継続。会社への伝え方、上司との関係構築の工夫を語る。',
+    summaryMedical: '52歳・乳がんII期・職業継続事例。傷病手当金未使用・有給+在宅勤務で対応。会社の柔軟性が治療継続を支えた好例。',
+    text: '<p>「仕事は、絶対に続けたかったんです」これが私の出発点でした。</p><p>52歳、外資系IT企業の部長として15年。社内で「がん」と言うのは怖かった。でも、隠して通すのは無理だと分かっていました。</p><p>上司にだけ伝えました。「治療しながら、できる範囲で続けたい」と。上司は「君のキャリアを止める権利は、誰にもない。一緒に考えよう」と。この一言で、私は救われました。</p><p>運用は、こうしました:<strong>Day 1-4(投与+ピーク帯)は完全に休む。</strong>有給を使う。<strong>Day 5-21 は在宅勤務</strong>(週1-2日だけ出社)。会議は録画してもらう。</p><p>大変だったのは、自分の <strong>「がんばりすぎる癖」</strong> を捨てることでした。Day 5 でちょっと動けるようになると、つい仕事を詰め込んでしまう。それで Day 8 で潰れる。これを2-3サイクル繰り返して、ようやく「動ける日に、ほどほどに」が身につきました。</p><p>4サイクル完走して、いまは元の働き方に戻っています。同僚には「ちょっと痩せたね」と言われるくらい。経験して分かったのは、<strong>「会社にどう伝えるか、いつ伝えるか」は、戦略</strong> だということ。SATOI で、同じように仕事を続けた先輩の事例集を作ってくれていて、それが本当に役に立ちました。</p>',
+    hearts: 92
+  },
+  {
+    id: 3, cancer: 'colon', cancerJa: '大腸がん', stage: 'III', age: 58, theme: ['work','money'], format: 'video',
+    name: 'S.N.さん', title: 'ポートと、冷蔵庫と、半年',
+    img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '冷蔵庫を開けるのが怖かった時期があった。でも、ポートと携帯ポンプのおかげで仕事は続けられました。',
+    summaryPatient: '58歳・大腸がんIII期。FOLFOX療法を6か月。中心静脈ポートと携帯型ポンプを活用し、自営業を続けながら治療完走。オキサリプラチンの神経障害との付き合い方を語る。',
+    summaryMedical: '58歳男性・大腸がんIII期(リンパ節転移あり)・mFOLFOX6を12サイクル完走。CVポート造設、自宅持ち帰り46時間持続点滴。Grade 2の末梢神経障害が課題。',
+    text: '<p>「ポート」という単語を初めて聞いた時、なんのことか全然分かりませんでした。説明されて、胸の皮膚の下に小さな器具を埋め込んで、そこから点滴をする、と。「えっ、自分の体に、機械を入れるの?」と。</p><p>でも、FOLFOX を6か月続けるなら、ポートは必須だと言われました。腕の血管では、もたない。納得して、手術を受けました。</p><p>FOLFOX のオキサリプラチンは、<strong>冷たいものに反応する</strong> という、ちょっと変わった副作用があります。冷蔵庫を開けて中の物を触ると、ピリピリッと電気が走るような感覚。冬の朝、車のハンドルを握れない。アイスクリームが、もう食べられない。</p><p>そして、累積していく。<strong>サイクル4くらいから、本格的に手足のしびれが残るようになりました。</strong>ボタンが留めにくい。スマホのキーが押しづらい。これがオキサリプラチンの「神経毒性」というやつでした。</p><p>主治医に正直に伝えたら、サイクル8で <strong>オキサリプラチン だけを減量</strong> してもらいました。「全部やめずに、減らす」という選択肢があることを、その時初めて知りました。最後の12サイクルまで、なんとか完走。</p><p>仕事(自営業・小さな印刷会社)は続けられました。Day 1の通院 → 46時間の自宅持ち帰り点滴 → Day 3 にポンプ外し → Day 4-13 で回復、というリズムでした。冷たいものを扱う仕事ではなかったのが幸いでした。</p><p>いま、治療終了から1年半。<strong>しびれは、まだ少し残っています。</strong>でも、検査は良好で、再発もない。妻が「あなた、ちょっと痩せたわね」と笑うくらいには、元の生活に戻りました。</p>',
+    hearts: 78
+  },
+  {
+    id: 4, cancer: 'lung', cancerJa: '肺がん', stage: 'IV', age: 62, theme: ['recur','choice'], format: 'text',
+    name: 'Y.K.さん', title: '4年目に、入りました',
+    img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: 'EGFR陽性と分かった時、希望が見えた。長期間飲み続けることで、普通の生活を取り戻せています。',
+    summaryPatient: '62歳・進行肺がんIV期と告知されたが、EGFR遺伝子変異陽性と判明し、オシメルチニブで長期コントロール。4年目、皮疹と付き合いながら仕事を継続中。',
+    summaryMedical: '62歳女性・非小細胞肺がんIV期・EGFR Exon19変異陽性・オシメルチニブ第一選択。FLAURA試験データに合致する長期PFS。Grade 1-2 の皮膚症状、日常生活は支障なし。',
+    text: '<p>「ステージIVの肺がんです」と言われた時、もう、人生終わったと思いました。当時58歳。下の娘の結婚を見られないと、本気で覚悟しました。</p><p>でも、主治医が <strong>「すぐに諦めないで。遺伝子検査を、まず。」</strong> と。</p><p>結果は、EGFR遺伝子変異 陽性。「ぴったり合う薬があります」と聞いた瞬間、本当に、世界が変わって見えました。</p><p>その薬がオシメルチニブ(タグリッソ)です。<strong>1日1錠、毎朝飲むだけ</strong>。点滴も入院もなく、月1回の通院で済む。</p><p>始めた時、皮疹が出ました。顔から首にかけて、ニキビのようなものが。「人前に出るのが恥ずかしい」と泣きました。でも、皮膚科の先生に保湿クリームと飲み薬を出してもらって、3か月くらいで、徐々に落ち着きました。</p><p>4年経って、いま、CT検査ではがんが <strong>「消えてはいないけど、ほぼ目立たないサイズで安定」</strong> しています。これを「無増悪生存」と言うらしいです。</p><p>娘の結婚式に出ました。来年生まれる孫にも、会えそうです。<strong>「いつまで効くか分からない不安」</strong> は、毎日、私のすぐ横にいます。でも、「明日も、明後日も、生きていそう」と思えるって、すごいことなんだと、いま実感しています。</p><p>もし、進行肺がんと言われた方が、これを読んでいたら——<strong>必ず、遺伝子検査を受けてください。</strong>EGFR、ALK、ROS1、その他いろいろあります。「ぴったり合う薬」が、あなたにも、あるかもしれません。</p>',
+    hearts: 234
+  },
+  {
+    id: 5, cancer: 'stomach', cancerJa: '胃がん', stage: 'I', age: 50, theme: ['choice'], format: 'text',
+    name: 'T.I.さん', title: '内視鏡で、終わりました',
+    img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '50歳の人間ドックで早期発見。お腹を切らずに、胃の中から削り取って、それで終わり。早期発見の威力を、身をもって知りました。',
+    summaryPatient: '50歳・人間ドックの胃カメラで偶然発見された早期胃がん。ESD(内視鏡的粘膜下層剥離術)で根治。お腹を切らない治療の選択肢を伝える。',
+    summaryMedical: '50歳男性・早期胃がん(深達度M, リンパ節転移なし)・人間ドックでの偶発発見。ESDで一括切除完了・治癒切除と判定・経過観察のみ。',
+    text: '<p>50歳の節目に、初めて人間ドックを受けました。会社が補助を出してくれて、まあ受けておくか、くらいの軽い気持ちで。</p><p>胃カメラで「小さなところが気になります」と言われ、組織を取られて、1週間後に「がんでした」と。</p><p>頭は真っ白でした。でも、続けて言われたのは、<strong>「早期だから、内視鏡で取れます。お腹は切りません。」</strong></p><p>ESD(イーエスディー)という方法だと説明されました。胃カメラを入れて、胃の中から、がんの部分だけを電気メスのようなもので削り取る。お腹は無傷。1泊2日の入院。</p><p>手術の日、麻酔で寝ているうちに終わりました。目が覚めたら「うまく取れました」と。ちょっと喉が痛いくらいで、お腹の傷もない。</p><p>1週間後、病理結果で <strong>「治癒切除(完全に取れました)」</strong> と確定。リンパ節転移もない。追加治療なし。あとは経過観察(年1回の胃カメラ)だけ。</p><p>これが「早期発見の威力」というやつなんだなと、身をもって知りました。<strong>50歳になったら、胃カメラ。これだけは、伝えたい。</strong></p>',
+    hearts: 145
+  },
+  {
+    id: 6, cancer: 'prostate', cancerJa: '前立腺がん', stage: 'I', age: 68, theme: ['choice'], format: 'text',
+    name: 'F.O.さん', title: '「治療しない」を、選びました',
+    img: 'https://images.unsplash.com/photo-1504438190342-5951e134ffee?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '監視療法という選択肢があると教わって、最初は驚いた。でも、いまの私には、一番合っていました。',
+    summaryPatient: '68歳・低リスク前立腺がんで「監視療法(Active Surveillance)」を選択。治療せずに定期検査で経過を見る、という選択肢を語る。',
+    summaryMedical: '68歳男性・限局性前立腺がん(グリソン6, PSA 4.8)・低リスク群・Active Surveillance継続中3年目。3-6か月ごとのPSA測定、年1回の生検。',
+    text: '<p>68歳で、前立腺がんと言われました。「PSA」という数値が、人間ドックで引っかかったのがきっかけです。</p><p>主治医が「あなたの場合、 <strong>『治療しない』という選択肢も、医学的に正当です</strong> 」と。これは、衝撃でした。</p><p>「監視療法」(Active Surveillance)というそうです。低リスクの前立腺がんは、進行が非常に遅いことが多い。手術や放射線で副作用を抱えるよりも、3-6か月ごとに検査して、悪化したら治療を始める、という選択肢。</p><p>最初、家族には反対されました。「治療しないなんて」「がんを放置するの?」と。でも、主治医と長く話して、ガイドラインも見せてもらって、 <strong>「監視療法は『何もしない』ではなく『慎重に診ていく』という積極的な医療判断」</strong> と理解できました。</p><p>始めて3年。PSAは安定、生検でも進行なし。<strong>手術していたら、性機能や排尿の問題が出ていたかも</strong> しれない。私の場合は、この選択で良かったと思っています。</p><p>「すべてのがんは、すぐ治療すべき」という思い込みを、私は捨てました。<strong>あなたのがんに、あなたに合った道がある。</strong>そのことを、伝えたいです。</p>',
+    hearts: 198
+  },
+  {
+    id: 7, cancer: 'pancreas', cancerJa: '膵がん', stage: 'IV', age: 70, theme: ['palliative','family'], format: 'text',
+    name: 'K.W.さん(妻)', title: '夫の、最後の8か月',
+    img: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '早期から緩和ケアを始めたら、最後の8か月、夫と私は、たくさん話せました。',
+    summaryPatient: 'ご家族(妻)の物語。70歳の夫が膵がんIV期と告知された後、早期緩和ケアを導入。化学療法と並行して緩和ケアを受けることで、最後の8か月をより穏やかに過ごせた。',
+    summaryMedical: '70歳男性・膵がんIV期・GnP療法+早期緩和ケア併用。WHO推奨の早期緩和ケアモデル実践例。家族のQOLも含めたケアの好例。',
+    text: '<p>夫が膵がんIV期と告知されたのは、孫の小学校入学式の1週間後でした。</p><p>「余命半年から1年」と言われて、私は、何も考えられなくなりました。でも、夫の方が冷静で、「最後まで、自分らしく生きたい」と。</p><p>主治医が、化学療法と <strong>早期からの緩和ケア</strong> を一緒に勧めてくれました。「緩和ケア=末期」ではなく「症状を抑えて、生活の質を保つ医療」だと教えてくれました。これは、目から鱗でした。</p><p>緩和ケアチームが入ってくれて、痛みのコントロール、食欲不振への対応、不安への薬。少しずつ調整しながら、夫は <strong>最後の数か月、孫と公園に行ったり、私と昔の旅行の写真を見返したり、お墓のことを冗談を交えて話したり</strong> できました。</p><p>「人生会議(ACP)」というのを、SATOIで教わりました。夫が「こうしたい」「こうはされたくない」を書いて、息子と私と主治医で共有しました。最後の1週間、夫の希望どおりに過ごせました。</p><p>夫が亡くなって、1年半が経ちました。<strong>「もっと早く緩和ケアを始めていれば」とは、思いません。あの判断は、正しかった。</strong>夫と私の、最後の8か月を、緩和ケアが守ってくれたから。</p><p>家族としての物語ですが、もしこれを読んでいる方が、ご家族のがんに直面していたら——<strong>緩和ケア=諦めではなく、「最後まで一緒に生きる」ための医療</strong> です。早く始める方が、いいです。</p>',
+    hearts: 312
+  },
+  {
+    id: 8, cancer: 'ovary', cancerJa: '卵巣がん', stage: 'II', age: 29, theme: ['choice','family'], format: 'text',
+    name: 'N.H.さん', title: '結婚2年目で、卵巣がん',
+    img: 'https://images.unsplash.com/photo-1525361322887-c0e34a499be8?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '「卵巣を取らなきゃいけない」と言われた時、子どもを諦めることになるのか、と泣きました。妊孕性温存という選択肢を教わって、人生が動き出した。',
+    summaryPatient: '29歳・結婚2年目で卵巣がんII期。妊孕性温存(卵子凍結)を行ってから手術。治療後、生殖補助医療で妊娠を目指す。',
+    summaryMedical: '29歳女性・卵巣がんII期・妊孕性温存療法(卵子凍結10個)・片側卵巣摘出・術後化学療法 BEP療法。',
+    text: '<p>結婚2年目、29歳で卵巣がんと診断されました。「子どもを作る予定」が、すべての前提だった夫婦にとって、これは、本当に、絶望でした。</p><p>「片側の卵巣を取る必要があります」と。「両側ではない、まだ希望はある」と頭では分かっても、心が追いつかない。</p><p>そんな時、主治医から <strong>「妊孕性温存」</strong> という選択肢を教わりました。手術の前に、卵子を採取して凍結保存する。残る卵巣の機能が落ちても、後で凍結した卵子で妊娠を目指せる。</p><p>不妊治療専門クリニックに紹介され、2週間で10個の卵子を採取・凍結しました。費用は60万円ほど。自治体の助成金で30万円戻ってきました。</p><p>手術と化学療法(BEP療法)を経て、いま、治療終了から1年。残った卵巣の機能は半分くらいですが、生理は戻りました。<strong>近々、凍結卵子を使って、不妊治療を始める予定です。</strong></p><p>「がんだから、もう諦めるしかない」と、思わないでください。<strong>若い世代のがん患者には、妊孕性温存という、希望の選択肢があります。</strong>主治医に必ず聞いてほしい。SATOIにも、ホットラインがあります。</p>',
+    hearts: 187
+  },
+  {
+    id: 9, cancer: 'blood', cancerJa: '血液がん', stage: 'III', age: 35, theme: ['choice','family'], format: 'video',
+    name: 'M.A.さん', title: '骨髄移植と、35歳の選択',
+    img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '弟がドナーになってくれた。「家族って、こういう時にこうなるんだな」と知りました。',
+    summaryPatient: '35歳・急性骨髄性白血病(AML)。弟がHLA一致ドナーとなり、骨髄移植を受けて寛解。移植医療と家族の物語。',
+    summaryMedical: '35歳男性・AML・標準寛解導入療法後、再発リスク評価で骨髄移植適応・実弟がHLA一致(地縁的に1/4の確率)・移植後3年寛解継続。',
+    text: '<p>35歳で「急性骨髄性白血病(AML)」と診断されました。健診で白血球の値が異常に高いと言われ、精密検査で確定。</p><p>最初の化学療法で寛解(がん細胞が見えない状態)になったものの、再発リスクが高いと言われ、骨髄移植を勧められました。</p><p>家族で <strong>HLA(白血球の型)</strong> を調べたら、弟が一致しました。「俺の骨髄、使ってくれ」と弟が即決してくれた時、私は、これまで弟と兄弟げんかしてきたすべてのことが、急にどうでもよくなりました。</p><p>移植は壮絶でした。前処置で全身の骨髄を全て叩いて、弟の骨髄細胞を点滴で入れる。数週間は無菌室。口の中も全身もボロボロになって、何度も「もう、無理かも」と思いました。</p><p>でも、生着(弟の細胞が体に住み着くこと)してから、ゆっくり体が戻ってきました。GVHD(移植片対宿主病)という合併症と何度か戦いながら、いま、移植から3年。<strong>寛解継続中</strong>。仕事にも復帰しました。</p><p>「家族って、こういう時に、こうなるんだな」と知りました。<strong>弟は何も、誇らない。「兄ちゃんも、もし俺が病気だったら、同じことしてくれただろ」と。</strong>その通り、と思いました。</p>',
+    hearts: 256
+  },
+  {
+    id: 10, cancer: 'breast', cancerJa: '乳がん', stage: 'II', age: 40, theme: ['just-diag','family'], format: 'audio',
+    name: 'R.S.さん', title: '真っ白だった、最初の2週間',
+    img: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '頭が真っ白で、何も考えられない。あの2週間が、いま思い返しても、いちばん辛かった時期です。',
+    summaryPatient: '40歳・乳がん告知直後の心情を語る。「魔の2週間」と呼ばれる時期に、SATOIの「ゆっくりモード」と先輩の声が支えに。',
+    summaryMedical: '40歳女性・乳がんII期。告知直後2週間の心理的混乱期に、ナラティブ介入と先輩患者ネットワークがメンタル支援として機能。',
+    text: '<p>「告知から2週間は、頭が真っ白だった」というのは、本当に本当でした。</p><p>最初の数日は、ニュース番組を見ても、何も入ってこない。テレビをつけているのか、消しているのかすら分からない。食事も、味がしない。眠れない。寝ても1時間で目が覚める。</p><p>「何かをしなきゃ」「治療法を調べなきゃ」と思うのに、PCを開くと、画面の文字が読めない。<strong>「がん 治療」と検索しても、何も理解できないんです。</strong>怖くて、不安で、頭が動かない。</p><p>SATOIの「ゆっくりモード」を、夜中に見つけました。「何もしなくて、いいです。ここに、いてくださるだけで、充分です。」というメッセージが、画面に出てきた時、私は、初めて、声をあげて泣きました。</p><p>その2週間、私は <strong>何も決めませんでした。</strong>SATOIで、先輩の物語をひとつだけ読んで、夜寝るのが日課になりました。「あ、この人は、いま生きているんだ」と思える、それだけが、希望でした。</p><p>3週目から、少しずつ、頭が動き始めました。検査の予定をカレンダーに書いた。主治医に質問を1つだけ用意した。家族に「ちょっと話せる?」と声をかけた。少しずつ、少しずつ。</p><p>もし、いま、告知されたばかりで、これを読んでいるあなたへ。<strong>何もしなくて、いいです。何も決めなくて、いいです。ここに、いるだけで、充分です。</strong>2週間、待ってください。3週目から、少しずつ、世界が見えてきます。</p>',
+    hearts: 421
+  },
+  {
+    id: 11, cancer: 'breast', cancerJa: '乳がん', stage: 'III', age: 55, theme: ['recur'], format: 'text',
+    name: 'I.T.さん', title: '5年経って、再発不安と暮らす',
+    img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '5年生存率を超えても、不安はゼロにならない。でも、不安と「一緒に生きる」術を、5年かけて身につけました。',
+    summaryPatient: '55歳・乳がんIII期治療完了5年目のサバイバー。「再発不安」との付き合い方を語る。',
+    summaryMedical: '55歳女性・乳がんIII期(HER2陽性・リンパ節転移あり)・術後トラスツズマブ+化学療法+ホルモン療法10年プラン中。5年無再発、心理的サバイバーシップ事例。',
+    text: '<p>「5年生存率を超えた」というのは、医学的には大きな節目です。でも、患者にとっては、節目で <strong>「不安がゼロになる」わけでは、ないんです。</strong></p><p>私の乳がんはIII期、HER2陽性、リンパ節転移あり。手術+化学療法+分子標的薬+ホルモン療法、フルコース。治療終了から5年が経ちます。</p><p>3年目までは、毎回の検査の前夜、必ず眠れませんでした。次の朝、検査結果を聞きに行く待合室で、心臓が口から出そうになる。<strong>「再発」という3文字が、頭の中をぐるぐる回る。</strong></p><p>4年目から、少し変わりました。<strong>「再発するかもしれない。でも、今日は、今日を生きる」</strong> と思えるようになった。これは、訓練でも、悟りでもなくて、ただ、5年間、いろいろな先輩の物語を読み続けた結果でした。</p><p>5年経った今、私のスタンスは:検査の前夜は不安、結果が出るまで不安、でも、結果が良ければ「あぁ、また半年生きられる」と思って、半年間、普通に暮らす。これが、私のサバイバーシップです。</p><p><strong>「もう大丈夫」とも「まだ怖い」とも、簡単に言わないようにしています。</strong>白黒つけずに、グレーで、ぼんやり、毎日を生きる。それが、5年間で身についた、私なりの「治療後の生き方」です。</p>',
+    hearts: 178
+  },
+  {
+    id: 12, cancer: 'breast', cancerJa: '乳がん(妻)', stage: 'II', age: 48, theme: ['family'], format: 'text',
+    name: 'O.K.さん(夫)', title: '妻を、支えた1年',
+    img: 'https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '「俺ががんになりたかった」と何度も思った。でも、それは、妻のためになる思考ではなかった。',
+    summaryPatient: '48歳・夫として、乳がんII期の妻を治療期間中支えた1年の記録。家族としての無力感、自分自身のメンタルケアの大切さを語る。',
+    summaryMedical: 'Caregiver burden 事例。配偶者のメンタル支援、家族向けカウンセリングの重要性を示すケース。',
+    text: '<p>妻が乳がんII期と診断された日、私は、夫として、何をすればいいのか、まったく分かりませんでした。</p><p>「俺が代わってあげられたら」と、最初の夜、何度も思いました。でも、これは、妻のためになる思考ではない、と途中で気づきました。<strong>妻が必要としているのは「代わってくれる夫」ではなく、「一緒に歩いてくれる夫」だった。</strong></p><p>SATOIの家族向けページに、先輩の夫の物語がいくつかあって、それを読みました。「ぜんぶ言わない」「アドバイスしすぎない」「『大丈夫?』を聞きすぎない」「ただ、そばにいる」。</p><p>私がやったのは、「治療の予定をGoogleカレンダーで共有する」「副作用ピーク帯の家事を全部代わる」「子どもに病状をどう伝えるか妻と話し合う」、それくらいでした。</p><p>1年経って、妻は治療を完走しました。妻が言うのは:<strong>「あなたが、普通に、いつもどおりに、いてくれたのが、いちばんありがたかった」</strong>。私は「がんばった」とも「英雄的だった」とも、思えません。でも、妻のそばに、毎日、いた。それは、できた。</p><p>家族として、できることは、限られています。<strong>「自分の無力感」と「相手のがん」を、混ぜないこと。</strong>自分のメンタルも、ちゃんと、ケアすること。家族向けカウンセリングを、私は2回受けました。それで、ずいぶん楽になりました。</p>',
+    hearts: 145
+  },
+  {
+    id: 13, cancer: 'breast', cancerJa: '乳がん', stage: 'II', age: 38, theme: ['children','family'], format: 'audio',
+    name: 'H.M.さん', title: '子どもに、どう伝えたか',
+    img: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '「ぜんぶ言わなくていいけど、嘘もつかない」が、私たちの結論でした。',
+    summaryPatient: '38歳・小学3年と1年生の子どもに、自分の乳がんをどう伝えたか。先輩の知恵をもとに、年齢に応じた伝え方を実践。',
+    summaryMedical: '38歳女性・乳がんII期・子ども2人(8歳・6歳)。子どもへの病名告知の段階的アプローチ実践事例。',
+    text: '<p>子どもにどう伝えるか、これが、いちばん悩んだことでした。</p><p>夫と何度も話し合いました。「全部黙っているのは、おかしい」「でも、ぜんぶ伝えたら子どもが怖がる」。両極端の間で、答えが見つからなかった。</p><p>SATOIで先輩の物語をいくつか読んで、<strong>「ぜんぶ言わなくていいけど、嘘もつかない」</strong> という方針に、夫婦で決めました。</p><p>具体的にやったのは:</p><p>① 病名は伝える。「お母さんは『がん』という病気で、これから治療を受けるよ」。<br>② 治療内容も、簡単に。「お薬を飲んだら、髪が抜けるかもしれない。でも、また生えてくる」。<br>③ 死ぬか死なないか、を聞かれたら正直に。「お医者さんは、治せると言っているよ。でも、絶対、ではないんだ」。</p><p>上の子(8歳)は、最初は静かでした。3日後に「お母さん、ぼくが料理する日もあるの?」と。下の子(6歳)は「ママの髪、私のと変えたら?」と無邪気に。</p><p>1年経って、上の子が言いました:「お母さんが教えてくれてよかった。<strong>『大人が秘密にしている』って、子どもには分かるんだよ。</strong>分からないと、怖い」と。</p><p>子どもにどう伝えるか、正解はないと思います。でも、<strong>「分かるだろう、言わなくても」は、たぶん、間違いです。</strong>年齢に応じた言葉で、伝えるべきだ、と私は思います。</p>',
+    hearts: 263
+  },
+  {
+    id: 14, cancer: 'lung', cancerJa: '肺がん', stage: 'III', age: 42, theme: ['work','money'], format: 'text',
+    name: 'D.S.さん', title: '会社に、いつ、どこまで伝えたか',
+    img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '人事に相談したのは、診断確定から2週間後。「もう少し早く相談していれば」と、いまでも少し思う。',
+    summaryPatient: '42歳・肺がんIII期。会社員として「いつ・どこに・どう伝えるか」を悩み、3段階で開示。傷病手当金・休職制度を活用しながら治療を継続。',
+    summaryMedical: '42歳男性・肺がんIII期・会社員。雇用維持と治療両立の事例。傷病手当金1年6か月活用・復職プラン段階的実施。',
+    text: '<p>「会社にいつ伝えるか」これは、本当に難しい問題でした。</p><p>診断確定から、3段階で伝えました:</p><p><strong>第1段階(診断から1週間):直属上司にだけ。</strong>「健康のことで、これから検査が増えます。詳しいことは後日。」</p><p><strong>第2段階(治療方針決定後 = 2週間後):人事と相談。</strong>「肺がんIII期です。手術+化学療法+放射線で、半年から1年。休職と復職の制度を教えてください。」</p><p><strong>第3段階(治療開始時):同僚チームに必要最小限。</strong>「健康のことで、しばらく休みます。戻ったら、また一緒に。」</p><p>人事との相談は、本当に救いでした。<strong>傷病手当金</strong>(健康保険から、給与の2/3を1年6か月)、<strong>休職制度</strong>、<strong>復職時の時短勤務</strong>、これらを全部教えてもらえました。</p><p>知らなかったら、辞めていたかも。<strong>「会社の制度は、知らないと、使えない」</strong>。これが、いちばんの学びでした。</p><p>治療完了から、いま、復職して半年。フルタイムに戻りました。<strong>「会社に、もっと早く相談すればよかった」</strong> と、いまでも少し思っています。1週間で十分。「健康のことで、相談したい」と、それだけ言えば、人事は応じてくれる。これは、もっと早く知っておきたかった。</p>',
+    hearts: 134
+  },
+  {
+    id: 15, cancer: 'breast', cancerJa: '乳がん', stage: 'IV', age: 50, theme: ['money','palliative'], format: 'text',
+    name: 'Y.M.さん', title: '治療費の現実と、使えた制度',
+    img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '高額療養費・医療費控除・がん保険・自治体補助・限度額認定証。これだけで、年間100万円ちかく変わりました。',
+    summaryPatient: '50歳・乳がんIV期・長期治療を続ける中で、お金の問題と、使えた制度の実態を語る。',
+    summaryMedical: '長期治療(分子標的薬・継続的)費用問題。社会保障制度活用の好例。',
+    text: '<p>乳がんIV期、長期治療になることが分かった時、「お金、どうしよう」と本気で思いました。</p><p>使った制度を、全部、リストにします:</p><p><strong>① 高額療養費制度</strong>:月の医療費が一定額を超えると、超えた分が戻ってくる。私の場合、月8万円以上は払わなくていい。年間で 約 100万円 助かりました。</p><p><strong>② 限度額認定証</strong>:事前に申請しておけば、窓口で高額療養費の上限額しか払わなくて済む。立て替えがなくなって、家計が楽に。</p><p><strong>③ 医療費控除</strong>:年間10万円超の医療費は、確定申告で還付。家族分も合算可。私の場合、年30-40万円戻ってきました。</p><p><strong>④ がん保険給付金</strong>:加入していたがん保険から、診断給付金200万円・治療給付金月10万円。これがなかったら、貯金が尽きていました。</p><p><strong>⑤ 自治体の補助</strong>:住んでいる市から、医療用ウィッグ補助2万円、乳房再建補助5万円。</p><p><strong>⑥ 傷病手当金</strong>:健保から、休んでいた期間の給与2/3(1年6か月)。</p><p><strong>⑦ 障害年金</strong>:長期化したら、申請可能。私はまだ申請していませんが、保険労務士に相談中。</p><p>合計すると、<strong>年間200万円以上は、これらの制度で助かっている</strong> 計算です。SATOIに、社労士無料相談があって、これに助けられました。</p><p>「お金のことで、治療をあきらめないでください。」これは、本当に、伝えたい。SATOIに相談してください。一緒に整理できます。</p>',
+    hearts: 218
+  }
+];
+
+/* ===== 描画 ===== */
+function renderCard(s, isAi) {
+  const formatLabel = s.format === 'audio' ? '🎙️ 音声あり' : (s.format === 'video' ? '🎥 動画あり' : '✏️ テキスト');
+  return `<div class="story-card ${isAi ? 'ai-rec-card' : ''}" onclick="openStory(${s.id})">
+    ${isAi ? '<div class="ai-rec-tag">AI おすすめ</div>' : ''}
+    <div class="story-img"><img src="${s.img}" loading="lazy" alt="" onerror="this.style.display='none'"><div class="story-format">${formatLabel}</div></div>
+    <div class="story-body">
+      <div class="story-meta">${s.cancerJa} ・ ステージ${s.stage} ・ ${s.age}歳</div>
+      <div class="story-title">${s.title}</div>
+      <div class="story-quote">「${s.quote}」</div>
+      <div class="story-foot">
+        <span class="story-name">${s.name}</span>
+        <span class="story-stat">♡ <span class="hearts">${s.hearts}</span></span>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* AI推薦(乳がんII・35-45歳の物語を優先表示) */
+const aiRecommended = STORIES.filter(s => s.cancer === 'breast' && s.stage === 'II' && s.age >= 35 && s.age <= 50).slice(0, 4);
+document.getElementById('aiRecGrid').innerHTML = aiRecommended.map(s => renderCard(s, true)).join('');
+
+/* 物語グリッド */
+let activeFilters = { cancer: 'breast', stage: 'all', theme: 'all', format: 'all' };
+function applyFilters() {
+  const filtered = STORIES.filter(s => {
+    if (activeFilters.cancer !== 'all' && s.cancer !== activeFilters.cancer) return false;
+    if (activeFilters.stage !== 'all' && s.stage !== activeFilters.stage) return false;
+    if (activeFilters.theme !== 'all' && !s.theme.includes(activeFilters.theme)) return false;
+    if (activeFilters.format !== 'all' && s.format !== activeFilters.format) return false;
+    return true;
+  });
+  document.getElementById('storiesGrid').innerHTML = filtered.map(s => renderCard(s, false)).join('');
+  document.getElementById('filterCount').textContent = `${filtered.length}件の物語が見つかりました`;
+}
+
+document.querySelectorAll('.filter-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const f = chip.dataset.filter, v = chip.dataset.value;
+    document.querySelectorAll(`.filter-chip[data-filter="${f}"]`).forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeFilters[f] = v;
+    applyFilters();
+  });
+});
+
+function smartFilter() {
+  // 「あなたと似ている人」= 乳がんII・35-50歳
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('.filter-chip[data-filter="cancer"][data-value="breast"]').classList.add('active');
+  document.querySelector('.filter-chip[data-filter="stage"][data-value="II"]').classList.add('active');
+  document.querySelector('.filter-chip[data-filter="theme"][data-value="all"]').classList.add('active');
+  document.querySelector('.filter-chip[data-filter="format"][data-value="all"]').classList.add('active');
+  activeFilters = { cancer: 'breast', stage: 'II', theme: 'all', format: 'all' };
+  applyFilters();
+  document.getElementById('storiesGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+applyFilters();
+
+/* モーダル */
+let currentAiTab = 'patient';
+function openStory(id) {
+  const s = STORIES.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('modalImg').src = s.img;
+  document.getElementById('modalTag').textContent = `${s.cancerJa} ・ ステージ${s.stage}`;
+  document.getElementById('modalName').textContent = `${s.name} ・ ${s.age}歳`;
+  document.getElementById('modalTitle').textContent = s.title;
+  document.getElementById('modalSummary').textContent = s.summaryPatient;
+  document.getElementById('modalText').innerHTML = s.text;
+  document.getElementById('rcHeart').textContent = s.hearts;
+  // 関連物語
+  const related = STORIES.filter(x => x.id !== id && (x.cancer === s.cancer || s.theme.some(t => x.theme.includes(t)))).slice(0, 3);
+  document.getElementById('relatedGrid').innerHTML = related.map(r =>
+    `<div class="related-card" onclick="openStory(${r.id})">
+      <div class="related-meta">${r.cancerJa} ・ ${r.stage}</div>
+      <div class="related-name">${r.name}・${r.age}歳</div>
+      <div class="related-snippet">${r.title}</div>
+    </div>`
+  ).join('');
+  currentAiTab = 'patient';
+  document.querySelectorAll('.modal-ai-switch button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'patient'));
+  document.getElementById('storyOverlay').classList.add('show');
+  document.getElementById('storyModal').dataset.storyId = id;
+  document.getElementById('storyModal').scrollTop = 0;
+}
+function closeStory() {
+  document.getElementById('storyOverlay').classList.remove('show');
+}
+function switchAiTab(btn, tab) {
+  document.querySelectorAll('.modal-ai-switch button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const id = document.getElementById('storyModal').dataset.storyId;
+  const s = STORIES.find(x => x.id == id);
+  if (!s) return;
+  document.getElementById('modalSummary').textContent = tab === 'medical' ? s.summaryMedical : s.summaryPatient;
+}
+function reactStory(btn, type) {
+  btn.classList.toggle('active');
+  if (type === 'heart') {
+    const el = document.getElementById('rcHeart');
+    const n = parseInt(el.textContent) + (btn.classList.contains('active') ? 1 : -1);
+    el.textContent = n;
+  } else if (type === 'thanks') {
+    setTimeout(() => alert('「ありがとう」を、物語の本人に届けました。\n\n編集部経由で、本人にだけ届く仕組みです(個人情報は守られます)。'), 200);
+  }
+}
+
+/* === 物語動画化機能 === */
+function generateVideo() {
+  const id = document.getElementById('storyModal').dataset.storyId;
+  const s = STORIES.find(x => x.id == id);
+  if (!s) return;
+  // 動画化モーダルを動的生成
+  if (document.getElementById('videoGenModal')) { document.getElementById('videoGenModal').remove(); return; }
+  const m = document.createElement('div');
+  m.id = 'videoGenModal';
+  m.style.cssText = 'position:fixed; inset:0; background:rgba(11,23,54,0.8); z-index:99999; display:flex; align-items:center; justify-content:center; padding:20px;';
+  m.innerHTML = '<div style="background:#0B1736; border-radius:22px; padding:32px; max-width:520px; width:100%; color:#F8F6F0; box-shadow:0 30px 70px rgba(0,0,0,0.5); border:1px solid rgba(212,169,94,0.4);">'
+    + '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">'
+    + '<div style="font-size:17px; font-weight:500; color:#F0C97A;">🎬 物語を、動画に変える</div>'
+    + '<button onclick="document.getElementById(\'videoGenModal\').remove()" style="background:transparent; border:none; color:rgba(248,246,240,0.5); font-size:22px; cursor:pointer;">×</button>'
+    + '</div>'
+    + '<div style="background:linear-gradient(135deg, #1A2548, #2E1F45); border-radius:14px; padding:30px 24px; text-align:center; margin-bottom:18px; border:1px solid rgba(212,169,94,0.3);">'
+    + '<div style="font-size:11px; letter-spacing:0.3em; color:#D4A95E; margin-bottom:14px;">PREVIEW ・ 30秒ショート動画</div>'
+    + '<div style="font-size:18px; font-weight:300; margin-bottom:8px;">' + s.title + '</div>'
+    + '<div style="font-size:12px; color:rgba(248,246,240,0.7); margin-bottom:18px;">' + s.name + ' ・ ' + s.cancerJa + '</div>'
+    + '<div style="background:rgba(248,246,240,0.06); border-radius:10px; padding:18px; font-size:13px; font-style:italic; line-height:1.85;">「' + (s.quote || s.title) + '」</div>'
+    + '<div style="margin-top:18px; font-size:11px; color:#F0C97A;">♪ BGM: 自動選曲 / 字幕付き / 縦動画(TikTok・Reels対応)</div>'
+    + '</div>'
+    + '<div style="font-size:12.5px; color:rgba(248,246,240,0.78); line-height:1.85; margin-bottom:18px;">AIが自動で:'
+    + '<ul style="padding-left:18px; margin-top:6px;">'
+    + '<li>物語の核となる言葉を抽出</li>'
+    + '<li>気分に合わせて音楽コミュニティから選曲</li>'
+    + '<li>個人情報をマスク・字幕付き</li>'
+    + '<li>30秒/60秒/180秒の3バージョン作成</li>'
+    + '</ul></div>'
+    + '<div style="display:flex; gap:10px; flex-wrap:wrap;">'
+    + '<button onclick="confirmVideo()" style="flex:1; padding:13px; background:linear-gradient(135deg, #D4622A, #D4A95E); color:white; border:none; border-radius:20px; font-size:12px; font-weight:500; cursor:pointer;">▶ 動画を生成する</button>'
+    + '<button onclick="document.getElementById(\'videoGenModal\').remove()" style="flex:1; padding:13px; background:transparent; color:rgba(248,246,240,0.85); border:1px solid rgba(248,246,240,0.3); border-radius:20px; font-size:12px; cursor:pointer;">キャンセル</button>'
+    + '</div>'
+    + '<div style="font-size:10.5px; color:rgba(248,246,240,0.5); margin-top:12px; line-height:1.7;">※ 動画化は本人同意ベース。個人を特定する情報はAIが自動マスクします。</div>'
+    + '</div>';
+  document.body.appendChild(m);
+  m.addEventListener('click', (e) => { if (e.target === m) m.remove(); });
+}
+function confirmVideo() {
+  document.getElementById('videoGenModal').remove();
+  if (typeof satoiNotify === 'function') {
+    satoiNotify('✓ 動画生成リクエストを送信しました\n\n生成完了まで約3-5分。完成したらお知らせします。\nYouTube/TikTok/Instagram Reelsで使える3形式を作成中。', {kind:'success', duration: 6000, cta:'音楽コミュニティで聴く', href:'SATOI_Mock_v1_MUS_community.html'});
+  }
+}
+
+/* === SNS シェアモーダル === */
+function openShareModal() {
+  const id = document.getElementById('storyModal').dataset.storyId;
+  const s = STORIES.find(x => x.id == id);
+  if (!s) return;
+  document.getElementById('ogTitle').textContent = s.title || 'SATOI 物語';
+  document.getElementById('ogQuote').textContent = '「' + (s.quote || s.title) + '」 ・ ' + s.cancerJa + ' ・ ' + s.name;
+  document.getElementById('shareModalInline').style.display = 'block';
+}
+function closeShareModal() {
+  document.getElementById('shareModalInline').style.display = 'none';
+}
+// 各SNSへの share URL 組み立て
+document.querySelectorAll('.sns-share-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const net = btn.dataset.net;
+    const id = document.getElementById('storyModal').dataset.storyId;
+    const s = STORIES.find(x => x.id == id);
+    if (!s) return;
+    const url = encodeURIComponent('https://satoi.example/stories/' + id);
+    const text = encodeURIComponent(`【SATOI 物語】${s.title}\n「${s.quote}」\n— ${s.cancerJa} ・ ${s.name}\n\n#SATOI #ナラティブメディスン`);
+    const shortUrl = 'https://satoi.example/stories/' + id;
+    let target = '';
+    switch(net) {
+      case 'x':
+        target = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+        break;
+      case 'line':
+        target = `https://social-plugins.line.me/lineit/share?url=${url}&text=${text}`;
+        break;
+      case 'facebook':
+        target = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`;
+        break;
+      case 'threads':
+        target = `https://www.threads.net/intent/post?text=${text}%20${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(shortUrl + ' #SATOI').then(() => {
+          alert('✓ リンクをコピーしました\n\n' + shortUrl + '\n#SATOI');
+        }).catch(() => {
+          prompt('このURLをコピーしてください:', shortUrl);
+        });
+        return;
+    }
+    window.open(target, '_blank', 'noopener,noreferrer,width=600,height=600');
+  });
+});
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeStory(); });
+
+/* 星 */
+(function genStars(){
+  const layer = document.getElementById('heroStars');
+  if (!layer) return;
+  for (let i=0; i<55; i++) {
+    const s = document.createElement('div');
+    s.className = 'h-star';
+    const sz = Math.random()*2.2 + 0.6;
+    s.style.width = sz + 'px'; s.style.height = sz + 'px';
+    s.style.left = (Math.random()*100) + '%';
+    s.style.top = (Math.random()*70) + '%';
+    s.style.animationDelay = (Math.random()*4) + 's';
+    s.style.animationDuration = (3 + Math.random()*2.5) + 's';
+    layer.appendChild(s);
+  }
+})();
+
+function toggleLamp() { document.getElementById('lampBubble').classList.toggle('show'); }
+setTimeout(() => document.getElementById('lampBubble').classList.add('show'), 2400);
+setTimeout(() => document.getElementById('lampBubble').classList.remove('show'), 9000);
+
+setInterval(() => {
+  const el = document.getElementById('tickerNum');
+  if (!el) return;
+  const cur = parseInt(el.textContent.replace(/,/g,''));
+  el.textContent = Math.max(50, cur + Math.floor(Math.random()*5) - 2).toLocaleString('en-US');
+}, 4500);
+</script>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

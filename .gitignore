@@ -1,0 +1,18 @@
+# 依存パッケージ(テスト用に生成。リポジトリには含めない)
+node_modules/
+
+# OS / エディタ生成物
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# ログ・一時ファイル
+*.log
+npm-debug.log*
+.netlify/
+
+# 環境変数(APIキー等は絶対にコミットしない)
+.env
+.env.*
