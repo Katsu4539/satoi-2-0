@@ -205,6 +205,10 @@
 
   /* ====== さがす ・ 全画面共通フローティングメニュー ====== */
   const SATOI_FIND_GROUPS = [
+    { title:'まず知る(基礎)', items:[
+      { label:'がんとは?(基礎知識)',     url:'SATOI_Mock_v1_KB_about.html' },
+      { label:'がんの治療(基本)',         url:'SATOI_Mock_v1_KB_treatment.html' }
+    ]},
     { title:'今の状況・全体像', items:[
       { label:'ダッシュボード(同じ境遇の人数・全体像)', url:'SATOI_Mock_v1_DASHBOARD.html' },
       { label:'患者ジャーニーマップ',                   url:'SATOI_Mock_v1_B1_hub.html' }
@@ -329,19 +333,19 @@
       .satoi-md-table th { background: rgba(127,127,127,0.12); font-weight: 700; }
       .satoi-md-hr { border: none; border-top: 1px solid rgba(127,127,127,0.3); margin: 0.9em 0; }
       /* ===== さがす フローティングメニュー ===== */
-      .satoi-find-overlay { position: fixed; inset: 0; z-index: 9200; background: rgba(11,23,54,0.55); backdrop-filter: blur(6px); display: flex; align-items: flex-start; justify-content: center; padding: 56px 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; overflow-y: auto; }
+      .satoi-find-overlay { position: fixed; inset: 0; z-index: 9200; background: rgba(11,23,54,0.55); backdrop-filter: blur(6px); display: flex; align-items: flex-start; justify-content: center; padding: 30px 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; overflow-y: auto; }
       .satoi-find-overlay.show { opacity: 1; pointer-events: auto; }
-      .satoi-find-panel { position: relative; width: min(920px, 100%); background: rgba(17,28,58,0.98); border: 1px solid rgba(212,169,94,0.4); border-radius: 20px; padding: 28px 30px 32px; box-shadow: 0 30px 80px rgba(0,0,0,0.5); transform: translateY(-12px); transition: transform 0.28s cubic-bezier(0.16,1,0.3,1); }
+      .satoi-find-panel { position: relative; width: min(1040px, 100%); background: rgba(17,28,58,0.98); border: 1px solid rgba(212,169,94,0.4); border-radius: 18px; padding: 22px 26px 24px; box-shadow: 0 30px 80px rgba(0,0,0,0.5); transform: translateY(-12px); transition: transform 0.28s cubic-bezier(0.16,1,0.3,1); }
       .satoi-find-overlay.show .satoi-find-panel { transform: translateY(0); }
-      .satoi-find-close { position: absolute; top: 14px; right: 16px; width: 34px; height: 34px; border-radius: 50%; background: rgba(248,246,240,0.12); border: 1px solid rgba(248,246,240,0.25); color: #F8F6F0; font-size: 18px; line-height: 1; cursor: pointer; }
+      .satoi-find-close { position: absolute; top: 12px; right: 14px; width: 32px; height: 32px; border-radius: 50%; background: rgba(248,246,240,0.12); border: 1px solid rgba(248,246,240,0.25); color: #F8F6F0; font-size: 18px; line-height: 1; cursor: pointer; }
       .satoi-find-close:hover { background: #D4A95E; color: #0B1736; border-color: #D4A95E; }
-      .satoi-find-title { font-size: 18px; letter-spacing: 0.08em; color: #F0C97A; margin-bottom: 22px; font-weight: 700; }
-      .satoi-find-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px 30px; }
-      .satoi-find-gtitle { font-size: 14px; letter-spacing: 0.12em; color: #7FA8C9; border-bottom: 1px solid rgba(127,168,201,0.3); padding-bottom: 8px; margin-bottom: 11px; font-weight: 600; }
-      .satoi-find-link { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px; border-radius: 11px; color: #F8F6F0; text-decoration: none; font-size: 16px; transition: all 0.18s; }
-      .satoi-find-link span { color: #D4A95E; font-weight: 700; font-size: 17px; }
+      .satoi-find-title { font-size: 16px; letter-spacing: 0.06em; color: #F0C97A; margin-bottom: 14px; font-weight: 500; }
+      .satoi-find-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px 24px; }
+      .satoi-find-gtitle { font-size: 13px; letter-spacing: 0.1em; color: #7FA8C9; border-bottom: 1px solid rgba(127,168,201,0.3); padding-bottom: 5px; margin-bottom: 5px; font-weight: 500; }
+      .satoi-find-link { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 10px; border-radius: 9px; color: #F8F6F0; text-decoration: none; font-size: 15px; font-weight: 400; transition: all 0.18s; }
+      .satoi-find-link span { color: #D4A95E; font-weight: 500; font-size: 16px; }
       .satoi-find-link:hover { background: rgba(212,169,94,0.16); color: #F0C97A; }
-      @media (max-width: 768px) { .satoi-find-overlay { padding: 18px 12px; } .satoi-find-panel { padding: 22px 18px 26px; } .satoi-find-groups { grid-template-columns: 1fr; gap: 16px; } }
+      @media (max-width: 768px) { .satoi-find-overlay { padding: 16px 12px; } .satoi-find-panel { padding: 18px 16px 20px; } .satoi-find-groups { grid-template-columns: 1fr 1fr; gap: 12px 14px; } }
       .satoi-md-p code, .satoi-md-table code, .satoi-md-ul code, .satoi-md-ol code { background: rgba(127,127,127,0.18); border-radius: 5px; padding: 1px 5px; font-size: 0.92em; }
       .satoi-md-p strong, .satoi-md-table strong, .satoi-md-ul strong, .satoi-md-ol strong, .satoi-md-h strong { font-weight: 700; }
       .satoi-univ-btn-enh {
