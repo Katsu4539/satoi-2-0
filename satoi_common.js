@@ -570,6 +570,29 @@
     return html;
   };
 
+  /* ====== 「AIと話す/深掘り」ボタンに、その項目の文脈を持たせる ======
+     各 .ai-cta-btn が、自分が属する section の見出し・カテゴリ・本文を読み取り、
+     A2対話に seed として渡す。A2側はこれを使って汎用挨拶ではなく文脈からリードする。 */
+  function enhanceAiCtaButtons(){
+    document.querySelectorAll('a.ai-cta-btn').forEach(function(a){
+      var href = a.getAttribute('href') || '';
+      if (href.indexOf('A2_dialog') === -1) return;
+      if (href.indexOf('seed=') !== -1) return; // 既に付与済み
+      var sec = a.closest('section') || a.closest('.section') || a.parentElement;
+      if (!sec) return;
+      var titleEl   = sec.querySelector('.section-title, h2, h3');
+      var eyebrowEl = sec.querySelector('.section-eyebrow');
+      var bodyEl    = sec.querySelector('.content-card');
+      var title = titleEl ? titleEl.textContent.trim() : '';
+      if (!title) return;
+      var eyebrow = eyebrowEl ? eyebrowEl.textContent.trim() : '';
+      var body = bodyEl ? bodyEl.textContent.trim().replace(/\s+/g, ' ').slice(0, 180) : '';
+      var seed = (eyebrow ? '【' + eyebrow + '】' : '') + title + (body ? ' / ' + body : '');
+      var sep = href.indexOf('?') === -1 ? '?' : '&';
+      a.setAttribute('href', href + sep + 'lead=1&seed=' + encodeURIComponent(seed));
+    });
+  }
+
   /* ====== 初期化 ====== */
   function init(){
     injectStyles();
@@ -577,6 +600,7 @@
     injectConciergeBubble();
     maybeRedirectFromA1();
     bindLoginButtons();
+    enhanceAiCtaButtons();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

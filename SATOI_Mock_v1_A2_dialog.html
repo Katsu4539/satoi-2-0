@@ -577,16 +577,18 @@ body {
     // sessionStorage に履歴があれば「前回の続き」表示
     window.__skipIntake = true;
     window.__resumeBeat = beatFromUrl || 'consider';
-    window.__resumeCancer = sessionStorage.getItem('satoi_last_cancer') || 'breast';
+    // 保存名は複数を横断チェック(satoi_cancer / satoi_last_cancer / satoi_intake)
+    var __intake = {}; try { __intake = JSON.parse(localStorage.getItem('satoi_intake') || '{}'); } catch(e){}
+    window.__resumeCancer = sessionStorage.getItem('satoi_cancer') || sessionStorage.getItem('satoi_last_cancer') || __intake.cancer || 'breast';
     window.__resumeCancerName = sessionStorage.getItem('satoi_last_cancer_name') || '乳がん';
-    window.__resumeStage = sessionStorage.getItem('satoi_last_stage') || 'II';
+    window.__resumeStage = sessionStorage.getItem('satoi_stage') || sessionStorage.getItem('satoi_last_stage') || __intake.stage || 'II';
   }
-  // 通常入力時に保存(原種・がん名・ステージが state に入ったタイミング)
+  // 通常入力時に保存(原種・がん名・ステージが state に入ったタイミング)。すべての保存先に書く。
   window.__saveResume = function(cancer, name, stage) {
     try {
-      sessionStorage.setItem('satoi_last_cancer', cancer || '');
-      sessionStorage.setItem('satoi_last_cancer_name', name || '');
-      sessionStorage.setItem('satoi_last_stage', stage || '');
+      if (cancer) { sessionStorage.setItem('satoi_last_cancer', cancer); sessionStorage.setItem('satoi_cancer', cancer); }
+      if (name)   { sessionStorage.setItem('satoi_last_cancer_name', name); }
+      if (stage)  { sessionStorage.setItem('satoi_last_stage', stage); sessionStorage.setItem('satoi_stage', stage); }
     } catch(e){}
   };
 })();
@@ -1610,6 +1612,14 @@ async function start() {
 
   if (mode === 'slow') document.body.classList.add('slow-pace');
 
+  // ===== 文脈つき深掘り(章ページ等の「AIと話す」から来た場合)=====
+  // seed があれば、汎用挨拶を出さず、その項目からAIがリードする
+  const seedParam = params.get('seed');
+  if (seedParam) {
+    await startSeededDeepDive(seedParam, params);
+    return;
+  }
+
   // ===== ★ RESUME MODE ・ 原種スキップ =====
   // 2026-05-20: ダッシュボード(=入口1問入力)からの遷移は質問を畳みかけない「自由対話モード」に直行
   const fromDashboard = params.get('from') === 'dashboard';
@@ -1618,9 +1628,9 @@ async function start() {
     return;
   }
 
-  // ?resume=1 / ?cancer=xxx / ?from=mypage / sessionStorage 履歴
+  // ?resume=1 / ?cancer=xxx / ?from=mypage / sessionStorage 履歴(保存名は複数を横断チェック)
   const urlResume = params.get('resume') === '1' || params.get('cancer') || params.get('from') || params.get('topic') || params.get('beat');
-  const sessCancer = sessionStorage.getItem('satoi_last_cancer') || sessionStorage.getItem('satoi_last_cancer_name');
+  const sessCancer = readStoredContext('cancer');
   if (urlResume || sessCancer) {
     await resumeMode(params);
     return;
@@ -1633,6 +1643,59 @@ async function start() {
   } else {
     await startSelf();
   }
+}
+
+/* ===== 保存名の統一(二重質問を防ぐ)=====
+   がん種・ステージを、複数の保存先(satoi_cancer / satoi_last_cancer / satoi_intake)から横断的に読む。 */
+function readStoredContext(kind){
+  try {
+    var intake = {};
+    try { intake = JSON.parse(localStorage.getItem('satoi_intake') || '{}'); } catch(e){}
+    if (kind === 'cancer') {
+      return sessionStorage.getItem('satoi_cancer') || sessionStorage.getItem('satoi_last_cancer') || intake.cancer || '';
+    }
+    if (kind === 'cancerName') {
+      return sessionStorage.getItem('satoi_last_cancer_name') || '';
+    }
+    if (kind === 'stage') {
+      return sessionStorage.getItem('satoi_stage') || sessionStorage.getItem('satoi_last_stage') || intake.stage || '';
+    }
+  } catch(e){}
+  return '';
+}
+/* すべての保存先に書き込む(どこから来ても引き継げるように) */
+function saveAllContext(cancer, name, stage){
+  try {
+    if (cancer) { sessionStorage.setItem('satoi_cancer', cancer); sessionStorage.setItem('satoi_last_cancer', cancer); }
+    if (name)   { sessionStorage.setItem('satoi_last_cancer_name', name); }
+    if (stage)  { sessionStorage.setItem('satoi_stage', stage); sessionStorage.setItem('satoi_last_stage', stage); }
+  } catch(e){}
+}
+
+/* ===== 文脈つき深掘り:章ページ等の項目内容を受け取り、AIが先にリードする ===== */
+const A2_CANCER_LABEL = { lung:'肺がん', stomach:'胃がん', breast:'乳がん', colon:'大腸がん', prostate:'前立腺がん', pancreas:'膵がん', other:'がん', unknown:'がん' };
+async function startSeededDeepDive(seed, params){
+  // 患者の状況を復元(あらゆる保存先から)→ 二重質問しない
+  const cancerKey = params.get('cancer') || readStoredContext('cancer');
+  const stage = params.get('stage') || readStoredContext('stage');
+  if (cancerKey) {
+    state.cancer = cancerKey;
+    state.cancerName = A2_CANCER_LABEL[cancerKey] || readStoredContext('cancerName') || state.cancerName || '';
+  }
+  if (stage) state.stage = stage;
+  state.step = 'free';
+  saveAllContext(state.cancer, state.cancerName, state.stage);
+
+  await delay(450);
+  await aiSay(`はい。いま読んでくださっていた内容について、ご一緒に、もう少し深掘りしましょう。`, { thinkMs: 700 });
+  await delay(300);
+
+  // AIに項目の文脈を渡してリードさせる(seed には 見出し+カテゴリ+本文の要約 が入っている)
+  const ask = `今、SATOIの中で「${seed}」という内容を読みました。これについて、私の状況に合わせて、もう少し詳しく・やさしく教えてください。そのうえで、次の一歩も提案してください。`;
+  await a2AskAI(ask);
+
+  const inp = document.getElementById('inputField');
+  if (inp) setTimeout(() => inp.focus(), 600);
 }
 
 /* ===== 自由対話モード(2026-05-20 新規:質問畳みかけ廃止)=====
@@ -1861,14 +1924,14 @@ async function handleResumeChoice(value, label) {
 }
 
 async function resumeMode(params) {
-  // 復元 ・ URL > sessionStorage > デフォルト乳がんII期
-  const cancerKey = params.get('cancer') || sessionStorage.getItem('satoi_last_cancer') || 'breast';
+  // 復元 ・ URL > 各保存先(satoi_cancer / satoi_last_cancer / satoi_intake) > デフォルト乳がんII期
+  const cancerKey = params.get('cancer') || readStoredContext('cancer') || 'breast';
   const cancerNames = {
     breast: '乳がん', colon: '大腸がん', lung: '肺がん',
     stomach: '胃がん', prostate: '前立腺がん', pancreas: '膵がん'
   };
-  const cancerName = sessionStorage.getItem('satoi_last_cancer_name') || cancerNames[cancerKey] || '乳がん';
-  const stage = params.get('stage') || sessionStorage.getItem('satoi_last_stage') || 'II';
+  const cancerName = readStoredContext('cancerName') || cancerNames[cancerKey] || '乳がん';
+  const stage = params.get('stage') || readStoredContext('stage') || 'II';
 
   state.cancer = cancerKey;
   state.cancerName = cancerName;
