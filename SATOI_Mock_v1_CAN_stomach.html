@@ -13,135 +13,215 @@
   --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
   --line: rgba(10,22,40,0.10); --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
   --accent: #D4622A; --accent-bg: rgba(212,98,42,0.06); --accent-border: rgba(212,98,42,0.4);
+  --teal: #0D7377; --teal-soft: #14A6AB;
   --starlight: #D4A95E; --starlight-strong: #F0C97A;
   --font: "Noto Sans JP", "Meiryo UI", sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; min-height: 100vh; overflow-x: hidden; font-family: var(--font); }
-body { color: var(--ink-deep); background: var(--morning-white); line-height: 1.85; font-size: 16px; }
+body { color: var(--ink-deep); background: var(--morning-white); line-height: 1.9; font-size: 16px; }
 a { color: inherit; text-decoration: none; }
 button { font-family: var(--font); cursor: pointer; }
 .header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; justify-content:space-between; align-items:center; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom: 1px solid var(--line); }
 .logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
 .logo .dot { width:8px; height:8px; background: var(--accent); border-radius:50%; margin-right:10px; box-shadow:0 0 12px var(--accent-border); }
 .back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-.hero { padding: 110px 32px 60px; position:relative; }
-.hero-bg { position:absolute; inset:0; opacity:0.28; background-image: url('https://images.unsplash.com/photo-1768154460594-119cb0586102?fm=jpg&q=80&w=1200&auto=format&fit=crop'); background-size: cover; background-position: center; filter: blur(2px); }
-.hero-overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(248,246,240,0.85), rgba(248,246,240,0.98)); }
+.hero { padding: 120px 32px 56px; position:relative; }
+.hero-bg { position:absolute; inset:0; opacity:0.22; background: radial-gradient(circle at 70% 20%, rgba(212,98,42,0.4), transparent 60%); }
+.hero-overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(248,246,240,0.7), rgba(248,246,240,0.98)); }
 .hero-content { position:relative; z-index:2; max-width: 1100px; margin: 0 auto; text-align: center; }
-.hero-eyebrow { display: inline-block; font-size: 12px; letter-spacing: 0.42em; color: var(--accent); padding: 6px 18px; border: 1px solid var(--accent-border); border-radius: 24px; margin-bottom: 24px; }
-.hero-title { font-size: clamp(36px, 5vw, 52px); font-weight: 300; letter-spacing: 0.06em; line-height: 1.4; color: var(--ink-deep); margin-bottom: 14px; }
-.hero-title strong { color: var(--accent); font-weight: 500; }
-.hero-meta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
-.meta-card { padding: 14px 22px; background: white; border-radius: 14px; border:1px solid var(--line); font-size: 13px; }
-.meta-card strong { color: var(--accent); font-weight: 600; font-size: 15px; }
+.hero-eyebrow { display: inline-block; font-size: 12px; letter-spacing: 0.42em; color: var(--accent); padding: 6px 18px; border: 1px solid var(--accent-border); border-radius: 24px; margin-bottom: 22px; }
+.hero-title { font-size: clamp(34px, 5vw, 50px); font-weight: 300; letter-spacing: 0.06em; line-height: 1.4; color: var(--ink-deep); margin-bottom: 12px; }
+.hero-lead { font-size: 15px; color: var(--ink-medium); line-height: 2; max-width: 640px; margin: 8px auto 0; }
+.hero-meta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+.meta-card { padding: 13px 20px; background: white; border-radius: 14px; border:1px solid var(--line); font-size: 12.5px; color: var(--ink-medium); }
+.meta-card strong { color: var(--accent); font-weight: 600; font-size: 15px; display:block; margin-bottom:2px; }
 
-.section { padding: 60px 32px; max-width: 1100px; margin: 0 auto; }
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 13px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc a { padding:7px 14px; background: var(--accent-bg); border:1px solid var(--accent-border); border-radius:18px; color: var(--ink-medium); font-size:11.5px; }
+.toc a:hover { background: var(--accent); color: white; }
+
+.section { padding: 52px 32px; max-width: 1040px; margin: 0 auto; }
 .section-eyebrow { font-size: 11px; letter-spacing: 0.36em; color: var(--accent); margin-bottom: 10px; font-weight: 600; }
-.section-title { font-size: clamp(24px, 3vw, 30px); font-weight: 500; color: var(--ink-deep); margin-bottom: 16px; }
-.info-card { background: white; border-radius: 18px; padding: 28px 32px; border: 1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); }
-.info-card p { font-size: 14px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 10px; white-space: pre-line; }
+.section-title { font-size: clamp(23px, 3vw, 29px); font-weight: 500; color: var(--ink-deep); margin-bottom: 14px; line-height:1.5; }
+.info-card { background: white; border-radius: 18px; padding: 26px 30px; border: 1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 18px; }
+.info-card p { font-size: 14px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 12px; }
+.info-card h4 { font-size:15px; font-weight:600; color: var(--accent); margin: 16px 0 8px; }
+.info-card ul { padding-left: 22px; margin: 8px 0 12px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.info-card li { margin-bottom: 5px; }
+.info-card strong { color: var(--ink-deep); font-weight: 600; }
+.info-card blockquote { border-left: 3px solid var(--accent); padding: 10px 18px; margin: 14px 0; background: var(--accent-bg); color: var(--ink-medium); font-size:13px; }
 
-.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 26px; }
-.action-card { padding: 22px 24px; background: var(--accent-bg); border-radius: 14px; border: 1px solid var(--accent-border); cursor: pointer; transition: all 0.3s; text-decoration: none; color: var(--ink-deep); }
+.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 22px; }
+.action-card { padding: 20px 22px; background: var(--accent-bg); border-radius: 14px; border: 1px solid var(--accent-border); cursor: pointer; transition: all 0.3s; text-decoration: none; color: var(--ink-deep); }
 .action-card:hover { background: white; transform: translateY(-3px); box-shadow: 0 10px 26px rgba(11,23,54,0.08); }
 .action-card-icon { font-size: 24px; margin-bottom: 8px; }
 .action-card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
 .action-card-desc { font-size: 11.5px; color: var(--ink-light); line-height: 1.7; }
 
-.voices { background: var(--morning-cream); padding: 30px 32px; border-radius: 18px; border-left: 4px solid var(--accent); margin: 30px 0; }
-.voices p { font-size: 13.5px; color: var(--ink-medium); font-style: italic; line-height: 1.9; margin-bottom: 8px; }
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 24px 28px; margin: 24px 0 0; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 15.5px; font-weight:600; color: var(--teal); margin-bottom: 6px; }
+.ai-cta p { font-size: 13px; color: var(--ink-medium); line-height: 1.9; margin-bottom: 12px; }
+.ai-cta-btn { display:inline-block; padding: 11px 22px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
 
-#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; }
-.satoi-univ-btn { width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); font-family: inherit; }
-.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; }
-@media (max-width: 768px) { .action-grid { grid-template-columns: 1fr; } #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; } }
+.voices { background: var(--morning-cream); padding: 24px 28px; border-radius: 18px; border-left: 4px solid var(--accent); margin: 18px 0; }
+.voices p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 8px; }
+.note-box { background: rgba(212,98,42,0.07); border:1px solid rgba(212,98,42,0.25); border-radius: 14px; padding: 16px 20px; font-size: 12.5px; color: var(--ink-medium); line-height:1.9; }
+.note-box strong { color: #D4622A; }
+
+@media (max-width: 768px) { .action-grid { grid-template-columns: 1fr; } .section { padding: 40px 16px; } .info-card { padding: 22px 20px; } }
 </style>
 </head>
 <body>
 
 <header class="header">
   <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
-  <button class="back-btn" onclick="history.back()">← 戻る</button>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_B1_hub.html'; })()">← 戻る</button>
 </header>
 
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Gastric Cancer</div>
+    <div class="hero-eyebrow">STOMACH CANCER ・ 胃がん</div>
     <h1 class="hero-title">胃がん</h1>
+    <p class="hero-lead">かつて日本で最も多かったがんですが、ピロリ菌の対策や内視鏡検診が広がり、早期に見つかる方が増えました。早期であれば、お腹を切らずに内視鏡で治せることもあります。</p>
     <div class="hero-meta">
-      <div class="meta-card">罹患 <strong>12.4万人/年(罹患数3位)</strong></div>
-      <div class="meta-card"><strong>5年生存率 66.6%(StageIで95%超)</strong></div>
+      <div class="meta-card"><strong>早期発見が進む</strong>内視鏡検診・ピロリ菌対策</div>
+      <div class="meta-card"><strong>早期は内視鏡治療も</strong>体にやさしい選択肢</div>
     </div>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-eyebrow">TYPES ・ がんの種類とタイプ</div>
-  <h2 class="section-title">胃がんの、種類・サブタイプ</h2>
-  <div class="info-card"><p>・ 分化型腺がん・未分化型腺がん・スキルス胃がん・ HER2陽性:15-20%・ MSI-High:5-10%</p></div>
-</section>
+<nav class="toc">
+  <a href="#s1">胃がんとは</a>
+  <a href="#s2">特徴・タイプ</a>
+  <a href="#s3">検査</a>
+  <a href="#s4">ステージ</a>
+  <a href="#s5">治療</a>
+  <a href="#s6">治療後の暮らし</a>
+  <a href="#s7">よくある不安</a>
+</nav>
 
-<section class="section">
-  <div class="section-eyebrow">EXAMINATIONS ・ 精密検査</div>
-  <h2 class="section-title">必要な、精密検査</h2>
-  <div class="info-card"><p>胃内視鏡・生検・CT・PET-CT・腫瘍マーカー CEA/CA19-9・HER2・MSI・PD-L1(CPS)</p></div>
-  <div class="action-grid">
-    <a class="action-card" href="SATOI_Mock_v1_CHP_exam.html"><div class="action-card-icon">🔬</div><div class="action-card-title">検査の詳細</div><div class="action-card-desc">画像・病理・遺伝子・腫瘍マーカー</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_B3_treatment_detail.html?cancer=stomach#precision-tests"><div class="action-card-icon">📋</div><div class="action-card-title">治療詳細へ</div><div class="action-card-desc">検査の結果から治療を選ぶ</div></a>
+<main>
+
+<section class="section" id="s1">
+  <div class="section-eyebrow">ABOUT</div>
+  <h2 class="section-title">胃がんとは ・ どんながん?</h2>
+  <div class="info-card">
+    <p>胃がんは、胃の内側の粘膜にできるがんです。<strong>ピロリ菌(ヘリコバクター・ピロリ)の感染</strong>が大きな要因のひとつと考えられており、感染がわかった場合の除菌が、予防につながるとされています。</p>
+    <p>初期は症状が出にくく、胃の不快感・食欲の低下・みぞおちの痛みなどで見つかることがあります。<strong>内視鏡(胃カメラ)検診で早く見つかれば、治しやすい</strong>がんです。</p>
+    <blockquote>胃がんは、早期発見の効果が大きいがんです。見つかった今から、できることがあります。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 胃がんについて、AIと話す</div>
+    <p>診断されたばかりの不安も含めて、あなたの状況に合わせてやさしくお話しします。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?cancer=stomach&from=can_stomach">AIと話す →</a>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-eyebrow">STAGING ・ ステージ分類</div>
-  <h2 class="section-title">ステージ別の、考え方</h2>
-  <div class="info-card"><p>・ Stage I:粘膜・粘膜下層・ Stage II:筋層〜漿膜下・ Stage III:漿膜越え or リンパ節転移多数・ Stage IV:遠隔転移</p></div>
-</section>
-
-<section class="section">
-  <div class="section-eyebrow">TREATMENTS ・ 治療法の選択肢</div>
-  <h2 class="section-title">胃がんの、標準治療</h2>
-  <div class="info-card"><p>・ 早期:内視鏡的粘膜下層剥離術(ESD)・ 手術(幽門側切除・全摘・腹腔鏡)・ 補助化学療法:S-1単剤 or S-1+ドセタキセル(SOX)・ 進行・再発:SP療法・FOLFOX・SOX・ HER2陽性:トラスツズマブ・ ニボルマブ(CPS≥5)</p></div>
-  <div class="action-grid">
-    <a class="action-card" href="SATOI_Mock_v1_B3_treatment_detail.html?cancer=stomach"><div class="action-card-icon">💊</div><div class="action-card-title">治療レジメン詳細</div><div class="action-card-desc">治療詳細ページへ</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_CHP_consider.html"><div class="action-card-icon">🧭</div><div class="action-card-title">治療法を考える</div><div class="action-card-desc">SDM・セカンドオピニオン</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_ACAD_research.html?cancer=stomach"><div class="action-card-icon">📚</div><div class="action-card-title">学術エビデンス</div><div class="action-card-desc">RCT・ガイドライン・PubMed</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_FREE_map.html"><div class="action-card-icon">🗺</div><div class="action-card-title">自由診療マップ</div><div class="action-card-desc">標準外の選択肢</div></a>
+<section class="section" id="s2">
+  <div class="section-eyebrow">FEATURES</div>
+  <h2 class="section-title">特徴・タイプ</h2>
+  <div class="info-card">
+    <p>胃がんは、できる場所や深さ、広がり方、組織の性質によって治療の組み立てが変わります。進行度のほか、<strong>HER2という目印</strong>を持つタイプかどうかなどを調べ、使える薬を見極めます。</p>
+    <p>進行した胃がんでは、HER2陽性なら抗HER2薬、状況によっては免疫療法が選べることもあり、薬の選択肢が広がっています。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 検査結果の意味を、AIと読み解く</div>
+    <p>「HER2陽性って?」「進行度はどう見るの?」——やさしく整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?cancer=stomach&from=can_stomach">AIと話す →</a>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-eyebrow">VOICES ・ 先輩の声</div>
-  <h2 class="section-title">同じ道を歩んだ、先輩の言葉</h2>
-  <div class="voices"><p>「胃を全摘して食事が変わった。少量を頻回に、よく噛む」・ 「ピロリ菌除菌で胃がんリスクが下がると知って、家族にも勧めた」</p></div>
+<section class="section" id="s3">
+  <div class="section-eyebrow">EXAMS</div>
+  <h2 class="section-title">主な検査</h2>
+  <div class="info-card">
+    <ul>
+      <li><strong>胃内視鏡(胃カメラ)・生検</strong> ・ 直接観察し、組織を採ってがんを確定する。</li>
+      <li><strong>CT</strong> ・ 広がりや転移を調べる。</li>
+      <li><strong>HER2検査など</strong> ・ 使える薬を見極める。</li>
+      <li><strong>腫瘍マーカー</strong> ・ 経過の確認の補助。</li>
+    </ul>
+  </div>
   <div class="action-grid">
-    <a class="action-card" href="SATOI_Mock_v1_D1_stories.html?cancer=stomach"><div class="action-card-icon">📖</div><div class="action-card-title">物語ライブラリ</div><div class="action-card-desc">15+件のナラティブ</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_MUS_community.html"><div class="action-card-icon">🎵</div><div class="action-card-title">音楽コミュニティ</div><div class="action-card-desc">同じ夜を過ごす音楽</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_KB_about.html"><div class="action-card-icon">📘</div><div class="action-card-title">検査と診断の基礎</div><div class="action-card-desc">何のために何を調べる?</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CHP_exam.html"><div class="action-card-icon">🔬</div><div class="action-card-title">検査の段階を見る</div><div class="action-card-desc">検査のとき</div></a>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-eyebrow">NEXT STEP ・ 次の一歩</div>
-  <h2 class="section-title">いま、できること</h2>
-  <div class="action-grid">
-    <a class="action-card" href="SATOI_Mock_v1_A2_dialog.html?cancer=stomach&resume=1&from=can_stomach"><div class="action-card-icon">💬</div><div class="action-card-title">AIと話す</div><div class="action-card-desc">胃がんについて深掘り</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_CON_concierge.html"><div class="action-card-icon">📞</div><div class="action-card-title">コンシェルジュ</div><div class="action-card-desc">電話 or AI で相談</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_C1_mypage.html"><div class="action-card-icon">👤</div><div class="action-card-title">マイページ</div><div class="action-card-desc">物語の壺・気持ち軌跡</div></a>
+<section class="section" id="s4">
+  <div class="section-eyebrow">STAGE</div>
+  <h2 class="section-title">ステージの考え方</h2>
+  <div class="info-card">
+    <p>胃がんのステージは、がんが胃の壁のどこまで深く入っているか、リンパ節や離れた臓器に広がっているかで、I〜IVに分けられます。</p>
+    <ul>
+      <li><strong>I期</strong> ・ 粘膜やその近くにとどまる早期。内視鏡での切除で済むこともあります。</li>
+      <li><strong>II〜III期</strong> ・ 壁の深くまで進む、またはリンパ節に広がった段階。手術と、必要に応じて薬物療法。</li>
+      <li><strong>IV期</strong> ・ 離れた臓器に転移がある段階。薬物療法が中心になります。</li>
+    </ul>
   </div>
 </section>
 
-<script>
-(function(){
-  const nav = document.createElement('div'); nav.id='satoi-univ-nav';
-  nav.innerHTML='<button class="satoi-univ-btn" title="戻る">←</button><button class="satoi-univ-btn" title="夜空ホーム">⌂</button><button class="satoi-univ-btn" title="マイページ">👤</button><button class="satoi-univ-btn" title="全体マップ">◎</button><button class="satoi-univ-btn" title="コンシェルジュ">💬</button>';
-  document.body.appendChild(nav);
-  const b = nav.querySelectorAll('.satoi-univ-btn');
-  b[0].onclick = ()=>history.back(); b[1].onclick = ()=>location.href='SATOI_Mock_v1_A1_entrance.html'; b[2].onclick = ()=>location.href='SATOI_Mock_v1_C1_mypage.html'; b[3].onclick = ()=>location.href='SATOI_Mock_v1_B1_hub.html'; b[4].onclick = ()=>location.href='SATOI_Mock_v1_CON_concierge.html';
-})();
-</script>
+<section class="section" id="s5">
+  <div class="section-eyebrow">TREATMENT</div>
+  <h2 class="section-title">主な治療</h2>
+  <div class="info-card">
+    <h4>内視鏡的切除</h4>
+    <p>ごく早期で、転移の心配が少ないものは、胃カメラを使ってその場で切り取れることがあります。胃を残せる、体にやさしい方法です。</p>
+    <h4>手術</h4>
+    <p>がんのある部分と周りのリンパ節を取り除きます。胃の一部を取る場合と、全部を取る場合があります。腹腔鏡やロボット支援で負担を抑える方法も広がっています。</p>
+    <h4>薬物療法</h4>
+    <p>再発を抑えるため、または進行を抑えるために、化学療法を行います。HER2陽性なら抗HER2薬、状況により免疫療法など、タイプに合わせた薬が使えることもあります。</p>
+  </div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_KB_treatment.html"><div class="action-card-icon">💊</div><div class="action-card-title">治療の基本</div><div class="action-card-desc">手術・薬・放射線・緩和</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_B3_treatment_detail.html?cancer=stomach"><div class="action-card-icon">📋</div><div class="action-card-title">治療レジメンの詳細</div><div class="action-card-desc">具体的な薬と副作用</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CHP_consider.html"><div class="action-card-icon">🧭</div><div class="action-card-title">治療を考える</div><div class="action-card-desc">SDM・セカンドオピニオン</div></a>
+  </div>
+</section>
+
+<section class="section" id="s6">
+  <div class="section-eyebrow">AFTER</div>
+  <h2 class="section-title">治療後の暮らし・経過観察</h2>
+  <div class="info-card">
+    <p>胃を手術したあとは、食事の取り方に工夫が必要になります。少しずつ、体が新しい状態に慣れていきます。</p>
+    <ul>
+      <li><strong>少量をこまめに</strong> ・ 一度にたくさん食べられなくなるため、回数を分けてゆっくり食べます。</li>
+      <li><strong>ダンピング症状への注意</strong> ・ 食後に動悸やだるさが出ることがあります。食べ方の工夫で和らげられます。</li>
+      <li><strong>体重・栄養</strong> ・ 体重が減りやすいので、管理栄養士に相談しながら無理なく。</li>
+      <li><strong>定期通院</strong> ・ 再発の確認や、貧血・栄養の状態を見守ります。</li>
+    </ul>
+  </div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_KB_life.html"><div class="action-card-icon">🌿</div><div class="action-card-title">暮らしと仕事</div><div class="action-card-desc">食事の工夫・両立</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_KB_sideeffects.html"><div class="action-card-icon">🩹</div><div class="action-card-title">副作用と対処</div><div class="action-card-desc">備え方・伝えるサイン</div></a>
+  </div>
+</section>
+
+<section class="section" id="s7">
+  <div class="section-eyebrow">VOICES &amp; NEXT</div>
+  <h2 class="section-title">よくある不安と、次の一歩</h2>
+  <div class="voices">
+    <p>「胃を取って、ちゃんと食べられるの?」「体重が落ちて不安」「仕事に戻れるか」——多くの方が、同じ気持ちを通ってきました。</p>
+    <p>胃がんは、食べ方の工夫を覚えながら、日常を取り戻している方がたくさんいます。一人で抱えず、少しずつ。同じ夜を過ごしている方が、ここにいます。</p>
+  </div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_A2_dialog.html?cancer=stomach&from=can_stomach"><div class="action-card-icon">💬</div><div class="action-card-title">AIと話す</div><div class="action-card-desc">胃がんについて深掘り</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_D1_stories.html?cancer=stomach"><div class="action-card-icon">📖</div><div class="action-card-title">先輩の物語</div><div class="action-card-desc">同じ道を歩んだ方の声</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CON_concierge.html"><div class="action-card-icon">📞</div><div class="action-card-title">コンシェルジュ</div><div class="action-card-desc">AI+電話で相談</div></a>
+  </div>
+  <div class="note-box" style="margin-top:20px;">
+    <strong>この情報について。</strong> ここに書かれているのは、胃がんを理解するための一般的な説明です。進行度やタイプによって治療は異なり、標準治療も更新されます。診断や治療方針は、必ず主治医とご相談ください。
+  </div>
+</section>
+
+</main>
+
 <script src="satoi_chp_insight.js"></script>
 <script src="satoi_common.js"></script>
 </body>
