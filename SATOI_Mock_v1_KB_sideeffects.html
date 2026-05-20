@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>副作用と対処(基礎) | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #F1ECD9; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 130px 32px 56px; text-align:center; background: linear-gradient(135deg, rgba(127,168,201,0.08) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: #7FA8C9; padding:6px 18px; border:1px solid rgba(127,168,201,0.4); border-radius:24px; margin-bottom:24px; }
+.hero-title { font-size: clamp(30px, 5vw, 44px); font-weight:300; line-height:1.55; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: #7FA8C9; font-weight:500; }
+.hero-sub { font-size:15px; color: var(--ink-medium); line-height:2; max-width:700px; margin:0 auto; }
+
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 14px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc-item { padding:7px 14px; background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.3); border-radius:18px; color: var(--ink-medium); font-size:11.5px; cursor:pointer; text-decoration:none; }
+.toc-item:hover, .toc-item.active { background: #7FA8C9; color: var(--morning-white); border-color: #7FA8C9; }
+
+.section { padding: 56px 32px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size:11px; letter-spacing:0.36em; color: #7FA8C9; margin-bottom:10px; font-weight:600; }
+.section-title { font-size: clamp(24px, 3.2vw, 30px); font-weight:500; color: var(--ink-deep); margin-bottom:14px; line-height:1.5; }
+.section-sub { font-size:14.5px; color: var(--ink-medium); line-height:1.95; margin-bottom:30px; }
+
+.content-card { background: white; border-radius:18px; padding: 28px 32px; border:1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 20px; }
+.content-card h3 { font-size:18px; font-weight:600; color: var(--ink-deep); margin-bottom: 12px; }
+.content-card h4 { font-size:15px; font-weight:600; color: #7FA8C9; margin: 18px 0 10px; }
+.content-card p { font-size:14px; color: var(--ink-medium); line-height:1.95; margin-bottom: 12px; }
+.content-card ul { padding-left: 22px; margin: 10px 0 14px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.content-card li { margin-bottom: 6px; }
+.content-card strong { color: var(--ink-deep); font-weight: 600; }
+.content-card blockquote { border-left: 3px solid #7FA8C9; padding: 10px 18px; margin: 14px 0; background: rgba(212,169,94,0.06); color: var(--ink-medium); font-size:13px; }
+
+.alert-card { background: rgba(212,98,42,0.07); border:1px solid rgba(212,98,42,0.3); border-radius:18px; padding: 26px 30px; margin-bottom: 20px; }
+.alert-card h3 { font-size:17px; font-weight:700; color: var(--warm-orange); margin-bottom: 10px; display:flex; align-items:center; gap:8px; }
+.alert-card ul { padding-left: 20px; margin: 6px 0 0; font-size:14px; color: var(--ink-deep); line-height:2; }
+.alert-card li strong { color: var(--warm-orange); }
+
+.tl-row { display:grid; grid-template-columns: 130px 1fr; gap: 14px; align-items:start; padding: 12px 0; border-bottom: 1px dashed var(--line); }
+.tl-row:last-child { border-bottom:none; }
+.tl-when { font-size:12px; font-weight:600; color:#5483A8; background: rgba(127,168,201,0.14); border-radius:10px; padding:6px 8px; text-align:center; }
+.tl-row p { font-size:13.5px; color: var(--ink-medium); line-height:1.85; margin:0; }
+
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 26px 30px; margin: 26px 0 8px; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 16px; font-weight:600; color: var(--teal); margin-bottom: 8px; }
+.ai-cta p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 14px; }
+.ai-cta-btn { display:inline-block; padding: 12px 24px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
+
+.note-box { background: rgba(212,98,42,0.07); border:1px solid rgba(212,98,42,0.25); border-radius: 14px; padding: 18px 22px; margin: 8px 0 0; font-size: 12.5px; color: var(--ink-medium); line-height:1.9; }
+.note-box strong { color: var(--warm-orange); }
+
+.related-nav { background: var(--morning-cream); padding: 40px 32px; margin-top: 40px; border-top: 1px solid var(--line); }
+.related-nav h4 { font-size:14px; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom: 16px; text-align: center; }
+.related-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; max-width: 980px; margin: 0 auto; }
+.related-card { padding: 14px 18px; background: white; border-radius: 12px; border:1px solid var(--line); cursor:pointer; transition: all 0.2s; }
+.related-card:hover { border-color: #7FA8C9; background: rgba(212,169,94,0.06); }
+.related-card-title { font-size: 13px; font-weight: 500; color: var(--ink-deep); margin-bottom: 3px; }
+.related-card-desc { font-size: 11.5px; color: var(--ink-light); }
+
+@media (max-width: 768px) {
+  .hero { padding: 110px 16px 46px; }
+  .section { padding: 40px 16px; }
+  .content-card { padding: 22px 20px; }
+  .tl-row { grid-template-columns: 90px 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_DASHBOARD.html'; })()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">SIDE EFFECTS ・ 副作用と対処(基礎)</div>
+  <h1 class="hero-title">副作用は、<strong>備えれば</strong>こわくない。</h1>
+  <p class="hero-sub">
+    いつ・どんなふうに出やすいかが分かると、心の準備ができます。<br>
+    我慢せず、上手に付き合うための基本を、やさしくまとめました。
+  </p>
+</section>
+
+<nav class="toc">
+  <a class="toc-item" href="#s1">副作用とは</a>
+  <a class="toc-item" href="#s2">よくある副作用と時期</a>
+  <a class="toc-item" href="#s3">備え方・セルフケア</a>
+  <a class="toc-item" href="#s4">すぐ伝えるサイン</a>
+  <a class="toc-item" href="#s5">心のつらさも</a>
+  <a class="toc-item" href="#s6">記録して伝える</a>
+</nav>
+
+<main>
+
+<section class="section" id="s1">
+  <div class="section-eyebrow">WHAT</div>
+  <h2 class="section-title">副作用とは ・ なぜ起きるの?</h2>
+  <p class="section-sub">「効いている証拠」でも「効いていない証拠」でもありません。治療と一緒に起こる体の反応です。</p>
+  <div class="content-card">
+    <p>がんの治療は、がん細胞をたたく一方で、正常な細胞にも少し影響することがあります。その結果として現れる体の変化が<strong>副作用</strong>です。治療の種類によって、出やすい副作用はかなり違います。</p>
+    <ul>
+      <li><strong>抗がん剤(化学療法)</strong> ・ 吐き気、だるさ、脱毛、口内炎、血液の数値の低下など。</li>
+      <li><strong>分子標的薬</strong> ・ 皮膚や爪の症状、下痢、高血圧など、薬ごとに特有のもの。</li>
+      <li><strong>免疫療法</strong> ・ 免疫が働きすぎて、体のいろいろな場所に炎症が出ることがある(早期発見が大切)。</li>
+      <li><strong>放射線治療</strong> ・ 当てた場所の皮膚や粘膜の変化、だるさなど。</li>
+    </ul>
+    <p>大事なのは、<strong>多くの副作用は予防や対処ができる</strong>ということ。今は吐き気止めなどの支持療法(治療を支えるケア)がとても進んでいます。我慢が美徳ではありません。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>あなたの治療で出やすい副作用を、やさしく整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_side&topic=what">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s2">
+  <div class="section-eyebrow">TIMING</div>
+  <h2 class="section-title">よくある副作用と、出やすい時期</h2>
+  <p class="section-sub">「いつ来るか」が分かると、生活の予定も立てやすくなります(下は抗がん剤の一般的な目安)。</p>
+  <div class="content-card">
+    <div class="tl-row"><span class="tl-when">投与日〜数日</span><p><strong>吐き気・食欲低下・だるさ</strong>が出やすい時期。制吐剤を予防的に使い、無理せず休むのがコツ。</p></div>
+    <div class="tl-row"><span class="tl-when">1〜2週間ごろ</span><p><strong>白血球の低下</strong>で感染しやすくなる時期(骨髄抑制)。発熱に注意。手洗い・人混みを避ける。</p></div>
+    <div class="tl-row"><span class="tl-when">2週間前後</span><p><strong>口内炎・脱毛</strong>が出始めることが多い。やわらかい歯ブラシ・うがい、帽子やウィッグの準備。</p></div>
+    <div class="tl-row"><span class="tl-when">回数を重ねて</span><p><strong>手足のしびれ(末梢神経障害)</strong>などが少しずつ。早めに主治医へ伝えると対応しやすい。</p></div>
+    <p style="margin-top:14px;">これはあくまで一般的な目安です。薬や人によって、出方も時期も違います。自分のパターンが分かると、「動ける日・休む日」の見当がつくようになります。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>あなたの治療スケジュールに合わせた「副作用カレンダー」を一緒に考えましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_side&topic=timing">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s3">
+  <div class="section-eyebrow">SELF CARE</div>
+  <h2 class="section-title">備え方・セルフケア</h2>
+  <p class="section-sub">ちょっとした工夫で、つらさはかなり軽くできます。</p>
+  <div class="content-card">
+    <h4>吐き気・食欲低下</h4>
+    <p>冷ました食事や、においの少ないものが食べやすいことが多いです。少量をこまめに。水分はこまめにとりましょう。吐き気止めは「気持ち悪くなる前」に使うのがコツです。</p>
+    <h4>口内炎</h4>
+    <p>やわらかい歯ブラシ、こまめなうがい(食塩水でも可)。痛い時は刺激の少ない食事(豆腐・お粥・スープ)を。</p>
+    <h4>脱毛</h4>
+    <p>抜け始める前に短くしておくと、心の準備がしやすいです。ウィッグ・帽子・スカーフを。多くの自治体に医療用ウィッグの補助制度があります。</p>
+    <h4>だるさ(倦怠感)</h4>
+    <p>「休むこと」も治療の一部。完璧を目指さず、家事は後回しでよいのです。軽い散歩などができる日は、少し体を動かすと気分が和らぐこともあります。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>今いちばんつらい症状について、具体的な工夫を一緒に探します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_side&topic=selfcare">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s4">
+  <div class="section-eyebrow">RED FLAGS</div>
+  <h2 class="section-title">すぐ主治医に伝えるサイン</h2>
+  <p class="section-sub">迷ったら、連絡してよいのです。早く伝えることが、自分を守ります。</p>
+  <div class="alert-card">
+    <h3>⚠ こんな時は、がまんせず、すぐ連絡を</h3>
+    <ul>
+      <li><strong>38度以上の発熱</strong>(特に治療後1〜2週間。感染のサインのことがあります)</li>
+      <li><strong>止まらない出血・あざが急に増える</strong>(血小板低下のことがあります)</li>
+      <li><strong>水分もとれないほどの吐き気・下痢</strong>、または続く嘔吐</li>
+      <li><strong>息苦しさ・強い胸の痛み</strong></li>
+      <li><strong>急な発疹・体のだるさの悪化</strong>(免疫療法中は特に注意)</li>
+    </ul>
+  </div>
+  <div class="content-card">
+    <p>多くの病院には、夜間や休日でもつながる<strong>緊急連絡先</strong>があります。受け取った説明書や診察券に書かれていることが多いので、見やすい場所に控えておきましょう。SATOI の「緊急時の医療情報」にもまとめておけます。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 緊急時の備えを、AIと整える</div>
+    <p>連絡先や、伝えるべき情報を、今のうちに一緒に準備しておきましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_side&topic=redflags">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s5">
+  <div class="section-eyebrow">MIND</div>
+  <h2 class="section-title">心のつらさも、副作用です</h2>
+  <p class="section-sub">体だけでなく、気持ちの落ち込みや不安も、治療と無関係ではありません。</p>
+  <div class="content-card">
+    <p>治療中に、気分が落ち込んだり、眠れなかったり、不安が強くなったりすることは、めずらしくありません。これは「弱さ」ではなく、体と心が大きな出来事に向き合っているサインです。</p>
+    <p>つらさが続く時は、主治医や看護師、心のケアの専門家(精神腫瘍科・心療内科など)に相談できます。緩和ケアのチームも、心のつらさを支えてくれます。一人で抱えなくて、いいのです。</p>
+    <blockquote>「こんなことで相談していいのかな」——いいんです。つらさに、大きいも小さいもありません。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 気持ちのこと、AIに話す</div>
+    <p>うまく言葉にならなくても大丈夫。そのまま、聞かせてください。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_side&topic=mind">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s6">
+  <div class="section-eyebrow">RECORD</div>
+  <h2 class="section-title">記録して、主治医に伝える</h2>
+  <p class="section-sub">「いつ・どんな時・どのくらい」をメモするだけで、診察がぐっと充実します。</p>
+  <div class="content-card">
+    <p>副作用は、その場では伝え忘れがちです。日々の体調を簡単に記録しておくと、診察室で正確に伝えられ、対処も早くなります。記録すること自体が、自分のパターンを知る助けにもなります。</p>
+    <ul>
+      <li>いつ(治療何日目か)、どんな症状が、どのくらいの強さで出たか</li>
+      <li>食事・睡眠・熱の有無</li>
+      <li>気持ちの変化</li>
+    </ul>
+    <p>SATOI の<strong>副作用の記録</strong>機能を使うと、毎日の記録が自動でグラフや要約になり、診察やご家族への共有にそのまま使えます。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 記録のつけ方を、AIと相談</div>
+    <p>あなたの治療に合わせて、何を記録するとよいか一緒に決めましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_side&topic=record">AIと話す →</a>
+  </div>
+
+  <div class="note-box">
+    <strong>この情報について。</strong> ここに書かれているのは、副作用を理解するための一般的な説明です。症状の感じ方や対処は人によって異なります。気になる症状や対処法は、必ず主治医・看護師・薬剤師にご相談ください。
+  </div>
+</section>
+
+<div class="related-nav">
+  <h4>もっと知る ・ 関連ページ</h4>
+  <div class="related-grid">
+    <a class="related-card" href="SATOI_Mock_v1_F4_side_effects.html">
+      <div class="related-card-title">副作用を記録・確認する</div>
+      <div class="related-card-desc">毎日の記録と、伝える準備</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_KB_treatment.html">
+      <div class="related-card-title">がんの治療(基本)</div>
+      <div class="related-card-desc">治療の種類と全体像</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_EMG_qr.html">
+      <div class="related-card-title">緊急時の医療情報・QR</div>
+      <div class="related-card-desc">もしもの時の連絡先</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_CON_concierge.html">
+      <div class="related-card-title">コンシェルジュに相談</div>
+      <div class="related-card-desc">つらい時は、人にも頼れます</div>
+    </a>
+  </div>
+</div>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

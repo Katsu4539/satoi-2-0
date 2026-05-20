@@ -207,7 +207,9 @@
   const SATOI_FIND_GROUPS = [
     { title:'まず知る(基礎)', items:[
       { label:'がんとは?(基礎知識)',     url:'SATOI_Mock_v1_KB_about.html' },
-      { label:'がんの治療(基本)',         url:'SATOI_Mock_v1_KB_treatment.html' }
+      { label:'がんの治療(基本)',         url:'SATOI_Mock_v1_KB_treatment.html' },
+      { label:'暮らしと仕事(基礎)',       url:'SATOI_Mock_v1_KB_life.html' },
+      { label:'世代別の情報(基礎)',       url:'SATOI_Mock_v1_KB_generation.html' }
     ]},
     { title:'今の状況・全体像', items:[
       { label:'ダッシュボード(同じ境遇の人数・全体像)', url:'SATOI_Mock_v1_DASHBOARD.html' },
@@ -230,10 +232,12 @@
       { label:'研究・治験の情報',             url:'SATOI_Mock_v1_ACAD_research.html' }
     ]},
     { title:'からだ・副作用', items:[
-      { label:'副作用の記録・対処', url:'SATOI_Mock_v1_F4_side_effects.html' }
+      { label:'副作用と対処(基礎)', url:'SATOI_Mock_v1_KB_sideeffects.html' },
+      { label:'副作用の記録・対処',   url:'SATOI_Mock_v1_F4_side_effects.html' }
     ]},
     { title:'お金・制度', items:[
-      { label:'お金・制度ハブ', url:'SATOI_Mock_v1_E1_money.html' }
+      { label:'お金と制度(基礎)', url:'SATOI_Mock_v1_KB_money.html' },
+      { label:'お金・制度ハブ',     url:'SATOI_Mock_v1_E1_money.html' }
     ]},
     { title:'家族・まわりの人', items:[
       { label:'家族との共有・伝え方', url:'SATOI_Mock_v1_FAM_view.html' }
@@ -346,6 +350,15 @@
       .satoi-find-link span { color: #D4A95E; font-weight: 500; font-size: 16px; }
       .satoi-find-link:hover { background: rgba(212,169,94,0.16); color: #F0C97A; }
       @media (max-width: 768px) { .satoi-find-overlay { padding: 16px 12px; } .satoi-find-panel { padding: 18px 16px 20px; } .satoi-find-groups { grid-template-columns: 1fr 1fr; gap: 12px 14px; } }
+      /* ===== ピックアップ・グリッド ===== */
+      .satoi-pickup-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(248px, 1fr)); gap: 14px; }
+      .satoi-pickup-card { display: flex; align-items: center; gap: 13px; padding: 16px 18px; background: #FFFFFF; border: 1px solid rgba(10,22,40,0.10); border-radius: 14px; text-decoration: none; color: #1A2A40; transition: all 0.2s; box-shadow: 0 4px 14px rgba(11,23,54,0.04); }
+      .satoi-pickup-card:hover { border-color: #7FA8C9; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(11,23,54,0.09); }
+      .satoi-pickup-ic { font-size: 24px; flex-shrink: 0; line-height: 1; }
+      .satoi-pickup-body { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+      .satoi-pickup-title { font-size: 14.5px; font-weight: 600; color: #1A2A40; }
+      .satoi-pickup-desc { font-size: 11.5px; color: rgba(26,42,64,0.6); line-height: 1.6; }
+      .satoi-pickup-arrow { color: #D4A95E; font-weight: 700; flex-shrink: 0; }
       .satoi-md-p code, .satoi-md-table code, .satoi-md-ul code, .satoi-md-ol code { background: rgba(127,127,127,0.18); border-radius: 5px; padding: 1px 5px; font-size: 0.92em; }
       .satoi-md-p strong, .satoi-md-table strong, .satoi-md-ul strong, .satoi-md-ol strong, .satoi-md-h strong { font-weight: 700; }
       .satoi-univ-btn-enh {
@@ -597,6 +610,40 @@
     });
   }
 
+  /* ====== ピックアップ・グリッド(自分で選んで回れる入口)======
+     #satoi-pickup というプレースホルダがあるページに、カード一覧を流し込む。
+     ハブ・マイページに設置。 */
+  const SATOI_PICKUP = [
+    { icon:'📘', title:'がんとは?(基礎)',   desc:'がん・ステージ・検査の基本', url:'SATOI_Mock_v1_KB_about.html' },
+    { icon:'💊', title:'がんの治療(基本)',   desc:'手術・薬・放射線・緩和',     url:'SATOI_Mock_v1_KB_treatment.html' },
+    { icon:'🩹', title:'副作用と対処',         desc:'時期・備え方・伝えるサイン', url:'SATOI_Mock_v1_KB_sideeffects.html' },
+    { icon:'💰', title:'お金と制度',           desc:'高額療養費・傷病手当金ほか', url:'SATOI_Mock_v1_KB_money.html' },
+    { icon:'🌿', title:'暮らしと仕事',         desc:'食事・両立・外見ケア',       url:'SATOI_Mock_v1_KB_life.html' },
+    { icon:'👨‍👩‍👧', title:'世代別の情報',     desc:'小児・AYA・働く世代・高齢', url:'SATOI_Mock_v1_KB_generation.html' },
+    { icon:'🗺', title:'治療の全体像',         desc:'あなたの治療マインドマップ', url:'SATOI_Mock_v1_B1_mindmap.html' },
+    { icon:'💛', title:'家族との共有',         desc:'伝え方・家族とつながる',     url:'SATOI_Mock_v1_FAM_view.html' },
+    { icon:'📖', title:'同じ境遇の物語',       desc:'体験談・先輩の声',           url:'SATOI_Mock_v1_D1_stories.html' },
+    { icon:'📝', title:'先生に聞きたいこと',   desc:'SDMカードを作る',            url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' },
+    { icon:'💬', title:'相談する',             desc:'コンシェルジュ(AI+電話)',  url:'SATOI_Mock_v1_CON_concierge.html' },
+    { icon:'🆘', title:'緊急時の備え',         desc:'医療情報・QRコード',         url:'SATOI_Mock_v1_EMG_qr.html' }
+  ];
+  function renderPickup(){
+    document.querySelectorAll('#satoi-pickup').forEach(function(host){
+      if (host.dataset.satoiFilled) return;
+      host.dataset.satoiFilled = '1';
+      var html = '<div class="satoi-pickup-grid">';
+      SATOI_PICKUP.forEach(function(it){
+        html += '<a class="satoi-pickup-card" href="' + it.url + '">'
+          + '<span class="satoi-pickup-ic">' + it.icon + '</span>'
+          + '<span class="satoi-pickup-body"><span class="satoi-pickup-title">' + it.title + '</span>'
+          + '<span class="satoi-pickup-desc">' + it.desc + '</span></span>'
+          + '<span class="satoi-pickup-arrow">→</span></a>';
+      });
+      html += '</div>';
+      host.innerHTML = html;
+    });
+  }
+
   /* ====== 初期化 ====== */
   function init(){
     injectStyles();
@@ -605,6 +652,7 @@
     maybeRedirectFromA1();
     bindLoginButtons();
     enhanceAiCtaButtons();
+    renderPickup();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
