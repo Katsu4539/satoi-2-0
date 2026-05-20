@@ -205,6 +205,24 @@
     const s = document.createElement('style');
     s.id = 'satoi-common-styles';
     s.textContent = `
+      /* ===== AI応答 マークダウン整形表示 ===== */
+      .satoi-md-p { margin: 0 0 0.7em; line-height: 1.85; }
+      .satoi-md-p:last-child { margin-bottom: 0; }
+      .satoi-md-h { font-weight: 700; line-height: 1.5; margin: 0.9em 0 0.45em; color: inherit; }
+      .satoi-md-h:first-child { margin-top: 0; }
+      .satoi-md-h1 { font-size: 1.18em; }
+      .satoi-md-h2 { font-size: 1.1em; }
+      .satoi-md-h3, .satoi-md-h4 { font-size: 1.03em; }
+      .satoi-md-ul, .satoi-md-ol { margin: 0.4em 0 0.7em; padding-left: 1.4em; line-height: 1.8; }
+      .satoi-md-ul li, .satoi-md-ol li { margin: 0.2em 0; }
+      .satoi-md-ul { list-style: disc; }
+      .satoi-md-ol { list-style: decimal; }
+      .satoi-md-table { border-collapse: collapse; width: 100%; margin: 0.6em 0; font-size: 0.95em; }
+      .satoi-md-table th, .satoi-md-table td { border: 1px solid rgba(127,127,127,0.35); padding: 7px 10px; text-align: left; vertical-align: top; }
+      .satoi-md-table th { background: rgba(127,127,127,0.12); font-weight: 700; }
+      .satoi-md-hr { border: none; border-top: 1px solid rgba(127,127,127,0.3); margin: 0.9em 0; }
+      .satoi-md-p code, .satoi-md-table code, .satoi-md-ul code, .satoi-md-ol code { background: rgba(127,127,127,0.18); border-radius: 5px; padding: 1px 5px; font-size: 0.92em; }
+      .satoi-md-p strong, .satoi-md-table strong, .satoi-md-ul strong, .satoi-md-ol strong, .satoi-md-h strong { font-weight: 700; }
       .satoi-univ-btn-enh {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         width: 84px; min-height: 84px; padding: 10px 6px;
@@ -349,6 +367,87 @@
       }
     }, true);
   }
+
+  /* ====== AI応答用 簡易マークダウン → HTML 変換 ======
+     太字・見出し・箇条書き・番号リスト・簡単な表・改行に対応。
+     まずHTMLエスケープしてから整形するので安全。 */
+  window.satoiMarkdown = function(src){
+    if (src == null) return '';
+    src = String(src).replace(/\r\n/g, '\n');
+
+    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    function inline(s){
+      s = esc(s);
+      s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+      s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/__([^_\n]+)__/g, '<strong>$1</strong>');
+      s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+      s = s.replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      return s;
+    }
+
+    function splitRow(row){
+      var r = row.trim();
+      if (r.charAt(0) === '|') r = r.slice(1);
+      if (r.charAt(r.length-1) === '|') r = r.slice(0,-1);
+      return r.split('|').map(function(c){ return c.trim(); });
+    }
+
+    var lines = src.split('\n');
+    var html = '';
+    var i = 0;
+    var listType = null;
+    function closeList(){ if (listType){ html += '</' + listType + '>'; listType = null; } }
+
+    while (i < lines.length){
+      var line = lines[i];
+      var trimmed = line.trim();
+
+      if (trimmed === ''){ closeList(); i++; continue; }
+
+      // 区切り線(--- *** ___ だけの行)
+      if (/^([-*_])\1{2,}$/.test(trimmed)){ closeList(); html += '<hr class="satoi-md-hr">'; i++; continue; }
+
+      // 表(パイプ表)
+      if (/\|/.test(line) && i+1 < lines.length && /\|/.test(lines[i+1]) && /^\s*\|?\s*:?-{2,}/.test(lines[i+1])){
+        closeList();
+        var header = splitRow(line);
+        i += 2;
+        var rows = [];
+        while (i < lines.length && /\|/.test(lines[i]) && lines[i].trim() !== ''){ rows.push(splitRow(lines[i])); i++; }
+        html += '<table class="satoi-md-table"><thead><tr>' + header.map(function(c){ return '<th>' + inline(c) + '</th>'; }).join('') + '</tr></thead><tbody>';
+        rows.forEach(function(r){ html += '<tr>' + r.map(function(c){ return '<td>' + inline(c) + '</td>'; }).join('') + '</tr>'; });
+        html += '</tbody></table>';
+        continue;
+      }
+
+      // 見出し
+      var h = trimmed.match(/^(#{1,4})\s+(.*)$/);
+      if (h){ closeList(); html += '<div class="satoi-md-h satoi-md-h' + h[1].length + '">' + inline(h[2]) + '</div>'; i++; continue; }
+
+      // 箇条書き
+      var ul = trimmed.match(/^[-*・]\s+(.*)$/);
+      if (ul){ if (listType !== 'ul'){ closeList(); html += '<ul class="satoi-md-ul">'; listType = 'ul'; } html += '<li>' + inline(ul[1]) + '</li>'; i++; continue; }
+
+      // 番号付きリスト
+      var ol = trimmed.match(/^\d+[.)]\s+(.*)$/);
+      if (ol){ if (listType !== 'ol'){ closeList(); html += '<ol class="satoi-md-ol">'; listType = 'ol'; } html += '<li>' + inline(ol[1]) + '</li>'; i++; continue; }
+
+      // 通常段落
+      closeList();
+      var para = [line];
+      i++;
+      while (i < lines.length){
+        var t = lines[i].trim();
+        if (t === '' || /^(#{1,4})\s/.test(t) || /^[-*・]\s/.test(t) || /^\d+[.)]\s/.test(t) || /\|/.test(lines[i])) break;
+        para.push(lines[i]); i++;
+      }
+      html += '<p class="satoi-md-p">' + para.map(inline).join('<br>') + '</p>';
+    }
+    closeList();
+    return html;
+  };
 
   /* ====== 初期化 ====== */
   function init(){

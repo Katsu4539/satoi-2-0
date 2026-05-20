@@ -1440,8 +1440,10 @@ async function handleSend() {
     a2ChatHistory.push({ role: 'assistant', content: result.reply });
 
     removeTypingIndicator();
-    // Claude応答を画面に出す(改行を<br>に)
-    const html = result.reply.replace(/\n/g, '<br>');
+    // Claude応答を画面に出す(マークダウンを整形表示。なければ改行を<br>に)
+    const html = (typeof window.satoiMarkdown === 'function')
+      ? window.satoiMarkdown(result.reply)
+      : result.reply.replace(/\n/g, '<br>');
     await aiSay(html, { thinkMs: 200 });
   } catch (err) {
     removeTypingIndicator();
