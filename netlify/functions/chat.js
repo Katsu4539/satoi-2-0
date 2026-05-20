@@ -94,11 +94,17 @@ exports.handler = async function(event, context) {
     const data = await resp.json();
 
     if (!resp.ok) {
+      // Anthropic が返した本当のエラー内容を取り出して画面に出す
+      const apiType = (data && data.error && data.error.type) ? data.error.type : 'unknown';
+      const apiMsg = (data && data.error && data.error.message)
+        ? data.error.message
+        : ('Anthropic API エラー (HTTP ' + resp.status + ')');
+      console.error('[chat] Anthropic API error', resp.status, apiType, apiMsg);
       return {
         statusCode: resp.status,
         headers: corsHeaders,
         body: JSON.stringify({
-          error: 'Anthropic API エラー',
+          error: 'Anthropic[' + resp.status + '/' + apiType + ']: ' + apiMsg,
           detail: data
         })
       };
