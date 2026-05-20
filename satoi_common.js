@@ -151,7 +151,8 @@
     };
 
     let html = btnHTML('satoi-back-enh','←',backLabel)
-      + btnHTML('satoi-home-enh','⌂',homeLabel);
+      + btnHTML('satoi-home-enh','⌂',homeLabel)
+      + btnHTML('satoi-find-enh','🔍','さがす');
     if (loggedIn) {
       html += btnHTML('satoi-my-enh','★',myLabel);
     }
@@ -197,6 +198,75 @@
         document.addEventListener('click', function close(ev){ if (!pop.contains(ev.target)) { pop.remove(); document.removeEventListener('click', close); } });
       }, 100);
     });
+
+    const findBtn = document.getElementById('satoi-find-enh');
+    if (findBtn) findBtn.addEventListener('click', (e) => { e.stopPropagation(); openFindMenu(); });
+  }
+
+  /* ====== さがす ・ 全画面共通フローティングメニュー ====== */
+  const SATOI_FIND_GROUPS = [
+    { title:'治療を知る', items:[
+      { label:'治療の全体像(マインドマップ)', url:'SATOI_Mock_v1_B1_mindmap.html' },
+      { label:'治療法の詳しい説明',           url:'SATOI_Mock_v1_B3_treatment_detail.html' },
+      { label:'がん情報ハブ',                 url:'SATOI_Mock_v1_B1_hub.html' }
+    ]},
+    { title:'からだ・副作用', items:[
+      { label:'副作用の記録・対処', url:'SATOI_Mock_v1_F4_side_effects.html' }
+    ]},
+    { title:'お金・制度', items:[
+      { label:'お金・制度ハブ', url:'SATOI_Mock_v1_E1_money.html' }
+    ]},
+    { title:'家族・まわりの人', items:[
+      { label:'家族との共有・伝え方', url:'SATOI_Mock_v1_FAM_view.html' }
+    ]},
+    { title:'仲間・物語', items:[
+      { label:'同じ境遇の方の物語', url:'SATOI_Mock_v1_D1_stories.html' },
+      { label:'音楽コミュニティ',   url:'SATOI_Mock_v1_MUS_community.html' }
+    ]},
+    { title:'相談する', items:[
+      { label:'コンシェルジュ(AI+電話)',   url:'SATOI_Mock_v1_CON_concierge.html' },
+      { label:'先生に聞きたいことカード',    url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' }
+    ]},
+    { title:'がん種別で見る', items:[
+      { label:'乳がん',     url:'SATOI_Mock_v1_CAN_breast.html' },
+      { label:'大腸がん',   url:'SATOI_Mock_v1_CAN_colon.html' },
+      { label:'肺がん',     url:'SATOI_Mock_v1_CAN_lung.html' },
+      { label:'胃がん',     url:'SATOI_Mock_v1_CAN_stomach.html' },
+      { label:'前立腺がん', url:'SATOI_Mock_v1_CAN_prostate.html' },
+      { label:'膵がん',     url:'SATOI_Mock_v1_CAN_pancreas.html' }
+    ]}
+  ];
+
+  function escFind(e){ if (e.key === 'Escape') closeFindMenu(); }
+  function closeFindMenu(){
+    const ov = document.getElementById('satoi-find-pop');
+    if (ov){ ov.classList.remove('show'); setTimeout(()=>{ try{ ov.remove(); }catch(e){} }, 250); }
+    document.removeEventListener('keydown', escFind);
+  }
+  function openFindMenu(){
+    if (document.getElementById('satoi-find-pop')) { closeFindMenu(); return; }
+    const ov = document.createElement('div');
+    ov.id = 'satoi-find-pop';
+    ov.className = 'satoi-find-overlay';
+    let inner = '<div class="satoi-find-panel" role="dialog" aria-label="さがす">'
+      + '<button class="satoi-find-close" aria-label="閉じる">×</button>'
+      + '<div class="satoi-find-title">さがす ・ 知りたいことから選ぶ</div>'
+      + '<div class="satoi-find-groups">';
+    SATOI_FIND_GROUPS.forEach(function(g){
+      inner += '<div class="satoi-find-group"><div class="satoi-find-gtitle">' + g.title + '</div>';
+      g.items.forEach(function(it){
+        inner += '<a class="satoi-find-link" href="' + it.url + '">' + it.label + '<span>→</span></a>';
+      });
+      inner += '</div>';
+    });
+    inner += '</div></div>';
+    ov.innerHTML = inner;
+    document.body.appendChild(ov);
+    setTimeout(()=>ov.classList.add('show'), 10);
+    ov.addEventListener('click', function(ev){
+      if (ev.target === ov || ev.target.classList.contains('satoi-find-close')) closeFindMenu();
+    });
+    document.addEventListener('keydown', escFind);
   }
 
   /* ====== スタイル注入 ====== */
@@ -221,6 +291,20 @@
       .satoi-md-table th, .satoi-md-table td { border: 1px solid rgba(127,127,127,0.35); padding: 7px 10px; text-align: left; vertical-align: top; }
       .satoi-md-table th { background: rgba(127,127,127,0.12); font-weight: 700; }
       .satoi-md-hr { border: none; border-top: 1px solid rgba(127,127,127,0.3); margin: 0.9em 0; }
+      /* ===== さがす フローティングメニュー ===== */
+      .satoi-find-overlay { position: fixed; inset: 0; z-index: 9200; background: rgba(11,23,54,0.55); backdrop-filter: blur(6px); display: flex; align-items: flex-start; justify-content: center; padding: 56px 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; overflow-y: auto; }
+      .satoi-find-overlay.show { opacity: 1; pointer-events: auto; }
+      .satoi-find-panel { position: relative; width: min(920px, 100%); background: rgba(17,28,58,0.98); border: 1px solid rgba(212,169,94,0.4); border-radius: 20px; padding: 28px 30px 32px; box-shadow: 0 30px 80px rgba(0,0,0,0.5); transform: translateY(-12px); transition: transform 0.28s cubic-bezier(0.16,1,0.3,1); }
+      .satoi-find-overlay.show .satoi-find-panel { transform: translateY(0); }
+      .satoi-find-close { position: absolute; top: 14px; right: 16px; width: 34px; height: 34px; border-radius: 50%; background: rgba(248,246,240,0.12); border: 1px solid rgba(248,246,240,0.25); color: #F8F6F0; font-size: 18px; line-height: 1; cursor: pointer; }
+      .satoi-find-close:hover { background: #D4A95E; color: #0B1736; border-color: #D4A95E; }
+      .satoi-find-title { font-size: 15px; letter-spacing: 0.1em; color: #F0C97A; margin-bottom: 20px; font-weight: 600; }
+      .satoi-find-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 22px 28px; }
+      .satoi-find-gtitle { font-size: 12px; letter-spacing: 0.14em; color: #7FA8C9; border-bottom: 1px solid rgba(127,168,201,0.3); padding-bottom: 7px; margin-bottom: 10px; }
+      .satoi-find-link { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; border-radius: 10px; color: #F8F6F0; text-decoration: none; font-size: 13.5px; transition: all 0.18s; }
+      .satoi-find-link span { color: #D4A95E; font-weight: 700; }
+      .satoi-find-link:hover { background: rgba(212,169,94,0.16); color: #F0C97A; }
+      @media (max-width: 768px) { .satoi-find-overlay { padding: 18px 12px; } .satoi-find-panel { padding: 22px 18px 26px; } .satoi-find-groups { grid-template-columns: 1fr; gap: 16px; } }
       .satoi-md-p code, .satoi-md-table code, .satoi-md-ul code, .satoi-md-ol code { background: rgba(127,127,127,0.18); border-radius: 5px; padding: 1px 5px; font-size: 0.92em; }
       .satoi-md-p strong, .satoi-md-table strong, .satoi-md-ul strong, .satoi-md-ol strong, .satoi-md-h strong { font-weight: 700; }
       .satoi-univ-btn-enh {

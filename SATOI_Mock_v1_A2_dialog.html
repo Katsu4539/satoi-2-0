@@ -543,6 +543,28 @@ body {
   <div class="lamp-orb" title="同じ夜を過ごしている方"></div>
 </div>
 
+<style>
+/* AI応答の下に出す「関連ショートカット」カード */
+.a2-shortcuts { display: flex; flex-direction: column; gap: 10px; max-width: 520px; margin: 6px 0 4px 52px; }
+.a2-shortcuts-label { font-size: 11.5px; color: var(--text-muted); letter-spacing: 0.04em; margin-bottom: 2px; }
+.a2-shortcut {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: rgba(212,169,94,0.10);
+  border: 1px solid rgba(212,169,94,0.45);
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--text-primary, #F8F6F0);
+  transition: all 0.22s ease;
+}
+.a2-shortcut:hover { background: rgba(212,169,94,0.95); color: #0B1736; border-color: #D4A95E; transform: translateX(3px); }
+.a2-shortcut-ic { font-size: 20px; flex-shrink: 0; }
+.a2-shortcut-tx { flex: 1; font-size: 14px; font-weight: 500; }
+.a2-shortcut-arrow { color: var(--starlight, #D4A95E); font-weight: 700; }
+.a2-shortcut:hover .a2-shortcut-arrow { color: #0B1736; }
+@media (max-width: 768px) { .a2-shortcuts { margin-left: 0; } }
+</style>
+
 <script>
 
 
@@ -867,6 +889,42 @@ function addChoices(choices) {
       onChoice(val, lbl);
     });
   });
+  scrollToBottom();
+}
+
+/* ===== AIが判断した関連ショートカットをカードで表示 ===== */
+const A2_SHORTCUTS = {
+  money:     { icon:'💰', label:'使えるお金・制度を見る',        url:'SATOI_Mock_v1_E1_money.html' },
+  treatment: { icon:'💊', label:'治療法の詳しい説明を見る',      url:'SATOI_Mock_v1_B3_treatment_detail.html' },
+  side:      { icon:'🩹', label:'副作用を記録・確認する',        url:'SATOI_Mock_v1_F4_side_effects.html' },
+  family:    { icon:'💛', label:'家族への伝え方・共有',          url:'SATOI_Mock_v1_FAM_view.html' },
+  stories:   { icon:'📖', label:'同じ境遇の方の物語を読む',      url:'SATOI_Mock_v1_D1_stories.html' },
+  concierge: { icon:'💬', label:'コンシェルジュに相談(無料)',   url:'SATOI_Mock_v1_CON_concierge.html' },
+  sdm:       { icon:'📝', label:'先生に聞きたいことカードを作る', url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' }
+};
+
+function addShortcutCards(keys) {
+  const uniq = [...new Set((keys || []).map(k => String(k).trim()).filter(k => A2_SHORTCUTS[k]))].slice(0, 2);
+  if (!uniq.length) return;
+  // 状況(がん種・ステージ)を引き継ぐ
+  const ctx = [];
+  if (state.cancer && state.cancer !== 'unknown') ctx.push('cancer=' + encodeURIComponent(state.cancer));
+  if (state.stage && state.stage !== 'unknown') ctx.push('stage=' + encodeURIComponent(state.stage));
+  const q = ctx.length ? ('?' + ctx.join('&')) : '';
+  const grp = document.createElement('div');
+  grp.className = 'message-group';
+  grp.innerHTML = `
+    <div class="a2-shortcuts">
+      <div class="a2-shortcuts-label">▸ 関連する場所(タップで開けます。足りなければ、また戻って聞いてください)</div>
+      ${uniq.map(k => {
+        const s = A2_SHORTCUTS[k];
+        // アンカー(#)がある場合はクエリを # の前に入れる
+        const parts = s.url.split('#');
+        const href = parts[0] + q + (parts[1] ? ('#' + parts[1]) : '');
+        return `<a class="a2-shortcut" href="${href}"><span class="a2-shortcut-ic">${s.icon}</span><span class="a2-shortcut-tx">${s.label}</span><span class="a2-shortcut-arrow">→</span></a>`;
+      }).join('')}
+    </div>`;
+  dialogWrap.appendChild(grp);
   scrollToBottom();
 }
 
@@ -1460,11 +1518,27 @@ async function a2AskAI(userMessage) {
     a2ChatHistory.push({ role: 'assistant', content: result.reply });
 
     removeTypingIndicator();
+
+    // AIが付けた隠しタグ [[LINKS: key1, key2]] を取り出し、本文からは除去する
+    let replyText = result.reply;
+    let linkKeys = [];
+    const m = replyText.match(/\[\[\s*LINKS\s*:([^\]]*)\]\]/i);
+    if (m) {
+      linkKeys = m[1].split(',').map(s => s.trim()).filter(Boolean);
+      replyText = replyText.replace(m[0], '').trim();
+    }
+
     // Claude応答を画面に出す(マークダウンを整形表示。なければ改行を<br>に)
     const html = (typeof window.satoiMarkdown === 'function')
-      ? window.satoiMarkdown(result.reply)
-      : result.reply.replace(/\n/g, '<br>');
+      ? window.satoiMarkdown(replyText)
+      : replyText.replace(/\n/g, '<br>');
     await aiSay(html, { thinkMs: 200 });
+
+    // 関連ショートカットカードを表示(AIが判断したものだけ)
+    if (linkKeys.length) {
+      await delay(250);
+      addShortcutCards(linkKeys);
+    }
   } catch (err) {
     removeTypingIndicator();
     await aiSay(`申し訳ありません、AI応答の取得に失敗しました。<br><span class="small">${(err && err.message) ? err.message : 'エラー'}<br>選択肢からの進行は引き続きご利用いただけます。</span>`, { thinkMs: 200 });

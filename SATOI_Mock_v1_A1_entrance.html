@@ -1254,13 +1254,7 @@ window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window
 })();
 </script>
 
-<!-- 隣の灯(光の伴走者) -->
-<div class="companion-lamp" id="companionLamp">
-  <div class="lamp-bubble">同じ夜を過ごしている方が、ここにいます。</div>
-  <div class="lamp-orb">
-    <button class="lamp-close" id="lampClose" aria-label="閉じる">×</button>
-  </div>
-</div>
+<!-- 隣の灯(光の伴走者)は、被って見にくいため A1 では非表示にした(2026-05-20 Katsujiさん指示) -->
 
 <!-- ティッカー -->
 <div class="footer-ticker">
@@ -1301,11 +1295,17 @@ window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window
   }, 4500);
 })();
 
-// ===== 隣の灯を閉じる =====
-document.getElementById('lampClose').addEventListener('click', (e) => {
-  e.stopPropagation();
-  document.getElementById('companionLamp').style.display = 'none';
-});
+// ===== 隣の灯を閉じる(灯はA1で非表示にしたため、存在する時のみ動作) =====
+(function(){
+  const lampCloseBtn = document.getElementById('lampClose');
+  if (lampCloseBtn) {
+    lampCloseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const lamp = document.getElementById('companionLamp');
+      if (lamp) lamp.style.display = 'none';
+    });
+  }
+})();
 
 // ===== カードクリック → 1問入力モーダル → ダッシュボード =====
 document.querySelectorAll('.route-card').forEach(card => {
