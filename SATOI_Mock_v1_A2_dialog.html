@@ -1969,7 +1969,7 @@ async function resumeMode(params) {
   } else if (/mypage|c1/i.test(fromPage)) {
     secondMsg = `<strong>マイページ</strong>から来てくれましたね。<br>前回は治療法について話していましたね。今日は、どこから話しましょうか?`;
   } else {
-    secondMsg = `今日は、どこから話しましょうか?<br><span class="small">「治療のこと」「副作用」「お金」「家族」「ただ話したい」など、何でもどうぞ。</span>`;
+    secondMsg = `気になっていること、聞いてみたいことを、自由に話してください。<br><span class="small">下の例から選んでも、ご自分の言葉で書いても、マイクで話しても、大丈夫です。</span>`;
   }
 
   // メッセージを表示
@@ -1991,15 +1991,20 @@ async function resumeMode(params) {
   showFreeInputMode();
 }
 
-/* フリー入力モード(原種選択ではなく自由対話)*/
+/* フリー入力モード(固い選択ではなく、悩み起点の自由対話)*/
 function showFreeInputMode() {
-  // 4つのクイック提案を表示
+  state.step = 'free';
+  // 悩み起点のチップ(押すとAIが自由対話でリード。固いシナリオ分岐は使わない)
   addChoices([
-    { value: 'q-tx',     label: '治療の続きを整理する' },
-    { value: 'q-side',   label: '副作用や体調のこと' },
-    { value: 'q-family', label: '家族に伝えること' },
-    { value: 'q-pause',  label: '今日はゆっくり話したい', secondary: true }
+    { value: 'sw-treat',  label: 'これからの治療・選択肢のこと' },
+    { value: 'sw-side',   label: '副作用・体調のこと' },
+    { value: 'sw-feel',   label: '気持ち・不安なこと' },
+    { value: 'sw-family', label: '家族に伝えること' },
+    { value: 'sw-money',  label: 'お金・制度のこと' },
+    { value: 'sw-open',   label: 'まだ言葉にならない / とにかく聞いてほしい', secondary: true }
   ]);
+  const inp = document.getElementById('inputField');
+  if (inp) setTimeout(() => inp.focus(), 500);
 }
 
 // ===== ご本人ルート =====
