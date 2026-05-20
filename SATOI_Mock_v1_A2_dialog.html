@@ -70,7 +70,8 @@ body {
   box-shadow: 0 0 10px var(--starlight);
 }
 
-.progress-wrap { flex: 1; max-width: 360px; margin: 0 24px; }
+/* 進捗バーは廃止(義務感・離脱を防ぐため非表示)。setProgress呼び出しは無害化される。 */
+.progress-wrap { display: none !important; }
 .progress-label {
   font-size: 12px; color: var(--text-muted); letter-spacing: 0.16em;
   margin-bottom: 8px; text-align: center;
@@ -961,6 +962,23 @@ async function onChoice(value, label) {
     return;
   }
 
+  // ===== 悩み起点(self)→ 自由対話モードへ。AIがやさしく応答し、必要なら自然に状況を尋ねる =====
+  if (value.startsWith('sw-')) {
+    const seeds = {
+      'sw-treat':  'これからの治療や、治療の選択肢について知りたいです。',
+      'sw-side':   '副作用や、治療中の体調のことが気になっています。',
+      'sw-feel':   '気持ちが不安で、落ち着かないです。少し話を聞いてほしいです。',
+      'sw-family': '家族に、どう伝えればいいか悩んでいます。',
+      'sw-money':  '治療のお金や、使える制度のことを知りたいです。',
+      'sw-open':   'うまく言葉にできないのですが、今の気持ちを聞いてほしいです。'
+    };
+    state.step = 'free';
+    await a2AskAI(seeds[value] || label);
+    const inp = document.getElementById('inputField');
+    if (inp) setTimeout(() => inp.focus(), 600);
+    return;
+  }
+
   // ===== ナラティブ・ジャーニー =====
   if (state.step === 'journey') {
     if (value === 'jrn-next') {
@@ -1413,12 +1431,14 @@ async function handleSend() {
   if (!v) return;
   addUserMessage(v);
   inputField.value = '';
+  await a2AskAI(v);
+}
 
-  // タイピング表示
+// 任意のテキストをAIに送って応答を表示する(自由対話の共通処理)。
+// userMessage は履歴に user として積む。画面への user 吹き出し表示は呼び出し側の責任。
+async function a2AskAI(userMessage) {
   addTypingIndicator();
-
   try {
-    // 状況コンテキストを system に織り込む
     const context = {
       cancerName: state.cancerName || '未入力',
       stage: state.stage || '未入力',
@@ -1430,7 +1450,7 @@ async function handleSend() {
       throw new Error('satoiChatApi が読み込まれていません');
     }
 
-    a2ChatHistory.push({ role: 'user', content: v });
+    a2ChatHistory.push({ role: 'user', content: userMessage });
 
     const result = await window.satoiChatApi.askClaude(a2ChatHistory.slice(-10), {
       context: context,
@@ -1847,7 +1867,6 @@ function showFreeInputMode() {
 
 // ===== ご本人ルート =====
 async function startSelf() {
-  setProgress(12, 'ステップ 1 / 4');
   await delay(state.mode === 'slow' ? 1400 : 600);
 
   if (state.mode === 'slow') {
@@ -1857,21 +1876,20 @@ async function startSelf() {
     await delay(900);
   } else {
     await aiSay(`ようこそ、SATOIへ。<br>今、ここに来てくれてありがとうございます。`);
-    await aiSay(`いくつか、教えていただけますか?<br>あなたに合った情報を、お一人ずつ違う形でお見せします。<br><br><span class="small">急がなくて大丈夫です。あなたのペースで答えてください。</span>`);
   }
 
-  await aiSay(`まず、<span class="accent">がんの種類</span>を教えていただけますか?<br><span class="small">わからない場合は、その選択肢を選んでも大丈夫です。</span>`);
+  // 悩み起点:まず「今いちばん気になっていること」から入る(がん種から聞かない)
+  await aiSay(`今、いちばん気になっていること、聞いてみたいことは、どんなことですか?<br><span class="small">あてはまるものを選んでも、下の欄にご自分の言葉で書いても、マイクで話しても、大丈夫です。</span>`);
 
   addChoices([
-    { value: 'breast', label: '乳がん' },
-    { value: 'colon', label: '大腸がん' },
-    { value: 'lung', label: '肺がん' },
-    { value: 'stomach', label: '胃がん' },
-    { value: 'prostate', label: '前立腺がん' },
-    { value: 'pancreas', label: '膵がん' },
-    { value: 'other', label: 'その他 / わからない', secondary: true }
+    { value: 'sw-treat',  label: 'これからの治療・選択肢のこと' },
+    { value: 'sw-side',   label: '副作用・体調のこと' },
+    { value: 'sw-feel',   label: '気持ち・不安なこと' },
+    { value: 'sw-family', label: '家族にどう伝えるか' },
+    { value: 'sw-money',  label: 'お金・制度のこと' },
+    { value: 'sw-open',   label: 'まだ言葉にならない / とにかく聞いてほしい', secondary: true }
   ]);
-  state.step = 1;
+  state.step = 'self-worry';
 }
 
 // ===== ご家族・大切な人ルート =====
