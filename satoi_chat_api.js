@@ -9,8 +9,8 @@
 (function(){
   'use strict';
 
-  // エンドポイント:netlify.toml で /api/chat → /.netlify/functions/chat にリダイレクト
-  const ENDPOINT = '/api/chat';
+  // エンドポイント:Netlify Functions を直接呼ぶ(短縮パス /api/chat の転送に依存しない)
+  const ENDPOINT = '/.netlify/functions/chat';
 
   /**
    * Claude API に問い合わせる(全画面共通)
