@@ -2298,27 +2298,29 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
 
       <div class="pathfinder-result">
-        <div class="pathfinder-story">
+        <div class="pathfinder-story" style="cursor:pointer;" onclick="location.href='SATOI_Mock_v1_D1_stories.html?from=b1'">
           <div class="pathfinder-story-photo" style="background-image: url('https://images.unsplash.com/photo-1709897633539-68625c0043e3?fm=jpg&q=80&w=900&auto=format&fit=crop');"></div>
           <div class="pathfinder-story-body">
-            <div class="pathfinder-story-name">Mさん / 60代 / 乳がん</div>
+            <div class="pathfinder-story-name">Mさん / 乳がん</div>
             <div class="pathfinder-story-quote">副作用は、声に出していい。</div>
+            <div style="font-size:11px; color:var(--starlight); margin-top:8px;">物語を読む →</div>
           </div>
         </div>
-        <div class="pathfinder-story">
+        <div class="pathfinder-story" style="cursor:pointer;" onclick="location.href='SATOI_Mock_v1_D1_stories.html?from=b1'">
           <div class="pathfinder-story-photo" style="background-image: url('https://images.unsplash.com/photo-1635777201262-dc3ee94989fe?fm=jpg&q=80&w=900&auto=format&fit=crop');"></div>
           <div class="pathfinder-story-body">
-            <div class="pathfinder-story-name">Tさん / 50代 / 大腸がん</div>
+            <div class="pathfinder-story-name">Tさん / 大腸がん</div>
             <div class="pathfinder-story-quote">我慢は、薬じゃないんだ。</div>
+            <div style="font-size:11px; color:var(--starlight); margin-top:8px;">物語を読む →</div>
           </div>
         </div>
         <div class="pathfinder-next">
           <div class="pathfinder-next-title">NEXT</div>
           <div class="pathfinder-next-head">いまのあなたに、できること</div>
-          <div class="pathfinder-next-list" id="nextList">
-            • 副作用の自己管理<br>
-            • 主治医への質問カード<br>
-            • 同じ気持ちの方と話す
+          <div class="pathfinder-next-list" id="nextList" style="display:flex; flex-direction:column; gap:8px;">
+            <a href="SATOI_Mock_v1_F4_side_effects.html" style="color:var(--morning-white); text-decoration:none; padding:8px 0; border-bottom:1px solid rgba(248,246,240,0.12); display:flex; justify-content:space-between;">副作用の自己管理 <span style="color:var(--starlight);">→</span></a>
+            <a href="SATOI_Mock_v1_C1_mypage.html#sdm-section" style="color:var(--morning-white); text-decoration:none; padding:8px 0; border-bottom:1px solid rgba(248,246,240,0.12); display:flex; justify-content:space-between;">主治医への質問カード <span style="color:var(--starlight);">→</span></a>
+            <a href="SATOI_Mock_v1_MUS_community.html" style="color:var(--morning-white); text-decoration:none; padding:8px 0; display:flex; justify-content:space-between;">同じ気持ちの方と話す <span style="color:var(--starlight);">→</span></a>
           </div>
           <button class="pathfinder-next-cta" id="goAI">AIに相談する  →</button>
         </div>

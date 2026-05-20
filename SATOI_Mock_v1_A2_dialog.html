@@ -1634,6 +1634,12 @@ async function start() {
     return;
   }
 
+  // 「大切な人のために(家族)」ルートは、過去の保存がん種に引っ張られず、必ず家族フローへ。
+  if (route === 'family' || route === 'palliative') {
+    await startFamily();
+    return;
+  }
+
   // ?resume=1 / ?cancer=xxx / ?from=mypage / sessionStorage 履歴(保存名は複数を横断チェック)
   const urlResume = params.get('resume') === '1' || params.get('cancer') || params.get('from') || params.get('topic') || params.get('beat');
   const sessCancer = readStoredContext('cancer');
