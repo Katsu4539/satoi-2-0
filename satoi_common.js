@@ -323,11 +323,11 @@
       /* ===== AI応答 マークダウン整形表示 ===== */
       .satoi-md-p { margin: 0 0 0.7em; line-height: 1.85; }
       .satoi-md-p:last-child { margin-bottom: 0; }
-      .satoi-md-h { font-weight: 700; line-height: 1.5; margin: 0.9em 0 0.45em; color: inherit; }
+      .satoi-md-h { font-weight: 600; line-height: 1.5; margin: 1em 0 0.4em; color: #F0C97A; letter-spacing: 0.02em; }
       .satoi-md-h:first-child { margin-top: 0; }
-      .satoi-md-h1 { font-size: 1.18em; }
-      .satoi-md-h2 { font-size: 1.1em; }
-      .satoi-md-h3, .satoi-md-h4 { font-size: 1.03em; }
+      .satoi-md-h1 { font-size: 1.08em; }
+      .satoi-md-h2 { font-size: 1.04em; }
+      .satoi-md-h3, .satoi-md-h4 { font-size: 1em; }
       .satoi-md-ul, .satoi-md-ol { margin: 0.4em 0 0.7em; padding-left: 1.4em; line-height: 1.8; }
       .satoi-md-ul li, .satoi-md-ol li { margin: 0.2em 0; }
       .satoi-md-ul { list-style: disc; }
@@ -360,7 +360,8 @@
       .satoi-pickup-desc { font-size: 11.5px; color: rgba(26,42,64,0.6); line-height: 1.6; }
       .satoi-pickup-arrow { color: #D4A95E; font-weight: 700; flex-shrink: 0; }
       .satoi-md-p code, .satoi-md-table code, .satoi-md-ul code, .satoi-md-ol code { background: rgba(127,127,127,0.18); border-radius: 5px; padding: 1px 5px; font-size: 0.92em; }
-      .satoi-md-p strong, .satoi-md-table strong, .satoi-md-ul strong, .satoi-md-ol strong, .satoi-md-h strong { font-weight: 700; }
+      .satoi-md-p strong, .satoi-md-table strong, .satoi-md-ul strong, .satoi-md-ol strong { font-weight: 600; color: #F0C97A; }
+      .satoi-md-h strong { font-weight: 600; color: inherit; }
       .satoi-univ-btn-enh {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         width: 84px; min-height: 84px; padding: 10px 6px;
