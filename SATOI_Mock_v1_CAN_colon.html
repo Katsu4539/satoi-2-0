@@ -13,135 +13,217 @@
   --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
   --line: rgba(10,22,40,0.10); --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
   --accent: #0D7377; --accent-bg: rgba(13,115,119,0.06); --accent-border: rgba(13,115,119,0.4);
+  --teal: #0D7377; --teal-soft: #14A6AB;
   --starlight: #D4A95E; --starlight-strong: #F0C97A;
   --font: "Noto Sans JP", "Meiryo UI", sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; min-height: 100vh; overflow-x: hidden; font-family: var(--font); }
-body { color: var(--ink-deep); background: var(--morning-white); line-height: 1.85; font-size: 16px; }
+body { color: var(--ink-deep); background: var(--morning-white); line-height: 1.9; font-size: 16px; }
 a { color: inherit; text-decoration: none; }
 button { font-family: var(--font); cursor: pointer; }
 .header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; justify-content:space-between; align-items:center; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom: 1px solid var(--line); }
 .logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
 .logo .dot { width:8px; height:8px; background: var(--accent); border-radius:50%; margin-right:10px; box-shadow:0 0 12px var(--accent-border); }
 .back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-.hero { padding: 110px 32px 60px; position:relative; }
-.hero-bg { position:absolute; inset:0; opacity:0.28; background-image: url('https://images.unsplash.com/photo-1763202364530-b8d9ce87af18?fm=jpg&q=80&w=1200&auto=format&fit=crop'); background-size: cover; background-position: center; filter: blur(2px); }
-.hero-overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(248,246,240,0.85), rgba(248,246,240,0.98)); }
+.hero { padding: 120px 32px 56px; position:relative; }
+.hero-bg { position:absolute; inset:0; opacity:0.22; background: radial-gradient(circle at 70% 20%, rgba(13,115,119,0.4), transparent 60%); }
+.hero-overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(248,246,240,0.7), rgba(248,246,240,0.98)); }
 .hero-content { position:relative; z-index:2; max-width: 1100px; margin: 0 auto; text-align: center; }
-.hero-eyebrow { display: inline-block; font-size: 12px; letter-spacing: 0.42em; color: var(--accent); padding: 6px 18px; border: 1px solid var(--accent-border); border-radius: 24px; margin-bottom: 24px; }
-.hero-title { font-size: clamp(36px, 5vw, 52px); font-weight: 300; letter-spacing: 0.06em; line-height: 1.4; color: var(--ink-deep); margin-bottom: 14px; }
-.hero-title strong { color: var(--accent); font-weight: 500; }
-.hero-meta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
-.meta-card { padding: 14px 22px; background: white; border-radius: 14px; border:1px solid var(--line); font-size: 13px; }
-.meta-card strong { color: var(--accent); font-weight: 600; font-size: 15px; }
+.hero-eyebrow { display: inline-block; font-size: 12px; letter-spacing: 0.42em; color: var(--accent); padding: 6px 18px; border: 1px solid var(--accent-border); border-radius: 24px; margin-bottom: 22px; }
+.hero-title { font-size: clamp(34px, 5vw, 50px); font-weight: 300; letter-spacing: 0.06em; line-height: 1.4; color: var(--ink-deep); margin-bottom: 12px; }
+.hero-lead { font-size: 15px; color: var(--ink-medium); line-height: 2; max-width: 640px; margin: 8px auto 0; }
+.hero-meta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+.meta-card { padding: 13px 20px; background: white; border-radius: 14px; border:1px solid var(--line); font-size: 12.5px; color: var(--ink-medium); }
+.meta-card strong { color: var(--accent); font-weight: 600; font-size: 15px; display:block; margin-bottom:2px; }
 
-.section { padding: 60px 32px; max-width: 1100px; margin: 0 auto; }
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 13px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc a { padding:7px 14px; background: var(--accent-bg); border:1px solid var(--accent-border); border-radius:18px; color: var(--ink-medium); font-size:11.5px; }
+.toc a:hover { background: var(--accent); color: white; }
+
+.section { padding: 52px 32px; max-width: 1040px; margin: 0 auto; }
 .section-eyebrow { font-size: 11px; letter-spacing: 0.36em; color: var(--accent); margin-bottom: 10px; font-weight: 600; }
-.section-title { font-size: clamp(24px, 3vw, 30px); font-weight: 500; color: var(--ink-deep); margin-bottom: 16px; }
-.info-card { background: white; border-radius: 18px; padding: 28px 32px; border: 1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); }
-.info-card p { font-size: 14px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 10px; white-space: pre-line; }
+.section-title { font-size: clamp(23px, 3vw, 29px); font-weight: 500; color: var(--ink-deep); margin-bottom: 14px; line-height:1.5; }
+.section-sub { font-size: 14px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 24px; }
+.info-card { background: white; border-radius: 18px; padding: 26px 30px; border: 1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 18px; }
+.info-card p { font-size: 14px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 12px; }
+.info-card h4 { font-size:15px; font-weight:600; color: var(--accent); margin: 16px 0 8px; }
+.info-card ul { padding-left: 22px; margin: 8px 0 12px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.info-card li { margin-bottom: 5px; }
+.info-card strong { color: var(--ink-deep); font-weight: 600; }
+.info-card blockquote { border-left: 3px solid var(--accent); padding: 10px 18px; margin: 14px 0; background: var(--accent-bg); color: var(--ink-medium); font-size:13px; }
 
-.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 26px; }
-.action-card { padding: 22px 24px; background: var(--accent-bg); border-radius: 14px; border: 1px solid var(--accent-border); cursor: pointer; transition: all 0.3s; text-decoration: none; color: var(--ink-deep); }
+.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 22px; }
+.action-card { padding: 20px 22px; background: var(--accent-bg); border-radius: 14px; border: 1px solid var(--accent-border); cursor: pointer; transition: all 0.3s; text-decoration: none; color: var(--ink-deep); }
 .action-card:hover { background: white; transform: translateY(-3px); box-shadow: 0 10px 26px rgba(11,23,54,0.08); }
 .action-card-icon { font-size: 24px; margin-bottom: 8px; }
 .action-card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
 .action-card-desc { font-size: 11.5px; color: var(--ink-light); line-height: 1.7; }
 
-.voices { background: var(--morning-cream); padding: 30px 32px; border-radius: 18px; border-left: 4px solid var(--accent); margin: 30px 0; }
-.voices p { font-size: 13.5px; color: var(--ink-medium); font-style: italic; line-height: 1.9; margin-bottom: 8px; }
+.ai-cta { background: linear-gradient(135deg, rgba(212,169,94,0.12), rgba(240,201,122,0.06)); border-radius: 18px; padding: 24px 28px; margin: 24px 0 0; border-left: 4px solid var(--starlight); }
+.ai-cta-title { font-size: 15.5px; font-weight:600; color: #8B5A1F; margin-bottom: 6px; }
+.ai-cta p { font-size: 13px; color: var(--ink-medium); line-height: 1.9; margin-bottom: 12px; }
+.ai-cta-btn { display:inline-block; padding: 11px 22px; background: var(--starlight); color: #3a2a0a; border-radius: 22px; font-size: 13px; font-weight: 600; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--starlight-strong); }
 
-#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; }
-.satoi-univ-btn { width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); font-family: inherit; }
-.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; }
-@media (max-width: 768px) { .action-grid { grid-template-columns: 1fr; } #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; } }
+.voices { background: var(--morning-cream); padding: 24px 28px; border-radius: 18px; border-left: 4px solid var(--accent); margin: 18px 0; }
+.voices p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 8px; }
+.note-box { background: rgba(212,98,42,0.07); border:1px solid rgba(212,98,42,0.25); border-radius: 14px; padding: 16px 20px; font-size: 12.5px; color: var(--ink-medium); line-height:1.9; }
+.note-box strong { color: #D4622A; }
+
+@media (max-width: 768px) { .action-grid { grid-template-columns: 1fr; } .section { padding: 40px 16px; } .info-card { padding: 22px 20px; } }
 </style>
 </head>
 <body>
 
 <header class="header">
   <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
-  <button class="back-btn" onclick="history.back()">← 戻る</button>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_B1_hub.html'; })()">← 戻る</button>
 </header>
 
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Colorectal Cancer</div>
+    <div class="hero-eyebrow">COLORECTAL CANCER ・ 大腸がん</div>
     <h1 class="hero-title">大腸がん</h1>
+    <p class="hero-lead">日本で、男女あわせて最も多く診断されているがんのひとつです。便の検査や内視鏡で早く見つけられることが多く、早期であれば、体への負担の少ない治療で治せることもあります。</p>
     <div class="hero-meta">
-      <div class="meta-card">罹患 <strong>15.5万人/年(男女合計で罹患数第1位)</strong></div>
-      <div class="meta-card"><strong>5年生存率 71.4%(全ステージ平均)</strong></div>
+      <div class="meta-card"><strong>罹患数 上位</strong>男女あわせて最多クラス</div>
+      <div class="meta-card"><strong>早期発見が鍵</strong>検診(便潜血)で見つかることも</div>
     </div>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-eyebrow">TYPES ・ がんの種類とタイプ</div>
-  <h2 class="section-title">大腸がんの、種類・サブタイプ</h2>
-  <div class="info-card"><p>・ 結腸がん:60%・ 直腸がん:40%・ KRAS/BRAF変異の有無で治療が分岐</p></div>
-</section>
+<nav class="toc">
+  <a href="#s1">大腸がんとは</a>
+  <a href="#s2">特徴・タイプ</a>
+  <a href="#s3">検査</a>
+  <a href="#s4">ステージ</a>
+  <a href="#s5">治療</a>
+  <a href="#s6">治療後の暮らし</a>
+  <a href="#s7">よくある不安</a>
+</nav>
 
-<section class="section">
-  <div class="section-eyebrow">EXAMINATIONS ・ 精密検査</div>
-  <h2 class="section-title">必要な、精密検査</h2>
-  <div class="info-card"><p>便潜血・大腸内視鏡・CT・MRI・腫瘍マーカー CEA・RAS/BRAF・MSI(免疫療法適応判定)</p></div>
-  <div class="action-grid">
-    <a class="action-card" href="SATOI_Mock_v1_CHP_exam.html"><div class="action-card-icon">🔬</div><div class="action-card-title">検査の詳細</div><div class="action-card-desc">画像・病理・遺伝子・腫瘍マーカー</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_B3_treatment_detail.html?cancer=colon#precision-tests"><div class="action-card-icon">📋</div><div class="action-card-title">治療詳細へ</div><div class="action-card-desc">検査の結果から治療を選ぶ</div></a>
+<main>
+
+<section class="section" id="s1">
+  <div class="section-eyebrow">ABOUT</div>
+  <h2 class="section-title">大腸がんとは ・ どんながん?</h2>
+  <div class="info-card">
+    <p>大腸がんは、食べ物の最後の通り道である大腸(結腸と直腸)の内側の粘膜にできるがんです。多くは、良性のポリープが時間をかけてがんに変化すると考えられています。</p>
+    <p>初期は症状が出にくいのですが、進むと<strong>血便・便が細くなる・お腹の張り・便通の変化</strong>などのサインが出ることがあります。<strong>便潜血検査(検診)や大腸内視鏡で早く見つけやすい</strong>がんで、早期に見つかれば治しやすいのが特徴です。</p>
+    <blockquote>大腸がんは、早期発見・早期治療の効果が大きいがんです。見つかった今が、動き出すスタート地点です。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 大腸がんについて、AIと話す</div>
+    <p>診断されたばかりの不安も含めて、あなたの状況に合わせてやさしくお話しします。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?cancer=colon&from=can_colon">AIと話す →</a>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-eyebrow">STAGING ・ ステージ分類</div>
-  <h2 class="section-title">ステージ別の、考え方</h2>
-  <div class="info-card"><p>・ Stage 0:粘膜内・ Stage I:粘膜下層〜固有筋層・ Stage II:漿膜越え・ Stage III:リンパ節転移あり・ Stage IV:遠隔転移(肝・肺など)</p></div>
-</section>
-
-<section class="section">
-  <div class="section-eyebrow">TREATMENTS ・ 治療法の選択肢</div>
-  <h2 class="section-title">大腸がんの、標準治療</h2>
-  <div class="info-card"><p>・ 手術(腹腔鏡・ロボット支援)・ 補助化学療法(StageIII)・ FOLFOX療法・FOLFIRI療法・CapeOX療法・ 分子標的薬:ベバシズマブ・セツキシマブ(RAS野生型)・パニツムマブ・ MSI-Highでは免疫療法(ペムブロリズマブ)</p></div>
-  <div class="action-grid">
-    <a class="action-card" href="SATOI_Mock_v1_B3_treatment_detail.html?cancer=colon"><div class="action-card-icon">💊</div><div class="action-card-title">治療レジメン詳細</div><div class="action-card-desc">治療詳細ページへ</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_CHP_consider.html"><div class="action-card-icon">🧭</div><div class="action-card-title">治療法を考える</div><div class="action-card-desc">SDM・セカンドオピニオン</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_ACAD_research.html?cancer=colon"><div class="action-card-icon">📚</div><div class="action-card-title">学術エビデンス</div><div class="action-card-desc">RCT・ガイドライン・PubMed</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_FREE_map.html"><div class="action-card-icon">🗺</div><div class="action-card-title">自由診療マップ</div><div class="action-card-desc">標準外の選択肢</div></a>
+<section class="section" id="s2">
+  <div class="section-eyebrow">FEATURES</div>
+  <h2 class="section-title">特徴・タイプ</h2>
+  <div class="info-card">
+    <p>大腸がんは、できる場所(結腸か直腸か)や、進み具合によって治療の組み立てが変わります。とくに<strong>直腸がん</strong>は、肛門に近いため、放射線を組み合わせたり、排便機能をどう残すかが大切なテーマになります。</p>
+    <h4>遺伝子のタイプも大切</h4>
+    <p>近年は、がん細胞の遺伝子の特徴(RAS、BRAF、MSIなど)を調べ、<strong>効く薬を見極める</strong>ことが進んでいます。とくに進行した大腸がんでは、これらの検査の結果で、使える分子標的薬や免疫療法が変わります。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 検査結果の意味を、AIと読み解く</div>
+    <p>「RAS野生型って?」「結腸と直腸で何が違う?」——やさしく整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?cancer=colon&from=can_colon">AIと話す →</a>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-eyebrow">VOICES ・ 先輩の声</div>
-  <h2 class="section-title">同じ道を歩んだ、先輩の言葉</h2>
-  <div class="voices"><p>「FOLFOX 8クール完走。点滴室で同じ患者さんと友達になった」・ 「ストーマは最初不安だったけど、慣れたら全然問題ない」</p></div>
+<section class="section" id="s3">
+  <div class="section-eyebrow">EXAMS</div>
+  <h2 class="section-title">主な検査</h2>
+  <div class="info-card">
+    <ul>
+      <li><strong>便潜血検査</strong> ・ 検診で広く使われる、便に血が混じっていないか調べる検査。</li>
+      <li><strong>大腸内視鏡(大腸カメラ)</strong> ・ 直接観察し、その場で組織を採ったり、早期のものは切除できることも。</li>
+      <li><strong>生検・病理検査</strong> ・ 採った組織でがんを確定する。</li>
+      <li><strong>CT・MRI</strong> ・ 広がりや転移を調べる。</li>
+      <li><strong>腫瘍マーカー(CEAなど)・遺伝子検査</strong> ・ 経過の確認や、薬の選択の参考に。</li>
+    </ul>
+  </div>
   <div class="action-grid">
-    <a class="action-card" href="SATOI_Mock_v1_D1_stories.html?cancer=colon"><div class="action-card-icon">📖</div><div class="action-card-title">物語ライブラリ</div><div class="action-card-desc">15+件のナラティブ</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_MUS_community.html"><div class="action-card-icon">🎵</div><div class="action-card-title">音楽コミュニティ</div><div class="action-card-desc">同じ夜を過ごす音楽</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_KB_about.html"><div class="action-card-icon">📘</div><div class="action-card-title">検査と診断の基礎</div><div class="action-card-desc">何のために何を調べる?</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CHP_exam.html"><div class="action-card-icon">🔬</div><div class="action-card-title">検査の段階を見る</div><div class="action-card-desc">検査のとき</div></a>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-eyebrow">NEXT STEP ・ 次の一歩</div>
-  <h2 class="section-title">いま、できること</h2>
-  <div class="action-grid">
-    <a class="action-card" href="SATOI_Mock_v1_A2_dialog.html?cancer=colon&resume=1&from=can_colon"><div class="action-card-icon">💬</div><div class="action-card-title">AIと話す</div><div class="action-card-desc">大腸がんについて深掘り</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_CON_concierge.html"><div class="action-card-icon">📞</div><div class="action-card-title">コンシェルジュ</div><div class="action-card-desc">電話 or AI で相談</div></a>
-    <a class="action-card" href="SATOI_Mock_v1_C1_mypage.html"><div class="action-card-icon">👤</div><div class="action-card-title">マイページ</div><div class="action-card-desc">物語の壺・気持ち軌跡</div></a>
+<section class="section" id="s4">
+  <div class="section-eyebrow">STAGE</div>
+  <h2 class="section-title">ステージの考え方</h2>
+  <div class="info-card">
+    <p>大腸がんのステージは、がんが大腸の壁のどこまで深く入っているか、リンパ節や離れた臓器(肝臓・肺など)に広がっているかで、0〜IVに分けられます。</p>
+    <ul>
+      <li><strong>0〜I期</strong> ・ 粘膜やその近くにとどまる早期。内視鏡での切除で済むこともあります。</li>
+      <li><strong>II〜III期</strong> ・ 壁の深くまで進む、またはリンパ節に広がった段階。手術と、必要に応じて薬物療法。</li>
+      <li><strong>IV期</strong> ・ 肝臓や肺などに転移がある段階。薬物療法を中心に、転移を手術で取れる場合もあります。</li>
+    </ul>
   </div>
 </section>
 
-<script>
-(function(){
-  const nav = document.createElement('div'); nav.id='satoi-univ-nav';
-  nav.innerHTML='<button class="satoi-univ-btn" title="戻る">←</button><button class="satoi-univ-btn" title="夜空ホーム">⌂</button><button class="satoi-univ-btn" title="マイページ">👤</button><button class="satoi-univ-btn" title="全体マップ">◎</button><button class="satoi-univ-btn" title="コンシェルジュ">💬</button>';
-  document.body.appendChild(nav);
-  const b = nav.querySelectorAll('.satoi-univ-btn');
-  b[0].onclick = ()=>history.back(); b[1].onclick = ()=>location.href='SATOI_Mock_v1_A1_entrance.html'; b[2].onclick = ()=>location.href='SATOI_Mock_v1_C1_mypage.html'; b[3].onclick = ()=>location.href='SATOI_Mock_v1_B1_hub.html'; b[4].onclick = ()=>location.href='SATOI_Mock_v1_CON_concierge.html';
-})();
-</script>
+<section class="section" id="s5">
+  <div class="section-eyebrow">TREATMENT</div>
+  <h2 class="section-title">主な治療</h2>
+  <div class="info-card">
+    <h4>内視鏡的切除</h4>
+    <p>ごく早期のがんは、大腸内視鏡を使ってその場で切り取れることがあります。お腹を切らずに済む、体にやさしい方法です。</p>
+    <h4>手術</h4>
+    <p>がんのある部分とリンパ節を取り除きます。腹腔鏡やロボット支援で、傷を小さくする方法も広がっています。直腸がんでは、肛門や排便の働きをできるだけ残す工夫がされますが、場合によっては<strong>人工肛門(ストーマ)</strong>が必要になることもあります(一時的な場合もあります)。</p>
+    <h4>薬物療法・放射線</h4>
+    <p>進行度に応じて、再発を抑える、または進行を抑えるための薬物療法を行います。遺伝子のタイプに合わせた分子標的薬や免疫療法が使えることもあります。直腸がんでは、手術前後に放射線を組み合わせることがあります。</p>
+  </div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_KB_treatment.html"><div class="action-card-icon">💊</div><div class="action-card-title">治療の基本</div><div class="action-card-desc">手術・薬・放射線・緩和</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_B3_treatment_detail.html?cancer=colon"><div class="action-card-icon">📋</div><div class="action-card-title">治療レジメンの詳細</div><div class="action-card-desc">具体的な薬と副作用</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CHP_consider.html"><div class="action-card-icon">🧭</div><div class="action-card-title">治療を考える</div><div class="action-card-desc">SDM・セカンドオピニオン</div></a>
+  </div>
+</section>
+
+<section class="section" id="s6">
+  <div class="section-eyebrow">AFTER</div>
+  <h2 class="section-title">治療後の暮らし・経過観察</h2>
+  <div class="info-card">
+    <ul>
+      <li><strong>排便の変化</strong> ・ 手術のあと、便通やお腹の調子が変わることがあります。少しずつ体が慣れていきます。食事の工夫も助けに。</li>
+      <li><strong>ストーマ(人工肛門)のケア</strong> ・ 必要になった場合、専門の看護師(WOCナース)が使い方や生活の工夫をサポートします。多くの方が、これまで通りの生活を続けています。</li>
+      <li><strong>定期通院</strong> ・ 再発や転移を早めに見つけるため、定期的に検査を受けます。</li>
+      <li><strong>食事と生活</strong> ・ 極端な制限は不要なことが多いですが、気になることは管理栄養士に相談を。</li>
+    </ul>
+  </div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_KB_life.html"><div class="action-card-icon">🌿</div><div class="action-card-title">暮らしと仕事</div><div class="action-card-desc">食事・両立</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_KB_sideeffects.html"><div class="action-card-icon">🩹</div><div class="action-card-title">副作用と対処</div><div class="action-card-desc">備え方・伝えるサイン</div></a>
+  </div>
+</section>
+
+<section class="section" id="s7">
+  <div class="section-eyebrow">VOICES &amp; NEXT</div>
+  <h2 class="section-title">よくある不安と、次の一歩</h2>
+  <div class="voices">
+    <p>「ストーマになったら、これまで通り暮らせるの?」「仕事は続けられる?」「再発が心配」——多くの方が、同じ不安を通ってきました。</p>
+    <p>大腸がんは、治療をしながら日常を続けている方がとても多いがんです。一人で抱えず、少しずつ。同じ夜を過ごしている方が、ここにいます。</p>
+  </div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_A2_dialog.html?cancer=colon&from=can_colon"><div class="action-card-icon">💬</div><div class="action-card-title">AIと話す</div><div class="action-card-desc">大腸がんについて深掘り</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_D1_stories.html?cancer=colon"><div class="action-card-icon">📖</div><div class="action-card-title">先輩の物語</div><div class="action-card-desc">同じ道を歩んだ方の声</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CON_concierge.html"><div class="action-card-icon">📞</div><div class="action-card-title">コンシェルジュ</div><div class="action-card-desc">AI+電話で相談</div></a>
+  </div>
+  <div class="note-box" style="margin-top:20px;">
+    <strong>この情報について。</strong> ここに書かれているのは、大腸がんを理解するための一般的な説明です。できる場所や進行度、タイプによって治療は異なり、標準治療も更新されます。診断や治療方針は、必ず主治医とご相談ください。
+  </div>
+</section>
+
+</main>
+
 <script src="satoi_chp_insight.js"></script>
 <script src="satoi_common.js"></script>
 </body>
