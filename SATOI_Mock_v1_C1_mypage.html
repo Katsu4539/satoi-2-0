@@ -1738,8 +1738,8 @@ body.satoi-has-jbar .header { top: 0 !important; }
     </div>
     <div class="mindmap-info">
       <div class="mindmap-info-eyebrow">CURRENT POSITION</div>
-      <div class="mindmap-info-where">標準治療を選択 →<br>TC療法を、検討中</div>
-      <div class="mindmap-info-trail">
+      <div class="mindmap-info-where" id="mmWhere">標準治療を選択 →<br>TC療法を、検討中</div>
+      <div class="mindmap-info-trail" id="mmTrail">
         診断(4/8) → 検査結果待ち(4/15) → セカンドオピニオン(4/22) → 標準治療を選ぶ(5/2) → <strong style="color:var(--warm-orange);">今、TC療法か他のレジメンか考えている</strong>
       </div>
       <div class="mindmap-people">
@@ -1882,7 +1882,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
     </div>
 
     <div class="sdm-list-mini">
-      <div class="sdm-q-mini checked"><span class="check"></span><span>提案されたTC療法の <strong>目的</strong> は、完治・延命・症状緩和のどれですか?</span></div>
+      <div class="sdm-q-mini checked"><span class="check"></span><span>提案された<span class="persona-treatment">TC療法</span>の <strong>目的</strong> は、完治・延命・症状緩和のどれですか?</span></div>
       <div class="sdm-q-mini checked"><span class="check"></span><span>副作用の中で、特に注意すべきものは何ですか?</span></div>
       <div class="sdm-q-mini checked"><span class="check"></span><span>治療を <strong>続けながら仕事</strong> は可能ですか?</span></div>
       <div class="sdm-q-mini checked"><span class="check"></span><span>セカンドオピニオンの結果を、どう取り入れていきますか?</span></div>
@@ -2574,6 +2574,7 @@ const TEAM = {
   family:  {title:'登録済みのご家族', role:'配偶者 ・ 自動共有:選択中の項目のみ', body:'<div class="ai-line">「ご家族向けの場所」が、SATOI内に用意されています。<br>あなたが共有したいタイミングで、共有する範囲を選べます。ご家族はファミリービューで、あなたの状況を見守れます。</div><div style="margin-top:18px;"><button class="sdm-act" onclick="satoiNotify(\'✓ 共有設定を変更\\n\\nどの情報を家族に見せるか、項目ごとに細かく選べます。\')">⚙️ 共有設定を変える</button> <button class="sdm-act" onclick="window.open(\'SATOI_Mock_v1_FAM_view.html\', \'_blank\')">💛 家族のページを見る</button></div>'},
   friend:  {title:'友人(未登録)', role:'招待できます', body:'<div class="ai-line">「一人で抱え込まないで」と思っている友人がいたら、招待することもできます。<br>共有する範囲は、あなたが選べます。「読むだけ」「励ますだけ」の関係でも、充分です。</div><div style="margin-top:18px;"><button class="sdm-act" onclick="satoiNotify(\'招待リンクをコピー\')">🔗 招待リンクをコピー</button></div>'}
 };
+window.TEAM = TEAM;
 
 function openTeamMember(key) {
   const m = TEAM[key];
@@ -2761,12 +2762,33 @@ document.querySelectorAll('.overlay').forEach(o => {
   document.querySelectorAll('.sm-name').forEach(function(el){ el.textContent = pname; });
   var team = document.querySelector('.team-center'); if (team) team.innerHTML = team.innerHTML.replace(/あおいさん/g, pname);
   var lb = document.getElementById('lampBubble'); if (lb && lb.textContent.indexOf('あおいさん') !== -1) lb.textContent = lb.textContent.replace('あおいさん', pname);
+  document.querySelectorAll('.ai-line').forEach(function(el){ if (el.innerHTML.indexOf('あおいさん') !== -1) el.innerHTML = el.innerHTML.replace(/あおいさん/g, pname); });
   // がん種・ステージ・診断からの日数をペルソナ別に反映
-  var PDATA = { p1:{ cancer:'乳がん', stage:'II', days:42 }, p2:{ cancer:'肺がん', stage:'IV', days:88 } };
+  var PDATA = {
+    p1:{ cancer:'乳がん', stage:'II', days:42, treatment:'TC療法',
+         where:'標準治療を選択 →<br>TC療法を、検討中',
+         trail:'診断(4/8) → 検査結果待ち(4/15) → セカンドオピニオン(4/22) → 標準治療を選ぶ(5/2) → <strong style="color:var(--warm-orange);">今、TC療法か他のレジメンか考えている</strong>' },
+    p2:{ cancer:'肺がん', stage:'IV', days:88, treatment:'オシメルチニブ',
+         where:'精密検査でEGFR陽性 →<br>オシメルチニブを、開始',
+         trail:'診断(2/24) → 精密検査・EGFR陽性(3/10) → 治療方針の決定(3/20) → オシメルチニブ開始(3/28) → <strong style="color:var(--warm-orange);">今、副作用とつきあいながら治療中</strong>' }
+  };
   var pd = PDATA[pid] || PDATA.p1;
   var db = document.getElementById('dayBadgeText'); if (db) db.textContent = '物語の現在地・診断から ' + pd.days + '日目';
+  var mw = document.getElementById('mmWhere'); if (mw) mw.innerHTML = pd.where;
+  var mt = document.getElementById('mmTrail'); if (mt) mt.innerHTML = pd.trail;
   document.querySelectorAll('.persona-cancer').forEach(function(el){ el.textContent = pd.cancer; });
   document.querySelectorAll('.persona-stage').forEach(function(el){ el.textContent = pd.stage; });
+  document.querySelectorAll('.persona-treatment').forEach(function(el){ el.textContent = pd.treatment; });
+  // チーム(主治医・先輩等)の乳がん前提テキストを、肺がんペルソナでは置換
+  if (pid === 'p2' && window.TEAM) {
+    var swap = function(s){ return (s || '')
+      .replace(/乳腺腫瘍内科/g, '呼吸器内科')
+      .replace(/乳腺ケアチーム/g, '呼吸器ケアチーム')
+      .replace(/TC療法/g, 'オシメルチニブ')
+      .replace(/乳がん・ステージII/g, '肺がん・ステージIV')
+      .replace(/乳がん/g, '肺がん'); };
+    Object.keys(window.TEAM).forEach(function(k){ var m = window.TEAM[k]; if (m.role) m.role = swap(m.role); if (m.body) m.body = swap(m.body); });
+  }
   // ペルソナ切替ボタン(デモ用・押すとそのペルソナでマイページ再読込)
   document.querySelectorAll('.sm-pbtn').forEach(function(b){
     if (b.getAttribute('data-p') === pid) b.classList.add('sm-pbtn-active');
