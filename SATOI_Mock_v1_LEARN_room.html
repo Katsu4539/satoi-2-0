@@ -113,6 +113,19 @@ footer { text-align:center; padding:40px 20px 60px; color:var(--ink-light); font
   .panel { padding:22px 18px; }
   .hero-title { font-size: clamp(26px, 8vw, 38px); }
 }
+/* toast */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: var(--font); font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+@media (max-width: 768px) { #satoi-toast-host { bottom: 14px; } .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; } }
 </style>
 </head>
 <body>
@@ -264,32 +277,33 @@ footer { text-align:center; padding:40px 20px 60px; color:var(--ink-light); font
   <p class="section-sub">あなたが理解したことは、次に診断された人の道しるべになります。共有はいつでも任意です。</p>
 
   <div class="panel" style="margin-bottom:20px;">
-    <h3>🤝 患者会でシェアする</h3>
-    <p>読んだ記事や、翻訳した論文を、ワンタップで患者会（みんなの広場）に届けられます。「○○さんが学んだこと」として、そっと共有されます。</p>
+    <h3>🤝 患者会（みんなの広場）でシェアする</h3>
+    <p>あなたが学んで「これは大事」と思ったことを、みんなの広場に「学んだこと」として届けられます。次に診断された人の道しるべになります。共有はいつでも任意です。</p>
+    <textarea id="shareInput" rows="3" placeholder="例：治療法は一つじゃないと知れた。先生に選択肢を聞いていい、と思えるまで少し時間がかかったけれど。" style="width:100%; border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-family:inherit; font-size:14px; line-height:1.8; color:var(--ink-deep); resize:vertical; outline:none; margin-bottom:14px;"></textarea>
     <div class="cta-row">
-      <button class="btn-primary" onclick="satoiNotify('患者会に共有しました。\n\n「あなたが学んだこと」として、みんなの広場に届きました。\nコメントや「ありがとう」が届くかもしれません。')">みんなの広場に共有</button>
-      <a class="btn-ghost" href="SATOI_Mock_v1_MUS_community.html">みんなの広場を見る →</a>
+      <button class="btn-primary" onclick="shareToForum()">みんなの広場に共有</button>
+      <a class="btn-ghost" href="SATOI_Mock_v1_FORUM.html">みんなの広場を見る →</a>
     </div>
   </div>
 
   <div class="panel">
     <h3>📝 はじめての人へ（ナレッジを残す）</h3>
     <p>あなたが「最初に知っておきたかったこと」を短く書いて残せます。新しく診断された人が、いちばん最初にここを読みます。当事者の言葉だから、届きます。</p>
-    <div id=”knowList”>
-      <div class=”know-card”>
-        <div class=”know-from”>乳がん・1年先輩のMさんのことば</div>
-        <div class=”know-body”>「検査結果を全部メモしておくと、次の診察で先生に聞きたいことが整理できました。怖くて聞けなかったことも、紙に書くと聞けた。」</div>
+    <div id="knowList">
+      <div class="know-card">
+        <div class="know-from">乳がん・1年先輩のMさんのことば</div>
+        <div class="know-body">「検査結果を全部メモしておくと、次の診察で先生に聞きたいことが整理できました。怖くて聞けなかったことも、紙に書くと聞けた。」</div>
       </div>
-      <div class=”know-card”>
-        <div class=”know-from”>肺がん・Kさんのことば</div>
-        <div class=”know-body”>「”治療法は一つじゃない”と知れたのが大きかった。先生に選択肢を聞いていい、と思えるまでに少し時間がかかったけれど。」</div>
+      <div class="know-card">
+        <div class="know-from">肺がん・Kさんのことば</div>
+        <div class="know-body">「"治療法は一つじゃない"と知れたのが大きかった。先生に選択肢を聞いていい、と思えるまでに少し時間がかかったけれど。」</div>
       </div>
     </div>
-    <form class=”know-form” onsubmit=”addKnowledge(event)” style=”margin-top:16px;”>
-      <textarea id=”knowInput” rows=”3” placeholder=”あなたが「最初に知っておきたかったこと」を、短くひとことから。” style=”width:100%; border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-family:inherit; font-size:14px; line-height:1.8; color:var(--ink-deep); resize:vertical; outline:none;”></textarea>
-      <div class=”share-line”>
-        <button type=”submit” class=”btn-primary”>＋ あなたのナレッジを残す</button>
-        <span style=”font-size:12px; color:var(--ink-light);”>※ 共有は任意です。書いた言葉は、新しく診断された人へ届きます。</span>
+    <form class="know-form" onsubmit="addKnowledge(event)" style="margin-top:16px;">
+      <textarea id="knowInput" rows="3" placeholder="あなたが「最初に知っておきたかったこと」を、短くひとことから。" style="width:100%; border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-family:inherit; font-size:14px; line-height:1.8; color:var(--ink-deep); resize:vertical; outline:none;"></textarea>
+      <div class="share-line">
+        <button type="submit" class="btn-primary">＋ あなたのナレッジを残す</button>
+        <span style="font-size:12px; color:var(--ink-light);">※ 共有は任意です。書いた言葉は、新しく診断された人へ届きます。</span>
       </div>
     </form>
   </div>
@@ -301,6 +315,43 @@ footer { text-align:center; padding:40px 20px 60px; color:var(--ink-light); font
 </footer>
 
 <script>
+// ===== satoiNotify(トースト・自己完結) =====
+function satoiNotify(msg, opts){
+  opts = opts || {};
+  var host = document.getElementById('satoi-toast-host');
+  if (!host){ host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  var t = document.createElement('div');
+  var kind = opts.kind || (String(msg).indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  var icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  var body = String(msg).replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  t.innerHTML = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div><button class="satoi-toast-close" aria-label="close">×</button>';
+  host.appendChild(t);
+  requestAnimationFrame(function(){ t.classList.add('show'); });
+  var dur = opts.duration || 4200;
+  var closer = function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); }, 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+
+// ===== 学んだことを「みんなの広場」に実投稿して遷移 =====
+function shareToForum(){
+  var ta = document.getElementById('shareInput');
+  var v = (ta && ta.value || '').trim();
+  if (!v){ satoiNotify('学んで「これは大事」と思ったことを、ひとことだけでも書いてみてください。', {kind:'warn'}); if (ta) ta.focus(); return; }
+  try {
+    var arr = JSON.parse(localStorage.getItem('satoi_forum_posts') || '[]');
+    var name = sessionStorage.getItem('satoi_persona') || '';
+    var cn = sessionStorage.getItem('satoi_last_cancer_name') || '';
+    var stg = sessionStorage.getItem('satoi_stage') || '';
+    var who = name ? ('あなた（' + name + (cn ? ' ・ ' + cn + (stg ? stg + '期' : '') : '') + '）') : 'あなた（匿名）';
+    arr.push({ id:'u'+Date.now(), cat:'manabi', text:v, who:who, mine:true, sympathy:0, symDone:false, replies:[], ts:Date.now() });
+    localStorage.setItem('satoi_forum_posts', JSON.stringify(arr));
+  } catch(e){}
+  location.href = 'SATOI_Mock_v1_FORUM.html?shared=1';
+}
+
 // 学びの部屋の中（読む）をその場で絞り込む実検索
 function doSearch(){
   var q = ((document.getElementById('learnSearch')||{}).value || '').trim().toLowerCase();

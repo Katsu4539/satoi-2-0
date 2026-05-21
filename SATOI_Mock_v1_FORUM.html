@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>みんなの広場 ・ 同じ夜を過ごす人たち | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #F1ECD9; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.header-right { display:flex; align-items:center; gap:10px; }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,40,0.18); border-radius:20px; font-size:12px; white-space:nowrap; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 132px 32px 44px; text-align:center; background: linear-gradient(135deg, rgba(127,168,201,0.14) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: var(--healing-blue); padding:6px 18px; border:1px solid rgba(127,168,201,0.5); border-radius:24px; margin-bottom:22px; }
+.hero-title { font-size: clamp(28px, 5vw, 44px); font-weight:300; line-height:1.5; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: var(--healing-blue); font-weight:600; }
+.hero-sub { font-size:15.5px; color: var(--ink-medium); line-height:2; max-width:680px; margin:0 auto; }
+.hero-live { margin-top:20px; font-size:13px; color: var(--ink-light); }
+.hero-live .num { color: var(--rose); font-weight:700; font-size:16px; }
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 22px 70px; }
+
+/* 投稿ボックス */
+.compose { background:#fff; border:1px solid var(--line); border-radius:18px; padding:22px; margin:-26px auto 30px; max-width:860px; box-shadow:0 14px 38px rgba(11,23,54,0.08); position:relative; z-index:5; }
+.compose h2 { font-size:16px; font-weight:600; color:var(--ink-deep); margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.compose .who-line { font-size:12px; color:var(--ink-light); margin-bottom:14px; }
+.compose .who-line strong { color:var(--healing-blue); }
+.compose textarea { width:100%; border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-family:inherit; font-size:14.5px; line-height:1.8; color:var(--ink-deep); resize:vertical; outline:none; min-height:88px; }
+.compose textarea:focus { border-color:var(--healing-blue); }
+.cat-row { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0; }
+.cat-chip { padding:7px 16px; border-radius:18px; border:1px solid var(--line); background:var(--morning-cream); font-size:13px; color:var(--ink-medium); }
+.cat-chip.active { background:var(--healing-blue); color:#fff; border-color:var(--healing-blue); }
+.compose-foot { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.compose-note { font-size:11.5px; color:var(--ink-light); flex:1; min-width:180px; }
+.btn-post { background:var(--warm-orange); color:#fff; border:none; border-radius:24px; padding:12px 28px; font-size:14px; font-weight:600; white-space:nowrap; }
+.btn-post:hover { background:#B85420; }
+
+/* フィルタ */
+.filter-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; align-items:center; }
+.filter-row .fl-label { font-size:12px; color:var(--ink-light); margin-right:4px; }
+.fchip { padding:7px 16px; border-radius:18px; border:1px solid rgba(127,168,201,0.4); background:rgba(127,168,201,0.10); font-size:13px; color:var(--ink-medium); }
+.fchip.active { background:var(--healing-blue); color:#fff; border-color:var(--healing-blue); }
+
+/* 投稿カード */
+.feed { display:flex; flex-direction:column; gap:16px; }
+.post-card { background:#fff; border:1px solid var(--line); border-left:3px solid var(--healing-blue); border-radius:14px; padding:22px 24px; cursor:pointer; transition:all 0.25s; }
+.post-card:hover { transform:translateX(5px); border-left-color:var(--starlight); box-shadow:0 10px 26px rgba(11,23,54,0.08); }
+.post-card.is-yours { border-left-color:var(--warm-orange); background:linear-gradient(180deg, rgba(212,98,42,0.05), #fff); }
+.post-tag { display:inline-block; font-size:11px; font-weight:600; padding:3px 12px; border-radius:12px; margin-bottom:10px; }
+.tag-soudan { background:rgba(127,168,201,0.16); color:#3F6E96; }
+.tag-manabi { background:rgba(20,166,171,0.16); color:#0D7377; }
+.tag-hagemashi { background:rgba(199,107,127,0.16); color:#A8475F; }
+.tag-yours { background:rgba(212,98,42,0.16); color:#B85420; }
+.post-text { font-size:16px; color:var(--ink-deep); font-weight:500; line-height:1.7; margin-bottom:14px; }
+.post-meta { display:flex; gap:18px; font-size:12px; color:var(--ink-light); flex-wrap:wrap; align-items:center; }
+.post-meta .who { font-weight:500; color:var(--ink-medium); }
+.post-meta .sym { color:var(--rose); font-weight:500; }
+.empty-note { text-align:center; color:var(--ink-light); font-size:13.5px; padding:30px; }
+
+/* スレッド・モーダル */
+.modal-mask { position:fixed; inset:0; background:rgba(11,23,40,0.55); backdrop-filter:blur(4px); z-index:9000; display:none; align-items:flex-end; justify-content:center; }
+.modal-mask.show { display:flex; }
+.modal { background:var(--morning-white); width:100%; max-width:680px; max-height:88vh; border-radius:22px 22px 0 0; overflow-y:auto; box-shadow:0 -20px 60px rgba(0,0,0,0.4); animation:rise 0.32s cubic-bezier(0.2,0.8,0.2,1); }
+@keyframes rise { from { transform:translateY(40px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+.modal-head { position:sticky; top:0; background:rgba(251,247,240,0.97); backdrop-filter:blur(8px); padding:18px 24px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
+.modal-head h3 { font-size:15px; font-weight:600; color:var(--ink-deep); }
+.modal-close { background:transparent; border:none; font-size:22px; color:var(--ink-light); line-height:1; }
+.modal-body { padding:24px; }
+.thread-text { font-size:17px; font-weight:500; color:var(--ink-deep); line-height:1.7; margin-bottom:10px; }
+.thread-meta { font-size:12px; color:var(--ink-light); margin-bottom:18px; display:flex; gap:14px; flex-wrap:wrap; }
+.sym-btn { display:inline-flex; align-items:center; gap:7px; padding:9px 20px; border-radius:22px; border:1px solid rgba(199,107,127,0.45); background:rgba(199,107,127,0.08); color:var(--rose); font-size:13.5px; font-weight:600; margin-bottom:22px; }
+.sym-btn:hover { background:rgba(199,107,127,0.16); }
+.sym-btn.done { background:var(--rose); color:#fff; border-color:var(--rose); }
+.replies-h { font-size:13px; font-weight:600; color:var(--ink-medium); margin-bottom:12px; border-top:1px solid var(--line); padding-top:18px; }
+.reply { background:var(--morning-cream); border-radius:12px; padding:13px 16px; margin-bottom:10px; }
+.reply .r-who { font-size:11.5px; color:var(--healing-blue); font-weight:600; margin-bottom:4px; }
+.reply .r-body { font-size:14px; color:var(--ink-deep); line-height:1.7; }
+.reply-form { margin-top:14px; }
+.reply-form textarea { width:100%; border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-family:inherit; font-size:14px; line-height:1.7; color:var(--ink-deep); resize:vertical; outline:none; min-height:64px; }
+.reply-form textarea:focus { border-color:var(--healing-blue); }
+.reply-foot { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:10px; flex-wrap:wrap; }
+.reply-foot .note { font-size:11px; color:var(--ink-light); }
+.btn-reply { background:var(--healing-blue); color:#fff; border:none; border-radius:20px; padding:10px 22px; font-size:13px; font-weight:600; }
+.btn-reply:hover { background:#5E8FB5; }
+
+.privacy { max-width:860px; margin:36px auto 0; padding:18px 22px; background:rgba(13,115,119,0.06); border:1px solid rgba(13,115,119,0.18); border-radius:14px; font-size:12.5px; color:var(--ink-medium); line-height:1.85; }
+.privacy strong { color:var(--teal); }
+
+footer { text-align:center; padding:40px 22px; color:var(--ink-light); font-size:12.5px; line-height:1.9; border-top:1px solid var(--line); margin-top:30px; }
+
+/* toast */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: var(--font); font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+
+@media (max-width: 768px) {
+  .header { padding:14px 18px; }
+  .hero { padding:120px 20px 40px; }
+  .wrap { padding:0 16px 60px; }
+  .compose { margin:-22px 16px 26px; }
+  .modal { max-width:100%; }
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="SATOI_Mock_v1_A1_entrance.html"><span class="dot"></span>SATOI</a>
+  <div class="header-right">
+    <a class="back-btn" href="SATOI_Mock_v1_B1_hub.html">← マインドマップへ戻る</a>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero-eyebrow">SHARED VOICES</span>
+  <h1 class="hero-title">みんなの<strong>広場</strong></h1>
+  <p class="hero-sub">いま、同じ夜を過ごしている人たちの、生の声。<br>うなずくだけでも「同じ気持ち」が伝わります。あなたの一言が、誰かの道しるべに。</p>
+  <div class="hero-live">いま <span class="num" id="liveNum">428</span> 人が、ここで読んでいます</div>
+</section>
+
+<!-- 投稿ボックス -->
+<div class="compose">
+  <h2>💬 いまの気持ちを、書いてみる</h2>
+  <div class="who-line">投稿者: <strong id="whoLabel">匿名で参加中</strong>（実名は出ません。書いた言葉だけが、そっと届きます）</div>
+  <textarea id="postInput" placeholder="迷っていること、聞きたいこと、誰かに伝えたいこと。短いひとことでも大丈夫です。"></textarea>
+  <div class="cat-row" id="catRow">
+    <button class="cat-chip active" data-cat="soudan">相談したい</button>
+    <button class="cat-chip" data-cat="manabi">学んだことを共有</button>
+    <button class="cat-chip" data-cat="hagemashi">はげまし・ありがとう</button>
+  </div>
+  <div class="compose-foot">
+    <span class="compose-note">この会話はセキュア環境で扱い、外部AIの学習には使いません。会員本人以外に個人情報は共有しません。</span>
+    <button class="btn-post" id="postBtn">広場に投稿する</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="filter-row" id="filterRow">
+    <span class="fl-label">表示:</span>
+    <button class="fchip active" data-f="all">すべて</button>
+    <button class="fchip" data-f="soudan">相談</button>
+    <button class="fchip" data-f="manabi">学び</button>
+    <button class="fchip" data-f="hagemashi">はげまし</button>
+    <button class="fchip" data-f="mine">あなたの投稿</button>
+  </div>
+
+  <div class="feed" id="feed"></div>
+
+  <div class="privacy">
+    <strong>この広場のお約束</strong><br>
+    ・実名や、個人が特定できる情報は書かないでください。<br>
+    ・医療の最終判断は、必ず主治医とご相談ください。ここは「気持ちを分け合う場所」です。<br>
+    ・あなたの投稿は、外部AIの学習には使われません。安心して、本音を置いていってください。
+  </div>
+</div>
+
+<!-- スレッドモーダル -->
+<div class="modal-mask" id="modalMask">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3>スレッド</h3>
+      <button class="modal-close" id="modalClose" aria-label="閉じる">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<footer>
+  SATOI ・ みんなの広場（Mock）<br>
+  ここでの会話は一般的な体験の共有です。治療の判断は、必ず主治医とご相談ください。
+</footer>
+
+<script>
+/* ===== satoiNotify(トースト・自己完結) ===== */
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  var host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  var t = document.createElement('div');
+  var kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  var icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  var body = String(msg).replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  t.innerHTML = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div><button class="satoi-toast-close" aria-label="close">×</button>';
+  host.appendChild(t);
+  requestAnimationFrame(function(){ t.classList.add('show'); });
+  var dur = opts.duration || 4200;
+  var closer = function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); }, 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+window.__origAlert = window.alert;
+window.alert = function(m){ try { satoiNotify(String(m)); } catch(e){ window.__origAlert(m); } };
+
+/* ===== 共有ストア（みんなの広場の本体データ） ===== */
+var FORUM_KEY = 'satoi_forum_posts';      // ユーザー投稿(配列)
+var SEED_STATE_KEY = 'satoi_forum_seed_state'; // シードの可変状態(同じ気持ち数・返信)
+
+/* シード投稿（初期からある相談・声） */
+var SEED_POSTS = [
+  { id:'s1', cat:'soudan', text:'乳がんステージII、手術と薬物療法を提案されたけど、迷っています', who:'40代女性', sympathy:84,
+    replies:[ {who:'同じ乳がんの先輩', body:'私も同じところで止まりました。SDM質問カードに「なぜこの順番か」を入れて先生に聞いたら、迷いが軽くなりました。'} ] },
+  { id:'s2', cat:'soudan', text:'81歳の父をホスピスに入れる判断、誰に相談したらいいか分からない', who:'50代男性 (家族)', sympathy:156,
+    replies:[ {who:'介護を経験した家族', body:'がん相談支援センターのソーシャルワーカーさんが、制度も気持ちも一緒に整理してくれました。'} ] },
+  { id:'s3', cat:'soudan', text:'抗がん剤の副作用がつらくて、治療を続けるか相談したい', who:'60代女性', sympathy:203,
+    replies:[ {who:'治療中の仲間', body:'つらさは我慢しないで主治医に数字で伝えると、支持療法を足してもらえました。'} ] },
+  { id:'s4', cat:'soudan', text:'仕事の上司に病気のこと、どこまで伝えるべきか', who:'30代男性', sympathy:118, replies:[] },
+  { id:'s5', cat:'soudan', text:'膵がん、抗がん剤が効きにくいと言われ、不安です', who:'50代女性', sympathy:67, replies:[] },
+  { id:'s6', cat:'hagemashi', text:'治療が一区切りつきました。あの夜の自分に「ちゃんと朝は来るよ」と伝えたい', who:'40代女性', sympathy:241, replies:[] },
+  { id:'s7', cat:'manabi', text:'“治療法は一つじゃない”と知れたのが大きかった。先生に選択肢を聞いていい、と思えるまで少し時間がかかったけれど。', who:'肺がんの先輩', sympathy:132, replies:[] }
+];
+
+function readJSON(key, def){ try { return JSON.parse(localStorage.getItem(key)) || def; } catch(e){ return def; } }
+function writeJSON(key, v){ try { localStorage.setItem(key, JSON.stringify(v)); } catch(e){} }
+
+function getUserPosts(){ return readJSON(FORUM_KEY, []); }
+function getSeedState(){ return readJSON(SEED_STATE_KEY, {}); }
+
+/* シードに保存済みの状態（♡・返信）を重ねる */
+function resolvedSeeds(){
+  var st = getSeedState();
+  return SEED_POSTS.map(function(p){
+    var s = st[p.id] || {};
+    return {
+      id:p.id, cat:p.cat, text:p.text, who:p.who, mine:false, seed:true,
+      sympathy: (typeof s.sympathy==='number' ? s.sympathy : p.sympathy),
+      symDone: !!s.symDone,
+      replies: (p.replies||[]).concat(s.replies||[])
+    };
+  });
+}
+
+/* 全投稿（ユーザー投稿が先頭・新しい順、その後シード） */
+function allPosts(){
+  var u = getUserPosts().slice().reverse(); // 保存は古→新、表示は新→古
+  return u.concat(resolvedSeeds());
+}
+
+function findPost(id){
+  return allPosts().filter(function(p){ return p.id === id; })[0];
+}
+
+/* ===== 投稿者ラベル（ペルソナ反映） ===== */
+function currentWho(){
+  try {
+    var name = sessionStorage.getItem('satoi_persona') || '';
+    var cn = sessionStorage.getItem('satoi_last_cancer_name') || '';
+    var stg = sessionStorage.getItem('satoi_stage') || '';
+    if (name) return 'あなた（' + name + (cn ? ' ・ ' + cn + (stg ? stg + '期' : '') : '') + '）';
+  } catch(e){}
+  return 'あなた（匿名）';
+}
+
+/* ===== カテゴリ ===== */
+var CAT_LABEL = { soudan:'相談', manabi:'学び', hagemashi:'はげまし' };
+var CAT_TAGCLASS = { soudan:'tag-soudan', manabi:'tag-manabi', hagemashi:'tag-hagemashi' };
+var selectedCat = 'soudan';
+var activeFilter = 'all';
+
+function esc(s){ var d=document.createElement('div'); d.textContent=String(s); return d.innerHTML; }
+
+/* ===== フィード描画 ===== */
+function renderFeed(){
+  var feed = document.getElementById('feed');
+  var posts = allPosts().filter(function(p){
+    if (activeFilter === 'all') return true;
+    if (activeFilter === 'mine') return p.mine;
+    return p.cat === activeFilter;
+  });
+  if (!posts.length){
+    feed.innerHTML = '<div class="empty-note">まだ投稿がありません。いちばん最初の声を、置いていきませんか。</div>';
+    return;
+  }
+  feed.innerHTML = posts.map(function(p){
+    var tagClass = p.mine ? 'tag-yours' : (CAT_TAGCLASS[p.cat] || 'tag-soudan');
+    var tagText = p.mine ? 'あなたの投稿' : (CAT_LABEL[p.cat] || '相談');
+    var rc = (p.replies||[]).length;
+    return '<div class="post-card' + (p.mine ? ' is-yours' : '') + '" data-id="' + p.id + '">'
+      + '<span class="post-tag ' + tagClass + '">' + tagText + '</span>'
+      + '<div class="post-text">' + esc(p.text) + '</div>'
+      + '<div class="post-meta"><span class="who">' + esc(p.who) + '</span>'
+      + '<span>💬 ' + rc + '件の返信</span>'
+      + '<span class="sym">♡ 同じ気持ち ' + p.sympathy + '</span></div>'
+      + '</div>';
+  }).join('');
+  [].forEach.call(feed.querySelectorAll('.post-card'), function(c){
+    c.addEventListener('click', function(){ openThread(c.getAttribute('data-id')); });
+  });
+}
+
+/* ===== 投稿 ===== */
+function submitPost(){
+  var ta = document.getElementById('postInput');
+  var v = (ta.value || '').trim();
+  if (!v){ satoiNotify('ひとことだけでも、書いてみてください。', {kind:'warn'}); ta.focus(); return; }
+  var arr = getUserPosts();
+  arr.push({
+    id: 'u' + Date.now(),
+    cat: selectedCat,
+    text: v,
+    who: currentWho(),
+    mine: true,
+    sympathy: 0,
+    symDone: false,
+    replies: [],
+    ts: Date.now()
+  });
+  writeJSON(FORUM_KEY, arr);
+  ta.value = '';
+  activeFilter = 'all';
+  syncFilterChips();
+  renderFeed();
+  window.scrollTo({ top: document.querySelector('.wrap').offsetTop - 70, behavior:'smooth' });
+  satoiNotify('✓ 広場に投稿しました。\n\nあなたの言葉が、同じ夜を過ごす誰かに届きます。コメントや「ありがとう」が返ってくるかもしれません。', {kind:'success', duration:5200});
+}
+
+/* ===== スレッド・モーダル ===== */
+var currentThreadId = null;
+function openThread(id){
+  var p = findPost(id);
+  if (!p) return;
+  currentThreadId = id;
+  var tagText = p.mine ? 'あなたの投稿' : (CAT_LABEL[p.cat] || '相談');
+  var repliesHtml = (p.replies||[]).map(function(r){
+    return '<div class="reply"><div class="r-who">' + esc(r.who) + '</div><div class="r-body">' + esc(r.body) + '</div></div>';
+  }).join('') || '<div class="empty-note" style="padding:14px;">まだ返信はありません。あなたの一言が、最初の返信になります。</div>';
+  document.getElementById('modalBody').innerHTML =
+      '<div class="thread-text">' + esc(p.text) + '</div>'
+    + '<div class="thread-meta"><span>' + esc(p.who) + '</span><span>' + tagText + '</span></div>'
+    + '<button class="sym-btn' + (p.symDone ? ' done' : '') + '" id="symBtn">♡ 同じ気持ち <span id="symCount">' + p.sympathy + '</span></button>'
+    + '<div class="replies-h">返信（' + (p.replies||[]).length + '）</div>'
+    + '<div id="replyList">' + repliesHtml + '</div>'
+    + '<div class="reply-form"><textarea id="replyInput" placeholder="そっと言葉を返す。「同じだよ」だけでも、力になります。"></textarea>'
+    + '<div class="reply-foot"><span class="note">実名・個人を特定できる情報は書かないでください。</span>'
+    + '<button class="btn-reply" id="replyBtn">返信する</button></div></div>';
+  document.getElementById('symBtn').addEventListener('click', function(){ toggleSympathy(id); });
+  document.getElementById('replyBtn').addEventListener('click', function(){ submitReply(id); });
+  document.getElementById('modalMask').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeThread(){
+  document.getElementById('modalMask').classList.remove('show');
+  document.body.style.overflow = '';
+  currentThreadId = null;
+}
+
+/* 「同じ気持ち」：ユーザー投稿/シードで保存先を分ける */
+function toggleSympathy(id){
+  var p = findPost(id);
+  if (!p) return;
+  var nowDone = !p.symDone;
+  var delta = nowDone ? 1 : -1;
+  if (id.indexOf('u') === 0){
+    var arr = getUserPosts();
+    for (var i=0;i<arr.length;i++){ if (arr[i].id===id){ arr[i].sympathy = Math.max(0,(arr[i].sympathy||0)+delta); arr[i].symDone = nowDone; } }
+    writeJSON(FORUM_KEY, arr);
+  } else {
+    var st = getSeedState();
+    var base = SEED_POSTS.filter(function(s){return s.id===id;})[0];
+    var cur = st[id] || { sympathy: base ? base.sympathy : 0, replies: [] };
+    cur.sympathy = Math.max(0, (typeof cur.sympathy==='number'?cur.sympathy:(base?base.sympathy:0)) + delta);
+    cur.symDone = nowDone;
+    st[id] = cur;
+    writeJSON(SEED_STATE_KEY, st);
+  }
+  var np = findPost(id);
+  var btn = document.getElementById('symBtn');
+  var cnt = document.getElementById('symCount');
+  if (cnt) cnt.textContent = np.sympathy;
+  if (btn) btn.classList.toggle('done', np.symDone);
+  renderFeed();
+}
+
+function submitReply(id){
+  var ta = document.getElementById('replyInput');
+  var v = (ta.value || '').trim();
+  if (!v){ satoiNotify('返信を書いてみてください。', {kind:'warn'}); ta.focus(); return; }
+  var who = currentWho();
+  if (id.indexOf('u') === 0){
+    var arr = getUserPosts();
+    for (var i=0;i<arr.length;i++){ if (arr[i].id===id){ arr[i].replies = arr[i].replies||[]; arr[i].replies.push({who:who, body:v}); } }
+    writeJSON(FORUM_KEY, arr);
+  } else {
+    var st = getSeedState();
+    var base = SEED_POSTS.filter(function(s){return s.id===id;})[0];
+    var cur = st[id] || { sympathy: base ? base.sympathy : 0, replies: [] };
+    cur.replies = cur.replies || [];
+    cur.replies.push({who:who, body:v});
+    st[id] = cur;
+    writeJSON(SEED_STATE_KEY, st);
+  }
+  ta.value = '';
+  openThread(id); // 再描画
+  renderFeed();
+  satoiNotify('✓ 返信しました。あなたの言葉が届きます。', {kind:'success'});
+}
+
+/* ===== フィルタ ===== */
+function syncFilterChips(){
+  [].forEach.call(document.querySelectorAll('#filterRow .fchip'), function(b){
+    b.classList.toggle('active', b.getAttribute('data-f') === activeFilter);
+  });
+}
+
+/* ===== 起動 ===== */
+document.addEventListener('DOMContentLoaded', function(){
+  // 投稿者ラベル
+  try {
+    var name = sessionStorage.getItem('satoi_persona');
+    if (name) document.getElementById('whoLabel').textContent = name + ' として参加中';
+  } catch(e){}
+
+  // カテゴリ選択
+  [].forEach.call(document.querySelectorAll('#catRow .cat-chip'), function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#catRow .cat-chip').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      selectedCat = b.getAttribute('data-cat');
+    });
+  });
+  // フィルタ
+  [].forEach.call(document.querySelectorAll('#filterRow .fchip'), function(b){
+    b.addEventListener('click', function(){
+      activeFilter = b.getAttribute('data-f');
+      syncFilterChips();
+      renderFeed();
+    });
+  });
+  document.getElementById('postBtn').addEventListener('click', submitPost);
+  document.getElementById('modalClose').addEventListener('click', closeThread);
+  document.getElementById('modalMask').addEventListener('click', function(e){ if (e.target === this) closeThread(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && currentThreadId) closeThread(); });
+
+  // 共有から来た場合（学びの部屋などから ?shared=1）通知
+  try {
+    var params = new URLSearchParams(location.search);
+    if (params.get('shared') === '1') {
+      satoiNotify('✓ あなたが学んだことを、広場に届けました。\n\nいちばん上に表示されています。', {kind:'success', duration:5000});
+    }
+    if (params.get('compose') === '1') {
+      var ta = document.getElementById('postInput'); if (ta) ta.focus();
+    }
+  } catch(e){}
+
+  renderFeed();
+
+  // 閲覧人数を少しだけ動かす（生きている感）
+  var ln = document.getElementById('liveNum');
+  setInterval(function(){
+    var n = parseInt(ln.textContent, 10) || 428;
+    n += (Math.random() < 0.5 ? -1 : 1) * (Math.floor(Math.random()*3));
+    if (n < 380) n = 380; if (n > 470) n = 470;
+    ln.textContent = n;
+  }, 4000);
+});
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

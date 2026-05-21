@@ -291,6 +291,62 @@ button { font-family: var(--font); cursor: pointer; }
   cursor: pointer;
 }
 .pubmed-preset:hover { background: rgba(212,169,94,0.2); border-color: var(--starlight); }
+.pubmed-hint2 { margin-top: 18px; font-size: 12.5px; line-height: 1.85; color: rgba(248,246,240,0.78); border-top: 1px solid rgba(248,246,240,0.15); padding-top: 16px; }
+.pubmed-hint2 strong { color: var(--starlight-strong); font-weight: 600; }
+
+/* === 在ページ論文結果 === */
+.pubmed-results { max-width: 1180px; margin: 28px auto 0; display: flex; flex-direction: column; gap: 16px; }
+.pr-head { font-size: 13px; color: var(--ink-medium); margin-bottom: 2px; }
+.pr-head strong { color: var(--teal); }
+.paper-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 22px 24px; box-shadow: 0 6px 20px rgba(11,23,54,0.05); transition: all .25s; }
+.paper-card:hover { box-shadow: 0 12px 30px rgba(11,23,54,0.10); transform: translateY(-2px); }
+.paper-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.paper-badge { font-size: 10.5px; font-weight: 600; letter-spacing: .04em; padding: 3px 10px; border-radius: 11px; background: rgba(13,115,119,0.12); color: var(--teal); }
+.paper-badge.trial { background: rgba(212,169,94,0.16); color: #9A7322; }
+.paper-badge.match { background: rgba(199,107,127,0.16); color: #A8475F; }
+.paper-title { font-size: 16.5px; font-weight: 600; color: var(--ink-deep); line-height: 1.55; margin-bottom: 6px; }
+.paper-cite { font-size: 12.5px; color: var(--ink-medium); margin-bottom: 14px; }
+.paper-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.pa-btn { padding: 9px 18px; border-radius: 22px; font-size: 13px; font-weight: 600; border: 1px solid var(--teal); background: var(--teal); color: #fff; }
+.pa-btn:hover { background: #0A5A5D; }
+.pa-btn.ghost { background: transparent; color: var(--teal); }
+.pa-btn.ghost:hover { background: rgba(13,115,119,0.08); }
+
+/* === 論文リーダー・モーダル === */
+.reader-mask { position: fixed; inset: 0; background: rgba(11,23,40,0.58); backdrop-filter: blur(4px); z-index: 9000; display: none; align-items: flex-end; justify-content: center; }
+.reader-mask.show { display: flex; }
+.reader { background: var(--morning-white); width: 100%; max-width: 760px; max-height: 90vh; border-radius: 22px 22px 0 0; overflow-y: auto; box-shadow: 0 -20px 60px rgba(0,0,0,0.4); animation: rdrise .32s cubic-bezier(0.2,0.8,0.2,1); }
+@keyframes rdrise { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.reader-head { position: sticky; top: 0; background: rgba(251,247,240,0.97); backdrop-filter: blur(8px); padding: 16px 22px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 12px; z-index: 3; }
+.reader-head .rh-title { font-size: 14px; font-weight: 600; color: var(--ink-deep); line-height: 1.5; }
+.reader-close { background: transparent; border: none; font-size: 22px; color: var(--ink-light, rgba(26,42,64,0.55)); line-height: 1; flex-shrink: 0; }
+.lang-row { display: flex; gap: 6px; flex-wrap: wrap; padding: 12px 22px; border-bottom: 1px solid var(--line); align-items: center; }
+.lang-row .lr-label { font-size: 11.5px; color: var(--ink-medium); margin-right: 4px; }
+.lang-chip { padding: 6px 14px; border-radius: 16px; border: 1px solid rgba(127,168,201,0.45); background: rgba(127,168,201,0.10); font-size: 12.5px; color: var(--ink-medium); }
+.lang-chip.active { background: var(--healing-blue); color: #fff; border-color: var(--healing-blue); }
+.tab-row { display: flex; gap: 4px; padding: 12px 22px 0; flex-wrap: wrap; position: sticky; top: 53px; background: var(--morning-white); z-index: 2; }
+.tab-btn { padding: 9px 16px; border: 1px solid var(--line); border-bottom: none; background: var(--morning-cream); border-radius: 12px 12px 0 0; font-size: 13px; color: var(--ink-medium); font-weight: 500; }
+.tab-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+.reader-body { padding: 22px; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+.abs-meta { font-size: 12px; color: var(--ink-medium); margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px dashed var(--line); }
+.abs-text { font-size: 15px; line-height: 1.95; color: var(--ink-deep); white-space: pre-line; }
+.plain-box { background: rgba(20,166,171,0.07); border: 1px solid rgba(20,166,171,0.22); border-radius: 14px; padding: 18px 20px; }
+.plain-box .pb-tag { font-size: 12px; font-weight: 700; color: var(--teal); margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+.plain-box .abs-text { font-size: 15.5px; }
+.fig-wrap { text-align: center; }
+.fig-svg { max-width: 100%; height: auto; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+.fig-cap { font-size: 13px; color: var(--ink-medium); line-height: 1.9; margin-top: 14px; text-align: left; }
+.fig-cap strong { color: var(--ink-deep); }
+.reader-foot { padding: 16px 22px 26px; display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--line); }
+.disc { font-size: 11.5px; color: var(--ink-light, rgba(26,42,64,0.55)); line-height: 1.8; padding: 0 22px 22px; }
+
+@media (max-width: 768px) {
+  .reader { max-width: 100%; }
+  .paper-actions { gap: 8px; }
+  .pa-btn { padding: 8px 14px; font-size: 12.5px; }
+}
 
 /* === SDM 根拠資料 === */
 .sdm-bridge {
@@ -610,7 +666,11 @@ button { font-family: var(--font); cursor: pointer; }
       <button class="pubmed-preset" onclick="openPubmed('cancer narrative medicine')">ナラティブ・メディスン</button>
       <button class="pubmed-preset" onclick="openPubmed('patient reported outcomes cancer')">患者報告アウトカム</button>
     </div>
+    <div class="pubmed-hint2">検索すると、SATOIが<strong>日本語訳・やさしい日本語・図表の解説</strong>まで用意した論文を、この画面で読めます（英語・中文・한국어にも切替）。原文はPubMedで開けます。</div>
   </div>
+
+  <!-- 在ページ・論文結果 -->
+  <div id="pubmedResults" class="pubmed-results" aria-live="polite"></div>
 </section>
 
 <!-- SDM 根拠資料 -->
@@ -716,25 +776,313 @@ window.__origAlert = window.alert;
 
 window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
 
-function openPubmed(q) {
-  const url = 'https://pubmed.ncbi.nlm.nih.gov/?term=' + encodeURIComponent(q);
-  window.open(url, '_blank');
+/* === PubMed 原文(外部) === */
+function openPubmedExternal(q) {
+  window.open('https://pubmed.ncbi.nlm.nih.gov/?term=' + encodeURIComponent(q), '_blank');
 }
-function searchPubmed() {
-  const v = document.getElementById('pubmedInput').value.trim();
-  if (!v) { alert('検索キーワードを入力してください'); return; }
-  openPubmed(v);
+function openPmid(pmid) {
+  window.open('https://pubmed.ncbi.nlm.nih.gov/' + encodeURIComponent(pmid) + '/', '_blank');
 }
-document.getElementById('pubmedInput').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') searchPubmed();
-});
-// 学びの部屋「調べる」からの検索語を引き継いで入力欄に反映
+
+/* === 論文データ（実在の主要試験・日英中韓で作り込み） === */
+var LANGS = [['ja','日本語'],['en','English'],['zh','中文'],['ko','한국어']];
+var FIG_FLAURA = '<svg class="fig-svg" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">'
+  + '<line x1="42" y1="18" x2="42" y2="168" stroke="#ccc"/><line x1="42" y1="168" x2="322" y2="168" stroke="#ccc"/>'
+  + '<text x="8" y="26" font-size="9" fill="#888">100%</text><text x="26" y="172" font-size="9" fill="#888">0</text><text x="298" y="186" font-size="9" fill="#888">months</text>'
+  + '<polyline fill="none" stroke="#9aa6b2" stroke-width="2.6" points="42,22 108,40 150,82 192,120 232,148 322,164"/>'
+  + '<polyline fill="none" stroke="#0D7377" stroke-width="2.6" points="42,22 150,36 202,68 252,104 292,138 322,150"/>'
+  + '<circle cx="255" cy="104" r="3" fill="#0D7377"/><text x="200" y="58" font-size="10" fill="#0D7377">Osimertinib · 18.9</text>'
+  + '<circle cx="150" cy="82" r="3" fill="#9aa6b2"/><text x="92" y="100" font-size="10" fill="#7a8794">Standard · 10.2</text></svg>';
+var FIG_KEYNOTE = '<svg class="fig-svg" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">'
+  + '<line x1="46" y1="18" x2="46" y2="168" stroke="#ccc"/><line x1="46" y1="168" x2="322" y2="168" stroke="#ccc"/>'
+  + '<text x="14" y="26" font-size="9" fill="#888">100%</text><text x="30" y="172" font-size="9" fill="#888">0</text>'
+  + '<rect x="100" y="62" width="62" height="106" rx="4" fill="#C76B7F"/><text x="104" y="56" font-size="11" fill="#A8475F">64.8%</text><text x="96" y="184" font-size="9" fill="#888">+免疫薬</text>'
+  + '<rect x="210" y="86" width="62" height="82" rx="4" fill="#9aa6b2"/><text x="216" y="80" font-size="11" fill="#7a8794">51.2%</text><text x="214" y="184" font-size="9" fill="#888">化学療法</text></svg>';
+var FIG_SDM = '<svg class="fig-svg" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">'
+  + '<line x1="46" y1="18" x2="46" y2="168" stroke="#ccc"/><line x1="46" y1="168" x2="322" y2="168" stroke="#ccc"/>'
+  + '<rect x="86" y="58" width="48" height="110" rx="4" fill="#0D7377"/><text x="84" y="52" font-size="10" fill="#0D7377">知識↑</text>'
+  + '<rect x="146" y="92" width="48" height="76" rx="4" fill="#9aa6b2"/><text x="150" y="86" font-size="9" fill="#7a8794">通常</text>'
+  + '<rect x="230" y="120" width="48" height="48" rx="4" fill="#7FA8C9"/><text x="222" y="114" font-size="10" fill="#5E8FB5">迷い↓</text>'
+  + '<text x="232" y="184" font-size="9" fill="#888">ガイド</text></svg>';
+
+var PAPERS = [
+  {
+    id:'flaura', trial:'FLAURA試験', pmid:'29151359', cancer:'lung',
+    keywords:['osimertinib','flaura','egfr','lung','肺','オシメルチニブ','タグリッソ','nsclc','非小細胞'],
+    title:'Osimertinib in Untreated EGFR-Mutated Advanced Non–Small-Cell Lung Cancer',
+    cite:'N Engl J Med 2018;378:113-125 / 2020;382:41-50 ・ 第III相RCT',
+    fig: FIG_FLAURA,
+    abstract:{
+      ja:'EGFR遺伝子変異陽性の進行非小細胞肺がんの未治療患者556人を対象に、第3世代EGFR阻害薬オシメルチニブを従来の第1世代薬(ゲフィチニブ/エルロチニブ)と比較した第III相無作為化試験。主要評価項目の無増悪生存期間(PFS)はオシメルチニブ群18.9か月に対し対照群10.2か月と有意に延長し、全生存期間(OS)も38.6か月対31.8か月と改善した。脳転移への効果と忍容性も良好だった。',
+      en:'In this phase III randomized trial, 556 untreated patients with EGFR-mutated advanced non–small-cell lung cancer received either the third-generation EGFR inhibitor osimertinib or a standard first-generation inhibitor (gefitinib or erlotinib). Median progression-free survival was significantly longer with osimertinib (18.9 vs 10.2 months), and overall survival was also improved (38.6 vs 31.8 months), with activity against brain metastases and a favorable safety profile.',
+      zh:'在这项III期随机试验中，556例未经治疗的EGFR突变晚期非小细胞肺癌患者，接受第三代EGFR抑制剂奥希替尼或标准第一代抑制剂(吉非替尼或厄洛替尼)。奥希替尼组的中位无进展生存期显著延长(18.9个月对10.2个月)，总生存期也得到改善(38.6个月对31.8个月)，对脑转移有效且安全性良好。',
+      ko:'이 3상 무작위 시험에서 치료 경험이 없는 EGFR 변이 진행성 비소세포폐암 환자 556명에게 3세대 EGFR 억제제 오시머티닙 또는 표준 1세대 억제제(게피티닙 또는 엘로티닙)를 투여했다. 무진행 생존기간 중앙값은 오시머티닙군에서 유의하게 길었고(18.9개월 대 10.2개월), 전체 생존기간도 개선되었으며(38.6개월 대 31.8개월), 뇌 전이에도 효과적이고 안전성이 양호했다.'
+    },
+    plain:{
+      ja:'肺がんの中でも「EGFR」という遺伝子に変化があるタイプの人が対象です。新しい薬(オシメルチニブ)を使うと、がんが大きくなるまでの時間が、これまでの薬の約10か月から約19か月へとほぼ2倍にのびました。長生きにもつながり、脳に転移したがんにも効きやすいことがわかりました。',
+      en:'This study is for people whose lung cancer has a change in a gene called EGFR. With the newer medicine (osimertinib), the time before the cancer grew again nearly doubled — from about 10 months to about 19 months. People also lived longer, and the medicine worked well even when the cancer had spread to the brain.',
+      zh:'这项研究针对肺癌中带有“EGFR”基因变化的人。使用较新的药物(奥希替尼)后，癌症再次长大的时间从约10个月延长到约19个月，几乎翻了一倍。患者也活得更久，而且即使癌症转移到脑部，这种药也很有效。',
+      ko:'이 연구는 폐암 중 "EGFR"이라는 유전자에 변화가 있는 분들을 위한 것입니다. 새로운 약(오시머티닙)을 쓰면 암이 다시 커지기까지의 시간이 약 10개월에서 약 19개월로 거의 두 배 늘었습니다. 더 오래 사는 데에도 도움이 되었고, 뇌로 전이된 암에도 잘 들었습니다.'
+    },
+    figcap:{
+      ja:'図：無増悪生存曲線。上の線(オシメルチニブ)が下の線(従来薬)より右に位置し、がんが進行しない期間が長いことを示す。中央値は18.9か月対10.2か月。',
+      en:'Figure: Progression-free survival curves. The upper line (osimertinib) stays to the right of the lower line (standard therapy), showing a longer time without progression. Medians: 18.9 vs 10.2 months.',
+      zh:'图：无进展生存曲线。上方曲线(奥希替尼)位于下方曲线(标准治疗)右侧，表示无进展时间更长。中位数为18.9个月对10.2个月。',
+      ko:'그림: 무진행 생존 곡선. 위쪽 선(오시머티닙)이 아래쪽 선(표준치료)보다 오른쪽에 있어 진행이 없는 기간이 더 김을 보여준다. 중앙값 18.9개월 대 10.2개월.'
+    }
+  },
+  {
+    id:'keynote522', trial:'KEYNOTE-522試験', pmid:'32101663', cancer:'breast',
+    keywords:['pembrolizumab','keynote','triple negative','tnbc','breast','乳','ペムブロリズマブ','キイトルーダ','トリプルネガティブ','術前'],
+    title:'Pembrolizumab plus Chemotherapy as Neoadjuvant Treatment in Early Triple-Negative Breast Cancer',
+    cite:'N Engl J Med 2020;382:810-821 / 2022;386:556-567 ・ 第III相RCT',
+    fig: FIG_KEYNOTE,
+    abstract:{
+      ja:'早期のトリプルネガティブ乳がん患者1174人を対象に、術前化学療法にペムブロリズマブ(免疫チェックポイント阻害薬)を上乗せする効果を検討した第III相試験。病理学的完全奏効(pCR)率はペムブロリズマブ群64.8%対プラセボ群51.2%と向上し、無イベント生存期間(EFS)もハザード比0.63と有意に改善した。免疫関連の有害事象には注意が必要。',
+      en:'This phase III trial evaluated adding pembrolizumab (an immune checkpoint inhibitor) to neoadjuvant chemotherapy in 1174 patients with early triple-negative breast cancer. The pathological complete response (pCR) rate rose to 64.8% with pembrolizumab versus 51.2% with placebo, and event-free survival was significantly improved (hazard ratio 0.63). Immune-related adverse events require monitoring.',
+      zh:'这项III期试验评估在新辅助化疗基础上加用帕博利珠单抗(免疫检查点抑制剂)，纳入1174例早期三阴性乳腺癌患者。帕博利珠单抗组的病理完全缓解(pCR)率提高至64.8%，安慰剂组为51.2%；无事件生存期也显著改善(风险比0.63)。需关注免疫相关不良反应。',
+      ko:'이 3상 시험은 조기 삼중음성 유방암 환자 1174명에서 수술 전 항암화학요법에 펨브롤리주맙(면역관문억제제)을 추가하는 효과를 평가했다. 병리학적 완전관해(pCR)율은 펨브롤리주맙군 64.8%로 위약군 51.2%보다 높았고, 무사건 생존기간도 유의하게 개선되었다(위험비 0.63). 면역 관련 이상반응에 대한 관찰이 필요하다.'
+    },
+    plain:{
+      ja:'乳がんの中でも「トリプルネガティブ」というタイプの、早い段階の人が対象です。手術の前に行う抗がん剤に、免疫の力を使う薬(ペムブロリズマブ)を加えると、手術時にがん細胞が見つからなくなる人の割合が約51%から約65%に増えました。再発も減りましたが、免疫の薬には特有の副作用があるため、こまめな確認が大切です。',
+      en:'This study is for people with early-stage "triple-negative" breast cancer. Adding an immune-boosting medicine (pembrolizumab) to the chemotherapy given before surgery raised the share of people with no cancer cells left at surgery from about 51% to about 65%. Recurrences also fell, but immune medicines have their own side effects, so careful monitoring matters.',
+      zh:'这项研究针对早期“三阴性”乳腺癌患者。在手术前的化疗中加入增强免疫的药物(帕博利珠单抗)，使手术时找不到癌细胞的比例从约51%提高到约65%。复发也减少了，但免疫药物有其特有的副作用，因此需要密切监测。',
+      ko:'이 연구는 초기 "삼중음성" 유방암 환자를 위한 것입니다. 수술 전 항암치료에 면역을 높이는 약(펨브롤리주맙)을 더하면, 수술 시 암세포가 발견되지 않는 사람의 비율이 약 51%에서 약 65%로 늘었습니다. 재발도 줄었지만 면역약은 특유의 부작용이 있어 꼼꼼한 관찰이 중요합니다.'
+    },
+    figcap:{
+      ja:'図：病理学的完全奏効(pCR)率の比較。免疫薬を加えた群(64.8%)が、加えない群(51.2%)より高い。棒が高いほど「手術時にがんが消えていた」人が多い。',
+      en:'Figure: Pathological complete response (pCR) rates. The group that received the immune medicine (64.8%) is higher than the group that did not (51.2%). A taller bar means more people had no detectable cancer at surgery.',
+      zh:'图：病理完全缓解(pCR)率比较。加用免疫药物组(64.8%)高于未加用组(51.2%)。柱越高，表示手术时癌细胞消失的人越多。',
+      ko:'그림: 병리학적 완전관해(pCR)율 비교. 면역약을 추가한 군(64.8%)이 추가하지 않은 군(51.2%)보다 높다. 막대가 높을수록 수술 시 암이 사라진 사람이 많음을 의미한다.'
+    }
+  },
+  {
+    id:'sdm', trial:'Cochraneレビュー(意思決定支援)', pmid:'28402085', cancer:'common',
+    keywords:['shared decision','decision aid','sdm','意思決定','共同意思決定','デシジョン','narrative','選択'],
+    title:'Decision Aids for People Facing Health Treatment or Screening Decisions',
+    cite:'Cochrane Database Syst Rev 2017;4:CD001431 ・ 105 RCT統合(約31,000人)',
+    fig: FIG_SDM,
+    abstract:{
+      ja:'治療の意思決定を支援する「デシジョン・エイド(意思決定ガイド)」の効果を、105件の無作為化試験(約3万1千人)から統合したコクラン・システマティックレビュー。デシジョン・エイドを使うと、選択肢に関する知識が増え、利益とリスクの理解が正確になり、「迷い(decisional conflict)」が減り、医師まかせにせず本人が関与する意思決定が増えた。',
+      en:'This Cochrane systematic review pooled 105 randomized trials (about 31,000 people) on patient decision aids that support treatment choices. Using a decision aid increased people’s knowledge of their options, led to more accurate perception of benefits and risks, reduced decisional conflict, and helped people take a more active role rather than leaving the decision entirely to the clinician.',
+      zh:'这项Cochrane系统评价汇总了105项随机试验(约31000人)，评估支持治疗选择的“决策辅助工具”。使用决策辅助工具后，患者对各种选择的了解增加，对获益和风险的认识更准确，决策困惑减少，并更主动地参与决策，而不是完全交给医生。',
+      ko:'이 코크란 체계적 고찰은 치료 선택을 돕는 "의사결정 도구"에 관한 105건의 무작위 시험(약 3만 1천 명)을 통합했다. 의사결정 도구를 사용하면 선택지에 대한 지식이 늘고, 이득과 위험에 대한 인식이 정확해지며, 결정 갈등이 줄고, 의사에게만 맡기지 않고 본인이 더 적극적으로 참여하게 되었다.'
+    },
+    plain:{
+      ja:'「どの治療を選ぶか」を考えるときに使う"意思決定ガイド"が役に立つか、たくさんの研究をまとめて調べたものです。ガイドを使った人は、選択肢のことがよくわかり、良い点・悪い点を正しくつかめて、迷いが減り、「先生におまかせ」ではなく自分も納得して決められるようになりました。',
+      en:'This review combined many studies to ask whether "decision aids" — guides that help you think through which treatment to choose — actually help. People who used them understood their options better, saw the pros and cons more accurately, felt less torn, and were able to take part in the decision themselves instead of just leaving it to the doctor.',
+      zh:'这篇综述汇总了许多研究，探讨帮助你思考“选择哪种治疗”的“决策辅助工具”是否真的有用。使用它的人更了解自己的选择，更准确地看清利弊，减少了纠结，并能够自己参与决定，而不是完全交给医生。',
+      ko:'이 고찰은 "어떤 치료를 고를지" 생각할 때 쓰는 "의사결정 도구"가 실제로 도움이 되는지 여러 연구를 모아 살펴본 것입니다. 도구를 사용한 사람은 선택지를 더 잘 이해하고, 장단점을 정확히 파악했으며, 망설임이 줄고, "의사에게 맡기기"가 아니라 스스로 납득하고 결정할 수 있게 되었습니다.'
+    },
+    figcap:{
+      ja:'図：デシジョン・エイド使用群と通常ケア群の比較。知識スコアの向上と「迷い」の低下が示されている。',
+      en:'Figure: Decision-aid group versus usual-care group. Knowledge scores rose and decisional conflict fell.',
+      zh:'图：决策辅助组与常规护理组比较。知识得分提高，决策困惑下降。',
+      ko:'그림: 의사결정 도구군과 일반치료군 비교. 지식 점수는 오르고 결정 갈등은 줄었다.'
+    }
+  }
+];
+
+var UI = {
+  resultsHead:{ ja:'件の論文を、SATOIが日本語訳・やさしい解説つきで用意しました', en:' papers prepared with Japanese translation & plain-language summary', zh:' 篇论文（含翻译与通俗解说）', ko:'편의 논문(번역·쉬운 해설 포함)' },
+  read:'読む・翻訳を見る', source:'PubMedで原文', tabAbs:'要旨（翻訳）', tabPlain:'やさしい日本語', tabFig:'図表の解説', savePdf:'この訳をPDFで保存', addSdm:'SDM質問カードに追加',
+  matchBadge:'あなたの状況に近い'
+};
+function esc(s){ var d=document.createElement('div'); d.textContent=String(s); return d.innerHTML; }
+
+function currentCancer(){ try { return sessionStorage.getItem('satoi_cancer') || ''; } catch(e){ return ''; } }
+
+function rankPapers(q){
+  q = (q||'').toLowerCase();
+  var pc = currentCancer();
+  var scored = PAPERS.map(function(p){
+    var s = 0;
+    p.keywords.forEach(function(k){ if (q && q.indexOf(k.toLowerCase()) !== -1) s += 2; });
+    if (q && (q.indexOf(p.cancer) !== -1)) s += 2;
+    if (pc && p.cancer === pc) s += 1; // ペルソナのがん種を少し優先
+    return { p:p, s:s };
+  });
+  scored.sort(function(a,b){ return b.s - a.s; });
+  return scored.map(function(x){ return x.p; });
+}
+
+function renderResults(q){
+  var box = document.getElementById('pubmedResults');
+  var papers = rankPapers(q);
+  var pc = currentCancer();
+  var head = '<div class="pr-head"><strong>' + papers.length + '</strong> ' + UI.resultsHead.ja + '</div>';
+  var cards = papers.map(function(p){
+    var match = pc && p.cancer === pc;
+    return '<div class="paper-card">'
+      + '<div class="paper-badges"><span class="paper-badge trial">' + esc(p.trial) + '</span>'
+      + '<span class="paper-badge">PMID ' + esc(p.pmid) + '</span>'
+      + (match ? '<span class="paper-badge match">♡ ' + UI.matchBadge + '</span>' : '') + '</div>'
+      + '<div class="paper-title">' + esc(p.title) + '</div>'
+      + '<div class="paper-cite">' + esc(p.cite) + '</div>'
+      + '<div class="paper-actions">'
+      + '<button class="pa-btn" onclick="openReader(\'' + p.id + '\')">' + UI.read + ' →</button>'
+      + '<button class="pa-btn ghost" onclick="openPmid(\'' + p.pmid + '\')">' + UI.source + '</button>'
+      + '</div></div>';
+  }).join('');
+  var ext = q ? ('<div class="pr-head" style="margin-top:6px;">PubMedで「' + esc(q) + '」の原文一覧を開く: '
+      + '<a href="#" onclick="openPubmedExternal(' + JSON.stringify(q).replace(/"/g,'&quot;') + ');return false;" style="color:var(--teal); font-weight:600;">英語の検索結果 →</a></div>') : '';
+  box.innerHTML = head + cards + ext;
+  box.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function searchPubmed(){
+  var v = (document.getElementById('pubmedInput').value || '').trim();
+  if (!v) { satoiNotify('検索キーワードを入力してください。例: osimertinib FLAURA / 乳がん 術前', {kind:'warn'}); return; }
+  renderResults(v);
+}
+// プリセット等の従来呼び出しは在ページ検索に統一
+function openPubmed(q){ var el = document.getElementById('pubmedInput'); if (el) el.value = q; renderResults(q); }
+
+/* === 論文リーダー === */
+var readerState = { id:null, lang:'ja', tab:'abs' };
+function ensureReader(){
+  if (document.getElementById('readerMask')) return;
+  var m = document.createElement('div');
+  m.className = 'reader-mask'; m.id = 'readerMask';
+  m.innerHTML = '<div class="reader" role="dialog" aria-modal="true">'
+    + '<div class="reader-head"><div class="rh-title" id="rdTitle"></div><button class="reader-close" id="rdClose" aria-label="閉じる">×</button></div>'
+    + '<div class="lang-row" id="rdLangRow"><span class="lr-label">言語:</span></div>'
+    + '<div class="tab-row" id="rdTabRow"></div>'
+    + '<div class="reader-body">'
+    + '<div class="tab-pane" id="pane-abs"><div class="abs-meta" id="rdMeta"></div><div class="abs-text" id="rdAbs"></div></div>'
+    + '<div class="tab-pane" id="pane-plain"><div class="plain-box"><div class="pb-tag">🪄 <span id="rdPlainTag">やさしい日本語</span></div><div class="abs-text" id="rdPlain"></div></div></div>'
+    + '<div class="tab-pane" id="pane-fig"><div class="fig-wrap"><div id="rdFig"></div><div class="fig-cap" id="rdFigCap"></div></div></div>'
+    + '</div>'
+    + '<div class="disc" id="rdDisc"></div>'
+    + '<div class="reader-foot">'
+    + '<button class="pa-btn" id="rdPdf"></button>'
+    + '<button class="pa-btn ghost" id="rdSdm"></button>'
+    + '<button class="pa-btn ghost" id="rdSrc"></button>'
+    + '</div></div>';
+  document.body.appendChild(m);
+  document.getElementById('rdClose').addEventListener('click', closeReader);
+  m.addEventListener('click', function(e){ if (e.target === m) closeReader(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && m.classList.contains('show')) closeReader(); });
+  // 言語チップ
+  var lr = document.getElementById('rdLangRow');
+  LANGS.forEach(function(l){
+    var b = document.createElement('button');
+    b.className = 'lang-chip' + (l[0]==='ja'?' active':''); b.setAttribute('data-lang', l[0]); b.textContent = l[1];
+    b.addEventListener('click', function(){ setLang(l[0]); });
+    lr.appendChild(b);
+  });
+  // タブ
+  var tr = document.getElementById('rdTabRow');
+  [['abs',UI.tabAbs],['plain',UI.tabPlain],['fig',UI.tabFig]].forEach(function(t){
+    var b = document.createElement('button');
+    b.className = 'tab-btn' + (t[0]==='abs'?' active':''); b.setAttribute('data-tab', t[0]); b.textContent = t[1];
+    b.addEventListener('click', function(){ setTab(t[0]); });
+    tr.appendChild(b);
+  });
+  document.getElementById('rdPdf').textContent = '📄 ' + UI.savePdf;
+  document.getElementById('rdSdm').textContent = '＋ ' + UI.addSdm;
+  document.getElementById('rdPdf').addEventListener('click', savePaperPdf);
+  document.getElementById('rdSdm').addEventListener('click', addPaperToSdm);
+}
+function currentPaper(){ return PAPERS.filter(function(p){ return p.id === readerState.id; })[0]; }
+function renderReader(){
+  var p = currentPaper(); if (!p) return;
+  var L = readerState.lang;
+  document.getElementById('rdTitle').textContent = p.trial + ' ・ ' + p.title;
+  document.getElementById('rdMeta').textContent = p.cite + ' ・ PMID ' + p.pmid;
+  document.getElementById('rdAbs').textContent = p.abstract[L];
+  document.getElementById('rdPlain').textContent = p.plain[L];
+  document.getElementById('rdFig').innerHTML = p.fig;
+  document.getElementById('rdFigCap').innerHTML = '<strong>' + (L==='ja'?'図の読み方':'How to read the figure') + '</strong><br>' + esc(p.figcap[L]);
+  var plainTags = { ja:'やさしい日本語', en:'In plain words', zh:'通俗解说', ko:'쉬운 말로' };
+  document.getElementById('rdPlainTag').textContent = plainTags[L];
+  var discs = {
+    ja:'※ これは原著論文の要点を平易にまとめた参考訳です。正式な内容は原文をご確認ください。治療の判断は必ず主治医とご相談ください。',
+    en:'Note: This is a simplified reference summary, not the official text. Please check the original article and consult your physician for treatment decisions.',
+    zh:'注：这是简明的参考摘要，并非正式原文。请查阅原文，治疗决定请咨询您的主治医生。',
+    ko:'※ 이것은 원문을 쉽게 요약한 참고 번역입니다. 정식 내용은 원문을 확인하시고, 치료 결정은 반드시 주치의와 상의하세요.'
+  };
+  document.getElementById('rdDisc').textContent = discs[L];
+  var srcLabels = { ja:'PubMedで原文', en:'Original on PubMed', zh:'在PubMed看原文', ko:'PubMed에서 원문 보기' };
+  var src = document.getElementById('rdSrc');
+  src.textContent = '🔗 ' + srcLabels[L];
+  src.onclick = function(){ openPmid(p.pmid); };
+  // チップのactive更新
+  document.querySelectorAll('#rdLangRow .lang-chip').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang')===L); });
+}
+function openReader(id){
+  ensureReader();
+  readerState = { id:id, lang:'ja', tab:'abs' };
+  setTab('abs');
+  renderReader();
+  document.getElementById('readerMask').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeReader(){
+  var m = document.getElementById('readerMask'); if (m) m.classList.remove('show');
+  document.body.style.overflow = '';
+}
+function setLang(l){ readerState.lang = l; renderReader(); }
+function setTab(t){
+  readerState.tab = t;
+  document.querySelectorAll('#rdTabRow .tab-btn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-tab')===t); });
+  ['abs','plain','fig'].forEach(function(k){ var el = document.getElementById('pane-'+k); if (el) el.classList.toggle('active', k===t); });
+}
+
+/* === PDF保存（ブラウザ印刷でPDF化＝図表込み） === */
+function savePaperPdf(){
+  var p = currentPaper(); if (!p) return;
+  var L = readerState.lang;
+  var heads = {
+    ja:{abs:'要旨（日本語訳）', plain:'やさしい日本語', fig:'図表の解説', src:'原文', by:'SATOI ・ 学術エビデンス'},
+    en:{abs:'Abstract (translation)', plain:'In plain words', fig:'Figure', src:'Source', by:'SATOI ・ Academic Evidence'},
+    zh:{abs:'摘要（翻译）', plain:'通俗解说', fig:'图表说明', src:'原文', by:'SATOI ・ 学术证据'},
+    ko:{abs:'초록(번역)', plain:'쉬운 말로', fig:'그림 설명', src:'원문', by:'SATOI ・ 학술 근거'}
+  };
+  var h = heads[L];
+  var w = window.open('', '_blank');
+  if (!w){ satoiNotify('PDF用の画面を開けませんでした。ポップアップを許可してください。', {kind:'warn'}); return; }
+  var doc = '<!DOCTYPE html><html lang="'+L+'"><head><meta charset="UTF-8"><title>'+esc(p.trial)+' - SATOI</title>'
+    + '<style>body{font-family:"Noto Sans JP","Meiryo UI",sans-serif;color:#1A2A40;max-width:720px;margin:40px auto;padding:0 28px;line-height:1.9;}'
+    + 'h1{font-size:20px;border-bottom:2px solid #0D7377;padding-bottom:10px;}h2{font-size:15px;color:#0D7377;margin-top:26px;}'
+    + '.cite{font-size:12px;color:#555;margin-bottom:8px;}.fig{text-align:center;margin:14px 0;}.cap{font-size:12px;color:#555;}'
+    + '.disc{font-size:11px;color:#888;border-top:1px solid #ddd;margin-top:30px;padding-top:12px;}'
+    + '.foot{font-size:11px;color:#999;margin-top:8px;}svg{max-width:100%;}</style></head><body>'
+    + '<h1>'+esc(p.title)+'</h1>'
+    + '<div class="cite">'+esc(p.trial)+' ・ '+esc(p.cite)+' ・ PMID '+esc(p.pmid)+'</div>'
+    + '<h2>'+h.abs+'</h2><p>'+esc(p.abstract[L])+'</p>'
+    + '<h2>'+h.plain+'</h2><p>'+esc(p.plain[L])+'</p>'
+    + '<h2>'+h.fig+'</h2><div class="fig">'+p.fig+'</div><div class="cap">'+esc(p.figcap[L])+'</div>'
+    + '<h2>'+h.src+'</h2><div class="cite">https://pubmed.ncbi.nlm.nih.gov/'+esc(p.pmid)+'/</div>'
+    + '<div class="disc">'+esc(document.getElementById('rdDisc').textContent)+'</div>'
+    + '<div class="foot">'+h.by+' ・ '+new Date().toLocaleDateString()+'</div>'
+    + '<script>window.onload=function(){setTimeout(function(){window.print();},300);}<\/script>'
+    + '</body></html>';
+  w.document.open(); w.document.write(doc); w.document.close();
+  satoiNotify('✓ PDFの保存（印刷）画面を開きました。\n図表・やさしい日本語まで含めて保存できます。', {kind:'success'});
+}
+
+/* === SDM質問カードに追加 === */
+function addPaperToSdm(){
+  var p = currentPaper(); if (!p) return;
+  try {
+    var arr = JSON.parse(localStorage.getItem('satoi_sdm_items') || '[]');
+    arr.push({ kind:'paper', title:p.title, trial:p.trial, pmid:p.pmid, link:'https://pubmed.ncbi.nlm.nih.gov/'+p.pmid+'/', ts:Date.now() });
+    localStorage.setItem('satoi_sdm_items', JSON.stringify(arr));
+  } catch(e){}
+  satoiNotify('✓ SDM質問カードに、この論文を根拠として追加しました。\n診察室で「この治療を選んだ根拠」を主治医と確認できます。', {kind:'success', cta:'SDM質問カードを見る', href:'SATOI_Mock_v1_A2_dialog.html?from=academia&sdm=1', duration:6000});
+}
+
+document.getElementById('pubmedInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') searchPubmed(); });
+
+// 学びの部屋「調べる」からの検索語を引き継ぎ→自動で在ページ結果を表示
 (function(){
   try {
     var p = new URLSearchParams(location.search);
     var q = p.get('q') || sessionStorage.getItem('satoi_pubmed_q') || '';
-    if (q) { var el = document.getElementById('pubmedInput'); if (el) el.value = q; }
-  } catch(e){}
+    if (q) { var el = document.getElementById('pubmedInput'); if (el) el.value = q; renderResults(q); }
+    else { renderResults(''); } // 初期表示：用意済みの論文を出す
+  } catch(e){ renderResults(''); }
 })();
 </script>
 <script src="satoi_common.js"></script>

@@ -2418,7 +2418,7 @@ document.addEventListener('DOMContentLoaded', function(){
       <p class="section-sub">いま、同じ夜を過ごしている人たちの、生の声。<br>うなずくだけでも「同じ気持ち」が伝わります。</p>
     </div>
 
-    <div class="forum-grid">
+    <div class="forum-grid" id="forumGrid">
       <div class="forum-card"><div class="forum-text">乳がんステージII、手術と薬物療法を提案されたけど、迷っています</div><div class="forum-meta"><span>40代女性</span><span class="forum-meta-tag">💬 3件の返信</span><span class="forum-meta-tag"><span class="sympathy">♡ 同じ気持ち 84</span></span></div></div>
       <div class="forum-card"><div class="forum-text">81歳の父をホスピスに入れる判断、誰に相談したらいいか分からない</div><div class="forum-meta"><span>50代男性 (家族)</span><span class="forum-meta-tag">💬 7件の返信</span><span class="forum-meta-tag"><span class="sympathy">♡ 同じ気持ち 156</span></span></div></div>
       <div class="forum-card"><div class="forum-text">抗がん剤の副作用がつらくて、治療を続けるか相談したい</div><div class="forum-meta"><span>60代女性</span><span class="forum-meta-tag">💬 12件の返信</span><span class="forum-meta-tag"><span class="sympathy">♡ 同じ気持ち 203</span></span></div></div>
@@ -2427,7 +2427,7 @@ document.addEventListener('DOMContentLoaded', function(){
       <div class="forum-card"><div class="forum-text">婚約者がBEP療法を開始予定、どう支えればいいか</div><div class="forum-meta"><span>20代女性 (家族)</span><span class="forum-meta-tag">💬 6件の返信</span><span class="forum-meta-tag"><span class="sympathy">♡ 同じ気持ち 92</span></span></div></div>
     </div>
 
-    <div class="forum-more"><a href="#all-forum">すべての相談を見る (28,432件)  →</a></div>
+    <div class="forum-more"><a href="SATOI_Mock_v1_FORUM.html">みんなの広場をひらく（すべての相談・投稿する）  →</a></div>
   </div>
 </section>
 
@@ -2530,7 +2530,7 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
     <div class="footer-col">
       <div class="footer-col-title">サービス</div>
-      <ul><li><a href="#pathfinder">あなたの道</a></li><li><a href="SATOI_Mock_v1_D1_stories.html">物語ライブラリ</a></li><li><a href="#forum">みんなの広場</a></li><li><a href="SATOI_Mock_v1_G1_corporate_login.html">法人会員 (保険会社)</a></li></ul>
+      <ul><li><a href="#pathfinder">あなたの道</a></li><li><a href="SATOI_Mock_v1_D1_stories.html">物語ライブラリ</a></li><li><a href="SATOI_Mock_v1_FORUM.html">みんなの広場</a></li><li><a href="SATOI_Mock_v1_G1_corporate_login.html">法人会員 (保険会社)</a></li></ul>
     </div>
     <div class="footer-col">
       <div class="footer-col-title">ガバナンス</div>
@@ -3588,6 +3588,33 @@ window.addEventListener('load', () => {
   var hn = document.querySelector('.revisit-headline .name'); if (hn) hn.textContent = pname;
   document.querySelectorAll('.persona-cancer').forEach(function(el){ el.textContent = pd.cancer; });
   document.querySelectorAll('.persona-stage').forEach(function(el){ el.textContent = pd.stage; });
+})();
+
+/* === みんなの広場：ユーザー投稿をプレビューに反映＋カードはFORUMへ遷移 === */
+(function(){
+  var grid = document.getElementById('forumGrid');
+  if (!grid) return;
+  function esc(s){ var d=document.createElement('div'); d.textContent=String(s); return d.innerHTML; }
+  try {
+    var arr = JSON.parse(localStorage.getItem('satoi_forum_posts') || '[]');
+    // 新しい投稿が上に来るよう逆順で先頭挿入（最大2件プレビュー）
+    arr.slice(-2).forEach(function(p){
+      var card = document.createElement('div');
+      card.className = 'forum-card';
+      card.style.borderLeftColor = 'var(--starlight)';
+      var rc = (p.replies||[]).length;
+      card.innerHTML = '<div class="forum-text">' + esc(p.text) + '</div>'
+        + '<div class="forum-meta"><span>' + esc(p.who || 'あなた') + '</span>'
+        + '<span class="forum-meta-tag">💬 ' + rc + '件の返信</span>'
+        + '<span class="forum-meta-tag"><span class="sympathy">♡ 同じ気持ち ' + (p.sympathy||0) + '</span></span></div>';
+      grid.insertBefore(card, grid.firstChild);
+    });
+  } catch(e){}
+  // 「クリック必ず遷移」：広場のカードはすべて本体ページへ
+  [].forEach.call(grid.querySelectorAll('.forum-card'), function(c){
+    c.style.cursor = 'pointer';
+    c.addEventListener('click', function(){ location.href = 'SATOI_Mock_v1_FORUM.html'; });
+  });
 })();
 </script>
 

@@ -835,12 +835,150 @@
     });
   }
 
+  /* ====== 多言語(i18n) ・ EN/ZH/KO ======
+     方針:テキストノードの「完全一致」だけを置換する(部分一致しない=誤訳・崩れを防ぐ)。
+     原文(日本語)はノードに退避して保持し、日本語に戻すと完全復元する。
+     辞書に無い文はそのまま日本語で残る(壊れない)。辞書を足せばカバー範囲が自動で広がる。 */
+  var SATOI_I18N = {
+    // ---- ナビ・共通 ----
+    '戻る':['Back','返回','뒤로'],
+    '言語':['Language','语言','언어'],
+    'さがす':['Search','搜索','검색'],
+    'ログイン':['Log in','登录','로그인'],
+    'ログイン ▾':['Log in ▾','登录 ▾','로그인 ▾'],
+    'マイページ':['My Page','我的页面','마이페이지'],
+    'みんなの広場':['Community','大家的广场','모두의 광장'],
+    '学びの部屋':['Learning Room','学习室','배움의 방'],
+    '物語ライブラリ':['Story Library','故事库','이야기 도서관'],
+    '音楽コミュニティ':['Music Community','音乐社区','음악 커뮤니티'],
+    'コンシェルジュ':['Concierge','礼宾服务','컨시어지'],
+    '💬 コンシェルジュ':['💬 Concierge','💬 礼宾服务','💬 컨시어지'],
+    'SATOIについて':['About SATOI','关于 SATOI','SATOI 소개'],
+    'Satoiができること':['What SATOI can do','SATOI 能做什么','SATOI가 할 수 있는 것'],
+    'ご本人':['Patient (you)','本人','본인'],
+    'ご家族の方':['Family member','家属','가족'],
+    'マインドマップ':['Mind Map','思维导图','마인드맵'],
+    '入口':['Entrance','入口','입구'],
+    // ---- 学びの部屋 タブ ----
+    '読む':['Read','阅读','읽기'],
+    '観る':['Watch','观看','보기'],
+    '調べる':['Research','查阅','조사'],
+    '伝える':['Share','传达','전하기'],
+    '学んだことは、誰かの力になる':['What you learn becomes someone’s strength','你学到的，会成为他人的力量','당신이 배운 것이 누군가의 힘이 됩니다'],
+    // ---- みんなの広場 ----
+    '広場に投稿する':['Post to the Community','发布到广场','광장에 올리기'],
+    'すべて':['All','全部','전체'],
+    '相談':['Consult','咨询','상담'],
+    '学び':['Learning','学习','배움'],
+    'はげまし':['Encouragement','鼓励','격려'],
+    'あなたの投稿':['Your posts','你的帖子','내 게시물'],
+    '相談したい':['Ask for advice','想咨询','상담하고 싶어요'],
+    '学んだことを共有':['Share what you learned','分享所学','배운 것을 공유'],
+    'はげまし・ありがとう':['Encouragement / Thanks','鼓励·感谢','격려·감사'],
+    // ---- C1 マイページ ----
+    '気持ちの、軌跡':['The trajectory of feelings','心情的轨迹','마음의 궤적'],
+    'あなたの、5つの側面':['Your five dimensions','你的五个维度','당신의 다섯 가지 측면'],
+    'あなたは今、ここにいます':['You are here, now','你现在在这里','당신은 지금 여기에 있습니다'],
+    '物語の壺':['The jar of stories','故事之壶','이야기 항아리'],
+    '身体':['Body','身体','신체'],
+    '活力':['Vitality','活力','활력'],
+    '共感':['Empathy','共情','공감'],
+    '精神':['Mind','精神','정신'],
+    '社会':['Social','社会','사회'],
+    'EMPSe 総合':['EMPSe Overall','EMPSe 综合','EMPSe 종합'],
+    // ---- 調べる(学術) ----
+    'PubMed で検索 →':['Search PubMed →','在 PubMed 搜索 →','PubMed에서 검색 →'],
+    '要旨（翻訳）':['Abstract (translation)','摘要（翻译）','초록(번역)'],
+    'やさしい日本語':['Plain language','通俗解说','쉬운 말'],
+    '図表の解説':['Figure explained','图表说明','그림 설명']
+  };
+  var SATOI_LANG_NAMES = { ja:'日本語', en:'English', zh:'中文', ko:'한국어' };
+  var SATOI_LANG_SHORT = { ja:'あ', en:'EN', zh:'中', ko:'한' };
+
+  function i18nWalk(cb){
+    if (!document.body) return;
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(n){
+        var p = n.parentNode;
+        if (!p) return NodeFilter.FILTER_REJECT;
+        var tag = p.nodeName;
+        if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT' || tag === 'TEXTAREA') return NodeFilter.FILTER_REJECT;
+        if (p.closest && p.closest('#satoi-lang-chip, #satoi-toast-host')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var n, arr = [];
+    while ((n = w.nextNode())) arr.push(n);
+    arr.forEach(cb);
+  }
+  var LANG_IDX = { en:0, zh:1, ko:2 };
+  window.satoiApplyLang = function(lang){
+    if (!lang) lang = 'ja';
+    try { sessionStorage.setItem('satoi_lang', lang); } catch(e){}
+    document.documentElement.lang = lang;
+    i18nWalk(function(n){
+      // 翻訳対象として未登録なら、原文(トリム)が辞書キーの時だけ登録
+      if (n.__satoiJa === undefined) {
+        var key0 = (n.nodeValue || '').trim();
+        if (SATOI_I18N[key0]) n.__satoiJa = n.nodeValue; else return;
+      }
+      var key = n.__satoiJa.trim();
+      var entry = SATOI_I18N[key];
+      if (!entry) return;
+      if (lang === 'ja') { n.nodeValue = n.__satoiJa; return; }
+      var idx = LANG_IDX[lang];
+      var tr = (idx != null) ? entry[idx] : null;
+      n.nodeValue = tr ? n.__satoiJa.replace(key, tr) : n.__satoiJa;
+    });
+    var lbl = document.getElementById('satoi-lang-chip-lbl');
+    if (lbl) lbl.textContent = SATOI_LANG_SHORT[lang] || 'あ';
+    var pop = document.getElementById('satoi-lang-chip-pop');
+    if (pop) pop.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang') === lang); });
+  };
+
+  function injectLangChip(){
+    if (document.getElementById('satoi-lang-chip')) return;
+    var cur = 'ja';
+    try { cur = sessionStorage.getItem('satoi_lang') || 'ja'; } catch(e){}
+    var wrap = document.createElement('div');
+    wrap.id = 'satoi-lang-chip';
+    wrap.style.cssText = 'position:fixed; left:16px; bottom:18px; z-index:8800; font-family:inherit;';
+    wrap.innerHTML =
+        '<button id="satoi-lang-chip-btn" aria-label="言語 / Language" style="display:inline-flex; align-items:center; gap:6px; padding:9px 14px; border-radius:22px; border:1px solid rgba(212,169,94,0.55); background:rgba(11,23,54,0.92); color:#F8F6F0; font-size:13px; font-weight:600; cursor:pointer; box-shadow:0 8px 22px rgba(11,23,54,0.30); backdrop-filter:blur(8px);">'
+      + '<span style="font-size:14px;">🌐</span><span id="satoi-lang-chip-lbl">' + (SATOI_LANG_SHORT[cur]||'あ') + '</span><span style="opacity:0.6; font-size:10px;">▾</span></button>'
+      + '<div id="satoi-lang-chip-pop" style="display:none; position:absolute; left:0; bottom:calc(100% + 8px); background:rgba(11,23,54,0.97); border:1px solid rgba(212,169,94,0.4); border-radius:12px; padding:6px; min-width:140px; box-shadow:0 12px 32px rgba(0,0,0,0.5);">'
+      + ['ja','en','zh','ko'].map(function(l){
+          return '<button data-lang="'+l+'" style="display:block; width:100%; text-align:left; padding:9px 14px; border:none; background:transparent; color:#F8F6F0; font-size:13px; cursor:pointer; border-radius:8px; font-family:inherit;">'+SATOI_LANG_NAMES[l]+'</button>';
+        }).join('')
+      + '</div>';
+    document.body.appendChild(wrap);
+    var btn = document.getElementById('satoi-lang-chip-btn');
+    var pop = document.getElementById('satoi-lang-chip-pop');
+    btn.addEventListener('click', function(e){ e.stopPropagation(); pop.style.display = (pop.style.display === 'block' ? 'none' : 'block'); });
+    document.addEventListener('click', function(){ pop.style.display = 'none'; });
+    pop.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('mouseover', function(){ b.style.background = 'rgba(212,169,94,0.18)'; });
+      b.addEventListener('mouseout', function(){ if (!b.classList.contains('active')) b.style.background = 'transparent'; });
+      b.addEventListener('click', function(){
+        var l = b.getAttribute('data-lang');
+        window.satoiApplyLang(l);
+        pop.style.display = 'none';
+        if (typeof satoiNotify === 'function') satoiNotify('✓ ' + ({ja:'日本語に切り替えました',en:'Switched to English',zh:'已切换到中文',ko:'한국어로 전환했습니다'}[l]) + ' ・ ' + ({ja:'未対応の文は日本語のまま表示します',en:'Untranslated text stays in Japanese',zh:'未翻译的文字仍以日语显示',ko:'미번역 문장은 일본어로 표시됩니다'}[l]), {kind:'success', duration:3200});
+      });
+    });
+    // active反映
+    pop.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang') === cur); });
+    var ab = pop.querySelector('button.active'); if (ab) ab.style.background = 'rgba(212,169,94,0.25)';
+  }
+
   /* ====== 初期化 ====== */
   function init(){
     injectStyles();
     injectHomeToggle();
     injectAiBar();
     injectEnhancedNav();
+    injectLangChip();
+    try { var sl = sessionStorage.getItem('satoi_lang'); if (sl && sl !== 'ja') window.satoiApplyLang(sl); } catch(e){}
     injectConciergeBubble();
     maybeRedirectFromA1();
     bindLoginButtons();

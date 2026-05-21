@@ -1729,7 +1729,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
         <span style="width:8px; height:8px; border-radius:50%; background:var(--teal); box-shadow:0 0 8px var(--teal);"></span>
         <span style="font-size:12px; color:var(--teal); letter-spacing:0.04em;">AI 観察</span>
       </div>
-      <div style="font-size:13.5px; color:var(--text-primary); line-height:1.95;">
+      <div id="empseObs" style="font-size:13.5px; color:var(--text-primary); line-height:1.95;">
         今週は <strong>共感(75)</strong> が高く、家族・先輩との繋がりが活きています。<br>
         一方 <strong>活力(45)</strong> がやや低め — Day 3-5 の副作用ピーク帯の影響です。<br>
         <span style="color:var(--text-muted);">活力を上げるには、無理せず休息 + 短い散歩(5分でOK)が、先輩データで効いています。</span>
@@ -2816,6 +2816,38 @@ document.querySelectorAll('.overlay').forEach(o => {
   };
   var pd = PDATA[pid] || PDATA.p1;
   var db = document.getElementById('dayBadgeText'); if (db) db.textContent = '物語の現在地・診断から ' + pd.days + '日目';
+
+  /* === EMPSe 5軸をペルソナ別に反映(レーダー・バー・数値・総合・AI観察) === */
+  var EMPSE = {
+    p1: { scores:[60,45,75,55,65], overall:60, trend:'↑ 先週比 +4',
+          obs:'今週は <strong>共感(75)</strong> が高く、家族・先輩との繋がりが活きています。<br>一方 <strong>活力(45)</strong> がやや低め — Day 3-5 の副作用ピーク帯の影響です。<br><span style="color:var(--text-muted);">活力を上げるには、無理せず休息 + 短い散歩(5分でOK)が、先輩データで効いています。</span>' },
+    p2: { scores:[42,50,82,68,72], overall:63, trend:'↑ 先週比 +3',
+          obs:'今週は <strong>共感(82)</strong>・<strong>社会(72)</strong> が高く、ご家族（お孫さん）や職場との繋がりが、力になっています。<br>一方 <strong>身体(42)</strong> は治療の影響で低め — 焦らず、今日できることをひとつずつ。<br><span style="color:var(--text-muted);">無理のないペースが、長く続けるコツです。短い休息と、好きなお茶の時間を。</span>' }
+  };
+  (function applyEmpse(){
+    var em = EMPSE[pid] || EMPSE.p1;
+    var V = [[0,-110],[95,-45],[70,75],[-70,75],[-95,-45]]; // P,E,Em,M,S 軸ベクトル(中心150,150)
+    var pts = em.scores.map(function(s,i){ return [Math.round(150 + V[i][0]*s/100), Math.round(150 + V[i][1]*s/100)]; });
+    var poly = document.getElementById('empsePoly');
+    if (poly) poly.setAttribute('points', pts.map(function(p){ return p[0]+','+p[1]; }).join(' '));
+    var circles = document.querySelectorAll('.empse-chart circle');
+    pts.forEach(function(p,i){ if (circles[i]){ circles[i].setAttribute('cx', p[0]); circles[i].setAttribute('cy', p[1]); } });
+    var fills = document.querySelectorAll('.empse-axis-fill');
+    var nums  = document.querySelectorAll('.empse-axis-num');
+    em.scores.forEach(function(s,i){ if (fills[i]) fills[i].style.width = s + '%'; if (nums[i]) nums[i].textContent = s; });
+    var on = document.querySelector('.empse-overall-num'); if (on) on.textContent = em.overall;
+    var ot = document.querySelector('.empse-overall-trend'); if (ot) ot.textContent = em.trend;
+    var obs = document.getElementById('empseObs'); if (obs) obs.innerHTML = em.obs;
+  })();
+
+  /* === 気持ち軌跡のX軸ラベルをペルソナの道のりに === */
+  (function applyMoodLabels(){
+    var L = (pid === 'p2')
+      ? ['告知','EGFR判明','方針決定','治療開始','治療中']
+      : ['告知','1週目','セカンドオピニオン','治療開始','3週目'];
+    var texts = document.querySelectorAll('#moodWrap svg text');
+    L.forEach(function(t,i){ if (texts[i]) texts[i].textContent = t; });
+  })();
   var mw = document.getElementById('mmWhere'); if (mw) mw.innerHTML = pd.where;
   var mt = document.getElementById('mmTrail'); if (mt) mt.innerHTML = pd.trail;
   document.querySelectorAll('.persona-cancer').forEach(function(el){ el.textContent = pd.cancer; });
