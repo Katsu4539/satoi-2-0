@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>治療法の、当事者レビュー ・ 同じ治療を受けた人の本音 | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #F1ECD9; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,40,0.18); border-radius:20px; font-size:12px; white-space:nowrap; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 132px 32px 40px; text-align:center; background: linear-gradient(135deg, rgba(212,169,94,0.12) 0%, var(--morning-white) 100%); }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: var(--starlight); padding:6px 18px; border:1px solid rgba(212,169,94,0.5); border-radius:24px; margin-bottom:22px; }
+.hero-title { font-size: clamp(28px, 5vw, 44px); font-weight:300; line-height:1.5; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: var(--warm-orange); font-weight:600; }
+.hero-sub { font-size:15.5px; color: var(--ink-medium); line-height:2; max-width:700px; margin:0 auto; }
+
+.verify { max-width:760px; margin:22px auto 0; padding:14px 20px; background:rgba(13,115,119,0.07); border:1px solid rgba(13,115,119,0.22); border-radius:14px; font-size:13px; color:var(--ink-medium); line-height:1.85; display:flex; gap:12px; align-items:flex-start; }
+.verify .vb { flex-shrink:0; font-size:12px; font-weight:700; color:#fff; background:var(--teal); padding:4px 10px; border-radius:11px; }
+.verify strong { color:var(--teal); }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 30px 22px 70px; }
+
+.filter-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:24px; }
+.filter-row .fl-label { font-size:12px; color:var(--ink-light); margin-right:4px; }
+.fchip { padding:8px 16px; border-radius:18px; border:1px solid rgba(212,169,94,0.4); background:rgba(212,169,94,0.10); font-size:13px; color:var(--ink-medium); }
+.fchip.active { background:var(--warm-orange); color:#fff; border-color:var(--warm-orange); }
+
+.tx-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+@media (max-width:760px){ .tx-grid { grid-template-columns:1fr; } }
+.tx-card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:22px 24px; cursor:pointer; transition:all .25s; }
+.tx-card:hover { transform:translateY(-3px); box-shadow:0 14px 32px rgba(11,23,54,0.10); border-color:rgba(212,169,94,0.5); }
+.tx-card.mine { border-left:4px solid var(--warm-orange); background:linear-gradient(180deg, rgba(212,98,42,0.04), #fff); }
+.tx-badges { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+.tx-badge { font-size:10.5px; font-weight:600; padding:3px 10px; border-radius:11px; background:rgba(127,168,201,0.16); color:#3F6E96; }
+.tx-badge.mine { background:rgba(212,98,42,0.16); color:#B85420; }
+.tx-name { font-size:18px; font-weight:600; color:var(--ink-deep); }
+.tx-sub { font-size:12.5px; color:var(--ink-light); margin-bottom:10px; }
+.tx-score-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.tx-stars { color:var(--starlight); font-size:18px; letter-spacing:2px; }
+.tx-stars .empty { color:rgba(10,22,40,0.16); }
+.tx-score-num { font-size:20px; font-weight:700; color:var(--warm-orange); }
+.tx-score-n { font-size:12px; color:var(--ink-light); }
+.tx-quote { font-size:13.5px; color:var(--ink-medium); line-height:1.8; border-left:3px solid rgba(212,169,94,0.5); padding-left:12px; }
+.tx-more { font-size:12.5px; color:var(--teal); font-weight:600; margin-top:12px; }
+
+/* モーダル */
+.modal-mask { position:fixed; inset:0; background:rgba(11,23,40,0.55); backdrop-filter:blur(4px); z-index:9000; display:none; align-items:flex-end; justify-content:center; }
+.modal-mask.show { display:flex; }
+.modal { background:var(--morning-white); width:100%; max-width:720px; max-height:90vh; border-radius:22px 22px 0 0; overflow-y:auto; box-shadow:0 -20px 60px rgba(0,0,0,0.4); animation:rise .32s cubic-bezier(0.2,0.8,0.2,1); }
+@keyframes rise { from { transform:translateY(40px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+.modal-head { position:sticky; top:0; background:rgba(251,247,240,0.97); backdrop-filter:blur(8px); padding:18px 24px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.modal-head h3 { font-size:17px; font-weight:600; color:var(--ink-deep); }
+.modal-head .mh-sub { font-size:12.5px; color:var(--ink-light); margin-top:2px; }
+.modal-close { background:transparent; border:none; font-size:22px; color:var(--ink-light); line-height:1; flex-shrink:0; }
+.modal-body { padding:24px; }
+
+.axes { display:flex; flex-direction:column; gap:10px; margin-bottom:22px; }
+.axis { display:grid; grid-template-columns:130px 1fr 38px; align-items:center; gap:12px; }
+.axis-label { font-size:13px; color:var(--ink-medium); }
+.axis-bar { height:9px; background:rgba(10,22,40,0.08); border-radius:6px; overflow:hidden; }
+.axis-fill { height:100%; background:linear-gradient(90deg, var(--teal-soft), var(--starlight)); border-radius:6px; }
+.axis-num { font-size:13px; font-weight:700; color:var(--ink-deep); text-align:right; }
+
+.reviews-h { font-size:14px; font-weight:600; color:var(--ink-deep); margin:20px 0 12px; border-top:1px solid var(--line); padding-top:18px; }
+.review { background:var(--morning-cream); border-radius:14px; padding:16px 18px; margin-bottom:12px; }
+.review-top { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
+.review-who { font-size:12.5px; font-weight:600; color:var(--ink-deep); }
+.review-verify { font-size:10px; font-weight:700; color:#fff; background:var(--teal); padding:2px 8px; border-radius:9px; }
+.review-stars { color:var(--starlight); font-size:13px; letter-spacing:1px; }
+.review-stars .empty { color:rgba(10,22,40,0.16); }
+.review-body { font-size:14px; color:var(--ink-deep); line-height:1.85; }
+
+/* 投稿 */
+.compose { background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px; margin-top:18px; }
+.compose h4 { font-size:14px; font-weight:600; color:var(--ink-deep); margin-bottom:4px; }
+.compose .who-line { font-size:11.5px; color:var(--ink-light); margin-bottom:14px; }
+.compose .who-line .vb { font-size:10px; font-weight:700; color:#fff; background:var(--teal); padding:2px 8px; border-radius:9px; margin-right:6px; }
+.star-pick { font-size:26px; letter-spacing:4px; color:rgba(10,22,40,0.18); margin-bottom:12px; cursor:pointer; user-select:none; }
+.star-pick .on { color:var(--starlight); }
+.compose textarea { width:100%; border:1px solid var(--line); border-radius:12px; padding:13px 15px; font-family:inherit; font-size:14px; line-height:1.8; color:var(--ink-deep); resize:vertical; min-height:72px; outline:none; }
+.compose textarea:focus { border-color:var(--warm-orange); }
+.compose-foot { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px; }
+.compose-note { font-size:11px; color:var(--ink-light); flex:1; min-width:170px; }
+.btn-post { background:var(--warm-orange); color:#fff; border:none; border-radius:22px; padding:11px 24px; font-size:13.5px; font-weight:600; white-space:nowrap; }
+.btn-post:hover { background:#B85420; }
+
+.disc { max-width:1080px; margin:28px auto 0; padding:16px 20px; background:rgba(199,107,127,0.07); border:1px solid rgba(199,107,127,0.22); border-radius:14px; font-size:12px; color:var(--ink-medium); line-height:1.85; }
+.disc strong { color:var(--rose); }
+footer { text-align:center; padding:40px 22px; color:var(--ink-light); font-size:12.5px; line-height:1.9; border-top:1px solid var(--line); margin-top:30px; }
+
+#satoi-toast-host { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none; max-width:92vw; }
+.satoi-toast { pointer-events:auto; min-width:280px; max-width:480px; background:linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color:#F8F6F0; padding:16px 22px 16px 18px; border-radius:16px; box-shadow:0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family:var(--font); font-size:13.5px; line-height:1.75; backdrop-filter:blur(14px); display:flex; gap:14px; align-items:flex-start; opacity:0; transform:translateY(20px); transition:opacity .4s, transform .4s; border-left:3px solid #D4A95E; }
+.satoi-toast.show { opacity:1; transform:translateY(0); }
+.satoi-toast.success { border-left-color:#14A6AB; }
+.satoi-toast.warn { border-left-color:#D4622A; }
+.satoi-toast-icon { flex-shrink:0; width:28px; height:28px; border-radius:50%; background:rgba(212,169,94,0.18); display:inline-flex; align-items:center; justify-content:center; font-size:14px; }
+.satoi-toast.success .satoi-toast-icon { background:rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background:rgba(212,98,42,0.20); }
+.satoi-toast-body { flex:1; white-space:pre-line; }
+.satoi-toast-close { background:transparent; border:none; color:rgba(248,246,240,0.5); cursor:pointer; font-size:18px; line-height:1; }
+@media (max-width:768px){ .header{padding:14px 18px;} .hero{padding:120px 18px 36px;} .modal{max-width:100%;} .axis{grid-template-columns:108px 1fr 34px;} #satoi-toast-host{bottom:14px;} .satoi-toast{min-width:auto; width:calc(100vw - 28px);} }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="SATOI_Mock_v1_A1_entrance.html"><span class="dot"></span>SATOI</a>
+  <a class="back-btn" href="SATOI_Mock_v1_B1_hub.html">← マインドマップへ戻る</a>
+</header>
+
+<section class="hero">
+  <span class="hero-eyebrow">REAL VOICES ON TREATMENTS</span>
+  <h1 class="hero-title">治療法の、<strong>当事者レビュー</strong></h1>
+  <p class="hero-sub">同じ治療を受けた人が、効果・副作用・続けやすさを ★で残しています。<br>カタログの説明ではなく、「実際どうだったか」の本音が、ここにあります。</p>
+  <div class="verify">
+    <span class="vb">✓ 認証</span>
+    <div><strong>保険証で本人確認された当事者だけ</strong>が投稿できます。なりすまし・広告・サクラを排除し、「実際にその治療を受けた人」の声だけを集めています。匿名性は守られ、表示されるのは年代・がん種などの最小限です。</div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="filter-row" id="filterRow">
+    <span class="fl-label">がん種:</span>
+    <button class="fchip active" data-c="all">すべて</button>
+    <button class="fchip" data-c="breast">乳がん</button>
+    <button class="fchip" data-c="lung">肺がん</button>
+    <button class="fchip" data-c="colon">大腸がん</button>
+    <button class="fchip" data-c="stomach">胃がん</button>
+    <button class="fchip" data-c="prostate">前立腺がん</button>
+    <button class="fchip" data-c="pancreas">膵がん</button>
+  </div>
+
+  <div class="tx-grid" id="txGrid"></div>
+
+  <div class="disc">
+    <strong>大切なお願い</strong>　ここにあるのは、あくまで個人の主観的な体験です。同じ治療でも、効果や副作用の出方は人によって大きく異なります。治療法を選ぶ・変えるときは、必ず主治医とご相談ください。SATOIは特定の治療を推奨するものではありません。
+  </div>
+</div>
+
+<div class="modal-mask" id="modalMask">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><h3 id="mTitle"></h3><div class="mh-sub" id="mSub"></div></div>
+      <button class="modal-close" id="mClose" aria-label="閉じる">×</button>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+
+<footer>
+  SATOI ・ 治療法の当事者レビュー（Mock）<br>
+  個人の体験の共有です。治療の判断は、必ず主治医とご相談ください。
+</footer>
+
+<script>
+function satoiNotify(msg, opts){
+  opts = opts || {};
+  var host = document.getElementById('satoi-toast-host');
+  if (!host){ host = document.createElement('div'); host.id='satoi-toast-host'; document.body.appendChild(host); }
+  var t = document.createElement('div');
+  var kind = opts.kind || (String(msg).indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  var icon = opts.icon || (kind==='success'?'✓':(kind==='warn'?'!':'●'));
+  t.innerHTML = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+String(msg).replace(/\n/g,'<br>')+'</div><button class="satoi-toast-close">×</button>';
+  host.appendChild(t);
+  requestAnimationFrame(function(){ t.classList.add('show'); });
+  var closer=function(){ t.classList.remove('show'); setTimeout(function(){t.remove();},450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, opts.duration||4200);
+}
+window.alert = function(m){ try{ satoiNotify(String(m)); }catch(e){} };
+
+var AXIS_LABELS = ['効果の実感','副作用の少なさ','続けやすさ','生活との両立','説明の納得感'];
+
+/* 実在レジメンの当事者レビュー（シード・実名なし） */
+var TX = [
+  { id:'tc', cancer:'breast', cancerName:'乳がん', regimen:'TC療法', sub:'ドセタキセル + シクロホスファミド（4サイクル）',
+    axes:[4.1,3.3,3.7,3.5,4.0], n:128,
+    reviews:[
+      {who:'40代女性 ・ 乳がんII', stars:4, body:'脱毛と3〜5日目のだるさはつらかったけれど、4回で終わると分かっていたので走り切れました。先生が副作用の山を事前に教えてくれたのが大きかった。'},
+      {who:'50代女性 ・ 乳がんII', stars:4, body:'吐き気止めがよく効いて、思ったより食べられました。仕事は治療日とその後2日を休む形で続けられました。'}
+    ]},
+  { id:'keynote', cancer:'breast', cancerName:'乳がん', regimen:'ペムブロリズマブ併用（術前）', sub:'KEYNOTE-522 ・ 免疫薬 + 化学療法',
+    axes:[4.4,3.0,3.4,3.3,3.9], n:64,
+    reviews:[
+      {who:'40代女性 ・ トリプルネガティブ', stars:4, body:'手術のときにがんが見つからなくなっていて、選んでよかったと思いました。ただ甲状腺の数値など、免疫の副作用のチェックはこまめに必要でした。'}
+    ]},
+  { id:'osi', cancer:'lung', cancerName:'肺がん', regimen:'オシメルチニブ（タグリッソ）', sub:'EGFR陽性 ・ 1日1回の内服',
+    axes:[4.5,4.0,4.6,4.2,4.1], n:96,
+    reviews:[
+      {who:'60代男性 ・ 肺がんIV(EGFR)', stars:5, body:'点滴ではなく毎日1錠の飲み薬なので、生活がほとんど変わりませんでした。だるさや皮膚の乾燥はありますが、自分のペースで暮らせています。'},
+      {who:'50代女性 ・ 肺腺がん', stars:4, body:'効果はしっかり感じます。下痢が出やすいので、整腸剤を常備して付き合っています。脳の転移にも効くと聞いて安心材料になりました。'}
+    ]},
+  { id:'platinum', cancer:'lung', cancerName:'肺がん', regimen:'プラチナ併用化学療法', sub:'シスプラチン/カルボプラチン + 併用薬',
+    axes:[3.8,2.9,3.1,3.0,3.6], n:51,
+    reviews:[
+      {who:'60代男性 ・ 肺がん', stars:3, body:'効く実感はありましたが、点滴のたびに数日きつかった。サポートの薬を増やしてもらって乗り切りました。'}
+    ]},
+  { id:'folfox', cancer:'colon', cancerName:'大腸がん', regimen:'FOLFOX', sub:'5-FU + オキサリプラチン',
+    axes:[4.0,3.0,3.3,3.4,3.8], n:73,
+    reviews:[
+      {who:'50代男性 ・ 大腸がんIII', stars:4, body:'冷たいものを触ると指がしびれる症状が特徴的。手袋が手放せませんでしたが、回を重ねるごとに自分なりの対策ができました。'}
+    ]},
+  { id:'capox', cancer:'colon', cancerName:'大腸がん', regimen:'CAPOX', sub:'カペシタビン（内服）+ オキサリプラチン',
+    axes:[3.9,3.2,3.8,3.7,3.7], n:40,
+    reviews:[
+      {who:'60代女性 ・ 大腸がん', stars:4, body:'飲み薬中心なので通院が少なくて済みました。手足のしびれと相談しながら量を調整してもらいました。'}
+    ]},
+  { id:'sox', cancer:'stomach', cancerName:'胃がん', regimen:'S-1 + オキサリプラチン（SOX）', sub:'内服 + 点滴の併用',
+    axes:[3.9,3.1,3.6,3.5,3.7], n:38,
+    reviews:[
+      {who:'60代男性 ・ 胃がん', stars:4, body:'食欲が落ちる時期がありましたが、少量を回数多く食べる工夫で体重を保てました。栄養士さんの相談が役立ちました。'}
+    ]},
+  { id:'adt', cancer:'prostate', cancerName:'前立腺がん', regimen:'ホルモン療法（ADT）', sub:'アンドロゲン遮断療法',
+    axes:[4.2,3.6,4.3,4.0,3.9], n:57,
+    reviews:[
+      {who:'70代男性 ・ 前立腺がん', stars:4, body:'ほてり（ホットフラッシュ）はありますが、日常生活はほぼ普段どおり。数値が落ち着いていくのを見ると励みになります。'}
+    ]},
+  { id:'folfirinox', cancer:'pancreas', cancerName:'膵がん', regimen:'FOLFIRINOX', sub:'多剤併用化学療法',
+    axes:[3.7,2.6,2.9,2.8,3.6], n:33,
+    reviews:[
+      {who:'50代女性 ・ 膵がん', stars:3, body:'強い治療なので副作用も大きめでした。それでも効果に賭けたい思いで続けています。支持療法と家族の支えが頼りです。'}
+    ]},
+  { id:'gnp', cancer:'pancreas', cancerName:'膵がん', regimen:'ゲムシタビン + nab-パクリタキセル', sub:'GnP療法',
+    axes:[3.6,3.1,3.4,3.3,3.6], n:29,
+    reviews:[
+      {who:'60代男性 ・ 膵がん', stars:3, body:'FOLFIRINOXより体への負担はやや軽いと感じました。脱毛やだるさはありますが、通院しながら続けられています。'}
+    ]}
+];
+
+function readReviews(){ try { return JSON.parse(localStorage.getItem('satoi_tx_reviews')||'{}'); } catch(e){ return {}; } }
+function writeReviews(o){ try { localStorage.setItem('satoi_tx_reviews', JSON.stringify(o)); } catch(e){} }
+function userReviewsFor(id){ var o=readReviews(); return o[id]||[]; }
+function allReviewsFor(t){ return userReviewsFor(t.id).concat(t.reviews); }
+
+function avg(arr){ return arr.reduce(function(a,b){return a+b;},0)/arr.length; }
+function overallOf(t){
+  // ユーザー★を反映:ユーザー投稿の★平均と軸平均をレビュー数で加重
+  var base = avg(t.axes);
+  var ur = userReviewsFor(t.id);
+  if (!ur.length) return base;
+  var us = avg(ur.map(function(r){return r.stars;}));
+  var w = t.n, wu = ur.length;
+  return (base*w + us*wu) / (w+wu);
+}
+function stars(v, cls){
+  cls = cls || 'tx-stars';
+  var full = Math.round(v);
+  var s='';
+  for (var i=1;i<=5;i++) s += (i<=full) ? '★' : '<span class="empty">★</span>';
+  return '<span class="'+cls+'">'+s+'</span>';
+}
+function esc(s){ var d=document.createElement('div'); d.textContent=String(s); return d.innerHTML; }
+function currentCancer(){ try { return sessionStorage.getItem('satoi_cancer')||''; } catch(e){ return ''; } }
+
+var activeFilter = 'all';
+function renderGrid(){
+  var grid = document.getElementById('txGrid');
+  var pc = currentCancer();
+  var list = TX.slice();
+  // ペルソナのがん種を優先（フィルタallのとき）
+  if (activeFilter === 'all' && pc) list.sort(function(a,b){ return (b.cancer===pc?1:0)-(a.cancer===pc?1:0); });
+  var shown = list.filter(function(t){ return activeFilter==='all' || t.cancer===activeFilter; });
+  grid.innerHTML = shown.map(function(t){
+    var mine = pc && t.cancer===pc;
+    var ov = overallOf(t);
+    var n = t.n + userReviewsFor(t.id).length;
+    var q = allReviewsFor(t)[0];
+    return '<div class="tx-card'+(mine?' mine':'')+'" data-id="'+t.id+'">'
+      + '<div class="tx-badges"><span class="tx-badge'+(mine?' mine':'')+'">'+esc(t.cancerName)+'</span>'+(mine?'<span class="tx-badge mine">あなたの治療に近い</span>':'')+'</div>'
+      + '<div class="tx-name">'+esc(t.regimen)+'</div>'
+      + '<div class="tx-sub">'+esc(t.sub)+'</div>'
+      + '<div class="tx-score-row">'+stars(ov)+'<span class="tx-score-num">'+ov.toFixed(1)+'</span><span class="tx-score-n">'+n+'件のレビュー</span></div>'
+      + (q?'<div class="tx-quote">'+esc(q.body)+'</div>':'')
+      + '<div class="tx-more">当事者レビューを読む・書く →</div>'
+      + '</div>';
+  }).join('');
+  [].forEach.call(grid.querySelectorAll('.tx-card'), function(c){ c.addEventListener('click', function(){ openModal(c.getAttribute('data-id')); }); });
+}
+
+var currentId = null, pickedStars = 0;
+function findTx(id){ return TX.filter(function(t){return t.id===id;})[0]; }
+function openModal(id){
+  var t = findTx(id); if (!t) return;
+  currentId = id; pickedStars = 0;
+  document.getElementById('mTitle').textContent = t.regimen;
+  document.getElementById('mSub').textContent = t.cancerName + ' ・ ' + t.sub;
+  var ov = overallOf(t);
+  var axesHtml = t.axes.map(function(v,i){
+    return '<div class="axis"><div class="axis-label">'+AXIS_LABELS[i]+'</div><div class="axis-bar"><div class="axis-fill" style="width:'+(v/5*100)+'%"></div></div><div class="axis-num">'+v.toFixed(1)+'</div></div>';
+  }).join('');
+  var revs = allReviewsFor(t);
+  var revHtml = revs.map(function(r){
+    return '<div class="review"><div class="review-top"><span class="review-who">'+esc(r.who)+'</span><span class="review-verify">✓ 認証済み</span>'+stars(r.stars,'review-stars')+'</div><div class="review-body">'+esc(r.body)+'</div></div>';
+  }).join('');
+  document.getElementById('mBody').innerHTML =
+      '<div class="tx-score-row" style="margin-bottom:18px;">'+stars(ov)+'<span class="tx-score-num">'+ov.toFixed(1)+'</span><span class="tx-score-n">'+(t.n+userReviewsFor(t.id).length)+'件の当事者レビュー</span></div>'
+    + '<div class="axes">'+axesHtml+'</div>'
+    + '<div class="reviews-h">みんなのレビュー</div>'
+    + revHtml
+    + '<div class="compose">'
+    + '<h4>あなたのレビューを書く</h4>'
+    + '<div class="who-line"><span class="vb">✓ 認証</span>'+esc(composerWho())+' として投稿（実名は出ません）</div>'
+    + '<div class="star-pick" id="starPick" role="slider" aria-label="星評価">'+[1,2,3,4,5].map(function(i){return '<span data-s="'+i+'">★</span>';}).join('')+'</div>'
+    + '<textarea id="reviewInput" placeholder="効果の実感・副作用・続けやすさなど、これから受ける人に伝えたい本音を。"></textarea>'
+    + '<div class="compose-foot"><span class="compose-note">同じ治療を受けた当事者として、これから選ぶ人の参考になります。医療判断は主治医とご相談ください。</span><button class="btn-post" id="reviewPost">レビューを投稿</button></div>'
+    + '</div>';
+  // 星選択
+  var sp = document.getElementById('starPick');
+  [].forEach.call(sp.querySelectorAll('span'), function(st){
+    st.addEventListener('click', function(){ pickedStars = parseInt(st.getAttribute('data-s'),10); paintStars(); });
+  });
+  document.getElementById('reviewPost').addEventListener('click', submitReview);
+  document.getElementById('modalMask').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function paintStars(){
+  var sp = document.getElementById('starPick'); if (!sp) return;
+  [].forEach.call(sp.querySelectorAll('span'), function(st){
+    st.classList.toggle('on', parseInt(st.getAttribute('data-s'),10) <= pickedStars);
+  });
+}
+function composerWho(){
+  var cn=''; var stg='';
+  try { cn = sessionStorage.getItem('satoi_last_cancer_name')||''; stg = sessionStorage.getItem('satoi_stage')||''; } catch(e){}
+  if (cn) return '当事者（' + cn + (stg?stg+'期':'') + '）';
+  return '当事者（認証済み）';
+}
+function submitReview(){
+  var ta = document.getElementById('reviewInput');
+  var v = (ta.value||'').trim();
+  if (!pickedStars){ satoiNotify('★の数（評価）を選んでください。', {kind:'warn'}); return; }
+  if (!v){ satoiNotify('ひとことだけでも、体験を書いてみてください。', {kind:'warn'}); ta.focus(); return; }
+  var o = readReviews();
+  o[currentId] = o[currentId] || [];
+  o[currentId].unshift({ who: composerWho(), stars: pickedStars, body: v, mine:true });
+  writeReviews(o);
+  openModal(currentId); // 再描画（自分のレビューが先頭に出る）
+  renderGrid();
+  satoiNotify('✓ レビューを投稿しました（'+pickedStars+'★）。\nあなたの本音が、これから同じ治療を選ぶ人の支えになります。', {kind:'success', duration:5000});
+}
+function closeModal(){ document.getElementById('modalMask').classList.remove('show'); document.body.style.overflow=''; currentId=null; }
+
+document.addEventListener('DOMContentLoaded', function(){
+  [].forEach.call(document.querySelectorAll('#filterRow .fchip'), function(b){
+    b.addEventListener('click', function(){
+      activeFilter = b.getAttribute('data-c');
+      document.querySelectorAll('#filterRow .fchip').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      renderGrid();
+    });
+  });
+  document.getElementById('mClose').addEventListener('click', closeModal);
+  document.getElementById('modalMask').addEventListener('click', function(e){ if (e.target===this) closeModal(); });
+  document.addEventListener('keydown', function(e){ if (e.key==='Escape' && currentId) closeModal(); });
+  // URLパラメータ ?regimen=tc 等で直接オープン
+  try {
+    var p = new URLSearchParams(location.search);
+    var c = p.get('cancer'); if (c){ var b=document.querySelector('#filterRow .fchip[data-c="'+c+'"]'); if (b) b.click(); }
+  } catch(e){}
+  renderGrid();
+  try { var rid = new URLSearchParams(location.search).get('regimen'); if (rid && findTx(rid)) openModal(rid); } catch(e){}
+});
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

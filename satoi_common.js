@@ -331,6 +331,7 @@
     { title:'治療を知る', items:[
       { label:'治療の全体像(マインドマップ)', url:'SATOI_Mock_v1_B1_mindmap.html' },
       { label:'治療法の詳しい説明',           url:'SATOI_Mock_v1_B3_treatment_detail.html' },
+      { label:'治療法の当事者レビュー(★体験)', url:'SATOI_Mock_v1_TX_reviews.html' },
       { label:'がん情報ハブ',                 url:'SATOI_Mock_v1_B1_hub.html' },
       { label:'研究・治験の情報',             url:'SATOI_Mock_v1_ACAD_research.html' }
     ]},
@@ -357,6 +358,8 @@
     ]},
     { title:'あなたの記録', items:[
       { label:'マイページ',       url:'SATOI_Mock_v1_C1_mypage.html' },
+      { label:'私の療養手帳(対話で育つ)', url:'SATOI_Mock_v1_TECHO_handbook.html' },
+      { label:'物語ムービー(人生会議・大切な人へ)', url:'SATOI_Mock_v1_MOVIE_lifestory.html' },
       { label:'今日の振り返り',   url:'SATOI_Mock_v1_C1_review.html' }
     ]},
     { title:'大切な設定・備え', items:[

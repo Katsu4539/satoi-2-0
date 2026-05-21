@@ -1335,6 +1335,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
     <div class="day-badge"><span class="pulse"></span><span id="dayBadgeText">物語の現在地・診断から 42日目</span></div>
     <a class="header-link" href="SATOI_Mock_v1_A2_dialog.html">AI対話</a>
     <a class="header-link" href="SATOI_Mock_v1_A1_entrance.html">ログアウト</a>
+    <a class="header-link" href="SATOI_Mock_v1_EMG_qr.html?from=c1" title="夜間・救急時にQRで医療情報を開示" style="color:#fff; background:linear-gradient(135deg,#B85450,#D4622A); border-radius:16px; padding:7px 14px; font-weight:600;">🚨 緊急QR</a>
   </div>
 </header>
 
@@ -1357,6 +1358,8 @@ body.satoi-has-jbar .header { top: 0 !important; }
       <button class="btn-primary" onclick="location.href='SATOI_Mock_v1_C1_resume_bridge.html'">前回の続きから話す →</button>
       <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_B1_mindmap.html?from=c1'">治療マインドマップで見る</button>
       <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_C1_review.html'">📖 今日の振り返り</button>
+      <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_TECHO_handbook.html'">📔 私の療養手帳</button>
+      <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_MOVIE_lifestory.html'">📽️ 物語ムービー</button>
       <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_CONSENT.html'">🔒 だれに何を見せているか</button>
     </div>
   </div>
@@ -1414,6 +1417,10 @@ body.satoi-has-jbar .header { top: 0 !important; }
   </div>
   <div class="sm-flow-hint">← 左右にスクロール・スワイプで、あなたの物語をたどれます →</div>
   <div class="sm-detail" id="smDetail"></div>
+  <p class="sm-cta-note" style="max-width:680px; margin:22px auto 12px; text-align:center; font-size:14px; line-height:1.95; color:rgba(26,42,64,0.72);">
+    かしこまって書かなくて、大丈夫です。<span class="sm-name">あなた</span>の物語が流れていく、その時々を <strong style="color:var(--warm-orange);">気軽にAIと話すだけ</strong>。<br>
+    話したこと・その日の気持ちは、<strong>物語の記録（ログ）</strong>として、ここに そっと残っていきます。話した分だけ、あなたの物語になります。
+  </p>
   <div class="sm-flow-cta"><a href="SATOI_Mock_v1_A2_dialog.html?resume=1&from=c1_story">この物語の続きを、AIと話す →</a></div>
 </section>
 
@@ -1795,12 +1802,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
   </div>
 </section>
 
-<!-- 緊急QR 常設ボタン -->
-<div class="c1-emg-fab" style="position:fixed; bottom:24px; right:24px; z-index:300;">
-  <button onclick="location.href='SATOI_Mock_v1_EMG_qr.html?from=c1'" style="display:flex; align-items:center; gap:10px; padding:14px 22px; background:linear-gradient(135deg, #B85450, #D4622A); color:white; border:none; border-radius:32px; font-size:13px; font-weight:600; cursor:pointer; box-shadow:0 12px 28px rgba(184,84,80,0.4); letter-spacing:0.04em;" title="夜間・救急時にQRで医療情報を開示">
-    🚨 緊急QR
-  </button>
-</div>
+<!-- 緊急QRはヘッダー右(ログアウト隣)へ移動。下部固定はコンシェルジュ/言語チップと被るため廃止。 -->
 
 <!-- ===== 4. マイチーム ===== -->
 <section class="section" style="background:var(--bg-cream);">
@@ -1911,7 +1913,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
           <div class="sdm-icon">📋</div>
           <div>
             <div class="sdm-title">次回の診察に向けて</div>
-            <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">準備中の質問:11個 ・ チェック済み:4個</div>
+            <div id="sdmCountInfo" style="font-size:13px;color:var(--text-secondary);margin-top:4px;">準備中の質問:7個 ・ チェック済み:4個</div>
           </div>
         </div>
       </div>
@@ -1920,7 +1922,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
 
     <div class="sdm-questions-summary">
       これまでの対話から、AIが大切だと思う質問を集めています。<br>
-      不要なものはチェックを外し、必要なものを追加できます。
+      <strong>各項目をタップ</strong>すると、チェックの ON / OFF を切り替えられます。チェックしたものだけが「PDFで印刷」に出ます。
     </div>
 
     <div class="sdm-list-mini">
@@ -1934,7 +1936,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
     </div>
 
     <div class="sdm-actions">
-      <button class="sdm-act" onclick="satoiNotify('✓ PDF出力(11問)\n\nA4一枚に整形・診察室にお持ちください。')">📄 PDFで印刷</button>
+      <button class="sdm-act" onclick="sdmPrint()">📄 PDFで印刷</button>
       <button class="sdm-act" onclick="satoiNotify('✓ QRコード生成\n\n診察室で先生のスマホに飛ばせます。')">📱 QRで先生に共有</button>
       <button class="sdm-act" onclick="satoiNotify('✓ メール送信\n\n登録済みのご家族・主治医に送信可能。')">✉️ メール送信</button>
       <button class="sdm-act" onclick="satoiNotify('✓ 物語の壺に記録\n\nマイページの「対話の足跡」に保存しました。光の粒+1。')">💎 物語に記録</button>
@@ -2938,6 +2940,65 @@ document.querySelectorAll('.overlay').forEach(o => {
     if (prevBtn) prevBtn.addEventListener('click', function(){ flow.scrollBy({ left:-260, behavior:'smooth' }); });
     if (nextBtn) nextBtn.addEventListener('click', function(){ flow.scrollBy({ left:260, behavior:'smooth' }); });
   }
+})();
+</script>
+
+<!-- ===== SDM 聞きたいカード:チェック開閉＋チェック内容のPDF出力 ===== -->
+<script>
+(function(){
+  var list = document.querySelector('.sdm-list-mini');
+  if (!list) return;
+  var items = [].slice.call(list.querySelectorAll('.sdm-q-mini'));
+  function qtext(it){ var sp = it.querySelector('span:last-child'); return sp ? sp.textContent.trim() : it.textContent.trim(); }
+  function updateCount(){
+    var checked = items.filter(function(it){ return it.classList.contains('checked'); }).length;
+    var el = document.getElementById('sdmCountInfo');
+    if (el) el.textContent = '準備中の質問:' + items.length + '個 ・ チェック済み:' + checked + '個';
+  }
+  items.forEach(function(it){
+    it.style.cursor = 'pointer';
+    it.setAttribute('role','checkbox');
+    it.setAttribute('aria-checked', it.classList.contains('checked') ? 'true' : 'false');
+    it.addEventListener('click', function(){
+      it.classList.toggle('checked');
+      it.setAttribute('aria-checked', it.classList.contains('checked') ? 'true' : 'false');
+      updateCount();
+    });
+  });
+  updateCount();
+
+  window.sdmPrint = function(){
+    var checked = items.filter(function(it){ return it.classList.contains('checked'); }).map(qtext);
+    if (!checked.length){
+      if (typeof satoiNotify === 'function') satoiNotify('チェックされた質問がありません。\n聞きたい質問をタップで選んでから「PDFで印刷」を押してください。', {kind:'warn'});
+      return;
+    }
+    var esc = function(s){ var d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; };
+    var pname = '';
+    try { pname = sessionStorage.getItem('satoi_persona') || ''; } catch(e){}
+    var cn = '';
+    try { cn = sessionStorage.getItem('satoi_last_cancer_name') || ''; } catch(e){}
+    var rows = checked.map(function(t){ return '<li>' + esc(t) + '<span class="ans">先生の回答メモ：__________________________________</span></li>'; }).join('');
+    var w = window.open('', '_blank');
+    if (!w){ if (typeof satoiNotify === 'function') satoiNotify('印刷用の画面を開けませんでした。ポップアップを許可してください。', {kind:'warn'}); return; }
+    var doc = '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>先生に聞きたいことカード - SATOI</title>'
+      + '<style>body{font-family:"Noto Sans JP","Meiryo UI",sans-serif;color:#1A2A40;max-width:720px;margin:36px auto;padding:0 28px;line-height:1.9;}'
+      + 'h1{font-size:21px;border-bottom:2px solid #0D7377;padding-bottom:10px;margin-bottom:6px;}'
+      + '.meta{font-size:12.5px;color:#555;margin-bottom:20px;}'
+      + 'ol{padding-left:22px;} li{margin-bottom:18px;font-size:15px;font-weight:600;}'
+      + '.ans{display:block;font-weight:400;font-size:12.5px;color:#888;margin-top:8px;}'
+      + '.note{font-size:11.5px;color:#999;border-top:1px solid #ddd;margin-top:28px;padding-top:12px;line-height:1.8;}'
+      + '.foot{font-size:11px;color:#999;margin-top:8px;}</style></head><body>'
+      + '<h1>先生に、聞きたいことカード</h1>'
+      + '<div class="meta">' + (pname ? esc(pname) + ' さま ・ ' : '') + (cn ? esc(cn) + ' ・ ' : '') + '次回の診察用 ・ ' + new Date().toLocaleDateString() + '<br>あなたがチェックした ' + checked.length + ' 件の質問です。診察室で、上から順に確認できます。</div>'
+      + '<ol>' + rows + '</ol>'
+      + '<div class="note">※ この用紙は、診察の限られた時間で「言いたかったことが言えなかった」をなくすためのものです。回答メモ欄に、先生の説明を書き留められます。</div>'
+      + '<div class="foot">SATOI ・ SDM（共同意思決定）質問カード</div>'
+      + '<script>window.onload=function(){setTimeout(function(){window.print();},300);}<\/script>'
+      + '</body></html>';
+    w.document.open(); w.document.write(doc); w.document.close();
+    if (typeof satoiNotify === 'function') satoiNotify('✓ チェックした ' + checked.length + ' 件を、印刷用に整えました。\nチェックを外した質問は出ません。回答メモ欄つきです。', {kind:'success', duration:4800});
+  };
 })();
 </script>
 

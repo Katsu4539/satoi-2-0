@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あなたの物語ムービー ・ 大切な人へ、想いを残す | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep:#0B1736; --night-medium:#1A2548; --starlight:#D4A95E; --starlight-strong:#F0C97A;
+  --morning-white:#FBF7F0; --morning-cream:#F6EFE3;
+  --teal:#0D7377; --teal-soft:#14A6AB; --healing-blue:#7FA8C9; --warm-orange:#D4622A; --rose:#C76B7F; --green:#5B9A68;
+  --ink-deep:#1A2A40; --ink-medium:rgba(26,42,64,0.78); --ink-light:rgba(26,42,64,0.55);
+  --line:rgba(10,22,40,0.10);
+  --font:"Noto Sans JP","Meiryo UI","Hiragino Kaku Gothic ProN",sans-serif;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family:var(--font); }
+body { color:var(--ink-deep); background:#F1ECD9; line-height:1.9; font-size:16px; }
+a { color:inherit; text-decoration:none; }
+button { font-family:var(--font); cursor:pointer; }
+
+.header { position:fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background:rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color:var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background:var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color:var(--ink-medium); border:1px solid rgba(11,23,40,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color:var(--warm-orange); color:var(--warm-orange); }
+
+.hero { padding:128px 32px 30px; text-align:center; background:linear-gradient(135deg, rgba(212,169,94,0.12) 0%, var(--morning-white) 100%); }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color:var(--starlight); padding:6px 18px; border:1px solid rgba(212,169,94,0.5); border-radius:24px; margin-bottom:18px; }
+.hero-title { font-size:clamp(27px,5vw,42px); font-weight:300; line-height:1.5; letter-spacing:0.06em; margin-bottom:14px; }
+.hero-title strong { color:var(--warm-orange); font-weight:600; }
+.hero-sub { font-size:15px; color:var(--ink-medium); line-height:2; max-width:680px; margin:0 auto; }
+.hero-name { color:var(--warm-orange); font-weight:600; }
+
+.wrap { max-width:900px; margin:0 auto; padding:26px 22px 70px; }
+
+/* プレーヤー */
+.player { background:var(--night-deep); border-radius:22px; overflow:hidden; box-shadow:0 20px 50px rgba(11,23,54,0.30); }
+.stage { position:relative; aspect-ratio:16/9; width:100%; overflow:hidden; }
+.scene { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:32px 36px; opacity:0; transition:opacity 1s ease; }
+.scene.show { opacity:1; }
+.scene::before { content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,23,54,0.10) 0%, rgba(11,23,54,0.78) 100%); z-index:0; }
+.scene-inner { position:relative; z-index:1; }
+.scene-ic { font-size:30px; margin-bottom:10px; }
+.scene-day { font-size:12px; letter-spacing:0.1em; color:var(--starlight-strong); margin-bottom:8px; font-weight:600; }
+.scene-ttl { font-size:clamp(18px,3vw,26px); font-weight:600; color:#fff; line-height:1.5; margin-bottom:10px; }
+.scene-body { font-size:clamp(13px,1.8vw,15px); color:rgba(248,246,240,0.92); line-height:1.85; max-width:640px; }
+.stage-title { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px; background:radial-gradient(circle at 50% 40%, rgba(26,37,72,0.6), rgba(11,23,54,0.96)); }
+.stage-title.hide { display:none; }
+.stage-title .st-eyebrow { font-size:12px; letter-spacing:0.3em; color:var(--starlight); margin-bottom:14px; }
+.stage-title .st-main { font-size:clamp(20px,3.6vw,30px); font-weight:300; color:#fff; line-height:1.6; }
+.stage-title .st-main strong { color:var(--starlight-strong); font-weight:600; }
+.stage-title .st-sub { font-size:13px; color:rgba(248,246,240,0.7); margin-top:14px; }
+.play-big { margin-top:24px; width:74px; height:74px; border-radius:50%; border:none; background:rgba(212,169,94,0.92); color:var(--night-deep); font-size:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 28px rgba(0,0,0,0.4); }
+.play-big:hover { background:var(--starlight-strong); }
+
+.progress { display:flex; gap:6px; padding:14px 20px 0; }
+.pdot { flex:1; height:4px; border-radius:3px; background:rgba(248,246,240,0.22); overflow:hidden; }
+.pdot .pfill { display:block; height:100%; width:0; background:var(--starlight); }
+.pdot.done .pfill { width:100%; }
+.controls { display:flex; align-items:center; gap:14px; padding:12px 20px 18px; color:rgba(248,246,240,0.92); }
+.ctrl-btn { background:rgba(248,246,240,0.12); border:none; color:#fff; width:40px; height:40px; border-radius:50%; font-size:16px; display:flex; align-items:center; justify-content:center; }
+.ctrl-btn:hover { background:rgba(212,169,94,0.4); }
+.ctrl-info { font-size:12.5px; color:rgba(248,246,240,0.7); margin-left:auto; }
+
+.scene-grad-0 { background:linear-gradient(135deg,#1A2548,#0B1736); }
+.scene-grad-1 { background:linear-gradient(135deg,#2C3E66,#14233f); }
+.scene-grad-2 { background:linear-gradient(135deg,#0D7377,#0a3d40); }
+.scene-grad-3 { background:linear-gradient(135deg,#C76B7F,#5e2f3a); }
+.scene-grad-4 { background:linear-gradient(135deg,#D4622A,#7a3417); }
+.scene-grad-5 { background:linear-gradient(135deg,#5B9A68,#2c4d33); }
+.scene-grad-6 { background:linear-gradient(135deg,#7FA8C9,#3c5871); }
+.scene-grad-7 { background:linear-gradient(135deg,#D4A95E,#7a5f2c); }
+
+.actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+.act { padding:13px 22px; border-radius:24px; font-size:14px; font-weight:600; border:1px solid var(--teal); background:var(--teal); color:#fff; }
+.act:hover { background:#0A5A5D; }
+.act.ghost { background:transparent; color:var(--teal); }
+.act.ghost:hover { background:rgba(13,115,119,0.08); }
+
+.acp { margin-top:34px; background:#fff; border:1px solid var(--line); border-radius:18px; padding:24px 26px; }
+.acp-eyebrow { font-size:11px; letter-spacing:0.3em; color:var(--green); font-weight:700; margin-bottom:8px; }
+.acp h2 { font-size:19px; font-weight:600; color:var(--ink-deep); margin-bottom:8px; }
+.acp p.lead { font-size:14px; color:var(--ink-medium); line-height:1.95; margin-bottom:16px; }
+.acp textarea { width:100%; border:1px solid var(--line); border-radius:12px; padding:13px 15px; font-family:inherit; font-size:14px; line-height:1.9; color:var(--ink-deep); resize:vertical; min-height:96px; outline:none; }
+.acp textarea:focus { border-color:var(--green); }
+.acp-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; align-items:center; }
+.acp-saved { font-size:11.5px; color:var(--green); opacity:0; transition:opacity .3s; }
+.acp-saved.show { opacity:1; }
+.acp-links { margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; }
+.acp-link { font-size:12.5px; color:var(--teal); border:1px solid rgba(13,115,119,0.4); border-radius:18px; padding:8px 14px; }
+.acp-link:hover { background:rgba(13,115,119,0.08); }
+
+.disc { max-width:900px; margin:26px auto 0; padding:16px 20px; background:rgba(127,168,201,0.10); border:1px solid rgba(127,168,201,0.3); border-radius:14px; font-size:12px; color:var(--ink-medium); line-height:1.85; }
+footer { text-align:center; padding:40px 22px; color:var(--ink-light); font-size:12.5px; line-height:1.9; border-top:1px solid var(--line); margin-top:30px; }
+
+#satoi-toast-host { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none; max-width:92vw; }
+.satoi-toast { pointer-events:auto; min-width:280px; max-width:480px; background:linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color:#F8F6F0; padding:16px 22px 16px 18px; border-radius:16px; box-shadow:0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family:var(--font); font-size:13.5px; line-height:1.75; backdrop-filter:blur(14px); display:flex; gap:14px; align-items:flex-start; opacity:0; transform:translateY(20px); transition:opacity .4s, transform .4s; border-left:3px solid #D4A95E; }
+.satoi-toast.show { opacity:1; transform:translateY(0); }
+.satoi-toast.success { border-left-color:#14A6AB; }
+.satoi-toast-icon { flex-shrink:0; width:28px; height:28px; border-radius:50%; background:rgba(212,169,94,0.18); display:inline-flex; align-items:center; justify-content:center; font-size:14px; }
+.satoi-toast-body { flex:1; white-space:pre-line; }
+.satoi-toast-close { background:transparent; border:none; color:rgba(248,246,240,0.5); cursor:pointer; font-size:18px; }
+@media (max-width:768px){ .header{padding:14px 16px;} .hero{padding:116px 18px 26px;} .scene{padding:22px 22px;} #satoi-toast-host{bottom:14px;} .satoi-toast{min-width:auto; width:calc(100vw - 28px);} }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="SATOI_Mock_v1_A1_entrance.html"><span class="dot"></span>SATOI</a>
+  <a class="back-btn" href="SATOI_Mock_v1_C1_mypage.html">← マイページへ戻る</a>
+</header>
+
+<section class="hero">
+  <span class="hero-eyebrow">YOUR STORY, AS A MOVIE</span>
+  <h1 class="hero-title"><span class="hero-name" id="heroName">あなた</span>の物語を、<strong>ムービー</strong>に</h1>
+  <p class="hero-sub">これまで残してきた言葉・気持ち・歩んだ記録から、SATOIが短いムービーを組み立てました。<br>大切な人に、想いを そのまま届けられます。</p>
+</section>
+
+<div class="wrap">
+  <div class="player">
+    <div class="stage" id="stage">
+      <div class="stage-title" id="stageTitle">
+        <div class="st-eyebrow">A SATOI STORY MOVIE</div>
+        <div class="st-main" id="stMain"><span id="stName">あなた</span>の、<strong>これまでの物語</strong></div>
+        <div class="st-sub" id="stSub">写真・残した言葉・治療の記録から</div>
+        <button class="play-big" id="playBig" aria-label="再生">▶</button>
+      </div>
+    </div>
+    <div class="progress" id="progress"></div>
+    <div class="controls">
+      <button class="ctrl-btn" id="btnPrev" aria-label="前へ">‹</button>
+      <button class="ctrl-btn" id="btnPlay" aria-label="再生/一時停止">▶</button>
+      <button class="ctrl-btn" id="btnNext" aria-label="次へ">›</button>
+      <span class="ctrl-info" id="ctrlInfo">タップで再生 ・ 約8シーン</span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="act" onclick="location.href='SATOI_Mock_v1_FAM_view.html?from=movie&share=movie'">📨 家族に、このムービーを届ける</button>
+    <button class="act ghost" onclick="satoiNotify('✓ 主治医・担当看護師に共有しました。\n緩和ケア・人生会議の場でも、あなたの物語を一緒に見られます。', {kind:\'success\', duration:5000})">🩺 主治医・看護師に共有</button>
+    <button class="act ghost" onclick="satoiNotify('✓ ムービーを保存しました（Mock）。\n本番では動画ファイルとして書き出し・ダウンロードできます。', {kind:\'success\'})">⤓ ムービーを保存</button>
+  </div>
+
+  <!-- 人生会議(ACP) -->
+  <div class="acp">
+    <div class="acp-eyebrow">ADVANCE CARE PLANNING ・ 人生会議</div>
+    <h2>これからのことを、大切な人と話しておく</h2>
+    <p class="lead">いつか話しておきたいこと、大切にしたい過ごし方を、あなたの言葉で残せます。書くのがつらいときは、無理をしないでください。AIと話しながら、少しずつでも大丈夫です。残した想いは、ご家族や医療チームと、あなたが許可した範囲で共有できます。</p>
+    <textarea id="acpInput" rows="4" placeholder="例：できるだけ住み慣れた家で過ごしたい。最後まで自分のことは自分で決めたい。痛みやつらさは、しっかり和らげてほしい。"></textarea>
+    <div class="acp-row">
+      <button class="act" onclick="saveAcp()">この想いを、残す</button>
+      <a class="act ghost" href="SATOI_Mock_v1_A2_dialog.html?from=movie&topic=acp">AIと話しながら、整える →</a>
+      <span class="acp-saved" id="acpSaved">✓ 残しました</span>
+    </div>
+    <div class="acp-links">
+      <a class="acp-link" href="SATOI_Mock_v1_FAM_view.html?from=movie">👨‍👩‍👧 家族と共有する</a>
+      <a class="acp-link" href="SATOI_Mock_v1_EMG_qr.html?from=movie">🆘 もしもの備え・医療情報QR</a>
+      <a class="acp-link" href="SATOI_Mock_v1_CHP_palliative.html">🌿 緩和ケアについて</a>
+    </div>
+  </div>
+
+  <div class="disc">
+    このムービーは、あなたが残してきた記録から組み立てた「物語」です。共有する相手は、あなたが選べます。人生会議（ACP）は、これからの過ごし方を大切な人と考えておくための、やさしい準備です。迷ったときは、主治医・看護師・相談支援センターにいつでも相談できます。
+  </div>
+</div>
+
+<footer>
+  SATOI ・ あなたの物語ムービー（Mock）<br>
+  あなたの歩みを、大切な人へ。
+</footer>
+
+<script>
+function satoiNotify(msg, opts){
+  opts = opts || {};
+  var host = document.getElementById('satoi-toast-host');
+  if (!host){ host = document.createElement('div'); host.id='satoi-toast-host'; document.body.appendChild(host); }
+  var t = document.createElement('div');
+  var kind = opts.kind || (String(msg).indexOf('✓')===0 ? 'success' : 'info');
+  t.className='satoi-toast '+kind;
+  var icon = opts.icon || (kind==='success'?'✓':(kind==='warn'?'!':'●'));
+  t.innerHTML='<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+String(msg).replace(/\n/g,'<br>')+'</div><button class="satoi-toast-close">×</button>';
+  host.appendChild(t);
+  requestAnimationFrame(function(){ t.classList.add('show'); });
+  var closer=function(){ t.classList.remove('show'); setTimeout(function(){t.remove();},450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, opts.duration||4200);
+}
+window.alert=function(m){ try{ satoiNotify(String(m)); }catch(e){} };
+function esc(s){ var d=document.createElement('div'); d.textContent=String(s); return d.innerHTML; }
+function pid(){ try { return sessionStorage.getItem('satoi_persona_id')||'p1'; } catch(e){ return 'p1'; } }
+function pname(){ try { return sessionStorage.getItem('satoi_persona')||'あなた'; } catch(e){ return 'あなた'; } }
+
+/* ペルソナの物語（C1物語マップと整合・短いムービー用） */
+var STORIES = {
+  p1: [
+    {ic:'🌑', day:'診断の日', ttl:'すべてが、変わった朝', body:'頭が真っ白になった日。それでも、子どもたちのことだけは、はっきり考えていました。'},
+    {ic:'🌫', day:'告知から数日', ttl:'子どもたちに、どう伝えよう', body:'自分のことより、まずそれだった。小さなあの子たちに、どこまで話せばいいのか。'},
+    {ic:'🌿', day:'ある夜', ttl:'上の子に、話した夜', body:'「ママ、病気なんだ。でも、ちゃんと治すからね」。小さく頷いてくれた。'},
+    {ic:'🌅', day:'治療開始', ttl:'前に進む、一歩', body:'こわかったけれど、同じ治療を選んだ人がたくさんいると知って、少し心強かった。'},
+    {ic:'📷', day:'治療中', ttl:'たくさん、写真を撮った', body:'子どもと笑って、変な顔をして。「いつものママ」を、残しておきたかった。'},
+    {ic:'💬', day:'昨夜', ttl:'子どもへの手紙の、下書き', body:'うまく言葉にできなかった想いを、AIが一緒に整理してくれた。少しずつ、書けそう。'},
+    {ic:'☀', day:'今日', ttl:'少しだけ、前を向けている', body:'まだ揺れるけれど。今日という日を、ちゃんと生きられた。それで、十分。'},
+    {ic:'🌱', day:'これから', ttl:'いつもの日を、一緒に', body:'運動会も、卒業式も。できるだけ多くの「いつもの日」を、子どもたちと。'}
+  ],
+  p2: [
+    {ic:'🌑', day:'診断の日', ttl:'定年まで、あと半年というとき', body:'「なんなんだ、これは」。正直、そう思った。それでも前を向くと決めた。'},
+    {ic:'🌫', day:'告知から数日', ttl:'孫が、もうすぐ生まれる', body:'それまでは——と、思った。会いたい。抱いてやりたい。その一心でした。'},
+    {ic:'🤝', day:'ある日', ttl:'職場に、伝えた', body:'「最後まで、できる仕事をやらせてくれ」。長年の仲間が、静かに頷いてくれた。'},
+    {ic:'🌅', day:'治療開始', ttl:'自分のペースで', body:'できることは、やる。焦らず。先生ともよく話して決めました。'},
+    {ic:'👶', day:'治療中', ttl:'孫の名前を、一緒に考えた', body:'息子夫婦と。こんな時間が持てるとは、思っていなかった。'},
+    {ic:'💬', day:'先日', ttl:'引き継ぎと、孫への手紙', body:'伝えておきたいことを、ひとつずつ。AIが、考えを整理する手伝いをしてくれた。'},
+    {ic:'🍵', day:'今日', ttl:'今日できることを、ひとつずつ', body:'先のことは、わからない。でも、今日という日は、確かにここにある。'},
+    {ic:'🌱', day:'これから', ttl:'この手で、抱きたい', body:'生まれてくる日まで。そして、できれば その先も。焦らず、今日を積み重ねて。'}
+  ]
+};
+
+var scenes = [], idx = 0, playing = false, timer = null;
+var SCENE_MS = 5200;
+
+function buildStage(){
+  var stage = document.getElementById('stage');
+  scenes = STORIES[pid()] || STORIES.p1;
+  // 既存sceneを除去（titleは残す）
+  [].forEach.call(stage.querySelectorAll('.scene'), function(el){ el.remove(); });
+  scenes.forEach(function(s,i){
+    var el = document.createElement('div');
+    el.className = 'scene scene-grad-' + (i % 8);
+    el.innerHTML = '<div class="scene-inner"><div class="scene-ic">'+s.ic+'</div><div class="scene-day">'+esc(s.day)+'</div><div class="scene-ttl">'+esc(s.ttl)+'</div><div class="scene-body">'+esc(s.body)+'</div></div>';
+    stage.appendChild(el);
+  });
+  // progress dots
+  var prog = document.getElementById('progress');
+  prog.innerHTML = scenes.map(function(){ return '<span class="pdot"><span class="pfill"></span></span>'; }).join('');
+  document.getElementById('ctrlInfo').textContent = 'タップで再生 ・ 全' + scenes.length + 'シーン';
+  document.getElementById('stName').textContent = pname();
+  document.getElementById('stSub').textContent = (pid()==='p2' ? '孫の誕生まで、自分のペースで' : '子どもたちへ、残したい想い');
+}
+
+function showScene(i){
+  idx = (i + scenes.length) % scenes.length;
+  var els = document.querySelectorAll('#stage .scene');
+  els.forEach(function(el,j){ el.classList.toggle('show', j===idx); });
+  var dots = document.querySelectorAll('#progress .pdot');
+  dots.forEach(function(d,j){ d.classList.toggle('done', j<idx); var f=d.querySelector('.pfill'); if(f) f.style.width = (j<idx?'100%':(j===idx?'0':'0')); });
+  // 現在シーンのfillをアニメ
+  if (dots[idx]){ var f=dots[idx].querySelector('.pfill'); if(f){ f.style.transition='none'; f.style.width='0'; void f.offsetWidth; f.style.transition='width '+SCENE_MS+'ms linear'; f.style.width = playing ? '100%' : '0'; } }
+}
+function startTitleHide(){ var st=document.getElementById('stageTitle'); if(st) st.classList.add('hide'); }
+function play(){
+  playing = true;
+  startTitleHide();
+  document.getElementById('btnPlay').textContent = '⏸';
+  showScene(idx);
+  clearTimeout(timer);
+  var step = function(){ if(!playing) return; if (idx >= scenes.length-1){ pause(); document.getElementById('ctrlInfo').textContent = 'おしまい ・ もう一度見るには ▶'; idx=scenes.length-1; return; } showScene(idx+1); timer=setTimeout(step, SCENE_MS); };
+  timer = setTimeout(step, SCENE_MS);
+}
+function pause(){ playing=false; clearTimeout(timer); document.getElementById('btnPlay').textContent='▶'; var dots=document.querySelectorAll('#progress .pdot'); if(dots[idx]){var f=dots[idx].querySelector('.pfill'); if(f){var w=getComputedStyle(f).width; f.style.transition='none'; f.style.width=w;}} }
+function toggle(){ if(playing) pause(); else { if(idx>=scenes.length-1) idx=0; play(); } }
+
+/* ACP メモ */
+function acpStore(){ try { return JSON.parse(localStorage.getItem('satoi_acp')||'{}'); } catch(e){ return {}; } }
+function saveAcp(){
+  var v = document.getElementById('acpInput').value.trim();
+  var o = acpStore(); o[pid()] = v; try { localStorage.setItem('satoi_acp', JSON.stringify(o)); } catch(e){}
+  var p=document.getElementById('acpSaved'); if(p){ p.classList.add('show'); setTimeout(function(){p.classList.remove('show');},2200); }
+  satoiNotify('✓ あなたの想いを残しました。\nいつでも書き直せます。共有する相手は、あなたが選べます。', {kind:'success', duration:4800});
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('heroName').textContent = pname();
+  buildStage();
+  showScene(0);
+  document.getElementById('playBig').addEventListener('click', play);
+  document.getElementById('btnPlay').addEventListener('click', toggle);
+  document.getElementById('btnPrev').addEventListener('click', function(){ pause(); showScene(idx-1); startTitleHide(); });
+  document.getElementById('btnNext').addEventListener('click', function(){ pause(); showScene(idx+1); startTitleHide(); });
+  // ACP 復元
+  var o = acpStore(); if (o[pid()]) document.getElementById('acpInput').value = o[pid()];
+});
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>
