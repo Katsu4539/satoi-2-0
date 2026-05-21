@@ -640,6 +640,8 @@
       s = s.replace(/__([^_\n]+)__/g, '<strong>$1</strong>');
       s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
       s = s.replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      // 途中で切れた等で残った 対になっていない **/__/* を除去(生のマークダウン記号を出さない)
+      s = s.replace(/\*\*/g, '').replace(/__/g, '').replace(/(^|[^*])\*(?!\*)/g, '$1');
       return s;
     }
 

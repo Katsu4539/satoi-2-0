@@ -64,7 +64,7 @@ exports.handler = async function(event, context) {
   const messages = body.messages || [];
   const system = body.system || defaultSystemPrompt();
   const model = body.model || 'claude-sonnet-4-6';
-  const maxTokens = body.max_tokens || 1024;
+  const maxTokens = body.max_tokens || 2048;
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return {
