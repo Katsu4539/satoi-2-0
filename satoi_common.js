@@ -185,6 +185,41 @@
     }
   }
 
+  /* ====== AIバー(カテゴリバー直下にレコメンド＋AI対話入口を出す・2026-05-21) ====== */
+  function injectAiBar(){
+    var toc = document.querySelector('.toc');
+    if (!toc || document.querySelector('.satoi-ai-bar')) return;
+    var page = (location.pathname.split('/').pop() || '').toLowerCase();
+    var pageKey = page.replace('.html', '');
+    var a2main = 'SATOI_Mock_v1_A2_dialog.html?from=' + encodeURIComponent(pageKey) + '&resume=1';
+    var map = {
+      living:    [['仕事と治療の両立は?', 'work'], ['家族のサポートのこと', 'family']],
+      money:     [['高額療養費って?', 'money'], ['傷病手当金は使える?', 'money']],
+      exam:      [['遺伝子検査って何?', 'genetic'], ['なぜ検査が必要?', 'genetic']],
+      genome:    [['ドライバー遺伝子とは?', 'genetic'], ['私のがんの場合は?', 'genetic']],
+      treatment: [['他の治療選択肢は?', 'treat'], ['副作用のことが心配', 'side']],
+      diagnosis: [['これからどうなるの?', 'flow'], ['まず何をすべき?', 'flow']],
+      consider:  [['治療法の選び方', 'treat'], ['セカンドオピニオンは?', 'treat']],
+      follow:    [['再発が心配です', 'flow'], ['経過観察って何をするの?', 'flow']],
+      palliative:[['緩和ケアって何?', 'feel'], ['つらさを和らげたい', 'feel']]
+    };
+    var key = '';
+    Object.keys(map).forEach(function(k){ if (!key && page.indexOf(k) !== -1) key = k; });
+    var recs = key ? map[key] : [['このページを、やさしく説明して', 'open'], ['私の場合はどうなる?', 'open']];
+    var recsHTML = recs.map(function(r){
+      return '<a class="satoi-ai-rec" href="SATOI_Mock_v1_A2_dialog.html?from=' + encodeURIComponent(pageKey) + '&topic=' + r[1] + '&resume=1">' + r[0] + '</a>';
+    }).join('');
+    var bar = document.createElement('div');
+    bar.className = 'satoi-ai-bar';
+    bar.innerHTML =
+      '<a class="satoi-ai-bar-main" href="' + a2main + '">'
+      + '<span class="satoi-ai-bar-icon">💬</span>'
+      + '<span class="satoi-ai-bar-txt"><b>SATOI AI に相談する</b><span>このページのことを、AIと深掘りできます</span></span>'
+      + '</a>'
+      + '<div class="satoi-ai-bar-recs">' + recsHTML + '</div>';
+    if (toc.parentNode) toc.parentNode.insertBefore(bar, toc.nextSibling);
+  }
+
   /* ====== ユニバーサルナビ強化(既存ナビを置換) ====== */
   function injectEnhancedNav(){
     // 2026-05-21: 各ページのヘッダーに戻る等があり重複・干渉するため、浮遊ユニバーサルナビは無効化。
@@ -381,6 +416,18 @@
       .satoi-home-toggle .sht-opt:hover { opacity:1; }
       .satoi-home-toggle .sht-opt.active { background:#D4A95E; color:#0B1736; opacity:1; box-shadow:0 2px 8px rgba(212,169,94,0.4); }
       @media (max-width: 700px) { .satoi-home-toggle .sht-opt { padding:5px 10px; font-size:11.5px; } }
+      /* ===== AIバー(カテゴリバー直下・レコメンド＋AI対話への入口)===== */
+      .satoi-ai-bar { max-width:1000px; margin:18px auto 4px; padding:13px 18px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; background:linear-gradient(135deg, rgba(13,115,119,0.12), rgba(20,166,171,0.06)); border:1px solid rgba(13,115,119,0.38); border-radius:16px; box-shadow:0 6px 20px rgba(11,23,54,0.08); }
+      .satoi-ai-bar-main { display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit; flex:1; min-width:230px; }
+      .satoi-ai-bar-icon { width:38px; height:38px; border-radius:50%; background:#0D7377; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; transition:background .2s; box-shadow:0 0 0 0 rgba(13,115,119,0.4); animation:satoi-aibar-pulse 2.8s infinite; }
+      @keyframes satoi-aibar-pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(13,115,119,0.35);} 50%{ box-shadow:0 0 0 7px rgba(13,115,119,0);} }
+      .satoi-ai-bar-main:hover .satoi-ai-bar-icon { background:#14A6AB; }
+      .satoi-ai-bar-txt b { font-size:14.5px; color:#0D7377; font-weight:700; display:block; line-height:1.4; }
+      .satoi-ai-bar-txt span { font-size:11.5px; color:rgba(26,42,64,0.7); }
+      .satoi-ai-bar-recs { display:flex; flex-wrap:wrap; gap:8px; }
+      .satoi-ai-rec { padding:8px 14px; border-radius:18px; background:#fff; border:1px solid rgba(13,115,119,0.4); color:#0D7377; font-size:12px; font-weight:500; text-decoration:none; white-space:nowrap; transition:all .2s; }
+      .satoi-ai-rec:hover { background:#0D7377; color:#fff; }
+      @media (max-width:700px){ .satoi-ai-bar{ margin:14px 12px 4px; padding:12px 14px; } .satoi-ai-bar-recs{ width:100%; } }
       /* ===== AI応答 マークダウン整形表示 ===== */
       .satoi-md-p { margin: 0 0 0.7em; line-height: 1.85; }
       .satoi-md-p:last-child { margin-bottom: 0; }
@@ -723,6 +770,7 @@
   function init(){
     injectStyles();
     injectHomeToggle();
+    injectAiBar();
     injectEnhancedNav();
     injectConciergeBubble();
     maybeRedirectFromA1();
