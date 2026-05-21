@@ -263,7 +263,8 @@ body {
   .detail-panel { width: 100%; max-width: 100%; top: 132px; padding: 22px 18px; }
   .detail-title { font-size: 19px; }
 
-  .legend { left: 12px; bottom: 12px; padding: 10px 14px; font-size: 11px; max-width: 240px; }
+  /* スマホでは凡例が地図に被るので非表示(浮遊要素を出さない方針) */
+  .legend { display: none !important; }
 }
 
 :focus-visible { outline: 2px solid var(--starlight); outline-offset: 3px; }
@@ -703,10 +704,15 @@ const TREATMENT_TREE = {
   }
 };
 
-// ===== URL パラメータ取得 =====
+// ===== URL パラメータ取得(無ければペルソナ設定を引継ぎ:Mさん=breast/II, Kさん=lung/IV) =====
 const urlParams = new URLSearchParams(window.location.search);
-const initialCancer = urlParams.get('cancer') || 'breast';
-const initialStage = urlParams.get('stage') || 'II';
+function _ssGet(k){ try { return sessionStorage.getItem(k); } catch(e){ return null; } }
+const VALID_CANCER = ['breast','colon','lung','stomach','prostate','pancreas'];
+const VALID_STAGE = ['I','II','III','IV'];
+let initialCancer = urlParams.get('cancer') || _ssGet('satoi_cancer') || 'breast';
+let initialStage = urlParams.get('stage') || _ssGet('satoi_stage') || 'II';
+if (VALID_CANCER.indexOf(initialCancer) === -1 || !TREATMENT_TREE[initialCancer]) initialCancer = 'breast';
+if (VALID_STAGE.indexOf(initialStage) === -1) initialStage = 'II';
 document.getElementById('cancerSelect').value = initialCancer;
 document.getElementById('stageSelect').value = initialStage;
 
@@ -898,6 +904,7 @@ function showTreatmentDetail(tr, cat, data, stageKey) {
     </div>
 
     <button class="detail-cta" onclick="satoiNotify('先生に聞きたいことカードを生成中…\\n\\n・なぜ私にこの治療?\\n・他の選択肢との違いは?\\n・副作用への対処法は?\\n・治療期間は?\\n・セカンドオピニオン紹介状\\n\\n→ PDF/QR/メールで主治医に渡せます\\n(次画面 B6)')">📝 先生に聞きたいことカードを作る</button>
+    <a href="SATOI_Mock_v1_C1_mypage.html" class="detail-cta secondary">🌙 あなたの物語に戻る・続ける</a>
     <a href="SATOI_Mock_v1_D1_stories.html" class="detail-cta secondary">📖 同じ治療を受けた方の物語</a>
     <a href="#" class="detail-cta secondary" onclick="satoiNotify('関連文献(PubMed)\\n→ AI翻訳で患者向けに分かりやすく\\n(次画面 B5)'); return false;">📚 関連文献を読む(AI翻訳)</a>
   `;

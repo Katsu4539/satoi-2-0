@@ -298,18 +298,20 @@ body.deep-night .hero {
 }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(212,169,94,0.5); }
 
+/* ヒーロー下部(明るい朝焼け)に置かれるため、白文字では見えない→濃い文字に(Katsuさん指示・2026-05-21) */
 .btn-secondary {
-  background: rgba(248,246,240,0.08);
-  color: var(--text-on-dark);
-  border: 1px solid rgba(248,246,240,0.28);
+  background: rgba(11,23,54,0.05);
+  color: var(--navy);
+  border: 1px solid rgba(11,23,54,0.32);
   padding: 16px 32px;
   border-radius: 30px;
   font-family: var(--font);
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.25s;
 }
-.btn-secondary:hover { background: rgba(248,246,240,0.16); }
+.btn-secondary:hover { background: rgba(11,23,54,0.12); }
 
 /* === ボディ ブロック === */
 .section {
@@ -1191,8 +1193,11 @@ body.deep-night .hero {
   .mood-card, .mindmap-now, .sdm-block { padding: 28px 22px; }
   .mindmap-now { grid-template-columns: 1fr; }
   .mindmap-thumb { margin: 0 auto; }
-  .team-wheel-wrap { max-width: 360px; }
+  /* 最下部メンバー(コーディネーター)のラベルが下の説明文に被らないよう余白を確保 */
+  .team-wheel-wrap { max-width: 320px; margin-bottom: 64px !important; }
   .team-member { width: 72px; height: 72px; margin-left: -36px; margin-top: -36px; }
+  .team-member .team-name { font-size: 11.5px; line-height: 1.35; }
+  .team-member .team-role { font-size: 10px; line-height: 1.3; }
   .team-avatar { width: 50px; height: 50px; font-size: 20px; }
   .team-center { width: 86px; height: 86px; font-size: 12px; }
   .trace-item { grid-template-columns: 1fr; gap: 8px; }
@@ -1328,7 +1333,6 @@ body.satoi-has-jbar .header { top: 0 !important; }
   </div>
   <div class="header-right">
     <div class="day-badge"><span class="pulse"></span><span id="dayBadgeText">物語の現在地・診断から 42日目</span></div>
-    <a class="header-link" href="SATOI_Mock_v1_B1_hub.html">マインドマップ</a>
     <a class="header-link" href="SATOI_Mock_v1_A2_dialog.html">AI対話</a>
     <a class="header-link" href="SATOI_Mock_v1_A1_entrance.html">ログアウト</a>
   </div>
@@ -1351,7 +1355,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
     </div>
     <div class="hero-cta-row">
       <button class="btn-primary" onclick="location.href='SATOI_Mock_v1_C1_resume_bridge.html'">前回の続きから話す →</button>
-      <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_B1_hub.html?from=c1'">マインドマップで治療を見る</button>
+      <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_B1_mindmap.html?from=c1'">治療マインドマップで見る</button>
       <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_C1_review.html'">📖 今日の振り返り</button>
       <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_CONSENT.html'">🔒 だれに何を見せているか</button>
     </div>
@@ -1393,6 +1397,10 @@ body.satoi-has-jbar .header { top: 0 !important; }
   .sm-detail-ttl{ font-size:19px; }
   .sm-detail-body{ font-size:16px; color:rgba(26,42,64,0.92); line-height:1.95; }
   .sm-flow-hint{ font-size:13px; color:rgba(26,42,64,0.7); }
+  /* ペルソナ切替:ラベルを1行目・ボタンを揃えて並べる(段ずれ解消) */
+  .sm-persona-switch{ display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:8px; }
+  .sm-persona-switch > span{ flex:0 0 100%; text-align:center; margin:0 0 4px 0 !important; }
+  .sm-pbtn{ margin:0 !important; flex:0 0 auto; min-width:160px; text-align:center; }
 }
 </style>
 <section class="section" id="storyMap">
@@ -1764,7 +1772,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
         <span>同じ道を歩いている人:<strong>7,124人</strong></span>
       </div>
       <div>
-        <button class="mindmap-cta" onclick="location.href='SATOI_Mock_v1_B1_hub.html?from=c1'">マインドマップで広げて見る →</button>
+        <button class="mindmap-cta" onclick="location.href='SATOI_Mock_v1_B1_mindmap.html?from=c1'">治療マインドマップで広げて見る →</button>
       </div>
     </div>
   </div>

@@ -152,9 +152,27 @@
   };
 
   /* ====== 入口↔ホーム 切替トグルを各ページのロゴ横へ自動挿入(2026-05-21) ====== */
+  // ロゴの文字色からヘッダーの明暗を判定し、トグルに配色テーマclassを付与
+  function applyToggleTheme(tog, logo){
+    if (!tog || tog.classList.contains('sht-dark-bg') || tog.classList.contains('sht-light-bg')) return;
+    var themeClass = 'sht-dark-bg';
+    try {
+      var lc = getComputedStyle(logo).color.match(/\d+(\.\d+)?/g);
+      if (lc && lc.length >= 3) {
+        var lum = 0.299*parseFloat(lc[0]) + 0.587*parseFloat(lc[1]) + 0.114*parseFloat(lc[2]);
+        themeClass = lum > 140 ? 'sht-dark-bg' : 'sht-light-bg';
+      }
+    } catch (e) {}
+    tog.classList.add(themeClass);
+  }
   function injectHomeToggle(){
-    if (document.querySelector('.satoi-home-toggle')) return; // A1/B1等、既にあればスキップ
-    var logo = document.querySelector('.logo');
+    var existing = document.querySelector('.satoi-home-toggle');
+    var logoEl = document.querySelector('.logo');
+    if (existing) { // A1/B1等、マークアップに既にある場合はテーマだけ付与
+      if (logoEl) applyToggleTheme(existing, logoEl);
+      return;
+    }
+    var logo = logoEl;
     if (!logo || !logo.parentNode) return;
     var path = (location.pathname || '').toLowerCase();
     var isEntry = path.indexOf('a1_entrance') !== -1;
@@ -163,14 +181,15 @@
       ? '<span class="sht-opt active">🌙 入口</span>'
       : '<a class="sht-opt" href="SATOI_Mock_v1_A1_entrance.html">🌙 入口</a>';
     var homeHTML = isHome
-      ? '<span class="sht-opt active">☀ ホーム</span>'
-      : '<a class="sht-opt" href="SATOI_Mock_v1_B1_hub.html">☀ ホーム</a>';
+      ? '<span class="sht-opt active">☀ マインドマップ</span>'
+      : '<a class="sht-opt" href="SATOI_Mock_v1_B1_hub.html">☀ マインドマップ</a>';
     var tog = document.createElement('div');
     tog.className = 'satoi-home-toggle';
     tog.setAttribute('role', 'group');
     tog.setAttribute('aria-label', '入口とホームの切替');
     tog.style.marginLeft = '14px';
     tog.innerHTML = entryHTML + homeHTML;
+    applyToggleTheme(tog, logo); // ヘッダーの明暗に追従して配色テーマを付与
     var parent = logo.parentNode;
     if (parent.classList && parent.classList.contains('logo-wrap')) {
       // 既にロゴがlogo-wrap内 → その直後に置く
@@ -454,10 +473,19 @@
       .satoi-jchip:not(.done):not(.current) { color: rgba(26,42,64,0.9) !important; background: #ffffff !important; border-color: rgba(11,23,54,0.30) !important; }
       .satoi-jchip:not(.done):not(.current) .satoi-jchip-n { background: rgba(11,23,54,0.16) !important; color: rgba(26,42,64,0.9) !important; }
       /* ===== 入口↔ホーム 切替トグル(共通)===== */
-      .satoi-home-toggle { display:inline-flex; align-items:center; gap:2px; padding:3px; border-radius:22px; background:rgba(127,127,127,0.14); border:1px solid rgba(127,127,127,0.30); vertical-align:middle; }
-      .satoi-home-toggle .sht-opt { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:18px; font-size:12.5px; font-weight:600; cursor:pointer; text-decoration:none; color:inherit; opacity:0.65; white-space:nowrap; transition:all .2s; font-family:inherit; }
-      .satoi-home-toggle .sht-opt:hover { opacity:1; }
-      .satoi-home-toggle .sht-opt.active { background:#D4A95E; color:#0B1736; opacity:1; box-shadow:0 2px 8px rgba(212,169,94,0.4); }
+      /* トグルはヘッダーの明暗に追従して文字色を切替(JSがロゴ色を読んで sht-dark-bg/sht-light-bg を付与・2026-05-21) */
+      .satoi-home-toggle { display:inline-flex; align-items:center; gap:2px; padding:3px; border-radius:22px; vertical-align:middle; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.30); }
+      .satoi-home-toggle .sht-opt { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:18px; font-size:12.5px; font-weight:600; cursor:pointer; text-decoration:none; white-space:nowrap; transition:all .2s; font-family:inherit; opacity:1; }
+      /* 暗いヘッダー上:明るい文字 */
+      .satoi-home-toggle.sht-dark-bg { background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.34); }
+      .satoi-home-toggle.sht-dark-bg .sht-opt { color:rgba(248,246,240,0.85) !important; }
+      .satoi-home-toggle.sht-dark-bg .sht-opt:hover { color:#fff !important; background:rgba(255,255,255,0.10); }
+      /* 明るいヘッダー上:濃い文字 */
+      .satoi-home-toggle.sht-light-bg { background:rgba(11,23,54,0.05); border-color:rgba(11,23,54,0.22); }
+      .satoi-home-toggle.sht-light-bg .sht-opt { color:rgba(26,42,64,0.78) !important; }
+      .satoi-home-toggle.sht-light-bg .sht-opt:hover { color:#0B1736 !important; background:rgba(11,23,54,0.08); }
+      /* 選択中はどちらのテーマでも金色pill+濃文字 */
+      .satoi-home-toggle .sht-opt.active { background:#D4A95E; color:#0B1736 !important; box-shadow:0 2px 8px rgba(212,169,94,0.4); }
       @media (max-width: 700px) { .satoi-home-toggle .sht-opt { padding:5px 10px; font-size:11.5px; } }
       /* ===== AIバー(カテゴリバー直下・レコメンド＋AI対話への入口)===== */
       .satoi-ai-bar { max-width:1000px; margin:18px auto 4px; padding:13px 18px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; background:linear-gradient(135deg, rgba(13,115,119,0.12), rgba(20,166,171,0.06)); border:1px solid rgba(13,115,119,0.38); border-radius:16px; box-shadow:0 6px 20px rgba(11,23,54,0.08); }
