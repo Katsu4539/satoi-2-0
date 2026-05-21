@@ -2593,7 +2593,7 @@ document.addEventListener('DOMContentLoaded', function(){
       <div class="ai-eyebrow">SDM QUESTION CARD / AI GENERATED</div>
       <h2 class="ai-title" style="margin-bottom:8px;">主治医に、聞きたいこと。</h2>
       <p style="font-size:13px; color:var(--ink-medium); line-height:1.8; margin-bottom:12px;">
-        AIが <strong>あなたの状況(乳がん ステージII・治療選択中)</strong> から、面談で聞くべき質問を自動で整理しました。<br>
+        AIが <strong>あなたの状況(<span class="persona-cancer">乳がん</span> ステージ<span class="persona-stage">II</span>・治療選択中)</strong> から、面談で聞くべき質問を自動で整理しました。<br>
         質問の優先度・タップで追加/外す・並べ替え可能です。
       </p>
       <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; background:rgba(212,169,94,0.12); border:1px solid rgba(212,169,94,0.3); border-radius:14px; font-size:11px; color:#7a5e22; letter-spacing:0.06em;">
@@ -3566,6 +3566,19 @@ window.addEventListener('load', () => {
     setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, 200 + i * 220);
   });
 });
+</script>
+
+<!-- ===== ペルソナ反映(挨拶名・がん種・ステージ) ===== -->
+<script>
+(function(){
+  var pid   = sessionStorage.getItem('satoi_persona_id') || 'p1';
+  var pname = sessionStorage.getItem('satoi_persona') || 'Mさん';
+  var PDATA = { p1:{ cancer:'乳がん', stage:'II' }, p2:{ cancer:'肺がん', stage:'IV' } };
+  var pd = PDATA[pid] || PDATA.p1;
+  var hn = document.querySelector('.revisit-headline .name'); if (hn) hn.textContent = pname;
+  document.querySelectorAll('.persona-cancer').forEach(function(el){ el.textContent = pd.cancer; });
+  document.querySelectorAll('.persona-stage').forEach(function(el){ el.textContent = pd.stage; });
+})();
 </script>
 
 <script src="satoi_common.js"></script>

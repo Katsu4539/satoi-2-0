@@ -1336,6 +1336,11 @@ body.satoi-has-jbar .header { top: 0 !important; }
       前回の続き、ゆっくり始めましょう。<br>
       昨日の夜、あなたが残してくれた言葉を、覚えています。
     </p>
+    <div class="sm-persona-switch" style="margin:0 0 22px;">
+      <span style="font-size:12.5px; color:rgba(255,255,255,0.78); margin-right:8px;">体験するペルソナ：</span>
+      <button class="sm-pbtn" data-p="p1">Mさん（乳がんII）</button>
+      <button class="sm-pbtn" data-p="p2">Kさん（肺がんIV）</button>
+    </div>
     <div class="hero-cta-row">
       <button class="btn-primary" onclick="location.href='SATOI_Mock_v1_C1_resume_bridge.html'">前回の続きから話す →</button>
       <button class="btn-secondary" onclick="location.href='SATOI_Mock_v1_B1_hub.html?from=c1'">マインドマップで治療を見る</button>
@@ -1367,6 +1372,10 @@ body.satoi-has-jbar .header { top: 0 !important; }
 .sm-flow-cta { text-align:center; margin-top:16px; }
 .sm-flow-cta a { display:inline-block; padding:12px 26px; background:#D4622A; color:#fff; border-radius:24px; font-size:14px; font-weight:600; text-decoration:none; box-shadow:0 6px 16px rgba(212,98,42,0.3); }
 .sm-flow-cta a:hover { background:#B85420; }
+.sm-persona-switch { text-align:center; margin:4px auto 10px; }
+.sm-pbtn { padding:7px 16px; margin:0 4px; border-radius:18px; border:1px solid rgba(13,115,119,0.4); background:#fff; color:#0D7377; font-size:12.5px; font-weight:600; cursor:pointer; font-family:inherit; transition:all .2s; }
+.sm-pbtn:hover { background:rgba(13,115,119,0.08); }
+.sm-pbtn.sm-pbtn-active { background:#0D7377; color:#fff; border-color:#0D7377; }
 @media (max-width:700px){ .sm-arrow{ display:none; } .sm-scene{ flex-basis:208px; } }
 </style>
 <section class="section" id="storyMap">
@@ -2758,6 +2767,27 @@ document.querySelectorAll('.overlay').forEach(o => {
   var db = document.getElementById('dayBadgeText'); if (db) db.textContent = '物語の現在地・診断から ' + pd.days + '日目';
   document.querySelectorAll('.persona-cancer').forEach(function(el){ el.textContent = pd.cancer; });
   document.querySelectorAll('.persona-stage').forEach(function(el){ el.textContent = pd.stage; });
+  // ペルソナ切替ボタン(デモ用・押すとそのペルソナでマイページ再読込)
+  document.querySelectorAll('.sm-pbtn').forEach(function(b){
+    if (b.getAttribute('data-p') === pid) b.classList.add('sm-pbtn-active');
+    b.addEventListener('click', function(){
+      var np = b.getAttribute('data-p');
+      if (np === pid) return;
+      if (window.satoiSetPersona) {
+        window.satoiSetPersona(np);
+      } else {
+        try {
+          sessionStorage.setItem('satoi_logged_in', '1');
+          sessionStorage.setItem('satoi_persona_id', np);
+          sessionStorage.setItem('satoi_persona', np === 'p2' ? 'Kさん' : 'Mさん');
+          sessionStorage.setItem('satoi_cancer', np === 'p2' ? 'lung' : 'breast');
+          sessionStorage.setItem('satoi_last_cancer_name', np === 'p2' ? '肺がん' : '乳がん');
+          sessionStorage.setItem('satoi_stage', np === 'p2' ? 'IV' : 'II');
+        } catch (e) {}
+      }
+      location.reload();
+    });
+  });
 
   var STORIES = {
     p1: [
