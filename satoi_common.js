@@ -10,10 +10,36 @@
   'use strict';
 
   /* ====== ログイン状態管理 ====== */
+  var SATOI_PERSONA_KEYS = ['satoi_logged_in','satoi_persona','satoi_persona_id','satoi_cancer','satoi_last_cancer','satoi_last_cancer_name','satoi_stage','satoi_last_stage'];
   window.satoiAuth = {
     isLoggedIn: function(){ return sessionStorage.getItem('satoi_logged_in') === '1'; },
     login: function(){ sessionStorage.setItem('satoi_logged_in','1'); },
-    logout: function(){ sessionStorage.removeItem('satoi_logged_in'); }
+    logout: function(){ try { SATOI_PERSONA_KEYS.forEach(function(k){ sessionStorage.removeItem(k); }); localStorage.removeItem('satoi_intake'); } catch(e){} },
+    persona: function(){ return sessionStorage.getItem('satoi_persona') || ''; }
+  };
+
+  /* ====== デモ用ペルソナ(ログインで読み込む)====== */
+  window.SATOI_PERSONAS = {
+    p1: { id:'p1', cancer:'breast', cancerName:'乳がん', stage:'II', phase:'treating', name:'Mさん',
+          label:'Mさん ・ 乳がん(トリプルネガティブ)・治療中', sub:'40代後半・子育て中の女性' },
+    p2: { id:'p2', cancer:'lung', cancerName:'肺がん', stage:'IV', phase:'treating', name:'Kさん',
+          label:'Kさん ・ 肺がん ステージIV ・ 治療中', sub:'60代・定年間近の男性' }
+  };
+  /* 選んだペルソナの状況を保存(マイページ・AI・物語が、その人の世界になる) */
+  window.satoiSetPersona = function(id){
+    var p = window.SATOI_PERSONAS[id]; if (!p) return false;
+    try {
+      sessionStorage.setItem('satoi_logged_in','1');
+      sessionStorage.setItem('satoi_persona', p.name);
+      sessionStorage.setItem('satoi_persona_id', p.id);
+      sessionStorage.setItem('satoi_cancer', p.cancer);
+      sessionStorage.setItem('satoi_last_cancer', p.cancer);
+      sessionStorage.setItem('satoi_last_cancer_name', p.cancerName);
+      sessionStorage.setItem('satoi_stage', p.stage);
+      sessionStorage.setItem('satoi_last_stage', p.stage);
+      localStorage.setItem('satoi_intake', JSON.stringify({ cancer:p.cancer, stage:p.stage, phase:p.phase }));
+    } catch(e){}
+    return true;
   };
 
   /* ====== 行動ログ記録(今日の振り返り機能用) ======
@@ -359,6 +385,8 @@
       .satoi-pickup-title { font-size: 14.5px; font-weight: 600; color: #1A2A40; }
       .satoi-pickup-desc { font-size: 11.5px; color: rgba(26,42,64,0.6); line-height: 1.6; }
       .satoi-pickup-arrow { color: #D4A95E; font-weight: 700; flex-shrink: 0; }
+      /* 言語切替は右の🌐に一本化:各ページ上部の言語セレクトは隠す */
+      .lang-select { display: none !important; }
       .satoi-md-p code, .satoi-md-table code, .satoi-md-ul code, .satoi-md-ol code { background: rgba(127,127,127,0.18); border-radius: 5px; padding: 1px 5px; font-size: 0.92em; }
       .satoi-md-p strong, .satoi-md-table strong, .satoi-md-ul strong, .satoi-md-ol strong { font-weight: 600; color: #F0C97A; }
       .satoi-md-h strong { font-weight: 600; color: inherit; }

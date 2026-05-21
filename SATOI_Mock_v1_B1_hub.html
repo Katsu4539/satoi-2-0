@@ -1919,14 +1919,23 @@ body.has-b1-journey-bar .header + section { margin-top: 0; }
     <div class="login-wrap">
       <button class="login-btn" id="loginBtn">ログイン ▾</button>
       <div class="login-menu" id="loginMenu">
-        <div class="login-menu-item" data-route="self">
-          <div class="login-menu-item-title">ご本人・ご家族の方</div>
-          <div class="login-menu-item-sub">物語を始める / 続きから</div>
+        <div class="login-menu-item" data-persona="p1">
+          <div class="login-menu-item-title">Mさん として入る</div>
+          <div class="login-menu-item-sub">乳がん(トリプルネガティブ)・治療中 / 子育て中</div>
+        </div>
+        <div class="login-menu-item" data-persona="p2">
+          <div class="login-menu-item-title">Kさん として入る</div>
+          <div class="login-menu-item-sub">肺がん ステージIV ・ 治療中 / 定年間近</div>
         </div>
         <div class="login-menu-divider"></div>
         <div class="login-menu-item" data-route="corporate">
           <div class="login-menu-item-title">法人会員(保険会社・医療機関)</div>
           <div class="login-menu-item-sub">事前データ連携で患者を支える</div>
+        </div>
+        <div class="login-menu-divider"></div>
+        <div class="login-menu-item" data-action="logout">
+          <div class="login-menu-item-title">ログアウト</div>
+          <div class="login-menu-item-sub">ペルソナを終了して、最初の状態に戻る</div>
         </div>
       </div>
     </div>
@@ -2923,6 +2932,10 @@ document.querySelectorAll('.step').forEach(step => {
   const btn = document.getElementById('loginBtn');
   const menu = document.getElementById('loginMenu');
   if (!btn || !menu) return;
+  // ログイン中はボタンにペルソナ名を出す
+  if (window.satoiAuth && window.satoiAuth.isLoggedIn() && window.satoiAuth.persona()) {
+    btn.textContent = window.satoiAuth.persona() + ' ▾';
+  }
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
     menu.classList.toggle('open');
@@ -2930,12 +2943,24 @@ document.querySelectorAll('.step').forEach(step => {
   document.addEventListener('click', () => menu.classList.remove('open'));
   menu.querySelectorAll('.login-menu-item').forEach(it => {
     it.addEventListener('click', () => {
+      const persona = it.dataset.persona;
       const route = it.dataset.route;
+      const action = it.dataset.action;
+      if (action === 'logout') {
+        if (window.satoiAuth) window.satoiAuth.logout();
+        window.location.href = 'SATOI_Mock_v1_A1_entrance.html';
+        return;
+      }
+      if (persona) {
+        if (window.satoiSetPersona) window.satoiSetPersona(persona);
+        window.location.href = 'SATOI_Mock_v1_C1_mypage.html';
+        return;
+      }
       if (route === 'corporate') {
         window.location.href = 'SATOI_Mock_v1_G1_corporate_login.html';
-      } else {
-        window.location.href = 'SATOI_Mock_v1_C1_mypage.html';
+        return;
       }
+      window.location.href = 'SATOI_Mock_v1_C1_mypage.html';
     });
   });
 })();
