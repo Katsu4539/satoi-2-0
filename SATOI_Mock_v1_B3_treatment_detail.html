@@ -1577,7 +1577,7 @@ const CANCER_NAMES_JA = {
   breast: '乳がん', colon: '大腸がん', lung: '肺がん',
   stomach: '胃がん', prostate: '前立腺がん', pancreas: '膵がん'
 };
-const cancerParam = params.get('cancer');
+const cancerParam = params.get('cancer') || sessionStorage.getItem('satoi_cancer');
 if (cancerParam && CANCER_NAMES_JA[cancerParam]) {
   const precNameEl = document.getElementById('precCancerName');
   if (precNameEl) precNameEl.textContent = CANCER_NAMES_JA[cancerParam] + ' の精密検査';
@@ -3764,7 +3764,7 @@ if (!treatmentKey) treatmentKey = 'TC';
 const data = TREATMENTS[treatmentKey] || TREATMENTS['GENERIC'] || GENERIC_TEMPLATE;
 
 // パラメータでがん種・ステージを上書き可能
-const cancer = params.get('cancer') || data.cancer;
+const cancer = params.get('cancer') || sessionStorage.getItem('satoi_cancer') || data.cancer;
 const stage = params.get('stage') || data.stage;
 
 document.getElementById('hCrumb').textContent = `${cancer} ・ ステージ${stage} ・ ${data.name}`;
