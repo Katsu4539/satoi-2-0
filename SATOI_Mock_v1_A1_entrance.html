@@ -704,6 +704,9 @@ body {
 
   .routes-section, .worries-section, .philosophy-section { margin-bottom: 70px; }
 
+  /* モバイル:ログインメニューが左にはみ出す問題を修正(左端基準で開く・画面内に収める) */
+  #loginMenuA1 { left: 8px !important; right: auto !important; min-width: 0 !important; width: max-content; max-width: calc(100vw - 32px) !important; }
+
   .routes-grid, .philosophy-grid {
     grid-template-columns: 1fr;
     gap: 16px;

@@ -431,6 +431,8 @@
       .companion-lamp { display: none !important; }
       .satoi-con-bubble { display: none !important; }
       .nudge { display: none !important; }
+      /* ===== ヘッダーのリンクが縦に文字割れするのを防ぐ(←ログアウト等) ===== */
+      .header .h-link, .header .back-btn, .header .header-link, .header .header-crumb { white-space: nowrap; }
       /* ===== 読みやすさ:ベースフォントを少し大きく(PCで小さい・Katsuさん指示・2026-05-21)===== */
       body { font-size: 17px; line-height: 1.85; }
       /* ===== 情報ページ(検査/暮らし/基礎知識等)の本文を高齢者にも読みやすく大きく(AZ/ファイザー水準・2026-05-21)===== */
@@ -985,12 +987,54 @@
     return p.indexOf('g1_corporate') !== -1 || p.indexOf('g2_corporate') !== -1;
   }
 
+  /* ====== 固定ヘッダーの被り防止(全ページ共通・2026-05-22) ======
+     固定ヘッダー(＋固定ジャーニーバー)の実高さを測り、直後の最初のコンテンツに
+     「ヘッダー高さ＋余白」以上の上余白を保証する。max方式なので既に足りているページは触らない(二重余白にしない)。
+     入口/マインドマップ トグル等でヘッダーが折り返して高くなっても、上のコンテンツが隠れない。 */
+  function fixHeaderOverlap(){
+    try {
+      var header = document.querySelector('.header');
+      if (!header) return;
+      if (getComputedStyle(header).position !== 'fixed') return;
+      var hh = header.getBoundingClientRect().height;
+      if (!hh) return;
+      // ヘッダー直下に固定のサブバー(ジャーニーバー)があれば、その高さも加算
+      var jh = 0;
+      var jbar = document.querySelector('.satoi-jbar, #satoi-jbar, .b1-journey-bar, #b1JourneyBar');
+      if (jbar && getComputedStyle(jbar).position === 'fixed') jh = jbar.getBoundingClientRect().height;
+      var need = Math.ceil(hh + jh + 14);
+      // ヘッダー直後の「最初の流し込みコンテンツ」を探す(固定/絶対配置・ジャーニーバー・script等はスキップ)
+      var el = header.nextElementSibling;
+      while (el) {
+        var skip = (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.tagName === 'LINK'
+          || el.classList.contains('satoi-jbar') || el.id === 'satoi-jbar'
+          || el.classList.contains('b1-journey-bar') || el.id === 'b1JourneyBar'
+          || ['fixed','absolute'].indexOf(getComputedStyle(el).position) >= 0
+          || getComputedStyle(el).display === 'none');
+        if (!skip) break;
+        el = el.nextElementSibling;
+      }
+      if (!el) return;
+      var cs = getComputedStyle(el);
+      var curPt = parseFloat(cs.paddingTop) || 0;
+      var curMt = parseFloat(cs.marginTop) || 0;
+      if (curPt + curMt < need) {
+        el.style.paddingTop = Math.ceil(need - curMt) + 'px';
+      }
+    } catch(e){}
+  }
+  var __satoiHdrTimer = null;
+  function scheduleHeaderFix(){ clearTimeout(__satoiHdrTimer); __satoiHdrTimer = setTimeout(fixHeaderOverlap, 120); }
+
   /* ====== 初期化 ====== */
   function init(){
     injectStyles();
     if (satoiIsCorporatePage()) {
-      // B2B業務画面:患者向けの注入はすべてスキップ(誤混入を防ぐ)
+      // B2B業務画面:患者向けの注入はすべてスキップ(誤混入を防ぐ)。被り防止だけは行う。
       bindLoginButtons();
+      scheduleHeaderFix();
+      window.addEventListener('load', scheduleHeaderFix);
+      window.addEventListener('resize', scheduleHeaderFix);
       return;
     }
     injectHomeToggle();
@@ -1003,6 +1047,12 @@
     bindLoginButtons();
     enhanceAiCtaButtons();
     renderPickup();
+    // 固定ヘッダーの被り防止(描画確定後＆フォント読込後にも再計算)
+    fixHeaderOverlap();
+    scheduleHeaderFix();
+    window.addEventListener('load', scheduleHeaderFix);
+    window.addEventListener('resize', scheduleHeaderFix);
+    if (document.fonts && document.fonts.ready && document.fonts.ready.then) document.fonts.ready.then(scheduleHeaderFix);
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
