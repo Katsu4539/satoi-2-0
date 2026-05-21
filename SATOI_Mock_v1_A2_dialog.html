@@ -827,7 +827,7 @@ function addAIMessage(html, opts = {}) {
     </div>
   `;
   dialogWrap.appendChild(grp);
-  scrollToBottom();
+  scrollGroupToTop(grp);
 }
 
 function addTypingIndicator() {
@@ -990,6 +990,15 @@ function addTreatments(treatments, cancerName) {
   scrollToBottom();
 }
 
+function scrollGroupToTop(grp) {
+  if (!grp) return;
+  requestAnimationFrame(function(){
+    var offset = 80; // 固定ヘッダー分の余白
+    var top = window.pageYOffset + grp.getBoundingClientRect().top - offset;
+    if (top < 0) top = 0;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  });
+}
 function scrollToBottom() {
   setTimeout(() => {
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
