@@ -106,6 +106,44 @@ button { font-family: var(--font); cursor:pointer; }
   <p class="hero-sub">結果待ちが、いちばん怖い時間。<br>でも、その時間が、あなた専用の治療地図を作る時間です。</p>
 </section>
 
+<!-- ===== タイプ判別=治療の入口(B3から分離して集約)===== -->
+<section class="section" id="precision" style="background: linear-gradient(135deg, rgba(13,115,119,0.06), rgba(20,166,171,0.06));">
+  <div class="section-eyebrow" style="color:#0D7377;">PRECISION ・ タイプ判別</div>
+  <h2 class="section-title">精密検査こそ、<strong style="color:#0D7377;">治療の入口</strong></h2>
+  <p style="max-width:820px; font-size:15px; line-height:1.9; color:rgba(26,42,64,0.82);">治療法は <strong style="color:#0D7377;">がんのタイプ</strong> で大きく変わります。同じ「乳がん」でも HER2陽性/陰性 で薬が全く違うように、まず精密検査でタイプを正しく判別することが、あなた専用の治療地図の出発点です。下の各検査(病理・画像・遺伝子・腫瘍マーカー)で、タイプを確かめていきます。</p>
+
+  <!-- がん種別 ・ 必要な精密検査(検査→治療への橋渡し)-->
+  <div style="max-width: 1000px; margin: 24px auto 0; padding: 22px 26px; background: rgba(248,246,240,0.9); border-radius: 16px; border: 1px solid rgba(11,23,54,0.08);">
+    <div style="font-size: 13px; font-weight: 600; color: #1A2A40; margin-bottom: 14px;">▸ がん種別 ・ 必要な精密検査(クリックで そのがんの治療を見る)</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;">
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=breast'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">🌸 乳がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">HER2 / ER/PgR / BRCA / Oncotype DX</div>
+      </button>
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=colon'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">🍃 大腸がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">RAS / BRAF / MSI / CEA</div>
+      </button>
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=lung'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">💨 肺がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">EGFR / ALK / ROS1 / PD-L1</div>
+      </button>
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=stomach'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">🥢 胃がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">HER2 / MSI / PD-L1 / CEA</div>
+      </button>
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=prostate'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">⚪ 前立腺がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">PSA / グリソンスコア / BRCA</div>
+      </button>
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=pancreas'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">💧 膵がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">CA19-9 / BRCA / MSI / KRAS</div>
+      </button>
+    </div>
+  </div>
+</section>
+
 <nav class="toc">
   <a class="toc-item" href="#s1">X線/CT/MRI</a>
   <a class="toc-item" href="#s2">PET-CT</a>

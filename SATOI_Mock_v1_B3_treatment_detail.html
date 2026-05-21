@@ -1025,86 +1025,11 @@ body.satoi-has-jbar .header { top: 0 !important; }
   </div>
 </header>
 
-<!-- ===== 精密検査・タイプ判別セクション(治療前必須)===== -->
-<section class="section" id="precision-tests" style="background: linear-gradient(135deg, rgba(13,115,119,0.06), rgba(20,166,171,0.06));">
-  <div class="section-eyebrow" style="color: #0D7377;">PRECISION TESTS ・ 治療前の精密検査</div>
-  <h2 class="section-title">タイプを「正しく」判別する <span id="precCancerName">精密検査</span></h2>
-  <p class="section-sub">治療法は <strong style="color:#0D7377;">がんのタイプ</strong> で大きく変わります。<br>同じ「乳がん」でも HER2陽性/陰性 で薬が全く違うように、精密検査こそが治療の入口です。</p>
-
-  <div style="max-width: 1100px; margin: 30px auto 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px;">
-
-    <!-- 検査1: 病理検査 -->
-    <div class="precision-card" style="background: white; border-radius: 18px; padding: 26px 28px; border: 1px solid rgba(11,23,54,0.10); cursor: pointer; transition: all 0.3s;" onclick="openPrecision('histo')">
-      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
-        <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(13,115,119,0.15); color: #0D7377; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">1</div>
-        <div style="font-size: 17px; font-weight: 600; color: #1A2A40;">病理検査 ・ 細胞診/組織診</div>
-      </div>
-      <div style="font-size: 13px; color: rgba(26,42,64,0.78); line-height: 1.9;">針生検 や 手術検体から <strong>がんのタイプ・グレード・分化度</strong> を顕微鏡で確定。乳がんなら HER2/ER/PgR、肺がんなら EGFR/ALK/PD-L1、大腸がんなら RAS/MSI を測定。</div>
-      <div style="margin-top: 12px; font-size: 11.5px; color: #D4622A;">▸ クリックで詳細を見る</div>
-    </div>
-
-    <!-- 検査2: 画像検査(CT/MRI/PET-CT/超音波) -->
-    <div class="precision-card" style="background: white; border-radius: 18px; padding: 26px 28px; border: 1px solid rgba(11,23,54,0.10); cursor: pointer;" onclick="openPrecision('imaging')">
-      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
-        <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(212,169,94,0.20); color: #8B5A1F; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">2</div>
-        <div style="font-size: 17px; font-weight: 600; color: #1A2A40;">画像検査 ・ CT / MRI / PET-CT</div>
-      </div>
-      <div style="font-size: 13px; color: rgba(26,42,64,0.78); line-height: 1.9;">CT(腫瘍の大きさ/転移) ・ MRI(軟部組織) ・ PET-CT(全身の活動度) ・ 超音波。<strong>ステージ確定</strong> と <strong>遠隔転移の有無</strong> を判定する。</div>
-      <div style="margin-top: 12px; font-size: 11.5px; color: #D4622A;">▸ クリックで詳細を見る</div>
-    </div>
-
-    <!-- 検査3: 遺伝子・分子検査(コンパニオン診断) -->
-    <div class="precision-card" style="background: white; border-radius: 18px; padding: 26px 28px; border: 1px solid rgba(11,23,54,0.10); cursor: pointer;" onclick="openPrecision('genetic')">
-      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
-        <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(212,98,42,0.18); color: #D4622A; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">3</div>
-        <div style="font-size: 17px; font-weight: 600; color: #1A2A40;">遺伝子検査 ・ 分子診断 <span style="font-size:10px; padding:2px 8px; background:#0D7377; color:white; border-radius:8px; margin-left:6px;">適用ありの場合のみ</span></div>
-      </div>
-      <div style="font-size: 13px; color: rgba(26,42,64,0.78); line-height: 1.9;">分子標的薬・免疫チェックポイント阻害薬の<strong>適応判定</strong>(コンパニオン診断)。BRCA1/2、Oncotype DX、がん遺伝子パネル(CGP)。<strong>がん種により実施有無が異なる</strong>。</div>
-      <div style="margin-top: 12px; font-size: 11.5px; color: #D4622A;">▸ クリックで詳細を見る</div>
-    </div>
-
-    <!-- 検査4: 腫瘍マーカー -->
-    <div class="precision-card" style="background: white; border-radius: 18px; padding: 26px 28px; border: 1px solid rgba(11,23,54,0.10); cursor: pointer;" onclick="openPrecision('marker')">
-      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
-        <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(127,168,201,0.20); color: #5483A8; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">4</div>
-        <div style="font-size: 17px; font-weight: 600; color: #1A2A40;">腫瘍マーカー検査</div>
-      </div>
-      <div style="font-size: 13px; color: rgba(26,42,64,0.78); line-height: 1.9;">血液で測定。CEA(大腸/肺/胃) ・ CA15-3(乳) ・ CA19-9(膵/胆) ・ PSA(前立腺) など。<strong>診断単独でなく、治療効果や再発モニタリングに使用</strong>。</div>
-      <div style="margin-top: 12px; font-size: 11.5px; color: #D4622A;">▸ クリックで詳細を見る</div>
-    </div>
-  </div>
-
-  <!-- がん種別 精密検査マトリクス -->
-  <div style="max-width: 1100px; margin: 36px auto 0; padding: 24px 28px; background: rgba(248,246,240,0.85); border-radius: 16px; border: 1px solid rgba(11,23,54,0.08);">
-    <div style="font-size: 13px; font-weight: 600; color: #1A2A40; margin-bottom: 14px;">▸ がん種別 ・ 必要な精密検査(クリックで各がん種の詳細へ)</div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;">
-      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=breast'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
-        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">🌸 乳がん</div>
-        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">HER2 / ER/PgR / BRCA / Oncotype DX</div>
-      </button>
-      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=colon'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
-        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">🍃 大腸がん</div>
-        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">RAS / BRAF / MSI / CEA</div>
-      </button>
-      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=lung'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
-        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">💨 肺がん</div>
-        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">EGFR / ALK / ROS1 / PD-L1</div>
-      </button>
-      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=stomach'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
-        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">🥢 胃がん</div>
-        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">HER2 / MSI / PD-L1 / CEA</div>
-      </button>
-      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=prostate'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
-        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">⚪ 前立腺がん</div>
-        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">PSA / グリソンスコア / BRCA</div>
-      </button>
-      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=pancreas'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
-        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">💧 膵がん</div>
-        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">CA19-9 / BRCA / MSI / KRAS</div>
-      </button>
-    </div>
-  </div>
-</section>
+<!-- ===== 治療の前提:タイプ判別への橋渡し(精密検査は「検査」ステップへ分離)===== -->
+<div style="max-width:1100px; margin:22px auto 0; padding:14px 20px; background:rgba(13,115,119,0.08); border:1px solid rgba(13,115,119,0.28); border-radius:14px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px;">
+  <span style="font-size:13.5px; color:#1A2A40; line-height:1.8;">治療は <strong style="color:#0D7377;">がんのタイプ</strong> で決まります。まだ検査が済んでいない方は、まず精密検査でタイプを確かめましょう。</span>
+  <a href="SATOI_Mock_v1_CHP_exam.html" style="margin-left:auto; padding:9px 18px; background:#0D7377; color:#fff; border-radius:18px; text-decoration:none; font-size:12.5px; font-weight:600; white-space:nowrap;">タイプを調べる(精密検査) →</a>
+</div>
 
 <!-- ===== ヒーロー ===== -->
 <section class="hero">

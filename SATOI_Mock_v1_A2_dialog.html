@@ -2210,7 +2210,7 @@ function getJourneyFlow(cancer) {
   };
   return [
     { step: '①', label: '精密検査(2〜4週)', desc: 'がんの広がりとタイプを確定', href: 'SATOI_Mock_v1_CHP_exam.html' },
-    { step: '②', label: 'コンパニオン診断・遺伝子検査', desc: '分子標的薬・免疫療法の適応を判定', href: 'SATOI_Mock_v1_B3_treatment_detail.html#precision-tests' },
+    { step: '②', label: 'コンパニオン診断・遺伝子検査', desc: '分子標的薬・免疫療法の適応を判定', href: 'SATOI_Mock_v1_CHP_exam.html#precision' },
     { step: '③', label: '治療方針の決定', desc: 'キャンサーボード(多職種カンファレンス)で最適解を', href: 'SATOI_Mock_v1_CHP_consider.html' },
     { step: '④', label: '治療開始', desc: treatSummary[cancer] || treatSummary.other, href: 'SATOI_Mock_v1_CHP_treatment.html' },
     { step: '⑤', label: '副作用ケア・サポート', desc: 'つらさは記録・厚労省連携・チームと共有', href: 'SATOI_Mock_v1_F4_side_effects.html' },
@@ -2568,7 +2568,7 @@ document.addEventListener('click', function(e) {
   else if (/遺伝子|コンパニオン|分子|BRCA|EGFR|HER2/.test(text)) target = 'genetic';
   else if (/腫瘍マーカー|CEA|PSA|CA1[59]|CA125/.test(text)) target = 'marker';
   if (target) {
-    location.href = 'SATOI_Mock_v1_B3_treatment_detail.html?from=a2_exam#precision-tests';
+    location.href = 'SATOI_Mock_v1_CHP_exam.html?from=a2_exam#precision';
   }
 });
 

@@ -186,12 +186,6 @@
       + btnHTML('satoi-con-enh','☎',conLabel)
       + btnHTML('satoi-lang-enh','🌐',langLabel);
 
-    html += '<div class="suv-fontsize" role="group" aria-label="文字サイズ切替">'
-      + '<button class="suv-fs-btn" data-fs="s" aria-label="文字を小さく">小</button>'
-      + '<button class="suv-fs-btn" data-fs="m" aria-label="文字を標準に">中</button>'
-      + '<button class="suv-fs-btn" data-fs="l" aria-label="文字を大きく">大</button>'
-      + '</div>';
-
     nav.innerHTML = html;
     document.body.appendChild(nav);
 
@@ -233,28 +227,6 @@
 
     const findBtn = document.getElementById('satoi-find-enh');
     if (findBtn) findBtn.addEventListener('click', (e) => { e.stopPropagation(); openFindMenu(); });
-  }
-
-  /* ====== 文字サイズ切替(小/中/大・zoomで全体スケール・localStorage保存) ====== */
-  function applyFontScale(fs){
-    const map = { s: '0.9', m: '1', l: '1.18' };
-    const z = map[fs] || '1';
-    document.documentElement.style.zoom = z;
-    document.querySelectorAll('.suv-fs-btn').forEach(b => {
-      b.classList.toggle('suv-fs-active', b.getAttribute('data-fs') === fs);
-    });
-    try { localStorage.setItem('satoi_font_scale', fs); } catch(e){}
-  }
-  function setupFontSize(){
-    let saved = 'm';
-    try { saved = localStorage.getItem('satoi_font_scale') || 'm'; } catch(e){}
-    applyFontScale(saved);
-    document.querySelectorAll('.suv-fs-btn').forEach(b => {
-      b.addEventListener('click', function(e){
-        e.stopPropagation();
-        applyFontScale(this.getAttribute('data-fs'));
-      });
-    });
   }
 
   /* ====== さがす ・ 全画面共通フローティングメニュー ====== */
@@ -445,22 +417,6 @@
         font-size: 11px; letter-spacing: 0.02em; font-weight: 500; white-space: nowrap;
       }
       #satoi-univ-nav { pointer-events: auto; }
-      .suv-fontsize {
-        display: flex; gap: 4px; justify-content: center; align-items: stretch;
-        background: rgba(11,23,54,0.88);
-        border: 1px solid rgba(212,169,94,0.5);
-        border-radius: 18px; padding: 6px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-      }
-      .suv-fs-btn {
-        flex: 1; min-width: 22px; padding: 6px 0;
-        background: transparent; border: none; border-radius: 12px;
-        color: #F0C97A; cursor: pointer; font-family: inherit;
-        font-size: 13px; font-weight: 600; transition: all 0.2s;
-      }
-      .suv-fs-btn:hover { background: rgba(212,169,94,0.25); }
-      .suv-fs-btn.suv-fs-active { background: #D4A95E; color: #0B1736; }
       .suv-lang-opt {
         display: block; width: 100%; text-align: left;
         background: transparent; border: none;
@@ -513,31 +469,10 @@
       #satoi-univ-nav button.satoi-univ-btn:not(.satoi-univ-btn-enh) { display: none !important; }
 
       @media (max-width: 700px) {
-        /* 右側縦ナビ → 画面下部の横バー(指に重ならない) */
-        #satoi-univ-nav {
-          right: 0 !important; left: 0; bottom: 0; top: auto !important;
-          transform: none !important;
-          flex-direction: row !important;
-          justify-content: space-around; align-items: center;
-          gap: 0; padding: 5px 2px calc(5px + env(safe-area-inset-bottom));
-          background: rgba(7,16,38,0.97);
-          border-top: 1px solid rgba(212,169,94,0.4);
-          backdrop-filter: blur(12px);
-        }
-        #satoi-univ-nav .satoi-univ-btn-enh {
-          width: auto !important; min-height: 0 !important; flex: 1 1 0;
-          padding: 5px 2px !important;
-          background: transparent !important; border: none !important;
-          box-shadow: none !important; border-radius: 12px !important;
-        }
-        #satoi-univ-nav .satoi-univ-btn-enh:hover {
-          transform: none !important; background: rgba(212,169,94,0.16) !important; color: #F0C97A !important;
-        }
-        #satoi-univ-nav .satoi-univ-btn-enh .suv-icon { font-size: 20px !important; margin-bottom: 1px !important; }
-        #satoi-univ-nav .satoi-univ-btn-enh .suv-label { font-size: 9px !important; }
-        #satoi-univ-nav .suv-fontsize { display: none; } /* スマホはピンチズーム可・文字サイズ切替はPCのみ表示 */
-        .satoi-con-bubble { right: 12px !important; bottom: 74px !important; max-width: 210px; font-size: 11.5px; }
-        body { padding-bottom: 62px; }
+        .satoi-univ-btn-enh { width: 64px; min-height: 64px; padding: 8px 4px; }
+        .satoi-univ-btn-enh .suv-icon { font-size: 19px; }
+        .satoi-univ-btn-enh .suv-label { font-size: 10px; }
+        .satoi-con-bubble { right: 84px; bottom: 16px; max-width: 220px; font-size: 11.5px; }
       }
     `;
     document.head.appendChild(s);
@@ -754,7 +689,6 @@
   function init(){
     injectStyles();
     injectEnhancedNav();
-    setupFontSize();
     injectConciergeBubble();
     maybeRedirectFromA1();
     bindLoginButtons();
