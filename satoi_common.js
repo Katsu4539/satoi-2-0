@@ -159,7 +159,7 @@
 
     const nav = document.createElement('div');
     nav.id = 'satoi-univ-nav';
-    nav.style.cssText = 'position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:9000; display:flex; flex-direction:column; gap:10px;';
+    nav.style.cssText = 'position:fixed; top:12px; right:16px; z-index:9000; display:flex; flex-direction:row; gap:8px; align-items:center;';
 
     const loggedIn = window.satoiAuth.isLoggedIn();
     const backLabel = '戻る';
@@ -177,13 +177,6 @@
     };
 
     let html = btnHTML('satoi-back-enh','←',backLabel)
-      + btnHTML('satoi-home-enh','⌂',homeLabel)
-      + btnHTML('satoi-find-enh','🔍','さがす');
-    if (loggedIn) {
-      html += btnHTML('satoi-my-enh','★',myLabel);
-    }
-    html += btnHTML('satoi-hub-enh','◎',hubLabel)
-      + btnHTML('satoi-con-enh','☎',conLabel)
       + btnHTML('satoi-lang-enh','🌐',langLabel);
 
     nav.innerHTML = html;
@@ -197,18 +190,13 @@
         location.href = window.satoiHome();
       }
     });
-    document.getElementById('satoi-home-enh').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
-    const myBtn = document.getElementById('satoi-my-enh');
-    if (myBtn) myBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_C1_mypage.html');
-    document.getElementById('satoi-hub-enh').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
-    document.getElementById('satoi-con-enh').addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
     document.getElementById('satoi-lang-enh').addEventListener('click', (e) => {
       e.stopPropagation();
       const existing = document.getElementById('suv-lang-pop');
       if (existing) { existing.remove(); return; }
       const pop = document.createElement('div');
       pop.id = 'suv-lang-pop';
-      pop.style.cssText = 'position:fixed; right:120px; top:50%; transform:translateY(-50%); background:rgba(11,23,54,0.96); border:1px solid rgba(212,169,94,0.4); border-radius:12px; padding:10px; z-index:9100; min-width:140px; box-shadow:0 12px 32px rgba(0,0,0,0.5);';
+      pop.style.cssText = 'position:fixed; top:52px; right:16px; background:rgba(11,23,54,0.96); border:1px solid rgba(212,169,94,0.4); border-radius:12px; padding:10px; z-index:9100; min-width:140px; box-shadow:0 12px 32px rgba(0,0,0,0.5);';
       pop.innerHTML = '<button class="suv-lang-opt active" data-lang="ja">日本語</button>'
         + '<button class="suv-lang-opt" data-lang="en">English</button>'
         + '<button class="suv-lang-opt" data-lang="zh">中文</button>'
@@ -225,8 +213,6 @@
       }, 100);
     });
 
-    const findBtn = document.getElementById('satoi-find-enh');
-    if (findBtn) findBtn.addEventListener('click', (e) => { e.stopPropagation(); openFindMenu(); });
   }
 
   /* ====== さがす ・ 全画面共通フローティングメニュー ====== */
@@ -393,30 +379,28 @@
       .satoi-md-p strong, .satoi-md-table strong, .satoi-md-ul strong, .satoi-md-ol strong { font-weight: 400; color: #F0C97A; }
       .satoi-md-h strong { font-weight: 600; color: inherit; }
       .satoi-univ-btn-enh {
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        width: 84px; min-height: 84px; padding: 10px 6px;
-        background: rgba(11,23,54,0.88);
-        border: 1px solid rgba(212,169,94,0.5);
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 8px 14px;
+        background: rgba(11,23,54,0.82);
+        border: 1px solid rgba(212,169,94,0.45);
         border-radius: 20px;
         color: #F0C97A;
         cursor: pointer;
         font-family: inherit;
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        transition: all 0.25s ease;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.20);
       }
       .satoi-univ-btn-enh:hover {
         background: rgba(212,169,94,0.95);
         color: #0B1736;
-        transform: translateX(-4px) scale(1.04);
-        box-shadow: 0 8px 22px rgba(212,169,94,0.4);
       }
       .satoi-univ-btn-enh .suv-icon {
-        font-size: 24px; line-height: 1; margin-bottom: 6px;
+        font-size: 15px; line-height: 1;
       }
       .satoi-univ-btn-enh .suv-label {
-        font-size: 11px; letter-spacing: 0.02em; font-weight: 500; white-space: nowrap;
+        font-size: 12px; letter-spacing: 0.02em; font-weight: 500; white-space: nowrap;
       }
       #satoi-univ-nav { pointer-events: auto; }
       .suv-lang-opt {
@@ -471,10 +455,11 @@
       #satoi-univ-nav button.satoi-univ-btn:not(.satoi-univ-btn-enh) { display: none !important; }
 
       @media (max-width: 700px) {
-        .satoi-univ-btn-enh { width: 64px; min-height: 64px; padding: 8px 4px; }
-        .satoi-univ-btn-enh .suv-icon { font-size: 19px; }
-        .satoi-univ-btn-enh .suv-label { font-size: 10px; }
-        .satoi-con-bubble { right: 84px; bottom: 16px; max-width: 220px; font-size: 11.5px; }
+        #satoi-univ-nav { top: 8px !important; right: 10px !important; }
+        .satoi-univ-btn-enh { padding: 7px 11px; }
+        .satoi-univ-btn-enh .suv-icon { font-size: 14px; }
+        .satoi-univ-btn-enh .suv-label { font-size: 11px; }
+        .satoi-con-bubble { right: 12px; bottom: 16px; max-width: 220px; font-size: 11.5px; }
       }
     `;
     document.head.appendChild(s);
