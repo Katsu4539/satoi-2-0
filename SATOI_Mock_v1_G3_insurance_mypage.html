@@ -644,12 +644,138 @@ body {
       </div>
     </div>
     <div class="policy-actions">
-      <button class="policy-btn" onclick="satoiNotify('診断給付金 請求書類を自動生成し、保険会社に送信します\n\n書類:診断書 + 申請書 + 本人確認\n通常 1-2週間で振込')">📨 診断給付金を申請する</button>
+      <button class="policy-btn" onclick="document.getElementById('benefitSim').scrollIntoView({behavior:'smooth'});">📨 給付金を申請する（請求漏れを確認）</button>
       <button class="policy-btn outline" onclick="satoiNotify('保険プラン詳細・約款・特約一覧')">📋 プラン詳細を見る</button>
       <button class="policy-btn outline" onclick="satoiNotify('受取人・保険プラン変更(保険会社サイトに遷移)')">⚙ 受取人・契約変更</button>
     </div>
   </div>
 </section>
+
+<!-- ①-2 給付金シミュレーター(請求漏れ発掘ナビ) -->
+<style>
+#benefitSim .bsim-headline { background: linear-gradient(135deg, rgba(13,115,119,0.14), rgba(212,169,94,0.14)); border:1px solid rgba(13,115,119,0.3); border-radius:18px; padding:26px 28px; text-align:center; margin-bottom:22px; }
+#benefitSim .bsim-h-label { font-size:13px; color:var(--text-secondary,#5a6a7e); letter-spacing:0.06em; }
+#benefitSim .bsim-h-amount { font-size:clamp(34px,7vw,52px); font-weight:800; color:#0D7377; line-height:1.2; margin:6px 0; }
+#benefitSim .bsim-h-sub { font-size:13px; color:var(--text-secondary,#5a6a7e); margin-bottom:16px; }
+#benefitSim .bsim-claim-all { background:#D4622A; color:#fff; border:none; border-radius:26px; padding:13px 28px; font-size:15px; font-weight:700; cursor:pointer; }
+#benefitSim .bsim-claim-all:hover { background:#B85420; }
+#benefitSim .bsim-claim-all:disabled { background:#bbb; cursor:default; }
+#benefitSim .bsim-list { display:flex; flex-direction:column; gap:12px; }
+#benefitSim .bsim-item { background:#fff; border:1px solid rgba(10,22,40,0.10); border-left:4px solid #14A6AB; border-radius:14px; padding:18px 20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+#benefitSim .bsim-item.na { border-left-color:#bbb; opacity:0.6; }
+#benefitSim .bsim-item.paid { border-left-color:#5B9A68; }
+#benefitSim .bsim-item.pending { border-left-color:#7FA8C9; }
+#benefitSim .bsim-main { flex:1; min-width:180px; }
+#benefitSim .bsim-name { font-size:15.5px; font-weight:700; color:#1A2A40; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+#benefitSim .bsim-miss { font-size:10.5px; font-weight:700; color:#fff; background:#D4622A; padding:2px 9px; border-radius:10px; }
+#benefitSim .bsim-desc { font-size:12.5px; color:#5a6a7e; margin-top:4px; }
+#benefitSim .bsim-amt { font-size:20px; font-weight:800; color:#1A2A40; white-space:nowrap; }
+#benefitSim .bsim-amt.na { font-size:13px; font-weight:600; color:#999; }
+#benefitSim .bsim-act { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+#benefitSim .bsim-badge { font-size:11px; font-weight:700; padding:3px 11px; border-radius:11px; }
+#benefitSim .bsim-badge.unclaimed { background:rgba(212,98,42,0.16); color:#B85420; }
+#benefitSim .bsim-badge.pending { background:rgba(127,168,201,0.18); color:#3F6E96; }
+#benefitSim .bsim-badge.paid { background:rgba(91,154,104,0.18); color:#3E7A4A; }
+#benefitSim .bsim-badge.na { background:rgba(10,22,40,0.08); color:#888; }
+#benefitSim .bsim-btn { background:#0D7377; color:#fff; border:none; border-radius:18px; padding:9px 18px; font-size:13px; font-weight:700; cursor:pointer; }
+#benefitSim .bsim-btn:hover { background:#0A5A5D; }
+#benefitSim .bsim-timeline { width:100%; font-size:11.5px; color:#5a6a7e; margin-top:8px; padding-top:8px; border-top:1px dashed rgba(10,22,40,0.12); }
+#benefitSim .bsim-timeline b { color:#3F6E96; }
+#benefitSim .bsim-note { font-size:11.5px; color:#888; line-height:1.8; margin-top:16px; }
+</style>
+<section class="section" id="benefitSim">
+  <div class="section-inner">
+    <div class="section-eyebrow">BENEFIT FINDER ・ 給付金シミュレーター</div>
+    <h2 class="section-title">まだ受け取れる給付が、あります</h2>
+    <p class="section-sub">ご加入プランの給付条件と、SATOIに記録された診断・治療の情報を照らし合わせ、請求できる給付金を自動で洗い出しました。<strong>請求漏れを、出させません。</strong></p>
+    <div class="bsim-headline">
+      <div class="bsim-h-label">まだ受け取れる給付（未請求）</div>
+      <div class="bsim-h-amount" id="bsimUnclaimed">¥0</div>
+      <div class="bsim-h-sub" id="bsimSub"></div>
+      <button class="bsim-claim-all" id="bsimClaimAll">未請求をまとめて請求する →</button>
+    </div>
+    <div class="bsim-list" id="bsimList"></div>
+    <div class="bsim-note">※ 表示はご加入プランの給付条件と記録に基づく目安です。最終的な給付可否・金額は保険会社の審査によります。診断書等の必要書類は、SATOIが本人同意の範囲で自動作成を支援します。</div>
+  </div>
+</section>
+
+<script>
+(function(){
+  function pid(){ try{ return sessionStorage.getItem('satoi_persona_id')||'p1'; }catch(e){ return 'p1'; } }
+  var BENEFITS = {
+    p1: [
+      { id:'diag',    name:'がん診断給付金',   desc:'がんと診断確定されたとき・一時金',           amount:3000000, missable:false },
+      { id:'surgery', name:'手術給付金',       desc:'乳房の手術を受けたとき',                     amount:200000,  missable:false },
+      { id:'hosp',    name:'入院給付金',       desc:'入院 7日 × 日額 ¥10,000',                   amount:70000,   missable:false },
+      { id:'tx',      name:'がん治療給付金',   desc:'治療した月 × 月額 ¥100,000（3か月分）',     amount:300000,  missable:false },
+      { id:'outpt',   name:'通院給付金',       desc:'通院 8日 × ¥5,000（見落とされやすい給付）', amount:40000,   missable:true },
+      { id:'adv',     name:'先進医療給付',     desc:'対象の先進医療を受けた場合（今回は対象なし）', amount:0,     na:true }
+    ],
+    p2: [
+      { id:'diag',  name:'がん診断給付金', desc:'がんと診断確定されたとき・一時金',             amount:3000000, missable:false },
+      { id:'tx',    name:'がん治療給付金', desc:'治療した月 × 月額 ¥100,000（6か月分・継続）', amount:600000,  missable:false },
+      { id:'hosp',  name:'入院給付金',     desc:'検査入院 3日 × 日額 ¥10,000',                 amount:30000,   missable:false },
+      { id:'outpt', name:'通院給付金',     desc:'通院 12日 × ¥5,000（見落とされやすい給付）',  amount:60000,   missable:true },
+      { id:'adv',   name:'先進医療給付',   desc:'対象の先進医療を受けた場合（今回は対象なし）', amount:0,      na:true }
+    ]
+  };
+  var KEY = 'satoi_ins_claims';
+  function loadState(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
+  function saveState(o){ try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  var st = loadState();
+  var list = BENEFITS[pid()] || BENEFITS.p1;
+  function statusOf(it){ if (it.na) return 'na'; return (st[pid()+'_'+it.id]) || 'unclaimed'; }
+  function setStatus(it, s){ st[pid()+'_'+it.id] = s; saveState(st); }
+  function yen(n){ return '¥' + (n||0).toLocaleString(); }
+
+  function render(){
+    var unclaimed = 0, pending = 0, paid = 0;
+    list.forEach(function(it){ var s=statusOf(it); if(s==='unclaimed') unclaimed+=it.amount; else if(s==='pending') pending+=it.amount; else if(s==='paid') paid+=it.amount; });
+    document.getElementById('bsimUnclaimed').textContent = yen(unclaimed);
+    var subs = [];
+    if (pending) subs.push('申請中 '+yen(pending));
+    if (paid) subs.push('給付済 '+yen(paid));
+    document.getElementById('bsimSub').textContent = subs.length ? subs.join(' ・ ') : '記録から自動で見つけました。気づかないうちの請求漏れを防ぎます。';
+    var allBtn = document.getElementById('bsimClaimAll');
+    var anyUnclaimed = list.some(function(it){ return statusOf(it)==='unclaimed'; });
+    allBtn.disabled = !anyUnclaimed;
+    allBtn.textContent = anyUnclaimed ? '未請求をまとめて請求する →' : 'すべて請求済みです ✓';
+
+    var box = document.getElementById('bsimList');
+    box.innerHTML = list.map(function(it){
+      var s = statusOf(it);
+      var badge = { unclaimed:'未請求', pending:'申請中・審査中', paid:'給付済', na:'対象外' }[s];
+      var tl = '';
+      if (s==='pending') tl = '<div class="bsim-timeline">請求 ✓ → <b>審査中</b>（通常1〜2週間）→ 給付　／　書類はSATOIが自動生成済み</div>';
+      if (s==='paid') tl = '<div class="bsim-timeline">請求 ✓ → 審査 ✓ → <b>振込完了</b>　お疲れさまでした。</div>';
+      var right = '';
+      if (s==='unclaimed') right = '<button class="bsim-btn" data-id="'+it.id+'">請求する</button>';
+      else if (s==='pending') right = '<button class="bsim-btn" data-id="'+it.id+'" data-finish="1" style="background:#5B9A68;">給付完了にする（デモ）</button>';
+      return '<div class="bsim-item '+s+'">'
+        + '<div class="bsim-main"><div class="bsim-name">'+it.name+(it.missable?'<span class="bsim-miss">見落とし注意</span>':'')+'</div>'
+        + '<div class="bsim-desc">'+it.desc+'</div>'+tl+'</div>'
+        + '<div class="bsim-amt'+(it.na?' na':'')+'">'+(it.na?'対象外':yen(it.amount))+'</div>'
+        + '<div class="bsim-act"><span class="bsim-badge '+s+'">'+badge+'</span>'+right+'</div>'
+        + '</div>';
+    }).join('');
+    [].forEach.call(box.querySelectorAll('.bsim-btn'), function(b){
+      b.addEventListener('click', function(){
+        var it = list.filter(function(x){return x.id===b.getAttribute('data-id');})[0];
+        if (!it) return;
+        if (b.getAttribute('data-finish')) { setStatus(it,'paid'); render(); satoiNotify('✓ '+it.name+' '+yen(it.amount)+' が振り込まれました（デモ）。', {kind:'success'}); }
+        else { setStatus(it,'pending'); render(); satoiNotify('✓ '+it.name+' を申請しました。\n診断書・申請書・本人確認をSATOIが自動生成し、保険会社に送信しました。通常1〜2週間で振込予定です。', {kind:'success', duration:5200}); }
+      });
+    });
+  }
+  document.getElementById('bsimClaimAll').addEventListener('click', function(){
+    var n=0, sum=0;
+    list.forEach(function(it){ if(statusOf(it)==='unclaimed'){ setStatus(it,'pending'); n++; sum+=it.amount; } });
+    render();
+    if (n) satoiNotify('✓ 未請求の給付 '+n+'件（'+yen(sum)+'）を、まとめて請求しました。\n必要書類はSATOIが自動作成・送信。請求漏れゼロです。', {kind:'success', duration:5600});
+  });
+  render();
+})();
+</script>
 
 <!-- ② ジャーニーマップ(保険版) -->
 <section class="section bg">
@@ -699,25 +825,25 @@ body {
     <p class="section-sub">あなたの保険プランで受けられる治療と、SATOI と連携している医療機関です。給付金は連携機関では原則「直接連携」で煩雑な手続き不要。</p>
 
     <div class="facility-grid">
-      <div class="facility-card" onclick="satoiNotify('近隣拠点病院マップ\n\n地域別に拠点病院がリスト表示・予約導線あり')">
+      <div class="facility-card" onclick="location.href='SATOI_Mock_v1_HOSP_directory.html?from=insurance'">
         <div class="facility-eyebrow">STANDARD CARE</div>
         <div class="facility-name">近隣の拠点病院</div>
         <div class="facility-meta">標準治療を受けられる地域の中核病院・治療給付金 直接連携可</div>
         <div class="facility-status">✓ 連携済み・即利用可</div>
       </div>
-      <div class="facility-card" onclick="satoiNotify('Light Clinic Ginza(LCG)に予約\n\n銀座本院・セカンドオピニオン対応・SATOIコーディネーター常駐')">
+      <div class="facility-card" onclick="location.href='SATOI_Mock_v1_HOSP_directory.html?from=insurance&type=satoi'">
         <div class="facility-eyebrow">SECOND OPINION</div>
         <div class="facility-name">Light Clinic Ginza</div>
         <div class="facility-meta">SATOIメイン拠点・セカンドオピニオン・専門医による個別カンファレンス</div>
         <div class="facility-status">✓ 連携済み・即利用可</div>
       </div>
-      <div class="facility-card" onclick="satoiNotify('定型医療クリニック\n\nSATOI提携クリニック・がん種別専門外来')">
+      <div class="facility-card" onclick="location.href='SATOI_Mock_v1_HOSP_directory.html?from=insurance'">
         <div class="facility-eyebrow">SECOND OPINION</div>
         <div class="facility-name">定型医療クリニック</div>
         <div class="facility-meta">SATOI提携・がん種別の専門外来・コーディネーター紹介</div>
         <div class="facility-status">✓ 連携済み・即利用可</div>
       </div>
-      <div class="facility-card" onclick="satoiNotify('自由診療・厚労省と調整中\n\n将来的に提携クリニックマップを段階展開')">
+      <div class="facility-card" onclick="location.href='SATOI_Mock_v1_FREE_map.html?from=insurance'">
         <div class="facility-eyebrow">CARE (FUTURE)</div>
         <div class="facility-name">自由診療マップ</div>
         <div class="facility-meta">標準治療を超えた選択肢・提携クリニック・厚労省と段階調整中</div>

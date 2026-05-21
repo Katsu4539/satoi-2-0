@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI 病院連携ダッシュボード - Hospital Partnership</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --night-glow: #2A3558;
+  --starlight: #D4A95E;
+  --starlight-soft: #E5C68A;
+  --morning-white: #F8F6F0;
+  --morning-cream: #F4F2EB;
+  --morning-warm: #EDE5D3;
+  --healing-blue: #7FA8C9;
+  --healing-blue-deep: #4F7AA0;
+  --teal: #0D7377;
+  --teal-soft: #5BA8AA;
+  --warm-orange: #D4622A;
+  --warm-coral: #E08461;
+  --rose: #C76B7F;
+  --ink-deep: #1A2238;
+  --ink-medium: #3D4860;
+  --ink-light: #6B7388;
+  --ink-mute: #9099A8;
+  --border: #E2DFD4;
+  --success: #2E8B57;
+  --danger: #C5443E;
+  --warning: #C28F2A;
+  --font: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; background: var(--morning-cream); }
+body { font-family: var(--font); color: var(--ink-deep); font-size: 15px; line-height: 1.65; display: flex; min-height: 100vh; }
+button, input, select { font-family: var(--font); }
+
+/* === サイドバー === */
+.sidebar { width: 248px; background: var(--night-deep); color: var(--morning-white); padding: 28px 0; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.side-logo { padding: 0 24px 24px; border-bottom: 1px solid rgba(248,246,240,0.08); margin-bottom: 18px; }
+.side-logo .logo { font-size: 20px; font-weight: 500; letter-spacing: 0.18em; display: inline-flex; align-items: center; color: var(--morning-white); text-decoration: none; }
+.side-logo .logo .dot { display: inline-block; width: 7px; height: 7px; background: var(--starlight); border-radius: 50%; margin-right: 9px; box-shadow: 0 0 8px var(--starlight); }
+.side-corp { font-size: 11px; letter-spacing: 0.26em; color: var(--starlight); margin-top: 6px; }
+.side-account { padding: 0 24px 22px; border-bottom: 1px solid rgba(248,246,240,0.08); margin-bottom: 14px; }
+.side-corp-name { font-size: 13px; color: rgba(248,246,240,0.85); margin-bottom: 4px; letter-spacing: 0.03em; }
+.side-staff { font-size: 11px; color: rgba(248,246,240,0.45); }
+.side-nav { list-style: none; padding: 0 12px; }
+.side-nav li { margin-bottom: 4px; }
+.side-nav button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 14px; background: transparent; color: rgba(248,246,240,0.78); border: none; border-radius: 8px; font-size: 13px; letter-spacing: 0.04em; cursor: pointer; transition: all 0.25s; text-align: left; }
+.side-nav button:hover { background: rgba(248,246,240,0.05); color: var(--morning-white); }
+.side-nav button.active { background: rgba(212,169,94,0.18); color: var(--starlight-soft); }
+.side-nav button.active::before { content: ''; width: 3px; height: 16px; background: var(--starlight); border-radius: 2px; margin-right: -9px; }
+.side-nav-icon { width: 16px; height: 16px; opacity: 0.9; flex-shrink: 0; }
+.side-nav-icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.6; }
+.side-bottom { padding: 22px 24px 0; margin-top: 16px; }
+.side-gov { font-size: 10px; color: rgba(212,169,94,0.7); padding: 10px 12px; background: rgba(212,169,94,0.06); border-radius: 8px; border: 1px solid rgba(212,169,94,0.18); line-height: 1.6; }
+.side-back { display: block; margin-top: 14px; font-size: 11px; color: rgba(248,246,240,0.5); text-decoration: none; padding: 8px 12px; border: 1px solid rgba(248,246,240,0.14); border-radius: 8px; text-align: center; transition: all 0.25s; }
+.side-back:hover { border-color: var(--starlight); color: var(--starlight); }
+
+/* === メインエリア === */
+.main { flex: 1; min-width: 0; padding: 28px 36px 60px; overflow-x: hidden; }
+.main-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
+.crumbs { font-size: 12px; color: var(--ink-light); letter-spacing: 0.06em; }
+.crumbs span:not(:last-child)::after { content: ' / '; margin: 0 4px; color: var(--ink-mute); }
+.crumbs span:last-child { color: var(--ink-deep); font-weight: 500; }
+.head-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.search-box { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--morning-white); border: 1px solid var(--border); border-radius: 22px; width: 260px; }
+.search-box input { border: none; outline: none; flex: 1; font-size: 13px; color: var(--ink-deep); background: transparent; }
+.search-box input::placeholder { color: var(--ink-mute); }
+.role-chip { display:flex; align-items:center; gap:8px; padding:6px 12px; background:var(--morning-white); border:1px solid var(--border); border-radius:20px; }
+.role-chip span { font-size: 10px; color: var(--ink-light); letter-spacing: 0.1em; }
+.role-chip select { border:none; background:transparent; font-family:var(--font); font-size:12px; color:var(--ink-deep); cursor:pointer; outline:none; font-weight:500; }
+.btn-action { padding: 8px 18px; background: var(--night-deep); color: var(--morning-white); border: none; border-radius: 20px; font-size: 12px; letter-spacing: 0.06em; cursor: pointer; }
+.btn-action.ghost { background: var(--morning-white); color: var(--ink-medium); border: 1px solid var(--border); }
+.btn-action:hover { opacity: 0.88; }
+
+/* === 患者ハブ思想バナー === */
+.hub-banner { background: linear-gradient(90deg, rgba(11,23,54,0.94), rgba(26,37,72,0.94)); color: var(--morning-white); border-radius: 12px; padding: 16px 24px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.hub-banner .glow { display:inline-flex; width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #F0C97A, #D4A95E 60%, rgba(212,169,94,0) 100%); box-shadow:0 0 14px rgba(212,169,94,0.55); flex-shrink:0; }
+.hub-banner .label { font-size: 11px; letter-spacing: 0.26em; color: var(--starlight); margin-bottom: 5px; }
+.hub-banner .copy { font-size: 13.5px; font-weight: 400; letter-spacing: 0.03em; line-height: 1.65; }
+.hub-banner .copy strong { color: var(--starlight-soft); font-weight: 500; }
+.hub-flow { display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:11px; }
+.hub-flow .node { padding:4px 12px; border-radius:14px; }
+.hub-flow .node.p { background: rgba(212,169,94,0.22); color: var(--starlight-soft); }
+.hub-flow .node.h { background: rgba(127,168,201,0.20); color: #cfe0ee; }
+.hub-flow .ar { color: var(--starlight); }
+
+/* === 同意ガバナンスサブバー === */
+.gov-subbar { background: linear-gradient(90deg, rgba(11,23,54,0.04), rgba(127,168,201,0.06), rgba(11,23,54,0.04)); border: 1px solid rgba(127,168,201,0.2); border-radius: 10px; padding: 10px 18px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 12px; }
+.gov-tag { display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:10px; font-weight:500; }
+.gov-tag .d { font-size: 9px; }
+.gov-tag.green { background: rgba(46,139,87,0.14); color: #1d6841; }
+.gov-tag.blue { background: rgba(127,168,201,0.18); color: #305878; }
+.gov-tag.orange { background: rgba(212,98,42,0.12); color: #95421c; }
+
+/* === ページタイトル === */
+.page-title { font-size: 26px; font-weight: 500; letter-spacing: 0.03em; margin-bottom: 6px; }
+.page-sub { font-size: 13px; color: var(--ink-light); margin-bottom: 26px; }
+
+/* === タブパネル === */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.4s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* === KPI === */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 26px; }
+.kpi-card { background: var(--morning-white); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; cursor: pointer; transition: all 0.25s; }
+.kpi-card:hover { border-color: var(--starlight); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(11,23,54,0.08); }
+.kpi-label { font-size: 11px; color: var(--ink-light); letter-spacing: 0.1em; margin-bottom: 10px; }
+.kpi-num { font-size: 30px; font-weight: 700; color: var(--ink-deep); letter-spacing: 0.02em; line-height: 1.15; margin-bottom: 4px; }
+.kpi-num .u { font-size: 15px; color: var(--ink-light); margin-left: 3px; font-weight: 500; }
+.kpi-trend { font-size: 11px; color: var(--success); display: inline-flex; align-items: center; gap: 4px; font-weight: 500; }
+.kpi-trend.down { color: var(--danger); }
+.kpi-trend.good-down { color: var(--success); }
+.kpi-sub { font-size: 11px; color: var(--ink-mute); margin-top: 6px; }
+
+/* === カード/セクション === */
+.card { background: var(--morning-white); border: 1px solid var(--border); border-radius: 12px; padding: 24px 26px; margin-bottom: 22px; }
+.card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+.card-title { font-size: 16px; font-weight: 500; letter-spacing: 0.02em; display: flex; align-items: center; gap: 9px; }
+.card-title .ic { width: 20px; height: 20px; color: var(--warm-orange); }
+.card-title .ic svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.6; }
+.card-link { font-size: 12px; color: var(--healing-blue-deep); cursor: pointer; border-bottom: 1px solid var(--healing-blue-deep); padding-bottom: 1px; background: none; border-top: none; border-left: none; border-right: none; }
+.card-link:hover { color: var(--warm-orange); border-color: var(--warm-orange); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+@media (max-width: 980px) { .two-col { grid-template-columns: 1fr; } }
+
+/* === アラートリスト === */
+.alert-list { list-style: none; }
+.alert-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border); background: var(--morning-cream); }
+.alert-item:hover { background: var(--morning-warm); border-color: var(--starlight); }
+.alert-sev { flex-shrink: 0; width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; }
+.alert-sev.high { background: var(--danger); box-shadow: 0 0 0 4px rgba(197,68,62,0.14); }
+.alert-sev.mid { background: var(--warning); box-shadow: 0 0 0 4px rgba(194,143,42,0.14); }
+.alert-sev.low { background: var(--healing-blue-deep); box-shadow: 0 0 0 4px rgba(79,122,160,0.14); }
+.alert-body { flex: 1; }
+.alert-main { font-size: 14px; color: var(--ink-deep); font-weight: 500; margin-bottom: 3px; }
+.alert-meta { font-size: 11.5px; color: var(--ink-light); }
+.alert-meta .src { color: var(--healing-blue-deep); }
+.alert-go { font-size: 18px; color: var(--ink-mute); align-self: center; }
+
+/* === テーブル === */
+.table-wrap { background: var(--morning-white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.table-head { padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
+.table-title { font-size: 15px; font-weight: 500; }
+.table-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-chip { font-size: 11px; padding: 6px 14px; background: var(--morning-cream); border: 1px solid var(--border); border-radius: 14px; cursor: pointer; letter-spacing: 0.04em; transition: all 0.2s; }
+.filter-chip:hover { background: var(--morning-warm); }
+.filter-chip.active { background: var(--night-deep); color: var(--morning-white); border-color: var(--night-deep); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { text-align: left; padding: 12px 16px; font-size: 11px; color: var(--ink-light); letter-spacing: 0.08em; font-weight: 500; background: var(--morning-cream); border-bottom: 1px solid var(--border); }
+tbody tr { cursor: pointer; transition: background 0.2s; border-bottom: 1px solid var(--border); }
+tbody tr:hover { background: var(--morning-cream); }
+tbody tr:last-child { border-bottom: none; }
+tbody td { padding: 14px 16px; vertical-align: middle; }
+.cell-id { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; color: var(--ink-medium); }
+.cell-name { font-weight: 500; color: var(--ink-deep); letter-spacing: 0.02em; }
+.cell-sub { font-size: 11px; color: var(--ink-light); margin-top: 2px; }
+
+.pill { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 10px; letter-spacing: 0.04em; font-weight: 500; }
+.pill.cancer-breast { background: rgba(199,107,127,0.14); color: #8a3551; }
+.pill.cancer-lung { background: rgba(127,168,201,0.18); color: #305878; }
+.pill.cancer-colon { background: rgba(13,115,119,0.14); color: #095e62; }
+.pill.cancer-stomach { background: rgba(212,98,42,0.14); color: #95421c; }
+.pill.cancer-pancreas { background: rgba(212,169,94,0.18); color: #7a5e22; }
+.pill.stage-ii { background: rgba(212,169,94,0.18); color: #7a5e22; }
+.pill.stage-iii { background: rgba(212,98,42,0.14); color: #95421c; }
+.pill.stage-iv { background: rgba(197,68,62,0.14); color: #8a2c27; }
+.pill.sev-high { background: rgba(197,68,62,0.14); color: #8a2c27; }
+.pill.sev-mid { background: rgba(194,143,42,0.16); color: #76561a; }
+.pill.sev-stable { background: rgba(46,139,87,0.14); color: #1d6841; }
+.consent-badge { display:inline-flex; align-items:center; gap:5px; font-size:10.5px; padding:3px 9px; border-radius:9px; background:rgba(46,139,87,0.12); color:#1d6841; font-weight:500; }
+.consent-badge .d { font-size: 8px; }
+
+.trend-spark { display:flex; align-items:flex-end; gap:2px; height:26px; }
+.trend-spark i { width:5px; background:var(--healing-blue); border-radius:1px; display:inline-block; }
+.trend-spark.up i { background: var(--warm-coral); }
+.trend-spark.down i { background: var(--teal-soft); }
+
+/* === モーダル === */
+.modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(11,23,54,0.5); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; padding: 40px 20px; }
+.modal-overlay.open { display: flex; animation: fadeIn 0.3s; }
+.modal { width: 100%; max-width: 820px; max-height: 90vh; overflow-y: auto; background: var(--morning-white); border-radius: 16px; box-shadow: 0 40px 90px rgba(0,0,0,0.35); }
+.modal-head { padding: 26px 32px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.modal-title { font-size: 21px; font-weight: 500; letter-spacing: 0.03em; margin-bottom: 6px; }
+.modal-sub { font-size: 12px; color: var(--ink-light); letter-spacing: 0.04em; }
+.modal-close { width: 36px; height: 36px; background: var(--morning-cream); border: none; border-radius: 50%; font-size: 16px; cursor: pointer; color: var(--ink-medium); flex-shrink: 0; }
+.modal-close:hover { background: var(--morning-warm); }
+.modal-body { padding: 22px 32px 28px; }
+.profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px; }
+.profile-item { padding: 13px 15px; background: var(--morning-cream); border-radius: 8px; }
+.profile-label { font-size: 10px; color: var(--ink-light); letter-spacing: 0.1em; margin-bottom: 4px; }
+.profile-value { font-size: 14px; color: var(--ink-deep); font-weight: 500; letter-spacing: 0.02em; }
+.section-block { margin-bottom: 24px; }
+.section-block-head { font-size: 11px; letter-spacing: 0.18em; color: var(--warm-orange); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.section-block-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.chart-box { position: relative; height: 240px; background: var(--morning-cream); border-radius: 10px; padding: 14px; }
+.mirror-note { font-size: 11.5px; color: var(--ink-light); background: rgba(127,168,201,0.10); border: 1px dashed rgba(127,168,201,0.35); border-radius: 8px; padding: 10px 14px; margin-top: 12px; line-height: 1.7; }
+.mirror-note strong { color: var(--healing-blue-deep); }
+.empse-row { display:flex; gap:8px; flex-wrap:wrap; }
+.empse-pill { font-size:11px; padding:5px 11px; border-radius:12px; background:var(--morning-cream); border:1px solid var(--border); }
+.empse-pill b { color: var(--warm-orange); }
+.modal-cta-row { padding: 0 32px 28px; display: flex; gap: 12px; flex-wrap: wrap; }
+.cta-primary { flex: 1; min-width: 240px; padding: 14px 22px; background: linear-gradient(135deg, var(--warm-orange), var(--warm-coral)); color: var(--morning-white); border: none; border-radius: 26px; font-size: 14px; font-weight: 500; letter-spacing: 0.04em; cursor: pointer; box-shadow: 0 8px 20px rgba(212,98,42,0.28); transition: all 0.3s; }
+.cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(212,98,42,0.4); }
+.cta-secondary { padding: 14px 22px; background: var(--morning-cream); color: var(--ink-medium); border: 1px solid var(--border); border-radius: 26px; font-size: 14px; cursor: pointer; }
+.cta-secondary:hover { background: var(--morning-warm); }
+
+/* === 相談ログ === */
+.consult-stats { display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-bottom:22px; }
+.consult-log { list-style:none; }
+.consult-card { border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-bottom:14px; background:var(--morning-white); }
+.consult-q { font-size:14px; color:var(--ink-deep); font-weight:500; margin-bottom:10px; display:flex; gap:10px; align-items:flex-start; }
+.consult-q .who { flex-shrink:0; font-size:10px; padding:3px 9px; border-radius:9px; background:rgba(212,169,94,0.18); color:#7a5e22; font-weight:500; }
+.consult-flow { display:flex; align-items:stretch; gap:10px; flex-wrap:wrap; }
+.flow-step { flex:1; min-width:200px; background:var(--morning-cream); border-radius:10px; padding:12px 14px; font-size:12.5px; line-height:1.65; }
+.flow-step .st-label { font-size:10px; letter-spacing:0.12em; color:var(--ink-light); margin-bottom:5px; display:flex; align-items:center; gap:6px; }
+.flow-step.ai .st-label { color: var(--teal); }
+.flow-step.esc .st-label { color: var(--warm-orange); }
+.flow-step.self .st-label { color: var(--success); }
+.flow-result { display:inline-block; margin-top:8px; font-size:11px; padding:3px 10px; border-radius:9px; font-weight:500; }
+.flow-result.self { background:rgba(46,139,87,0.14); color:#1d6841; }
+.flow-result.esc { background:rgba(212,98,42,0.14); color:#95421c; }
+
+/* === ACP === */
+.acp-track { display:flex; align-items:center; gap:6px; }
+.acp-dot { width:9px; height:9px; border-radius:50%; background:var(--border); }
+.acp-dot.done { background:var(--success); }
+.acp-dot.active { background:var(--warning); box-shadow:0 0 0 3px rgba(194,143,42,0.18); }
+.acp-stage { font-size:11px; color:var(--ink-light); margin-left:6px; }
+
+/* === エビデンス === */
+.evi-grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+@media (max-width: 860px){ .evi-grid { grid-template-columns:1fr; } }
+.evi-card { border:1px solid var(--border); border-radius:12px; padding:20px 22px; background:var(--morning-white); }
+.evi-cite { font-size:12px; color:var(--healing-blue-deep); line-height:1.7; }
+.evi-cite .jrnl { font-style:italic; }
+.evi-stat { font-size:26px; font-weight:700; color:var(--teal); margin:8px 0 4px; }
+.sanpou { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; margin-top:6px; }
+@media (max-width: 860px){ .sanpou { grid-template-columns:1fr; } }
+.sanpou-card { border-radius:14px; padding:22px; color:var(--morning-white); }
+.sanpou-card.patient { background:linear-gradient(135deg,#C76B7F,#E08461); }
+.sanpou-card.hospital { background:linear-gradient(135deg,#4F7AA0,#7FA8C9); }
+.sanpou-card.satoi { background:linear-gradient(135deg,#0B1736,#2A3558); }
+.sanpou-card h4 { font-size:15px; font-weight:500; margin-bottom:10px; letter-spacing:0.04em; }
+.sanpou-card ul { list-style:none; font-size:12.5px; line-height:1.9; }
+.sanpou-card ul li::before { content:'▸ '; color:rgba(255,255,255,0.7); }
+.roi-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:14px; }
+@media (max-width: 720px){ .roi-grid { grid-template-columns:1fr; } }
+.roi-card { background:var(--morning-cream); border-radius:12px; padding:18px 20px; text-align:center; }
+.roi-num { font-size:28px; font-weight:700; color:var(--warm-orange); }
+.roi-label { font-size:12px; color:var(--ink-light); margin-top:4px; }
+
+/* === 連携サービス === */
+.svc-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:18px; }
+@media (max-width: 860px){ .svc-grid { grid-template-columns:1fr; } }
+.svc-card { border:1px solid var(--border); border-radius:14px; padding:24px; background:var(--morning-white); transition:all 0.25s; }
+.svc-card:hover { border-color:var(--starlight); box-shadow:0 10px 24px rgba(11,23,54,0.07); }
+.svc-badge { display:inline-flex; align-items:center; gap:6px; font-size:10px; letter-spacing:0.1em; padding:4px 11px; border-radius:12px; background:rgba(212,169,94,0.16); color:#7a5e22; font-weight:500; margin-bottom:14px; }
+.svc-title { font-size:17px; font-weight:500; margin-bottom:8px; }
+.svc-desc { font-size:13px; color:var(--ink-light); line-height:1.8; margin-bottom:16px; }
+.svc-btn { padding:10px 20px; border-radius:22px; border:none; font-size:13px; cursor:pointer; background:var(--night-deep); color:var(--morning-white); font-family:var(--font); }
+.svc-btn.ghost { background:var(--morning-white); color:var(--ink-medium); border:1px solid var(--border); }
+.svc-btn:hover { opacity:0.9; }
+
+/* === トースト === */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: all 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast-body { flex: 1; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+
+@media (max-width: 1024px) {
+  body { flex-direction: column; }
+  .sidebar { position: relative; width: 100%; height: auto; display: flex; flex-wrap: wrap; padding: 16px; gap: 8px; }
+  .side-logo, .side-account { width: 100%; }
+  .side-nav { display: flex; flex-wrap: wrap; padding: 0; }
+  .side-nav li { margin: 0; }
+  .side-bottom { width: 100%; }
+}
+@media (max-width: 768px) {
+  .main { padding: 18px 14px 50px; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .consult-stats, .roi-grid { grid-template-columns: 1fr; }
+  .profile-grid { grid-template-columns: 1fr 1fr; }
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  input, textarea, select { font-size: 16px; }
+}
+:focus-visible { outline: 2px solid var(--starlight); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="side-logo">
+    <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+    <div class="side-corp">HOSPITAL PARTNERSHIP</div>
+  </div>
+  <div class="side-account">
+    <div class="side-corp-name" id="hospName">DEMO がんセンター</div>
+    <div class="side-staff" id="staffLabel">担当: 腫瘍内科(医師ビュー)</div>
+  </div>
+  <ul class="side-nav" id="sideNav">
+    <li><button class="active" data-tab="overview">
+      <span class="side-nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+      概要ダッシュボード
+    </button></li>
+    <li><button data-tab="monitoring">
+      <span class="side-nav-icon"><svg viewBox="0 0 24 24"><path d="M3 12 H7 L9 6 L13 18 L15 12 H21"/></svg></span>
+      患者モニタリング(ePRO)
+    </button></li>
+    <li><button data-tab="consult">
+      <span class="side-nav-icon"><svg viewBox="0 0 24 24"><path d="M21 12 a9 9 0 0 1 -9 9 H4 l1.5 -4 A9 9 0 1 1 21 12 Z"/></svg></span>
+      相談一次受け履歴
+    </button></li>
+    <li><button data-tab="acp">
+      <span class="side-nav-icon"><svg viewBox="0 0 24 24"><path d="M4 21 V3 H14 L20 9 V21 Z"/><path d="M14 3 V9 H20"/><path d="M8 13 L11 16 L16 10"/></svg></span>
+      ACP・意思決定支援
+    </button></li>
+    <li><button data-tab="evidence">
+      <span class="side-nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12 L11 15 L16 9"/></svg></span>
+      効果とエビデンス
+    </button></li>
+    <li><button data-tab="services">
+      <span class="side-nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2 V5 M12 19 V22 M2 12 H5 M19 12 H22 M5 5 L7 7 M17 17 L19 19 M5 19 L7 17 M17 7 L19 5"/></svg></span>
+      連携サービス
+    </button></li>
+  </ul>
+  <div class="side-bottom">
+    <div class="side-gov">
+      <strong>情報の流れ</strong><br>
+      患者さんの同意に基づき共有された情報のみ表示。3省2ガイドライン準拠。
+    </div>
+    <a href="SATOI_Mock_v1_H0_hospital_login.html" class="side-back">ログアウト</a>
+  </div>
+</aside>
+
+<main class="main">
+
+  <div class="hub-banner">
+    <span class="glow"></span>
+    <div style="flex:1; min-width:280px;">
+      <div class="label">SATOI / PATIENT-AS-HUB</div>
+      <div class="copy">患者さんが<strong>自分の意思で共有した情報</strong>を、病院がお受け取りして伴走に活かす画面です。<br>病院が患者さんを管理する場ではありません。<strong>ここに出る情報は、患者さんがマイページで見るものと同じ</strong>です。</div>
+    </div>
+    <div class="hub-flow">
+      <span class="node p">患者・家族</span><span class="ar">→ 同意共有 →</span><span class="node h">病院</span>
+    </div>
+  </div>
+
+  <div class="gov-subbar">
+    <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+      <span class="gov-tag green"><span class="d">●</span> 本人同意済みデータのみ</span>
+      <span class="gov-tag blue"><span class="d">●</span> 鏡の原則:患者と病院は同じ画面を見る</span>
+      <span class="gov-tag orange"><span class="d">●</span> 共有はいつでも患者が停止可</span>
+    </div>
+    <button class="card-link" onclick="goTab('evidence')">情報ガバナンスとエビデンス →</button>
+  </div>
+
+  <div class="main-head">
+    <div class="crumbs"><span>SATOI Hospital</span><span id="crumbsCurrent">概要ダッシュボード</span></div>
+    <div class="head-actions">
+      <div class="search-box">
+        <span style="font-size:14px; color:var(--ink-mute);">⌕</span>
+        <input type="text" placeholder="患者・症状・がん種で検索">
+      </div>
+      <div class="role-chip">
+        <span>VIEW</span>
+        <select id="roleSwitcher">
+          <option value="doctor">医師ビュー</option>
+          <option value="nurse">看護師ビュー</option>
+          <option value="coordinator">地域連携室ビュー</option>
+        </select>
+      </div>
+      <button class="btn-action ghost" onclick="satoiNotify('レポートPDFを書き出しました(デモ)。実環境では月次連携レポートを自動生成します。',{kind:'success'})">レポート出力</button>
+    </div>
+  </div>
+
+  <!-- ===== タブ1: 概要 ===== -->
+  <div class="tab-panel active" data-panel="overview">
+    <h1 class="page-title">こんにちは、DEMO がんセンター さま</h1>
+    <p class="page-sub">本日 2026年5月22日(金)・あなたの担当する患者さんが共有してくれた状況の要約です。</p>
+
+    <div class="kpi-grid">
+      <div class="kpi-card" onclick="goTab('consult')">
+        <div class="kpi-label">看護師電話の一次受け代行</div>
+        <div class="kpi-num">312<span class="u">件/月</span></div>
+        <div class="kpi-trend good-down">▲ SATOIが先に対応・看護師工数を肩代わり</div>
+        <div class="kpi-sub">うち 71% が患者の自己解決で完了</div>
+      </div>
+      <div class="kpi-card" onclick="goTab('monitoring')">
+        <div class="kpi-label">救急受診の予防(重症化前検知)</div>
+        <div class="kpi-num">−38<span class="u">%</span></div>
+        <div class="kpi-trend">▲ ePROアラートで早期介入</div>
+        <div class="kpi-sub">予定外受診・夜間電話の前年同月比</div>
+      </div>
+      <div class="kpi-card" onclick="goTab('evidence')">
+        <div class="kpi-label">平均在院日数</div>
+        <div class="kpi-num">−1.6<span class="u">日</span></div>
+        <div class="kpi-trend">▲ 退院後フォロー連携で短縮</div>
+        <div class="kpi-sub">対象がん種の中央値・連携前比</div>
+      </div>
+      <div class="kpi-card" onclick="goTab('monitoring')">
+        <div class="kpi-label">ePRO 回収率</div>
+        <div class="kpi-num">86<span class="u">%</span></div>
+        <div class="kpi-trend">▲ 患者が自宅でも入力を継続</div>
+        <div class="kpi-sub">担当患者の週次入力率(全国平均比 +31pt)</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2 L20 7 V13 C20 17 16 21 12 22 C8 21 4 17 4 13 V7 Z"/><path d="M12 8 V13 M12 16 h.01"/></svg></span>今日のアラート</div>
+          <button class="card-link" onclick="goTab('monitoring')">すべて見る →</button>
+        </div>
+        <ul class="alert-list">
+          <li class="alert-item" onclick="openPatient('M')">
+            <span class="alert-sev high"></span>
+            <div class="alert-body">
+              <div class="alert-main">患者M:倦怠感スコアが3日連続で上昇(2→4→5)</div>
+              <div class="alert-meta"><span class="src">出典:本人がSATOIで入力したePRO</span>・5/22 朝 同意のうえ共有</div>
+            </div>
+            <span class="alert-go">›</span>
+          </li>
+          <li class="alert-item" onclick="openPatient('K')">
+            <span class="alert-sev high"></span>
+            <div class="alert-body">
+              <div class="alert-main">患者K:息切れ(呼吸困難)スコアが閾値超え・発熱の併発記録あり</div>
+              <div class="alert-meta"><span class="src">出典:本人＋ご家族の入力</span>・5/21 夜 重症化サインを自動検知</div>
+            </div>
+            <span class="alert-go">›</span>
+          </li>
+          <li class="alert-item" onclick="goTab('consult')">
+            <span class="alert-sev mid"></span>
+            <div class="alert-body">
+              <div class="alert-main">相談一次受け:同じ副作用の質問が今週8件・FAQ更新を提案</div>
+              <div class="alert-meta"><span class="src">出典:聞きたいことボックス</span>・SATOI AIが一次対応済</div>
+            </div>
+            <span class="alert-go">›</span>
+          </li>
+          <li class="alert-item" onclick="goTab('acp')">
+            <span class="alert-sev low"></span>
+            <div class="alert-body">
+              <div class="alert-main">患者K:次回IC前に「家族と相談したい4つの問い」を共有してくれました</div>
+              <div class="alert-meta"><span class="src">出典:ACP・意思決定支援</span>・IC前に医師が確認可能</div>
+            </div>
+            <span class="alert-go">›</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20 c0 -3.5 3 -6 6 -6 s6 2.5 6 6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M16 20 c0 -2.6 1.5 -4.6 4 -4.6"/></svg></span>担当患者サマリ</div>
+          <button class="card-link" onclick="goTab('monitoring')">患者モニタリングへ →</button>
+        </div>
+        <div class="table-wrap" style="border:none;">
+          <table>
+            <thead><tr><th>患者</th><th>がん種/病期</th><th>直近の状態</th><th>共有</th></tr></thead>
+            <tbody>
+              <tr onclick="openPatient('M')">
+                <td><div class="cell-name">患者M</div><div class="cell-sub">40代・子育て中</div></td>
+                <td><span class="pill cancer-breast">乳がん</span> <span class="pill stage-ii">II期</span></td>
+                <td><span class="pill sev-high">要観察</span><div class="cell-sub">倦怠感が上昇傾向</div></td>
+                <td><span class="consent-badge"><span class="d">●</span>同意済</span></td>
+              </tr>
+              <tr onclick="openPatient('K')">
+                <td><div class="cell-name">患者K</div><div class="cell-sub">60代・定年間近</div></td>
+                <td><span class="pill cancer-lung">肺がん</span> <span class="pill stage-iv">IV期</span></td>
+                <td><span class="pill sev-high">アラート</span><div class="cell-sub">息切れ・発熱の併発</div></td>
+                <td><span class="consent-badge"><span class="d">●</span>本人＋家族</span></td>
+              </tr>
+              <tr onclick="openPatient('S')">
+                <td><div class="cell-name">患者S</div><div class="cell-sub">50代</div></td>
+                <td><span class="pill cancer-colon">大腸がん</span> <span class="pill stage-iii">III期</span></td>
+                <td><span class="pill sev-mid">フォロー中</span><div class="cell-sub">退院後・在宅PRO安定</div></td>
+                <td><span class="consent-badge"><span class="d">●</span>同意済</span></td>
+              </tr>
+              <tr onclick="openPatient('T')">
+                <td><div class="cell-name">患者T</div><div class="cell-sub">70代</div></td>
+                <td><span class="pill cancer-stomach">胃がん</span> <span class="pill stage-ii">II期</span></td>
+                <td><span class="pill sev-stable">安定</span><div class="cell-sub">食欲スコア回復</div></td>
+                <td><span class="consent-badge"><span class="d">●</span>同意済</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="background:linear-gradient(135deg, rgba(127,168,201,0.08), rgba(212,169,94,0.06)); border-color:rgba(127,168,201,0.25);">
+      <div class="card-title" style="margin-bottom:10px;"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7 v5 l3 2"/></svg></span>SATOIが肩代わりしている病院の負担</div>
+      <p style="font-size:13px; color:var(--ink-medium); line-height:1.9;">看護師電話の一次受け / 外来説明の補完 / ACP・意思決定支援 / ePRO収集 / 救急・重症化の予防 / 退院後フォロー / 働き方改革(工数) / IC前の患者理解。<br>いずれも<strong style="color:var(--warm-orange);">患者さんが主体的にSATOIを使う</strong>ことで生まれた情報を、病院が受け取って活かす形です。</p>
+    </div>
+  </div>
+
+  <!-- ===== タブ2: 患者モニタリング ===== -->
+  <div class="tab-panel" data-panel="monitoring">
+    <h1 class="page-title">患者モニタリング(ePRO推移)</h1>
+    <p class="page-sub">患者さんが自宅・外来で入力した症状(ePRO)の推移です。重症化サインを早期に検知し、救急受診の前に手を打てます。</p>
+
+    <div class="card" style="padding:16px 22px; background:rgba(127,168,201,0.08); border-color:rgba(127,168,201,0.25); margin-bottom:18px;">
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; font-size:13px; color:var(--ink-medium);">
+        <span class="consent-badge"><span class="d">●</span>鏡の原則</span>
+        ここに表示されるグラフは、患者さんがマイページ・療養手帳で見ているものと<strong style="color:var(--healing-blue-deep);">同一</strong>です。病院だけが見られる隠れた指標はありません。
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-head">
+        <div class="table-title">担当患者リスト</div>
+        <div class="table-filters">
+          <span class="filter-chip active" data-mfilter="all">全て</span>
+          <span class="filter-chip" data-mfilter="alert">要対応</span>
+          <span class="filter-chip" data-mfilter="home">退院後・在宅</span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>患者</th><th>がん種/病期</th><th>直近ePRO傾向</th><th>重症化サイン</th><th>共有元</th><th></th></tr></thead>
+        <tbody id="monBody">
+          <tr data-mrow="alert" onclick="openPatient('M')">
+            <td><div class="cell-name">患者M</div><div class="cell-sub">40代・子育て中・乳がん術後化学療法</div></td>
+            <td><span class="pill cancer-breast">乳がん</span> <span class="pill stage-ii">II期</span></td>
+            <td><div class="trend-spark up"><i style="height:30%"></i><i style="height:40%"></i><i style="height:40%"></i><i style="height:60%"></i><i style="height:80%"></i><i style="height:100%"></i></div></td>
+            <td><span class="pill sev-high">倦怠感↑</span></td>
+            <td><span class="consent-badge"><span class="d">●</span>本人</span></td>
+            <td><span class="alert-go">›</span></td>
+          </tr>
+          <tr data-mrow="alert" onclick="openPatient('K')">
+            <td><div class="cell-name">患者K</div><div class="cell-sub">60代・定年間近・肺がん薬物療法</div></td>
+            <td><span class="pill cancer-lung">肺がん</span> <span class="pill stage-iv">IV期</span></td>
+            <td><div class="trend-spark up"><i style="height:40%"></i><i style="height:50%"></i><i style="height:55%"></i><i style="height:70%"></i><i style="height:90%"></i><i style="height:100%"></i></div></td>
+            <td><span class="pill sev-high">息切れ＋発熱</span></td>
+            <td><span class="consent-badge"><span class="d">●</span>本人＋家族</span></td>
+            <td><span class="alert-go">›</span></td>
+          </tr>
+          <tr data-mrow="home" onclick="openPatient('S')">
+            <td><div class="cell-name">患者S</div><div class="cell-sub">50代・大腸がん術後・退院後在宅</div></td>
+            <td><span class="pill cancer-colon">大腸がん</span> <span class="pill stage-iii">III期</span></td>
+            <td><div class="trend-spark down"><i style="height:90%"></i><i style="height:70%"></i><i style="height:60%"></i><i style="height:50%"></i><i style="height:40%"></i><i style="height:35%"></i></div></td>
+            <td><span class="pill sev-stable">安定</span></td>
+            <td><span class="consent-badge"><span class="d">●</span>本人</span></td>
+            <td><span class="alert-go">›</span></td>
+          </tr>
+          <tr data-mrow="home" onclick="openPatient('T')">
+            <td><div class="cell-name">患者T</div><div class="cell-sub">70代・胃がん術後・退院後在宅</div></td>
+            <td><span class="pill cancer-stomach">胃がん</span> <span class="pill stage-ii">II期</span></td>
+            <td><div class="trend-spark down"><i style="height:80%"></i><i style="height:65%"></i><i style="height:55%"></i><i style="height:45%"></i><i style="height:40%"></i><i style="height:38%"></i></div></td>
+            <td><span class="pill sev-stable">安定</span></td>
+            <td><span class="consent-badge"><span class="d">●</span>同意済</span></td>
+            <td><span class="alert-go">›</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== タブ3: 相談一次受け履歴 ===== -->
+  <div class="tab-panel" data-panel="consult">
+    <h1 class="page-title">相談一次受け履歴(看護師代行)</h1>
+    <p class="page-sub">患者さんからの問い合わせを、まずSATOIが受け止め一次対応します。医療判断が必要なものだけ、整理して医療者へエスカレーションします。</p>
+
+    <div class="consult-stats">
+      <div class="roi-card"><div class="roi-num">312</div><div class="roi-label">今週の一次受け件数</div></div>
+      <div class="roi-card"><div class="roi-num" style="color:var(--success)">71%</div><div class="roi-label">患者の自己解決で完了</div></div>
+      <div class="roi-card"><div class="roi-num" style="color:var(--warm-orange)">29%</div><div class="roi-label">医療者へエスカレーション</div></div>
+    </div>
+
+    <div class="card" style="padding:14px 20px; background:rgba(127,168,201,0.08); border-color:rgba(127,168,201,0.25);">
+      <div style="font-size:13px; color:var(--ink-medium);"><span class="consent-badge"><span class="d">●</span>聞きたいことボックス連携</span> 患者さんの「聞きたいこと」はまずSATOIが受け止め、解決できないものだけ、文脈つきで先生方に届きます。看護師さんの電話対応の負担を肩代わりします。</div>
+    </div>
+
+    <ul class="consult-log">
+      <li class="consult-card">
+        <div class="consult-q"><span class="who">患者M</span> 抗がん剤のあと、手足のしびれが続いています。このまま様子を見て大丈夫でしょうか?</div>
+        <div class="consult-flow">
+          <div class="flow-step ai">
+            <div class="st-label">● SATOI AI 一次対応</div>
+            末梢神経障害の一般的な経過と、セルフケア(保温・記録)を案内。「いつ受診すべきか」の目安も提示。
+            <span class="flow-result self">自己解決で完了</span>
+          </div>
+          <div class="flow-step self">
+            <div class="st-label">✓ 看護師の電話対応:不要</div>
+            患者さんは安心して経過観察。次回外来で記録を持参予定。<br>看護師工数:約12分/件を削減。
+          </div>
+        </div>
+      </li>
+      <li class="consult-card">
+        <div class="consult-q"><span class="who">患者K</span> 昨夜から息苦しさが強く、熱も37.9度あります。どうしたらいいですか?</div>
+        <div class="consult-flow">
+          <div class="flow-step ai">
+            <div class="st-label">● SATOI AI 一次対応</div>
+            ePROの「息切れ＋発熱」を重症化サインと判定。自己判断させず、ただちに医療者へつなぐと案内。
+            <span class="flow-result esc">医療者へエスカレーション</span>
+          </div>
+          <div class="flow-step esc">
+            <div class="st-label">▲ 医師・看護師へ(文脈つき)</div>
+            直近のePRO推移・服薬・体温記録を要約して連携。先生は背景を把握した状態で対応開始。
+            <button class="card-link" style="margin-top:8px;" onclick="openPatient('K')">患者Kの状態を見る →</button>
+          </div>
+        </div>
+      </li>
+      <li class="consult-card">
+        <div class="consult-q"><span class="who">患者S</span> 退院後の食事で、気をつけることをもう一度確認したいです。</div>
+        <div class="consult-flow">
+          <div class="flow-step ai">
+            <div class="st-label">● SATOI AI 一次対応</div>
+            退院時の説明内容を、患者さんの理解度に合わせて噛み砕いて再説明。外来説明の補完。
+            <span class="flow-result self">自己解決で完了</span>
+          </div>
+          <div class="flow-step self">
+            <div class="st-label">✓ 外来での再説明:不要</div>
+            「同じことを何度も聞きにくい」を解消。外来の説明工数を肩代わり。
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ===== タブ4: ACP・意思決定支援 ===== -->
+  <div class="tab-panel" data-panel="acp">
+    <h1 class="page-title">ACP・意思決定支援</h1>
+    <p class="page-sub">患者さんが自分のペースで考えた「これからのこと」「大切にしたいこと」を、本人の同意のうえ共有。IC(説明と同意)の前に、医師が患者さんの価値観を把握できます。</p>
+
+    <div class="card" style="padding:14px 20px; background:rgba(212,169,94,0.07); border-color:rgba(212,169,94,0.25);">
+      <div style="font-size:13px; color:var(--ink-medium);"><span class="consent-badge" style="background:rgba(212,98,42,0.12); color:#95421c;"><span class="d">●</span>主語は患者さん</span> ACPは病院が記入を迫るものではありません。患者さんが「聞きたいことボックス」や物語の記録を通じて、自分の言葉で残したものを共有します。</div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-head"><div class="table-title">患者別 ACP・意思決定の状況</div></div>
+      <table>
+        <thead><tr><th>患者</th><th>ACP対話の進み</th><th>IC前の患者理解度</th><th>共有された問い・希望</th></tr></thead>
+        <tbody>
+          <tr onclick="openPatient('K')">
+            <td><div class="cell-name">患者K</div><div class="cell-sub">肺がんIV期</div></td>
+            <td><div class="acp-track"><span class="acp-dot done"></span><span class="acp-dot done"></span><span class="acp-dot active"></span><span class="acp-dot"></span><span class="acp-stage">対話中</span></div></td>
+            <td><span class="pill sev-mid">一部に不安</span></td>
+            <td style="font-size:12.5px; color:var(--ink-medium);">「家族と相談したい4つの問い」を共有。仕事の引き継ぎと痛みの管理を重視。</td>
+          </tr>
+          <tr onclick="openPatient('M')">
+            <td><div class="cell-name">患者M</div><div class="cell-sub">乳がんII期</div></td>
+            <td><div class="acp-track"><span class="acp-dot done"></span><span class="acp-dot active"></span><span class="acp-dot"></span><span class="acp-dot"></span><span class="acp-stage">考え始め</span></div></td>
+            <td><span class="pill sev-stable">おおむね理解</span></td>
+            <td style="font-size:12.5px; color:var(--ink-medium);">子育てと治療の両立が最優先。脱毛・通院頻度について質問を準備中。</td>
+          </tr>
+          <tr onclick="openPatient('S')">
+            <td><div class="cell-name">患者S</div><div class="cell-sub">大腸がんIII期</div></td>
+            <td><div class="acp-track"><span class="acp-dot done"></span><span class="acp-dot done"></span><span class="acp-dot done"></span><span class="acp-dot done"></span><span class="acp-stage">記録済</span></div></td>
+            <td><span class="pill sev-stable">十分理解</span></td>
+            <td style="font-size:12.5px; color:var(--ink-medium);">在宅での生活の継続を希望。緊急時の連絡先と意向を家族と共有済み。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:22px;">
+      <div class="card-title" style="margin-bottom:12px;"><span class="ic"><svg viewBox="0 0 24 24"><path d="M21 11.5 a8.5 8.5 0 0 1 -12 7.7 L3 21 l1.8 -6 A8.5 8.5 0 1 1 21 11.5 Z"/></svg></span>IC(説明と同意)の前に</div>
+      <p style="font-size:13px; color:var(--ink-medium); line-height:1.9;">先生がICに入る前に、患者さんが「何を分かっていて、何に不安で、何を大切にしたいか」を5分で把握できます。<strong style="color:var(--warm-orange);">説明のやり直しや行き違いが減り、限られた外来時間を本質的な対話に使えます。</strong>これは外来説明・IC前の患者理解という病院の負担を、患者さん自身の準備で軽くする仕組みです。</p>
+    </div>
+  </div>
+
+  <!-- ===== タブ5: 効果とエビデンス ===== -->
+  <div class="tab-panel" data-panel="evidence">
+    <h1 class="page-title">効果とエビデンス(KPI・ROI・三方良し)</h1>
+    <p class="page-sub">ePRO(患者報告アウトカム)による継続的なモニタリングは、症状管理だけでなく救急受診の減少・生存期間にも効果があることが示されています。</p>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px;"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 19 V5 M4 19 H20 M8 16 V11 M12 16 V8 M16 16 V13"/></svg></span>連携による効果(当院デモ値)</div>
+      <div class="roi-grid">
+        <div class="roi-card"><div class="roi-num">−38%</div><div class="roi-label">予定外・救急受診</div></div>
+        <div class="roi-card"><div class="roi-num">−1.6日</div><div class="roi-label">平均在院日数</div></div>
+        <div class="roi-card"><div class="roi-num">約62時間/月</div><div class="roi-label">看護師の電話・説明工数の削減</div></div>
+      </div>
+    </div>
+
+    <div class="evi-grid">
+      <div class="evi-card">
+        <div class="svc-badge">EVIDENCE 01</div>
+        <div class="evi-stat">生存期間の延長</div>
+        <p style="font-size:13px; color:var(--ink-medium); line-height:1.8; margin-bottom:12px;">進行がん患者で、症状をePROで継続報告した群は、通常ケア群より全生存期間が有意に長かった(中央値 31.2 vs 26.0 ヶ月)。救急受診・入院も減少。</p>
+        <div class="evi-cite">Basch E, et al. Overall Survival Results of a Trial Assessing Patient-Reported Outcomes for Symptom Monitoring During Routine Cancer Treatment. <span class="jrnl">JAMA.</span> 2017;318(2):197-198.</div>
+      </div>
+      <div class="evi-card">
+        <div class="svc-badge">EVIDENCE 02</div>
+        <div class="evi-stat">救急・重症化の予防</div>
+        <p style="font-size:13px; color:var(--ink-medium); line-height:1.8; margin-bottom:12px;">在宅でのePROモニタリングと一次トリアージの組み合わせにより、予定外受診と重症化が減少し、医療者の対応工数も軽減したと報告。</p>
+        <div class="evi-cite">Welby S, et al. Patient-reported outcome monitoring and remote triage in oncology care. <span class="jrnl">Int J Clin Oncol.</span> 2026.（デモ用引用)</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:22px;">
+      <div class="card-title" style="margin-bottom:16px;"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"/><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/></svg></span>三方良し ― 患者さんをハブに、みんなが得をする</div>
+      <div class="sanpou">
+        <div class="sanpou-card patient">
+          <h4>患者さん(主役)</h4>
+          <ul>
+            <li>同じ話を何度もしなくていい</li>
+            <li>不安なとき、すぐ受け止めてもらえる</li>
+            <li>重症化の前に手を打ってもらえる</li>
+            <li>自分の価値観を分かってもらえる</li>
+          </ul>
+        </div>
+        <div class="sanpou-card hospital">
+          <h4>病院(医師・看護師)</h4>
+          <ul>
+            <li>電話・説明の一次受け工数が減る</li>
+            <li>救急・夜間対応が減る</li>
+            <li>IC前に患者を理解できる</li>
+            <li>在院日数・働き方改革に寄与</li>
+          </ul>
+        </div>
+        <div class="sanpou-card satoi">
+          <h4>SATOI</h4>
+          <ul>
+            <li>患者の同意に基づくPROが蓄積</li>
+            <li>エビデンスとして社会に還元</li>
+            <li>患者・病院・保険をつなぐ基盤</li>
+            <li>NBM(物語に基づく医療)を実装</li>
+          </ul>
+        </div>
+      </div>
+      <div class="mirror-note" style="margin-top:18px;">
+        <strong>ガバナンス:</strong> すべて本人同意ベース。鏡の原則により病院が見るものは患者も見られます。共有はいつでも患者本人が停止でき、停止後はダッシュボードから即時に消えます。3省2ガイドライン準拠。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== タブ6: 連携サービス ===== -->
+  <div class="tab-panel" data-panel="services">
+    <h1 class="page-title">連携サービス</h1>
+    <p class="page-sub">患者さんを起点に、病院の外の支援ともなめらかにつながります。すべて患者さんの意思と同意で動きます。</p>
+
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="svc-badge">予約連携・擬似</div>
+        <div class="svc-title">スマパ予約連携</div>
+        <p class="svc-desc">患者さんがスマホから外来・検査を予約。SATOIの体調記録(ePRO)と連動し、状態が悪い時は優先枠を提案。受付・電話予約の負担を軽減します。</p>
+        <button class="svc-btn" onclick="satoiNotify('スマパ予約連携(デモ):患者Mの次回外来候補を3枠提案しました。',{kind:'success'})">予約枠を提案する</button>
+      </div>
+      <div class="svc-card">
+        <div class="svc-badge">提携・擬似</div>
+        <div class="svc-title">治療費ファイナンス相談</div>
+        <p class="svc-desc">高額な治療費の見通しに不安を抱える患者さんへ、提携先のファイナンス・公的制度相談を案内。給付金シミュレーターとも連動し、お金の不安(EMPSeのe=経済)を支えます。</p>
+        <button class="svc-btn ghost" onclick="satoiNotify('治療費ファイナンス相談(デモ):提携窓口の予約ページを患者さんへ案内しました。',{kind:'info'})">相談窓口を案内</button>
+      </div>
+      <div class="svc-card">
+        <div class="svc-badge">在宅・緩和ケア連携</div>
+        <div class="svc-title">在宅・緩和ケアへの橋渡し</div>
+        <p class="svc-desc">PSが下がってきた患者さんが「自宅の近くで、どんなケアを受けたいか」を起点に、拠点病院ディレクトリ・在宅医・緩和ケアと連携。患者さん発の希望に病院が応える形でつなぎます。</p>
+        <button class="svc-btn" onclick="location.href='SATOI_Mock_v1_HOSP_directory.html'">拠点病院ディレクトリを開く →</button>
+      </div>
+      <div class="svc-card">
+        <div class="svc-badge">家族連携</div>
+        <div class="svc-title">ご家族との連携・AI代弁</div>
+        <p class="svc-desc">患者さんが発信できない時は、ご家族の報告やAI代弁が患者さんの声を橋渡し。家族もアプリの中で患者さんを理解しながら、みんなが患者さんを介してつながります。</p>
+        <button class="svc-btn ghost" onclick="location.href='SATOI_Mock_v1_FAM_view.html'">ファミリービューを見る →</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ===== 患者モーダル ===== -->
+<div class="modal-overlay" id="patientModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="pmTitle">患者M</div>
+        <div class="modal-sub" id="pmSub">本人がSATOIで共有した情報・本人同意済み</div>
+      </div>
+      <button class="modal-close" onclick="closePatient()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="profile-grid" id="pmProfile"></div>
+
+      <div class="section-block">
+        <div class="section-block-head">ePRO 症状スコアの推移(直近6週)</div>
+        <div class="chart-box"><canvas id="pmChart"></canvas></div>
+        <div class="mirror-note"><strong>鏡の原則:</strong> このグラフは患者さんが療養手帳・マイページで見ているものと同一です。0〜5(0=なし / 5=非常に強い)の自己申告スコア。</div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-block-head">患者さんが共有したこと(EMPSe・本人の言葉)</div>
+        <div class="empse-row" id="pmEmpse"></div>
+        <p id="pmVoice" style="font-size:13px; color:var(--ink-medium); line-height:1.85; margin-top:12px; padding:14px 16px; background:var(--morning-cream); border-radius:10px; border-left:3px solid var(--starlight);"></p>
+      </div>
+
+      <div class="section-block" id="pmAlertBlock">
+        <div class="section-block-head">重症化サインと一次対応</div>
+        <p id="pmAlert" style="font-size:13px; color:var(--ink-medium); line-height:1.85;"></p>
+      </div>
+    </div>
+    <div class="modal-cta-row">
+      <button class="cta-primary" id="pmContact">この患者さんに連絡する(連携メモを残す)</button>
+      <button class="cta-secondary" onclick="closePatient()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* === トースト === */
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || 'info';
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  t.innerHTML = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+String(msg).replace(/\n/g,'<br>')+'</div><button class="satoi-toast-close" aria-label="close">×</button>';
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, opts.duration || 4200);
+  return t;
+}
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){} };
+
+/* === タブ切替 === */
+const sideNav = document.getElementById('sideNav');
+const crumbsLabel = {
+  overview: '概要ダッシュボード',
+  monitoring: '患者モニタリング(ePRO)',
+  consult: '相談一次受け履歴',
+  acp: 'ACP・意思決定支援',
+  evidence: '効果とエビデンス',
+  services: '連携サービス'
+};
+function goTab(tab){
+  sideNav.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.querySelector('.tab-panel[data-panel="'+tab+'"]');
+  if (panel) panel.classList.add('active');
+  const cr = document.getElementById('crumbsCurrent');
+  if (cr) cr.textContent = crumbsLabel[tab] || tab;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+sideNav.querySelectorAll('button').forEach(btn => {
+  btn.addEventListener('click', () => goTab(btn.dataset.tab));
+});
+
+/* === ロール(ビュー)切替 === */
+(function(){
+  const sel = document.getElementById('roleSwitcher');
+  const labels = { doctor: '腫瘍内科(医師ビュー)', nurse: '外来看護(看護師ビュー)', coordinator: '地域連携室(連携室ビュー)' };
+  const params = new URLSearchParams(location.search);
+  const initRole = params.get('role');
+  if (initRole && labels[initRole]) { sel.value = initRole; document.getElementById('staffLabel').textContent = '担当: ' + labels[initRole]; }
+  const initHosp = params.get('hosp');
+  if (initHosp) { document.getElementById('hospName').textContent = decodeURIComponent(initHosp).replace(/-/g,' '); }
+  sel.addEventListener('change', () => {
+    document.getElementById('staffLabel').textContent = '担当: ' + (labels[sel.value] || '');
+    satoiNotify('ビューを「<strong>'+ (labels[sel.value]||'') +'</strong>」に切り替えました', { kind:'info', duration:2600 });
+  });
+})();
+
+/* === モニタリングのフィルタ === */
+document.querySelectorAll('[data-mfilter]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('[data-mfilter]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    const f = chip.dataset.mfilter;
+    document.querySelectorAll('#monBody tr').forEach(tr => {
+      tr.style.display = (f === 'all' || tr.dataset.mrow === f) ? '' : 'none';
+    });
+  });
+});
+
+/* === 患者データ === */
+const PATIENTS = {
+  M: {
+    title: '患者M', sub: '本人がSATOIで共有・本人同意済み(2026-05-22)',
+    profile: [['がん種 / 病期','乳がん II期'],['年代 / 背景','40代・子育て中'],['治療','術後 化学療法中'],['共有元','本人(マイページ)'],['担当','腫瘍内科 / 外来看護'],['ePRO回収','週6/7日 入力']],
+    labels: ['4/11','4/18','4/25','5/2','5/9','5/16','5/22'],
+    series: [
+      { name:'倦怠感', color:'#D4622A', data:[1,2,2,3,3,4,5] },
+      { name:'吐き気', color:'#7FA8C9', data:[2,3,2,2,1,1,1] },
+      { name:'手足のしびれ', color:'#C76B7F', data:[0,1,1,2,2,2,3] }
+    ],
+    empse: [['E 活力','低下傾向'],['M 精神','不安あり'],['P 身体','倦怠感↑'],['S 社会','育児両立'],['e 経済','給付確認中']],
+    voice: '「子どもの行事には出たいので、しんどい日が続くのがつらいです。倦怠感がここ数日強くて、家事が回りません。」',
+    alert: '倦怠感スコアが3日連続で上昇(2→4→5)。SATOIが重症化サインとして検知し、本人にはセルフケアと受診目安を一次案内済み。医師・看護師に文脈つきで共有しています。'
+  },
+  K: {
+    title: '患者K', sub: '本人＋ご家族がSATOIで共有・本人同意済み(2026-05-21)',
+    profile: [['がん種 / 病期','肺がん IV期'],['年代 / 背景','60代・定年間近'],['治療','薬物療法中'],['共有元','本人＋家族(AI代弁あり)'],['担当','腫瘍内科 / 緩和ケア'],['ePRO回収','週5/7日 入力']],
+    labels: ['4/10','4/17','4/24','5/1','5/8','5/15','5/21'],
+    series: [
+      { name:'息切れ', color:'#C5443E', data:[1,2,2,3,3,4,5] },
+      { name:'痛み', color:'#D4622A', data:[2,2,3,3,3,3,4] },
+      { name:'食欲低下', color:'#7FA8C9', data:[1,2,2,3,3,3,4] }
+    ],
+    empse: [['E 活力','低下'],['M 精神','仕事の不安'],['P 身体','息切れ＋発熱'],['S 社会','引き継ぎ中'],['e 経済','収入面の相談']],
+    voice: '「仕事の引き継ぎを終えるまでは頑張りたい。痛みと息苦しさだけは何とかしてほしい。家族にも心配をかけたくない。」(一部はご家族の代弁)',
+    alert: '息切れスコアが閾値超え＋発熱(37.9度)の併発を検知。SATOIは自己判断させず、ただちに医療者へエスカレーション。直近のePRO・服薬・体温を要約して連携済み。'
+  },
+  S: {
+    title: '患者S', sub: '本人がSATOIで共有・退院後 在宅フォロー中',
+    profile: [['がん種 / 病期','大腸がん III期'],['年代 / 背景','50代'],['治療','術後・退院後 在宅'],['共有元','本人(療養手帳)'],['担当','地域連携室 / 在宅医'],['ePRO回収','週7/7日 入力']],
+    labels: ['4/11','4/18','4/25','5/2','5/9','5/16','5/22'],
+    series: [
+      { name:'腹部症状', color:'#0D7377', data:[4,3,3,2,2,1,1] },
+      { name:'倦怠感', color:'#D4622A', data:[3,3,2,2,2,1,1] }
+    ],
+    empse: [['E 活力','回復中'],['M 精神','安定'],['P 身体','症状軽快'],['S 社会','在宅生活'],['e 経済','落ち着き']],
+    voice: '「家で過ごせるのが一番ありがたい。困ったらアプリですぐ聞けるので、退院後の不安がだいぶ減りました。」',
+    alert: '退院後の在宅PROは安定して改善傾向。重症化サインなし。再入院リスクは低と判定。地域連携室と在宅医に経過を共有しています。'
+  },
+  T: {
+    title: '患者T', sub: '本人がSATOIで共有・退院後 在宅フォロー中',
+    profile: [['がん種 / 病期','胃がん II期'],['年代 / 背景','70代'],['治療','術後・退院後 在宅'],['共有元','本人(同意済)'],['担当','外来看護 / 地域連携室'],['ePRO回収','週6/7日 入力']],
+    labels: ['4/11','4/18','4/25','5/2','5/9','5/16','5/22'],
+    series: [
+      { name:'食欲低下', color:'#7FA8C9', data:[4,4,3,2,2,2,1] },
+      { name:'倦怠感', color:'#D4622A', data:[3,3,3,2,2,1,1] }
+    ],
+    empse: [['E 活力','回復'],['M 精神','安定'],['P 身体','食欲回復'],['S 社会','家族と同居'],['e 経済','安定']],
+    voice: '「少しずつ食べられるようになってきました。記録をつけると、自分でも良くなっているのが分かって励みになります。」',
+    alert: '食欲スコアが回復し、全体に安定。重症化サインなし。次回外来までセルフモニタリング継続で問題なしと判定。'
+  }
+};
+
+let pmChartInstance = null;
+function openPatient(key){
+  const p = PATIENTS[key];
+  if (!p) return;
+  document.getElementById('pmTitle').textContent = p.title;
+  document.getElementById('pmSub').textContent = p.sub;
+  document.getElementById('pmProfile').innerHTML = p.profile.map(function(x){
+    return '<div class="profile-item"><div class="profile-label">'+x[0]+'</div><div class="profile-value">'+x[1]+'</div></div>';
+  }).join('');
+  document.getElementById('pmEmpse').innerHTML = p.empse.map(function(x){
+    return '<span class="empse-pill"><b>'+x[0]+'</b> '+x[1]+'</span>';
+  }).join('');
+  document.getElementById('pmVoice').textContent = p.voice;
+  document.getElementById('pmAlert').textContent = p.alert;
+  document.getElementById('patientModal').classList.add('open');
+
+  const ctx = document.getElementById('pmChart').getContext('2d');
+  if (pmChartInstance) pmChartInstance.destroy();
+  pmChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: p.labels,
+      datasets: p.series.map(function(s){
+        return { label: s.name, data: s.data, borderColor: s.color, backgroundColor: s.color + '22', tension: 0.3, borderWidth: 2, pointRadius: 3, pointBackgroundColor: s.color, fill: false };
+      })
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        y: { min: 0, max: 5, ticks: { stepSize: 1, font: { family: 'Noto Sans JP', size: 11 }, color: '#6B7388' }, grid: { color: 'rgba(0,0,0,0.05)' }, title: { display: true, text: '症状スコア (0-5)', font: { family:'Noto Sans JP', size: 10 }, color:'#9099A8' } },
+        x: { ticks: { font: { family: 'Noto Sans JP', size: 11 }, color: '#6B7388' }, grid: { display: false } }
+      },
+      plugins: { legend: { position: 'bottom', labels: { font: { family: 'Noto Sans JP', size: 12 }, color: '#3D4860', usePointStyle: true, padding: 16 } } }
+    }
+  });
+
+  document.getElementById('pmContact').onclick = function(){
+    closePatient();
+    satoiNotify('✓ '+p.title+' への連携メモを記録しました(デモ)。担当看護師と共有されます。', { kind:'success' });
+  };
+}
+function closePatient(){
+  document.getElementById('patientModal').classList.remove('open');
+  if (pmChartInstance) { pmChartInstance.destroy(); pmChartInstance = null; }
+}
+document.getElementById('patientModal').addEventListener('click', function(e){
+  if (e.target === this) closePatient();
+});
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closePatient(); });
+</script>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

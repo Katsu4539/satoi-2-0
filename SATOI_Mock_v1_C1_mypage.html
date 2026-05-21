@@ -1640,7 +1640,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
   <div class="section-eyebrow">EMPSe ・ MULTI-DIMENSIONAL WELLBEING</div>
   <h2 class="section-title">あなたの、5つの側面</h2>
   <p class="section-sub">
-    身体・活力・共感・精神・社会 の5軸で、あなたの「いま」を多面的に見守ります。<br>
+    身体・活力・精神・社会・経済 の5軸で、あなたの「いま」を多面的に見守ります。<br>
     AI が日々の対話・記録から推定 + あなた自身の入力 で更新されます。各軸をタップして詳細へ。
   </p>
 
@@ -1688,8 +1688,8 @@ body.satoi-has-jbar .header { top: 0 !important; }
           <text x="150" y="27" text-anchor="middle" font-size="13" font-family="Noto Sans JP" fill="#1A2A40" font-weight="500">身体</text>
           <text x="263" y="91" text-anchor="middle" font-size="12" font-family="Noto Sans JP" fill="#D4622A" font-weight="700">E</text>
           <text x="263" y="106" text-anchor="middle" font-size="13" font-family="Noto Sans JP" fill="#1A2A40" font-weight="500">活力</text>
-          <text x="237" y="242" text-anchor="middle" font-size="12" font-family="Noto Sans JP" fill="#0D7377" font-weight="700">Em</text>
-          <text x="237" y="257" text-anchor="middle" font-size="13" font-family="Noto Sans JP" fill="#1A2A40" font-weight="500">共感</text>
+          <text x="237" y="242" text-anchor="middle" font-size="12" font-family="Noto Sans JP" fill="#0D7377" font-weight="700">e</text>
+          <text x="237" y="257" text-anchor="middle" font-size="13" font-family="Noto Sans JP" fill="#1A2A40" font-weight="500">経済</text>
           <text x="63" y="242" text-anchor="middle" font-size="12" font-family="Noto Sans JP" fill="#5483A8" font-weight="700">M</text>
           <text x="63" y="257" text-anchor="middle" font-size="13" font-family="Noto Sans JP" fill="#1A2A40" font-weight="500">精神</text>
           <text x="38" y="91" text-anchor="middle" font-size="12" font-family="Noto Sans JP" fill="#0A5A5D" font-weight="700">S</text>
@@ -1713,8 +1713,8 @@ body.satoi-has-jbar .header { top: 0 !important; }
           <div class="empse-axis-bar"><div class="empse-axis-fill" style="width:45%; background:#D4622A;"></div></div>
           <div class="empse-axis-num">45</div>
         </div>
-        <div class="empse-axis-row" onclick="openEmpseAxis('empathy')">
-          <div class="empse-axis-pill" style="background:rgba(13,115,119,0.15); color:#0D7377;"><strong style="font-weight:800; margin-right:5px;">Em</strong>共感</div>
+        <div class="empse-axis-row" onclick="openEmpseAxis('economy')">
+          <div class="empse-axis-pill" style="background:rgba(13,115,119,0.15); color:#0D7377;"><strong style="font-weight:800; margin-right:5px;">e</strong>経済</div>
           <div class="empse-axis-bar"><div class="empse-axis-fill" style="width:75%; background:#0D7377;"></div></div>
           <div class="empse-axis-num">75</div>
         </div>
@@ -1737,9 +1737,9 @@ body.satoi-has-jbar .header { top: 0 !important; }
         <span style="font-size:12px; color:var(--teal); letter-spacing:0.04em;">AI 観察</span>
       </div>
       <div id="empseObs" style="font-size:13.5px; color:var(--text-primary); line-height:1.95;">
-        今週は <strong>共感(75)</strong> が高く、家族・先輩との繋がりが活きています。<br>
+        今週は <strong>社会(65)</strong> が高く、家族・先輩との繋がりが活きています。<br>
         一方 <strong>活力(45)</strong> がやや低め — Day 3-5 の副作用ピーク帯の影響です。<br>
-        <span style="color:var(--text-muted);">活力を上げるには、無理せず休息 + 短い散歩(5分でOK)が、先輩データで効いています。</span>
+        <span style="color:var(--text-muted);">活力を上げるには、無理せず休息 + 短い散歩(5分でOK)が、先輩データで効いています。経済の不安は「給付金シミュレーター」で軽くできます。</span>
       </div>
       <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
         <button class="sdm-act" onclick="satoiNotify('✓ 自己入力フォームを開く\n\n今のあなたの5軸を、自分の言葉で入力。AI 推定と統合されます。')">📝 自己入力で更新</button>
@@ -2435,10 +2435,10 @@ const EMPSE_DETAIL = {
     body:'やる気・集中力・「動ける感じ」のスコア。<br><strong>AI観察:</strong>Day 3 のピーク帯で 45 まで低下。これは典型的なパターンで、心配は要りません。Day 7 で 60 まで戻る予測です。',
     sources:'対話のテンポ / 短文記録の活力ワード / 自己入力'
   },
-  empathy: { name:'共感(Empathy)', score:75, color:'#0D7377',
-    title:'共感 ・ 75 (今週高め)',
-    body:'家族・先輩・コーディネーターとの繋がりの密度。<br><strong>AI観察:</strong>今週は配偶者との対話・1年先輩との物語シェアが活発。SATOI内のネットワークが、しっかり機能しています。',
-    sources:'マイチーム内メッセージ / 先輩物語の閲覧 / コーディネーター対話'
+  economy: { name:'経済(Economy)', score:55, color:'#0D7377',
+    title:'経済 ・ 55',
+    body:'治療費・家計・お金の不安の度合い。経済的な安定は、治療を続ける力に直結します。<br><strong>AI観察:</strong>使える制度（高額療養費・限度額認定証）と、ご加入保険の給付がまだ請求できる可能性があります。「給付金シミュレーター」で確認すると、不安が減らせます。',
+    sources:'保険・給付の連携 / 高額療養費の利用状況 / 家計の不安に関する記録'
   },
   mental: { name:'精神(Mental)', score:55, color:'#7FA8C9',
     title:'精神 ・ 55',
@@ -2486,7 +2486,7 @@ function openEmpseAxis(key) {
     poly.style.transition = 'all 1.2s ease';
   }
   // 軸バー更新
-  const axisMap = { P:'physical', E:'energy', Em:'empathy', M:'mental', S:'social' };
+  const axisMap = { P:'physical', E:'energy', Em:'economy', M:'mental', S:'social' };
   const axisColors = { P:'#D4A95E', E:'#D4622A', Em:'#0D7377', M:'#7FA8C9', S:'#14A6AB' };
   Object.keys(parsed).forEach(k => {
     const val = parsed[k];
@@ -2821,10 +2821,10 @@ document.querySelectorAll('.overlay').forEach(o => {
 
   /* === EMPSe 5軸をペルソナ別に反映(レーダー・バー・数値・総合・AI観察) === */
   var EMPSE = {
-    p1: { scores:[60,45,75,55,65], overall:60, trend:'↑ 先週比 +4',
-          obs:'今週は <strong>共感(75)</strong> が高く、家族・先輩との繋がりが活きています。<br>一方 <strong>活力(45)</strong> がやや低め — Day 3-5 の副作用ピーク帯の影響です。<br><span style="color:var(--text-muted);">活力を上げるには、無理せず休息 + 短い散歩(5分でOK)が、先輩データで効いています。</span>' },
-    p2: { scores:[42,50,82,68,72], overall:63, trend:'↑ 先週比 +3',
-          obs:'今週は <strong>共感(82)</strong>・<strong>社会(72)</strong> が高く、ご家族（お孫さん）や職場との繋がりが、力になっています。<br>一方 <strong>身体(42)</strong> は治療の影響で低め — 焦らず、今日できることをひとつずつ。<br><span style="color:var(--text-muted);">無理のないペースが、長く続けるコツです。短い休息と、好きなお茶の時間を。</span>' }
+    p1: { scores:[60,45,52,55,65], overall:55, trend:'↑ 先週比 +4',
+          obs:'今週は <strong>社会(65)</strong> が高く、家族・先輩との繋がりが活きています。<br>一方 <strong>活力(45)</strong>・<strong>経済(52)</strong> がやや低め — 副作用のピークと、治療費の不安が背景です。<br><span style="color:var(--text-muted);">休息と、「給付金シミュレーター」での請求漏れ確認が、経済の安心につながります。</span>' },
+    p2: { scores:[42,50,60,68,72], overall:58, trend:'↑ 先週比 +3',
+          obs:'今週は <strong>社会(72)</strong>・<strong>精神(68)</strong> が高く、ご家族（お孫さん）や職場との繋がりが、力になっています。<br>一方 <strong>身体(42)</strong> は治療の影響で低め — 焦らず、今日できることをひとつずつ。<br><span style="color:var(--text-muted);">無理のないペースが長続きのコツ。経済(60)は、給付や制度でさらに安心にできます。</span>' }
   };
   (function applyEmpse(){
     var em = EMPSE[pid] || EMPSE.p1;

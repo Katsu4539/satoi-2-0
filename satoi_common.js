@@ -316,7 +316,8 @@
     ]},
     { title:'今の状況・全体像', items:[
       { label:'ダッシュボード(同じ境遇の人数・全体像)', url:'SATOI_Mock_v1_DASHBOARD.html' },
-      { label:'患者ジャーニーマップ',                   url:'SATOI_Mock_v1_B1_hub.html' }
+      { label:'患者ジャーニーマップ',                   url:'SATOI_Mock_v1_B1_hub.html' },
+      { label:'病院をさがす(拠点病院・専門病院)',        url:'SATOI_Mock_v1_HOSP_directory.html' }
     ]},
     { title:'段階で見る(診断〜緩和)', items:[
       { label:'診断・告知のとき',     url:'SATOI_Mock_v1_CHP_diagnosis.html' },
@@ -822,6 +823,7 @@
   const SATOI_PICKUP = [
     { icon:'📚', title:'学びの部屋',           desc:'がんを、まるごと知る（読む・観る・調べる・伝える）', url:'SATOI_Mock_v1_LEARN_room.html' },
     { icon:'🗺', title:'治療の全体像',         desc:'あなたの治療マインドマップ', url:'SATOI_Mock_v1_B1_mindmap.html' },
+    { icon:'🏥', title:'病院をさがす',         desc:'全国のがん拠点病院・専門病院', url:'SATOI_Mock_v1_HOSP_directory.html' },
     { icon:'📝', title:'先生に聞きたいこと',   desc:'聞きたいことボックス(SDM)',  url:'SATOI_Mock_v1_SDM_box.html' },
     { icon:'📖', title:'同じ境遇の物語',       desc:'体験談・先輩の声',           url:'SATOI_Mock_v1_D1_stories.html' },
     { icon:'💛', title:'家族との共有',         desc:'伝え方・家族とつながる',     url:'SATOI_Mock_v1_FAM_view.html' },
@@ -981,10 +983,11 @@
     var ab = pop.querySelector('button.active'); if (ab) ab.style.background = 'rgba(212,169,94,0.25)';
   }
 
-  /* 法人(保険会社)向けの業務画面では、患者向けUI(入口/マインドマップ・コンシェルジュ・言語・おすすめ等)を出さない */
+  /* 法人(保険会社・病院)向けの業務画面では、患者向けUI(入口/マインドマップ・コンシェルジュ・言語・おすすめ等)を出さない */
   function satoiIsCorporatePage(){
     var p = (location.pathname || '').toLowerCase();
-    return p.indexOf('g1_corporate') !== -1 || p.indexOf('g2_corporate') !== -1;
+    return p.indexOf('g1_corporate') !== -1 || p.indexOf('g2_corporate') !== -1
+      || p.indexOf('h0_hospital') !== -1 || p.indexOf('h1_hospital') !== -1;
   }
 
   /* ====== 固定ヘッダーの被り防止(全ページ共通・2026-05-22) ======

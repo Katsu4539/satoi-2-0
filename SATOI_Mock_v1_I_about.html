@@ -981,16 +981,16 @@ section.compact {
         <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">疲労・気力・活動量</div>
         <div style="font-size: 10px; color: var(--starlight-strong); margin-top: 8px;">▸ クリックで詳細</div>
       </div>
-      <div onclick="showEmpseDetail('empathy')" style="background: rgba(13,115,119,0.10); border:1px solid rgba(13,115,119,0.35); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
-        <div style="font-size:42px; margin-bottom:8px; color: #0D7377; font-weight:300;">M</div>
-        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">共感(e<u>M</u>pathy)</div>
-        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">家族・先輩との繋がり</div>
+      <div onclick="showEmpseDetail('mental')" style="background: rgba(127,168,201,0.15); border:1px solid rgba(127,168,201,0.4); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
+        <div style="font-size:42px; margin-bottom:8px; color: #5483A8; font-weight:300;">M</div>
+        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">精神(Mental)</div>
+        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">不安・希望・こころの安定</div>
         <div style="font-size: 10px; color: var(--starlight-strong); margin-top: 8px;">▸ クリックで詳細</div>
       </div>
-      <div onclick="showEmpseDetail('psychological')" style="background: rgba(127,168,201,0.15); border:1px solid rgba(127,168,201,0.4); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
-        <div style="font-size:42px; margin-bottom:8px; color: #5483A8; font-weight:300;">P</div>
-        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">精神(Psychological)</div>
-        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">不安・希望・物語感</div>
+      <div onclick="showEmpseDetail('physical')" style="background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.35); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
+        <div style="font-size:42px; margin-bottom:8px; color: #D4A95E; font-weight:300;">P</div>
+        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">身体(Physical)</div>
+        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">体調・痛み・睡眠</div>
         <div style="font-size: 10px; color: var(--starlight-strong); margin-top: 8px;">▸ クリックで詳細</div>
       </div>
       <div onclick="showEmpseDetail('social')" style="background: rgba(20,166,171,0.10); border:1px solid rgba(20,166,171,0.35); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
@@ -999,10 +999,10 @@ section.compact {
         <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">仕事・社会的接続</div>
         <div style="font-size: 10px; color: var(--starlight-strong); margin-top: 8px;">▸ クリックで詳細</div>
       </div>
-      <div onclick="showEmpseDetail('physical')" style="background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.35); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
-        <div style="font-size:42px; margin-bottom:8px; color: #D4A95E; font-weight:300;">e</div>
-        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">身体(physical bod<u>y</u>)</div>
-        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">体調・痛み・睡眠</div>
+      <div onclick="showEmpseDetail('economy')" style="background: rgba(13,115,119,0.10); border:1px solid rgba(13,115,119,0.35); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
+        <div style="font-size:42px; margin-bottom:8px; color: #0D7377; font-weight:300;">e</div>
+        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">経済(Economy)</div>
+        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">治療費・家計の安定</div>
         <div style="font-size: 10px; color: var(--starlight-strong); margin-top: 8px;">▸ クリックで詳細</div>
       </div>
     </div>
@@ -1305,10 +1305,10 @@ fluctuate('numSdm', 18624, 8);
 function showEmpseDetail(axis) {
   const details = {
     energy: {title: '活力 (Energy)', body: '疲労・気力・活動量を測る軸。\n\n■ AIが推定するソース\n・F4 副作用記録(倦怠感の強さ)\n・対話の文章量・時間帯\n・睡眠時間の自己申告\n\n■ 上げ方\n短い散歩(5分でOK)・日光浴・無理しない休息リズム。先輩データで Day 6-7 から徐々に回復するパターンが多い。'},
-    empathy: {title: '共感 (eMpathy)', body: '家族・先輩・コーディネーターとの繋がり感を測る軸。\n\n■ AIが推定するソース\n・マイチーム内のやり取り頻度\n・先輩物語の閲覧数\n・コーディネーター対話\n\n■ 上げ方\n「言わなくても通じる」「同じ気持ちの人がいる」と感じられる体験を増やす。ファミリービューで遠方家族と繋がる、患者サロンに参加する。'},
-    psychological: {title: '精神 (Psychological)', body: '不安・希望・物語感を測る軸。\n\n■ AIが推定するソース\n・気持ち軌跡の自己入力\n・対話で出てくる感情語(不安/希望/怖い/前向き 等)\n・物語の壺の蓄積\n\n■ 上げ方\n揺れていい時期だと知る・コンシェルジュに話す・物語を書く。「決めなくていい夜」も精神を支える。'},
-    social: {title: '社会 (Social)', body: '仕事・社会的接続感を測る軸。\n\n■ AIが推定するソース\n・仕事継続フラグ\n・友人/同僚への招待状況\n・SNS共有頻度\n\n■ 上げ方\n両立支援制度を使う・休職復職を計画する・仲間とつながる。社労士相談で「使える制度」を整理。'},
-    physical: {title: '身体 (physical bodY)', body: 'EMPSe の "e" は身体軸を表します。体調・痛み・睡眠を測る軸。\n\n■ AIが推定するソース\n・F4 副作用記録(身体症状の強さ)\n・腫瘍マーカー・検査値(本人同意で連携)\n・服薬遵守\n\n■ 上げ方\n症状を我慢せず伝える・F4で記録を続ける・主治医チームと密に共有する。'},
+    mental: {title: '精神 (Mental)', body: '不安・希望・物語感など、こころの安定を測る軸。\n\n■ AIが推定するソース\n・気持ち軌跡の自己入力\n・対話で出てくる感情語(不安/希望/怖い/前向き 等)\n・物語の壺の蓄積\n\n■ 上げ方\n揺れていい時期だと知る・コンシェルジュに話す・物語を書く。「決めなくていい夜」も精神を支える。'},
+    physical: {title: '身体 (Physical)', body: '体調・痛み・睡眠など、からだの状態を測る軸。\n\n■ AIが推定するソース\n・F4 副作用記録(身体症状の強さ)\n・腫瘍マーカー・検査値(本人同意で連携)\n・服薬遵守\n\n■ 上げ方\n症状を我慢せず伝える・F4で記録を続ける・主治医チームと密に共有する。'},
+    social: {title: '社会 (Social)', body: '仕事・家族・友人との社会的接続感を測る軸。\n\n■ AIが推定するソース\n・仕事継続フラグ\n・友人/同僚への招待状況\n・家族との接続\n\n■ 上げ方\n両立支援制度を使う・休職復職を計画する・仲間とつながる。社労士相談で「使える制度」を整理。'},
+    economy: {title: '経済 (Economy)', body: 'EMPSe の "e" は経済軸を表します。治療費・家計・お金の不安の度合いを測る軸。経済的な安定は、治療を続ける力に直結します。\n\n■ AIが推定するソース\n・保険・給付の連携状況\n・高額療養費・限度額認定証の利用\n・お金の不安に関する記録\n\n■ 上げ方\n使える制度(高額療養費等)を確認・給付金シミュレーターで請求漏れを防ぐ・社労士/FP相談。'},
   };
   const d = details[axis] || { title: 'EMPSe', body: '5軸の詳細' };
   if (typeof satoiNotify === 'function') {

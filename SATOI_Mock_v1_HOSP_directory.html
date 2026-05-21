@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>病院をさがす ・ がん診療連携拠点病院・専門病院 | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep:#0B1736; --starlight:#D4A95E; --starlight-strong:#F0C97A;
+  --morning-white:#FBF7F0; --morning-cream:#F6EFE3;
+  --teal:#0D7377; --teal-soft:#14A6AB; --healing-blue:#7FA8C9; --warm-orange:#D4622A; --rose:#C76B7F;
+  --ink-deep:#1A2A40; --ink-medium:rgba(26,42,64,0.78); --ink-light:rgba(26,42,64,0.55);
+  --line:rgba(10,22,40,0.10);
+  --font:"Noto Sans JP","Meiryo UI","Hiragino Kaku Gothic ProN",sans-serif;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family:var(--font); }
+body { color:var(--ink-deep); background:#F1ECD9; line-height:1.9; font-size:16px; }
+a { color:inherit; text-decoration:none; }
+button { font-family:var(--font); cursor:pointer; }
+
+.header { position:fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background:rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color:var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background:var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color:var(--ink-medium); border:1px solid rgba(11,23,40,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color:var(--warm-orange); color:var(--warm-orange); }
+
+.hero { padding:130px 32px 30px; text-align:center; background:linear-gradient(135deg, rgba(127,168,201,0.14) 0%, var(--morning-white) 100%); }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.34em; color:var(--healing-blue); padding:6px 18px; border:1px solid rgba(127,168,201,0.5); border-radius:24px; margin-bottom:18px; }
+.hero-title { font-size:clamp(27px,5vw,42px); font-weight:300; line-height:1.5; letter-spacing:0.04em; margin-bottom:14px; }
+.hero-title strong { color:var(--healing-blue); font-weight:600; }
+.hero-sub { font-size:15px; color:var(--ink-medium); line-height:2; max-width:720px; margin:0 auto; }
+
+.wrap { max-width:1080px; margin:0 auto; padding:24px 22px 70px; }
+.toolbar { background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-bottom:20px; box-shadow:0 8px 24px rgba(11,23,54,0.05); }
+.search-row { display:flex; gap:10px; margin-bottom:14px; }
+.search-row input { flex:1; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-family:inherit; font-size:15px; color:var(--ink-deep); outline:none; }
+.search-row input:focus { border-color:var(--healing-blue); }
+.filter-line { margin-bottom:10px; }
+.filter-line:last-child { margin-bottom:0; }
+.fl-label { font-size:11.5px; color:var(--ink-light); margin-bottom:6px; }
+.chips { display:flex; gap:7px; flex-wrap:wrap; }
+.chip { padding:7px 14px; border-radius:16px; border:1px solid rgba(127,168,201,0.4); background:rgba(127,168,201,0.10); font-size:12.5px; color:var(--ink-medium); }
+.chip.active { background:var(--healing-blue); color:#fff; border-color:var(--healing-blue); }
+
+.count { font-size:13px; color:var(--ink-medium); margin:6px 2px 16px; }
+.count strong { color:var(--teal); }
+
+.hosp-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+@media (max-width:760px){ .hosp-grid { grid-template-columns:1fr; } }
+.hosp-card { background:#fff; border:1px solid var(--line); border-left:4px solid var(--healing-blue); border-radius:14px; padding:20px 22px; }
+.hosp-card.satoi { border-left-color:var(--starlight); background:linear-gradient(180deg, rgba(212,169,94,0.06), #fff); }
+.hosp-card.ncc { border-left-color:var(--teal); }
+.hosp-badges { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:8px; }
+.hosp-badge { font-size:10.5px; font-weight:700; padding:3px 10px; border-radius:11px; background:rgba(13,115,119,0.12); color:var(--teal); }
+.hosp-badge.satoi { background:rgba(212,169,94,0.18); color:#9A7322; }
+.hosp-badge.area { background:rgba(127,168,201,0.16); color:#3F6E96; }
+.hosp-name { font-size:17px; font-weight:700; color:var(--ink-deep); line-height:1.5; }
+.hosp-loc { font-size:12.5px; color:var(--ink-light); margin:4px 0 12px; }
+.hosp-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.h-btn { font-size:12.5px; padding:8px 15px; border-radius:16px; font-weight:600; border:1px solid var(--teal); background:transparent; color:var(--teal); }
+.h-btn:hover { background:rgba(13,115,119,0.08); }
+.h-btn.primary { background:var(--teal); color:#fff; }
+.h-btn.primary:hover { background:#0A5A5D; }
+.h-btn.satoi { background:var(--starlight); color:#0B1736; border-color:var(--starlight); }
+.empty { text-align:center; color:var(--ink-light); font-size:13.5px; padding:30px; grid-column:1/-1; }
+
+.source { max-width:1080px; margin:24px auto 0; padding:16px 20px; background:rgba(13,115,119,0.06); border:1px solid rgba(13,115,119,0.2); border-radius:14px; font-size:12px; color:var(--ink-medium); line-height:1.85; }
+.source a { color:var(--teal); font-weight:600; text-decoration:underline; }
+footer { text-align:center; padding:40px 22px; color:var(--ink-light); font-size:12.5px; line-height:1.9; border-top:1px solid var(--line); margin-top:30px; }
+
+#satoi-toast-host { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none; max-width:92vw; }
+.satoi-toast { pointer-events:auto; min-width:280px; max-width:480px; background:linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color:#F8F6F0; padding:16px 22px 16px 18px; border-radius:16px; box-shadow:0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family:var(--font); font-size:13.5px; line-height:1.75; backdrop-filter:blur(14px); display:flex; gap:14px; align-items:flex-start; opacity:0; transform:translateY(20px); transition:opacity .4s, transform .4s; border-left:3px solid #D4A95E; }
+.satoi-toast.show { opacity:1; transform:translateY(0); }
+.satoi-toast.success { border-left-color:#14A6AB; }
+.satoi-toast-icon { flex-shrink:0; width:28px; height:28px; border-radius:50%; background:rgba(212,169,94,0.18); display:inline-flex; align-items:center; justify-content:center; font-size:14px; }
+.satoi-toast-body { flex:1; white-space:pre-line; }
+.satoi-toast-close { background:transparent; border:none; color:rgba(248,246,240,0.5); cursor:pointer; font-size:18px; }
+@media (max-width:768px){ .header{padding:14px 16px;} .hero{padding:118px 18px 28px;} #satoi-toast-host{bottom:14px;} .satoi-toast{min-width:auto; width:calc(100vw - 28px);} }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="SATOI_Mock_v1_A1_entrance.html"><span class="dot"></span>SATOI</a>
+  <div style="display:flex; gap:10px; align-items:center;">
+    <a class="back-btn" href="SATOI_Mock_v1_H0_hospital_login.html" style="border-color:rgba(127,168,201,0.5); color:var(--healing-blue);">病院関係者の方 →</a>
+    <a class="back-btn" href="SATOI_Mock_v1_B1_hub.html">← マインドマップへ</a>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero-eyebrow">FIND A HOSPITAL</span>
+  <h1 class="hero-title">病院を、<strong>さがす</strong></h1>
+  <p class="hero-sub">全国の「がん診療連携拠点病院」（国の指定）と、専門のがんセンター、SATOI提携クリニックを、地域とがん種でしぼって探せます。<br>どこにかかればいいか迷ったら、まずここから。</p>
+</section>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="search-row">
+      <input type="text" id="hSearch" placeholder="病院名・地域でさがす（例：国立がん研究センター、大阪、北海道）">
+    </div>
+    <div class="filter-line">
+      <div class="fl-label">地域</div>
+      <div class="chips" id="areaChips">
+        <button class="chip active" data-f="area" data-v="all">全国</button>
+        <button class="chip" data-f="area" data-v="hokkaido">北海道・東北</button>
+        <button class="chip" data-f="area" data-v="kanto">関東</button>
+        <button class="chip" data-f="area" data-v="chubu">中部</button>
+        <button class="chip" data-f="area" data-v="kinki">近畿</button>
+        <button class="chip" data-f="area" data-v="chugoku">中国・四国</button>
+        <button class="chip" data-f="area" data-v="kyushu">九州・沖縄</button>
+      </div>
+    </div>
+    <div class="filter-line">
+      <div class="fl-label">都道府県</div>
+      <select id="prefSelect" style="width:100%; max-width:360px; border:1px solid var(--line); border-radius:12px; padding:11px 14px; font-family:inherit; font-size:15px; color:var(--ink-deep); background:#fff; outline:none;"></select>
+    </div>
+    <div class="filter-line">
+      <div class="fl-label">種別</div>
+      <div class="chips" id="typeChips">
+        <button class="chip active" data-f="type" data-v="all">すべて</button>
+        <button class="chip" data-f="type" data-v="pref">都道府県拠点</button>
+        <button class="chip" data-f="type" data-v="local">地域拠点</button>
+        <button class="chip" data-f="type" data-v="regional">地域診療病院</button>
+        <button class="chip" data-f="type" data-v="ncc">国がん</button>
+        <button class="chip" data-f="type" data-v="satoi">SATOI提携</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="count" id="hCount"></div>
+  <div class="hosp-grid" id="hospGrid"></div>
+
+  <div class="source">
+    出典：国立がん研究センター「がん情報サービス」<a href="https://hospdb.ganjoho.jp/" target="_blank" rel="noopener">病院をさがす（公式・全国の指定病院検索）</a>。掲載は代表的な指定病院の一部です。<strong>最新の指定状況・診療内容・受診方法は、各病院の公式情報および上記の公式検索でご確認ください。</strong>受診には原則かかりつけ医からの紹介状が必要です。
+  </div>
+</div>
+
+<footer>SATOI ・ 病院をさがす（がん診療連携拠点病院・専門病院）（Mock）</footer>
+
+<script src="satoi_hospitals_data.js"></script>
+<script>
+function satoiNotify(msg, opts){
+  opts = opts || {};
+  var host = document.getElementById('satoi-toast-host');
+  if (!host){ host = document.createElement('div'); host.id='satoi-toast-host'; document.body.appendChild(host); }
+  var t = document.createElement('div');
+  var kind = opts.kind || (String(msg).indexOf('✓')===0 ? 'success' : 'info');
+  t.className='satoi-toast '+kind;
+  var icon = opts.icon || (kind==='success'?'✓':(kind==='warn'?'!':'●'));
+  t.innerHTML='<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+String(msg).replace(/\n/g,'<br>')+'</div><button class="satoi-toast-close">×</button>';
+  host.appendChild(t);
+  requestAnimationFrame(function(){ t.classList.add('show'); });
+  var closer=function(){ t.classList.remove('show'); setTimeout(function(){t.remove();},450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, opts.duration||4200);
+}
+window.alert=function(m){ try{ satoiNotify(String(m)); }catch(e){} };
+function esc(s){ var d=document.createElement('div'); d.textContent=String(s); return d.innerHTML; }
+var GANJOHO = 'https://hospdb.ganjoho.jp/';
+function gmap(name){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(name); }
+
+/* 全国のがん診療連携拠点病院 等(出典:厚労省/国がん 令和8年4月1日現在)＋SATOI提携。データは satoi_hospitals_data.js */
+var HOSP = (window.SATOI_HOSP_DATA || []).map(function(h){ return { n:h.n, area:h.a, pref:h.p, type:h.t, note:h.note, satoi:(h.t==='satoi') }; });
+var TYPE_LABEL = { ncc:'国立がん研究センター', pref:'都道府県がん診療連携拠点病院', local:'地域がん診療連携拠点病院', regional:'地域がん診療病院', special:'特定領域がん診療連携拠点病院', satoi:'SATOI提携クリニック' };
+var AREA_LABEL = { hokkaido:'北海道・東北', kanto:'関東', chubu:'中部', kinki:'近畿', chugoku:'中国・四国', kyushu:'九州・沖縄' };
+var PREFS = ['北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県','滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'];
+var RENDER_CAP = 90;
+
+var filters = { area:'all', type:'all', pref:'all', q:'' };
+function isDefaultView(){ return filters.area==='all' && filters.type==='all' && filters.pref==='all' && !filters.q; }
+
+function render(){
+  var box = document.getElementById('hospGrid');
+  var defView = isDefaultView();
+  var rows = HOSP.filter(function(h){
+    if (defView){ return h.type==='pref' || h.type==='ncc' || h.type==='satoi'; } // 既定:全国の代表(都道府県拠点等)
+    if (filters.area !== 'all' && h.area !== filters.area) return false;
+    if (filters.pref !== 'all' && h.pref !== filters.pref) return false;
+    if (filters.type !== 'all' && h.type !== filters.type) return false;
+    if (filters.q){ var t=(h.n+' '+(h.pref||'')+' '+(AREA_LABEL[h.area]||'')).toLowerCase(); if (t.indexOf(filters.q)===-1) return false; }
+    return true;
+  });
+  var head = '<strong>'+rows.length+'</strong> 件';
+  if (defView) head += '（全国の代表＝都道府県拠点・国がん・SATOI提携を表示中。地域・都道府県・検索でしぼれます）';
+  document.getElementById('hCount').innerHTML = head;
+  if (!rows.length){ box.innerHTML = '<div class="empty">条件に合う病院が見つかりませんでした。条件をひろげるか、公式の<a href="'+GANJOHO+'" target="_blank" rel="noopener" style="color:var(--teal);text-decoration:underline;">病院検索</a>もご利用ください。</div>'; return; }
+  var capped = rows.length > RENDER_CAP ? rows.slice(0, RENDER_CAP) : rows;
+  var html = capped.map(function(h){
+    var cls = h.satoi ? 'satoi' : (h.type==='ncc' ? 'ncc' : '');
+    var actions = h.satoi
+      ? '<button class="h-btn satoi" onclick="satoiNotify(\'✓ Light Clinic Ginza に相談・予約\\n\\n銀座本院。セカンドオピニオン／治療の伴走相談に対応。SATOI会員はオンライン予約できます。\', {kind:\'success\'})">予約・相談</button>'
+        + '<a class="h-btn" href="'+gmap(h.n)+'" target="_blank" rel="noopener">Googleマップ</a>'
+        + '<a class="h-btn" href="SATOI_Mock_v1_CON_concierge.html">相談する</a>'
+      : '<a class="h-btn primary" href="'+gmap(h.n)+'" target="_blank" rel="noopener">📍 Googleマップで開く</a>'
+        + '<a class="h-btn" href="'+GANJOHO+'" target="_blank" rel="noopener">公式情報</a>'
+        + '<a class="h-btn" href="SATOI_Mock_v1_CON_concierge.html">相談する</a>';
+    return '<div class="hosp-card '+cls+'">'
+      + '<div class="hosp-badges"><span class="hosp-badge'+(h.satoi?' satoi':'')+'">'+esc(TYPE_LABEL[h.type]||'')+'</span><span class="hosp-badge area">'+esc(h.pref||AREA_LABEL[h.area]||'')+'</span></div>'
+      + '<div class="hosp-name">'+esc(h.n)+'</div>'
+      + (h.note?('<div class="hosp-loc">'+esc(h.note)+'</div>'):'')
+      + '<div class="hosp-actions">'+actions+'</div>'
+      + '</div>';
+  }).join('');
+  if (rows.length > RENDER_CAP) html += '<div class="empty">ほか '+(rows.length-RENDER_CAP)+' 件あります。都道府県や検索でしぼってください。</div>';
+  box.innerHTML = html;
+}
+function bindChips(id, key){
+  [].forEach.call(document.querySelectorAll('#'+id+' .chip'), function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#'+id+' .chip').forEach(function(x){ x.classList.remove('active'); });
+      c.classList.add('active');
+      filters[key] = c.getAttribute('data-v');
+      render();
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', function(){
+  // 都道府県セレクトを生成
+  var sel = document.getElementById('prefSelect');
+  if (sel){
+    sel.innerHTML = '<option value="all">全国</option>' + PREFS.map(function(p){ return '<option value="'+p+'">'+p+'</option>'; }).join('');
+    sel.addEventListener('change', function(){ filters.pref = this.value; render(); });
+  }
+  bindChips('areaChips','area');
+  bindChips('typeChips','type');
+  document.getElementById('hSearch').addEventListener('input', function(){ filters.q = (this.value||'').trim().toLowerCase(); render(); });
+  try {
+    var p = new URLSearchParams(location.search);
+    if (p.get('type')){ var tc=document.querySelector('#typeChips .chip[data-v="'+p.get('type')+'"]'); if (tc){ document.querySelectorAll('#typeChips .chip').forEach(function(x){x.classList.remove('active');}); tc.classList.add('active'); filters.type=p.get('type'); } }
+    if (p.get('from') === 'insurance') satoiNotify('ご加入の保険から来られました。受診先の病院は、全国どこでも自由に選べます。', {kind:'info', duration:4600});
+  } catch(e){}
+  render();
+});
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>
