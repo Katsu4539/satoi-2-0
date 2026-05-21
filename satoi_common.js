@@ -153,9 +153,11 @@
 
   /* ====== ユニバーサルナビ強化(既存ナビを置換) ====== */
   function injectEnhancedNav(){
-    // 既存の satoi-univ-nav を削除して上書き
+    // 2026-05-21: 各ページのヘッダーに戻る等があり重複・干渉するため、浮遊ユニバーサルナビは無効化。
+    // (言語切替はヘッダーへ統合予定。再有効化する場合はこの return を外す)
     const old = document.getElementById('satoi-univ-nav');
     if (old) old.remove();
+    return;
 
     const nav = document.createElement('div');
     nav.id = 'satoi-univ-nav';
