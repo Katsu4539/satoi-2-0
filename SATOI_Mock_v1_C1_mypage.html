@@ -1345,24 +1345,42 @@ body.satoi-has-jbar .header { top: 0 !important; }
   </div>
 </section>
 
-<!-- ===== 物語マップ(あなたの物語の続き・SATOIの心臓部) ===== -->
+<!-- ===== 物語マップ(あなたの物語が流れていく・SATOIの心臓部) ===== -->
 <style>
-.story-timeline { max-width: 760px; margin: 10px auto 0; position: relative; padding-left: 6px; }
-.story-timeline::before { content:''; position:absolute; left:18px; top:10px; bottom:18px; width:2px; background:linear-gradient(180deg, rgba(212,98,42,0.5), rgba(13,115,119,0.4)); }
-.sm-card { position:relative; display:flex; gap:16px; padding:4px 0 16px 0; cursor:pointer; }
-.sm-dot { flex-shrink:0; width:38px; height:38px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:16px; z-index:1; background:#fff; box-shadow:0 0 0 4px rgba(246,239,227,0.9); }
-.sm-body { flex:1; background:#fff; border:1px solid rgba(11,23,54,0.10); border-radius:14px; padding:14px 18px; box-shadow:0 4px 14px rgba(11,23,54,0.05); transition:all .2s; }
-.sm-card:hover .sm-body { border-color:#D4A95E; transform:translateY(-1px); box-shadow:0 8px 20px rgba(11,23,54,0.08); }
-.sm-meta { font-size:11px; letter-spacing:0.08em; color:rgba(26,42,64,0.55); margin-bottom:4px; }
-.sm-title { font-size:15px; font-weight:600; color:#1A2A40; line-height:1.6; }
-.sm-text { font-size:13.5px; color:rgba(26,42,64,0.8); line-height:1.95; margin-top:10px; }
-.sm-more { font-size:12px; color:#D4622A; margin-top:8px; font-weight:500; }
+#storyMap .sm-flow-wrap { position:relative; max-width:1120px; margin:14px auto 0; }
+.sm-flow { display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x proximity; padding:8px 4px 16px; -webkit-overflow-scrolling:touch; }
+.sm-flow::-webkit-scrollbar { height:6px; }
+.sm-flow::-webkit-scrollbar-thumb { background:rgba(212,169,94,0.5); border-radius:3px; }
+.sm-scene { scroll-snap-align:center; flex:0 0 232px; background:#fff; border:1px solid rgba(11,23,54,0.10); border-radius:16px; padding:18px; cursor:pointer; transition:all .2s; }
+.sm-scene:hover, .sm-scene.active { border-color:#D4A95E; box-shadow:0 8px 22px rgba(11,23,54,0.10); transform:translateY(-2px); }
+.sm-scene.active { background:linear-gradient(180deg,#fff,#FBF7F0); }
+.sm-scene-ic { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; margin-bottom:10px; background:rgba(0,0,0,0.03); }
+.sm-scene-day { font-size:11px; letter-spacing:0.06em; font-weight:600; }
+.sm-scene-ttl { font-size:14px; font-weight:600; color:#1A2A40; line-height:1.55; margin-top:5px; }
+.sm-arrow { position:absolute; top:34%; width:38px; height:38px; border-radius:50%; background:#fff; border:1px solid rgba(11,23,54,0.15); box-shadow:0 4px 12px rgba(11,23,54,0.14); cursor:pointer; font-size:18px; color:#1A2A40; display:flex; align-items:center; justify-content:center; z-index:3; }
+.sm-arrow.prev { left:-8px; } .sm-arrow.next { right:-8px; }
+.sm-flow-hint { text-align:center; font-size:11.5px; color:rgba(26,42,64,0.5); margin-top:2px; }
+.sm-detail { max-width:1120px; margin:14px auto 0; background:linear-gradient(135deg, rgba(13,115,119,0.07), rgba(212,169,94,0.07)); border:1px solid rgba(13,115,119,0.22); border-radius:16px; padding:22px 26px; }
+.sm-detail-meta { font-size:12px; font-weight:600; letter-spacing:0.06em; margin-bottom:6px; }
+.sm-detail-ttl { font-size:18px; font-weight:600; color:#1A2A40; margin-bottom:10px; line-height:1.6; }
+.sm-detail-body { font-size:14.5px; color:rgba(26,42,64,0.85); line-height:2; }
+.sm-flow-cta { text-align:center; margin-top:16px; }
+.sm-flow-cta a { display:inline-block; padding:12px 26px; background:#D4622A; color:#fff; border-radius:24px; font-size:14px; font-weight:600; text-decoration:none; box-shadow:0 6px 16px rgba(212,98,42,0.3); }
+.sm-flow-cta a:hover { background:#B85420; }
+@media (max-width:700px){ .sm-arrow{ display:none; } .sm-scene{ flex-basis:208px; } }
 </style>
 <section class="section" id="storyMap">
   <div class="section-eyebrow">YOUR STORY ・ 物語の続き</div>
-  <h2 class="section-title"><span class="sm-name">あなた</span>の、これまでの物語</h2>
-  <p class="section-sub">診断のあの日から、今日まで。あなたが残してきた言葉・気持ち・節目が、ひとつの物語になっています。<br>触れると、その日の物語が、もう一度ひらきます。</p>
-  <div class="story-timeline" id="storyTimeline"></div>
+  <h2 class="section-title"><span class="sm-name">あなた</span>の物語が、流れていく</h2>
+  <p class="section-sub">診断のあの日から、今日、そして これから へ。左から右へ、あなたの物語が続いていきます。<br>シーンに触れると、その日の物語がひらきます。</p>
+  <div class="sm-flow-wrap">
+    <button class="sm-arrow prev" id="smPrev" aria-label="前のシーンへ">‹</button>
+    <div class="sm-flow" id="smFlow"></div>
+    <button class="sm-arrow next" id="smNext" aria-label="次のシーンへ">›</button>
+  </div>
+  <div class="sm-flow-hint">← 左右にスクロール・スワイプで、あなたの物語をたどれます →</div>
+  <div class="sm-detail" id="smDetail"></div>
+  <div class="sm-flow-cta"><a href="SATOI_Mock_v1_A2_dialog.html?resume=1&from=c1_story">この物語の続きを、AIと話す →</a></div>
 </section>
 
 <!-- ===== ニュース欄(SATOIからのお知らせ) ===== -->
@@ -2734,6 +2752,12 @@ document.querySelectorAll('.overlay').forEach(o => {
   document.querySelectorAll('.sm-name').forEach(function(el){ el.textContent = pname; });
   var team = document.querySelector('.team-center'); if (team) team.innerHTML = team.innerHTML.replace(/あおいさん/g, pname);
   var lb = document.getElementById('lampBubble'); if (lb && lb.textContent.indexOf('あおいさん') !== -1) lb.textContent = lb.textContent.replace('あおいさん', pname);
+  // がん種・ステージ・診断からの日数をペルソナ別に反映
+  var PDATA = { p1:{ cancer:'乳がん', stage:'II', days:42 }, p2:{ cancer:'肺がん', stage:'IV', days:88 } };
+  var pd = PDATA[pid] || PDATA.p1;
+  var db = document.getElementById('dayBadgeText'); if (db) db.textContent = '物語の現在地・診断から ' + pd.days + '日目';
+  document.querySelectorAll('.persona-cancer').forEach(function(el){ el.textContent = pd.cancer; });
+  document.querySelectorAll('.persona-stage').forEach(function(el){ el.textContent = pd.stage; });
 
   var STORIES = {
     p1: [
@@ -2743,7 +2767,8 @@ document.querySelectorAll('.overlay').forEach(o => {
       { t:'milestone', day:'治療開始',         icon:'🌅', title:'TC療法を、始めました', body:'こわかったけれど、これが前に進む一歩。同じ治療を選んだ人が、たくさんいると知って、少し心強かった。' },
       { t:'story',     day:'治療中',           icon:'📷', title:'髪が抜ける前に、たくさん写真を撮った', body:'子どもと、笑って、変な顔をして。「いつものママ」を、残しておきたかった。' },
       { t:'dialogue',  day:'昨夜',             icon:'💬', title:'AIと、子どもへの手紙の下書きをつくった', body:'うまく言葉にできなかった想いを、AIが一緒に整理してくれた。少しずつ、書けそうです。' },
-      { t:'feeling',   day:'今日',             icon:'☀', title:'今日は、少しだけ前を向けている気がする', body:'まだ揺れるけれど。今日という日を、ちゃんと生きられた。それで、十分。' }
+      { t:'feeling',   day:'今日',             icon:'☀', title:'今日は、少しだけ前を向けている気がする', body:'まだ揺れるけれど。今日という日を、ちゃんと生きられた。それで、十分。' },
+      { t:'future',    day:'これから',         icon:'🌱', title:'子どもたちの、これからを見ていたい', body:'運動会も、卒業式も。できるだけ多くの「いつもの日」を、一緒に。その願いを、ここに置いておきます。' }
     ],
     p2: [
       { t:'milestone', day:'診断の日',       icon:'🌑', title:'肺がん ステージIV と、告知されました', body:'定年まで、あと半年というときでした。「なんなんだ、これは」。正直、そう思った。' },
@@ -2752,35 +2777,40 @@ document.querySelectorAll('.overlay').forEach(o => {
       { t:'milestone', day:'治療開始',         icon:'🌅', title:'免疫療法を含む治療を、始めました', body:'できることは、やる。焦らず、自分のペースで。先生ともよく話して決めました。' },
       { t:'story',     day:'治療中',           icon:'👶', title:'息子夫婦と、孫の名前を考えた', body:'生まれてくる子の名前を、一緒に。こんな時間が持てるとは、思っていなかった。' },
       { t:'dialogue',  day:'先日',             icon:'💬', title:'AIと、仕事の引き継ぎと、孫への手紙を整理した', body:'伝えておきたいことを、ひとつずつ。AIが、考えを整理する手伝いをしてくれた。' },
-      { t:'feeling',   day:'今日',             icon:'🍵', title:'焦らない。今日できることを、ひとつずつ', body:'先のことは、わからない。でも、今日という日は、確かにここにある。' }
+      { t:'feeling',   day:'今日',             icon:'🍵', title:'焦らない。今日できることを、ひとつずつ', body:'先のことは、わからない。でも、今日という日は、確かにここにある。' },
+      { t:'future',    day:'これから',         icon:'🌱', title:'孫を、この手で抱きたい', body:'生まれてくる日まで。そして、できれば その先も。焦らず、今日を積み重ねていきます。' }
     ]
   };
-  var COLORS = { milestone:'#D4622A', feeling:'#0D7377', story:'#C76B7F', dialogue:'#7FA8C9' };
-  var LABELS = { milestone:'節目', feeling:'気持ちの記録', story:'物語', dialogue:'AIとの対話' };
+  var COLORS = { milestone:'#D4622A', feeling:'#0D7377', story:'#C76B7F', dialogue:'#7FA8C9', future:'#5B9A68' };
+  var LABELS = { milestone:'節目', feeling:'気持ちの記録', story:'物語', dialogue:'AIとの対話', future:'これからの願い' };
   var eps = STORIES[pid] || STORIES.p1;
-  var host = document.getElementById('storyTimeline');
-  if (host) {
-    host.innerHTML = eps.map(function(e, i){
+  var flow = document.getElementById('smFlow');
+  var detail = document.getElementById('smDetail');
+  function showDetail(e){
+    if (!detail) return;
+    var c = COLORS[e.t] || '#D4A95E';
+    detail.innerHTML = '<div class="sm-detail-meta" style="color:' + c + ';">' + LABELS[e.t] + ' ・ ' + e.day + '</div>'
+      + '<div class="sm-detail-ttl">' + e.title + '</div>'
+      + '<div class="sm-detail-body">' + e.body + '</div>';
+  }
+  if (flow) {
+    flow.innerHTML = eps.map(function(e, i){
       var c = COLORS[e.t] || '#D4A95E';
-      return '<div class="sm-card" data-i="' + i + '">'
-        + '<div class="sm-dot" style="color:' + c + '; border:2px solid ' + c + ';">' + e.icon + '</div>'
-        + '<div class="sm-body" style="border-left:4px solid ' + c + ';">'
-        +   '<div class="sm-meta">' + LABELS[e.t] + ' ・ ' + e.day + '</div>'
-        +   '<div class="sm-title">' + e.title + '</div>'
-        +   '<div class="sm-text">' + e.body + '</div>'
-        +   '<div class="sm-more">▸ ひらく</div>'
-        + '</div></div>';
+      return '<div class="sm-scene" data-i="' + i + '">'
+        + '<div class="sm-scene-ic" style="color:' + c + '; border:2px solid ' + c + ';">' + e.icon + '</div>'
+        + '<div class="sm-scene-day" style="color:' + c + ';">' + LABELS[e.t] + '</div>'
+        + '<div class="sm-scene-ttl">' + e.title + '</div>'
+        + '</div>';
     }).join('');
-    host.querySelectorAll('.sm-card').forEach(function(card){
-      var txt = card.querySelector('.sm-text');
-      var more = card.querySelector('.sm-more');
-      txt.style.display = 'none';
-      card.addEventListener('click', function(){
-        var willOpen = (txt.style.display === 'none');
-        txt.style.display = willOpen ? 'block' : 'none';
-        more.textContent = willOpen ? '▸ とじる' : '▸ ひらく';
-      });
-    });
+    var scenes = flow.querySelectorAll('.sm-scene');
+    function activate(i){ scenes.forEach(function(s, j){ s.classList.toggle('active', j === i); }); showDetail(eps[i]); }
+    scenes.forEach(function(s, i){ s.addEventListener('click', function(){ activate(i); s.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' }); }); });
+    var nowIdx = 0; eps.forEach(function(e, i){ if (e.day === '今日') nowIdx = i; });
+    activate(nowIdx);
+    setTimeout(function(){ if (scenes[nowIdx]) scenes[nowIdx].scrollIntoView({ behavior:'auto', inline:'center', block:'nearest' }); }, 60);
+    var prevBtn = document.getElementById('smPrev'), nextBtn = document.getElementById('smNext');
+    if (prevBtn) prevBtn.addEventListener('click', function(){ flow.scrollBy({ left:-260, behavior:'smooth' }); });
+    if (nextBtn) nextBtn.addEventListener('click', function(){ flow.scrollBy({ left:260, behavior:'smooth' }); });
   }
 })();
 </script>
