@@ -820,7 +820,15 @@ body {
 
 /* === レスポンシブ === */
 @media (max-width: 720px) {
-  .header { padding: 14px 18px; }
+  /* ヘッダーのスカシ(下方向フェード)を廃止→単色で読みやすく。折返さない */
+  .header { padding: 12px 14px !important; background: rgba(11,23,54,0.96) !important; flex-wrap: nowrap; gap: 8px; }
+  /* パンくず(マインドマップ・治療詳細)はスマホでは省いて場所を空ける */
+  .header-crumb { display: none !important; }
+  .header-right { gap: 8px; flex-shrink: 1; min-width: 0; }
+  /* 「← マインドマップに戻る」は ☀ホーム と行き先が同じ(B1)なのでスマホでは省く */
+  .header-right .h-link[href*="B1_hub"] { display: none !important; }
+  /* マイページは入口/ホームと釣り合うコンパクトなpillで一行表示 */
+  .header-right .h-link[href*="C1_mypage"] { font-size: 12px; padding: 6px 12px; white-space: nowrap; }
   .hero { padding: 100px 22px 60px; }
   .hero-title { font-size: 36px; }
   .section { padding: 48px 20px; }
@@ -829,7 +837,7 @@ body {
   .purpose-card { grid-template-columns: 1fr; padding: 24px; text-align: center; }
   .purpose-icon { margin: 0 auto; }
   .cycle-day { font-size: 10px; }
-  .companion-lamp { right: 14px; bottom: 56px; }
+  .companion-lamp { display: none !important; }
   .sdm-block { padding: 26px 22px; }
 }
 

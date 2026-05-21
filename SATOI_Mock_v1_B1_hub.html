@@ -1803,6 +1803,16 @@ body.has-b1-journey-bar .header + section { margin-top: 0; }
   body.has-b1-journey-bar .hero { padding-top: 200px; }
   .revisit-bar { margin: 120px 14px 0; padding: 18px; }
   .revisit-bar.show { grid-template-columns: 1fr; }
+  /* ヘッダーが縦に折り返さないよう整理(Katsuさん指示・2026-05-21) */
+  .header { flex-wrap: nowrap !important; gap: 8px !important; padding: 10px 12px !important; }
+  .header-right { gap: 8px !important; flex-shrink: 1; min-width: 0; }
+  /* 「前回の続き」は重複(ヒーローにCTAあり)→モバイルでは隠す。言語/ログインも省く */
+  .b1-hdr-resume { display: none !important; }
+  .lang-select { display: none !important; }
+  .login-wrap { display: none !important; }
+  /* マイページは入口/ホームと釣り合うコンパクトなpillに */
+  .b1-hdr-mypage { padding: 7px 14px !important; font-size: 12px !important; white-space: nowrap; box-shadow: none !important; }
+  .satoi-home-toggle { margin-left: 8px !important; }
 }
 
 /* === SATOI 共通リッチトースト(alert置換)=== */
@@ -1915,8 +1925,8 @@ body.has-b1-journey-bar .header + section { margin-top: 0; }
     <a href="#forum" style="font-size: 15px; padding: 10px 16px; border-radius: 16px; transition: all 0.2s;" onmouseover="this.style.background='rgba(212,169,94,0.12)'" onmouseout="this.style.background='transparent'">みんなの広場</a>
   </nav>
   <div class="header-right" style="display:flex; gap:12px; align-items:center;">
-    <a href="SATOI_Mock_v1_A2_dialog.html?resume=1&from=b1_resume" style="padding: 10px 22px; background: #D4622A; color: #FFFFFF; border: 1px solid #D4622A; border-radius: 22px; font-size: 14px; text-decoration: none; font-weight: 700; transition: all 0.2s; box-shadow: 0 4px 12px rgba(212,98,42,0.4);" onmouseover="this.style.background='#B85420'" onmouseout="this.style.background='#D4622A'">▸ 前回の続き</a>
-    <a href="SATOI_Mock_v1_C1_mypage.html" style="padding: 10px 22px; background: #0D7377; color: #FFFFFF; border: 1px solid #0D7377; border-radius: 22px; font-size: 14px; text-decoration: none; font-weight: 700; transition: all 0.2s; box-shadow: 0 4px 12px rgba(13,115,119,0.4);" onmouseover="this.style.background='#0A5A5D'" onmouseout="this.style.background='#0D7377'">★ マイページ</a>
+    <a class="b1-hdr-resume" href="SATOI_Mock_v1_A2_dialog.html?resume=1&from=b1_resume" style="padding: 10px 22px; background: #D4622A; color: #FFFFFF; border: 1px solid #D4622A; border-radius: 22px; font-size: 14px; text-decoration: none; font-weight: 700; transition: all 0.2s; box-shadow: 0 4px 12px rgba(212,98,42,0.4);" onmouseover="this.style.background='#B85420'" onmouseout="this.style.background='#D4622A'">▸ 前回の続き</a>
+    <a class="b1-hdr-mypage" href="SATOI_Mock_v1_C1_mypage.html" style="padding: 10px 22px; background: #0D7377; color: #FFFFFF; border: 1px solid #0D7377; border-radius: 22px; font-size: 14px; text-decoration: none; font-weight: 700; transition: all 0.2s; box-shadow: 0 4px 12px rgba(13,115,119,0.4);" onmouseover="this.style.background='#0A5A5D'" onmouseout="this.style.background='#0D7377'">★ マイページ</a>
     <select class="lang-select" aria-label="言語切り替え">
       <option>日本語</option>
       <option>English</option>

@@ -377,12 +377,17 @@ body {
 /* === モバイル === */
 @media (max-width: 768px) {
   body { font-size: 16px; }
-  .header { padding: 14px 16px; }
+  /* ヘッダーのスカシ(下方向フェード)を廃止→単色で読みやすく。折返さない */
+  .header { padding: 12px 14px !important; background: rgba(11,23,54,0.96) !important; flex-wrap: nowrap; gap: 8px; }
   .logo { font-size: 17px; }
-  .progress-wrap { max-width: 130px; margin: 0 10px; }
-  .back-btn { padding: 6px 12px; font-size: 12px; }
-  /* スマホ:マイページ(絶対配置)はトグルと重なるので隠す(ホーム→ハブから到達可) */
-  .header a[href*="C1_mypage"] { display: none !important; }
+  .progress-wrap { display: none !important; }
+  /* 「← 戻る」は「🌙 入口」と行き先が重複するのでスマホでは省く */
+  .back-btn { display: none !important; }
+  /* マイページは隠さず、右端にコンパクトなpillで残す(入口/ホーム/マイページの3点でバランス) */
+  .header a[href*="C1_mypage"] {
+    position: absolute !important; top: 13px !important; right: 12px !important;
+    padding: 6px 12px !important; font-size: 11.5px !important; z-index: 120;
+  }
   /* スマホ:入力欄を端末下端(セーフエリア)から確保し、隠れないように */
   .input-area { padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important; }
 

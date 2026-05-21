@@ -1174,8 +1174,14 @@ body.deep-night .hero {
 
 /* === レスポンシブ === */
 @media (max-width: 760px) {
-  .header { padding: 14px 18px; }
-  .logo { font-size: 18px; letter-spacing: 0.18em; }
+  /* ヘッダーのスカシ(下方向フェード)を廃止→読みやすい単色に */
+  .header { padding: 12px 14px !important; background: rgba(11,23,54,0.96) !important; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); flex-wrap: nowrap; gap: 8px; }
+  .logo { font-size: 18px; letter-spacing: 0.16em; }
+  /* 右側ナビ:折返しせず一列、字を少し小さく・はっきり */
+  .header-right { gap: 6px; flex-shrink: 1; min-width: 0; }
+  /* 長い「物語の現在地」バッジはモバイルでは隠す(同じ情報は下のマインドマップ節にある) */
+  .day-badge { display: none !important; }
+  .header-link { font-size: 12px; padding: 6px 10px; color: var(--text-on-dark); white-space: nowrap; }
   .hero { padding: 110px 22px 70px; min-height: 60vh; }
   .greeting { font-size: 32px; }
   .greeting-sub { font-size: 15px; }
@@ -1190,8 +1196,10 @@ body.deep-night .hero {
   .team-avatar { width: 50px; height: 50px; font-size: 20px; }
   .team-center { width: 86px; height: 86px; font-size: 12px; }
   .trace-item { grid-template-columns: 1fr; gap: 8px; }
-  .companion-lamp { right: 18px; bottom: 60px; width: 60px; height: 60px; }
-  .nudge { left: 12px; right: 12px; max-width: none; bottom: 60px; }
+  /* モバイルでは浮遊要素を一切出さない(Katsuさん指示・2026-05-21) */
+  .companion-lamp { display: none !important; }
+  .nudge { display: none !important; }
+  .c1-emg-fab { display: none !important; }
 }
 
 /* === SATOI 共通リッチトースト(alert置換)=== */
@@ -1376,7 +1384,16 @@ body.satoi-has-jbar .header { top: 0 !important; }
 .sm-pbtn { padding:7px 16px; margin:0 4px; border-radius:18px; border:1px solid rgba(13,115,119,0.4); background:#fff; color:#0D7377; font-size:12.5px; font-weight:600; cursor:pointer; font-family:inherit; transition:all .2s; }
 .sm-pbtn:hover { background:rgba(13,115,119,0.08); }
 .sm-pbtn.sm-pbtn-active { background:#0D7377; color:#fff; border-color:#0D7377; }
-@media (max-width:700px){ .sm-arrow{ display:none; } .sm-scene{ flex-basis:208px; } }
+@media (max-width:700px){
+  .sm-arrow{ display:none; }
+  .sm-scene{ flex-basis:230px; padding:20px; }
+  /* 高齢者・スマホでも読めるよう物語マップの文字を拡大・濃く */
+  .sm-scene-ttl{ font-size:16px; }
+  .sm-scene-day{ font-size:12.5px; }
+  .sm-detail-ttl{ font-size:19px; }
+  .sm-detail-body{ font-size:16px; color:rgba(26,42,64,0.92); line-height:1.95; }
+  .sm-flow-hint{ font-size:13px; color:rgba(26,42,64,0.7); }
+}
 </style>
 <section class="section" id="storyMap">
   <div class="section-eyebrow">YOUR STORY ・ 物語の続き</div>
@@ -1754,7 +1771,7 @@ body.satoi-has-jbar .header { top: 0 !important; }
 </section>
 
 <!-- 緊急QR 常設ボタン -->
-<div style="position:fixed; bottom:24px; right:24px; z-index:300;">
+<div class="c1-emg-fab" style="position:fixed; bottom:24px; right:24px; z-index:300;">
   <button onclick="location.href='SATOI_Mock_v1_EMG_qr.html?from=c1'" style="display:flex; align-items:center; gap:10px; padding:14px 22px; background:linear-gradient(135deg, #B85450, #D4622A); color:white; border:none; border-radius:32px; font-size:13px; font-weight:600; cursor:pointer; box-shadow:0 12px 28px rgba(184,84,80,0.4); letter-spacing:0.04em;" title="夜間・救急時にQRで医療情報を開示">
     🚨 緊急QR
   </button>

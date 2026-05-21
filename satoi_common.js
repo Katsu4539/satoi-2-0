@@ -427,10 +427,18 @@
       /* スマホ:大きくしすぎ・余白過多で窮屈にならないよう調整(iPhone/iPad) */
       @media (max-width: 768px) {
         body { font-size: 16px; }
-        /* スマホ:コンシェルジュ吹き出しは入力欄に被るので非表示・トグルは小さく */
+        /* スマホ:浮遊要素は一切出さない(Katsuさん指示・2026-05-21) */
         .satoi-con-bubble { display: none !important; }
+        .companion-lamp { display: none !important; }
+        .nudge { display: none !important; }
+        #satoi-univ-nav { display: none !important; }
         .satoi-home-toggle { margin-left: 8px !important; }
         .satoi-home-toggle .sht-opt { padding: 4px 9px !important; font-size: 11px !important; }
+        /* スマホ:コンテンツ系ページのヘッダーを折返さず1行で整える(h-link/crumbは全7ページ共通) */
+        .header-crumb { display: none !important; }
+        .h-link { font-size: 12px !important; padding: 6px 12px !important; white-space: nowrap !important; }
+        /* 「マインドマップに戻る」は ☀ホーム と行き先が同じ(B1)なのでスマホでは省く */
+        .h-link[href*="B1_hub"] { display: none !important; }
         .content-card { padding: 18px 16px !important; }
         .content-card h3 { font-size: 17.5px !important; }
         .content-card h4 { font-size: 16px !important; }
