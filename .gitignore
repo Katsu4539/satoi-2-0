@@ -16,3 +16,9 @@ npm-debug.log*
 # 環境変数(APIキー等は絶対にコミットしない)
 .env
 .env.*
+
+# 内部ドキュメントはリポジトリに置かない(保存先は Dropbox/ナレッジレポート/Cowork のみ)
+SATOI_v2_ナレッジレポート_*.md
+ナレッジレポート_*.md
+feedback_report_*.md
+KR_*.md
