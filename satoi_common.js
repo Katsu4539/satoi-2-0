@@ -809,6 +809,7 @@
      #satoi-pickup というプレースホルダがあるページに、カード一覧を流し込む。
      ハブ・マイページに設置。 */
   const SATOI_PICKUP = [
+    { icon:'📚', title:'学びの部屋',           desc:'がんを、まるごと知る（読む・調べる・伝える）', url:'SATOI_Mock_v1_LEARN_room.html' },
     { icon:'📘', title:'がんとは?(基礎)',   desc:'がん・ステージ・検査の基本', url:'SATOI_Mock_v1_KB_about.html' },
     { icon:'💊', title:'がんの治療(基本)',   desc:'手術・薬・放射線・緩和',     url:'SATOI_Mock_v1_KB_treatment.html' },
     { icon:'🩹', title:'副作用と対処',         desc:'時期・備え方・伝えるサイン', url:'SATOI_Mock_v1_KB_sideeffects.html' },

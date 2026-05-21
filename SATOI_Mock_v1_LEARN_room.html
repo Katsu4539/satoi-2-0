@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学びの部屋 ・ がんを、まるごと知る | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #F1ECD9; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,40,0.18); border-radius:20px; font-size:12px; white-space:nowrap; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 130px 32px 52px; text-align:center; background: linear-gradient(135deg, rgba(212,169,94,0.10) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: var(--starlight); padding:6px 18px; border:1px solid rgba(212,169,94,0.45); border-radius:24px; margin-bottom:22px; }
+.hero-title { font-size: clamp(30px, 5vw, 46px); font-weight:300; line-height:1.5; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: var(--warm-orange); font-weight:600; }
+.hero-sub { font-size:15.5px; color: var(--ink-medium); line-height:2; max-width:720px; margin:0 auto; }
+
+.searchbar { max-width:640px; margin:30px auto 0; display:flex; gap:10px; background:#fff; border:1px solid var(--line); border-radius:30px; padding:8px 8px 8px 22px; box-shadow:0 8px 24px rgba(11,23,54,0.06); }
+.searchbar input { flex:1; border:none; outline:none; font-size:15px; font-family:inherit; color:var(--ink-deep); background:transparent; }
+.searchbar button { background:var(--warm-orange); color:#fff; border:none; border-radius:24px; padding:10px 22px; font-size:14px; font-weight:600; }
+.searchbar button:hover { background:#B85420; }
+.search-hint { font-size:12px; color:var(--ink-light); margin-top:10px; }
+
+.toc { position: sticky; top:62px; z-index:50; background: rgba(255,253,247,0.96); border-bottom: 1px solid var(--line); padding: 12px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc-item { padding:8px 18px; background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.3); border-radius:18px; color: var(--ink-medium); font-size:13px; cursor:pointer; text-decoration:none; }
+.toc-item:hover, .toc-item.active { background: var(--warm-orange); color: var(--morning-white); border-color: var(--warm-orange); }
+
+.section { padding: 54px 32px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size:11px; letter-spacing:0.36em; color: var(--teal); margin-bottom:10px; font-weight:600; }
+.section-title { font-size: clamp(23px, 3.2vw, 30px); font-weight:500; color: var(--ink-deep); margin-bottom:12px; line-height:1.5; }
+.section-sub { font-size:15px; color: var(--ink-medium); line-height:1.95; margin-bottom:28px; }
+
+.shelf-label { display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--ink-deep); margin:26px 0 14px; }
+.depth-tag { font-size:11px; font-weight:700; letter-spacing:0.06em; padding:3px 10px; border-radius:12px; }
+.depth-basic { background:rgba(20,166,171,0.16); color:#0D7377; }
+.depth-pro { background:rgba(199,107,127,0.16); color:#A8475F; }
+
+.tiles { display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+.tile { display:block; background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px 20px; box-shadow:0 6px 18px rgba(11,23,54,0.04); transition:all .2s; }
+.tile:hover { transform:translateY(-3px); border-color:var(--starlight); box-shadow:0 12px 28px rgba(11,23,54,0.10); }
+.tile-ic { font-size:24px; margin-bottom:10px; }
+.tile-ttl { font-size:16px; font-weight:600; color:var(--ink-deep); margin-bottom:6px; }
+.tile-desc { font-size:13px; color:var(--ink-medium); line-height:1.8; }
+
+.chips { display:flex; flex-wrap:wrap; gap:10px; }
+.chip { background:#fff; border:1px solid var(--line); border-radius:22px; padding:10px 18px; font-size:14px; color:var(--ink-deep); box-shadow:0 4px 12px rgba(11,23,54,0.04); }
+.chip:hover { border-color:var(--warm-orange); color:var(--warm-orange); }
+
+.panel { background:#fff; border:1px solid var(--line); border-radius:18px; padding:26px 30px; box-shadow:0 6px 22px rgba(11,23,54,0.04); }
+.panel h3 { font-size:18px; font-weight:600; color:var(--ink-deep); margin-bottom:10px; }
+.panel p { font-size:14px; color:var(--ink-medium); line-height:1.95; margin-bottom:14px; }
+.ladder { list-style:none; padding:0; margin:8px 0 18px; }
+.ladder li { display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px dashed var(--line); font-size:14px; color:var(--ink-medium); line-height:1.8; }
+.ladder li:last-child { border-bottom:none; }
+.ladder .n { flex-shrink:0; width:26px; height:26px; border-radius:50%; background:var(--teal); color:#fff; font-size:12px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; }
+.cta-row { display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; }
+.btn-primary { background:var(--teal); color:#fff; border:none; border-radius:24px; padding:12px 24px; font-size:14px; font-weight:600; }
+.btn-primary:hover { background:#0A5A5D; }
+.btn-ghost { background:transparent; color:var(--teal); border:1px solid rgba(13,115,119,0.45); border-radius:24px; padding:12px 24px; font-size:14px; font-weight:600; }
+.btn-ghost:hover { background:rgba(13,115,119,0.08); }
+.note { font-size:12.5px; color:var(--ink-light); line-height:1.85; margin-top:14px; padding:12px 16px; background:rgba(212,169,94,0.08); border-left:3px solid var(--starlight); border-radius:8px; }
+
+/* 動画ランキング */
+.vid-filter { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+.vid-fchip { padding:7px 14px; border-radius:18px; border:1px solid var(--line); background:#fff; font-size:12.5px; color:var(--ink-medium); cursor:pointer; }
+.vid-fchip.active, .vid-fchip:hover { background:var(--healing-blue); color:#fff; border-color:var(--healing-blue); }
+.vid-list { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+.vid-card { display:flex; gap:14px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:13px; box-shadow:0 5px 16px rgba(11,23,54,0.04); transition:all .2s; cursor:pointer; text-align:left; align-items:center; }
+.vid-card:hover { transform:translateY(-2px); border-color:var(--healing-blue); box-shadow:0 12px 26px rgba(11,23,54,0.10); }
+.vid-thumb { position:relative; flex-shrink:0; width:118px; height:70px; border-radius:10px; background:linear-gradient(135deg,#1A2548,#0D7377); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.vid-thumb .play { width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.92); color:#0D7377; display:flex; align-items:center; justify-content:center; font-size:13px; padding-left:2px; }
+.vid-rank { position:absolute; top:6px; left:6px; min-width:22px; height:22px; padding:0 6px; border-radius:11px; background:var(--warm-orange); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+.vid-info { flex:1; min-width:0; }
+.vid-title { font-size:14px; font-weight:600; color:var(--ink-deep); line-height:1.5; margin-bottom:5px; }
+.vid-ch { font-size:12px; color:var(--teal); font-weight:600; margin-bottom:4px; }
+.vid-stats { font-size:11.5px; color:var(--ink-light); display:flex; gap:12px; flex-wrap:wrap; }
+.know-card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px 22px; box-shadow:0 4px 14px rgba(11,23,54,0.04); margin-bottom:14px; }
+.know-from { font-size:12px; color:var(--teal); font-weight:600; margin-bottom:8px; }
+.know-body { font-size:14px; color:var(--ink-medium); line-height:1.9; }
+.share-line { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:14px; }
+
+footer { text-align:center; padding:40px 20px 60px; color:var(--ink-light); font-size:12px; line-height:1.9; }
+
+@media (max-width: 768px) {
+  .header { padding:12px 14px; }
+  .section { padding:44px 16px; }
+  .hero { padding:108px 16px 40px; }
+  .tiles { grid-template-columns: 1fr; }
+  .searchbar { margin-top:22px; }
+  .panel { padding:22px 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== ヘッダー ===== -->
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_B1_hub.html'; })()">← 戻る</button>
+</header>
+
+<!-- ===== ヒーロー ===== -->
+<section class="hero">
+  <span class="hero-eyebrow">LEARNING ROOM</span>
+  <h1 class="hero-title">がんを、<strong>まるごと知る</strong></h1>
+  <p class="hero-sub">
+    知りたいと思った、その気持ちがいちばんの入口です。<br>
+    基礎からじっくり、専門的に深く、そして学んだことを誰かに伝えるところまで。あなたのペースで。
+  </p>
+  <div class="searchbar">
+    <input id="learnSearch" type="text" placeholder="知りたいことを入力（例：トリプルネガティブ、骨転移、傷病手当金）">
+    <button onclick="doSearch()">探す</button>
+  </div>
+  <div class="search-hint">この部屋のすべて（基礎・がん種別・専門文献）からまとめて探せます。</div>
+</section>
+
+<!-- ===== 目次 ===== -->
+<nav class="toc">
+  <a class="toc-item" href="#read">📖 読む</a>
+  <a class="toc-item" href="#watch">🎬 観る</a>
+  <a class="toc-item" href="#search">🔬 調べる</a>
+  <a class="toc-item" href="#share">🤝 伝える</a>
+</nav>
+
+<!-- ===== 1. 読む ===== -->
+<section class="section" id="read">
+  <div class="section-eyebrow">READ ・ 読む</div>
+  <h2 class="section-title">基礎から、知りたい深さまで</h2>
+  <p class="section-sub">まずは気になるところから。基礎はいつでも無料で開いています。</p>
+
+  <div class="shelf-label">まず押さえる <span class="depth-tag depth-basic">基礎</span></div>
+  <div class="tiles">
+    <a class="tile" href="SATOI_Mock_v1_KB_about.html"><div class="tile-ic">📘</div><div class="tile-ttl">がんとは？</div><div class="tile-desc">がん・ステージ・検査の基本を、やさしく。</div></a>
+    <a class="tile" href="SATOI_Mock_v1_KB_treatment.html"><div class="tile-ic">💊</div><div class="tile-ttl">がんの治療</div><div class="tile-desc">手術・薬物・放射線。治療の全体像。</div></a>
+    <a class="tile" href="SATOI_Mock_v1_KB_sideeffects.html"><div class="tile-ic">🌱</div><div class="tile-ttl">副作用と対処</div><div class="tile-desc">起こりやすいことと、和らげ方。</div></a>
+    <a class="tile" href="SATOI_Mock_v1_KB_money.html"><div class="tile-ic">💰</div><div class="tile-ttl">お金と制度</div><div class="tile-desc">高額療養費・傷病手当金などの支え。</div></a>
+    <a class="tile" href="SATOI_Mock_v1_KB_life.html"><div class="tile-ic">🏠</div><div class="tile-ttl">暮らしと仕事</div><div class="tile-desc">治療と日常・仕事を、どう続けるか。</div></a>
+    <a class="tile" href="SATOI_Mock_v1_KB_generation.html"><div class="tile-ic">👪</div><div class="tile-ttl">世代別の情報</div><div class="tile-desc">年代・立場ごとに知っておきたいこと。</div></a>
+  </div>
+
+  <div class="shelf-label">がん種から学ぶ <span class="depth-tag depth-basic">基礎</span></div>
+  <div class="chips">
+    <a class="chip" href="SATOI_Mock_v1_CAN_breast.html">乳がん</a>
+    <a class="chip" href="SATOI_Mock_v1_CAN_lung.html">肺がん</a>
+    <a class="chip" href="SATOI_Mock_v1_CAN_stomach.html">胃がん</a>
+    <a class="chip" href="SATOI_Mock_v1_CAN_colon.html">大腸がん</a>
+    <a class="chip" href="SATOI_Mock_v1_CAN_prostate.html">前立腺がん</a>
+    <a class="chip" href="SATOI_Mock_v1_CAN_pancreas.html">膵がん</a>
+  </div>
+
+  <div class="shelf-label">もっと専門的に <span class="depth-tag depth-pro">専門</span></div>
+  <div class="tiles">
+    <a class="tile" href="SATOI_Mock_v1_KB_genome.html"><div class="tile-ic">🧬</div><div class="tile-ttl">がんと遺伝子（ゲノム）</div><div class="tile-desc">遺伝子・ゲノム医療・コンパニオン診断。</div></a>
+    <a class="tile" href="SATOI_Mock_v1_ACAD_research.html"><div class="tile-ic">🔬</div><div class="tile-ttl">論文から調べる</div><div class="tile-desc">PubMedを検索し、患者向けに翻訳して読む。</div></a>
+    <a class="tile" href="SATOI_Mock_v1_KB_treatment.html"><div class="tile-ic">📈</div><div class="tile-ttl">治療成績・エビデンス</div><div class="tile-desc">数字の見方と、自分への当てはめ方。</div></a>
+  </div>
+</section>
+
+<!-- ===== 1.5 観る（動画ランキング） ===== -->
+<section class="section" id="watch">
+  <div class="section-eyebrow">WATCH ・ 観る</div>
+  <h2 class="section-title">動画で、ゆっくり学ぶ</h2>
+  <p class="section-sub">再生回数・登録者数の多い、がんの専門チャンネルや解説動画のランキング。信頼できる発信を、見つけて回れます。</p>
+
+  <!-- SATOI 学びチャンネル（自社・5人の医師。第一弾＝よろず先生） -->
+  <div class="shelf-label">📺 SATOIの学びチャンネル <span class="depth-tag depth-pro">SATOIオリジナル</span></div>
+  <p class="section-sub" style="margin-bottom:16px;">5人の医師による、がん治療の解説動画を順次公開。第一弾は よろず先生（萬憲彰院長・ライトクリニック銀座）。</p>
+  <div class="vid-list" id="satoiVidList">
+    <a class="vid-card" href="https://www.youtube.com/watch?v=50D24cKIrlw" target="_blank" rel="noopener">
+      <div class="vid-thumb" style="background-image:url('https://img.youtube.com/vi/50D24cKIrlw/mqdefault.jpg'); background-size:cover; background-position:center;"><span class="play">▶</span></div>
+      <div class="vid-info"><div class="vid-title">がんと言われたら、まずこれを見て！</div><div class="vid-ch">よろず先生（萬憲彰院長）</div><div class="vid-stats"><span>診断されたら最初に</span></div></div>
+    </a>
+    <a class="vid-card" href="https://www.youtube.com/watch?v=whUYfqHtemo" target="_blank" rel="noopener">
+      <div class="vid-thumb" style="background-image:url('https://img.youtube.com/vi/whUYfqHtemo/mqdefault.jpg'); background-size:cover; background-position:center;"><span class="play">▶</span></div>
+      <div class="vid-info"><div class="vid-title">腫瘍マーカー急上昇、それは“悪化”ではない？</div><div class="vid-ch">よろず先生（萬憲彰院長）</div><div class="vid-stats"><span>診察密着</span></div></div>
+    </a>
+    <a class="vid-card" href="https://www.youtube.com/watch?v=TUwDd9jFSUE" target="_blank" rel="noopener">
+      <div class="vid-thumb" style="background-image:url('https://img.youtube.com/vi/TUwDd9jFSUE/mqdefault.jpg'); background-size:cover; background-position:center;"><span class="play">▶</span></div>
+      <div class="vid-info"><div class="vid-title">がん治療を支える補完療法（水素吸入・ハイパーサーミア ほか）</div><div class="vid-ch">よろず先生（萬憲彰院長）</div><div class="vid-stats"><span>補完療法</span></div></div>
+    </a>
+    <a class="vid-card" href="https://www.youtube.com/watch?v=UByF5-XOLrQ" target="_blank" rel="noopener">
+      <div class="vid-thumb" style="background-image:url('https://img.youtube.com/vi/UByF5-XOLrQ/mqdefault.jpg'); background-size:cover; background-position:center;"><span class="play">▶</span></div>
+      <div class="vid-info"><div class="vid-title">萬院長インタビュー（ヘルスアカデミー）</div><div class="vid-ch">よろず先生（萬憲彰院長）</div><div class="vid-stats"><span>視聴7万超</span></div></div>
+    </a>
+  </div>
+  <div style="margin-top:14px;"><a class="btn-ghost" href="https://www.youtube.com/@yorokurichannel" target="_blank" rel="noopener">よろクリチャンネルを見る →</a></div>
+
+  <!-- 信頼できる専門チャンネル（外部・実在） -->
+  <div class="shelf-label" style="margin-top:30px;">🔎 信頼できる専門チャンネル（YouTube）</div>
+  <p class="section-sub" style="margin-bottom:16px;">登録者数・再生回数の多い、医師・公的機関による発信。新しいタブで開きます。</p>
+  <div class="vid-list" id="vidList">
+    <a class="vid-card" href="https://www.youtube.com/channel/UCVX2pB43fTkQVd3x_Ss5Jwg" target="_blank" rel="noopener">
+      <div class="vid-thumb"><span class="vid-rank">1</span><span class="play">▶</span></div>
+      <div class="vid-info"><div class="vid-title">がん防災チャンネル・現役がん治療医</div><div class="vid-ch">押川勝太郎（腫瘍内科医）</div><div class="vid-stats"><span>登録 約9.3万</span><span>動画 2,000本超</span></div></div>
+    </a>
+    <a class="vid-card" href="https://www.youtube.com/channel/UCTj4HCD5jWGMNUJhv1RIweQ" target="_blank" rel="noopener">
+      <div class="vid-thumb"><span class="vid-rank">2</span><span class="play">▶</span></div>
+      <div class="vid-info"><div class="vid-title">がん情報チャンネル・外科医 佐藤のりひろ</div><div class="vid-ch">佐藤典宏（外科医・がん専門医）</div><div class="vid-stats"><span>予防・診断・治療・セルフケア</span></div></div>
+    </a>
+    <a class="vid-card" href="https://www.youtube.com/channel/UCicLjKtxm1uIyHKw12RW1Qw" target="_blank" rel="noopener">
+      <div class="vid-thumb"><span class="vid-rank">3</span><span class="play">▶</span></div>
+      <div class="vid-info"><div class="vid-title">国立がん研究センター 公式チャンネル</div><div class="vid-ch">国立がん研究センター</div><div class="vid-stats"><span>登録 約2.7万</span><span>公的機関の信頼情報</span></div></div>
+    </a>
+  </div>
+</section>
+
+<!-- ===== 2. 調べる ===== -->
+<section class="section" id="search" style="background:#fff; max-width:none;">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="section-eyebrow">RESEARCH ・ 調べる</div>
+    <h2 class="section-title">論文を、自分の言葉で読む</h2>
+    <p class="section-sub">専門の文献も、AIが患者さん向けに翻訳・要約します。難しければ、もっと噛み砕けます。</p>
+
+    <div class="panel">
+      <h3>🔬 PubMedから調べる</h3>
+      <div class="searchbar" style="margin:6px 0 6px; box-shadow:none;">
+        <input id="pubmedSearch" type="text" placeholder="キーワードや病名（例：triple negative breast cancer prognosis）">
+        <button onclick="doPubmed()">検索</button>
+      </div>
+      <ul class="ladder">
+        <li><span class="n">1</span><span><strong>検索</strong>：PubMedから関連の高い論文を集めます。</span></li>
+        <li><span class="n">2</span><span><strong>翻訳</strong>：患者さん向けの日本語に。図表もそのまま取り込みます。</span></li>
+        <li><span class="n">3</span><span><strong>PDF化</strong>：図表込みで保存・印刷。診察や患者会に持っていけます。</span></li>
+        <li><span class="n">4</span><span><strong>もっとわかりやすく</strong>：難しければ、中学生にもわかる言葉まで噛み砕きます。</span></li>
+      </ul>
+      <div class="cta-row">
+        <a class="btn-primary" href="SATOI_Mock_v1_ACAD_research.html">🔬 学術・エビデンスのページで調べる</a>
+        <button class="btn-ghost" onclick="satoiNotify('もっとわかりやすく説明します。\n\n専門用語をかみくだいて、たとえ話を添えて、要点だけに。')">🪄 もっとわかりやすく</button>
+      </div>
+      <div class="note">基礎の理解はずっと無料です。論文の大量翻訳や図表PDF化など“濃い体験”は、使った分だけのご利用になります（深く潜るほど、価値を感じた分だけ）。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 伝える ===== -->
+<section class="section" id="share">
+  <div class="section-eyebrow">SHARE ・ 伝える</div>
+  <h2 class="section-title">学んだことは、誰かの力になる</h2>
+  <p class="section-sub">あなたが理解したことは、次に診断された人の道しるべになります。共有はいつでも任意です。</p>
+
+  <div class="panel" style="margin-bottom:20px;">
+    <h3>🤝 患者会でシェアする</h3>
+    <p>読んだ記事や、翻訳した論文を、ワンタップで患者会（みんなの広場）に届けられます。「○○さんが学んだこと」として、そっと共有されます。</p>
+    <div class="cta-row">
+      <button class="btn-primary" onclick="satoiNotify('患者会に共有しました。\n\n「あなたが学んだこと」として、みんなの広場に届きました。\nコメントや「ありがとう」が届くかもしれません。')">みんなの広場に共有</button>
+      <a class="btn-ghost" href="SATOI_Mock_v1_MUS_community.html">みんなの広場を見る →</a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>📝 はじめての人へ（ナレッジを残す）</h3>
+    <p>あなたが「最初に知っておきたかったこと」を短く書いて残せます。新しく診断された人が、いちばん最初にここを読みます。当事者の言葉だから、届きます。</p>
+    <div class="know-card">
+      <div class="know-from">乳がん・1年先輩のMさんのことば</div>
+      <div class="know-body">「検査結果を全部メモしておくと、次の診察で先生に聞きたいことが整理できました。怖くて聞けなかったことも、紙に書くと聞けた。」</div>
+    </div>
+    <div class="know-card">
+      <div class="know-from">肺がん・Kさんのことば</div>
+      <div class="know-body">「“治療法は一つじゃない”と知れたのが大きかった。先生に選択肢を聞いていい、と思えるまでに少し時間がかかったけれど。」</div>
+    </div>
+    <div class="share-line">
+      <button class="btn-primary" onclick="satoiNotify('あなたのナレッジを書く\n\n「最初に知っておきたかったこと」を、短くひとことから。\n下書きはマイページに保存され、いつでも続けられます。')">＋ あなたのナレッジを残す</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  SATOI ・ 学びの部屋（Mock）<br>
+  ここで得た情報は一般的な参考です。治療の判断は、必ず主治医とご相談ください。
+</footer>
+
+<script>
+function doSearch(){
+  var q = (document.getElementById('learnSearch')||{}).value || '';
+  satoiNotify('「' + (q||'…') + '」を、この部屋の中から探しています。\n\n・基礎の記事\n・がん種別の解説\n・専門の文献（PubMed）\n\n→ 近い順に並べてお見せします。');
+}
+function doPubmed(){
+  var q = (document.getElementById('pubmedSearch')||{}).value || '';
+  try { sessionStorage.setItem('satoi_pubmed_q', q); } catch(e){}
+  location.href = 'SATOI_Mock_v1_ACAD_research.html' + (q ? ('?q=' + encodeURIComponent(q)) : '');
+}
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>
