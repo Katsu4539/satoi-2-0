@@ -1993,28 +1993,25 @@ document.addEventListener('DOMContentLoaded', function(){
       <span class="b1-journey-chip-num">3</span><span>治療法を考える</span>
     </div>
     <span class="b1-journey-arrow">›</span>
-    <div class="b1-journey-chip current" data-beat="consider" data-i="3">
+    <div class="b1-journey-chip done" data-beat="treatment" data-i="3">
       <span class="b1-journey-chip-num">4</span><span>治療</span>
     </div>
     <span class="b1-journey-arrow">›</span>
-    <div class="b1-journey-chip" data-beat="living" data-i="4">
+    <div class="b1-journey-chip done" data-beat="living" data-i="4">
       <span class="b1-journey-chip-num">5</span><span>治療中の暮らし</span>
     </div>
     <span class="b1-journey-arrow">›</span>
-    <div class="b1-journey-chip" data-beat="follow" data-i="5">
+    <div class="b1-journey-chip done" data-beat="follow" data-i="5">
       <span class="b1-journey-chip-num">6</span><span>治療後</span>
     </div>
     <span class="b1-journey-arrow">›</span>
-    <div class="b1-journey-chip" data-beat="money" data-i="6">
+    <div class="b1-journey-chip done" data-beat="money" data-i="6">
       <span class="b1-journey-chip-num">7</span><span>お金・制度</span>
     </div>
     <span class="b1-journey-arrow">›</span>
-    <div class="b1-journey-chip" data-beat="palliative" data-i="7">
+    <div class="b1-journey-chip done" data-beat="palliative" data-i="7">
       <span class="b1-journey-chip-num">8</span><span>もしもの時</span>
     </div>
-    <span class="b1-journey-peers" title="同じ段階にいる人数(リアルタイム)">
-      同じ段階に <strong id="peerCount">3,247</strong> 人
-    </span>
   </div>
 </nav>
 
@@ -3429,8 +3426,11 @@ let nudgeCurrent = null;
   document.querySelectorAll('.b1-journey-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const beat = chip.dataset.beat;
+      // 2026-05-22 Katsuさん指示:1-8は既定で全緑(done)。クリックした所だけ赤(current)に点灯→遷移。
+      document.querySelectorAll('.b1-journey-chip').forEach(c => { c.classList.remove('current'); c.classList.add('done'); });
+      chip.classList.remove('done'); chip.classList.add('current');
       if (beatToChpMain[beat]) {
-        window.location.href = beatToChpMain[beat] + '?from=b1';
+        setTimeout(() => { window.location.href = beatToChpMain[beat] + '?from=b1'; }, 170);
       }
     });
   });
