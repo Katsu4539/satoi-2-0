@@ -151,6 +151,40 @@
     });
   };
 
+  /* ====== 入口↔ホーム 切替トグルを各ページのロゴ横へ自動挿入(2026-05-21) ====== */
+  function injectHomeToggle(){
+    if (document.querySelector('.satoi-home-toggle')) return; // A1/B1等、既にあればスキップ
+    var logo = document.querySelector('.logo');
+    if (!logo || !logo.parentNode) return;
+    var path = (location.pathname || '').toLowerCase();
+    var isEntry = path.indexOf('a1_entrance') !== -1;
+    var isHome  = path.indexOf('b1_hub') !== -1;
+    var entryHTML = isEntry
+      ? '<span class="sht-opt active">🌙 入口</span>'
+      : '<a class="sht-opt" href="SATOI_Mock_v1_A1_entrance.html">🌙 入口</a>';
+    var homeHTML = isHome
+      ? '<span class="sht-opt active">☀ ホーム</span>'
+      : '<a class="sht-opt" href="SATOI_Mock_v1_B1_hub.html">☀ ホーム</a>';
+    var tog = document.createElement('div');
+    tog.className = 'satoi-home-toggle';
+    tog.setAttribute('role', 'group');
+    tog.setAttribute('aria-label', '入口とホームの切替');
+    tog.style.marginLeft = '14px';
+    tog.innerHTML = entryHTML + homeHTML;
+    var parent = logo.parentNode;
+    if (parent.classList && parent.classList.contains('logo-wrap')) {
+      // 既にロゴがlogo-wrap内 → その直後に置く
+      parent.insertBefore(tog, logo.nextSibling);
+    } else {
+      // ロゴをラッパーで包み、トグルと一体化(space-betweenでも左に固定)
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'display:inline-flex; align-items:center;';
+      parent.insertBefore(wrap, logo);
+      wrap.appendChild(logo);
+      wrap.appendChild(tog);
+    }
+  }
+
   /* ====== ユニバーサルナビ強化(既存ナビを置換) ====== */
   function injectEnhancedNav(){
     // 2026-05-21: 各ページのヘッダーに戻る等があり重複・干渉するため、浮遊ユニバーサルナビは無効化。
@@ -688,6 +722,7 @@
   /* ====== 初期化 ====== */
   function init(){
     injectStyles();
+    injectHomeToggle();
     injectEnhancedNav();
     injectConciergeBubble();
     maybeRedirectFromA1();
