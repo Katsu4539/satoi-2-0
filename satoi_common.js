@@ -323,7 +323,7 @@
       /* ===== AI応答 マークダウン整形表示 ===== */
       .satoi-md-p { margin: 0 0 0.7em; line-height: 1.85; }
       .satoi-md-p:last-child { margin-bottom: 0; }
-      .satoi-md-h { font-weight: 600; line-height: 1.5; margin: 1em 0 0.4em; color: #F0C97A; letter-spacing: 0.02em; }
+      .satoi-md-h { font-weight: 500; line-height: 1.6; margin: 1em 0 0.35em; color: #F0C97A; letter-spacing: 0.02em; }
       .satoi-md-h:first-child { margin-top: 0; }
       .satoi-md-h1 { font-size: 1.08em; }
       .satoi-md-h2 { font-size: 1.04em; }
