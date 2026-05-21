@@ -1345,6 +1345,26 @@ body.satoi-has-jbar .header { top: 0 !important; }
   </div>
 </section>
 
+<!-- ===== 物語マップ(あなたの物語の続き・SATOIの心臓部) ===== -->
+<style>
+.story-timeline { max-width: 760px; margin: 10px auto 0; position: relative; padding-left: 6px; }
+.story-timeline::before { content:''; position:absolute; left:18px; top:10px; bottom:18px; width:2px; background:linear-gradient(180deg, rgba(212,98,42,0.5), rgba(13,115,119,0.4)); }
+.sm-card { position:relative; display:flex; gap:16px; padding:4px 0 16px 0; cursor:pointer; }
+.sm-dot { flex-shrink:0; width:38px; height:38px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:16px; z-index:1; background:#fff; box-shadow:0 0 0 4px rgba(246,239,227,0.9); }
+.sm-body { flex:1; background:#fff; border:1px solid rgba(11,23,54,0.10); border-radius:14px; padding:14px 18px; box-shadow:0 4px 14px rgba(11,23,54,0.05); transition:all .2s; }
+.sm-card:hover .sm-body { border-color:#D4A95E; transform:translateY(-1px); box-shadow:0 8px 20px rgba(11,23,54,0.08); }
+.sm-meta { font-size:11px; letter-spacing:0.08em; color:rgba(26,42,64,0.55); margin-bottom:4px; }
+.sm-title { font-size:15px; font-weight:600; color:#1A2A40; line-height:1.6; }
+.sm-text { font-size:13.5px; color:rgba(26,42,64,0.8); line-height:1.95; margin-top:10px; }
+.sm-more { font-size:12px; color:#D4622A; margin-top:8px; font-weight:500; }
+</style>
+<section class="section" id="storyMap">
+  <div class="section-eyebrow">YOUR STORY ・ 物語の続き</div>
+  <h2 class="section-title"><span class="sm-name">あなた</span>の、これまでの物語</h2>
+  <p class="section-sub">診断のあの日から、今日まで。あなたが残してきた言葉・気持ち・節目が、ひとつの物語になっています。<br>触れると、その日の物語が、もう一度ひらきます。</p>
+  <div class="story-timeline" id="storyTimeline"></div>
+</section>
+
 <!-- ===== ニュース欄(SATOIからのお知らせ) ===== -->
 <section class="section" style="padding: 36px 40px 12px;">
   <div style="max-width: 980px; margin: 0 auto; background: var(--bg-paper); border: 1px solid var(--line); border-radius: 18px; padding: 22px 26px;">
@@ -2702,6 +2722,67 @@ document.querySelectorAll('.overlay').forEach(o => {
     if (e.target === o) o.classList.remove('show');
   });
 });
+</script>
+
+<!-- ===== 物語マップ:ペルソナ反映＋物語タイムライン描画 ===== -->
+<script>
+(function(){
+  var pid   = sessionStorage.getItem('satoi_persona_id') || 'p1';
+  var pname = sessionStorage.getItem('satoi_persona') || 'Mさん';
+  // 名前差し替え(ヒーロー挨拶・物語マップ見出し・チーム中央・ランプ吹き出し)
+  var g = document.querySelector('.greeting .name'); if (g) g.textContent = pname;
+  document.querySelectorAll('.sm-name').forEach(function(el){ el.textContent = pname; });
+  var team = document.querySelector('.team-center'); if (team) team.innerHTML = team.innerHTML.replace(/あおいさん/g, pname);
+  var lb = document.getElementById('lampBubble'); if (lb && lb.textContent.indexOf('あおいさん') !== -1) lb.textContent = lb.textContent.replace('あおいさん', pname);
+
+  var STORIES = {
+    p1: [
+      { t:'milestone', day:'診断の日',       icon:'🌑', title:'乳がん（トリプルネガティブ）と、告知されました', body:'頭が真っ白になった日。先生の声が、遠くに聞こえた。それでも、子どもたちのことだけは、はっきり考えていました。' },
+      { t:'feeling',   day:'告知から3日',     icon:'🌫', title:'子どもたちに、どう伝えよう', body:'自分のことより、まずそれだった。まだ小さいあの子たちに、どこまで話せばいいのか、ずっと考えていました。' },
+      { t:'story',     day:'告知から1週間',   icon:'🌿', title:'上の子に、話した夜', body:'「ママ、病気なんだ。でも、ちゃんと治すからね」。意外と、静かに聞いてくれた。抱きしめたら、小さく頷いてくれました。' },
+      { t:'milestone', day:'治療開始',         icon:'🌅', title:'TC療法を、始めました', body:'こわかったけれど、これが前に進む一歩。同じ治療を選んだ人が、たくさんいると知って、少し心強かった。' },
+      { t:'story',     day:'治療中',           icon:'📷', title:'髪が抜ける前に、たくさん写真を撮った', body:'子どもと、笑って、変な顔をして。「いつものママ」を、残しておきたかった。' },
+      { t:'dialogue',  day:'昨夜',             icon:'💬', title:'AIと、子どもへの手紙の下書きをつくった', body:'うまく言葉にできなかった想いを、AIが一緒に整理してくれた。少しずつ、書けそうです。' },
+      { t:'feeling',   day:'今日',             icon:'☀', title:'今日は、少しだけ前を向けている気がする', body:'まだ揺れるけれど。今日という日を、ちゃんと生きられた。それで、十分。' }
+    ],
+    p2: [
+      { t:'milestone', day:'診断の日',       icon:'🌑', title:'肺がん ステージIV と、告知されました', body:'定年まで、あと半年というときでした。「なんなんだ、これは」。正直、そう思った。' },
+      { t:'feeling',   day:'告知から数日',     icon:'🌫', title:'孫が、もうすぐ生まれる', body:'それまでは——と、思った。会いたい。抱いてやりたい。その一心でした。' },
+      { t:'story',     day:'告知から2週間',   icon:'🤝', title:'職場に、伝えた', body:'「最後まで、できる仕事をやらせてくれ」と頼んだ。長年の仲間が、静かに頷いてくれた。' },
+      { t:'milestone', day:'治療開始',         icon:'🌅', title:'免疫療法を含む治療を、始めました', body:'できることは、やる。焦らず、自分のペースで。先生ともよく話して決めました。' },
+      { t:'story',     day:'治療中',           icon:'👶', title:'息子夫婦と、孫の名前を考えた', body:'生まれてくる子の名前を、一緒に。こんな時間が持てるとは、思っていなかった。' },
+      { t:'dialogue',  day:'先日',             icon:'💬', title:'AIと、仕事の引き継ぎと、孫への手紙を整理した', body:'伝えておきたいことを、ひとつずつ。AIが、考えを整理する手伝いをしてくれた。' },
+      { t:'feeling',   day:'今日',             icon:'🍵', title:'焦らない。今日できることを、ひとつずつ', body:'先のことは、わからない。でも、今日という日は、確かにここにある。' }
+    ]
+  };
+  var COLORS = { milestone:'#D4622A', feeling:'#0D7377', story:'#C76B7F', dialogue:'#7FA8C9' };
+  var LABELS = { milestone:'節目', feeling:'気持ちの記録', story:'物語', dialogue:'AIとの対話' };
+  var eps = STORIES[pid] || STORIES.p1;
+  var host = document.getElementById('storyTimeline');
+  if (host) {
+    host.innerHTML = eps.map(function(e, i){
+      var c = COLORS[e.t] || '#D4A95E';
+      return '<div class="sm-card" data-i="' + i + '">'
+        + '<div class="sm-dot" style="color:' + c + '; border:2px solid ' + c + ';">' + e.icon + '</div>'
+        + '<div class="sm-body" style="border-left:4px solid ' + c + ';">'
+        +   '<div class="sm-meta">' + LABELS[e.t] + ' ・ ' + e.day + '</div>'
+        +   '<div class="sm-title">' + e.title + '</div>'
+        +   '<div class="sm-text">' + e.body + '</div>'
+        +   '<div class="sm-more">▸ ひらく</div>'
+        + '</div></div>';
+    }).join('');
+    host.querySelectorAll('.sm-card').forEach(function(card){
+      var txt = card.querySelector('.sm-text');
+      var more = card.querySelector('.sm-more');
+      txt.style.display = 'none';
+      card.addEventListener('click', function(){
+        var willOpen = (txt.style.display === 'none');
+        txt.style.display = willOpen ? 'block' : 'none';
+        more.textContent = willOpen ? '▸ とじる' : '▸ ひらく';
+      });
+    });
+  }
+})();
 </script>
 
 <script src="satoi_common.js"></script>

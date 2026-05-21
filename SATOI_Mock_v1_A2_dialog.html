@@ -536,6 +536,7 @@ body {
     </button>
   </div>
   <div class="input-hint">タップで選択 / マイクで話す / キーボードで入力、どれでも</div>
+  <div class="input-hint" style="font-size:10.5px; opacity:0.62; margin-top:3px;">🔒 この会話はセキュアに扱われ、外部AIの学習には使われません。あなたの情報は、ご本人以外に共有されません。</div>
 </div>
 
 <!-- 隣の灯 -->
@@ -2320,6 +2321,7 @@ function renderJourneyBar(beats, currentIdx) {
   }
   bar.style.display = 'block';
   bar.innerHTML = '<div class="journey-bar-inner">' +
+    '<span class="journey-bar-hint" title="各ステップはAIと深掘りできます。タップでそのテーマへ移動します。" style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; margin-right:10px; border-radius:14px; background:rgba(212,169,94,0.16); border:1px dashed rgba(212,169,94,0.55); color:#F0C97A; font-size:11px; font-weight:600; white-space:nowrap; flex-shrink:0;">🤖 AIと深掘り <span style="opacity:0.72; font-weight:400;">タップで移動</span></span>' +
     beats.map((b, i) =>
       `<div class="journey-chip ${i === currentIdx ? 'current' : (i < currentIdx ? 'done' : '')}" data-i="${i}" title="クリックでこのステージへジャンプ">
          <span class="journey-chip-num">${b.stepNum}</span>
