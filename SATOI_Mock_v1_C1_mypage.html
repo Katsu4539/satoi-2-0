@@ -2221,14 +2221,11 @@ window.__origAlert = window.alert;
     bar.className = 'satoi-jbar';
     bar.setAttribute('aria-label', 'ペーシェントジャーニー');
     let inner = '<div class="satoi-jbar-inner">';
+    // 2026-05-22 Katsuさん指示:1-8は既定で全部「緑(done)」。クリックされたものだけ「赤(current)」に点灯。
     beats.forEach((b, i) => {
-      const cls = (i === idx) ? 'current' : (i < idx ? 'done' : '');
-      inner += '<div class="satoi-jchip '+cls+'" data-beat="'+b.id+'" data-i="'+i+'"><span class="satoi-jchip-n">'+b.n+'</span><span>'+b.label+'</span></div>';
+      inner += '<div class="satoi-jchip done" data-beat="'+b.id+'" data-i="'+i+'"><span class="satoi-jchip-n">'+b.n+'</span><span>'+b.label+'</span></div>';
       if (i < beats.length - 1) inner += '<span class="satoi-jarrow">›</span>';
     });
-    if (idx >= 0) {
-      inner += '<span class="satoi-jbar-peers">同じ段階に <strong>'+(3247 + Math.floor(Math.random()*60-30))+'</strong> 人</span>';
-    }
     inner += '</div>';
     bar.innerHTML = inner;
     // ヘッダーの直後 or body 先頭に
@@ -2238,6 +2235,9 @@ window.__origAlert = window.alert;
     document.body.classList.add('satoi-has-jbar');
     bar.querySelectorAll('.satoi-jchip').forEach(chip => {
       chip.addEventListener('click', () => {
+        // クリックした所が「赤(current)」に点灯し、他は緑(done)に戻る
+        bar.querySelectorAll('.satoi-jchip').forEach(c => { c.classList.remove('current'); c.classList.add('done'); });
+        chip.classList.remove('done'); chip.classList.add('current');
         const beat = chip.dataset.beat;
         // 国がんしおり準拠の CHP 系ページへ遷移
         const beatToChp = {
@@ -2251,7 +2251,7 @@ window.__origAlert = window.alert;
           palliative: 'SATOI_Mock_v1_CHP_palliative.html'
         };
         const target = beatToChp[beat];
-        if (target) location.href = target + '?from=c1_jbar';
+        if (target) setTimeout(() => { location.href = target + '?from=c1_jbar'; }, 170);
       });
     });
   }

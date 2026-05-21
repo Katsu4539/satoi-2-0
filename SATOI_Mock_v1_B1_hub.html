@@ -529,20 +529,22 @@ button { font-family: var(--font); cursor: pointer; }
 .cat-card:hover::before { width: 8px; }
 
 .cat-icon {
-  width: 56px; height: 56px;
+  width: 78px; height: 78px;
   background: var(--accent-bg, rgba(212,169,94,0.12));
-  border-radius: 16px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   color: var(--accent, var(--starlight));
+  font-size: 38px; /* 絵文字アイコン用 */
+  line-height: 1;
 }
-.cat-icon svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.cat-icon svg { width: 44px; height: 44px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
-.cat-title { font-size: 21px; font-weight: 500; color: var(--ink-deep); margin-bottom: 12px; letter-spacing: 0.03em; }
-.cat-desc { font-size: 14px; color: var(--ink-medium); line-height: 1.85; margin-bottom: 18px; }
-.cat-meta { font-size: 12px; color: var(--ink-light); letter-spacing: 0.06em; padding-top: 14px; border-top: 1px solid rgba(11,23,54,0.08); }
+.cat-title { font-size: 25px; font-weight: 600; color: var(--ink-deep); margin-bottom: 12px; letter-spacing: 0.03em; }
+.cat-desc { font-size: 17px; color: var(--ink-medium); line-height: 1.9; margin-bottom: 18px; }
+.cat-meta { font-size: 14px; color: var(--ink-light); letter-spacing: 0.06em; padding-top: 14px; border-top: 1px solid rgba(11,23,54,0.08); }
 
 .cat-card[data-color="amber"]   { --accent: var(--starlight);    --accent-bg: rgba(212,169,94,0.12); }
 .cat-card[data-color="teal"]    { --accent: var(--teal);         --accent-bg: rgba(13,115,119,0.1); }
@@ -576,7 +578,7 @@ button { font-family: var(--font); cursor: pointer; }
 
 .pathfinder-stage {
   margin-bottom: 60px;
-  opacity: 0.4;
+  opacity: 1; /* 2026-05-22 Katsuさん指示:グレーアウトをやめ、最初から実コンテンツとして読める・押せる */
   transition: opacity 0.6s;
 }
 .pathfinder-stage[data-active="true"] { opacity: 1; }
@@ -1943,9 +1945,9 @@ body.has-b1-journey-bar .header + section { margin-top: 0; }
           <div class="login-menu-item-sub">肺がん ステージIV ・ 治療中 / 定年間近</div>
         </div>
         <div class="login-menu-divider"></div>
-        <div class="login-menu-item" data-route="corporate">
-          <div class="login-menu-item-title">法人会員(保険会社・医療機関)</div>
-          <div class="login-menu-item-sub">事前データ連携で患者を支える</div>
+        <div class="login-menu-item" data-route="insurance">
+          <div class="login-menu-item-title">保険会員(個人・がん保険加入者)</div>
+          <div class="login-menu-item-sub">ご加入の保険から、もう繋がっています</div>
         </div>
         <div class="login-menu-divider"></div>
         <div class="login-menu-item" data-action="logout">
@@ -2069,10 +2071,7 @@ document.addEventListener('DOMContentLoaded', function(){
       <button class="btn btn-primary" id="heroStartBtn" onclick="location.href='SATOI_Mock_v1_D2_story_map.html?from=b1'">あなたの物語マップを始める  →</button>
       <button class="btn btn-ghost" id="heroSeeStories" onclick="location.href='SATOI_Mock_v1_D1_stories.html?from=b1'">先輩の物語を読む</button>
     </div>
-    <button class="hero-voice-hint" id="heroVoice">
-      <span class="mic-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11 v1 a7 7 0 0 0 14 0 v-1"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span>
-      <span>声でも、話せます。「治療について聞きたい」など</span>
-    </button>
+    <a class="hero-newdiff" id="heroNewDiff" href="#updates" onclick="event.preventDefault(); var u=document.getElementById('updates'); if(u) u.scrollIntoView({behavior:'smooth'});" style="display:inline-flex; align-items:center; gap:10px; margin-top:22px; padding:11px 20px; border-radius:24px; background:rgba(212,169,94,0.16); border:1px solid rgba(212,169,94,0.5); color:var(--starlight-strong); font-size:14px; font-weight:600; text-decoration:none;"><span style="width:9px;height:9px;border-radius:50%;background:#F0C97A;box-shadow:0 0 8px #F0C97A; flex-shrink:0;"></span>新しい先輩の物語が 12件 追加されました ・ 新着を見る →</a>
   </div>
 
   <div class="hero-routes">
@@ -2276,10 +2275,6 @@ document.addEventListener('DOMContentLoaded', function(){
       <h3 class="pathfinder-question">いま、もっとも気がかりなことは何ですか?</h3>
       <div class="pathfinder-prompt">
         ひとつ、選んでみてください
-        <button class="pathfinder-voice" data-voice-target="stage1">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11 v1 a7 7 0 0 0 14 0 v-1"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
-          声で答える
-        </button>
       </div>
       <div class="pathfinder-options" data-stage="1">
         <button class="pathfinder-option" data-value="treatment">治療のこと<span class="pathfinder-option-meta">告知時3人に1人</span></button>
@@ -2299,10 +2294,6 @@ document.addEventListener('DOMContentLoaded', function(){
       <h3 class="pathfinder-question" id="q2">続けて、教えてください</h3>
       <div class="pathfinder-prompt">
         どの場面で、いちばん迷っていますか?
-        <button class="pathfinder-voice" data-voice-target="stage2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11 v1 a7 7 0 0 0 14 0 v-1"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
-          声で答える
-        </button>
       </div>
       <div class="pathfinder-options" data-stage="2" id="opts2"></div>
     </div>
@@ -2968,6 +2959,10 @@ document.querySelectorAll('.step').forEach(step => {
         window.location.href = 'SATOI_Mock_v1_C1_mypage.html';
         return;
       }
+      if (route === 'insurance') {
+        window.location.href = 'SATOI_Mock_v1_G3_insurance_id_login.html?from=b1';
+        return;
+      }
       if (route === 'corporate') {
         window.location.href = 'SATOI_Mock_v1_G1_corporate_login.html';
         return;
@@ -3341,10 +3336,8 @@ document.getElementById('aiInput').addEventListener('keydown', (e) => {
   }
 });
 
-/* ヒーロー声 */
-document.getElementById('heroVoice').addEventListener('click', (e) => {
-  startVoice('hero', e.currentTarget);
-});
+/* ヒーロー声(ピルは撤去済み・存在時のみバインド) */
+(function(){ var hv = document.getElementById('heroVoice'); if (hv) hv.addEventListener('click', (e) => startVoice('hero', e.currentTarget)); })();
 
 /* Pathfinder 声 */
 document.querySelectorAll('.pathfinder-voice').forEach(btn => {
@@ -3470,8 +3463,10 @@ let nudgeCurrent = null;
   const seeNewBtn = document.getElementById('seeNewBtn');
   const freshBtn = document.getElementById('freshStartBtn');
   const params = new URLSearchParams(window.location.search);
+  // 2026-05-22 Katsuさん指示:再開カードは毎回幅を取るため撤去(常時非表示)。新着/12件はヒーローへ移設済み。
+  if (bar) bar.classList.remove('show');
+  return;
   const isRevisit = params.get('revisit') === '1' || params.get('from') === 'c1' || params.get('from') === 'a2' || !params.get('fresh');
-  if (isRevisit) bar.classList.add('show');
 
   closeBtn && closeBtn.addEventListener('click', () => bar.classList.remove('show'));
   resumeBtn && resumeBtn.addEventListener('click', () => {

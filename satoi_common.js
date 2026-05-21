@@ -426,8 +426,11 @@
     const s = document.createElement('style');
     s.id = 'satoi-common-styles';
     s.textContent = `
-      /* ===== 右側の浮遊オーブ(companion-lamp)を全ページで非表示(Katsuさん指示・2026-05-21)===== */
+      /* ===== 浮遊UIを全ページ・PC含め非表示(Katsuさん指示・2026-05-22)=====
+         右側オーブ(companion-lamp)/コンシェルジュ吹き出し/サジェスション(nudge)はすべて廃止 */
       .companion-lamp { display: none !important; }
+      .satoi-con-bubble { display: none !important; }
+      .nudge { display: none !important; }
       /* ===== 読みやすさ:ベースフォントを少し大きく(PCで小さい・Katsuさん指示・2026-05-21)===== */
       body { font-size: 17px; line-height: 1.85; }
       /* ===== 情報ページ(検査/暮らし/基礎知識等)の本文を高齢者にも読みやすく大きく(AZ/ファイザー水準・2026-05-21)===== */
@@ -636,6 +639,8 @@
 
   /* ====== コンシェルジュ・フローティングバブル ====== */
   function injectConciergeBubble(){
+    // 2026-05-22: Katsuさん指示により、左右の浮遊コンシェルジュ吹き出しは全廃(PC含む)。注入しない。
+    return;
     // A1 は独自バブル(同じ夜)があるのでスキップ。CON ページもスキップ。
     const path = location.pathname.toLowerCase();
     if (path.includes('a1_entrance') || path.includes('con_concierge')) return;
@@ -974,9 +979,20 @@
     var ab = pop.querySelector('button.active'); if (ab) ab.style.background = 'rgba(212,169,94,0.25)';
   }
 
+  /* 法人(保険会社)向けの業務画面では、患者向けUI(入口/マインドマップ・コンシェルジュ・言語・おすすめ等)を出さない */
+  function satoiIsCorporatePage(){
+    var p = (location.pathname || '').toLowerCase();
+    return p.indexOf('g1_corporate') !== -1 || p.indexOf('g2_corporate') !== -1;
+  }
+
   /* ====== 初期化 ====== */
   function init(){
     injectStyles();
+    if (satoiIsCorporatePage()) {
+      // B2B業務画面:患者向けの注入はすべてスキップ(誤混入を防ぐ)
+      bindLoginButtons();
+      return;
+    }
     injectHomeToggle();
     injectAiBar();
     injectEnhancedNav();

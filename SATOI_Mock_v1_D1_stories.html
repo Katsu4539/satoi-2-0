@@ -886,7 +886,6 @@ body {
 <header class="header">
   <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
   <div class="header-right">
-    <a class="h-link" href="SATOI_Mock_v1_B1_hub.html">マインドマップ</a>
     <a class="h-link" href="SATOI_Mock_v1_C1_mypage.html">マイページ</a>
     <a class="h-link" href="SATOI_Mock_v1_A2_dialog.html">AI対話</a>
   </div>
@@ -918,7 +917,7 @@ body {
     </div>
   </div>
   <p class="section-sub">
-    あなたの状況(乳がん・ステージII・TC療法を検討中・35-45歳・家族と暮らす方)に近い場所を、歩いてきた方の物語です。<br>
+    あなたの状況(<span id="recProfile">乳がん・ステージII・TC療法を検討中・35-45歳・家族と暮らす方</span>)に近い場所を、歩いてきた方の物語です。<br>
     <span style="color:var(--teal);">同じ場所からはじまった方が、これだけいらっしゃいます。</span>
   </p>
 
@@ -1440,6 +1439,39 @@ const STORIES = [
     summaryMedical: '長期治療(分子標的薬・継続的)費用問題。社会保障制度活用の好例。',
     text: '<p>乳がんIV期、長期治療になることが分かった時、「お金、どうしよう」と本気で思いました。</p><p>使った制度を、全部、リストにします:</p><p><strong>① 高額療養費制度</strong>:月の医療費が一定額を超えると、超えた分が戻ってくる。私の場合、月8万円以上は払わなくていい。年間で 約 100万円 助かりました。</p><p><strong>② 限度額認定証</strong>:事前に申請しておけば、窓口で高額療養費の上限額しか払わなくて済む。立て替えがなくなって、家計が楽に。</p><p><strong>③ 医療費控除</strong>:年間10万円超の医療費は、確定申告で還付。家族分も合算可。私の場合、年30-40万円戻ってきました。</p><p><strong>④ がん保険給付金</strong>:加入していたがん保険から、診断給付金200万円・治療給付金月10万円。これがなかったら、貯金が尽きていました。</p><p><strong>⑤ 自治体の補助</strong>:住んでいる市から、医療用ウィッグ補助2万円、乳房再建補助5万円。</p><p><strong>⑥ 傷病手当金</strong>:健保から、休んでいた期間の給与2/3(1年6か月)。</p><p><strong>⑦ 障害年金</strong>:長期化したら、申請可能。私はまだ申請していませんが、保険労務士に相談中。</p><p>合計すると、<strong>年間200万円以上は、これらの制度で助かっている</strong> 計算です。SATOIに、社労士無料相談があって、これに助けられました。</p><p>「お金のことで、治療をあきらめないでください。」これは、本当に、伝えたい。SATOIに相談してください。一緒に整理できます。</p>',
     hearts: 218
+  },
+  {
+    id: 16, cancer: 'lung', cancerJa: '肺がん', stage: 'IV', age: 64, gender: 'M',
+    theme: ['family','choice'], format: 'text',
+    name: 'K.T.さん', title: '孫の名前を、一緒に考えた',
+    img: 'https://images.unsplash.com/photo-1709897633539-68625c0043e3?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '点滴ではなく、毎日1錠の飲み薬。生活がほとんど変わらないことに、救われました。',
+    summaryPatient: '64歳・肺がんIV期(EGFR陽性)。定年を半年後に控えて告知。オシメルチニブの内服で自宅中心の生活を続けながら、生まれてくる孫の名前を息子夫婦と考える時間を得た。',
+    summaryMedical: '64歳男性・非小細胞肺がんIV期・EGFR変異陽性・オシメルチニブ第一選択。外来内服管理で日常生活はほぼ維持。家族との時間がQOLとアドヒアランスを支える。',
+    text: '<p>定年まであと半年、という時の告知でした。「ステージIVの肺がん」と聞いて、最初は何も考えられませんでした。</p><p>でも、遺伝子検査でEGFRという変異が見つかって、「合う飲み薬があります」と。<strong>点滴でも入院でもなく、毎朝1錠</strong>。これなら、今までの暮らしを大きく変えずに済む。それが、何よりありがたかった。</p><p>いちばんの願いは、もうすぐ生まれる孫に会うこと。息子夫婦と、孫の名前を一緒に考える時間が持てました。<strong>焦らず、今日できることを、ひとつずつ</strong>。先のことはわからないけれど、今日という日は、確かにここにある。そう思えるようになりました。</p>',
+    hearts: 187
+  },
+  {
+    id: 17, cancer: 'lung', cancerJa: '肺がん', stage: 'IV', age: 60, gender: 'M',
+    theme: ['work','choice'], format: 'audio',
+    name: 'H.M.さん', title: '最後まで、できる仕事を',
+    img: 'https://images.unsplash.com/photo-1635777201262-dc3ee94989fe?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '「最後まで働かせてくれ」と頼んだら、長年の仲間が、静かに頷いてくれた。',
+    summaryPatient: '60歳・肺がんIV期。定年間近で診断。職場に病気を伝え、できる範囲で仕事を続ける選択をした。伝え方と、仲間の支えについて語る。',
+    summaryMedical: '60歳男性・肺がんIV期・就労継続事例。職場の理解と業務調整により治療と仕事を両立。役割の継続が心理的支えに。',
+    text: '<p>「会社に、どう伝えるか」。それが、いちばん悩みました。隠し通すのは無理だと分かっていました。</p><p>上司と、長年の同僚にだけ伝えました。「最後まで、できる仕事をやらせてくれ」と。<strong>仲間が、静かに頷いてくれた</strong>。その一言で、ずいぶん楽になりました。</p><p>通院の日は休む。体調のいい日に、できる範囲で。無理はしない。<strong>役割があること</strong>が、こんなに支えになるとは思いませんでした。同じ立場の方へ——伝える相手と、伝え方は、焦らず選んでいいと思います。</p>',
+    hearts: 121
+  },
+  {
+    id: 18, cancer: 'lung', cancerJa: '肺がん', stage: 'IV', age: 67, gender: 'M',
+    theme: ['recur','palliative'], format: 'text',
+    name: 'T.S.さん', title: '焦らない、と決めた日',
+    img: 'https://images.unsplash.com/photo-1778161964462-841cfb14a585?fm=jpg&q=80&w=900&auto=format&fit=crop',
+    quote: '先のことは、わからない。でも、今日という日は、確かにここにある。',
+    summaryPatient: '67歳・肺がんIV期。治療を続けながら、自分のペースで暮らすことを大切にしている。これからのことを家族と話す「人生会議」にも、少しずつ取り組んでいる。',
+    summaryMedical: '67歳男性・肺がんIV期・長期治療中。ACP(人生会議)を家族と段階的に実施。本人の価値観に沿った療養目標の共有が安心につながる。',
+    text: '<p>再発と言われた時は、さすがにこたえました。でも、ひとしきり落ち込んだあと、「焦らない」と決めました。</p><p>住み慣れた家で、好きなお茶を飲んで、近所を少し歩く。<strong>それだけで、十分いい一日</strong>だと思えるようになりました。これからのことも、家族と少しずつ話しています。「もしものとき、どうしたいか」。重い話だけれど、話しておくと、かえって気持ちが軽くなる。</p><p>先のことは、わからない。でも、<strong>今日という日は、確かにここにある</strong>。それを大切にしています。</p>',
+    hearts: 98
   }
 ];
 
@@ -1461,12 +1493,23 @@ function renderCard(s, isAi) {
   </div>`;
 }
 
-/* AI推薦(乳がんII・35-45歳の物語を優先表示) */
-const aiRecommended = STORIES.filter(s => s.cancer === 'breast' && s.stage === 'II' && s.age >= 35 && s.age <= 50).slice(0, 4);
+/* AI推薦:ログイン中ペルソナのがん種・ステージを優先表示 */
+var PERSONA_CANCER = 'breast', PERSONA_STAGE = 'II';
+try { PERSONA_CANCER = sessionStorage.getItem('satoi_cancer') || 'breast'; PERSONA_STAGE = sessionStorage.getItem('satoi_stage') || 'II'; } catch(e){}
+var PROFILE_BY_CANCER = {
+  breast: '乳がん・ステージ' + PERSONA_STAGE + '・TC療法を検討中・35-45歳・家族と暮らす方',
+  lung:   '肺がん・ステージ' + PERSONA_STAGE + '・オシメルチニブで治療中・60代・定年間近の方'
+};
+(function(){ var rp = document.getElementById('recProfile'); if (rp && PROFILE_BY_CANCER[PERSONA_CANCER]) rp.textContent = PROFILE_BY_CANCER[PERSONA_CANCER]; })();
+let aiRecommended = STORIES.filter(s => s.cancer === PERSONA_CANCER && s.stage === PERSONA_STAGE);
+if (aiRecommended.length < 3) aiRecommended = STORIES.filter(s => s.cancer === PERSONA_CANCER);
+if (aiRecommended.length < 1) aiRecommended = STORIES.slice(0, 4);
+aiRecommended = aiRecommended.slice(0, 4);
 document.getElementById('aiRecGrid').innerHTML = aiRecommended.map(s => renderCard(s, true)).join('');
 
-/* 物語グリッド */
-let activeFilters = { cancer: 'breast', stage: 'all', theme: 'all', format: 'all' };
+/* 物語グリッド:既定はペルソナのがん種で絞り込み */
+let activeFilters = { cancer: PERSONA_CANCER, stage: 'all', theme: 'all', format: 'all' };
+(function(){ document.querySelectorAll('.filter-chip[data-filter="cancer"]').forEach(c => c.classList.toggle('active', c.dataset.value === PERSONA_CANCER)); })();
 function applyFilters() {
   const filtered = STORIES.filter(s => {
     if (activeFilters.cancer !== 'all' && s.cancer !== activeFilters.cancer) return false;
@@ -1490,13 +1533,13 @@ document.querySelectorAll('.filter-chip').forEach(chip => {
 });
 
 function smartFilter() {
-  // 「あなたと似ている人」= 乳がんII・35-50歳
+  // 「あなたと似ている人」= ログイン中ペルソナのがん種・ステージ
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  document.querySelector('.filter-chip[data-filter="cancer"][data-value="breast"]').classList.add('active');
-  document.querySelector('.filter-chip[data-filter="stage"][data-value="II"]').classList.add('active');
+  var cc = document.querySelector('.filter-chip[data-filter="cancer"][data-value="'+PERSONA_CANCER+'"]'); if (cc) cc.classList.add('active');
+  var sc = document.querySelector('.filter-chip[data-filter="stage"][data-value="'+PERSONA_STAGE+'"]'); if (sc) sc.classList.add('active');
   document.querySelector('.filter-chip[data-filter="theme"][data-value="all"]').classList.add('active');
   document.querySelector('.filter-chip[data-filter="format"][data-value="all"]').classList.add('active');
-  activeFilters = { cancer: 'breast', stage: 'II', theme: 'all', format: 'all' };
+  activeFilters = { cancer: PERSONA_CANCER, stage: PERSONA_STAGE, theme: 'all', format: 'all' };
   applyFilters();
   document.getElementById('storiesGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
