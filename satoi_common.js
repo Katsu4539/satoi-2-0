@@ -388,7 +388,7 @@
       /* 言語切替は右の🌐に一本化:各ページ上部の言語セレクトは隠す */
       .lang-select { display: none !important; }
       .satoi-md-p code, .satoi-md-table code, .satoi-md-ul code, .satoi-md-ol code { background: rgba(127,127,127,0.18); border-radius: 5px; padding: 1px 5px; font-size: 0.92em; }
-      .satoi-md-p strong, .satoi-md-table strong, .satoi-md-ul strong, .satoi-md-ol strong { font-weight: 600; color: #F0C97A; }
+      .satoi-md-p strong, .satoi-md-table strong, .satoi-md-ul strong, .satoi-md-ol strong { font-weight: 400; color: #F0C97A; }
       .satoi-md-h strong { font-weight: 600; color: inherit; }
       .satoi-univ-btn-enh {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -541,6 +541,14 @@
   window.satoiMarkdown = function(src){
     if (src == null) return '';
     src = String(src).replace(/\r\n/g, '\n');
+    // 生のコードフェンス(```)や、中身のない見出し記号(#だけ)の行は、
+    // 解析前にまるごと取り除く(段落アキュムレータに飲み込まれて画面に漏れるのを防ぐ)。
+    src = src.split('\n').filter(function(l){
+      var t = l.trim();
+      if (/^`{3,}/.test(t)) return false;   // ``` で始まる行
+      if (/^#{1,6}\s*$/.test(t)) return false; // # だけ・## だけ等(中身なし)
+      return true;
+    }).join('\n');
 
     function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
@@ -572,6 +580,10 @@
       var trimmed = line.trim();
 
       if (trimmed === ''){ closeList(); i++; continue; }
+
+      // コードフェンス(```)や、中身のない見出し記号(##だけ)の行は表示しない(生のまま出さない)
+      if (/^`{3,}/.test(trimmed)) { i++; continue; }
+      if (/^#{1,6}$/.test(trimmed)) { i++; continue; }
 
       // 区切り線(--- *** ___ だけの行)
       if (/^([-*_])\1{2,}$/.test(trimmed)){ closeList(); html += '<hr class="satoi-md-hr">'; i++; continue; }
