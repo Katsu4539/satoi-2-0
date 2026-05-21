@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>聞きたいことボックス ・ 先生といっしょに決める準備 | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep:#0B1736; --starlight:#D4A95E; --starlight-strong:#F0C97A;
+  --morning-white:#FBF7F0; --morning-cream:#F6EFE3;
+  --teal:#0D7377; --teal-soft:#14A6AB; --healing-blue:#7FA8C9; --warm-orange:#D4622A; --rose:#C76B7F; --green:#5B9A68;
+  --ink-deep:#1A2A40; --ink-medium:rgba(26,42,64,0.78); --ink-light:rgba(26,42,64,0.55);
+  --line:rgba(10,22,40,0.10);
+  --font:"Noto Sans JP","Meiryo UI","Hiragino Kaku Gothic ProN",sans-serif;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family:var(--font); }
+body { color:var(--ink-deep); background:#F1ECD9; line-height:1.9; font-size:16px; }
+a { color:inherit; text-decoration:none; }
+button { font-family:var(--font); cursor:pointer; }
+
+.header { position:fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background:rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color:var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background:var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color:var(--ink-medium); border:1px solid rgba(11,23,40,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color:var(--warm-orange); color:var(--warm-orange); }
+
+.hero { padding:130px 32px 30px; text-align:center; background:linear-gradient(135deg, rgba(20,166,171,0.12) 0%, var(--morning-white) 100%); }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.34em; color:var(--teal); padding:6px 18px; border:1px solid rgba(13,115,119,0.4); border-radius:24px; margin-bottom:18px; }
+.hero-title { font-size:clamp(27px,5vw,42px); font-weight:300; line-height:1.5; letter-spacing:0.04em; margin-bottom:16px; }
+.hero-title strong { color:var(--teal); font-weight:600; }
+.hero-sub { font-size:15px; color:var(--ink-medium); line-height:2; max-width:720px; margin:0 auto; }
+.hero-sub .hl { color:var(--warm-orange); font-weight:600; }
+
+.wrap { max-width:840px; margin:0 auto; padding:26px 22px 70px; }
+
+/* 投入ボックス */
+.addbox { background:#fff; border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 12px 32px rgba(11,23,54,0.07); margin-bottom:14px; }
+.addbox h2 { font-size:17px; font-weight:600; color:var(--ink-deep); margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+.addbox p.sub { font-size:12.5px; color:var(--ink-light); margin-bottom:14px; }
+.addbox textarea { width:100%; border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-family:inherit; font-size:15px; line-height:1.85; color:var(--ink-deep); resize:vertical; min-height:74px; outline:none; }
+.addbox textarea:focus { border-color:var(--teal); }
+.addbox-foot { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px; }
+.addbox-note { font-size:11.5px; color:var(--ink-light); flex:1; min-width:180px; }
+.btn-add { background:var(--teal); color:#fff; border:none; border-radius:22px; padding:11px 24px; font-size:14px; font-weight:600; white-space:nowrap; }
+.btn-add:hover { background:#0A5A5D; }
+.quick-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+.quick-chip { font-size:12.5px; padding:7px 14px; border-radius:16px; border:1px dashed rgba(13,115,119,0.45); background:rgba(13,115,119,0.06); color:var(--teal); }
+.quick-chip:hover { background:rgba(13,115,119,0.14); }
+
+/* 件数バー */
+.countbar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:18px 0 12px; }
+.countbar .ci { font-size:13px; color:var(--ink-medium); }
+.countbar .ci strong { color:var(--teal); font-size:16px; }
+.btn-card { background:var(--warm-orange); color:#fff; border:none; border-radius:22px; padding:11px 22px; font-size:13.5px; font-weight:600; }
+.btn-card:hover { background:#B85420; }
+
+/* 質問アイテム */
+.q-list { display:flex; flex-direction:column; gap:14px; }
+.q-card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 20px; border-left:4px solid var(--healing-blue); }
+.q-card.doctor { border-left-color:var(--warm-orange); }
+.q-card.ai { border-left-color:var(--teal-soft); }
+.q-top { display:flex; align-items:flex-start; gap:12px; }
+.q-check { width:24px; height:24px; border-radius:7px; border:2px solid rgba(10,22,40,0.25); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:15px; color:#fff; cursor:pointer; margin-top:2px; }
+.q-check.on { background:var(--teal); border-color:var(--teal); }
+.q-main { flex:1; }
+.q-text { font-size:15.5px; color:var(--ink-deep); font-weight:500; line-height:1.7; }
+.q-tag { display:inline-block; font-size:11px; font-weight:700; padding:3px 11px; border-radius:11px; margin-top:8px; }
+.q-tag.ai { background:rgba(20,166,171,0.16); color:#0A6E72; }
+.q-tag.doctor { background:rgba(212,98,42,0.16); color:#B85420; }
+.q-del { background:transparent; border:none; color:var(--ink-light); font-size:18px; cursor:pointer; flex-shrink:0; }
+.q-del:hover { color:var(--warm-orange); }
+.q-actions { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+.q-btn { font-size:12.5px; padding:8px 14px; border-radius:16px; border:1px solid var(--teal); background:transparent; color:var(--teal); font-weight:600; }
+.q-btn:hover { background:rgba(13,115,119,0.08); }
+.q-ai-note { margin-top:12px; background:rgba(20,166,171,0.07); border:1px solid rgba(20,166,171,0.22); border-radius:12px; padding:14px 16px; font-size:13.5px; line-height:1.85; color:var(--ink-deep); display:none; }
+.q-ai-note.show { display:block; }
+.q-ai-note .nh { font-size:12px; font-weight:700; color:var(--teal); margin-bottom:8px; display:flex; align-items:center; gap:7px; }
+.q-ai-note .resolved-line { margin-top:10px; }
+.q-ai-note .mark-resolved { font-size:12px; padding:6px 12px; border-radius:14px; border:1px solid var(--green); background:transparent; color:var(--green); font-weight:600; }
+.q-ai-note .mark-resolved:hover { background:rgba(91,154,104,0.10); }
+.q-card.resolved { opacity:0.62; }
+.q-card.resolved .q-text { text-decoration:line-through; }
+.q-resolved-badge { display:none; font-size:11px; font-weight:700; color:var(--green); margin-top:6px; }
+.q-card.resolved .q-resolved-badge { display:inline-block; }
+
+.empty { text-align:center; color:var(--ink-light); font-size:13.5px; padding:30px; }
+
+.value { max-width:840px; margin:30px auto 0; padding:20px 24px; background:linear-gradient(135deg, rgba(13,115,119,0.08), rgba(212,169,94,0.08)); border:1px solid rgba(13,115,119,0.22); border-radius:16px; }
+.value h3 { font-size:15px; font-weight:600; color:var(--teal); margin-bottom:8px; }
+.value p { font-size:13.5px; color:var(--ink-medium); line-height:1.9; }
+.disc { max-width:840px; margin:20px auto 0; font-size:12px; color:var(--ink-light); line-height:1.85; text-align:center; }
+
+footer { text-align:center; padding:40px 22px; color:var(--ink-light); font-size:12.5px; line-height:1.9; border-top:1px solid var(--line); margin-top:30px; }
+
+#satoi-toast-host { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none; max-width:92vw; }
+.satoi-toast { pointer-events:auto; min-width:280px; max-width:480px; background:linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color:#F8F6F0; padding:16px 22px 16px 18px; border-radius:16px; box-shadow:0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family:var(--font); font-size:13.5px; line-height:1.75; backdrop-filter:blur(14px); display:flex; gap:14px; align-items:flex-start; opacity:0; transform:translateY(20px); transition:opacity .4s, transform .4s; border-left:3px solid #D4A95E; }
+.satoi-toast.show { opacity:1; transform:translateY(0); }
+.satoi-toast.success { border-left-color:#14A6AB; }
+.satoi-toast.warn { border-left-color:#D4622A; }
+.satoi-toast-icon { flex-shrink:0; width:28px; height:28px; border-radius:50%; background:rgba(212,169,94,0.18); display:inline-flex; align-items:center; justify-content:center; font-size:14px; }
+.satoi-toast-body { flex:1; white-space:pre-line; }
+.satoi-toast-close { background:transparent; border:none; color:rgba(248,246,240,0.5); cursor:pointer; font-size:18px; }
+@media (max-width:768px){ .header{padding:14px 16px;} .hero{padding:118px 18px 28px;} #satoi-toast-host{bottom:14px;} .satoi-toast{min-width:auto; width:calc(100vw - 28px);} }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="SATOI_Mock_v1_A1_entrance.html"><span class="dot"></span>SATOI</a>
+  <a class="back-btn" href="SATOI_Mock_v1_C1_mypage.html">← マイページへ</a>
+</header>
+
+<section class="hero">
+  <span class="hero-eyebrow">SDM ・ 先生といっしょに決める</span>
+  <h1 class="hero-title">聞きたいこと<strong>ボックス</strong></h1>
+  <p class="hero-sub">気になったこと・不安なこと・先生に確認したいことを、思いついた時にここへ。<br>AIがいったん受け止めて、<span class="hl">AIで解決できることは先に</span>、先生に聞くべきことは整理して、<br>診察前に「<strong>いっしょに決めるカード</strong>」にまとめます。</p>
+</section>
+
+<div class="wrap">
+  <div class="addbox">
+    <h2>🗣️ 聞きたいこと・気になることを入れる</h2>
+    <p class="sub">短くて大丈夫です。あとからAIが整理します。「○○ってどういう意味？」でも「これからどうすれば？」でも。</p>
+    <textarea id="qInput" placeholder="例：オシメルチニブを長く続けるコツはありますか？／治療費はどれくらいかかりますか？"></textarea>
+    <div class="addbox-foot">
+      <span class="addbox-note">この内容はセキュア環境で扱い、外部AIの学習には使いません。本人以外には共有しません。</span>
+      <button class="btn-add" id="addBtn">ボックスに入れる</button>
+    </div>
+    <div class="quick-row" id="quickRow"></div>
+  </div>
+
+  <div class="countbar">
+    <div class="ci">ボックスの中：<strong id="cTotal">0</strong> 件 ・ カードに入れる：<strong id="cChecked">0</strong> 件</div>
+    <button class="btn-card" id="makeCardBtn">📄 いっしょに決めるカードをPDFで保存</button>
+  </div>
+
+  <div class="q-list" id="qList"></div>
+
+  <div class="value">
+    <h3>なぜ「ボックス」なのか</h3>
+    <p>AIが答えられる一般的な疑問（制度・費用・副作用の一般知識など）は<strong>ここで先に解決</strong>できます。先生には「あなたの体と、これからをどう決めるか」という<strong>相談に集中</strong>でき、診察の限られた時間を活かせます。これは病院の負担を減らすことにもつながります。</p>
+  </div>
+  <div class="disc">AIの回答は一般的な情報です。あなたの体や治療の最終判断は、必ず主治医とご相談ください。</div>
+</div>
+
+<footer>
+  SATOI ・ 聞きたいことボックス（SDM｜主治医といっしょに決める）（Mock）
+</footer>
+
+<!-- 本物のPDFダウンロード用(日本語対応:html2canvasで描画→jsPDFに格納) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+function satoiNotify(msg, opts){
+  opts = opts || {};
+  var host = document.getElementById('satoi-toast-host');
+  if (!host){ host = document.createElement('div'); host.id='satoi-toast-host'; document.body.appendChild(host); }
+  var t = document.createElement('div');
+  var kind = opts.kind || (String(msg).indexOf('✓')===0 ? 'success' : 'info');
+  t.className='satoi-toast '+kind;
+  var icon = opts.icon || (kind==='success'?'✓':(kind==='warn'?'!':'●'));
+  t.innerHTML='<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+String(msg).replace(/\n/g,'<br>')+'</div><button class="satoi-toast-close">×</button>';
+  host.appendChild(t);
+  requestAnimationFrame(function(){ t.classList.add('show'); });
+  var closer=function(){ t.classList.remove('show'); setTimeout(function(){t.remove();},450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, opts.duration||4200);
+}
+window.alert=function(m){ try{ satoiNotify(String(m)); }catch(e){} };
+function esc(s){ var d=document.createElement('div'); d.textContent=String(s); return d.innerHTML; }
+function pid(){ try{ return sessionStorage.getItem('satoi_persona_id')||'p1'; }catch(e){ return 'p1'; } }
+function pname(){ try{ return sessionStorage.getItem('satoi_persona')||''; }catch(e){ return ''; } }
+
+/* ===== AIの一般回答ナレッジ(病院問い合わせ削減用・一般情報) ===== */
+var KB = [
+  { keys:['費用','お金','高額療養','医療費','支払','いくら','治療費'],
+    answer:'医療費の自己負担には上限を設ける<strong>高額療養費制度</strong>があり、事前に<strong>限度額認定証</strong>を申請しておくと窓口での支払いが上限額までで済みます。年間10万円超は<strong>医療費控除</strong>の対象にもなります。',
+    ask:'「私の場合、ひと月の自己負担はおおよそいくらになりますか？使える制度はありますか？」と聞くと、相談員にもつなげてもらえます。' },
+  { keys:['脱毛','髪','抜け','ウィッグ','かつら'],
+    answer:'抗がん剤による脱毛は薬の種類で時期が異なりますが、多くは投与開始から<strong>2〜3週間ほどで始まり</strong>、治療終了後に回復していきます。ウィッグや帽子は事前に準備でき、自治体の補助がある場合もあります。',
+    ask:'「私の治療では、いつ頃・どの程度の脱毛が予想されますか？」と聞くと、準備の見通しが立ちます。' },
+  { keys:['仕事','両立','働','休職','復職','傷病手当'],
+    answer:'治療と仕事の両立は、<strong>通院日・体調の波に合わせた働き方の調整</strong>が鍵です。傷病手当金や時短・在宅などの制度が使えることもあります。会社へは「いつ・誰に・どこまで」を整理して伝えると進めやすいです。',
+    ask:'「治療スケジュール上、仕事を休む必要がある日はいつ頃ですか？」と聞くと、職場と調整しやすくなります。' },
+  { keys:['副作用','つらい','吐き気','だるさ','しびれ','下痢','発疹','皮膚'],
+    answer:'副作用は<strong>我慢せず記録して伝える</strong>ことが大切です。多くは支持療法（吐き気止め・保湿・整腸剤など）で和らげられます。出やすい時期（ピーク帯）を知っておくと、生活の予定を立てやすくなります。',
+    ask:'「私の治療で特に注意すべき副作用と、つらい時の連絡先・対処を教えてください」と聞いておくと安心です。' },
+  { keys:['食事','食べ','栄養','飲酒','お酒'],
+    answer:'治療中は<strong>無理なく食べられるものを少量ずつ</strong>が基本です。極端な制限より、バランスと水分。気になる食品や健康食品は、薬との飲み合わせがあるため確認が必要です。',
+    ask:'「避けた方がよい食品や、サプリ・健康食品との飲み合わせはありますか？」と聞くと安全です。' },
+  { keys:['セカンドオピニオン','ほかの病院','別の先生','転院'],
+    answer:'セカンドオピニオンは<strong>患者さんの正当な権利</strong>です。今の主治医に紹介状や資料を用意してもらえます。関係が悪くなることを心配する必要はありません。',
+    ask:'「セカンドオピニオンを受けたいので、紹介状と検査データをお願いできますか？」と伝えればスムーズです。' }
+];
+/* 先生に聞くべき＝個別判断のサイン */
+var DOCTOR_HINTS = ['私の','僕の','自分の','このまま','効く','効か','予後','余命','どれくらい生','治る','根治','手術','再発','転移','進行','方針','選んだ','やめ','中止','変更','次の手','ステージ','検査の結果','数値'];
+
+function classify(text){
+  var t = (text||'');
+  for (var i=0;i<KB.length;i++){
+    for (var j=0;j<KB[i].keys.length;j++){
+      if (t.indexOf(KB[i].keys[j]) !== -1){
+        // 「私の」等の個別判断が混ざる場合は先生寄りにするが、一般情報も添える
+        return { status:'ai', kb:KB[i] };
+      }
+    }
+  }
+  for (var k=0;k<DOCTOR_HINTS.length;k++){ if (t.indexOf(DOCTOR_HINTS[k]) !== -1) return { status:'doctor', kb:null }; }
+  return { status:'doctor', kb:null }; // 迷ったら先生に(安全側)
+}
+
+/* ===== ストア ===== */
+function load(){ try{ return JSON.parse(localStorage.getItem('satoi_sdm_box')||'null'); }catch(e){ return null; } }
+function save(arr){ try{ localStorage.setItem('satoi_sdm_box', JSON.stringify(arr)); }catch(e){} }
+
+var SEED = {
+  p1: [
+    '提案されたTC療法の目的は、完治・延命・症状緩和のどれですか？',
+    'TC療法の副作用で、特に気をつけることは何ですか？',
+    '治療を続けながら仕事はできますか？',
+    '子ども(まだ小さい)に、どこまで・どう伝えるのが良いでしょうか？',
+    '治療費の見通しと、高額療養費の申請について教えてください'
+  ],
+  p2: [
+    'オシメルチニブを長く続けるコツや、注意点はありますか？',
+    'もし効きにくくなったら、次にどんな選択肢がありますか？',
+    '下痢や皮膚の症状が出たとき、どう対処すればいいですか？',
+    '孫の誕生まで体調を保つために、生活で気をつけることは？',
+    '治療費はどれくらいかかりますか？使える制度はありますか？'
+  ]
+};
+
+var items = [];
+function init(){
+  var stored = load();
+  if (stored && stored.length) { items = stored; }
+  else {
+    items = (SEED[pid()]||SEED.p1).map(function(t){ var c=classify(t); return { id:'q'+Math.random().toString(36).slice(2), text:t, status:c.status, checked:true, resolved:false, opened:false }; });
+    save(items);
+  }
+  // クイック追加(ペルソナ別の候補)
+  var quick = (pid()==='p2')
+    ? ['予後はどう考えればいい？','在宅で過ごすには？','痛みは抑えられますか？']
+    : ['再発の可能性は？','妊娠・出産への影響は？','脱毛はいつ頃？'];
+  document.getElementById('quickRow').innerHTML = quick.map(function(q){ return '<button class="quick-chip" data-q="'+esc(q)+'">＋ '+esc(q)+'</button>'; }).join('');
+  [].forEach.call(document.querySelectorAll('#quickRow .quick-chip'), function(b){
+    b.addEventListener('click', function(){ addItem(b.getAttribute('data-q')); });
+  });
+  render();
+}
+
+function addItem(text){
+  text = (text||'').trim();
+  if (!text){ satoiNotify('聞きたいこと・気になることを書いてください。', {kind:'warn'}); return; }
+  var c = classify(text);
+  items.unshift({ id:'q'+Math.random().toString(36).slice(2), text:text, status:c.status, checked:true, resolved:false, opened:false });
+  save(items);
+  document.getElementById('qInput').value='';
+  render();
+  satoiNotify('✓ ボックスに入れました。\n「AIに整理してもらう」で、先に解決できるか確かめられます。', {kind:'success'});
+}
+
+function counts(){
+  document.getElementById('cTotal').textContent = items.length;
+  document.getElementById('cChecked').textContent = items.filter(function(i){ return i.checked; }).length;
+}
+
+function render(){
+  var list = document.getElementById('qList');
+  if (!items.length){ list.innerHTML = '<div class="empty">まだ何も入っていません。気になることを、ひとつ入れてみましょう。</div>'; counts(); return; }
+  list.innerHTML = items.map(function(it){
+    var tagCls = it.status==='ai' ? 'ai' : 'doctor';
+    var tagTxt = it.status==='ai' ? '💡 AIが先に答えられます' : '🩺 先生に聞きましょう';
+    return '<div class="q-card '+tagCls+(it.resolved?' resolved':'')+'" data-id="'+it.id+'">'
+      + '<div class="q-top">'
+      + '<div class="q-check'+(it.checked?' on':'')+'" data-act="check" title="カードに入れる">'+(it.checked?'✓':'')+'</div>'
+      + '<div class="q-main"><div class="q-text">'+esc(it.text)+'</div>'
+      + '<span class="q-tag '+tagCls+'">'+tagTxt+'</span>'
+      + '<span class="q-resolved-badge">✓ AIで解決済み</span>'
+      + '<div class="q-actions"><button class="q-btn" data-act="ai">🤖 AIに整理してもらう</button></div>'
+      + '<div class="q-ai-note" id="note-'+it.id+'"></div>'
+      + '</div>'
+      + '<button class="q-del" data-act="del" title="削除">×</button>'
+      + '</div></div>';
+  }).join('');
+  [].forEach.call(list.querySelectorAll('.q-card'), function(card){
+    var id = card.getAttribute('data-id');
+    card.querySelector('[data-act="check"]').addEventListener('click', function(){ toggleCheck(id); });
+    card.querySelector('[data-act="del"]').addEventListener('click', function(){ delItem(id); });
+    card.querySelector('[data-act="ai"]').addEventListener('click', function(){ aiHelp(id); });
+    var it = items.filter(function(x){return x.id===id;})[0];
+    if (it && it.opened) renderNote(it);
+  });
+  counts();
+}
+
+function findItem(id){ return items.filter(function(x){return x.id===id;})[0]; }
+function toggleCheck(id){ var it=findItem(id); if(!it) return; it.checked=!it.checked; save(items); render(); }
+function delItem(id){ items = items.filter(function(x){return x.id!==id;}); save(items); render(); }
+
+function renderNote(it){
+  var note = document.getElementById('note-'+it.id);
+  if (!note) return;
+  var who = pname() ? pname() : 'あなた';
+  var html = '';
+  if (it.status==='ai' && it.kbAnswer){
+    html = '<div class="nh">🤖 AIからの整理（一般的な情報）</div>'
+      + '<div>'+it.kbAnswer+'</div>'
+      + '<div style="margin-top:10px; color:var(--ink-medium);"><strong>診察ではこう聞くと早いです：</strong><br>'+esc(it.kbAsk)+'</div>'
+      + '<div class="resolved-line"><button class="mark-resolved" data-act="resolve">これはAIで解決。カードから外す</button></div>';
+  } else {
+    html = '<div class="nh">🩺 これは先生に聞きましょう</div>'
+      + '<div>これは'+esc(who)+'さんの体や治療方針に関わるので、主治医に確認するのがいちばん確実です。AIが代わりに判断はできませんが、<strong>診察で伝わりやすい聞き方</strong>に整えました。</div>'
+      + '<div style="margin-top:10px; color:var(--ink-medium);"><strong>おすすめの聞き方：</strong><br>'+esc(refinePhrasing(it.text))+'</div>'
+      + '<div class="resolved-line" style="font-size:12px; color:var(--ink-light);">この質問は「いっしょに決めるカード」に入れて、診察にお持ちください。</div>';
+  }
+  note.innerHTML = html;
+  note.classList.add('show');
+  var rb = note.querySelector('[data-act="resolve"]');
+  if (rb) rb.addEventListener('click', function(){ var x=findItem(it.id); if(x){ x.resolved=true; x.checked=false; save(items); render(); satoiNotify('✓ AIで解決にしました。先生に聞く分だけがカードに残ります。', {kind:'success'}); } });
+}
+
+function refinePhrasing(text){
+  var t = text.replace(/[。\.]$/,'');
+  return '「先生、' + t + '。私としては〇〇を大切にしたいのですが、どう考えればよいでしょうか？」';
+}
+
+function aiHelp(id){
+  var it = findItem(id); if (!it) return;
+  it.opened = true;
+  if (it.status==='ai'){
+    var c = classify(it.text);
+    if (c.kb){ it.kbAnswer = c.kb.answer; it.kbAsk = c.kb.ask; }
+  }
+  save(items);
+  renderNote(it);
+}
+
+/* ===== いっしょに決めるカード(PDF) ===== */
+function cardMeta(){
+  var who = pname() ? pname() : '';
+  var cn=''; var stg='';
+  try { cn = sessionStorage.getItem('satoi_last_cancer_name')||''; stg = sessionStorage.getItem('satoi_stage')||''; } catch(e){}
+  return (who?esc(who)+' さま ・ ':'') + (cn?esc(cn)+(stg?stg+'期':'')+' ・ ':'') + '次回の診察用 ・ ' + new Date().toLocaleDateString();
+}
+function hasCardContent(){ return items.some(function(i){ return (i.checked && !i.resolved) || i.resolved; }); }
+/* カード本文(①先生に聞くこと ＋ ②AIで先に解決した履歴 を両方収録) */
+function buildCardHTML(){
+  var chosen = items.filter(function(i){ return i.checked && !i.resolved; });
+  var resolved = items.filter(function(i){ return i.resolved; });
+  var ask = chosen.map(function(it){ return '<li style="margin-bottom:16px;font-size:15px;font-weight:600;line-height:1.7;">'+esc(it.text)+'<span style="display:block;font-weight:400;font-size:12.5px;color:#888;margin-top:8px;">先生の回答メモ：____________________________________</span></li>'; }).join('');
+  var solved = resolved.map(function(it){
+    var a = it.kbAnswer ? it.kbAnswer : 'AIと相談して、ここで解決にしました。';
+    return '<li style="margin-bottom:14px;font-size:13.5px;line-height:1.8;"><span style="font-weight:600;color:#1A2A40;">'+esc(it.text)+'</span><span style="display:block;color:#555;margin-top:5px;">→ '+a+'</span></li>';
+  }).join('');
+  var html = ''
+    + '<div style="font-size:12px;color:#0D7377;margin-bottom:4px;letter-spacing:0.1em;">SDM ・ 主治医といっしょに決める</div>'
+    + '<div style="font-size:22px;font-weight:700;border-bottom:2px solid #0D7377;padding-bottom:10px;margin-bottom:6px;">いっしょに決めるカード</div>'
+    + '<div style="font-size:12.5px;color:#555;margin-bottom:22px;">'+cardMeta()+'</div>'
+    + '<div style="font-size:15px;font-weight:700;color:#0D7377;margin:0 0 10px;">🩺 先生に聞くこと'+(chosen.length?'（'+chosen.length+'件）':'')+'</div>'
+    + (chosen.length ? '<ol style="padding-left:22px;margin:0 0 8px;">'+ask+'</ol>' : '<div style="font-size:13px;color:#888;margin-bottom:8px;">（先生に聞く質問は選ばれていません）</div>');
+  if (resolved.length){
+    html += '<div style="font-size:15px;font-weight:700;color:#5B9A68;margin:24px 0 10px;border-top:1px solid #ddd;padding-top:18px;">💡 AIで先に解決したこと（記録）</div>'
+      + '<ol style="padding-left:22px;margin:0;">'+solved+'</ol>';
+  }
+  html += '<div style="font-size:11.5px;color:#999;border-top:1px solid #ddd;margin-top:26px;padding-top:12px;line-height:1.8;">※ 上段は「あなたの体と、これからをいっしょに決める」ための相談です。下段のAI解決分は、自分用の記録として残しています。最終判断は必ず主治医とご相談ください。</div>'
+    + '<div style="font-size:11px;color:#999;margin-top:8px;">SATOI ・ 聞きたいことボックス → いっしょに決めるカード</div>';
+  return html;
+}
+function makeCard(){
+  if (!hasCardContent()){ satoiNotify('カードに入れる質問がありません。\nチェックを付けるか、ボックスに質問を足してください。', {kind:'warn'}); return; }
+  downloadPdf();
+}
+/* ② ワンクリックで本物の .pdf をダウンロード(jsPDF + html2canvas・日本語そのまま) */
+function downloadPdf(){
+  var node = document.createElement('div');
+  node.style.cssText = 'position:fixed; left:-99999px; top:0; width:720px; background:#fff; padding:38px 42px; font-family:"Noto Sans JP","Meiryo UI",sans-serif; color:#1A2A40; box-sizing:border-box; line-height:1.9;';
+  node.innerHTML = buildCardHTML();
+  document.body.appendChild(node);
+  var cleanup = function(){ if (node && node.parentNode) node.parentNode.removeChild(node); };
+  try {
+    if (!window.html2canvas || !window.jspdf) throw new Error('libs not ready');
+    window.html2canvas(node, { scale: 2, backgroundColor: '#ffffff', useCORS: true }).then(function(canvas){
+      try {
+        var img = canvas.toDataURL('image/png');
+        var jsPDF = window.jspdf.jsPDF;
+        var pdf = new jsPDF('p', 'mm', 'a4');
+        var pw = pdf.internal.pageSize.getWidth();
+        var ph = pdf.internal.pageSize.getHeight();
+        var imgH = canvas.height * pw / canvas.width;
+        if (imgH <= ph){
+          pdf.addImage(img, 'PNG', 0, 0, pw, imgH);
+        } else {
+          var remaining = imgH, pos = 0;
+          pdf.addImage(img, 'PNG', 0, pos, pw, imgH);
+          remaining -= ph;
+          while (remaining > 0){ pos -= ph; pdf.addPage(); pdf.addImage(img, 'PNG', 0, pos, pw, imgH); remaining -= ph; }
+        }
+        pdf.save('いっしょに決めるカード.pdf');
+        satoiNotify('✓ 「いっしょに決めるカード」をPDFでダウンロードしました。\n先生に聞くこと＋AIで解決した記録の両方が入っています。', {kind:'success', duration:5400});
+      } catch(e2){ printFallback(); }
+      finally { cleanup(); }
+    }).catch(function(){ cleanup(); printFallback(); });
+  } catch(e){ cleanup(); printFallback(); }
+}
+/* フォールバック:ライブラリ未読込時はブラウザ印刷→PDF保存 */
+function printFallback(){
+  var w = window.open('', '_blank');
+  if (!w){ satoiNotify('PDFを開けませんでした。ポップアップを許可してください。', {kind:'warn'}); return; }
+  var doc = '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>いっしょに決めるカード - SATOI</title>'
+    + '<style>body{font-family:"Noto Sans JP","Meiryo UI",sans-serif;color:#1A2A40;max-width:720px;margin:36px auto;padding:0 28px;line-height:1.9;}</style></head><body>'
+    + buildCardHTML()
+    + '<scr'+'ipt>window.onload=function(){setTimeout(function(){window.print();},300);}<\/scr'+'ipt>'
+    + '</body></html>';
+  w.document.open(); w.document.write(doc); w.document.close();
+  satoiNotify('✓ 印刷／PDF保存の画面を開きました。', {kind:'success'});
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('addBtn').addEventListener('click', function(){ addItem(document.getElementById('qInput').value); });
+  document.getElementById('makeCardBtn').addEventListener('click', makeCard);
+  init();
+  // 流入元の通知(動線確認用)
+  try {
+    var p = new URLSearchParams(location.search);
+    if (p.get('from')) satoiNotify('ここで「先生に聞きたいこと」をためて、カードにまとめられます。', {kind:'info', duration:4200});
+  } catch(e){}
+});
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

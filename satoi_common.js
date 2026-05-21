@@ -354,7 +354,7 @@
     { title:'相談する', items:[
       { label:'AIにゆっくり相談',            url:'SATOI_Mock_v1_A2_dialog.html' },
       { label:'コンシェルジュ(AI+電話)',   url:'SATOI_Mock_v1_CON_concierge.html' },
-      { label:'先生に聞きたいこと(SDMカード)', url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' }
+      { label:'先生に聞きたいことボックス(SDM)', url:'SATOI_Mock_v1_SDM_box.html' }
     ]},
     { title:'あなたの記録', items:[
       { label:'マイページ',       url:'SATOI_Mock_v1_C1_mypage.html' },
@@ -820,7 +820,7 @@
   const SATOI_PICKUP = [
     { icon:'📚', title:'学びの部屋',           desc:'がんを、まるごと知る（読む・観る・調べる・伝える）', url:'SATOI_Mock_v1_LEARN_room.html' },
     { icon:'🗺', title:'治療の全体像',         desc:'あなたの治療マインドマップ', url:'SATOI_Mock_v1_B1_mindmap.html' },
-    { icon:'📝', title:'先生に聞きたいこと',   desc:'SDMカードを作る',            url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' },
+    { icon:'📝', title:'先生に聞きたいこと',   desc:'聞きたいことボックス(SDM)',  url:'SATOI_Mock_v1_SDM_box.html' },
     { icon:'📖', title:'同じ境遇の物語',       desc:'体験談・先輩の声',           url:'SATOI_Mock_v1_D1_stories.html' },
     { icon:'💛', title:'家族との共有',         desc:'伝え方・家族とつながる',     url:'SATOI_Mock_v1_FAM_view.html' },
     { icon:'💬', title:'相談する',             desc:'コンシェルジュ(AI+電話)',  url:'SATOI_Mock_v1_CON_concierge.html' },
