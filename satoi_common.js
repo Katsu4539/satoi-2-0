@@ -341,6 +341,12 @@
       .satoi-jbar { background: rgba(255,253,247,0.985) !important; backdrop-filter: blur(2px) !important; }
       .satoi-jchip:not(.done):not(.current) { color: rgba(26,42,64,0.9) !important; background: #ffffff !important; border-color: rgba(11,23,54,0.30) !important; }
       .satoi-jchip:not(.done):not(.current) .satoi-jchip-n { background: rgba(11,23,54,0.16) !important; color: rgba(26,42,64,0.9) !important; }
+      /* ===== 入口↔ホーム 切替トグル(共通)===== */
+      .satoi-home-toggle { display:inline-flex; align-items:center; gap:2px; padding:3px; border-radius:22px; background:rgba(127,127,127,0.14); border:1px solid rgba(127,127,127,0.30); vertical-align:middle; }
+      .satoi-home-toggle .sht-opt { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:18px; font-size:12.5px; font-weight:600; cursor:pointer; text-decoration:none; color:inherit; opacity:0.65; white-space:nowrap; transition:all .2s; font-family:inherit; }
+      .satoi-home-toggle .sht-opt:hover { opacity:1; }
+      .satoi-home-toggle .sht-opt.active { background:#D4A95E; color:#0B1736; opacity:1; box-shadow:0 2px 8px rgba(212,169,94,0.4); }
+      @media (max-width: 700px) { .satoi-home-toggle .sht-opt { padding:5px 10px; font-size:11.5px; } }
       /* ===== AI応答 マークダウン整形表示 ===== */
       .satoi-md-p { margin: 0 0 0.7em; line-height: 1.85; }
       .satoi-md-p:last-child { margin-bottom: 0; }

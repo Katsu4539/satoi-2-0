@@ -1902,6 +1902,10 @@ body.has-b1-journey-bar .header + section { margin-top: 0; }
 <!-- ヘッダー -->
 <header class="header">
   <a href="SATOI_Mock_v1_A1_entrance.html" class="logo" title="クリックで SATOI 入口へ戻る"><span class="dot"></span>SATOI</a>
+  <div class="satoi-home-toggle" role="group" aria-label="入口とホームの切替" style="margin-left:14px;">
+    <a class="sht-opt" href="SATOI_Mock_v1_A1_entrance.html">🌙 入口</a>
+    <span class="sht-opt active">☀ ホーム</span>
+  </div>
   <nav class="nav-mini" style="gap: 28px;">
     <a href="#pathfinder" style="font-size: 15px; padding: 10px 16px; border-radius: 16px; transition: all 0.2s;" onmouseover="this.style.background='rgba(212,169,94,0.12)'" onmouseout="this.style.background='transparent'">あなたの道</a>
     <a href="#types" style="font-size: 15px; padding: 10px 16px; border-radius: 16px; transition: all 0.2s;" onmouseover="this.style.background='rgba(212,169,94,0.12)'" onmouseout="this.style.background='transparent'">がん種別</a>
@@ -1964,10 +1968,6 @@ document.addEventListener('DOMContentLoaded', function(){
 <!-- 横断ジャーニーバー(常駐・全画面共通核機能) -->
 <nav class="b1-journey-bar" id="b1JourneyBar" aria-label="ペーシェントジャーニー">
   <div class="b1-journey-bar-inner">
-    <span class="b1-journey-meta" title="あなたのがん種・ステージから現在地を表示しています">
-      <span class="b1-journey-meta-icon">●</span>
-      乳がん II期 / いまここ
-    </span>
     <div class="b1-journey-chip done" data-beat="diagnosis" data-i="0" title="クリックでジャンプ">
       <span class="b1-journey-chip-num">1</span><span>診断</span>
     </div>
