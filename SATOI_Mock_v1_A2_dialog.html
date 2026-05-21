@@ -381,6 +381,10 @@ body {
   .logo { font-size: 17px; }
   .progress-wrap { max-width: 130px; margin: 0 10px; }
   .back-btn { padding: 6px 12px; font-size: 12px; }
+  /* スマホ:マイページ(絶対配置)はトグルと重なるので隠す(ホーム→ハブから到達可) */
+  .header a[href*="C1_mypage"] { display: none !important; }
+  /* スマホ:入力欄を端末下端(セーフエリア)から確保し、隠れないように */
+  .input-area { padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important; }
 
   .dialog-wrap { padding: 90px 16px 220px; }
 

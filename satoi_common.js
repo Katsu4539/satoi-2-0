@@ -427,6 +427,10 @@
       /* スマホ:大きくしすぎ・余白過多で窮屈にならないよう調整(iPhone/iPad) */
       @media (max-width: 768px) {
         body { font-size: 16px; }
+        /* スマホ:コンシェルジュ吹き出しは入力欄に被るので非表示・トグルは小さく */
+        .satoi-con-bubble { display: none !important; }
+        .satoi-home-toggle { margin-left: 8px !important; }
+        .satoi-home-toggle .sht-opt { padding: 4px 9px !important; font-size: 11px !important; }
         .content-card { padding: 18px 16px !important; }
         .content-card h3 { font-size: 17.5px !important; }
         .content-card h4 { font-size: 16px !important; }
