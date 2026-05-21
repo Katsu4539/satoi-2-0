@@ -407,6 +407,35 @@
       .companion-lamp { display: none !important; }
       /* ===== 読みやすさ:ベースフォントを少し大きく(PCで小さい・Katsuさん指示・2026-05-21)===== */
       body { font-size: 17px; line-height: 1.85; }
+      /* ===== 情報ページ(検査/暮らし/基礎知識等)の本文を高齢者にも読みやすく大きく(AZ/ファイザー水準・2026-05-21)===== */
+      .toc-item { font-size: 14px !important; }
+      .section-sub { font-size: 17px !important; line-height: 1.95 !important; }
+      .hero-sub { font-size: 17px !important; line-height: 2 !important; }
+      .content-card { padding: 26px 30px !important; }
+      .content-card h3 { font-size: 19px !important; }
+      .content-card h4 { font-size: 17px !important; }
+      .content-card p { font-size: 16.5px !important; line-height: 2 !important; }
+      .content-card ul, .content-card ol { font-size: 16px !important; line-height: 2 !important; }
+      .content-card li { font-size: 16px !important; }
+      .content-card blockquote { font-size: 15px !important; }
+      .ai-cta-title { font-size: 17.5px !important; }
+      .ai-cta p { font-size: 15.5px !important; line-height: 2 !important; }
+      .mini-card-title { font-size: 16.5px !important; }
+      .mini-card-desc { font-size: 14px !important; line-height: 1.9 !important; }
+      .related-card-title { font-size: 15px !important; }
+      .related-card-desc { font-size: 13px !important; }
+      /* スマホ:大きくしすぎ・余白過多で窮屈にならないよう調整(iPhone/iPad) */
+      @media (max-width: 768px) {
+        body { font-size: 16px; }
+        .content-card { padding: 18px 16px !important; }
+        .content-card h3 { font-size: 17.5px !important; }
+        .content-card h4 { font-size: 16px !important; }
+        .content-card p { font-size: 15.5px !important; line-height: 1.95 !important; }
+        .content-card ul, .content-card ol, .content-card li { font-size: 15px !important; }
+        .section-sub { font-size: 15.5px !important; }
+        .hero-sub { font-size: 15.5px !important; }
+        .ai-cta p { font-size: 14.5px !important; }
+      }
       /* ===== 上部の朝靄を弱め、ステップバー(AI入口)とテロップを見えるように(Katsuさん指示・2026-05-21)===== */
       .header { backdrop-filter: blur(3px) !important; -webkit-backdrop-filter: blur(3px) !important; }
       .satoi-jbar { background: rgba(255,253,247,0.985) !important; backdrop-filter: blur(2px) !important; }
