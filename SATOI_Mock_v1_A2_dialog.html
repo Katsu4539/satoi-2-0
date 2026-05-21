@@ -2256,7 +2256,7 @@ function getBeats(cancer, stage, cancerName) {
       id: 'comp', chip: '検査(精密)', stepNum: 4,
       title: 'コンパニオン診断・遺伝子検査の話',
       narrative: `${cancerName} は、近年、大きく治療法が広がりました。<br>その鍵が「コンパニオン診断」と「遺伝子検査」です。<br>あなたの がんのタイプ を分子レベルで調べて、<strong>最も効く治療</strong> を見つけるためのものです。`,
-      visual: { type: 'list', items: comps, lead: 'test', desc: 'meaning' },
+      visual: { type: 'genes', items: comps },
       deeper: `コンパニオン診断は、保険適用のものが多く、結果が出るまで通常 1〜3週間。<br>これは「あなた専用の治療地図」を作るための時間です。<br>結果次第で、選べる治療の選択肢が <strong>3倍</strong> くらいに増えることもあります。`,
       anxiety: `「遺伝子検査って、怖い」「家族にも影響あるの?」——BRCAなど遺伝性のものは、家族にも影響する可能性があります。<br>でも、検査結果は、あなたの同意なしには誰にも共有されません。<br>家族と話すタイミングも、あなたが決めて、いいんです。`
     },
@@ -2271,7 +2271,7 @@ function getBeats(cancer, stage, cancerName) {
     {
       id: 'treat', chip: '治療の選択肢', stepNum: 6,
       title: '治療を選ぶ段階に来たら、何があるのか',
-      narrative: `ここでようやく、「治療の選択肢」のお話です。<br><br>大事なのは、「いま選ぶ」ことではありません。<br>「どんな選択肢があるか、知っておく」だけで、検査結果を聞きに行く日に、ぐっと話がしやすくなります。`,
+      narrative: `ここからは、「治療の選択肢」のお話です。<br><br>大事なのは、「いま選ぶ」ことではありません。<br>「どんな選択肢があるか、知っておく」だけで、検査結果を聞きに行く日に、ぐっと話がしやすくなります。`,
       visual: { type: 'treatments', items: data?.treatments || [] },
       deeper: `${cancerName} ステージ${stage} では、複数の治療法を組み合わせる「集学的治療」が標準です。<br>1つを選ぶ、というよりも「何を、どの順番で」というのが、治療設計です。<br>主治医とあなたとで、納得しながら決めていきます(共同意思決定・SDM)。`,
       anxiety: `「どれを選んでも、後悔しそう」——揺れて、いいです。<br>選んだ後も、状況に応じて切り替えられます。<br>「決めたら、もう戻れない」治療は、実は、ほとんどありません。`
@@ -2419,6 +2419,39 @@ function renderBeatVisual(visual) {
         `<div class="journey-list-item"><div class="journey-list-head">${it[visual.lead] || ''}</div><div class="journey-list-desc">${it[visual.desc] || ''}</div></div>`
       ).join('') + '</div>';
   }
+  else if (visual.type === 'genes') {
+    var ghtml = '<div class="journey-genes">';
+    visual.items.forEach(function(it){
+      var gene = (it.test || '').replace(/[（(].*$/, '').replace(/(遺伝子|融合|発現|検査|タンパク質|プロファイリング|受容体).*$/, '').trim();
+      if (!gene) gene = 'cancer';
+      var pubmed = 'https://pubmed.ncbi.nlm.nih.gov/?term=' + encodeURIComponent(gene + ' cancer treatment');
+      var anchor = /BRCA|HRR/.test(it.test || '') ? '#family' : '#driver';
+      var testEsc = (it.test || '').replace(/"/g, '');
+      ghtml += '<div class="gene-card">'
+        + '<button class="gene-head" type="button" aria-expanded="false"><span class="gene-name">' + (it.test || '') + '</span><span class="gene-chev">＋ タップで詳しく</span></button>'
+        + '<div class="gene-body"><div class="gene-meaning">' + (it.meaning || '') + '</div><div class="gene-actions">'
+        + '<a class="gene-act" href="SATOI_Mock_v1_KB_genome.html' + anchor + '">📖 もっと知る</a>'
+        + '<a class="gene-act" href="' + pubmed + '" target="_blank" rel="noopener">🔍 PubMedで調べる</a>'
+        + '<button class="gene-act gene-sdm" type="button" data-test="' + testEsc + '" data-url="' + pubmed + '">📎 SDMに追加</button>'
+        + '</div></div></div>';
+    });
+    ghtml += '</div>';
+    grp.innerHTML = ghtml;
+    setTimeout(function(){
+      grp.querySelectorAll('.gene-head').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var card = btn.closest('.gene-card');
+          var open = card.classList.toggle('open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          var chev = btn.querySelector('.gene-chev');
+          if (chev) chev.textContent = open ? '− 閉じる' : '＋ タップで詳しく';
+        });
+      });
+      grp.querySelectorAll('.gene-sdm').forEach(function(b){
+        b.addEventListener('click', function(e){ e.stopPropagation(); addGeneToSdm(b.getAttribute('data-test'), b.getAttribute('data-url')); });
+      });
+    }, 30);
+  }
   else if (visual.type === 'team-circle') {
     const roles = [
       { name:'外科医',         icon:'🔪', sup:'がんを取り除く手術を担当。手術可能性・術式・術後の見通しをあなたと共有します。' },
@@ -2525,6 +2558,21 @@ function addCustomSdmQ() {
 function toggleSdmQ(el) {
   el.classList.toggle('checked');
   updateSdmCount();
+}
+function addGeneToSdm(test, url) {
+  var list = document.getElementById('sdmCustomList');
+  if (list) {
+    var li = document.createElement('div');
+    li.className = 'sdm-q checked';
+    var q = '「' + test + '」は、私のがんではどうですか?(先生に確認)';
+    li.innerHTML = '<span class="sdm-check"></span><span>' + q.replace(/</g, '&lt;')
+      + ' <a href="' + url + '" target="_blank" rel="noopener" style="color:#6FE0E5;text-decoration:underline;font-size:11.5px;">▸ 論文</a></span>'
+      + '<button class="sdm-remove" onclick="this.parentElement.remove()">×</button>';
+    list.appendChild(li);
+    if (typeof updateSdmCount === 'function') updateSdmCount();
+  }
+  if (typeof satoiNotify === 'function') satoiNotify('SDM質問カードに追加しました。先生に「' + test + '」を確認できます。');
+  if (typeof openSdmModal === 'function') openSdmModal();
 }
 function updateSdmCount() {
   const n = document.querySelectorAll('#sdmOverlay .sdm-q.checked').length;
@@ -2861,6 +2909,20 @@ body.with-journey-bar .dialog-wrap {
   color: var(--text-secondary);
   line-height: 1.85;
 }
+
+/* 遺伝子カード(開閉式・深掘り) */
+.journey-genes { display:grid; gap:10px; max-width:760px; margin:8px 0; }
+.gene-card { background: rgba(13,115,119,0.10); border:1px solid rgba(13,115,119,0.38); border-radius:12px; overflow:hidden; transition: background .25s, border-color .25s; }
+.gene-card.open { background: rgba(13,115,119,0.16); border-color: rgba(212,169,94,0.6); }
+.gene-head { width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; background:transparent; border:none; padding:14px 18px; text-align:left; color:#F0C97A; }
+.gene-name { font-size:15px; font-weight:600; letter-spacing:0.02em; }
+.gene-chev { font-size:11.5px; color:#9FC0DC; white-space:nowrap; }
+.gene-body { max-height:0; overflow:hidden; transition:max-height .3s ease; padding:0 18px; }
+.gene-card.open .gene-body { max-height:600px; padding:0 18px 16px; }
+.gene-meaning { font-size:13.5px; color:rgba(248,246,240,0.85); line-height:1.95; margin-bottom:14px; }
+.gene-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.gene-act { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:500; padding:8px 14px; border-radius:18px; border:1px solid rgba(212,169,94,0.5); color:#F0C97A; background:rgba(11,23,54,0.4); text-decoration:none; font-family:inherit; cursor:pointer; }
+.gene-act:hover { background:#D4A95E; color:#0B1736; border-color:#D4A95E; }
 
 /* journey-team(キャンサーボード輪・改修版) */
 .journey-team-wrap {

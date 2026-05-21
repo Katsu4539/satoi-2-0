@@ -346,6 +346,8 @@
     const s = document.createElement('style');
     s.id = 'satoi-common-styles';
     s.textContent = `
+      /* ===== 右側の浮遊オーブ(companion-lamp)を全ページで非表示(Katsuさん指示・2026-05-21)===== */
+      .companion-lamp { display: none !important; }
       /* ===== AI応答 マークダウン整形表示 ===== */
       .satoi-md-p { margin: 0 0 0.7em; line-height: 1.85; }
       .satoi-md-p:last-child { margin-bottom: 0; }
