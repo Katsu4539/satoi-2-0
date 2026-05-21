@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>がんとは?(基礎知識) | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #F1ECD9; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 130px 32px 56px; text-align:center; background: linear-gradient(135deg, rgba(127,168,201,0.08) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: #7FA8C9; padding:6px 18px; border:1px solid rgba(127,168,201,0.4); border-radius:24px; margin-bottom:24px; }
+.hero-title { font-size: clamp(30px, 5vw, 44px); font-weight:300; line-height:1.55; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: #7FA8C9; font-weight:500; }
+.hero-sub { font-size:15px; color: var(--ink-medium); line-height:2; max-width:700px; margin:0 auto; }
+
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 14px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc-item { padding:7px 14px; background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.3); border-radius:18px; color: var(--ink-medium); font-size:11.5px; cursor:pointer; text-decoration:none; }
+.toc-item:hover, .toc-item.active { background: #7FA8C9; color: var(--morning-white); border-color: #7FA8C9; }
+
+.section { padding: 56px 32px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size:11px; letter-spacing:0.36em; color: #7FA8C9; margin-bottom:10px; font-weight:600; }
+.section-title { font-size: clamp(24px, 3.2vw, 30px); font-weight:500; color: var(--ink-deep); margin-bottom:14px; line-height:1.5; }
+.section-sub { font-size:14.5px; color: var(--ink-medium); line-height:1.95; margin-bottom:30px; }
+
+.content-card { background: white; border-radius:18px; padding: 28px 32px; border:1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 20px; }
+.content-card h3 { font-size:18px; font-weight:600; color: var(--ink-deep); margin-bottom: 12px; }
+.content-card h4 { font-size:15px; font-weight:600; color: #7FA8C9; margin: 18px 0 10px; }
+.content-card p { font-size:14px; color: var(--ink-medium); line-height:1.95; margin-bottom: 12px; }
+.content-card ul { padding-left: 22px; margin: 10px 0 14px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.content-card li { margin-bottom: 6px; }
+.content-card strong { color: var(--ink-deep); font-weight: 600; }
+.content-card blockquote { border-left: 3px solid #7FA8C9; padding: 10px 18px; margin: 14px 0; background: rgba(212,169,94,0.06); color: var(--ink-medium); font-size:13px; }
+
+.stage-row { display:grid; grid-template-columns: 70px 1fr; gap: 14px; align-items:start; padding: 12px 0; border-bottom: 1px dashed var(--line); }
+.stage-row:last-child { border-bottom: none; }
+.stage-badge { display:inline-flex; align-items:center; justify-content:center; min-width:60px; padding: 5px 0; border-radius: 10px; background: rgba(127,168,201,0.16); color: #5483A8; font-weight:700; font-size:13px; }
+.stage-row p { font-size:13.5px; color: var(--ink-medium); line-height:1.85; margin:0; }
+
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 26px 30px; margin: 26px 0 8px; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 16px; font-weight:600; color: var(--teal); margin-bottom: 8px; }
+.ai-cta p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 14px; }
+.ai-cta-btn { display:inline-block; padding: 12px 24px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
+
+.note-box { background: rgba(212,98,42,0.07); border:1px solid rgba(212,98,42,0.25); border-radius: 14px; padding: 18px 22px; margin: 8px 0 0; font-size: 12.5px; color: var(--ink-medium); line-height:1.9; }
+.note-box strong { color: var(--warm-orange); }
+
+.related-nav { background: var(--morning-cream); padding: 40px 32px; margin-top: 40px; border-top: 1px solid var(--line); }
+.related-nav h4 { font-size:14px; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom: 16px; text-align: center; }
+.related-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; max-width: 980px; margin: 0 auto; }
+.related-card { padding: 14px 18px; background: white; border-radius: 12px; border:1px solid var(--line); cursor:pointer; transition: all 0.2s; }
+.related-card:hover { border-color: #7FA8C9; background: rgba(212,169,94,0.06); }
+.related-card-title { font-size: 13px; font-weight: 500; color: var(--ink-deep); margin-bottom: 3px; }
+.related-card-desc { font-size: 11.5px; color: var(--ink-light); }
+
+@media (max-width: 768px) {
+  .hero { padding: 110px 16px 46px; }
+  .section { padding: 40px 16px; }
+  .content-card { padding: 22px 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_DASHBOARD.html'; })()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">ABOUT CANCER ・ がんとは?(基礎知識)</div>
+  <h1 class="hero-title">まず、<strong>言葉の意味</strong>から、ゆっくりと。</h1>
+  <p class="hero-sub">
+    「がん」「ステージ」「タイプ」——急に飛び込んできた言葉たち。<br>
+    一つずつ、やさしい言葉にほどいていきましょう。知ることは、落ち着くための一歩です。
+  </p>
+</section>
+
+<nav class="toc">
+  <a class="toc-item" href="#s1">がんとは</a>
+  <a class="toc-item" href="#s2">良性と悪性</a>
+  <a class="toc-item" href="#s3">ステージ(病期)</a>
+  <a class="toc-item" href="#s4">がんのタイプ</a>
+  <a class="toc-item" href="#s5">検査と診断</a>
+  <a class="toc-item" href="#s6">治療までの流れ</a>
+</nav>
+
+<main>
+
+<section class="section" id="s1">
+  <div class="section-eyebrow">WHAT IS CANCER</div>
+  <h2 class="section-title">がんとは ・ 体の細胞から生まれます</h2>
+  <p class="section-sub">特別な「外から来たもの」ではなく、もともと自分の体の細胞が変化して生まれます。</p>
+  <div class="content-card">
+    <p>私たちの体は、とても小さな<strong>細胞</strong>が集まってできています。細胞は、古くなると新しいものに入れ替わり、増えすぎないよう上手に調整されています。</p>
+    <p>ところが、何かのきっかけで細胞の設計図(遺伝子)に傷が積み重なると、その調整がきかなくなり、<strong>増えなくていいのに増え続ける</strong>細胞が現れることがあります。これが「がん」のもとです。やがてかたまりを作ったり、周りに広がったり、別の場所へ移動(転移)したりします。</p>
+    <p>大事なのは、がんは<strong>「生活が悪かったから」「気の持ちようで防げた」といった単純な話ではない</strong>ということ。年齢を重ねるほど誰にでも起こりうる、細胞レベルの出来事です。ご自分を責める必要は、まったくありません。</p>
+    <blockquote>2人に1人が、生涯のうちにがんと診断される時代です。あなたは、ひとりではありません。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>「どうして自分が」という気持ちも含めて、ゆっくりお話しできます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_about&topic=whatis">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s2">
+  <div class="section-eyebrow">BENIGN / MALIGNANT</div>
+  <h2 class="section-title">良性と悪性 ・ 何がちがうの?</h2>
+  <p class="section-sub">「腫瘍(しゅよう)」と聞くと不安になりますが、腫瘍にも性格があります。</p>
+  <div class="content-card">
+    <p>細胞のかたまりを<strong>腫瘍</strong>といいます。腫瘍には、おだやかな<strong>良性</strong>と、広がる力を持つ<strong>悪性</strong>があり、この悪性腫瘍が、いわゆる「がん」です。</p>
+    <h4>ちがいのイメージ</h4>
+    <ul>
+      <li><strong>良性</strong> ・ その場でゆっくり大きくなるが、周りへ広がったり転移したりはしにくい。</li>
+      <li><strong>悪性(がん)</strong> ・ 周りの組織にしみ込むように広がったり(浸潤)、別の場所へ移動したり(転移)する力を持つ。</li>
+    </ul>
+    <p>「腫瘍がある」と言われても、それが良性か悪性か、どんな性質かは、検査で確かめてから分かります。早合点せず、検査の結果を待つことが大切です。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>検査の結果待ちの不安な時間も、一緒に過ごせます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_about&topic=benign">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s3">
+  <div class="section-eyebrow">STAGE</div>
+  <h2 class="section-title">ステージ(病期) ・ 広がりぐあいを表す目安</h2>
+  <p class="section-sub">ステージは「重症度ランキング」ではなく、治療方針を決めるための共通のものさしです。</p>
+  <div class="content-card">
+    <p><strong>ステージ(病期)</strong>は、がんがどのくらい広がっているかを表す目安です。多くは、<strong>がんの大きさ・深さ(T)</strong>、<strong>近くのリンパ節への広がり(N)</strong>、<strong>離れた場所への転移(M)</strong>の3つを組み合わせて、I〜IVで表します。</p>
+    <div style="margin-top:8px;">
+      <div class="stage-row"><span class="stage-badge">I 期</span><p>がんが比較的小さく、その場所にとどまっている段階。</p></div>
+      <div class="stage-row"><span class="stage-badge">II 期</span><p>少し大きくなる、または近くのリンパ節に少し広がり始めた段階。</p></div>
+      <div class="stage-row"><span class="stage-badge">III 期</span><p>周りの組織やリンパ節への広がりが進んだ段階。</p></div>
+      <div class="stage-row"><span class="stage-badge">IV 期</span><p>離れた臓器に転移がある段階。治療の目的が変わることもあります。</p></div>
+    </div>
+    <p style="margin-top:14px;">ステージはあくまで<strong>治療の方針を決めるための共通言語</strong>です。同じステージでも、がんのタイプや体の状態で経過は変わります。数字だけで先を決めつけず、主治医とこれからを話していきましょう。</p>
+    <blockquote>「ステージ◯=こうなる」と決まっているわけではありません。ステージは出発点であって、結末ではありません。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>「自分のステージの意味」を、不安をあおらない言葉で整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_about&topic=stage">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s4">
+  <div class="section-eyebrow">SUBTYPE</div>
+  <h2 class="section-title">がんのタイプ ・ 同じ名前でも、性格が違う</h2>
+  <p class="section-sub">「乳がん」「肺がん」と一口に言っても、その中にいくつもの性質があります。</p>
+  <div class="content-card">
+    <p>近年のがん治療では、ステージ(広がり)だけでなく、<strong>がんのタイプ(性質)</strong>がとても重要になっています。がん細胞が持つ目印や遺伝子の特徴によって、効く薬がまったく変わるからです。</p>
+    <h4>たとえば</h4>
+    <ul>
+      <li>乳がんでは、ホルモンの影響を受けるタイプか、HER2という目印を持つタイプかなどで、選ぶ薬が変わります。</li>
+      <li>肺がんでは、特定の遺伝子の変化(EGFR、ALKなど)があると、それをねらう分子標的薬が使えることがあります。</li>
+    </ul>
+    <p>だからこそ、治療を始める前に<strong>タイプを正しく調べる検査</strong>がとても大切です。「同じがんなのに、人によって薬が違う」のは、このタイプの違いによるものです。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>あなたの検査結果の言葉(陽性・陰性など)を、やさしく読み解きます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_about&topic=subtype">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s5">
+  <div class="section-eyebrow">DIAGNOSIS</div>
+  <h2 class="section-title">検査と診断 ・ 何のために、何を調べる?</h2>
+  <p class="section-sub">いくつもの検査があるのは、治療を「正しく選ぶ」ためです。</p>
+  <div class="content-card">
+    <p>がんの診断や治療方針を決めるために、いくつかの検査を組み合わせます。たくさんあって戸惑いますが、それぞれに役割があります。</p>
+    <h4>主な検査の役割</h4>
+    <ul>
+      <li><strong>画像検査(CT・MRI・PET・超音波など)</strong> ・ がんの場所や大きさ、広がりを「見える化」する。</li>
+      <li><strong>内視鏡・生検</strong> ・ 組織の一部を採って顕微鏡で調べ、がんかどうか・性質を確定する。</li>
+      <li><strong>病理検査・遺伝子検査</strong> ・ がんのタイプを調べ、効く薬を見極める(コンパニオン診断など)。</li>
+      <li><strong>血液検査・腫瘍マーカー</strong> ・ 体の状態の把握や、治療効果・経過の確認の補助。</li>
+    </ul>
+    <p>結果が出るまでに時間がかかることもあります。待つ時間はつらいものですが、<strong>「正しく調べること」が、合った治療への近道</strong>です。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>受ける検査の意味や、結果の見方を一緒に確認しましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_about&topic=diagnosis">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s6">
+  <div class="section-eyebrow">FLOW</div>
+  <h2 class="section-title">治療までの大きな流れ</h2>
+  <p class="section-sub">今、自分がどのあたりにいるのか。地図があると、少し落ち着きます。</p>
+  <div class="content-card">
+    <p>多くの場合、次のような流れで進みます。順番や内容はがんによって変わりますが、全体像を持っておくと、見通しが立ちやすくなります。</p>
+    <ul>
+      <li><strong>1. 発見・受診</strong> ・ 検診や症状をきっかけに受診。</li>
+      <li><strong>2. 検査・診断</strong> ・ 画像や生検で、がんの有無・場所・広がり・タイプを確かめる。</li>
+      <li><strong>3. 治療方針の相談</strong> ・ 主治医と一緒に方針を決める(必要ならセカンドオピニオンも)。</li>
+      <li><strong>4. 治療</strong> ・ 手術・薬物療法・放射線などを、計画に沿って受ける。</li>
+      <li><strong>5. 治療後・経過観察</strong> ・ 定期的に通院し、再発がないか確認しながら暮らす。</li>
+    </ul>
+    <p>SATOI では、この流れを<strong>あなた専用の地図(ジャーニーマップ)</strong>として、いつでも見られるようにしています。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>「今、自分はどこ?」を、あなたの状況に合わせて一緒に確かめましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_about&topic=flow">AIと話す →</a>
+  </div>
+
+  <div class="note-box">
+    <strong>この情報について。</strong> ここに書かれているのは、がんを理解するための一般的な説明です。お一人ずつの状態によって、当てはまり方は異なります。診断や治療については、必ず主治医とご相談ください。SATOI は、あなたが安心して主治医と話せるよう、情報をやさしく整理してお手伝いします。
+  </div>
+</section>
+
+<div class="related-nav">
+  <h4>もっと知る ・ 関連ページ</h4>
+  <div class="related-grid">
+    <a class="related-card" href="SATOI_Mock_v1_KB_treatment.html">
+      <div class="related-card-title">がんの治療(基本)</div>
+      <div class="related-card-desc">手術・薬・放射線・緩和の全体像</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_B1_mindmap.html">
+      <div class="related-card-title">治療の全体像(マインドマップ)</div>
+      <div class="related-card-desc">あなたの治療の地図</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_B3_treatment_detail.html">
+      <div class="related-card-title">治療法の詳しい説明</div>
+      <div class="related-card-desc">レジメン・副作用・SDM質問</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_DASHBOARD.html">
+      <div class="related-card-title">ダッシュボード</div>
+      <div class="related-card-desc">同じ境遇の人数・全体像</div>
+    </a>
+  </div>
+</div>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

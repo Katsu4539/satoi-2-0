@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>がんと遺伝子（ゲノム）のはなし | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #E6EBEE; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 130px 32px 60px; text-align:center; background: linear-gradient(135deg, rgba(13,115,119,0.06) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: #0D7377; padding:6px 18px; border:1px solid rgba(13,115,119,0.4); border-radius:24px; margin-bottom:24px; }
+.hero-title { font-size: clamp(30px, 5vw, 44px); font-weight:300; line-height:1.55; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: #0D7377; font-weight:500; }
+.hero-sub { font-size:15px; color: var(--ink-medium); line-height:2; max-width:680px; margin:0 auto; }
+
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 14px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc-item { padding:7px 14px; background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.3); border-radius:18px; color: var(--ink-medium); font-size:11.5px; cursor:pointer; text-decoration:none; }
+.toc-item:hover, .toc-item.active { background: #0D7377; color: var(--morning-white); border-color: #0D7377; }
+
+.section { padding: 56px 32px; max-width: 1000px; margin: 0 auto; }
+.section-eyebrow { font-size:11px; letter-spacing:0.36em; color: #0D7377; margin-bottom:10px; font-weight:600; }
+.section-title { font-size: clamp(23px, 3.2vw, 29px); font-weight:500; color: var(--ink-deep); margin-bottom:14px; line-height:1.5; }
+.section-sub { font-size:14.5px; color: var(--ink-medium); line-height:1.95; margin-bottom:24px; }
+
+.content-card { background: white; border-radius:18px; padding: 28px 32px; border:1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 20px; }
+.content-card h4 { font-size:15px; font-weight:600; color: #0D7377; margin: 18px 0 10px; }
+.content-card h4:first-child { margin-top: 0; }
+.content-card p { font-size:14.5px; color: var(--ink-medium); line-height:1.95; margin-bottom: 12px; }
+.content-card ul { padding-left: 22px; margin: 10px 0 14px; color: var(--ink-medium); font-size:14px; line-height:1.95; }
+.content-card li { margin-bottom: 6px; }
+.content-card strong { color: var(--ink-deep); font-weight: 600; }
+.analogy { border-left: 3px solid var(--starlight); padding: 12px 20px; margin: 16px 0; background: rgba(212,169,94,0.08); color: var(--ink-medium); font-size:14px; border-radius: 0 10px 10px 0; }
+.gentle { text-align:center; font-size:13.5px; color: var(--ink-light); margin: 8px auto 0; max-width:640px; line-height:1.9; }
+
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 26px 30px; margin: 24px 0; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 16px; font-weight:600; color: var(--teal); margin-bottom: 8px; }
+.ai-cta p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 14px; }
+.ai-cta-btn { display:inline-block; padding: 12px 24px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
+.linkrow { display:flex; flex-wrap:wrap; gap: 10px; margin-top: 6px; }
+.pill-link { display:inline-flex; align-items:center; gap:6px; padding: 10px 18px; border-radius: 20px; font-size: 12.5px; font-weight: 500; border:1px solid var(--teal); color: var(--teal); background:white; }
+.pill-link:hover { background: var(--teal); color: white; }
+.pill-link.solid { background: var(--teal); color:white; }
+.pill-link.solid:hover { background: var(--teal-soft); }
+
+.searchbox { display:flex; gap:0; max-width:520px; margin: 14px 0; border:1px solid var(--teal); border-radius: 14px; overflow:hidden; }
+.searchbox input { flex:1; border:none; padding: 12px 16px; font-size: 14px; font-family: inherit; outline:none; }
+.searchbox button { border:none; background: var(--teal); color:white; padding: 0 20px; font-size: 13px; font-weight:500; }
+.searchbox button:hover { background: var(--teal-soft); }
+
+.related-nav { background: var(--morning-cream); padding: 36px 32px; margin-top: 30px; border-top: 1px solid var(--line); }
+.related-nav h4 { font-size:14px; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom: 16px; text-align: center; }
+.related-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; max-width: 980px; margin: 0 auto; }
+.related-card { padding: 14px 18px; background: white; border-radius: 12px; border:1px solid var(--line); cursor:pointer; transition: all 0.2s; }
+.related-card:hover { border-color: #0D7377; background: rgba(212,169,94,0.06); }
+.related-card-title { font-size: 13px; font-weight: 500; color: var(--ink-deep); margin-bottom: 3px; }
+.related-card-desc { font-size: 11.5px; color: var(--ink-light); }
+
+@media (max-width: 768px) {
+  .hero { padding: 110px 16px 50px; }
+  .section { padding: 40px 16px; }
+  .content-card { padding: 22px 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_CHP_exam.html'; })()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">GENOME ・ がんと遺伝子</div>
+  <h1 class="hero-title">がんと、<strong>遺伝子</strong>の はなし</h1>
+  <p class="hero-sub">「EGFR」「ALK」「HER2」——検査で出てくる、この言葉たち。<br>むずかしく見えますが、知るほどに、治療の選び方が見えてきます。<br>あなたのペースで、いっしょに見ていきましょう。</p>
+</section>
+
+<nav class="toc">
+  <a class="toc-item" href="#why">なぜ遺伝子を調べる?</a>
+  <a class="toc-item" href="#driver">ドライバー遺伝子とは</a>
+  <a class="toc-item" href="#test">遺伝子検査の種類</a>
+  <a class="toc-item" href="#family">遺伝するの?</a>
+  <a class="toc-item" href="#sdm">先生と決める</a>
+  <a class="toc-item" href="#pubmed">もっと深く調べる</a>
+</nav>
+
+<main>
+
+<section class="section" id="why">
+  <div class="section-eyebrow">WHY ・ なぜ調べるのか</div>
+  <h2 class="section-title">がんは、<strong style="color:#0D7377;">遺伝子の異常</strong>から始まります</h2>
+  <p class="section-sub">私たちの体は約37兆個の細胞でできていて、その一つひとつに「設計図」＝遺伝子があります。この設計図に傷（変異）が積み重なり、細胞が増えすぎてしまった状態が、がんです。</p>
+  <div class="content-card">
+    <p>大事なのは、<strong>同じ臓器のがんでも、傷ついている遺伝子が違えば「別のがん」</strong>のように振る舞うことです。だから、効く薬も変わります。</p>
+    <p>たとえば同じ「肺がん」でも、EGFRという遺伝子に変異がある人と、ALKという遺伝子が関わる人とでは、第一選択の薬がまったく違います。</p>
+    <div class="analogy">🔑 たとえるなら——がんの遺伝子は「鍵穴」。その鍵穴にぴったり合う「鍵（薬）」を選ぶために、まず鍵穴の形を調べる。それが遺伝子検査です。</div>
+    <p>つまり遺伝子を調べることは、<strong>あなたに最も効く治療を、最初から選ぶため</strong>。回り道をしないための、いちばん大切な一歩です。</p>
+  </div>
+</section>
+
+<section class="section" id="driver">
+  <div class="section-eyebrow">DRIVER ・ ドライバー遺伝子</div>
+  <h2 class="section-title">がんを動かす「アクセル」＝ドライバー遺伝子</h2>
+  <p class="section-sub">遺伝子の変異の中でも、がんの増殖を強く押し進めている「主役」を、ドライバー遺伝子と呼びます。患者さんが「これ何で調べるの?」といちばん疑問に思うところです。</p>
+  <div class="content-card">
+    <div class="analogy">🚗 ドライバー遺伝子は「踏みっぱなしのアクセル」。車（がん細胞）が止まらず進んでしまう原因です。そのアクセルだけを狙って止めるのが <strong>分子標的薬</strong> です。</div>
+    <h4>よく調べられるドライバー遺伝子の例</h4>
+    <ul>
+      <li><strong>EGFR / ALK / ROS1（肺がんなど）</strong>：合致する経口の分子標的薬が、劇的に効くことがあります。</li>
+      <li><strong>HER2（乳がん・胃がん・大腸がんなど）</strong>：陽性ならトラスツズマブ等が大きな武器に。</li>
+      <li><strong>BRCA1/2（乳がん・卵巣・前立腺・膵臓）</strong>：PARP阻害薬の適応。遺伝性の判定にも関わります。</li>
+      <li><strong>RAS / BRAF（大腸がんなど）</strong>：治療方針が大きく変わる重要な指標です。</li>
+      <li><strong>PD-L1（多くのがん種）</strong>：高ければ免疫チェックポイント阻害薬が選択肢に。</li>
+    </ul>
+    <p>「狙い撃ちできる相手（ドライバー）が見つかるか」を調べるのが、コンパニオン診断・遺伝子検査の目的です。</p>
+  </div>
+</section>
+
+<section class="section" id="test">
+  <div class="section-eyebrow">TESTS ・ 検査の種類</div>
+  <h2 class="section-title">遺伝子検査には、種類があります</h2>
+  <div class="content-card">
+    <h4>① コンパニオン診断（単一〜少数の遺伝子）</h4>
+    <p>「この薬が効くか」を判定するための検査。多くが保険適用で、結果まで通常 <strong>1〜3週間</strong>。治療開始前の標準的な検査です。</p>
+    <h4>② 包括的ゲノムプロファイリング検査（CGP・がん遺伝子パネル）</h4>
+    <p>数百の遺伝子を一度にまとめて調べる検査（FoundationOne®やがんゲノムプロファイル等）。標準治療が難しくなった時などに、保険適用で受けられる場合があります。主治医・がんゲノム医療の窓口と相談して進めます。</p>
+    <div class="ai-cta">
+      <div class="ai-cta-title">🧪 検査そのものの流れを見る</div>
+      <p>あなたのがん種で、どんな精密検査が必要か。検査ページでまとめて確認できます。</p>
+      <a class="ai-cta-btn" href="SATOI_Mock_v1_CHP_exam.html#precision">検査ページ（精密検査）へ →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="family">
+  <div class="section-eyebrow">FAMILY ・ 遺伝のこと</div>
+  <h2 class="section-title">「これは、家族にも遺伝するの?」</h2>
+  <p class="section-sub">遺伝子検査と聞くと、不安になる方が多い部分です。ここは、落ち着いて整理しましょう。</p>
+  <div class="content-card">
+    <h4>多くは「体細胞変異」＝遺伝しません</h4>
+    <p>がんで調べる遺伝子変異の大半は、生きていく中で後天的に起きた <strong>体細胞変異</strong> で、子どもや家族に受け継がれるものではありません。</p>
+    <h4>一部は「生殖細胞系列」＝家族に関わることも</h4>
+    <p>BRCA1/2 などは、生まれ持った <strong>生殖細胞系列の変異</strong> のことがあり、その場合は血縁の家族の検診相談につながることもあります。</p>
+    <blockquote style="border-left:3px solid #0D7377; padding:10px 18px; margin:14px 0; background:rgba(13,115,119,0.06); border-radius:0 10px 10px 0; font-size:13.5px; color:var(--ink-medium);">検査の結果は、<strong>あなたの同意なしに、誰かに共有されることはありません</strong>。家族に話すかどうか、いつ話すかも、あなたが決めて大丈夫です。</blockquote>
+  </div>
+  <p class="gentle">ここまで読めたあなたは、もう十分がんばっています。むずかしい言葉は、覚えなくて大丈夫。<br>分からない言葉が出てきたら、そのまま AI に聞いてみてください。</p>
+</section>
+
+<section class="section" id="sdm">
+  <div class="section-eyebrow">SDM ・ 先生と決める</div>
+  <h2 class="section-title">知った上で、先生と<strong style="color:#0D7377;">いっしょに</strong>決める</h2>
+  <p class="section-sub">SATOIが目指すのは、あなたと先生のあいだの「情報の差」をなくすこと。知識は、先生と対等に話すための、あなたの味方です。</p>
+  <div class="content-card">
+    <p>遺伝子の結果票を持って診察に行くとき、こんな質問を用意しておくと、話がぐっと進みます。</p>
+    <ul>
+      <li>「私のがんに、ドライバー遺伝子は見つかりましたか?」</li>
+      <li>「その結果だと、どんな治療が選べますか?」</li>
+      <li>「包括的ゲノム検査（CGP）は、私に向いていますか?」</li>
+    </ul>
+    <p>気になった検査名や調べたことは、<strong>SDM質問カードに保存して、先生に共有</strong>できます（PDF・QR・メール）。</p>
+    <div class="linkrow">
+      <a class="pill-link solid" href="SATOI_Mock_v1_B3_treatment_detail.html">治療詳細・SDMカードへ →</a>
+      <a class="pill-link" href="SATOI_Mock_v1_A2_dialog.html?topic=genetic&resume=1">AIと、遺伝子の話をする →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pubmed">
+  <div class="section-eyebrow">DEEPER ・ もっと深く</div>
+  <h2 class="section-title">自分でも、最新の研究を調べたい方へ</h2>
+  <p class="section-sub">世界中の医学論文は、<strong>PubMed（パブメド）</strong> という米国国立医学図書館の無料データベースで探せます。英語ですが、検索のコツさえ分かれば、最新情報にたどり着けます。</p>
+  <div class="content-card">
+    <h4>かんたんな検索のコツ</h4>
+    <p>検索窓に「<strong>遺伝子名 + がん種 + treatment</strong>」を英語で入れるのが基本です。例：<strong>EGFR lung cancer treatment</strong></p>
+    <div class="searchbox">
+      <input id="pubmedInput" type="text" placeholder="例：EGFR lung cancer treatment" value="EGFR lung cancer treatment">
+      <button onclick="(function(){var q=encodeURIComponent(document.getElementById('pubmedInput').value||'cancer treatment');window.open('https://pubmed.ncbi.nlm.nih.gov/?term='+q,'_blank','noopener');})()">PubMedで検索 →</button>
+    </div>
+    <p style="font-size:13px;color:var(--ink-light);">※ボタンを押すと、PubMedの検索結果が新しいタブで開きます。最近の総説を読みたい時は、左側の絞り込みで「Review」「5 years」を選ぶと探しやすくなります。</p>
+    <div class="analogy">📎 見つけた論文は、SDM質問カードに「要約＋リンク」で添付して、先生にそのまま見てもらうこともできます。「先生、これ読んだのですが」の一言が、対話のきっかけになります。</div>
+  </div>
+  <p class="gentle">調べることに疲れたら、いつでも休んでいいです。ここにある情報は、逃げません。</p>
+</section>
+
+</main>
+
+<div class="related-nav">
+  <h4>関連して、見ておきたいページ</h4>
+  <div class="related-grid">
+    <div class="related-card" onclick="location.href='SATOI_Mock_v1_CHP_exam.html#precision'">
+      <div class="related-card-title">🔬 精密検査（検査ページ）</div>
+      <div class="related-card-desc">がん種別に必要な検査を確認</div>
+    </div>
+    <div class="related-card" onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html'">
+      <div class="related-card-title">💊 治療の詳細</div>
+      <div class="related-card-desc">遺伝子結果から選ぶ治療</div>
+    </div>
+    <div class="related-card" onclick="location.href='SATOI_Mock_v1_ACAD_research.html'">
+      <div class="related-card-title">📚 学術・エビデンス</div>
+      <div class="related-card-desc">研究の系統樹・深掘り</div>
+    </div>
+    <div class="related-card" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?topic=genetic&resume=1'">
+      <div class="related-card-title">💬 AIと話す</div>
+      <div class="related-card-desc">分からない言葉を、その場で</div>
+    </div>
+  </div>
+</div>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お金と制度(基礎) | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #F1ECD9; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 130px 32px 56px; text-align:center; background: linear-gradient(135deg, rgba(127,168,201,0.08) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: #7FA8C9; padding:6px 18px; border:1px solid rgba(127,168,201,0.4); border-radius:24px; margin-bottom:24px; }
+.hero-title { font-size: clamp(30px, 5vw, 44px); font-weight:300; line-height:1.55; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: #7FA8C9; font-weight:500; }
+.hero-sub { font-size:15px; color: var(--ink-medium); line-height:2; max-width:700px; margin:0 auto; }
+
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 14px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc-item { padding:7px 14px; background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.3); border-radius:18px; color: var(--ink-medium); font-size:11.5px; cursor:pointer; text-decoration:none; }
+.toc-item:hover, .toc-item.active { background: #7FA8C9; color: var(--morning-white); border-color: #7FA8C9; }
+
+.section { padding: 56px 32px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size:11px; letter-spacing:0.36em; color: #7FA8C9; margin-bottom:10px; font-weight:600; }
+.section-title { font-size: clamp(24px, 3.2vw, 30px); font-weight:500; color: var(--ink-deep); margin-bottom:14px; line-height:1.5; }
+.section-sub { font-size:14.5px; color: var(--ink-medium); line-height:1.95; margin-bottom:30px; }
+
+.content-card { background: white; border-radius:18px; padding: 28px 32px; border:1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 20px; }
+.content-card h3 { font-size:18px; font-weight:600; color: var(--ink-deep); margin-bottom: 12px; }
+.content-card h4 { font-size:15px; font-weight:600; color: #7FA8C9; margin: 18px 0 10px; }
+.content-card p { font-size:14px; color: var(--ink-medium); line-height:1.95; margin-bottom: 12px; }
+.content-card ul { padding-left: 22px; margin: 10px 0 14px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.content-card li { margin-bottom: 6px; }
+.content-card strong { color: var(--ink-deep); font-weight: 600; }
+.content-card blockquote { border-left: 3px solid #7FA8C9; padding: 10px 18px; margin: 14px 0; background: rgba(212,169,94,0.06); color: var(--ink-medium); font-size:13px; }
+
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 26px 30px; margin: 26px 0 8px; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 16px; font-weight:600; color: var(--teal); margin-bottom: 8px; }
+.ai-cta p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 14px; }
+.ai-cta-btn { display:inline-block; padding: 12px 24px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
+
+.note-box { background: rgba(212,98,42,0.07); border:1px solid rgba(212,98,42,0.25); border-radius: 14px; padding: 18px 22px; margin: 8px 0 0; font-size: 12.5px; color: var(--ink-medium); line-height:1.9; }
+.note-box strong { color: var(--warm-orange); }
+
+.related-nav { background: var(--morning-cream); padding: 40px 32px; margin-top: 40px; border-top: 1px solid var(--line); }
+.related-nav h4 { font-size:14px; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom: 16px; text-align: center; }
+.related-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; max-width: 980px; margin: 0 auto; }
+.related-card { padding: 14px 18px; background: white; border-radius: 12px; border:1px solid var(--line); cursor:pointer; transition: all 0.2s; }
+.related-card:hover { border-color: #7FA8C9; background: rgba(212,169,94,0.06); }
+.related-card-title { font-size: 13px; font-weight: 500; color: var(--ink-deep); margin-bottom: 3px; }
+.related-card-desc { font-size: 11.5px; color: var(--ink-light); }
+
+@media (max-width: 768px) {
+  .hero { padding: 110px 16px 46px; }
+  .section { padding: 40px 16px; }
+  .content-card { padding: 22px 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_DASHBOARD.html'; })()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">COST &amp; SUPPORT ・ お金と制度(基礎)</div>
+  <h1 class="hero-title">お金の不安は、<strong>制度</strong>で軽くできます。</h1>
+  <p class="hero-sub">
+    がんの治療には、使える公的な仕組みがたくさんあります。<br>
+    「知らずに損をしない」ために、まず全体像を押さえましょう。
+  </p>
+</section>
+
+<nav class="toc">
+  <a class="toc-item" href="#s1">医療費の全体像</a>
+  <a class="toc-item" href="#s2">高額療養費</a>
+  <a class="toc-item" href="#s3">傷病手当金</a>
+  <a class="toc-item" href="#s4">医療費控除</a>
+  <a class="toc-item" href="#s5">そのほかの支え</a>
+  <a class="toc-item" href="#s6">相談先</a>
+</nav>
+
+<main>
+
+<section class="section" id="s1">
+  <div class="section-eyebrow">OVERVIEW</div>
+  <h2 class="section-title">医療費の全体像 ・ 全額を払うわけではありません</h2>
+  <p class="section-sub">まず安心してほしいこと。日本では、医療費の自己負担には上限の仕組みがあります。</p>
+  <div class="content-card">
+    <p>がんの治療費と聞くと不安になりますが、日本には<strong>公的医療保険</strong>があり、窓口で払うのは原則かかった費用の1〜3割です。さらに、その自己負担にも<strong>月ごとの上限</strong>を設ける仕組み(高額療養費)があります。</p>
+    <p>お金の支えは、大きく分けて次の3つの方向から考えると整理しやすいです。</p>
+    <ul>
+      <li><strong>払う額を減らす</strong> ・ 高額療養費制度、医療費控除 など</li>
+      <li><strong>収入を支える</strong> ・ 傷病手当金、障害年金 など</li>
+      <li><strong>相談して使いこなす</strong> ・ 病院の相談員(MSW)、社労士、FP など</li>
+    </ul>
+    <blockquote>「知らなかったために使えなかった」が、いちばんもったいない。まずは存在を知り、窓口に聞くことが第一歩です。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>あなたの状況で、まず確認するとよい制度を一緒に整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_money&topic=overview">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s2">
+  <div class="section-eyebrow">HIGH-COST</div>
+  <h2 class="section-title">高額療養費制度 ・ 月の負担に上限</h2>
+  <p class="section-sub">いちばん大きな支え。多くの方が使える、いちばん基本の制度です。</p>
+  <div class="content-card">
+    <p><strong>高額療養費制度</strong>は、1か月(暦月)の医療費の自己負担が一定の上限を超えたとき、超えた分が戻ってくる(または払わなくてよくなる)仕組みです。上限額は、年齢や所得によって変わります。</p>
+    <h4>知っておくと便利なこと</h4>
+    <ul>
+      <li><strong>限度額適用認定証</strong>を事前に用意して窓口に出すと、最初から上限までの支払いで済み、一時的な立て替えが要らなくなります(マイナ保険証で自動的に適用できる場合もあります)。</li>
+      <li>同じ世帯・同じ月の自己負担を<strong>合算</strong>できる場合があります。</li>
+      <li>負担が重い月が続いたときに、上限がさらに下がる仕組み(多数回該当)もあります。</li>
+    </ul>
+    <p>具体的な上限額や手続きは、加入している健康保険(協会けんぽ・健保組合・国保など)の窓口で確認できます。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>「自分の上限はどのくらい?」「認定証はどう取る?」を一緒に確認します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_money&topic=highcost">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s3">
+  <div class="section-eyebrow">SICK LEAVE</div>
+  <h2 class="section-title">傷病手当金 ・ 働けない間の収入を支える</h2>
+  <p class="section-sub">治療で仕事を休むとき、収入の一部を支えてくれる制度です。</p>
+  <div class="content-card">
+    <p><strong>傷病手当金</strong>は、会社員などが加入する健康保険から、病気やけがで働けず給料が出ないときに支給されるお金です。一定の条件を満たすと、給料のおよそ3分の2程度が、最長で1年6か月まで支給されます(加入している保険によって扱いが異なります)。</p>
+    <ul>
+      <li>連続して休んだ後の、給与が支払われない日に対して支給されます。</li>
+      <li>申請には、医師の意見など必要な書類があります。会社の担当部署や保険者に確認しましょう。</li>
+      <li>自営業などの国民健康保険には、原則この制度はありません(自治体により異なります)。</li>
+    </ul>
+    <p>「休むとお金が…」という不安が、治療の選択をためらわせることがあります。こうした制度があることを知っておくだけでも、心が少し軽くなります。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>仕事と治療の両立、休職や手当のこと、一緒に整理しましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_money&topic=sickleave">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s4">
+  <div class="section-eyebrow">TAX</div>
+  <h2 class="section-title">医療費控除 ・ 払った税金が戻ることも</h2>
+  <p class="section-sub">1年間の医療費がかさんだら、確定申告で税金が軽くなる場合があります。</p>
+  <div class="content-card">
+    <p><strong>医療費控除</strong>は、1年間(1〜12月)に支払った医療費が一定額を超えたとき、確定申告をすると所得税・住民税が軽くなる仕組みです。本人だけでなく、生計を同じくする家族の分も合算できます。</p>
+    <ul>
+      <li>通院の交通費(公共交通機関)など、対象になるものがあります。</li>
+      <li>高額療養費などで戻った分は差し引いて計算します。</li>
+      <li><strong>領収書やレシートは、捨てずに保管</strong>しておきましょう。</li>
+    </ul>
+    <p>医療用ウィッグや補整具なども、条件により対象になることがあります。詳しくは税務署や、後述の相談先に確認しましょう。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>何が対象になるか、何を保管すべきか、一緒に確認します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_money&topic=tax">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s5">
+  <div class="section-eyebrow">OTHERS</div>
+  <h2 class="section-title">そのほかの支え</h2>
+  <p class="section-sub">状況によって、ほかにも使える支えがあります。</p>
+  <div class="content-card">
+    <ul>
+      <li><strong>障害年金</strong> ・ 治療が長引き、生活や仕事に大きな支障が続く場合に対象になることがあります。</li>
+      <li><strong>身体障害者手帳</strong> ・ 手術などで体の機能に一定の状態が生じた場合に、税の軽減やサービスにつながることがあります。</li>
+      <li><strong>介護保険</strong> ・ 一定の年齢や状態で、在宅療養の支援を受けられることがあります。</li>
+      <li><strong>民間の保険・がん保険</strong> ・ 加入していれば、診断給付金や入院・通院給付の対象になることがあります。請求漏れに注意。</li>
+      <li><strong>自治体・職場の制度</strong> ・ 医療用ウィッグの助成など、地域や勤務先ごとの支援も。</li>
+    </ul>
+    <blockquote>「自分は対象かな?」と迷ったら、まず相談を。対象かどうかの判断こそ、専門家の出番です。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>加入保険の請求漏れチェックや、使えそうな制度を一緒に洗い出します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_money&topic=others">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s6">
+  <div class="section-eyebrow">WHERE TO ASK</div>
+  <h2 class="section-title">相談先 ・ 一人で抱えない</h2>
+  <p class="section-sub">お金や制度は複雑です。プロに聞くのが、いちばんの近道です。</p>
+  <div class="content-card">
+    <ul>
+      <li><strong>がん相談支援センター</strong> ・ 全国の拠点病院にある無料窓口。その病院にかかっていなくても相談できます。</li>
+      <li><strong>医療ソーシャルワーカー(MSW)</strong> ・ 病院にいる、生活やお金の相談の専門職。制度の案内や申請の助けに。</li>
+      <li><strong>社会保険労務士(社労士)</strong> ・ 傷病手当金や障害年金などの手続きのプロ。</li>
+      <li><strong>ファイナンシャルプランナー(FP)</strong> ・ 家計全体の見通しや保険の確認に。</li>
+    </ul>
+    <p>SATOI では、お金・制度の全体像を整理し、相談先につなぐお手伝いができます。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 相談の準備を、AIと整える</div>
+    <p>誰に・何を聞くとよいか、あなたの状況に合わせて整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_money&topic=consult">AIと話す →</a>
+  </div>
+
+  <div class="note-box">
+    <strong>この情報について。</strong> 制度の名称・条件・金額は変わることがあり、お一人ずつの状況によって使えるかどうかも異なります。ここでは仕組みの大まかな説明にとどめています。<strong>最新で正確な内容は、必ず加入している保険・自治体・病院の相談窓口でご確認ください。</strong>
+  </div>
+</section>
+
+<div class="related-nav">
+  <h4>もっと知る ・ 関連ページ</h4>
+  <div class="related-grid">
+    <a class="related-card" href="SATOI_Mock_v1_E1_money.html">
+      <div class="related-card-title">お金・制度ハブ</div>
+      <div class="related-card-desc">使える制度を自動でチェック</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_KB_treatment.html">
+      <div class="related-card-title">がんの治療(基本)</div>
+      <div class="related-card-desc">治療の種類と全体像</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_FAM_view.html">
+      <div class="related-card-title">家族との共有・伝え方</div>
+      <div class="related-card-desc">お金のことも家族と</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_CON_concierge.html">
+      <div class="related-card-title">コンシェルジュに相談</div>
+      <div class="related-card-desc">専門の相談につなぎます</div>
+    </a>
+  </div>
+</div>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>検査 ・ 状態を知る | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #E6EBEE; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 130px 32px 60px; text-align:center; background: linear-gradient(135deg, rgba(13,115,119,0.06) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: #0D7377; padding:6px 18px; border:1px solid rgba(13,115,119,0.4); border-radius:24px; margin-bottom:24px; }
+.hero-title { font-size: clamp(30px, 5vw, 44px); font-weight:300; line-height:1.55; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: #0D7377; font-weight:500; }
+.hero-sub { font-size:15px; color: var(--ink-medium); line-height:2; max-width:680px; margin:0 auto; }
+
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 14px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc-item { padding:7px 14px; background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.3); border-radius:18px; color: var(--ink-medium); font-size:11.5px; cursor:pointer; text-decoration:none; }
+.toc-item:hover, .toc-item.active { background: #0D7377; color: var(--morning-white); border-color: #0D7377; }
+
+.section { padding: 60px 32px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size:11px; letter-spacing:0.36em; color: #0D7377; margin-bottom:10px; font-weight:600; }
+.section-title { font-size: clamp(24px, 3.2vw, 30px); font-weight:500; color: var(--ink-deep); margin-bottom:14px; line-height:1.5; }
+.section-sub { font-size:14.5px; color: var(--ink-medium); line-height:1.95; margin-bottom:30px; }
+
+.content-card { background: white; border-radius:18px; padding: 28px 32px; border:1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 20px; }
+.content-card h3 { font-size:18px; font-weight:600; color: var(--ink-deep); margin-bottom: 12px; }
+.content-card h4 { font-size:15px; font-weight:600; color: #0D7377; margin: 18px 0 10px; }
+.content-card p { font-size:14px; color: var(--ink-medium); line-height:1.95; margin-bottom: 12px; }
+.content-card ul { padding-left: 22px; margin: 10px 0 14px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.content-card li { margin-bottom: 6px; }
+.content-card strong { color: var(--ink-deep); font-weight: 500; }
+.content-card blockquote { border-left: 3px solid #0D7377; padding: 10px 18px; margin: 14px 0; background: rgba(212,169,94,0.06); color: var(--ink-medium); font-size:13px; font-style: italic; }
+
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 24px; }
+.mini-card { background: var(--morning-cream); border-radius:14px; padding: 20px 22px; border:1px solid var(--line); cursor:pointer; transition: all 0.3s; }
+.mini-card:hover { background: white; border-color: #0D7377; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(11,23,54,0.08); }
+.mini-card-num { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%; background: #0D7377; color: white; font-weight:700; font-size:13px; margin-bottom:10px; }
+.mini-card-title { font-size:15px; font-weight:600; color: var(--ink-deep); margin-bottom: 6px; }
+.mini-card-desc { font-size:12.5px; color: var(--ink-medium); line-height:1.85; }
+
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 28px 32px; margin: 30px 0; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 16px; font-weight:600; color: var(--teal); margin-bottom: 8px; }
+.ai-cta p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 14px; }
+.ai-cta-btn { display:inline-block; padding: 12px 24px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
+
+.related-nav { background: var(--morning-cream); padding: 36px 32px; margin-top: 40px; border-top: 1px solid var(--line); }
+.related-nav h4 { font-size:14px; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom: 16px; text-align: center; }
+.related-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; max-width: 980px; margin: 0 auto; }
+.related-card { padding: 14px 18px; background: white; border-radius: 12px; border:1px solid var(--line); cursor:pointer; transition: all 0.2s; }
+.related-card:hover { border-color: #0D7377; background: rgba(212,169,94,0.06); }
+.related-card-title { font-size: 13px; font-weight: 500; color: var(--ink-deep); margin-bottom: 3px; }
+.related-card-desc { font-size: 11.5px; color: var(--ink-light); }
+
+@media (max-width: 768px) {
+  .hero { padding: 110px 16px 50px; }
+  .section { padding: 40px 16px; }
+  .content-card { padding: 22px 20px; }
+}
+
+/* === SATOI 共通トースト・ユニバーサルナビ === */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35); font-size: 13.5px; line-height: 1.75; display: flex; gap: 14px; opacity: 0; transform: translateY(20px); transition: all 0.4s; border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; }
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; }
+.satoi-univ-btn { width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_C1_mypage.html'; })()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">CHAPTER 2 ・ EXAMINATIONS</div>
+  <h1 class="hero-title">がんの<strong>状態</strong>を知るための、検査</h1>
+  <p class="hero-sub">結果待ちが、いちばん怖い時間。<br>でも、その時間が、あなた専用の治療地図を作る時間です。</p>
+</section>
+
+<!-- ===== タイプ判別=治療の入口(B3から分離して集約)===== -->
+<section class="section" id="precision" style="background: linear-gradient(135deg, rgba(13,115,119,0.06), rgba(20,166,171,0.06));">
+  <div class="section-eyebrow" style="color:#0D7377;">PRECISION ・ タイプ判別</div>
+  <h2 class="section-title">精密検査こそ、<strong style="color:#0D7377;">治療の入口</strong></h2>
+  <p style="max-width:820px; font-size:15px; line-height:1.9; color:rgba(26,42,64,0.82);">治療法は <strong style="color:#0D7377;">がんのタイプ</strong> で大きく変わります。同じ「乳がん」でも HER2陽性/陰性 で薬が全く違うように、まず精密検査でタイプを正しく判別することが、あなた専用の治療地図の出発点です。下の各検査(病理・画像・遺伝子・腫瘍マーカー)で、タイプを確かめていきます。</p>
+
+  <!-- がん種別 ・ 必要な精密検査(検査→治療への橋渡し)-->
+  <div style="max-width: 1000px; margin: 24px auto 0; padding: 22px 26px; background: rgba(248,246,240,0.9); border-radius: 16px; border: 1px solid rgba(11,23,54,0.08);">
+    <div style="font-size: 13px; font-weight: 600; color: #1A2A40; margin-bottom: 14px;">▸ がん種別 ・ 必要な精密検査(クリックで そのがんの治療を見る)</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;">
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=breast'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">🌸 乳がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">HER2 / ER/PgR / BRCA / Oncotype DX</div>
+      </button>
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=colon'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">🍃 大腸がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">RAS / BRAF / MSI / CEA</div>
+      </button>
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=lung'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">💨 肺がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">EGFR / ALK / ROS1 / PD-L1</div>
+      </button>
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=stomach'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">🥢 胃がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">HER2 / MSI / PD-L1 / CEA</div>
+      </button>
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=prostate'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">⚪ 前立腺がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">PSA / グリソンスコア / BRCA</div>
+      </button>
+      <button onclick="location.href='SATOI_Mock_v1_B3_treatment_detail.html?cancer=pancreas'" style="padding: 12px; background: white; border: 1px solid rgba(11,23,54,0.15); border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit;">
+        <div style="font-size: 13px; font-weight: 600; color: #1A2A40;">💧 膵がん</div>
+        <div style="font-size: 11px; color: rgba(26,42,64,0.65); margin-top: 4px;">CA19-9 / BRCA / MSI / KRAS</div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<nav class="toc">
+  <a class="toc-item" href="#s1">X線/CT/MRI</a>
+  <a class="toc-item" href="#s2">PET-CT</a>
+  <a class="toc-item" href="#s3">超音波</a>
+  <a class="toc-item" href="#s4">腫瘍マーカー</a>
+  <a class="toc-item" href="#s5">内視鏡</a>
+  <a class="toc-item" href="#s6">病理検査</a>
+  <a class="toc-item" href="#s7">遺伝子検査</a>
+  <a class="toc-item" href="#s8">セカンドオピニオン</a>
+
+</nav>
+
+<main>
+<section class="section" id="s1">
+  <div class="section-eyebrow">画像検査(X線・CT・MRI)</div>
+  <h2 class="section-title">腫瘍の場所と大きさを「見える化」</h2>
+  <div class="content-card"><h4>X線検査</h4><p>骨や肺の状態を確認。胸部・腹部・骨など。被曝量は1回約0.05mSv(自然放射線の1か月分)。</p>
+             <h4>CT検査</h4><p>体を輪切りにして見られます。1-2分で撮影完了。造影剤を使うことが多く、ヨードアレルギーは事前申告。</p>
+             <h4>MRI検査</h4><p>強い磁場で軟部組織を詳しく。30-60分かかります。ペースメーカーや一部の金属は禁忌なので必ず申告を。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_exam&topic=s1&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s2">
+  <div class="section-eyebrow">PET-CT検査</div>
+  <h2 class="section-title">がん細胞の「活動度」を見る</h2>
+  <div class="content-card"><p>糖の代謝が活発な細胞(がんを含む)を光らせます。<strong>遠隔転移の検出に特に有効</strong>。検査前6時間絶食、当日2時間ほど安静が必要。費用は3割負担で約3万円。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_exam&topic=s2&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s3">
+  <div class="section-eyebrow">超音波(エコー)検査</div>
+  <h2 class="section-title">被曝なし・繰り返せる</h2>
+  <div class="content-card"><p>乳腺・甲状腺・肝臓・甲状腺などに有効。妊娠中も安全。痛みなく、何度でも実施可能。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_exam&topic=s3&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s4">
+  <div class="section-eyebrow">腫瘍マーカー検査</div>
+  <h2 class="section-title">血液で測る補助検査</h2>
+  <div class="content-card"><ul><li>CEA: 大腸・肺・胃・膵</li><li>CA15-3: 乳がん</li><li>CA19-9: 膵・胆道</li><li>PSA: 前立腺がん</li><li>AFP: 肝がん</li></ul>
+             <p><strong>診断単独には使いません。</strong>治療効果や再発モニタリングに使用します。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_exam&topic=s4&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s5">
+  <div class="section-eyebrow">内視鏡検査</div>
+  <h2 class="section-title">直接見て、組織も採れる</h2>
+  <div class="content-card"><p>食道・胃・大腸・気管支など。観察と同時に組織採取(生検)もでき、病理診断に直結します。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_exam&topic=s5&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s6">
+  <div class="section-eyebrow">病理検査</div>
+  <h2 class="section-title">がんを「確定」させる検査</h2>
+  <div class="content-card"><p>針生検や手術検体から、がんのタイプ・グレード・分化度を顕微鏡で確定。<strong>これが治療方針の土台</strong>です。</p>
+             <ul><li>HER2(乳・胃)・ER/PgR(乳)</li><li>PD-L1(肺・胃)</li><li>KRAS/RAS(大腸)</li></ul>
+             <p>結果は通常1-2週間。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_exam&topic=s6&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s7">
+  <div class="section-eyebrow">遺伝子検査・分子診断</div>
+  <h2 class="section-title">治療薬を選ぶための検査</h2>
+  <div class="content-card"><h4>コンパニオン診断(治療薬の適応判定)</h4><ul><li>EGFR/ALK(肺がん)</li><li>BRCA1/2(乳・卵巣・前立腺・膵)</li><li>MSI-H(全がん)</li></ul>
+             <h4>がん遺伝子パネル検査(CGP)</h4><p>100以上の遺伝子を一括検査。標準治療終了後に保険適用、56万円(高額療養費対象)。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_exam&topic=s7&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s8">
+  <div class="section-eyebrow">セカンドオピニオン</div>
+  <h2 class="section-title">使っていい権利</h2>
+  <div class="content-card"><p>主治医を信頼しているからこそ、別の意見を聞くのは患者の権利。診療情報提供書を主治医に依頼してください。「気を悪くされるかも」は、ほとんどの先生にとって杞憂です。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_exam&topic=s8&resume=1">AIと話す →</a>
+  </div>
+</section>
+
+</main>
+
+<aside class="related-nav">
+  <h4>関連するページ</h4>
+  <div class="related-grid">
+    <a class="related-card" href="SATOI_Mock_v1_C1_mypage.html"><div class="related-card-title">マイページに戻る</div><div class="related-card-desc">物語の壺・気持ち軌跡・チーム</div></a>
+    <a class="related-card" href="SATOI_Mock_v1_CON_concierge.html"><div class="related-card-title">SATOI コンシェルジュ</div><div class="related-card-desc">電話 or AI で話す</div></a>
+    <a class="related-card" href="SATOI_Mock_v1_B1_hub.html"><div class="related-card-title">全体マップ</div><div class="related-card-desc">マインドマップで全体俯瞰</div></a>
+    <a class="related-card" href="SATOI_Mock_v1_D2_story_map.html"><div class="related-card-title">あなたの物語マップ</div><div class="related-card-desc">これまでの足跡を見る</div></a>
+  </div>
+</aside>
+
+<script>
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  t.className = 'satoi-toast';
+  t.innerHTML = '<span class="satoi-toast-icon">●</span><div style="flex:1;">'+msg.replace(/\n/g,'<br>')+'</div><button class="satoi-toast-close">×</button>';
+  host.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add('show'));
+  const closer = ()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, opts.duration||5000);
+}
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){} };
+
+(function setupUnivNav(){
+  if (document.getElementById('satoi-univ-nav')) return;
+  const nav = document.createElement('div'); nav.id='satoi-univ-nav';
+  nav.innerHTML='<button class="satoi-univ-btn" title="戻る">←</button><button class="satoi-univ-btn" title="夜空ホーム">⌂</button><button class="satoi-univ-btn" title="マイページ">👤</button><button class="satoi-univ-btn" title="全体マップ">◎</button><button class="satoi-univ-btn" title="コンシェルジュ">💬</button>';
+  document.body.appendChild(nav);
+  const btns = nav.querySelectorAll('.satoi-univ-btn');
+  btns[0].onclick = () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; };
+  btns[1].onclick = () => location.href='SATOI_Mock_v1_A1_entrance.html';
+  btns[2].onclick = () => location.href='SATOI_Mock_v1_C1_mypage.html';
+  btns[3].onclick = () => location.href='SATOI_Mock_v1_B1_hub.html';
+  btns[4].onclick = () => location.href='SATOI_Mock_v1_CON_concierge.html';
+})();
+
+// TOC アクティブ追従
+document.querySelectorAll('.toc-item').forEach(a => a.addEventListener('click', e => {
+  document.querySelectorAll('.toc-item').forEach(x => x.classList.remove('active'));
+  a.classList.add('active');
+}));
+</script>
+<script src="satoi_chp_insight.js"></script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

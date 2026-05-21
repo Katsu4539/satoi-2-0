@@ -856,7 +856,7 @@ body { font-family: var(--font); color: var(--text-primary); background: var(--m
       <div class="expert-role">傷病手当金・障害年金 専門</div>
       <div class="expert-spec">乳がん患者の傷病手当・障害年金申請を 500件以上 サポート。会社との交渉も伴走。</div>
       <div class="expert-meta">⭐ 4.9 ・ 312件のレビュー ・ 初回30分無料</div>
-      <button class="expert-btn" onclick="satoiNotify('予約画面へ・空き枠表示(プレースホルダ)')">予約する</button>
+      <button class="expert-btn" onclick="satoiNotify('予約画面へ・空き枠表示')">予約する</button>
     </div>
     <div class="expert-card">
       <div class="expert-avatar">社</div>
@@ -864,7 +864,7 @@ body { font-family: var(--font); color: var(--text-primary); background: var(--m
       <div class="expert-role">休職制度・復職支援 専門</div>
       <div class="expert-spec">「治療と仕事の両立」を会社とすり合わせる相談多数。中小企業から大企業まで対応。</div>
       <div class="expert-meta">⭐ 4.8 ・ 198件のレビュー ・ 初回30分無料</div>
-      <button class="expert-btn" onclick="satoiNotify('予約画面へ(プレースホルダ)')">予約する</button>
+      <button class="expert-btn" onclick="satoiNotify('予約画面へ')">予約する</button>
     </div>
     <div class="expert-card">
       <div class="expert-avatar">FP</div>
@@ -872,7 +872,7 @@ body { font-family: var(--font); color: var(--text-primary); background: var(--m
       <div class="expert-role">治療費全体設計 ・ がん保険診断</div>
       <div class="expert-spec">長期治療のキャッシュフロー設計・既存がん保険の保障見直し・新規加入の必要性判断。中立な視点で。</div>
       <div class="expert-meta">⭐ 4.9 ・ 256件のレビュー ・ 初回30分無料</div>
-      <button class="expert-btn" onclick="satoiNotify('予約画面へ(プレースホルダ)')">予約する</button>
+      <button class="expert-btn" onclick="satoiNotify('予約画面へ')">予約する</button>
     </div>
     <div class="expert-card">
       <div class="expert-avatar">FP</div>
@@ -880,7 +880,7 @@ body { font-family: var(--font); color: var(--text-primary); background: var(--m
       <div class="expert-role">教育資金・住宅ローン 影響</div>
       <div class="expert-spec">子どもの教育費・住宅ローンを抱えながらの治療設計。家族全体のお金の不安を整理。</div>
       <div class="expert-meta">⭐ 4.8 ・ 174件のレビュー ・ 初回30分無料</div>
-      <button class="expert-btn" onclick="satoiNotify('予約画面へ(プレースホルダ)')">予約する</button>
+      <button class="expert-btn" onclick="satoiNotify('予約画面へ')">予約する</button>
     </div>
   </div>
 </section>
@@ -1160,7 +1160,7 @@ function renderBenefit(b) {
     <div class="benefit-detail">${b.detail}
       <div class="benefit-actions">
         ${b.status !== 'ng' ? '<button class="benefit-btn" onclick="event.stopPropagation(); scrollToAssistant()">申請書類を作る</button>' : ''}
-        <button class="benefit-btn outline" onclick="event.stopPropagation(); satoiNotify(\'詳細ガイド・プレースホルダ\')">詳しいガイドを読む</button>
+        <button class="benefit-btn outline" onclick="event.stopPropagation(); satoiNotify(\'詳細ガイド\')">詳しいガイドを読む</button>
       </div>
     </div>
   </div>`;

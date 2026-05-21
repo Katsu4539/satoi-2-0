@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - あなたのダッシュボード</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0B1736;
+  --bg-mid: #1A2548;
+  --ink-on-dark: #F8F6F0;
+  --ink-mid: #B8BFD0;
+  --ink-light: #8893A8;
+  --accent: #D4A95E;
+  --accent-strong: #F0C97A;
+  --teal: #0D7377;
+  --teal-light: #14A6AB;
+  --warm: #D4622A;
+  --emergency: #B85450;
+  --line: rgba(248,246,240,0.12);
+  --card-bg: rgba(248,246,240,0.05);
+  --font: 'Noto Sans JP', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--bg-deep);
+  color: var(--ink-on-dark);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(ellipse at 30% 0%, rgba(212,169,94,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(13,115,119,0.08) 0%, transparent 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+.header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(11,23,54,0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: 16px 32px; display: flex; align-items: center; gap: 18px;
+}
+.logo { font-weight: 700; letter-spacing: 0.22em; color: var(--ink-on-dark); font-size: 15px; text-decoration:none; }
+.logo .dot { display:inline-block; width:8px; height:8px; background: var(--accent); border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+.back-link { margin-left: auto; padding: 8px 18px; background: rgba(248,246,240,0.08); border: 1px solid var(--line); border-radius: 18px; color: var(--ink-on-dark); text-decoration: none; font-size: 13px; }
+.back-link:hover { background: rgba(248,246,240,0.16); }
+
+.main { max-width: 1100px; margin: 0 auto; padding: 36px 28px 80px; }
+
+/* ヒーローセクション:状況サマリ */
+.hero {
+  background: linear-gradient(135deg, rgba(212,169,94,0.12), rgba(13,115,119,0.10));
+  border: 1px solid rgba(212,169,94,0.3);
+  border-radius: 22px;
+  padding: 32px 36px; margin-bottom: 28px;
+}
+.hero-eyebrow { font-size: 11.5px; color: var(--accent-strong); letter-spacing: 0.22em; margin-bottom: 10px; }
+.hero-title { font-size: 30px; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.04em; }
+.hero-sub { color: var(--ink-mid); font-size: 14.5px; }
+.hero-tags { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-tag {
+  padding: 8px 18px; background: rgba(212,169,94,0.18); border: 1px solid rgba(212,169,94,0.5);
+  border-radius: 18px; color: var(--accent-strong); font-size: 13px; font-weight: 600;
+}
+
+/* メインメトリクス:大きく見せる */
+.metrics-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 32px;
+}
+.metric-card {
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 18px;
+  padding: 28px; position: relative; overflow: hidden;
+}
+.metric-card.peers { border-color: rgba(13,115,119,0.4); }
+.metric-card.survival { border-color: rgba(212,169,94,0.4); }
+.metric-label { font-size: 12px; color: var(--ink-light); letter-spacing: 0.18em; margin-bottom: 12px; text-transform: uppercase; }
+.metric-main { font-size: 56px; font-weight: 800; color: var(--ink-on-dark); line-height: 1; margin-bottom: 8px; letter-spacing: -0.02em; }
+.metric-main .unit { font-size: 26px; font-weight: 500; color: var(--ink-mid); margin-left: 4px; }
+.metric-sub { color: var(--ink-mid); font-size: 13.5px; line-height: 1.6; }
+.metric-source { font-size: 11px; color: var(--ink-light); margin-top: 10px; font-style: italic; }
+
+/* ステージ別生存率の小グラフ */
+.stages-row {
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 18px;
+  padding: 24px 28px; margin-bottom: 32px;
+}
+.stages-title { font-size: 14px; color: var(--ink-mid); margin-bottom: 18px; letter-spacing: 0.04em; }
+.stages-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.stage-cell { background: rgba(248,246,240,0.03); border: 1px solid var(--line); border-radius: 12px; padding: 16px 12px; text-align: center; }
+.stage-cell.current { background: rgba(212,169,94,0.15); border-color: var(--accent); }
+.stage-cell-label { font-size: 11px; color: var(--ink-light); margin-bottom: 4px; }
+.stage-cell-pct { font-size: 22px; font-weight: 700; color: var(--accent-strong); }
+.stage-cell.current .stage-cell-pct { color: var(--accent-strong); }
+
+/* セクションタイトル */
+.section-title {
+  font-size: 18px; font-weight: 700; margin: 28px 0 16px; display: flex; align-items: center; gap: 10px;
+  color: var(--ink-on-dark); letter-spacing: 0.04em;
+}
+.section-title .num { display: inline-flex; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--bg-deep); align-items: center; justify-content: center; font-size: 13px; font-weight: 800; }
+
+/* タイムライン:これから起きること */
+.timeline-card {
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 18px;
+  padding: 24px 28px; margin-bottom: 24px;
+}
+.tl-flow { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; }
+.tl-step {
+  flex: 0 0 auto; min-width: 140px;
+  background: rgba(248,246,240,0.04); border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 14px; text-align: center;
+}
+.tl-step.now { background: rgba(212,98,42,0.15); border-color: var(--warm); }
+.tl-step-num { font-size: 18px; color: var(--accent); font-weight: 700; }
+.tl-step-name { font-size: 12.5px; color: var(--ink-on-dark); margin-top: 6px; }
+.tl-step-when { font-size: 10.5px; color: var(--ink-light); margin-top: 4px; }
+.tl-arrow { display: flex; align-items: center; color: var(--ink-light); font-size: 16px; }
+
+/* 王道治療カード */
+.royal-card {
+  background: linear-gradient(135deg, rgba(212,98,42,0.10), rgba(212,169,94,0.08));
+  border: 1.5px solid rgba(212,98,42,0.4); border-radius: 18px;
+  padding: 24px 28px; margin-bottom: 24px;
+}
+.royal-eyebrow { font-size: 12px; color: var(--warm); letter-spacing: 0.18em; margin-bottom: 10px; font-weight: 600; }
+.royal-name { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: var(--ink-on-dark); }
+.royal-desc { color: var(--ink-mid); font-size: 14px; margin-bottom: 14px; }
+.royal-cta {
+  display: inline-block; padding: 12px 26px; background: var(--warm); color: white;
+  border-radius: 24px; text-decoration: none; font-weight: 700; font-size: 14px;
+  box-shadow: 0 6px 18px rgba(212,98,42,0.35);
+}
+.royal-cta:hover { background: #B85420; }
+.royal-alt { display: block; margin-top: 18px; text-align: center; }
+.royal-alt a { display:inline-block; color: var(--accent-strong); font-size: 16px; font-weight: 600; padding: 13px 30px; border: 1.5px solid rgba(212,169,94,0.55); border-radius: 26px; text-decoration: none; cursor: pointer; transition: all 0.2s; }
+.royal-alt a:hover { background: rgba(212,169,94,0.15); }
+.alt-treatments { margin-top: 22px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 14px; }
+.alt-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; cursor: pointer; transition: all 0.2s; text-decoration:none; color: var(--ink-on-dark); display:block; }
+.alt-card:hover { border-color: var(--accent); background: rgba(212,169,94,0.10); transform: translateY(-2px); }
+.alt-card-name { font-size: 15px; font-weight: 600; margin-bottom: 5px; }
+.alt-card-desc { font-size: 12px; color: var(--ink-light); line-height: 1.6; }
+
+/* 知りたいトピックカード */
+.topics-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;
+  margin-bottom: 24px;
+}
+.topic-card {
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px;
+  padding: 22px 20px; cursor: pointer; transition: all 0.2s;
+  text-decoration: none; color: var(--ink-on-dark); display: block;
+}
+.topic-card:hover { transform: translateY(-2px); border-color: var(--accent); background: rgba(212,169,94,0.10); }
+.topic-icon { font-size: 28px; margin-bottom: 10px; }
+.topic-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.topic-desc { font-size: 12px; color: var(--ink-light); }
+
+/* AI窓口 */
+.ai-prompt {
+  background: linear-gradient(135deg, rgba(13,115,119,0.18), rgba(20,166,171,0.12));
+  border: 1.5px solid rgba(13,115,119,0.4); border-radius: 18px;
+  padding: 24px 28px; margin: 32px 0; display: flex; align-items: center; gap: 18px;
+}
+.ai-prompt-icon { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), var(--teal-light)); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.ai-prompt-text { flex: 1; }
+.ai-prompt-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.ai-prompt-sub { color: var(--ink-mid); font-size: 13px; }
+.ai-prompt-btn { padding: 12px 24px; background: var(--teal-light); color: white; border: none; border-radius: 22px; font-weight: 700; cursor: pointer; text-decoration: none; font-size: 14px; }
+.ai-prompt-btn:hover { background: var(--teal); }
+
+/* 出典フッター */
+.sources-foot {
+  font-size: 11px; color: var(--ink-light); margin-top: 40px; padding-top: 18px;
+  border-top: 1px solid var(--line); line-height: 1.8;
+}
+.sources-foot a { color: var(--ink-mid); text-decoration: underline; }
+
+@media (max-width: 700px) {
+  .metrics-row { grid-template-columns: 1fr; }
+  .stages-grid { grid-template-columns: repeat(2, 1fr); }
+  .metric-main { font-size: 42px; }
+  .hero-title { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <a href="SATOI_Mock_v1_C1_mypage.html" class="back-link">★ マイページ</a>
+</header>
+
+<main class="main">
+
+  <!-- ヒーロー:状況サマリ -->
+  <section class="hero">
+    <div class="hero-eyebrow">YOUR DASHBOARD</div>
+    <h1 class="hero-title" id="heroTitle">あなたの今、見えるところ</h1>
+    <div class="hero-sub">入力いただいた情報をもとに、いま知っておきたいことを、ここに集めました。</div>
+    <div class="hero-tags" id="heroTags"></div>
+  </section>
+
+  <!-- メイン2メトリクス -->
+  <section class="metrics-row">
+    <div class="metric-card peers">
+      <div class="metric-label">同じ境遇の方</div>
+      <div class="metric-main"><span id="metricPeers">—</span><span class="unit">人</span></div>
+      <div class="metric-sub" id="metricPeersSub">いま、日本に、これだけの方がいらっしゃいます。<br>あなたは、ひとりではありません。</div>
+      <div class="metric-source">出典:国立がん研究センター がん統計(2019-2021)</div>
+    </div>
+    <div class="metric-card survival">
+      <div class="metric-label">5年生存率(全ステージ)</div>
+      <div class="metric-main"><span id="metricSurvival">—</span><span class="unit">%</span></div>
+      <div class="metric-sub" id="metricSurvivalSub">これは、いまの医療がもたらしている希望の数字です。<br>あなたのステージでは、もっと変わります(下記)。</div>
+      <div class="metric-source">出典:全がん協 5年生存率(2014-2015診断)</div>
+    </div>
+  </section>
+
+  <!-- ステージ別 -->
+  <section class="stages-row">
+    <div class="stages-title">📊 ステージ別 5年生存率(ご自身のステージは強調表示)</div>
+    <div class="stages-grid" id="stagesGrid"></div>
+  </section>
+
+  <!-- これから起きること(タイムライン) -->
+  <h2 class="section-title"><span class="num">1</span>これから、こんな順番で進みます</h2>
+  <div class="timeline-card">
+    <div class="tl-flow" id="tlFlow"></div>
+  </div>
+
+  <!-- 王道治療 -->
+  <h2 class="section-title"><span class="num">2</span>あなたへの王道治療(1つだけ提示)</h2>
+  <div class="royal-card">
+    <div class="royal-eyebrow">RECOMMENDED STANDARD CARE</div>
+    <div class="royal-name" id="royalName">—</div>
+    <div class="royal-desc" id="royalDesc">—</div>
+    <a class="royal-cta" id="royalCta" href="#">この治療を、詳しく見る →</a>
+    <div class="royal-alt"><a id="altToggle" onclick="toggleAlternatives()">他の治療選択肢も見たい →</a></div>
+    <div class="alt-treatments" id="altTreatments" style="display:none;"></div>
+  </div>
+
+  <!-- AI 自由質問窓口 -->
+  <div class="ai-prompt">
+    <div class="ai-prompt-icon">💬</div>
+    <div class="ai-prompt-text">
+      <div class="ai-prompt-title">気になること、AIに聞いてみましょう</div>
+      <div class="ai-prompt-sub">質問を畳みかけません。あなたが知りたいことだけ、ゆっくり答えます。</div>
+    </div>
+    <a class="ai-prompt-btn" href="SATOI_Mock_v1_A2_dialog.html?resume=1&from=dashboard">AIに、聞く →</a>
+  </div>
+
+  <!-- 知りたいトピック -->
+  <h2 class="section-title"><span class="num">3</span>次に、何を知りたいですか?</h2>
+  <div class="topics-grid">
+    <a class="topic-card" id="topicTreatment" href="SATOI_Mock_v1_B1_hub.html?from=dashboard">
+      <div class="topic-icon">💊</div>
+      <div class="topic-title">治療法を、もっと知る</div>
+      <div class="topic-desc">王道以外の選択肢、新しい治療</div>
+    </a>
+    <a class="topic-card" href="SATOI_Mock_v1_F4_side_effects.html?from=dashboard">
+      <div class="topic-icon">🌡</div>
+      <div class="topic-title">副作用と、どう付き合うか</div>
+      <div class="topic-desc">症状の記録と、暮らしの工夫</div>
+    </a>
+    <a class="topic-card" href="SATOI_Mock_v1_E1_money.html?from=dashboard">
+      <div class="topic-icon">💰</div>
+      <div class="topic-title">お金のこと</div>
+      <div class="topic-desc">高額療養費・がん保険・働き方</div>
+    </a>
+    <a class="topic-card" href="SATOI_Mock_v1_FAM_view.html?from=dashboard">
+      <div class="topic-icon">👨‍👩‍👧</div>
+      <div class="topic-title">家族に、どう伝えるか</div>
+      <div class="topic-desc">同じ立場の方の事例と言葉</div>
+    </a>
+    <a class="topic-card" href="SATOI_Mock_v1_D1_stories.html?from=dashboard">
+      <div class="topic-icon">📖</div>
+      <div class="topic-title">同じ境遇の方の、物語</div>
+      <div class="topic-desc">先輩患者・家族の声</div>
+    </a>
+    <a class="topic-card" href="SATOI_Mock_v1_C1_mypage.html?from=dashboard">
+      <div class="topic-icon">📋</div>
+      <div class="topic-title">主治医に、何を聞くか</div>
+      <div class="topic-desc">SDM カードで質問整理</div>
+    </a>
+    <a class="topic-card" href="SATOI_Mock_v1_A1_entrance.html" style="border-color:rgba(212,169,94,0.45);">
+      <div class="topic-icon">🌌</div>
+      <div class="topic-title">SATOIって、どんな場所?</div>
+      <div class="topic-desc">入口に戻って、SATOIの世界をのぞいてみる</div>
+    </a>
+    <a class="topic-card" href="SATOI_Mock_v1_B1_hub.html?from=dashboard" style="border-color:rgba(212,98,42,0.45);">
+      <div class="topic-icon">📖</div>
+      <div class="topic-title">みんなの物語を見る</div>
+      <div class="topic-desc">同じ道を歩いた方の物語と、ハブへ</div>
+    </a>
+  </div>
+
+  <div class="sources-foot">
+    出典:
+    <a href="https://ganjoho.jp/reg_stat/statistics/stat/summary.html" target="_blank">国立がん研究センター がん統計</a> ・
+    <a href="https://www.ncc.go.jp/jp/information/pr_release/2025/1119/index.html" target="_blank">2012-2015年診断 5年生存率(2025年公表)</a> ・
+    <a href="https://www.ncc.go.jp/jp/icc/crcfactsheet/index.html" target="_blank">大腸がんファクトシート2024</a> ・
+    全国がん登録 罹患データ(2019-2021)
+  </div>
+
+</main>
+
+<script src="satoi_common.js"></script>
+<script src="satoi_chat_api.js"></script>
+<script>
+// ===== がん種別データ(国立がん研究センター・全がん協 2024-2025 公表値を反映) =====
+const CANCER_DATA = {
+  lung: {
+    name: '肺がん',
+    incidence: 127000,
+    survival_overall: 47.5,
+    stages: { I: 82.2, II: 52.6, III: 30.4, IV: 9.0 },
+    timeline: [
+      { n: 1, name: '精密検査', when: '2〜4週' },
+      { n: 2, name: 'コンパニオン診断', when: '1〜3週' },
+      { n: 3, name: '治療方針決定', when: '1週' },
+      { n: 4, name: '治療開始', when: '即〜2週' },
+      { n: 5, name: '副作用ケア', when: '随時' },
+      { n: 6, name: '経過観察', when: '5〜10年' }
+    ],
+    royal: {
+      name: 'プラチナ併用化学療法 + 免疫療法',
+      desc: 'IIIb-IV期の非小細胞肺がんの第一選択。ペムブロリズマブ等の免疫チェックポイント阻害薬と、シスプラチン+ペメトレキセドを組み合わせます。',
+      key: 'PLATINUM_DOUBLET'
+    }
+  },
+  stomach: {
+    name: '胃がん',
+    incidence: 109679,
+    survival_overall: 70.6,
+    stages: { I: 95.0, II: 67.6, III: 45.7, IV: 6.0 },
+    timeline: [
+      { n: 1, name: '精密内視鏡', when: '1〜2週' },
+      { n: 2, name: 'CT・PET-CT', when: '1〜2週' },
+      { n: 3, name: '治療方針決定', when: '1週' },
+      { n: 4, name: '治療開始', when: '即〜2週' },
+      { n: 5, name: '副作用ケア', when: '随時' },
+      { n: 6, name: '経過観察', when: '5年' }
+    ],
+    royal: {
+      name: '手術(胃切除) + 術後補助化学療法',
+      desc: 'II-III期胃がんの標準治療。幽門側胃切除または全摘 + S-1単独またはS-1+シスプラチンによる術後補助。',
+      key: 'SURGERY_GASTRECTOMY'
+    }
+  },
+  breast: {
+    name: '乳がん',
+    incidence: 95000,
+    survival_overall: 92.2,
+    stages: { I: 95.2, II: 90.9, III: 77.3, IV: 38.6 },
+    timeline: [
+      { n: 1, name: '精密病理(HER2等)', when: '2〜4週' },
+      { n: 2, name: '画像評価', when: '1〜2週' },
+      { n: 3, name: '治療方針決定', when: '1週' },
+      { n: 4, name: '手術+術後療法', when: '4週〜数ヶ月' },
+      { n: 5, name: '副作用ケア', when: '随時' },
+      { n: 6, name: '経過観察', when: '10年' }
+    ],
+    royal: {
+      name: '手術(乳房温存) + 放射線 + ホルモン療法',
+      desc: 'I-II期・ホルモン受容体陽性HER2陰性乳がんの標準治療。温存術後に放射線25-30回、その後ホルモン療法5-10年。',
+      key: 'SURGERY_BREAST_PARTIAL'
+    }
+  },
+  colon: {
+    name: '大腸がん',
+    incidence: 154585,
+    survival_overall: 71.4,
+    stages: { I: 92.3, II: 86.1, III: 76.0, IV: 18.4 },
+    timeline: [
+      { n: 1, name: '大腸内視鏡・病理', when: '2週' },
+      { n: 2, name: 'CT・遺伝子検査', when: '1〜3週' },
+      { n: 3, name: '治療方針決定', when: '1週' },
+      { n: 4, name: '手術+術後療法', when: '4週〜半年' },
+      { n: 5, name: '副作用ケア', when: '随時' },
+      { n: 6, name: '経過観察', when: '5年' }
+    ],
+    royal: {
+      name: '手術(腹腔鏡) + FOLFOX療法',
+      desc: 'III期大腸がんの標準治療。腹腔鏡下大腸切除術 + 術後FOLFOX(5-FU+ロイコボリン+オキサリプラチン)6ヶ月。',
+      key: 'FOLFOX'
+    }
+  },
+  prostate: {
+    name: '前立腺がん',
+    incidence: 95000,
+    survival_overall: 98.4,
+    stages: { I: 100, II: 100, III: 100, IV: 63.4 },
+    timeline: [
+      { n: 1, name: '精密生検', when: '2〜3週' },
+      { n: 2, name: 'MRI・骨シンチ', when: '1〜2週' },
+      { n: 3, name: '治療方針決定', when: '1週' },
+      { n: 4, name: '治療開始', when: '即〜4週' },
+      { n: 5, name: '副作用ケア', when: '随時' },
+      { n: 6, name: 'PSA経過観察', when: '5〜10年' }
+    ],
+    royal: {
+      name: 'ロボット支援手術(ダヴィンチ) または 放射線(IMRT)',
+      desc: 'I-III期前立腺がんの標準。ロボット支援前立腺全摘術 または 強度変調放射線治療(IMRT)から、年齢・希望で選択。',
+      key: 'PROSTATECTOMY'
+    }
+  },
+  pancreas: {
+    name: '膵がん',
+    incidence: 43865,
+    survival_overall: 8.9,
+    stages: { I: 38.6, II: 18.0, III: 6.0, IV: 1.3 },
+    timeline: [
+      { n: 1, name: '精密CT・MRCP', when: '2週' },
+      { n: 2, name: 'EUS・遺伝子検査', when: '1〜2週' },
+      { n: 3, name: '治療方針決定', when: '1週' },
+      { n: 4, name: '治療開始', when: '即〜2週' },
+      { n: 5, name: '緩和ケア併走', when: '早期から' },
+      { n: 6, name: '経過観察', when: '随時' }
+    ],
+    royal: {
+      name: 'FOLFIRINOX療法',
+      desc: 'III-IV期膵がんの第一選択化学療法。オキサリプラチン+イリノテカン+5-FU+ロイコボリンの併用。緩和ケア早期導入を必ず組み合わせます。',
+      key: 'FOLFIRINOX'
+    }
+  }
+};
+
+// ===== URLパラメータから読み出し =====
+const params = new URLSearchParams(location.search);
+const cancerKey = (params.get('cancer') || 'lung').toLowerCase();
+const stage = params.get('stage') || 'II';
+const phase = params.get('phase') || 'consider'; // consider/treating/decided/post
+
+const data = CANCER_DATA[cancerKey] || CANCER_DATA.lung;
+
+// ===== タイトル・タグ =====
+const phaseLabel = {
+  'consider':  '治療法を、考えている',
+  'treating':  '治療中',
+  'decided':   '治療法が、決まった',
+  'post':      '治療を、終えた',
+  'just-diag': '告知されたばかり'
+}[phase] || phase;
+
+document.getElementById('heroTitle').textContent = `${data.name}・ステージ${stage}・${phaseLabel} あなたへ`;
+document.getElementById('heroTags').innerHTML = `
+  <span class="hero-tag">${data.name}</span>
+  <span class="hero-tag">ステージ ${stage}</span>
+  <span class="hero-tag">${phaseLabel}</span>
+`;
+
+// 悩み(worry)を引き継いでいれば、ヒーローに一言添える
+const worry = params.get('worry');
+if (worry) {
+  const worryMsg = {
+    'treatment': '治療のこと',
+    'money': 'お金や仕事のこと',
+    'family': 'ご家族への伝え方',
+    'peers': '同じ病気の方の話',
+    'talk': '今のお気持ち',
+    'silence': '言葉にならないお気持ち'
+  }[worry];
+  if (worryMsg) {
+    const sub = document.querySelector('.hero-sub');
+    if (sub) sub.innerHTML = `<strong style="color:var(--accent-strong);">${worryMsg}</strong> について、お探しですね。<br>あなたに合った情報を、ここに集めました。急がなくて、大丈夫です。`;
+  }
+}
+
+// ===== メトリクス =====
+document.getElementById('metricPeers').textContent = data.incidence.toLocaleString();
+document.getElementById('metricSurvival').textContent = data.survival_overall.toFixed(1);
+
+// ===== ステージ別 =====
+const stagesGrid = document.getElementById('stagesGrid');
+['I','II','III','IV'].forEach(s => {
+  const div = document.createElement('div');
+  div.className = 'stage-cell' + (s === stage ? ' current' : '');
+  div.innerHTML = `
+    <div class="stage-cell-label">ステージ${s}</div>
+    <div class="stage-cell-pct">${data.stages[s]}<span style="font-size:14px; font-weight:500;">%</span></div>
+  `;
+  stagesGrid.appendChild(div);
+});
+
+// ===== タイムライン =====
+const tlFlow = document.getElementById('tlFlow');
+data.timeline.forEach((step, i) => {
+  const div = document.createElement('div');
+  div.className = 'tl-step' + (i === 2 ? ' now' : '');  // とりあえず治療方針決定をnow扱い
+  div.innerHTML = `
+    <div class="tl-step-num">${step.n}</div>
+    <div class="tl-step-name">${step.name}</div>
+    <div class="tl-step-when">${step.when}</div>
+  `;
+  tlFlow.appendChild(div);
+  if (i < data.timeline.length - 1) {
+    const arr = document.createElement('div');
+    arr.className = 'tl-arrow';
+    arr.textContent = '›';
+    tlFlow.appendChild(arr);
+  }
+});
+
+// ===== 王道治療 =====
+document.getElementById('royalName').textContent = data.royal.name;
+document.getElementById('royalDesc').textContent = data.royal.desc;
+document.getElementById('royalCta').href = `SATOI_Mock_v1_B3_treatment_detail.html?treatment=${data.royal.key}&cancer=${encodeURIComponent(data.name)}&stage=${stage}`;
+
+// ===== 他の治療選択肢(その場展開) =====
+const ALT_TREATMENTS = {
+  lung: [
+    {name:'プラチナ併用化学療法',desc:'進行肺がんの第一選択化学療法',key:'PLATINUM_DOUBLET'},
+    {name:'手術(肺葉切除)',desc:'I-II期の標準・肺葉ごと切除',key:'SURGERY_LOBECTOMY'},
+    {name:'オシメルチニブ',desc:'EGFR変異陽性に高効果・経口薬',key:'OSIMERTINIB'},
+    {name:'アレクチニブ',desc:'ALK融合遺伝子陽性に・経口薬',key:'ALECTINIB'},
+    {name:'免疫チェックポイント阻害薬',desc:'PD-L1高発現で第一選択も',key:'ICI'},
+    {name:'定位放射線治療(SBRT)',desc:'早期・手術不可例にピンポイント照射',key:'SBRT'}
+  ],
+  stomach: [
+    {name:'手術(胃切除)',desc:'幽門側切除/全摘・II期以上の標準',key:'SURGERY_GASTRECTOMY'},
+    {name:'内視鏡治療(ESD)',desc:'早期がんで切らずに切除',key:'ESD'},
+    {name:'SP療法',desc:'S-1+シスプラチン・標準化学療法',key:'SP'},
+    {name:'トラスツズマブ',desc:'HER2陽性胃がんに化学療法と併用',key:'TRASTUZUMAB_GASTRIC'},
+    {name:'ニボルマブ',desc:'免疫療法・三次治療以降に',key:'NIVOLUMAB'}
+  ],
+  breast: [
+    {name:'手術(乳房温存)',desc:'乳房を残しながら切除',key:'SURGERY_BREAST_PARTIAL'},
+    {name:'手術(乳房全摘)',desc:'乳房全体を切除・再建も可',key:'SURGERY_BREAST_TOTAL'},
+    {name:'ホルモン療法',desc:'ホルモン受容体陽性に・5〜10年',key:'HORMONE'},
+    {name:'分子標的薬(HER2)',desc:'トラスツズマブ等・HER2陽性に',key:'HER2_TARGETED'},
+    {name:'CDK4/6阻害薬',desc:'進行例・パルボシクリブ',key:'CDK46'},
+    {name:'化学療法(TC)',desc:'術後の再発予防',key:'TC'}
+  ],
+  colon: [
+    {name:'手術(腹腔鏡)',desc:'小さな傷で根治・回復が早い',key:'SURGERY_LAPAROSCOPIC'},
+    {name:'FOLFOX療法',desc:'術後補助・進行例の標準',key:'FOLFOX'},
+    {name:'FOLFIRI療法',desc:'FOLFOX後の二次治療',key:'FOLFIRI'},
+    {name:'ベバシズマブ併用',desc:'血管新生阻害薬を化学療法に追加',key:'BEVACIZUMAB'},
+    {name:'セツキシマブ',desc:'RAS野生型に・EGFR標的',key:'CETUXIMAB'}
+  ],
+  prostate: [
+    {name:'手術(全摘)',desc:'ロボット支援・神経温存も可',key:'PROSTATECTOMY'},
+    {name:'監視療法',desc:'低リスク早期は経過観察',key:'ACTIVE_SURVEILLANCE'},
+    {name:'放射線治療(IMRT)',desc:'手術なしで根治・通院',key:'IMRT'},
+    {name:'小線源治療',desc:'前立腺内に放射線源を埋込',key:'BRACHYTHERAPY'},
+    {name:'ホルモン療法(ADT)',desc:'男性ホルモンを抑える',key:'ADT'},
+    {name:'エンザルタミド',desc:'去勢抵抗性に・新規ホルモン薬',key:'ENZALUTAMIDE'}
+  ],
+  pancreas: [
+    {name:'FOLFIRINOX療法',desc:'第一選択・強力な化学療法',key:'FOLFIRINOX'},
+    {name:'手術(膵頭十二指腸切除)',desc:'切除可能例の根治治療',key:'WHIPPLE'},
+    {name:'ゲムシタビン+nab-PTX',desc:'副作用比較的軽い標準併用',key:'GEM_NAB'},
+    {name:'ゲムシタビン+S-1',desc:'日本でよく使う組み合わせ',key:'GEM_S1'},
+    {name:'化学放射線療法',desc:'局所進行例に',key:'CRT'},
+    {name:'緩和ケア早期導入',desc:'治療と並行しQOLを守る',key:'EARLY_PC'}
+  ]
+};
+
+function toggleAlternatives() {
+  const wrap = document.getElementById('altTreatments');
+  const toggle = document.getElementById('altToggle');
+  if (!wrap || !toggle) return;
+  if (wrap.style.display === 'none' || !wrap.style.display) {
+    const alts = (ALT_TREATMENTS[cancerKey] || []).filter(t => t.key !== data.royal.key);
+    if (!alts.length) {
+      wrap.innerHTML = '<div style="color:var(--ink-light); font-size:13px; padding:10px;">他の選択肢は、主治医にご相談ください。</div>';
+    } else {
+      wrap.innerHTML = alts.map(t =>
+        `<a class="alt-card" href="SATOI_Mock_v1_B3_treatment_detail.html?treatment=${t.key}&cancer=${encodeURIComponent(data.name)}&stage=${stage}"><div class="alt-card-name">${t.name}</div><div class="alt-card-desc">${t.desc}</div></a>`
+      ).join('');
+    }
+    wrap.style.display = 'grid';
+    toggle.textContent = '× 選択肢を閉じる';
+  } else {
+    wrap.style.display = 'none';
+    toggle.textContent = '他の治療選択肢も見たい →';
+  }
+}
+</script>
+
+</body>
+</html>

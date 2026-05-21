@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寄り添う ・ SATOIの姿勢01 - 数字より、言葉を信じる</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --night-glow: #2A3558;
+  --starlight: #D4A95E;
+  --starlight-soft: #E5C68A;
+  --starlight-strong: #F0C97A;
+  --teal: #0D7377;
+  --teal-soft: #14A6AB;
+  --warm-orange: #D4622A;
+  --rose: #C76B7F;
+  --morning-cream: #F6EFE3;
+  --morning-white: #FBF7F0;
+  --text-on-dark: rgba(248,246,240,0.96);
+  --text-on-dark-soft: rgba(248,246,240,0.78);
+  --text-on-dark-quiet: rgba(248,246,240,0.55);
+  --line: rgba(248,246,240,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; overflow-x:hidden; }
+body {
+  font-family: var(--font);
+  color: var(--text-on-dark);
+  background:
+    radial-gradient(ellipse at top, var(--night-medium) 0%, var(--night-deep) 50%, #060d1f 100%);
+  background-attachment: fixed;
+  line-height: 2;
+  font-weight: 300;
+  min-height: 100vh;
+  padding-bottom: 120px;
+}
+
+/* === 星(背景アニメ) === */
+.stars-layer { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.star { position: absolute; background: var(--starlight); border-radius: 50%; opacity: 0; animation: twinkle 5s infinite ease-in-out; }
+@keyframes twinkle { 0%,100% { opacity:0.12; transform:scale(0.7);} 50% { opacity:0.7; transform:scale(1.1);} }
+
+/* === ヘッダー === */
+.header {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 18px 36px;
+  display:flex; align-items:center; justify-content:space-between;
+  background: linear-gradient(to bottom, rgba(11,23,54,0.7), rgba(11,23,54,0));
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.logo { font-size: 22px; font-weight: 500; letter-spacing: 0.22em; color: var(--text-on-dark); text-decoration: none; display: inline-flex; align-items: center; }
+.logo .dot { display:inline-block; width:8px; height:8px; background: var(--starlight); border-radius:50%; margin: 0 10px 0 0; box-shadow: 0 0 12px var(--starlight); }
+.header-nav { display:flex; gap: 22px; align-items: center; }
+.header-nav a { color: var(--text-on-dark-soft); font-size: 12.5px; text-decoration: none; letter-spacing: 0.12em; transition: color 0.2s; }
+.header-nav a:hover { color: var(--starlight); }
+
+/* === ヒーロー === */
+.hero {
+  padding: 160px 24px 80px;
+  text-align: center;
+  max-width: 920px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  font-size: 11px; letter-spacing: 0.42em; color: var(--starlight);
+  margin-bottom: 22px;
+}
+.hero-title {
+  font-size: clamp(38px, 6.5vw, 68px);
+  font-weight: 200; line-height: 1.2;
+  margin-bottom: 28px;
+  letter-spacing: 0.06em;
+}
+.hero-title .accent { color: var(--starlight); font-weight: 300; }
+.hero-sub {
+  font-size: clamp(15px, 1.6vw, 18px);
+  color: var(--text-on-dark-soft);
+  font-weight: 300;
+  max-width: 680px; margin: 0 auto;
+  letter-spacing: 0.04em;
+}
+
+/* === セクション基本 === */
+.section {
+  max-width: 920px; margin: 60px auto;
+  padding: 0 24px;
+}
+.section-title {
+  font-size: 13px; letter-spacing: 0.32em;
+  color: var(--starlight); margin-bottom: 16px;
+}
+.section-heading {
+  font-size: clamp(24px, 3.5vw, 36px);
+  font-weight: 300; line-height: 1.5;
+  margin-bottom: 28px; letter-spacing: 0.04em;
+}
+.section-body {
+  font-size: 15px; line-height: 2.1;
+  color: var(--text-on-dark-soft);
+  font-weight: 300;
+}
+.section-body p { margin-bottom: 20px; }
+.section-body strong { color: var(--starlight-soft); font-weight: 500; }
+
+/* === 引用 === */
+.quote-block {
+  margin: 40px 0;
+  padding: 32px 36px;
+  background: rgba(212,169,94,0.06);
+  border-left: 3px solid var(--starlight);
+  border-radius: 0 14px 14px 0;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 2.1;
+}
+.quote-block .cite {
+  display: block; margin-top: 14px;
+  font-style: normal; font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--text-on-dark-quiet);
+}
+
+/* === 原則カード === */
+.principle-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px; margin-top: 36px;
+}
+.principle-card {
+  background: rgba(248,246,240,0.04);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px 22px;
+  transition: all 0.3s;
+}
+.principle-card:hover {
+  border-color: rgba(212,169,94,0.4);
+  transform: translateY(-3px);
+}
+.principle-card .num {
+  font-size: 11px; letter-spacing: 0.3em;
+  color: var(--starlight); margin-bottom: 10px;
+}
+.principle-card h4 {
+  font-size: 18px; font-weight: 400;
+  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+}
+.principle-card p {
+  font-size: 13px; line-height: 1.95;
+  color: var(--text-on-dark-soft);
+  font-weight: 300;
+}
+
+/* === 対比表 === */
+.contrast {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin: 32px 0;
+}
+.contrast-col {
+  padding: 24px;
+  border-radius: 14px;
+  font-size: 14px; line-height: 1.95;
+}
+.contrast-bad {
+  background: rgba(199,107,127,0.08);
+  border: 1px solid rgba(199,107,127,0.3);
+}
+.contrast-good {
+  background: rgba(13,115,119,0.1);
+  border: 1px solid rgba(13,115,119,0.4);
+}
+.contrast-col .label {
+  font-size: 11px; letter-spacing: 0.28em;
+  margin-bottom: 12px;
+}
+.contrast-bad .label { color: var(--rose); }
+.contrast-good .label { color: var(--teal-soft); }
+.contrast-col ul { list-style: none; padding: 0; }
+.contrast-col li { padding-left: 18px; position: relative; margin-bottom: 10px; }
+.contrast-col li::before { content: ''; position: absolute; left: 0; top: 12px; width: 8px; height: 1px; background: currentColor; }
+
+/* === 実装例 === */
+.example-block {
+  background: rgba(11,23,54,0.6);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 32px 30px;
+  margin: 32px 0;
+}
+.example-block .ex-eyebrow {
+  font-size: 11px; letter-spacing: 0.3em;
+  color: var(--teal-soft); margin-bottom: 14px;
+}
+.example-block h4 {
+  font-size: 20px; font-weight: 400;
+  margin-bottom: 18px;
+}
+.example-block .ex-body {
+  font-size: 14px; color: var(--text-on-dark-soft);
+  line-height: 2; font-weight: 300;
+}
+.example-block .ex-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 20px;
+  padding: 10px 22px;
+  background: rgba(212,169,94,0.12);
+  border: 1px solid var(--starlight);
+  border-radius: 24px;
+  color: var(--starlight-strong);
+  font-size: 12.5px;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  transition: all 0.3s;
+}
+.example-block .ex-cta:hover {
+  background: rgba(212,169,94,0.24);
+  transform: translateX(4px);
+}
+
+/* === 関連 === */
+.related {
+  max-width: 920px; margin: 80px auto 40px;
+  padding: 0 24px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.related a {
+  display: block;
+  background: rgba(248,246,240,0.04);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 20px;
+  color: var(--text-on-dark);
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.related a:hover {
+  border-color: var(--starlight);
+  background: rgba(212,169,94,0.08);
+}
+.related a .r-eyebrow {
+  font-size: 10.5px; letter-spacing: 0.3em;
+  color: var(--starlight); margin-bottom: 6px;
+}
+.related a .r-title {
+  font-size: 15px; letter-spacing: 0.04em;
+}
+.related a .r-sub {
+  font-size: 12px; color: var(--text-on-dark-soft);
+  margin-top: 6px;
+}
+
+/* === ユニバーサルナビ === */
+.uninav {
+  position: fixed; right: 22px; bottom: 100px; z-index: 90;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.uninav a {
+  width: 48px; height: 48px;
+  background: rgba(11,23,54,0.85);
+  border: 1px solid var(--starlight);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--starlight);
+  text-decoration: none;
+  font-size: 18px;
+  transition: all 0.3s;
+  backdrop-filter: blur(8px);
+}
+.uninav a:hover {
+  background: var(--starlight);
+  color: var(--night-deep);
+  transform: scale(1.1);
+}
+.uninav a .label {
+  position: absolute; right: 56px;
+  font-size: 11px; letter-spacing: 0.2em;
+  background: rgba(11,23,54,0.95);
+  padding: 4px 10px; border-radius: 4px;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  white-space: nowrap;
+  color: var(--text-on-dark);
+}
+.uninav a:hover .label { opacity: 1; }
+
+/* === フッター === */
+.footer {
+  text-align: center; padding: 40px 24px;
+  font-size: 11px; letter-spacing: 0.22em;
+  color: var(--text-on-dark-quiet);
+}
+
+@media (max-width: 700px) {
+  .header { padding: 14px 18px; }
+  .header-nav { gap: 12px; }
+  .header-nav a { font-size: 11px; }
+  .hero { padding: 130px 18px 60px; }
+  .contrast { grid-template-columns: 1fr; }
+  .uninav { right: 12px; bottom: 80px; }
+  .uninav a { width: 42px; height: 42px; font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars-layer" id="stars"></div>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <nav class="header-nav">
+    <a href="SATOI_Mock_v1_I_about.html">← About に戻る</a>
+    <a href="SATOI_Mock_v1_C1_mypage.html">マイページ</a>
+    <a href="SATOI_Mock_v1_CON_concierge.html">コンシェルジュ</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">01 ・ POSTURE ・ 寄り添う</div>
+  <h1 class="hero-title">数字より、<br><span class="accent">言葉を信じる</span>。</h1>
+  <p class="hero-sub">
+    あなたの揺れ・沈黙・言いにくいことを、医療の一部として扱います。<br>
+    SATOIが「寄り添う」と言うとき、それは態度のことではなく、設計のことです。
+  </p>
+</section>
+
+<section class="section">
+  <div class="section-title">なぜ「寄り添う」が必要か</div>
+  <h2 class="section-heading">医療は、データだけでは届かない領域があります。</h2>
+  <div class="section-body">
+    <p>
+      がんと診断された方の多くは、検査値や生存率の話を聞く前に、まず「これからの自分の人生」に向き合います。
+      けれど従来のシステムは、その<strong>言葉にならない時間</strong>を扱う設計になっていませんでした。
+    </p>
+    <p>
+      SATOIは、<strong>NBM(Narrative-Based Medicine / 物語に基づく医療)</strong> という考え方を土台にしています。
+      患者さん一人ひとりの言葉・体験・揺れを、診療の文脈に組み込む医療です。
+      EBM(エビデンスに基づく医療)を尊重しながら、その隣で、あなたの物語を扱います。
+    </p>
+  </div>
+
+  <div class="quote-block">
+    「治療方針は決まったけれど、家族にどう伝えるかが、いちばん怖い」<br>
+    「先生に聞きたかったことがあったのに、診察室では言葉が出なかった」<br>
+    <span class="cite">SATOIユーザーの声より(匿名・複数の患者さんの声を抽象化)</span>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">寄り添う の 4原則</div>
+  <h2 class="section-heading">押し付けない、急かさない、否定しない、忘れない。</h2>
+  <div class="principle-grid">
+    <div class="principle-card">
+      <div class="num">01</div>
+      <h4>押し付けない</h4>
+      <p>「こうすべき」を提示しない。AIは選択肢を並べ、判断は本人と医療チームに委ねる。標準治療は尊重しつつ、価値観の対話を優先します。</p>
+    </div>
+    <div class="principle-card">
+      <div class="num">02</div>
+      <h4>急かさない</h4>
+      <p>「ゆっくりモード」を常設。今日は何も決めなくていい。気持ちを置く場所、戻ってくる場所として機能します。</p>
+    </div>
+    <div class="principle-card">
+      <div class="num">03</div>
+      <h4>否定しない</h4>
+      <p>「不安・怒り・後悔」もそのまま受け取ります。AIが「ポジティブに考えましょう」とは絶対に言いません。</p>
+    </div>
+    <div class="principle-card">
+      <div class="num">04</div>
+      <h4>忘れない</h4>
+      <p>原疾患・治療歴・前回までの会話を記憶。<strong>同じ質問を二度しない</strong> ことで、患者さんの負担を下げます。</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">これまでの医療UIと、SATOIの違い</div>
+  <h2 class="section-heading">UIの一つひとつに、姿勢が宿ります。</h2>
+  <div class="contrast">
+    <div class="contrast-col contrast-bad">
+      <div class="label">よくある医療系UI</div>
+      <ul>
+        <li>「いまの気分を1〜10で入れてください」</li>
+        <li>「不明な点はチャットボットへ」</li>
+        <li>診察前のチェックリストが20項目</li>
+        <li>「あなたへのおすすめ治療法」とAIが提示</li>
+        <li>初回訪問時と同じ質問を、毎回繰り返す</li>
+      </ul>
+    </div>
+    <div class="contrast-col contrast-good">
+      <div class="label">SATOIの設計</div>
+      <ul>
+        <li>「今日、ことばにできそうなことはありますか」</li>
+        <li>「言いにくいことを、私に話してもいいですよ」</li>
+        <li>必要な3つだけ。続きは、いつでもいい</li>
+        <li>「あなたが大事にしたいことは何か」を一緒に整理</li>
+        <li>原疾患は記録済み。続きから話せます</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">寄り添う を、どこで体験できるか</div>
+  <h2 class="section-heading">SATOIの各画面に組み込まれています。</h2>
+
+  <div class="example-block">
+    <div class="ex-eyebrow">A1 入口</div>
+    <h4>「告知から間もない方へ」のゆっくりモード</h4>
+    <div class="ex-body">
+      入口画面では、いきなり機能を並べません。「眠れない夜」「ことばにできない不安」「家族に言えない」など、
+      あなたが今ここで感じていることに、まず手を伸ばします。会員登録もログインも不要で入れます。
+    </div>
+    <a href="SATOI_Mock_v1_A1_entrance.html" class="ex-cta">体験する →</a>
+  </div>
+
+  <div class="example-block">
+    <div class="ex-eyebrow">AI対話</div>
+    <h4>「ゆっくり話してください、急ぎません」のAI対話</h4>
+    <div class="ex-body">
+      AIは選択肢を3つだけ提示し、迷ったら「分からない」を選べます。
+      会話の途中で離脱しても、次回は「前回はここまで話しました」から再開します。<strong>同じ質問はしません。</strong>
+    </div>
+    <a href="SATOI_Mock_v1_A2_dialog.html" class="ex-cta">体験する →</a>
+  </div>
+
+  <div class="example-block">
+    <div class="ex-eyebrow">マイページ</div>
+    <h4>「気持ちの軌跡」と「物語の壺」</h4>
+    <div class="ex-body">
+      EMPSe(身体・気力・共感・心理・社会)の5軸で、無理に点数化せずに、あなたの揺れを可視化。
+      日々のことばは「物語の壺」に溜まり、振り返ったときに光ります。
+    </div>
+    <a href="SATOI_Mock_v1_C1_mypage.html" class="ex-cta">体験する →</a>
+  </div>
+</section>
+
+<section class="related">
+  <a href="SATOI_Mock_v1_POSTURE_tsunagaru.html">
+    <div class="r-eyebrow">02 ・ CONNECT</div>
+    <div class="r-title">つながる</div>
+    <div class="r-sub">家族・先輩・チームを、同意ベースで</div>
+  </a>
+  <a href="SATOI_Mock_v1_POSTURE_michishirube.html">
+    <div class="r-eyebrow">03 ・ COMPASS</div>
+    <div class="r-title">道しるべ</div>
+    <div class="r-sub">広いマインドマップで、いま・これから</div>
+  </a>
+  <a href="SATOI_Mock_v1_PRO_promises.html">
+    <div class="r-eyebrow">PROMISES</div>
+    <div class="r-title">5つの約束</div>
+    <div class="r-sub">SATOIから、あなたへの約束</div>
+  </a>
+</section>
+
+<div class="uninav">
+  <a href="SATOI_Mock_v1_I_about.html" title="About に戻る"><span class="label">About に戻る</span>←</a>
+  <a href="SATOI_Mock_v1_A1_entrance.html" title="ホーム"><span class="label">ホーム</span>⌂</a>
+  <a href="SATOI_Mock_v1_B1_hub.html" title="ハブ"><span class="label">ハブ</span>◉</a>
+  <a href="SATOI_Mock_v1_C1_mypage.html" title="マイページ"><span class="label">マイページ</span>☆</a>
+  <a href="SATOI_Mock_v1_CON_concierge.html" title="コンシェルジュ"><span class="label">相談</span>☎</a>
+</div>
+
+<footer class="footer">
+  SATOI ・ Narrative-Based Care for Cancer ・ © 2026
+</footer>
+
+<script>
+// 星を散らす
+(function(){
+  const layer = document.getElementById('stars');
+  if(!layer) return;
+  for(let i=0;i<70;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random()*2.2 + 0.6;
+    s.style.width = size+'px'; s.style.height = size+'px';
+    s.style.left = (Math.random()*100)+'%';
+    s.style.top = (Math.random()*100)+'%';
+    s.style.animationDelay = (Math.random()*5)+'s';
+    s.style.animationDuration = (3+Math.random()*4)+'s';
+    layer.appendChild(s);
+  }
+})();
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>治療後 ・ 経過観察 | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #EBE0EE; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 130px 32px 60px; text-align:center; background: linear-gradient(135deg, rgba(20,166,171,0.08) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: #14A6AB; padding:6px 18px; border:1px solid rgba(20,166,171,0.4); border-radius:24px; margin-bottom:24px; }
+.hero-title { font-size: clamp(30px, 5vw, 44px); font-weight:300; line-height:1.55; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: #14A6AB; font-weight:500; }
+.hero-sub { font-size:15px; color: var(--ink-medium); line-height:2; max-width:680px; margin:0 auto; }
+
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 14px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc-item { padding:7px 14px; background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.3); border-radius:18px; color: var(--ink-medium); font-size:11.5px; cursor:pointer; text-decoration:none; }
+.toc-item:hover, .toc-item.active { background: #14A6AB; color: var(--morning-white); border-color: #14A6AB; }
+
+.section { padding: 60px 32px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size:11px; letter-spacing:0.36em; color: #14A6AB; margin-bottom:10px; font-weight:600; }
+.section-title { font-size: clamp(24px, 3.2vw, 30px); font-weight:500; color: var(--ink-deep); margin-bottom:14px; line-height:1.5; }
+.section-sub { font-size:14.5px; color: var(--ink-medium); line-height:1.95; margin-bottom:30px; }
+
+.content-card { background: white; border-radius:18px; padding: 28px 32px; border:1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 20px; }
+.content-card h3 { font-size:18px; font-weight:600; color: var(--ink-deep); margin-bottom: 12px; }
+.content-card h4 { font-size:15px; font-weight:600; color: #14A6AB; margin: 18px 0 10px; }
+.content-card p { font-size:14px; color: var(--ink-medium); line-height:1.95; margin-bottom: 12px; }
+.content-card ul { padding-left: 22px; margin: 10px 0 14px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.content-card li { margin-bottom: 6px; }
+.content-card strong { color: var(--ink-deep); font-weight: 500; }
+.content-card blockquote { border-left: 3px solid #14A6AB; padding: 10px 18px; margin: 14px 0; background: rgba(212,169,94,0.06); color: var(--ink-medium); font-size:13px; font-style: italic; }
+
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 24px; }
+.mini-card { background: var(--morning-cream); border-radius:14px; padding: 20px 22px; border:1px solid var(--line); cursor:pointer; transition: all 0.3s; }
+.mini-card:hover { background: white; border-color: #14A6AB; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(11,23,54,0.08); }
+.mini-card-num { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%; background: #14A6AB; color: white; font-weight:700; font-size:13px; margin-bottom:10px; }
+.mini-card-title { font-size:15px; font-weight:600; color: var(--ink-deep); margin-bottom: 6px; }
+.mini-card-desc { font-size:12.5px; color: var(--ink-medium); line-height:1.85; }
+
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 28px 32px; margin: 30px 0; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 16px; font-weight:600; color: var(--teal); margin-bottom: 8px; }
+.ai-cta p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 14px; }
+.ai-cta-btn { display:inline-block; padding: 12px 24px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
+
+.related-nav { background: var(--morning-cream); padding: 36px 32px; margin-top: 40px; border-top: 1px solid var(--line); }
+.related-nav h4 { font-size:14px; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom: 16px; text-align: center; }
+.related-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; max-width: 980px; margin: 0 auto; }
+.related-card { padding: 14px 18px; background: white; border-radius: 12px; border:1px solid var(--line); cursor:pointer; transition: all 0.2s; }
+.related-card:hover { border-color: #14A6AB; background: rgba(212,169,94,0.06); }
+.related-card-title { font-size: 13px; font-weight: 500; color: var(--ink-deep); margin-bottom: 3px; }
+.related-card-desc { font-size: 11.5px; color: var(--ink-light); }
+
+@media (max-width: 768px) {
+  .hero { padding: 110px 16px 50px; }
+  .section { padding: 40px 16px; }
+  .content-card { padding: 22px 20px; }
+}
+
+/* === SATOI 共通トースト・ユニバーサルナビ === */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35); font-size: 13.5px; line-height: 1.75; display: flex; gap: 14px; opacity: 0; transform: translateY(20px); transition: all 0.4s; border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; }
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; }
+.satoi-univ-btn { width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_C1_mypage.html'; })()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">CHAPTER 6 ・ AFTER TREATMENT</div>
+  <h1 class="hero-title">治療後、<strong>そのあとは</strong></h1>
+  <p class="hero-sub">治療が終わっても、SATOI はそばにいます。<br>「もう大丈夫」と「再発が怖い」のあいだで、揺れる時期です。</p>
+</section>
+
+<nav class="toc">
+  <a class="toc-item" href="#s1">経過観察</a>
+  <a class="toc-item" href="#s2">サバイバーシップ</a>
+  <a class="toc-item" href="#s3">再発と言われたら</a>
+  <a class="toc-item" href="#s4">緩和ケアを中心に</a>
+  <a class="toc-item" href="#s5">社会復帰</a>
+  <a class="toc-item" href="#s6">後遺症ケア</a>
+
+</nav>
+
+<main>
+<section class="section" id="s1">
+  <div class="section-eyebrow">経過観察</div>
+  <h2 class="section-title">定期的に病院に通う</h2>
+  <div class="content-card"><h4>標準的な経過観察スケジュール</h4>
+             <ul><li>治療後 〜半年: 3か月ごと</li><li>〜3年: 3-6か月ごと</li><li>〜5年: 6か月-1年ごと</li><li>〜10年: 1年ごと</li></ul>
+             <p>CT・MRI・腫瘍マーカー・診察。<strong>再発の早期発見</strong> が目的です。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_follow&topic=s1&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s2">
+  <div class="section-eyebrow">サバイバーシップ</div>
+  <h2 class="section-title">治療後の人生をどう生きるか</h2>
+  <div class="content-card"><p>「がん経験者(サバイバー)」として、新しい価値観で生きる人が増えています。同じ経験を語る・支える側になる・自分の物語を残す。SATOI D1 物語ライブラリで、先輩の語りに触れられます。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_follow&topic=s2&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s3">
+  <div class="section-eyebrow">再発と言われたら</div>
+  <h2 class="section-title">「終わり」ではなく「次の選択」</h2>
+  <div class="content-card"><p>再発しても、選べる治療があります。初回治療の経験があるので、副作用への対処も上手になっています。落ち込むのは自然 ・ でも、もう一度進める力もあります。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_follow&topic=s3&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s4">
+  <div class="section-eyebrow">緩和ケアを中心に</div>
+  <h2 class="section-title">「治療しない」も、ひとつの選択</h2>
+  <div class="content-card"><p>治療を続けない選択肢も、医学的に・倫理的に正当な選択です。緩和ケア中心 = 何もしないではなく、<strong>痛み・症状・心を最大限ケアする積極的な医療</strong>。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_follow&topic=s4&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s5">
+  <div class="section-eyebrow">社会復帰</div>
+  <h2 class="section-title">働き方・学び方の再設計</h2>
+  <div class="content-card"><p>復職時はフルタイム→時短→フル のように段階的に。会社に「治療計画書」を提出して両立支援プランを作るのが標準です。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_follow&topic=s5&resume=1">AIと話す →</a>
+  </div>
+</section>
+<section class="section" id="s6">
+  <div class="section-eyebrow">後遺症ケア</div>
+  <h2 class="section-title">長く続く副作用への向き合い方</h2>
+  <div class="content-card"><p>脱毛は数か月で戻ります。しびれは1-2年残ることも。リンパ浮腫は専門外来で。<strong>後遺症の相談先</strong> をマイページに登録しておきましょう。</p></div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>この内容について、AI とゆっくり話せます。あなたの状況に合わせて、次の一歩を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=chp_chp_follow&topic=s6&resume=1">AIと話す →</a>
+  </div>
+</section>
+
+</main>
+
+<aside class="related-nav">
+  <h4>関連するページ</h4>
+  <div class="related-grid">
+    <a class="related-card" href="SATOI_Mock_v1_C1_mypage.html"><div class="related-card-title">マイページに戻る</div><div class="related-card-desc">物語の壺・気持ち軌跡・チーム</div></a>
+    <a class="related-card" href="SATOI_Mock_v1_CON_concierge.html"><div class="related-card-title">SATOI コンシェルジュ</div><div class="related-card-desc">電話 or AI で話す</div></a>
+    <a class="related-card" href="SATOI_Mock_v1_B1_hub.html"><div class="related-card-title">全体マップ</div><div class="related-card-desc">マインドマップで全体俯瞰</div></a>
+    <a class="related-card" href="SATOI_Mock_v1_D2_story_map.html"><div class="related-card-title">あなたの物語マップ</div><div class="related-card-desc">これまでの足跡を見る</div></a>
+  </div>
+</aside>
+
+<script>
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  t.className = 'satoi-toast';
+  t.innerHTML = '<span class="satoi-toast-icon">●</span><div style="flex:1;">'+msg.replace(/\n/g,'<br>')+'</div><button class="satoi-toast-close">×</button>';
+  host.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add('show'));
+  const closer = ()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, opts.duration||5000);
+}
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){} };
+
+(function setupUnivNav(){
+  if (document.getElementById('satoi-univ-nav')) return;
+  const nav = document.createElement('div'); nav.id='satoi-univ-nav';
+  nav.innerHTML='<button class="satoi-univ-btn" title="戻る">←</button><button class="satoi-univ-btn" title="夜空ホーム">⌂</button><button class="satoi-univ-btn" title="マイページ">👤</button><button class="satoi-univ-btn" title="全体マップ">◎</button><button class="satoi-univ-btn" title="コンシェルジュ">💬</button>';
+  document.body.appendChild(nav);
+  const btns = nav.querySelectorAll('.satoi-univ-btn');
+  btns[0].onclick = () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; };
+  btns[1].onclick = () => location.href='SATOI_Mock_v1_A1_entrance.html';
+  btns[2].onclick = () => location.href='SATOI_Mock_v1_C1_mypage.html';
+  btns[3].onclick = () => location.href='SATOI_Mock_v1_B1_hub.html';
+  btns[4].onclick = () => location.href='SATOI_Mock_v1_CON_concierge.html';
+})();
+
+// TOC アクティブ追従
+document.querySelectorAll('.toc-item').forEach(a => a.addEventListener('click', e => {
+  document.querySelectorAll('.toc-item').forEach(x => x.classList.remove('active'));
+  a.classList.add('active');
+}));
+</script>
+<script src="satoi_chp_insight.js"></script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

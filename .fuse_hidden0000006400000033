@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>つながる ・ SATOIの姿勢02 - 同意ベースで、あなたのチームを</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --starlight: #D4A95E;
+  --starlight-soft: #E5C68A;
+  --starlight-strong: #F0C97A;
+  --teal: #0D7377;
+  --teal-soft: #14A6AB;
+  --teal-deep: #0A5A5D;
+  --warm-orange: #D4622A;
+  --rose: #C76B7F;
+  --text-on-dark: rgba(248,246,240,0.96);
+  --text-on-dark-soft: rgba(248,246,240,0.78);
+  --text-on-dark-quiet: rgba(248,246,240,0.55);
+  --line: rgba(248,246,240,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; overflow-x:hidden; }
+body {
+  font-family: var(--font);
+  color: var(--text-on-dark);
+  background: radial-gradient(ellipse at top, #0F2A2D 0%, var(--night-deep) 60%, #060d1f 100%);
+  background-attachment: fixed;
+  line-height: 2;
+  font-weight: 300;
+  min-height: 100vh;
+  padding-bottom: 120px;
+}
+.stars-layer { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.star { position: absolute; background: var(--teal-soft); border-radius: 50%; opacity: 0; animation: twinkle 5s infinite ease-in-out; }
+@keyframes twinkle { 0%,100% { opacity:0.1; transform:scale(0.7);} 50% { opacity:0.6; transform:scale(1.1);} }
+
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding: 18px 36px; display:flex; align-items:center; justify-content:space-between; background: linear-gradient(to bottom, rgba(11,23,54,0.7), rgba(11,23,54,0)); backdrop-filter: blur(10px); }
+.logo { font-size: 22px; font-weight: 500; letter-spacing: 0.22em; color: var(--text-on-dark); text-decoration: none; display: inline-flex; align-items: center; }
+.logo .dot { display:inline-block; width:8px; height:8px; background: var(--teal-soft); border-radius:50%; margin: 0 10px 0 0; box-shadow: 0 0 12px var(--teal-soft); }
+.header-nav { display:flex; gap: 22px; }
+.header-nav a { color: var(--text-on-dark-soft); font-size: 12.5px; text-decoration: none; letter-spacing: 0.12em; transition: color 0.2s; }
+.header-nav a:hover { color: var(--teal-soft); }
+
+.hero { padding: 160px 24px 80px; text-align: center; max-width: 920px; margin: 0 auto; }
+.hero-eyebrow { font-size: 11px; letter-spacing: 0.42em; color: var(--teal-soft); margin-bottom: 22px; }
+.hero-title { font-size: clamp(38px, 6.5vw, 68px); font-weight: 200; line-height: 1.2; margin-bottom: 28px; letter-spacing: 0.06em; }
+.hero-title .accent { color: var(--teal-soft); font-weight: 300; }
+.hero-sub { font-size: clamp(15px, 1.6vw, 18px); color: var(--text-on-dark-soft); font-weight: 300; max-width: 680px; margin: 0 auto; letter-spacing: 0.04em; }
+
+.section { max-width: 920px; margin: 60px auto; padding: 0 24px; }
+.section-title { font-size: 13px; letter-spacing: 0.32em; color: var(--teal-soft); margin-bottom: 16px; }
+.section-heading { font-size: clamp(24px, 3.5vw, 36px); font-weight: 300; line-height: 1.5; margin-bottom: 28px; letter-spacing: 0.04em; }
+.section-body { font-size: 15px; line-height: 2.1; color: var(--text-on-dark-soft); font-weight: 300; }
+.section-body p { margin-bottom: 20px; }
+.section-body strong { color: var(--teal-soft); font-weight: 500; }
+
+/* === マイチームのビジュアル === */
+.team-wheel {
+  position: relative;
+  width: 100%; max-width: 500px;
+  aspect-ratio: 1;
+  margin: 50px auto;
+}
+.team-center {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 110px; height: 110px;
+  background: radial-gradient(circle, var(--teal-soft), var(--teal-deep));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  color: var(--text-on-dark);
+  font-size: 13px; letter-spacing: 0.12em;
+  box-shadow: 0 0 60px rgba(20,166,171,0.5);
+}
+.team-center .me { font-size: 18px; font-weight: 400; }
+.team-node {
+  position: absolute;
+  width: 90px; height: 90px;
+  background: rgba(11,23,54,0.8);
+  border: 1.5px solid rgba(20,166,171,0.5);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  font-size: 11px; letter-spacing: 0.1em;
+  text-align: center;
+  color: var(--text-on-dark);
+  backdrop-filter: blur(6px);
+  transition: all 0.4s;
+  animation: float 6s infinite ease-in-out;
+}
+.team-node:hover { border-color: var(--teal-soft); transform: scale(1.1); }
+.team-node .role { font-size: 10px; color: var(--text-on-dark-quiet); margin-top: 4px; }
+.team-node .icon { font-size: 22px; margin-bottom: 2px; }
+@keyframes float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-6px);} }
+
+.team-node.n1 { top: 4%; left: 50%; transform: translateX(-50%); animation-delay: 0s; }
+.team-node.n2 { top: 24%; right: 4%; animation-delay: 0.8s; }
+.team-node.n3 { bottom: 24%; right: 4%; animation-delay: 1.6s; }
+.team-node.n4 { bottom: 4%; left: 50%; transform: translateX(-50%); animation-delay: 2.4s; }
+.team-node.n5 { bottom: 24%; left: 4%; animation-delay: 3.2s; }
+.team-node.n6 { top: 24%; left: 4%; animation-delay: 4s; }
+
+.team-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none;
+}
+.team-svg line { stroke: rgba(20,166,171,0.25); stroke-width: 1; stroke-dasharray: 3 4; }
+
+/* === 役割カード === */
+.roles-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px; margin-top: 36px;
+}
+.role-card {
+  background: rgba(248,246,240,0.04);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px 22px;
+  transition: all 0.3s;
+}
+.role-card:hover {
+  border-color: rgba(20,166,171,0.4);
+  transform: translateY(-3px);
+}
+.role-card .role-icon {
+  font-size: 28px; margin-bottom: 10px;
+}
+.role-card h4 { font-size: 17px; font-weight: 400; margin-bottom: 8px; letter-spacing: 0.04em; }
+.role-card .when { font-size: 11px; letter-spacing: 0.2em; color: var(--teal-soft); margin-bottom: 10px; }
+.role-card p { font-size: 13px; line-height: 1.9; color: var(--text-on-dark-soft); font-weight: 300; }
+
+/* === 同意フロー === */
+.consent-flow {
+  background: rgba(13,115,119,0.08);
+  border: 1px solid rgba(20,166,171,0.3);
+  border-radius: 18px;
+  padding: 36px 32px;
+  margin: 40px 0;
+}
+.consent-flow h4 { font-size: 18px; font-weight: 400; margin-bottom: 24px; letter-spacing: 0.04em; color: var(--teal-soft); }
+.consent-steps {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+.consent-step {
+  padding: 18px;
+  background: rgba(11,23,54,0.5);
+  border-radius: 12px;
+  position: relative;
+}
+.consent-step .step-num {
+  display: inline-block;
+  width: 24px; height: 24px; line-height: 24px;
+  background: var(--teal-soft); color: var(--night-deep);
+  border-radius: 50%; text-align: center;
+  font-size: 12px; font-weight: 500;
+  margin-bottom: 10px;
+}
+.consent-step h5 { font-size: 14px; font-weight: 500; margin-bottom: 8px; }
+.consent-step p { font-size: 12px; color: var(--text-on-dark-soft); line-height: 1.8; }
+
+/* === 実装例 === */
+.example-block {
+  background: rgba(11,23,54,0.6);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 32px 30px;
+  margin: 32px 0;
+}
+.example-block .ex-eyebrow { font-size: 11px; letter-spacing: 0.3em; color: var(--teal-soft); margin-bottom: 14px; }
+.example-block h4 { font-size: 20px; font-weight: 400; margin-bottom: 18px; }
+.example-block .ex-body { font-size: 14px; color: var(--text-on-dark-soft); line-height: 2; font-weight: 300; }
+.example-block .ex-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 20px; padding: 10px 22px;
+  background: rgba(20,166,171,0.14);
+  border: 1px solid var(--teal-soft);
+  border-radius: 24px;
+  color: var(--teal-soft);
+  font-size: 12.5px; text-decoration: none;
+  letter-spacing: 0.1em; transition: all 0.3s;
+}
+.example-block .ex-cta:hover { background: rgba(20,166,171,0.28); transform: translateX(4px); }
+
+/* === 関連 === */
+.related {
+  max-width: 920px; margin: 80px auto 40px;
+  padding: 0 24px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.related a {
+  display: block;
+  background: rgba(248,246,240,0.04);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 20px;
+  color: var(--text-on-dark);
+  text-decoration: none; transition: all 0.3s;
+}
+.related a:hover { border-color: var(--teal-soft); background: rgba(20,166,171,0.08); }
+.related a .r-eyebrow { font-size: 10.5px; letter-spacing: 0.3em; color: var(--teal-soft); margin-bottom: 6px; }
+.related a .r-title { font-size: 15px; letter-spacing: 0.04em; }
+.related a .r-sub { font-size: 12px; color: var(--text-on-dark-soft); margin-top: 6px; }
+
+/* === ユニバーサルナビ === */
+.uninav { position: fixed; right: 22px; bottom: 100px; z-index: 90; display: flex; flex-direction: column; gap: 12px; }
+.uninav a {
+  width: 48px; height: 48px;
+  background: rgba(11,23,54,0.85);
+  border: 1px solid var(--teal-soft);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--teal-soft); text-decoration: none; font-size: 18px;
+  transition: all 0.3s; backdrop-filter: blur(8px);
+  position: relative;
+}
+.uninav a:hover { background: var(--teal-soft); color: var(--night-deep); transform: scale(1.1); }
+.uninav a .label {
+  position: absolute; right: 56px;
+  font-size: 11px; letter-spacing: 0.2em;
+  background: rgba(11,23,54,0.95);
+  padding: 4px 10px; border-radius: 4px;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  white-space: nowrap; color: var(--text-on-dark);
+}
+.uninav a:hover .label { opacity: 1; }
+
+.footer { text-align: center; padding: 40px 24px; font-size: 11px; letter-spacing: 0.22em; color: var(--text-on-dark-quiet); }
+
+@media (max-width: 700px) {
+  .header { padding: 14px 18px; }
+  .header-nav { gap: 12px; }
+  .header-nav a { font-size: 11px; }
+  .hero { padding: 130px 18px 60px; }
+  .team-wheel { max-width: 360px; }
+  .team-node { width: 72px; height: 72px; font-size: 10px; }
+  .uninav { right: 12px; bottom: 80px; }
+  .uninav a { width: 42px; height: 42px; font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars-layer" id="stars"></div>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <nav class="header-nav">
+    <a href="SATOI_Mock_v1_I_about.html">← About に戻る</a>
+    <a href="SATOI_Mock_v1_C1_mypage.html">マイページ</a>
+    <a href="SATOI_Mock_v1_CON_concierge.html">コンシェルジュ</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">02 ・ POSTURE ・ つながる</div>
+  <h1 class="hero-title">一人で<br><span class="accent">闘わなくていい</span>。</h1>
+  <p class="hero-sub">
+    家族・先輩・主治医の先生・コーディネーター・AI。<br>
+    あなたを支えるチームを、<strong>あなたの同意ベース</strong>で、ひとつずつ繋いでいきます。
+  </p>
+</section>
+
+<section class="section">
+  <div class="section-title">なぜ「つながる」が必要か</div>
+  <h2 class="section-heading">がんは、本人ひとりの闘いではなくなりました。</h2>
+  <div class="section-body">
+    <p>
+      治療が長期化・複雑化するにつれ、患者さん本人だけでなく、<strong>家族・主治医の先生・看護師・薬剤師・心理士・職場・社労士・先輩患者</strong> —
+      多くの人がチームとして関わるようになりました。けれど現状、それぞれが別の場所で別の話をしていて、
+      患者さんが「全部自分で繋ぐ係」になっています。
+    </p>
+    <p>
+      SATOIは、<strong>あなたを中心に置いたチーム図</strong> を、あなたの手元に用意します。
+      誰に・いつ・何を・どこまで共有するかは、すべてあなたが決められます。
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">あなたのチームの形</div>
+  <h2 class="section-heading">真ん中は、いつもあなたです。</h2>
+  <div class="team-wheel">
+    <svg class="team-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <line x1="50" y1="50" x2="50" y2="10"/>
+      <line x1="50" y1="50" x2="90" y2="30"/>
+      <line x1="50" y1="50" x2="90" y2="70"/>
+      <line x1="50" y1="50" x2="50" y2="90"/>
+      <line x1="50" y1="50" x2="10" y2="70"/>
+      <line x1="50" y1="50" x2="10" y2="30"/>
+    </svg>
+    <div class="team-center"><div class="me">あなた</div><div style="font-size:10px;opacity:0.8;margin-top:4px;letter-spacing:0.2em;">YOU</div></div>
+    <div class="team-node n1"><div class="icon">👨‍⚕️</div><div>主治医の先生</div><div class="role">医療判断</div></div>
+    <div class="team-node n2"><div class="icon">👩‍⚕️</div><div>看護師</div><div class="role">日常ケア</div></div>
+    <div class="team-node n3"><div class="icon">💊</div><div>薬剤師</div><div class="role">服薬支援</div></div>
+    <div class="team-node n4"><div class="icon">👨‍👩‍👧</div><div>家族</div><div class="role">伴走</div></div>
+    <div class="team-node n5"><div class="icon">💬</div><div>先輩患者</div><div class="role">経験の共有</div></div>
+    <div class="team-node n6"><div class="icon">🤖</div><div>SATOI AI</div><div class="role">案内役</div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">「つながる」を構成する6つの役割</div>
+  <h2 class="section-heading">それぞれの専門が、必要な時に、必要なだけ。</h2>
+  <div class="roles-grid">
+    <div class="role-card">
+      <div class="role-icon">👨‍⚕️</div>
+      <div class="when">いつでも</div>
+      <h4>主治医の先生</h4>
+      <p>治療方針の最終判断者。SATOIは診察前の「聞きたいこと整理シート」をAIで作り、診察時間を有意義に使えるよう支援します。</p>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">👨‍👩‍👧</div>
+      <div class="when">毎日</div>
+      <h4>家族</h4>
+      <p>「ファミリービュー」で、本人が話したい範囲だけを共有できます。本人が話せないことは、AIが代弁することもできます(本人の同意があれば)。</p>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">💬</div>
+      <div class="when">気になった時</div>
+      <h4>先輩患者</h4>
+      <p>同じ原疾患・近い治療経過の方の物語を、匿名で読めます。「自分だけじゃなかった」と気づける場所です。</p>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">🎵</div>
+      <div class="when">夜眠れない時</div>
+      <h4>音楽コミュニティ</h4>
+      <p>がんを経験した方々のプレイリストを、Spotify/Apple Music/YouTubeで聴けます。言葉にできない夜の伴走者として。</p>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">📞</div>
+      <div class="when">困った時</div>
+      <h4>コンシェルジュ</h4>
+      <p>電話・AIチャット両対応。「制度の話」「お金の話」「セカンドオピニオン」など、何を聞けばいいか分からない時の窓口。</p>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">🤖</div>
+      <div class="when">24時間</div>
+      <h4>SATOI AI</h4>
+      <p>あなたの原疾患・治療歴・前回までの会話を記憶。いつでも、急かさず、押し付けず、あなたの言葉を待ちます。</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">同意ベースの設計</div>
+  <h2 class="section-heading">「つなぐ前に、まず聞く」を徹底します。</h2>
+  <div class="consent-flow">
+    <h4>SATOIの情報共有 4ステップ</h4>
+    <div class="consent-steps">
+      <div class="consent-step">
+        <span class="step-num">1</span>
+        <h5>誰に</h5>
+        <p>共有先を、あなたが個別に選びます。一括公開は絶対にしません。</p>
+      </div>
+      <div class="consent-step">
+        <span class="step-num">2</span>
+        <h5>何を</h5>
+        <p>項目単位で選べます。気持ちの軌跡だけ・治療歴だけ、など。</p>
+      </div>
+      <div class="consent-step">
+        <span class="step-num">3</span>
+        <h5>いつまで</h5>
+        <p>期限を設定できます。「今日の診察前だけ」「次回までの1週間」など。</p>
+      </div>
+      <div class="consent-step">
+        <span class="step-num">4</span>
+        <h5>いつでも撤回</h5>
+        <p>共有はいつでも止められます。理由の説明は不要です。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">つながる を、どこで体験できるか</div>
+  <h2 class="section-heading">SATOIの各画面に組み込まれています。</h2>
+
+  <div class="example-block">
+    <div class="ex-eyebrow">B1 ハブ</div>
+    <h4>家族とつながる - ファミリービュー</h4>
+    <div class="ex-body">
+      ご家族が、あなたが話したい範囲だけを見られる画面です。
+      「今日は調子いい」だけでもいい。本人が話せないことを、AIが代弁する設定も用意しています。
+    </div>
+    <a href="SATOI_Mock_v1_B1_hub.html" class="ex-cta">ハブを見る →</a>
+  </div>
+
+  <div class="example-block">
+    <div class="ex-eyebrow">MUS コミュニティ</div>
+    <h4>音楽でつながる - 同じ夜を過ごす人がいます</h4>
+    <div class="ex-body">
+      がんを経験した方々のプレイリストを共有しています。Spotify / Apple Music / YouTube から、直接聴けます。
+      「自分だけじゃない」を感じる、ことばを使わない方法です。
+    </div>
+    <a href="SATOI_Mock_v1_MUS_community.html" class="ex-cta">コミュニティを見る →</a>
+  </div>
+
+  <div class="example-block">
+    <div class="ex-eyebrow">CON コンシェルジュ</div>
+    <h4>電話とAIチャットで、専門家に繋ぐ</h4>
+    <div class="ex-body">
+      何を聞けばいいか分からない時の窓口。電話 / AIチャット / 予約相談 から選べます。
+      がん相談支援センターや、社労士・税理士など、必要な専門家に確実に橋渡しします。
+    </div>
+    <a href="SATOI_Mock_v1_CON_concierge.html" class="ex-cta">コンシェルジュへ →</a>
+  </div>
+</section>
+
+<section class="related">
+  <a href="SATOI_Mock_v1_POSTURE_yorisou.html">
+    <div class="r-eyebrow">01 ・ POSTURE</div>
+    <div class="r-title">寄り添う</div>
+    <div class="r-sub">数字より、言葉を信じる</div>
+  </a>
+  <a href="SATOI_Mock_v1_POSTURE_michishirube.html">
+    <div class="r-eyebrow">03 ・ COMPASS</div>
+    <div class="r-title">道しるべ</div>
+    <div class="r-sub">広いマインドマップで、いま・これから</div>
+  </a>
+  <a href="SATOI_Mock_v1_PRO_promises.html">
+    <div class="r-eyebrow">PROMISES</div>
+    <div class="r-title">5つの約束</div>
+    <div class="r-sub">SATOIから、あなたへの約束</div>
+  </a>
+</section>
+
+<div class="uninav">
+  <a href="SATOI_Mock_v1_I_about.html" title="About に戻る"><span class="label">About に戻る</span>←</a>
+  <a href="SATOI_Mock_v1_A1_entrance.html" title="ホーム"><span class="label">ホーム</span>⌂</a>
+  <a href="SATOI_Mock_v1_B1_hub.html" title="ハブ"><span class="label">ハブ</span>◉</a>
+  <a href="SATOI_Mock_v1_C1_mypage.html" title="マイページ"><span class="label">マイページ</span>☆</a>
+  <a href="SATOI_Mock_v1_CON_concierge.html" title="コンシェルジュ"><span class="label">相談</span>☎</a>
+</div>
+
+<footer class="footer">
+  SATOI ・ Narrative-Based Care for Cancer ・ © 2026
+</footer>
+
+<script>
+(function(){
+  const layer = document.getElementById('stars');
+  if(!layer) return;
+  for(let i=0;i<60;i++){
+    const s = document.createElement('div'); s.className = 'star';
+    const size = Math.random()*2 + 0.6;
+    s.style.width = size+'px'; s.style.height = size+'px';
+    s.style.left = (Math.random()*100)+'%';
+    s.style.top = (Math.random()*100)+'%';
+    s.style.animationDelay = (Math.random()*5)+'s';
+    s.style.animationDuration = (3+Math.random()*4)+'s';
+    layer.appendChild(s);
+  }
+})();
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

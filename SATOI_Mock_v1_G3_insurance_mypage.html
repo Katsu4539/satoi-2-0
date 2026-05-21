@@ -644,9 +644,9 @@ body {
       </div>
     </div>
     <div class="policy-actions">
-      <button class="policy-btn" onclick="satoiNotify('診断給付金 請求書類を自動生成し、保険会社に送信します(プレースホルダ)\n\n書類:診断書 + 申請書 + 本人確認\n通常 1-2週間で振込')">📨 診断給付金を申請する</button>
-      <button class="policy-btn outline" onclick="satoiNotify('保険プラン詳細・約款・特約一覧(プレースホルダ)')">📋 プラン詳細を見る</button>
-      <button class="policy-btn outline" onclick="satoiNotify('受取人・保険プラン変更(保険会社サイトに遷移・プレースホルダ)')">⚙ 受取人・契約変更</button>
+      <button class="policy-btn" onclick="satoiNotify('診断給付金 請求書類を自動生成し、保険会社に送信します\n\n書類:診断書 + 申請書 + 本人確認\n通常 1-2週間で振込')">📨 診断給付金を申請する</button>
+      <button class="policy-btn outline" onclick="satoiNotify('保険プラン詳細・約款・特約一覧')">📋 プラン詳細を見る</button>
+      <button class="policy-btn outline" onclick="satoiNotify('受取人・保険プラン変更(保険会社サイトに遷移)')">⚙ 受取人・契約変更</button>
     </div>
   </div>
 </section>
@@ -699,25 +699,25 @@ body {
     <p class="section-sub">あなたの保険プランで受けられる治療と、SATOI と連携している医療機関です。給付金は連携機関では原則「直接連携」で煩雑な手続き不要。</p>
 
     <div class="facility-grid">
-      <div class="facility-card" onclick="satoiNotify('近隣拠点病院マップ・プレースホルダ\n\n地域別に拠点病院がリスト表示・予約導線あり')">
+      <div class="facility-card" onclick="satoiNotify('近隣拠点病院マップ\n\n地域別に拠点病院がリスト表示・予約導線あり')">
         <div class="facility-eyebrow">STANDARD CARE</div>
         <div class="facility-name">近隣の拠点病院</div>
         <div class="facility-meta">標準治療を受けられる地域の中核病院・治療給付金 直接連携可</div>
         <div class="facility-status">✓ 連携済み・即利用可</div>
       </div>
-      <div class="facility-card" onclick="satoiNotify('Light Clinic Ginza(LCG)に予約・プレースホルダ\n\n銀座本院・セカンドオピニオン対応・SATOIコーディネーター常駐')">
+      <div class="facility-card" onclick="satoiNotify('Light Clinic Ginza(LCG)に予約\n\n銀座本院・セカンドオピニオン対応・SATOIコーディネーター常駐')">
         <div class="facility-eyebrow">SECOND OPINION</div>
         <div class="facility-name">Light Clinic Ginza</div>
         <div class="facility-meta">SATOIメイン拠点・セカンドオピニオン・専門医による個別カンファレンス</div>
         <div class="facility-status">✓ 連携済み・即利用可</div>
       </div>
-      <div class="facility-card" onclick="satoiNotify('定型医療クリニック・プレースホルダ\n\nSATOI提携クリニック・がん種別専門外来')">
+      <div class="facility-card" onclick="satoiNotify('定型医療クリニック\n\nSATOI提携クリニック・がん種別専門外来')">
         <div class="facility-eyebrow">SECOND OPINION</div>
         <div class="facility-name">定型医療クリニック</div>
         <div class="facility-meta">SATOI提携・がん種別の専門外来・コーディネーター紹介</div>
         <div class="facility-status">✓ 連携済み・即利用可</div>
       </div>
-      <div class="facility-card" onclick="satoiNotify('自由診療・厚労省と調整中・プレースホルダ\n\n将来的に提携クリニックマップを段階展開')">
+      <div class="facility-card" onclick="satoiNotify('自由診療・厚労省と調整中\n\n将来的に提携クリニックマップを段階展開')">
         <div class="facility-eyebrow">CARE (FUTURE)</div>
         <div class="facility-name">自由診療マップ</div>
         <div class="facility-meta">標準治療を超えた選択肢・提携クリニック・厚労省と段階調整中</div>
@@ -789,13 +789,13 @@ body {
           <div class="family-icon">📨</div>
           <div class="family-title">親戚への説明シート</div>
           <div class="family-desc">「今こんな状態です」を分かりやすいPDFで自動生成・LINE転送可</div>
-          <button class="family-btn" onclick="satoiNotify('説明シートを生成(プレースホルダ)\n\n本人同意の範囲で・カルテ原文は出さず・ナラティブに翻訳')">📄 シートを作る</button>
+          <button class="family-btn" onclick="satoiNotify('説明シートを生成\n\n本人同意の範囲で・カルテ原文は出さず・ナラティブに翻訳')">📄 シートを作る</button>
         </div>
         <div class="family-item">
           <div class="family-icon">🌙</div>
           <div class="family-title">ACP・人生会議の準備</div>
           <div class="family-desc">「もしも」の希望を整理し、家族と共有。終末期コミュニケーションの基盤</div>
-          <button class="family-btn" onclick="satoiNotify('ACPワークシート(プレースホルダ)\n\nSATOI伴走者と一緒に進められます')">🪔 ACPを始める</button>
+          <button class="family-btn" onclick="satoiNotify('ACPワークシート\n\nSATOI伴走者と一緒に進められます')">🪔 ACPを始める</button>
         </div>
       </div>
     </div>
@@ -1027,13 +1027,13 @@ function handlePriority(target) {
     facility: () => document.querySelector('.facility-grid').scrollIntoView({behavior:'smooth'}),
     sim: () => document.querySelector('.sim-card').scrollIntoView({behavior:'smooth'}),
     sdm: () => { window.location.href = 'SATOI_Mock_v1_B3_treatment_detail.html#sdm'; },
-    living: () => alert('リビングニーズ請求(プレースホルダ)\n\n余命6か月以内の宣告を受けた場合に、保険金の一部を生前に受け取れる制度。\nSATOIで申請書類を準備できます。'),
+    living: () => alert('リビングニーズ請求\n\n余命6か月以内の宣告を受けた場合に、保険金の一部を生前に受け取れる制度。\nSATOIで申請書類を準備できます。'),
     b1: () => { window.location.href = 'SATOI_Mock_v1_B1_hub.html'; },
     f4: () => { window.location.href = 'SATOI_Mock_v1_F4_side_effects.html'; },
-    acp: () => alert('ACP・人生会議ワークシート(プレースホルダ)\n\nSATOI コーディネーターと一緒に、ゆっくり整理します。')
+    acp: () => alert('ACP・人生会議ワークシート\n\nSATOI コーディネーターと一緒に、ゆっくり整理します。')
   };
   if (map[target]) map[target]();
-  else alert('詳細ページへ(プレースホルダ)');
+  else alert('詳細ページへ');
 }
 
 /* active users 数字のふらつき */

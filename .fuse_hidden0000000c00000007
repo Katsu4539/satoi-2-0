@@ -1,0 +1,3951 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - 治療詳細・あなたと一緒に過ごす日々</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --dawn-pink: #D8A98A;
+  --morning-cream: #F6EFE3;
+  --morning-white: #FBF7F0;
+  --starlight: #D4A95E;
+  --starlight-soft: #E5C68A;
+  --starlight-strong: #F0C97A;
+  --teal: #0D7377;
+  --teal-deep: #0A5A5D;
+  --teal-soft: #14A6AB;
+  --warm-orange: #D4622A;
+  --warm-orange-soft: #E9874C;
+  --warn-yellow: #F4B860;
+  --rare-pink: #C97070;
+  --navy: #0A1628;
+  --bg-cream: #FBF8F2;
+  --bg-soft: #F4EFE6;
+  --bg-paper: #FFFCF6;
+  --line: rgba(10,22,40,0.10);
+  --line-soft: rgba(10,22,40,0.06);
+  --text-primary: #1A2A40;
+  --text-secondary: rgba(26,42,64,0.72);
+  --text-muted: rgba(26,42,64,0.50);
+  --text-on-dark: rgba(248,246,240,0.96);
+  --text-on-dark-soft: rgba(248,246,240,0.74);
+  --font: "Noto Sans JP", "Meiryo UI", "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+body {
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: var(--morning-white);
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+/* === ヘッダー === */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 16px 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(11,23,54,0.92), rgba(11,23,54,0));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.logo-wrap { display: flex; align-items: center; gap: 12px; }
+.logo {
+  font-size: 22px; font-weight: 500; letter-spacing: 0.22em;
+  color: var(--text-on-dark);
+  display: inline-flex; align-items: center; text-decoration: none;
+}
+.logo .dot {
+  display: inline-block; width: 8px; height: 8px;
+  background: var(--starlight); border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 0 12px var(--starlight);
+}
+.header-crumb {
+  font-size: 12px;
+  color: var(--text-on-dark-soft);
+  letter-spacing: 0.1em;
+}
+.header-right { display: flex; align-items: center; gap: 12px; }
+.h-link {
+  color: var(--text-on-dark-soft);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 18px;
+  transition: background 0.2s;
+}
+.h-link:hover { background: rgba(248,246,240,0.08); }
+
+/* === ヒーロー === */
+.hero {
+  position: relative;
+  padding: 120px 40px 70px;
+  background: linear-gradient(180deg, var(--night-deep) 0%, var(--night-medium) 38%, var(--dawn-pink) 78%, var(--morning-cream) 100%);
+  color: var(--text-on-dark);
+  overflow: hidden;
+  text-align: center;
+}
+.hero-stars { position: absolute; inset: 0; pointer-events: none; }
+.h-star {
+  position: absolute;
+  background: var(--starlight);
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 4.5s infinite ease-in-out;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.7); }
+  50% { opacity: 0.75; transform: scale(1.1); }
+}
+
+.hero-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.34em;
+  color: var(--text-on-dark-soft);
+  margin-bottom: 18px;
+}
+.hero-context {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--text-on-dark-soft);
+  margin-bottom: 14px;
+  line-height: 1.7;
+}
+.hero-context strong { color: var(--starlight-strong); font-weight: 500; }
+.hero-title {
+  font-size: 54px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  color: var(--text-on-dark);
+  margin-bottom: 14px;
+}
+.hero-title .accent { color: var(--starlight-strong); font-weight: 500; }
+.hero-fullname {
+  font-size: 14px;
+  color: var(--text-on-dark-soft);
+  margin-bottom: 32px;
+  letter-spacing: 0.04em;
+}
+.hero-people {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 22px;
+  background: rgba(248,246,240,0.10);
+  border: 1px solid rgba(248,246,240,0.22);
+  border-radius: 22px;
+  font-size: 13px;
+  color: var(--text-on-dark);
+}
+.hero-people .num {
+  color: var(--starlight-strong);
+  font-weight: 600;
+  font-size: 17px;
+}
+.hero-quiet {
+  margin-top: 26px;
+  font-size: 13px;
+  color: rgba(248,246,240,0.62);
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+/* === セクション === */
+.section {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 70px 36px;
+}
+.section.bg {
+  background: var(--bg-cream);
+  max-width: none;
+  padding-left: 0; padding-right: 0;
+}
+.section.bg > .section-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 36px;
+}
+.section-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  color: var(--teal);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.section-title {
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+.section-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 2;
+  margin-bottom: 32px;
+  max-width: 720px;
+}
+
+/* === 1. 目的 === */
+.purpose-card {
+  background: linear-gradient(135deg, rgba(13,115,119,0.05), rgba(13,115,119,0.10));
+  border: 1px solid rgba(13,115,119,0.25);
+  border-radius: 22px;
+  padding: 36px;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 28px;
+  align-items: center;
+}
+.purpose-icon {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: var(--morning-white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+}
+.purpose-type {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+.purpose-title {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+.purpose-detail {
+  font-size: 14px;
+  line-height: 2;
+  color: var(--text-secondary);
+}
+
+/* === 2. レジメン === */
+.regimen-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 26px;
+}
+.meta-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.meta-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+.meta-value {
+  font-size: 17px;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.cycle-cal {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px;
+  margin-top: 8px;
+}
+.cycle-cal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.cycle-cal-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.cycle-cal-note {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.cycle-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 18px;
+}
+.cycle-day {
+  aspect-ratio: 1 / 1;
+  background: var(--bg-soft);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+.cycle-day:hover { transform: scale(1.06); }
+.cycle-day.invest { background: var(--teal); color: var(--morning-white); font-weight: 600; }
+.cycle-day.peak { background: rgba(244,184,96,0.30); border: 1px solid var(--warn-yellow); color: #8B5A1F; }
+.cycle-day.recover { background: rgba(13,115,119,0.10); color: var(--teal-deep); }
+.cycle-day.test { background: rgba(212,98,42,0.15); color: var(--warm-orange); border: 1px dashed var(--warm-orange-soft); }
+.cycle-legend {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-size: 11px; color: var(--text-secondary);
+}
+.cycle-legend span {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.cycle-legend .swatch {
+  width: 12px; height: 12px; border-radius: 3px;
+}
+
+/* === 3. 効果の見通し === */
+.efficacy-card {
+  background: linear-gradient(135deg, var(--bg-paper), var(--bg-cream));
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 34px;
+}
+.efficacy-headline {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--teal);
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+.efficacy-headline .big {
+  font-size: 36px;
+  color: var(--warm-orange);
+  font-weight: 600;
+}
+.efficacy-detail {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 2;
+  margin-bottom: 18px;
+}
+.efficacy-caveat {
+  background: rgba(212,98,42,0.06);
+  border-left: 3px solid var(--warm-orange);
+  padding: 14px 18px;
+  border-radius: 0 12px 12px 0;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.9;
+}
+.efficacy-sources {
+  margin-top: 18px;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* === 4. 副作用タイムライン === */
+.side-timeline-wrap {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+.side-timeline {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  min-width: 540px;
+}
+.side-tl-step {
+  background: var(--bg-soft);
+  border-radius: 12px;
+  padding: 14px;
+  position: relative;
+}
+.side-tl-step.peak { background: rgba(244,184,96,0.20); border: 1px solid var(--warn-yellow); }
+.side-tl-step.invest { background: rgba(13,115,119,0.10); border: 1px solid var(--teal); }
+.side-tl-day {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+.side-tl-step.peak .side-tl-day { color: #8B5A1F; }
+.side-tl-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.side-cat {
+  margin-bottom: 22px;
+}
+.side-cat-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.side-cat-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+.side-cat-pill.common { background: rgba(244,184,96,0.18); color: #8B5A1F; border: 1px solid var(--warn-yellow); }
+.side-cat-pill.sometimes { background: rgba(13,115,119,0.10); color: var(--teal-deep); border: 1px solid var(--teal); }
+.side-cat-pill.rare { background: rgba(201,112,112,0.10); color: var(--rare-pink); border: 1px solid var(--rare-pink); }
+.side-cat-pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+.side-cat-pill.common .dot { background: var(--warn-yellow); }
+.side-cat-pill.sometimes .dot { background: var(--teal); }
+.side-cat-pill.rare .dot { background: var(--rare-pink); }
+.side-cat-note { font-size: 12px; color: var(--text-muted); }
+
+.side-items { display: grid; gap: 8px; }
+.side-item {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+.side-item:hover { border-color: var(--teal); }
+.side-item-head {
+  display: grid;
+  grid-template-columns: 1fr auto 28px;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+}
+.side-item-name {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.side-item-timing {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+.side-item-arrow {
+  color: var(--text-muted);
+  transition: transform 0.2s;
+}
+.side-item.open .side-item-arrow { transform: rotate(180deg); }
+.side-item-body {
+  display: none;
+  padding: 0 18px 16px 18px;
+  font-size: 13px;
+  line-height: 1.95;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--line-soft);
+}
+.side-item.open .side-item-body { display: block; padding-top: 14px; }
+
+/* === 5. 治療と生活 === */
+.lifestyle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.lifestyle-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px 22px;
+  transition: all 0.2s;
+}
+.lifestyle-card:hover { border-color: var(--warm-orange-soft); transform: translateY(-2px); }
+.lifestyle-icon {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: rgba(212,98,42,0.10);
+  color: var(--warm-orange);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+.lifestyle-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.lifestyle-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.lifestyle-cost {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: rgba(13,115,119,0.06);
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.85;
+  color: var(--text-primary);
+}
+.lifestyle-cost strong { color: var(--teal); }
+
+/* === 6. 先輩の物語 === */
+.seniors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+.senior-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.senior-card:hover { border-color: var(--teal); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(10,22,40,0.06); }
+.senior-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #2A3558, #4A5578);
+  position: relative;
+}
+.senior-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.senior-body { padding: 18px 20px 20px; }
+.senior-meta {
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.senior-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.senior-quote {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  font-style: italic;
+}
+
+.seniors-cta {
+  text-align: center;
+  margin-top: 22px;
+}
+.seniors-cta a {
+  color: var(--teal);
+  text-decoration: underline;
+  font-size: 13px;
+}
+
+/* === 7. PubMed === */
+.pubmed-list { display: grid; gap: 12px; }
+.pubmed-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--starlight);
+  border-radius: 0 14px 14px 0;
+  padding: 18px 22px;
+}
+.pubmed-source {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.pubmed-title {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+.pubmed-summary {
+  font-size: 13px;
+  line-height: 1.95;
+  color: var(--text-secondary);
+}
+.pubmed-actions {
+  margin-top: 12px;
+  display: flex; gap: 8px;
+}
+.pubmed-action {
+  background: transparent;
+  border: 1px solid var(--starlight);
+  color: var(--starlight);
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-size: 11.5px;
+  font-family: var(--font);
+  cursor: pointer;
+}
+.pubmed-action:hover { background: var(--starlight); color: var(--navy); }
+
+/* === 8. SDM カード === */
+.sdm-block {
+  background: linear-gradient(135deg, #FFF5EB, #FFE8D6);
+  border-radius: 22px;
+  padding: 36px;
+}
+.sdm-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 22px;
+}
+.sdm-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--warm-orange);
+  color: var(--morning-white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.sdm-h-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.sdm-h-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.sdm-list { display: grid; gap: 8px; margin-bottom: 22px; }
+.sdm-q {
+  background: rgba(255,255,255,0.7);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer;
+  border: 1px solid rgba(212,98,42,0.10);
+  transition: all 0.18s;
+  line-height: 1.65;
+}
+.sdm-q:hover { border-color: rgba(212,98,42,0.4); }
+.sdm-check {
+  width: 18px; height: 18px;
+  border: 2px solid var(--warm-orange);
+  border-radius: 4px;
+  flex-shrink: 0;
+  position: relative;
+}
+.sdm-q.checked { background: rgba(212,98,42,0.10); border-color: rgba(212,98,42,0.3); }
+.sdm-q.checked .sdm-check { background: var(--warm-orange); }
+.sdm-q.checked .sdm-check::after {
+  content: '✓'; position: absolute;
+  left: 50%; top: 50%; transform: translate(-50%, -50%);
+  color: var(--morning-white); font-size: 12px;
+}
+.sdm-add { display: flex; gap: 8px; margin-bottom: 18px; }
+.sdm-add input {
+  flex: 1; padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px; font-family: var(--font);
+  font-size: 13px; background: var(--bg-paper);
+}
+.sdm-add input:focus { outline: none; border-color: var(--warm-orange); }
+.sdm-add-btn {
+  padding: 12px 16px;
+  background: var(--text-primary);
+  color: var(--morning-white);
+  border: none; border-radius: 12px;
+  font-family: var(--font); font-size: 13px;
+  cursor: pointer;
+}
+.sdm-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.sdm-act {
+  background: var(--morning-white);
+  color: var(--warm-orange);
+  border: 1px solid var(--warm-orange);
+  padding: 10px 16px;
+  border-radius: 18px;
+  font-family: var(--font); font-size: 12.5px;
+  cursor: pointer;
+}
+.sdm-act:hover { background: var(--warm-orange); color: var(--morning-white); }
+
+/* === 9. 次のアクション === */
+.next-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.next-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px 22px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-family: var(--font);
+}
+.next-card:hover { border-color: var(--teal); transform: translateY(-3px); box-shadow: 0 12px 28px rgba(10,22,40,0.06); }
+.next-icon {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: rgba(13,115,119,0.10);
+  color: var(--teal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+.next-title {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.next-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* === companion lamp === */
+.companion-lamp {
+  position: fixed;
+  right: 28px; bottom: 28px;
+  width: 70px; height: 70px;
+  z-index: 150;
+  cursor: pointer;
+}
+.lamp-orb {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%,
+    var(--starlight-strong) 0%,
+    var(--starlight) 38%,
+    rgba(212,169,94,0.18) 70%,
+    transparent 100%);
+  animation: lamp-breath 4s ease-in-out infinite;
+}
+@keyframes lamp-breath {
+  0%, 100% { transform: scale(0.95); opacity: 0.85; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+.lamp-bubble {
+  position: absolute;
+  right: 84px; bottom: 12px;
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(10,22,40,0.18);
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 0.4s, transform 0.4s;
+  pointer-events: none;
+}
+.lamp-bubble.show { opacity: 1; transform: translateX(0); }
+.lamp-bubble::after {
+  content: '';
+  position: absolute;
+  right: -7px; top: 50%;
+  transform: translateY(-50%);
+  border: 7px solid transparent;
+  border-left-color: var(--morning-white);
+}
+
+/* === ティッカー === */
+.ticker {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(11,23,54,0.92);
+  color: var(--text-on-dark);
+  padding: 11px 20px;
+  font-size: 12.5px;
+  text-align: center;
+  z-index: 140;
+  backdrop-filter: blur(10px);
+}
+.ticker .dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--starlight);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--starlight);
+  margin-right: 8px;
+  vertical-align: middle;
+  animation: pulse-soft 2.4s infinite ease-in-out;
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.ticker-num { color: var(--starlight-strong); font-weight: 600; }
+
+/* === フッター === */
+.footer {
+  background: var(--navy);
+  color: var(--text-on-dark-soft);
+  padding: 50px 40px 80px;
+  text-align: center;
+}
+.footer-row { display: flex; justify-content: center; gap: 22px; margin-bottom: 18px; flex-wrap: wrap; }
+.footer-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px;
+  background: rgba(248,246,240,0.06);
+  border: 1px solid rgba(248,246,240,0.14);
+  border-radius: 18px;
+  font-size: 11.5px;
+}
+.footer-logo { font-size: 20px; letter-spacing: 0.28em; margin-bottom: 12px; color: var(--text-on-dark); }
+
+/* === レスポンシブ === */
+@media (max-width: 720px) {
+  /* ヘッダーのスカシ(下方向フェード)を廃止→単色で読みやすく。折返さない */
+  .header { padding: 12px 14px !important; background: rgba(11,23,54,0.96) !important; flex-wrap: nowrap; gap: 8px; }
+  /* パンくず(マインドマップ・治療詳細)はスマホでは省いて場所を空ける */
+  .header-crumb { display: none !important; }
+  .header-right { gap: 8px; flex-shrink: 1; min-width: 0; }
+  /* 「← マインドマップに戻る」は ☀ホーム と行き先が同じ(B1)なのでスマホでは省く */
+  .header-right .h-link[href*="B1_hub"] { display: none !important; }
+  /* マイページは入口/ホームと釣り合うコンパクトなpillで一行表示 */
+  .header-right .h-link[href*="C1_mypage"] { font-size: 12px; padding: 6px 12px; white-space: nowrap; }
+  .hero { padding: 100px 22px 60px; }
+  .hero-title { font-size: 36px; }
+  .section { padding: 48px 20px; }
+  .section.bg > .section-inner { padding: 0 20px; }
+  .section-title { font-size: 22px; }
+  .purpose-card { grid-template-columns: 1fr; padding: 24px; text-align: center; }
+  .purpose-icon { margin: 0 auto; }
+  .cycle-day { font-size: 10px; }
+  .companion-lamp { display: none !important; }
+  .sdm-block { padding: 26px 22px; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) {
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+
+/* === 精密検査 詳細モーダル(画面中央)=== */
+.prec-modal-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(11,23,54,0.62);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.32s cubic-bezier(0.4,0,0.2,1);
+}
+.prec-modal-overlay.show { opacity: 1; pointer-events: auto; }
+.prec-modal {
+  position: relative;
+  width: min(620px, 100%);
+  max-height: 86vh;
+  background: var(--morning-white, #FFFDF7);
+  border-radius: 22px;
+  box-shadow: 0 30px 80px rgba(11,23,54,0.45), 0 0 0 1px rgba(212,169,94,0.30);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transform: translateY(24px) scale(0.97);
+  transition: transform 0.36s cubic-bezier(0.16,1,0.3,1);
+}
+.prec-modal-overlay.show .prec-modal { transform: translateY(0) scale(1); }
+.prec-modal-head {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(11,23,54,0.97), rgba(26,37,72,0.97));
+  color: #F8F6F0;
+  padding: 22px 56px 22px 26px;
+  border-bottom: 3px solid #D4A95E;
+}
+.prec-modal-eyebrow { font-size: 11px; letter-spacing: 0.16em; color: #F0C97A; margin-bottom: 6px; }
+.prec-modal-title { font-size: 18px; font-weight: 600; line-height: 1.5; }
+.prec-modal-body {
+  padding: 24px 26px 28px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--text, #1A2A40);
+}
+.prec-modal-body strong { color: #0D7377; font-weight: 600; }
+.prec-modal-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(248,246,240,0.14);
+  border: 1px solid rgba(248,246,240,0.28);
+  color: #F8F6F0;
+  cursor: pointer;
+  font-size: 18px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.prec-modal-close:hover { background: #D4A95E; color: #0B1736; border-color: #D4A95E; }
+@media (max-width: 768px) {
+  .prec-modal-overlay { padding: 14px; }
+  .prec-modal { max-height: 90vh; border-radius: 18px; }
+  .prec-modal-head { padding: 18px 52px 18px 20px; }
+  .prec-modal-title { font-size: 16px; }
+  .prec-modal-body { padding: 20px; font-size: 13.5px; }
+}
+
+
+/* === SATOI 共通モバイル対応(iPad/iPhone)=== */
+@media (max-width: 1024px) {
+  /* iPad 縦 ・ ヘッダー狭め */
+  .header { padding: 14px 22px !important; }
+  .section, .wrap, .container, main, .main { padding-left: 22px !important; padding-right: 22px !important; }
+}
+@media (max-width: 768px) {
+  /* iPhone ・ 主要メトリクスをモバイル最適化 */
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title, .hero-title-l1 { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title, .nbm-title, .mission-line { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  .section, .container, .wrap, main, .main, section { padding-left: 14px !important; padding-right: 14px !important; }
+  section, .section { padding-top: 50px !important; padding-bottom: 50px !important; }
+  /* グリッドを1列に */
+  .grid, .cards, .types-grid, .stories-grid, .forum-grid, .family-grid, .promise-list, .partner-grid, .gov-grid, .numbers-grid, .empse-grid, .pubmed-list, .sources-grid, .criteria-grid, .tx-cat-grid, .map-wrap, .emg-grid, .emg-consent-grid, .emg-contacts, .kids-talk-wrap, .cat-grid, .videos-grid, .cat-cards, .partner-cards, .promise-cards, .principle-cards, .pricing-grid, .pricing-cards, .step-cards, .info-cards, .role-cards, .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* 横スクロールのみ許す要素は残す */
+  .b1-journey-bar, .journey-bar, .types-tabs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  /* ヒーローの padding 圧縮 */
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  /* 大きい見出し */
+  .opener-line { font-size: 24px !important; margin-bottom: 40px !important; }
+  /* タップ領域 44px 最低 */
+  .btn, button, .login-btn, .nav-mini a, .filter-chip, .cat-card, .type-card, .story-card, .forum-card { min-height: 40px; }
+  /* テーブル横スクロール */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* マイチーム ホイール → 縦並びに */
+  .team-wheel-wrap, .team-wheel { width: 100% !important; height: auto !important; min-height: 360px; }
+  /* モーダル系: 画面いっぱいに */
+  .modal, .overlay-modal, [class*='Modal'], [class*='modal'] { max-width: 100vw !important; }
+  /* ナビ縮小 */
+  .nav-mini, .nav { gap: 12px !important; font-size: 12px !important; }
+  /* フォーム入力 */
+  input, textarea, select { font-size: 16px !important; } /* iOSのズーム防止 */
+  /* SVG レーダーチャートの収まり */
+  .empse-chart, .empse-chart-wrap { width: 100% !important; max-width: 320px; height: auto !important; margin: 0 auto !important; }
+  /* B1 7ステップを横スクロールに */
+  .steps-row { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 10px; }
+  .steps-row .step { flex-shrink: 0; min-width: 80px; }
+  /* G2 サイドナビは画面下部固定 or hamburger 想定 */
+  .sidebar, .side-nav, .g2-sidebar { position: relative !important; width: 100% !important; height: auto !important; overflow-x: auto !important; display: flex !important; }
+}
+@media (max-width: 480px) {
+  /* 極小画面 */
+  .hero { padding: 80px 12px 40px !important; }
+  .b1-journey-bar { padding: 8px 10px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+
+/* === SATOI ユニバーサル横断ナビ(戻る/ホーム/言語) === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-univ-btn[title]::after { content: attr(title); position: absolute; right: 54px; background: rgba(11,23,54,0.92); color: #F8F6F0; font-size: 11px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.satoi-univ-btn:hover::after { opacity: 1; }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+
+/* === SATOI 横断ジャーニーバー(B3/C1共通)=== */
+.satoi-jbar { position: fixed; top: 64px; left: 0; right: 0; z-index: 95; padding: 10px 22px 8px; background: rgba(255,253,247,0.95); border-bottom: 1px solid rgba(11,23,54,0.08); backdrop-filter: blur(14px); overflow-x: auto; white-space: nowrap; box-shadow: 0 2px 12px rgba(11,23,54,0.05); }
+.satoi-jbar::-webkit-scrollbar { height: 3px; }
+.satoi-jbar::-webkit-scrollbar-thumb { background: rgba(212,169,94,0.45); border-radius: 2px; }
+.satoi-jbar-inner { display: inline-flex; align-items: center; gap: 6px; padding: 2px 0; }
+.satoi-jbar-meta { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px 3px 3px; border-radius: 14px; background: rgba(212,169,94,0.10); border: 1px dashed rgba(212,169,94,0.5); color: rgba(26,42,64,0.78); font-size: 10.5px; margin-right: 10px; flex-shrink: 0; font-family: "Noto Sans JP", sans-serif; }
+.satoi-jbar-meta-i { width: 20px; height: 20px; border-radius: 50%; background: #D4A95E; color: #0B1736; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.satoi-jchip { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px 6px 5px; border-radius: 16px; background: rgba(11,23,54,0.04); border: 1px solid rgba(11,23,54,0.08); color: rgba(26,42,64,0.55); font-size: 11px; flex-shrink: 0; cursor: pointer; transition: all 0.3s; font-family: "Noto Sans JP", sans-serif; }
+.satoi-jchip:hover { border-color: #D4622A; color: #D4622A; }
+.satoi-jchip.done { background: rgba(13,115,119,0.12); border-color: rgba(13,115,119,0.4); color: #0D7377; }
+.satoi-jchip.current { background: rgba(212,98,42,0.16); border-color: #D4622A; color: #D4622A; font-weight: 600; box-shadow: 0 0 12px rgba(212,98,42,0.25); animation: jchipPulse 2.4s infinite; }
+@keyframes jchipPulse { 0%,100%{ box-shadow: 0 0 12px rgba(212,98,42,0.25);} 50%{ box-shadow: 0 0 20px rgba(212,98,42,0.45);} }
+.satoi-jchip-n { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: rgba(11,23,54,0.07); font-size: 9.5px; font-weight: 600; }
+.satoi-jchip.done .satoi-jchip-n { background: #0D7377; color: #FBF7F0; }
+.satoi-jchip.current .satoi-jchip-n { background: #D4622A; color: #FBF7F0; }
+.satoi-jarrow { color: rgba(11,23,54,0.25); font-size: 12px; flex-shrink: 0; }
+.satoi-jbar-peers { display: inline-flex; align-items: center; gap: 7px; margin-left: 16px; padding: 8px 18px; border-radius: 18px; background: rgba(13,115,119,0.18); border: 1.5px solid rgba(13,115,119,0.5); color: #0D7377; font-size: 14px; font-weight: 600; flex-shrink: 0; font-family: "Noto Sans JP", sans-serif; }
+.satoi-jbar-peers strong { color: #0D7377; font-weight: 800; font-size: 16px; }
+body.satoi-has-jbar { padding-top: 50px !important; }
+body.satoi-has-jbar .header { top: 0 !important; }
+@media (max-width: 768px) { .satoi-jbar { top: 56px; padding: 8px 12px; } body.satoi-has-jbar { padding-top: 40px !important; } }
+
+</style>
+</head>
+<body>
+
+<!-- ===== ヘッダー ===== -->
+<header class="header">
+  <div class="logo-wrap">
+    <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+    <span class="header-crumb" id="hCrumb">マインドマップ ・ 治療詳細</span>
+  </div>
+  <div class="header-right">
+    <a class="h-link" href="SATOI_Mock_v1_B1_hub.html">← マインドマップに戻る</a>
+    <a class="h-link" href="SATOI_Mock_v1_C1_mypage.html">マイページ</a>
+  </div>
+</header>
+
+<!-- ===== 治療の前提:タイプ判別への橋渡し(精密検査は「検査」ステップへ分離)===== -->
+<div style="max-width:1100px; margin:64px auto 0; padding:16px 22px; background:#FBF7F0; border:1px solid rgba(13,115,119,0.45); border-radius:14px; box-shadow:0 8px 24px rgba(11,23,54,0.22); display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; position:relative; z-index:2;">
+  <span style="font-size:14px; color:#1A2A40; line-height:1.8; font-weight:500;">治療は <strong style="color:#0D7377;">がんのタイプ</strong> で決まります。まだ検査が済んでいない方は、まず精密検査でタイプを確かめましょう。</span>
+  <a href="SATOI_Mock_v1_CHP_exam.html" style="margin-left:auto; padding:10px 20px; background:#0D7377; color:#fff; border-radius:18px; text-decoration:none; font-size:13px; font-weight:600; white-space:nowrap;">タイプを調べる(精密検査) →</a>
+</div>
+
+<!-- ===== ヒーロー ===== -->
+<section class="hero">
+  <div class="hero-stars" id="heroStars"></div>
+  <div class="hero-eyebrow">TREATMENT DETAIL</div>
+  <p class="hero-context"><strong id="ctxCancer">乳がん</strong> ステージ <strong id="ctxStage">II</strong> のあなたが、考えている</p>
+  <h1 class="hero-title"><span class="accent" id="ctxName">TC療法</span></h1>
+  <p class="hero-fullname" id="ctxFullname">ドセタキセル + シクロホスファミド</p>
+  <div class="hero-people">
+    <span>同じ治療を選んだ人 ・</span>
+    <span class="num" id="ctxPeople">7,124</span>
+    <span>人</span>
+  </div>
+  <p class="hero-quiet">焦らないで。今は、知っておくだけで、充分です。</p>
+</section>
+
+<!-- ===== 1. 目的 ===== -->
+<section class="section">
+  <div class="section-eyebrow">01 / PURPOSE</div>
+  <h2 class="section-title">この治療は、何のために</h2>
+  <p class="section-sub">治療を選ぶ前にいちばん大事なのは、「何を目指す治療なのか」を、あなたと主治医が共有していることです。</p>
+
+  <div class="purpose-card">
+    <div class="purpose-icon" id="purposeIcon">🎯</div>
+    <div>
+      <div class="purpose-type" id="purposeType">完治を目指す ・ 補助化学療法</div>
+      <div class="purpose-title" id="purposeTitle">手術後の再発予防</div>
+      <div class="purpose-detail" id="purposeDetail">手術で見える腫瘍は取り除いた後、目に見えない がん細胞 を叩いて、再発リスクを下げるための治療です。完治を目指す治療の、重要な一部です。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. レジメン ===== -->
+<section class="section bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">02 / REGIMEN</div>
+    <h2 class="section-title">レジメン ・ どんな順番で進むのか</h2>
+    <p class="section-sub">「いつ・何が起きるか」が見えると、不安はぐっと減ります。1サイクルのリズムを、見てみましょう。</p>
+
+    <div class="regimen-meta" id="regimenMeta">
+      <!-- JS で生成 -->
+    </div>
+
+    <div class="cycle-cal">
+      <div class="cycle-cal-head">
+        <div class="cycle-cal-title" id="cycleTitle">1サイクル(21日間)の流れ</div>
+        <div class="cycle-cal-note">タップで詳細</div>
+      </div>
+      <div class="cycle-grid" id="cycleGrid">
+        <!-- JS で生成 -->
+      </div>
+      <div class="cycle-legend">
+        <span><span class="swatch" style="background:#0D7377"></span>投与日</span>
+        <span><span class="swatch" style="background:rgba(244,184,96,0.5);border:1px solid #F4B860"></span>副作用ピーク</span>
+        <span><span class="swatch" style="background:rgba(13,115,119,0.10)"></span>回復期</span>
+        <span><span class="swatch" style="background:rgba(212,98,42,0.15);border:1px dashed #E9874C"></span>採血・診察</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 効果の見通し ===== -->
+<section class="section">
+  <div class="section-eyebrow">03 / EFFICACY</div>
+  <h2 class="section-title">効果の、見通し</h2>
+  <p class="section-sub">数字は希望にも不安にもなります。読み方を、一緒に整えていきましょう。</p>
+
+  <div class="efficacy-card">
+    <div class="efficacy-headline" id="effHead">
+      10年無再発生存率を <span class="big">+5〜7%</span> 改善
+    </div>
+    <div class="efficacy-detail" id="effDetail">
+      同じ条件(ステージII・リンパ節転移無し・HER2陰性)の方への大規模研究で、TC療法を追加することで再発リスクを 約20〜30%減らせる と報告されています。
+    </div>
+    <div class="efficacy-caveat">
+      これは「過去の平均値」です。<br>
+      あなたの結果は、あなただけのもの。年齢・体力・がんのタイプ・他の治療との組み合わせで変わります。<br>
+      最新の治療が加わるたびに、数字は上がっています。
+    </div>
+    <div class="efficacy-sources" id="effSources">
+      出典:JCO 2009 (Jones et al.) ・ St.Gallen Consensus 2023 ・ 日本乳癌学会ガイドライン 2024
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. 副作用 ===== -->
+<section class="section bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">04 / SIDE EFFECTS</div>
+    <h2 class="section-title">起こりうる副作用と、いつ起きるか</h2>
+    <p class="section-sub">「いつ・何が」が見えていれば、心の準備ができます。タップで「対処法」と「主治医に伝えるサイン」が開きます。</p>
+
+    <div class="side-timeline-wrap">
+      <div class="side-timeline">
+        <div class="side-tl-step invest"><div class="side-tl-day">Day 1</div><div class="side-tl-desc">投与日<br>(2-3時間)</div></div>
+        <div class="side-tl-step peak"><div class="side-tl-day">Day 2-4</div><div class="side-tl-desc">副作用ピーク<br>(吐き気・倦怠)</div></div>
+        <div class="side-tl-step"><div class="side-tl-day">Day 5-10</div><div class="side-tl-desc">徐々に回復<br>(食欲戻る)</div></div>
+        <div class="side-tl-step"><div class="side-tl-day">Day 11-14</div><div class="side-tl-desc">体調安定<br>(動ける時期)</div></div>
+        <div class="side-tl-step"><div class="side-tl-day">Day 15-21</div><div class="side-tl-desc">次サイクル<br>準備期</div></div>
+      </div>
+    </div>
+
+    <div class="side-cat">
+      <div class="side-cat-head">
+        <span class="side-cat-pill common"><span class="dot"></span>よくある(70%以上)</span>
+        <span class="side-cat-note">ほとんどの方が経験します</span>
+      </div>
+      <div class="side-items" id="sideCommon"><!-- JS --></div>
+    </div>
+
+    <div class="side-cat">
+      <div class="side-cat-head">
+        <span class="side-cat-pill sometimes"><span class="dot"></span>ときどき(30-70%)</span>
+        <span class="side-cat-note">起きる場合があります</span>
+      </div>
+      <div class="side-items" id="sideSometimes"><!-- JS --></div>
+    </div>
+
+    <div class="side-cat">
+      <div class="side-cat-head">
+        <span class="side-cat-pill rare"><span class="dot"></span>まれ(10%以下)</span>
+        <span class="side-cat-note">少数ですが、知っておくこと</span>
+      </div>
+      <div class="side-items" id="sideRare"><!-- JS --></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. 治療と生活 ===== -->
+<section class="section">
+  <div class="section-eyebrow">05 / LIVING WITH</div>
+  <h2 class="section-title">治療と、生活の両立</h2>
+  <p class="section-sub">仕事・家事・お金・家族。治療だけが、人生ではありません。</p>
+
+  <div class="lifestyle-grid" id="lifestyleGrid">
+    <!-- JS で生成 -->
+  </div>
+</section>
+
+<!-- ===== 6. 先輩の物語 ===== -->
+<section class="section bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">06 / SENIORS</div>
+    <h2 class="section-title">同じ治療を選んだ、先輩の物語</h2>
+    <p class="section-sub">「正解」を見つけに来た方の物語ではなく、「揺れながら歩いた」方の声が、ここにあります。</p>
+
+    <div class="seniors-grid" id="seniorsGrid">
+      <!-- JS で生成 -->
+    </div>
+    <div class="seniors-cta">
+      <a href="SATOI_Mock_v1_C1_mypage.html?route=stories">すべての物語を、読む(D1物語ライブラリ・近日公開) →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6.5 製品概要・採用基準・保険点数金額 ===== -->
+<section class="section" id="product-overview">
+  <div class="section-eyebrow">06.5 / PRODUCT & COST</div>
+  <h2 class="section-title">製品概要 ・ 採用基準 ・ 保険点数金額</h2>
+  <p class="section-sub">SATOI はあなたが「ちゃんと選んでいる」と感じられるよう、製品の概要・採用基準・実際の自己負担額まで開示します。</p>
+
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; margin-top: 36px; max-width: 1180px; margin-left: auto; margin-right: auto;">
+
+    <!-- 製品概要 -->
+    <div style="background: linear-gradient(135deg, rgba(13,115,119,0.08), rgba(20,166,171,0.06)); border-radius: 18px; padding: 26px 28px; border: 1px solid rgba(13,115,119,0.25);">
+      <div style="font-size:11px; letter-spacing:0.32em; color:#0D7377; margin-bottom:10px; font-weight:600;">▸ 製品概要</div>
+      <div style="font-size:18px; font-weight:600; color:#1A2A40; margin-bottom:14px;">TC療法(Docetaxel + Cyclophosphamide)</div>
+      <table style="width:100%; font-size:13px; color:rgba(26,42,64,0.85); line-height:1.85; border-collapse: collapse;">
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10); width: 40%;">分類</td><td>抗悪性腫瘍剤 ・ 化学療法</td></tr>
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10);">承認(PMDA)</td><td>1998年(タキソテール)</td></tr>
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10);">適応</td><td>乳がん術後補助療法</td></tr>
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10);">投与</td><td>3週間隔 × 4クール 標準</td></tr>
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10);">投与法</td><td>点滴静注 約1時間</td></tr>
+        <tr><td style="padding:6px 0;">主要副作用</td><td>骨髄抑制・脱毛・末梢神経障害</td></tr>
+      </table>
+    </div>
+
+    <!-- 採用基準 -->
+    <div style="background: linear-gradient(135deg, rgba(212,169,94,0.10), rgba(212,98,42,0.06)); border-radius: 18px; padding: 26px 28px; border: 1px solid rgba(212,169,94,0.30);">
+      <div style="font-size:11px; letter-spacing:0.32em; color:#D4622A; margin-bottom:10px; font-weight:600;">▸ SATOI 採用基準</div>
+      <div style="font-size:18px; font-weight:600; color:#1A2A40; margin-bottom:14px;">5基準すべて満たす</div>
+      <div style="display:grid; gap:8px; font-size:12.5px; color:rgba(26,42,64,0.85); line-height:1.7;">
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="width:22px; height:22px; border-radius:50%; background:#0D7377; color:white; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">✓</span><div><strong>JSMO ガイドライン</strong> 記載 ・ レベル A</div></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="width:22px; height:22px; border-radius:50%; background:#0D7377; color:white; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">✓</span><div><strong>Phase III RCT</strong> ・ Jones et al. 2009 (n=1,016)</div></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="width:22px; height:22px; border-radius:50%; background:#0D7377; color:white; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">✓</span><div><strong>PMDA 承認</strong> ・ 保険適用</div></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="width:22px; height:22px; border-radius:50%; background:#0D7377; color:white; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">✓</span><div><strong>編集委員会</strong> 2/3 合意(国がん5名+腫瘍内科医10名)</div></div>
+        <div style="display:flex; gap:10px; align-items:flex-start;"><span style="width:22px; height:22px; border-radius:50%; background:#0D7377; color:white; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">✓</span><div><strong>患者代表3名</strong> レビュー済</div></div>
+      </div>
+      <button onclick="location.href='SATOI_Mock_v1_ACAD_research.html?from=b3'" style="margin-top:14px; padding:8px 18px; background:rgba(212,98,42,0.15); border:1px solid #D4622A; color:#D4622A; border-radius:18px; font-size:12px; cursor:pointer; font-family:inherit;">学術ページで採用5基準を見る →</button>
+    </div>
+
+    <!-- 保険点数金額 -->
+    <div style="background: linear-gradient(135deg, rgba(199,107,127,0.08), rgba(127,168,201,0.08)); border-radius: 18px; padding: 26px 28px; border: 1px solid rgba(199,107,127,0.25);">
+      <div style="font-size:11px; letter-spacing:0.32em; color:#C76B7F; margin-bottom:10px; font-weight:600;">▸ 保険点数 ・ 自己負担額</div>
+      <div style="font-size:18px; font-weight:600; color:#1A2A40; margin-bottom:14px;">1クール ¥18-22万 → 自己負担 ¥3-7万</div>
+      <table style="width:100%; font-size:12.5px; color:rgba(26,42,64,0.85); line-height:1.85; border-collapse: collapse;">
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10);">ドセタキセル 60mg/m²(B体格)</td><td style="text-align:right; font-weight:600;">¥118,250</td></tr>
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10);">シクロホスファミド 600mg/m²</td><td style="text-align:right; font-weight:600;">¥4,830</td></tr>
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10);">前投薬・制吐剤・支持療法</td><td style="text-align:right; font-weight:600;">¥18,500</td></tr>
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10);">外来化学療法加算</td><td style="text-align:right; font-weight:600;">¥7,500</td></tr>
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10);">画像・検査・初診/再診料</td><td style="text-align:right; font-weight:600;">¥25,000〜</td></tr>
+        <tr style="background: rgba(199,107,127,0.10);"><td style="padding:8px 0; font-weight:600;">1クール 合計(10割)</td><td style="text-align:right; font-weight:700; color:#C76B7F;">¥185,000〜</td></tr>
+        <tr><td style="padding:6px 0; border-bottom: 1px dashed rgba(11,23,54,0.10);">3割負担</td><td style="text-align:right; font-weight:600;">¥55,500〜</td></tr>
+        <tr><td style="padding:6px 0;">高額療養費後(年収500万)</td><td style="text-align:right; font-weight:700; color:#0D7377;">¥35,400〜</td></tr>
+      </table>
+      <div style="margin-top:12px; padding:10px 14px; background:rgba(13,115,119,0.10); border-left: 3px solid #0D7377; border-radius:8px; font-size:11.5px; color:rgba(26,42,64,0.85); line-height:1.75;">
+        💡 高額療養費制度を使えば、4クール完了で <strong>自己負担合計 約¥14万</strong>。<a href="SATOI_Mock_v1_E1_money.html?from=b3" style="color:#D4622A; text-decoration:underline;">制度マッチングで詳細を見る →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. PubMed ===== -->
+<section class="section">
+  <div class="section-eyebrow">07 / EVIDENCE</div>
+  <h2 class="section-title">最新エビデンス ・ AI翻訳</h2>
+  <p class="section-sub">医療従事者向けの最新論文を、AIが患者向けに要約しています。原文も、ご家族や主治医と一緒に読めます。</p>
+
+  <div class="pubmed-list" id="pubmedList">
+    <!-- JS で生成 -->
+  </div>
+
+    <!-- DIPEx 参照 -->
+  <div style="margin-top: 22px; background: rgba(127,168,201,0.08); border: 1px solid rgba(127,168,201,0.3); border-radius: 14px; padding: 18px 22px; max-width: 760px; margin-left: auto; margin-right: auto;">
+    <div style="font-size:11px; letter-spacing: 0.3em; color: #5483A8; font-weight:600; margin-bottom:6px;">▸ NARRATIVE REFERENCE</div>
+    <div style="font-size:13.5px; color: var(--text-medium, #1A2A40); line-height: 1.85;">
+      この治療を選んだ患者さんの<strong>生の語り</strong>を、<a href="https://www.dipex-j.org/breast-cancer/" target="_blank" rel="noopener" style="color: #D4622A; text-decoration: underline;">DIPEx-Japan(健康と病いの語り)</a> で読めます。論文では分からない、選択の揺れ・家族との時間・治療後の生活が、200+の質的研究としてまとまっています。
+    </div>
+  </div>
+
+  <!-- 学術ページ・自由診療マップへの導線 -->
+  <div style="margin-top:28px; display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+    <button onclick="location.href='SATOI_Mock_v1_ACAD_research.html?from=b3'" style="padding:14px 26px; background:linear-gradient(135deg, #0D7377, #14A6AB); color:white; border:none; border-radius:24px; font-size:13px; font-weight:500; cursor:pointer; box-shadow: 0 6px 18px rgba(13,115,119,0.3);">📚 学術・エビデンス系統樹を見る →</button>
+    <button onclick="location.href='SATOI_Mock_v1_FREE_map.html?from=b3'" style="padding:14px 26px; background:white; color:#C76B7F; border:1px solid #C76B7F; border-radius:24px; font-size:13px; font-weight:500; cursor:pointer;">🗺 自由診療マップを見る →</button>
+  </div>
+</section>
+
+<!-- ===== 8. SDM ===== -->
+<section class="section bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">08 / SDM CARDS</div>
+    <h2 class="section-title">主治医に、この治療について聞きたいこと</h2>
+    <p class="section-sub">この治療に特化した質問を、AIが7問用意しました。診察室で「言いたかったことが言えなかった」をなくすために。</p>
+
+    <div class="sdm-block">
+      <div class="sdm-head">
+        <div class="sdm-icon">📋</div>
+        <div>
+          <div class="sdm-h-title" id="sdmHTitle">TC療法について、聞きたいこと</div>
+          <div class="sdm-h-sub">準備中の質問:7問 ・ 次回診察:3日後</div>
+        </div>
+      </div>
+      <div class="sdm-list" id="sdmList">
+        <!-- JS で生成 -->
+      </div>
+      <div class="sdm-add">
+        <input id="sdmCustomInput" type="text" placeholder="あなたが聞きたいことを、自由に書く(Enterで追加・AIが整える)" onkeydown="if(event.key==='Enter'){addCustomSdmQ();}">
+        <button class="sdm-add-btn" onclick="addCustomSdmQ()">+ 追加</button>
+      </div>
+      <div class="sdm-actions">
+        <button class="sdm-act" onclick="sdmExport('pdf')">📄 PDFで印刷</button>
+        <button class="sdm-act" onclick="sdmExport('qr')">📱 QRで先生に共有</button>
+        <button class="sdm-act" onclick="sdmExport('mail')">✉️ メール送信</button>
+        <button class="sdm-act" onclick="sdmExport('save')">💎 物語の壺に記録</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 9. 次のアクション ===== -->
+<section class="section">
+  <div class="section-eyebrow">09 / NEXT STEP</div>
+  <h2 class="section-title">今、ここからの選択</h2>
+  <p class="section-sub">急がなくて、いいです。今日見たことは、物語の壺に、ちゃんと残しておきました。</p>
+
+  <div class="next-actions">
+    <button class="next-card" onclick="location.href='SATOI_Mock_v1_B1_hub.html'">
+      <div class="next-icon">🗺️</div>
+      <div class="next-title">他の治療と、比較したい</div>
+      <div class="next-desc">マインドマップで、選べる道を広げて見る</div>
+    </button>
+    <button class="next-card" onclick="scrollToSdm()">
+      <div class="next-icon">📋</div>
+      <div class="next-title">主治医に聞くカードを作る</div>
+      <div class="next-desc">この治療特化の質問7問 + 自由追加</div>
+    </button>
+    <button class="next-card" onclick="location.href='SATOI_Mock_v1_C1_mypage.html?route=stories'">
+      <div class="next-icon">📖</div>
+      <div class="next-title">先輩の物語を、もっと読む</div>
+      <div class="next-desc">同じ治療を選んだ方の声(D1物語ライブラリ)</div>
+    </button>
+    <button class="next-card" onclick="location.href='SATOI_Mock_v1_F4_side_effects.html'">
+      <div class="next-icon">📝</div>
+      <div class="next-title">副作用が出てきたら、記録する</div>
+      <div class="next-desc">日々の体調 → 主治医・厚労省連携</div>
+    </button>
+    <button class="next-card" onclick="location.href='SATOI_Mock_v1_E1_money.html'">
+      <div class="next-icon">💰</div>
+      <div class="next-title">お金・制度をチェック</div>
+      <div class="next-desc">使える制度をAIが判定 → 申請書類自動生成</div>
+    </button>
+    <button class="next-card" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?route=self&cancer=' + (params.get('cancer')||'breast')">
+      <div class="next-icon">💬</div>
+      <div class="next-title">AIと、もう一度ゆっくり話す</div>
+      <div class="next-desc">不安や疑問を、声でも文字でも</div>
+    </button>
+    <button class="next-card" onclick="location.href='SATOI_Mock_v1_C1_mypage.html'">
+      <div class="next-icon">🌙</div>
+      <div class="next-title">今日はここまで</div>
+      <div class="next-desc">マイページに戻る。物語の壺は、開いています</div>
+    </button>
+  </div>
+</section>
+
+<!-- ===== companion lamp ===== -->
+<div class="companion-lamp" onclick="toggleLamp()">
+  <div class="lamp-orb"></div>
+  <div class="lamp-bubble" id="lampBubble">焦らないで。今は、知っておくだけで、充分です。</div>
+</div>
+
+<!-- ===== ティッカー ===== -->
+<div class="ticker">
+  <span class="dot"></span>
+  いま、<span class="ticker-num" id="tickerNum">847</span> 人が、この治療について調べています
+</div>
+
+<!-- ===== フッター ===== -->
+<footer class="footer">
+  <div class="footer-logo">● SATOI</div>
+  <div style="font-size:13px; margin-bottom:16px; max-width:540px; margin-left:auto; margin-right:auto; line-height:1.85;">
+    この情報は、診療を代替するものではありません。<br>
+    最終的な治療は、あなたと主治医の先生で、決めていきます。
+  </div>
+  <div class="footer-row">
+    <div class="footer-badge"><span>🇯🇵</span><span>厚労省 副作用報告連携</span></div>
+    <div class="footer-badge"><span>📚</span><span>日本臨床腫瘍学会ガイドライン 2025 準拠</span></div>
+    <div class="footer-badge"><span>🤝</span><span>JOInT 諮問委員会 ガバナンス</span></div>
+  </div>
+</footer>
+
+<script>
+
+/* === SATOI 共通リッチトースト関数 === */
+(function ensureToastHost(){
+  if (document.getElementById('satoi-toast-host')) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div');
+      host.id = 'satoi-toast-host';
+      document.body.appendChild(host);
+    }
+  });
+  if (document.body && !document.getElementById('satoi-toast-host')) {
+    const host = document.createElement('div');
+    host.id = 'satoi-toast-host';
+    document.body.appendChild(host);
+  }
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) {
+    html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  }
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+// 既存の alert を全て satoiNotify にフォールバック(他コードからのalert呼び出しもキャッチ)
+window.__origAlert = window.alert;
+
+/* === SATOI ユニバーサル横断ナビ JS === */
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div');
+    nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る" aria-label="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム" aria-label="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ" aria-label="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語" aria-label="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn');
+    const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const lang = b.dataset.lang;
+        const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+        if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+        document.documentElement.lang = lang;
+        langPop.classList.remove('show');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+
+/* === SATOI 横断ジャーニーバー JS(B3/C1共通)=== */
+(function setupSatoiJBar(){
+  function inject(){
+    if (document.getElementById('satoi-jbar')) return;
+    // 2026-05-20: 固定デフォルト'consider'を廃止、URLパラメータ未指定ならどのチップもアクティブにしない
+    const params = new URLSearchParams(location.search);
+    const currentBeat = params.get('beat') || null;
+    const beats = [
+      {id:'diagnosis', label:'診断', n:1},
+      {id:'exam', label:'検査', n:2},
+      {id:'consider', label:'治療法を考える', n:3},
+      {id:'treatment', label:'治療', n:4},
+      {id:'living', label:'治療中の暮らし', n:5},
+      {id:'follow', label:'治療後・経過観察', n:6},
+      {id:'money', label:'お金・制度', n:7},
+      {id:'palliative', label:'もしもの時', n:8},
+    ];
+    const curIdx = currentBeat ? beats.findIndex(b => b.id === currentBeat) : -1;
+    const idx = curIdx;
+    const bar = document.createElement('nav');
+    bar.id = 'satoi-jbar';
+    bar.className = 'satoi-jbar';
+    bar.setAttribute('aria-label', 'ペーシェントジャーニー');
+    let inner = '<div class="satoi-jbar-inner">';
+    beats.forEach((b, i) => {
+      const cls = (i === idx) ? 'current' : (i < idx ? 'done' : '');
+      inner += '<div class="satoi-jchip '+cls+'" data-beat="'+b.id+'" data-i="'+i+'"><span class="satoi-jchip-n">'+b.n+'</span><span>'+b.label+'</span></div>';
+      if (i < beats.length - 1) inner += '<span class="satoi-jarrow">›</span>';
+    });
+    if (idx >= 0) {
+      inner += '<span class="satoi-jbar-peers">同じ段階に <strong>'+(3247 + Math.floor(Math.random()*60-30))+'</strong> 人</span>';
+    }
+    inner += '</div>';
+    bar.innerHTML = inner;
+    // ヘッダーの直後 or body 先頭に
+    const header = document.querySelector('.header');
+    if (header && header.nextSibling) header.parentNode.insertBefore(bar, header.nextSibling);
+    else document.body.insertBefore(bar, document.body.firstChild);
+    document.body.classList.add('satoi-has-jbar');
+    bar.querySelectorAll('.satoi-jchip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const beat = chip.dataset.beat;
+        if (chip.classList.contains('current')) {
+          // 現在地クリック = ページ上部にスクロール
+          window.scrollTo({top: 0, behavior: 'smooth'});
+          if (typeof satoiNotify === 'function') satoiNotify('● いま「'+chip.textContent.replace(/\d+/,'').trim()+'」のステージにいます', {kind:'info', duration: 2400});
+          return;
+        }
+        // 該当ビートでA2にジャンプ
+        location.href = 'SATOI_Mock_v1_A2_dialog.html?beat='+beat+'&from='+location.pathname.split('/').pop().replace('SATOI_Mock_v1_','').replace('.html','');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+
+const params = new URLSearchParams(window.location.search);
+
+/* ===== 精密検査詳細 ・ クリック展開 ===== */
+const PRECISION_DETAILS = {
+  histo: {
+    title: '病理検査 ・ 細胞診/組織診',
+    body: '針生検 や 手術検体から、がんのタイプ・グレード・分化度 を顕微鏡で確定します。\\n\\n■ 主な内容\\n・HER2(乳がん・胃がん):過剰発現の有無 → ハーセプチン適応判定\\n・ER/PgR(乳がん):ホルモン感受性 → ホルモン療法適応\\n・PD-L1(肺がん・胃がん 等):免疫療法適応\\n・KRAS/RAS(大腸がん):抗EGFR薬適応\\n\\n■ 期間: 結果1-2週間\\n■ 負担: 針生検は外来日帰り、組織診は手術検体から\\n■ 費用: 保険適用 ・ 数千〜2万円(3割負担)',
+  },
+  imaging: {
+    title: '画像検査 ・ CT / MRI / PET-CT',
+    body: '腫瘍のサイズ・転移の有無を「見える化」してステージを確定します。\\n\\n■ CT(コンピュータ断層撮影)\\n・全身の状態把握 ・ 1-2分で撮影\\n・造影剤使用が多い ・ ヨードアレルギーは事前申告\\n\\n■ MRI(磁気共鳴画像)\\n・軟部組織・脳・骨盤に強い\\n・30-60分かかる ・ ペースメーカー禁忌\\n\\n■ PET-CT(陽電子断層撮影)\\n・がん細胞の活動度を可視化\\n・遠隔転移検出に有効 ・ 検査前6時間絶食\\n\\n■ 超音波(エコー)\\n・乳腺・甲状腺・肝臓に有効 ・ 被曝なし\\n\\n■ 費用: PET-CT は 3割負担で約3万円',
+  },
+  genetic: {
+    title: '遺伝子検査 ・ 分子診断(コンパニオン診断)',
+    body: '分子標的薬・免疫薬の適応を判定する検査です。\\n\\n■ コンパニオン診断(治療薬の適応判定)\\n・EGFR(肺がん):オシメルチニブ等の適応\\n・ALK/ROS1(肺がん):アレクチニブ等\\n・BRCA1/2(乳がん・卵巣・前立腺・膵):PARP阻害薬\\n・MSI-H/dMMR(全がん):免疫療法適応\\n\\n■ がん遺伝子パネル検査(CGP)\\n・100以上の遺伝子を一括検査 ・ 標準治療終了後に保険適用\\n・56万円(高額療養費対象)\\n\\n■ 遺伝性腫瘍検査\\n・遺伝カウンセリング併用必須\\n・家族にも関わるため慎重に\\n\\n■ がん種により実施有無が異なります。前立腺がんは主に BRCA、膵がんは KRAS など。',
+  },
+  marker: {
+    title: '腫瘍マーカー検査',
+    body: '血液で測定する補助的な検査です。\\n\\n■ がん種別の主な腫瘍マーカー\\n・CEA: 大腸/肺/胃/膵\\n・CA15-3: 乳がん\\n・CA19-9: 膵/胆道/胃\\n・CA125: 卵巣がん\\n・PSA: 前立腺がん\\n・AFP: 肝がん\\n・SCC: 扁平上皮がん\\n\\n■ 使い方\\n・診断単独には使わない(早期発見には精度不足)\\n・治療効果の判定や 再発モニタリングに有用\\n・治療前→治療中→治療後で経時変化を見る\\n\\n■ 注意\\n・健常者でも高値になることがある\\n・がん患者でも正常値のことがある\\n・必ず画像検査と組み合わせて判断',
+  },
+};
+function openPrecision(key) {
+  const d = PRECISION_DETAILS[key];
+  if (!d) return;
+  let overlay = document.getElementById('prec-modal-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'prec-modal-overlay';
+    overlay.className = 'prec-modal-overlay';
+    overlay.innerHTML =
+      '<div class="prec-modal" role="dialog" aria-modal="true" aria-labelledby="prec-modal-title">'
+      + '<button class="prec-modal-close" aria-label="閉じる">×</button>'
+      + '<div class="prec-modal-head">'
+      +   '<div class="prec-modal-eyebrow">PRECISION TESTS ・ 精密検査の詳細</div>'
+      +   '<div class="prec-modal-title" id="prec-modal-title"></div>'
+      + '</div>'
+      + '<div class="prec-modal-body" id="prec-modal-body"></div>'
+      + '</div>';
+    document.body.appendChild(overlay);
+    // 閉じる挙動: ×ボタン・背景クリック・Escキー
+    const closeModal = () => {
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+    };
+    overlay.querySelector('.prec-modal-close').addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('show')) closeModal();
+    });
+  }
+  const body = d.body.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  overlay.querySelector('#prec-modal-title').textContent = d.title;
+  overlay.querySelector('#prec-modal-body').innerHTML = body;
+  overlay.querySelector('.prec-modal-body').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => overlay.classList.add('show'));
+}
+
+/* ===== がん種別 ・ URLパラメータ初期化 ===== */
+const CANCER_TO_TREATMENT = {
+  breast: 'TC', colon: 'FOLFOX', lung: 'OSIMERTINIB',
+  stomach: 'SP', prostate: 'ADT', pancreas: 'FOLFIRINOX'
+};
+const CANCER_NAMES_JA = {
+  breast: '乳がん', colon: '大腸がん', lung: '肺がん',
+  stomach: '胃がん', prostate: '前立腺がん', pancreas: '膵がん'
+};
+const cancerParam = params.get('cancer') || sessionStorage.getItem('satoi_cancer');
+if (cancerParam && CANCER_NAMES_JA[cancerParam]) {
+  const precNameEl = document.getElementById('precCancerName');
+  if (precNameEl) precNameEl.textContent = CANCER_NAMES_JA[cancerParam] + ' の精密検査';
+}
+
+/* ===== 治療データ ===== */
+const TREATMENTS = {
+  'TC': {
+    cancer: '乳がん', stage: 'II', name: 'TC療法',
+    fullName: 'ドセタキセル + シクロホスファミド',
+    people: 7124,
+    purposeType: '完治を目指す ・ 補助化学療法',
+    purposeTitle: '手術後の再発予防',
+    purposeDetail: '手術で見える腫瘍は取り除いた後、目に見えない がん細胞 を叩いて、再発リスクを下げるための治療です。完治を目指す治療の、重要な一部です。',
+    purposeIcon: '🎯',
+    regimen: {
+      meta: [
+        { label: 'サイクル', value: '3週間 × 4サイクル' },
+        { label: '期間', value: '約 3か月' },
+        { label: '投与', value: '点滴・外来通院' },
+        { label: '1回の時間', value: '約 2-3時間' }
+      ],
+      cycleTitle: '1サイクル(21日間)の流れ ・ Day 1 が投与日'
+    },
+    eff: {
+      head: '10年無再発生存率を <span class="big">+5〜7%</span> 改善',
+      detail: '同じ条件(ステージII・リンパ節転移無し・HER2陰性)の方への大規模研究で、TC療法を追加することで再発リスクを <strong>約20〜30%減らせる</strong> と報告されています。',
+      sources: '出典:JCO 2009 (Jones et al.) ・ St.Gallen Consensus 2023 ・ 日本乳癌学会ガイドライン 2024'
+    },
+    common: [
+      { name: '倦怠感・疲れやすさ', timing: 'Day 2-7 がピーク', manage: '休息を優先。家事は後回しに。SATOIで体調を毎日記録すると、自分のピーク帯が見えてきて、「動ける日・休む日」が予測できるようになります。<br><strong>主治医に伝えるサイン:</strong>日常生活が3日以上できない、寝てもしんどい。' },
+      { name: '脱毛', timing: 'Day 14頃から始まる', manage: 'ウィッグ・帽子・スカーフ。多くの自治体で医療用ウィッグの補助制度があり(2-3万円程度)、医療費控除の対象にもなります。<br><strong>準備のコツ:</strong>抜け始める前に短くカットしておくと、心の準備ができます。' },
+      { name: '味覚変化', timing: 'Day 5-14', manage: '冷ました食事・薄味・酸味のあるもの(レモン・梅干し)。「金属の味」がしたり、何を食べても美味しくない時期があります。<br>SATOIの「治療中のレシピ集」に、先輩が乗り越えたメニューが集まっています。' },
+      { name: '吐き気・食欲低下', timing: 'Day 1-4', manage: '制吐剤(オランザピン・パロノセトロン等)を予防的に。「気持ち悪い」と感じる前に投与するのがコツ。<br><strong>主治医に伝えるサイン:</strong>水分も摂れない、24時間以上嘔吐。' }
+    ],
+    sometimes: [
+      { name: '末梢神経障害(手足のしびれ)', timing: '回数を重ねるごと(2-3サイクル目以降)', manage: 'TC療法のドセタキセル に特有。保湿クリーム・ビタミンB群の補助・冷却グローブ などが助けに。<br><strong>主治医に必ず伝える:</strong>ボタンが留められない、文字が書きにくい、はサインです。残り続けることがあるので早めに対応。' },
+      { name: '口内炎', timing: 'Day 5-10', manage: '柔らかい歯ブラシ・うがい励行(食塩水でも可)。痛い時は うがい薬+局所麻酔薬。<br>食べる時は冷ました柔らかい食事(豆腐・お粥・スープ)。' },
+      { name: '爪の変化', timing: '2サイクル目以降', manage: '爪が黒くなる・剥がれる・割れる が起きることがあります。<br>保湿・冷却(投与中の冷却手袋)。ネイルベース(透明)を塗っておく方法も。'}
+    ],
+    rare: [
+      { name: '発熱性好中球減少症(FN)', timing: 'Day 5-12', manage: '<strong style="color:#C97070;">38度以上の発熱は すぐに病院へ。</strong><br>休日・夜間でも、病院の救急連絡先を確認。SATOIに緊急時連絡カードを登録しておけます。' },
+      { name: 'アレルギー反応', timing: 'Day 1(点滴中)', manage: '医療者が点滴中、ずっと観察しています。万一の対応体制(ステロイド・抗ヒスタミン薬)も完備。<br>「胸が苦しい」「のどが詰まる感じ」があれば、すぐ伝える。' },
+      { name: '心毒性(まれ)', timing: '累積投与で', manage: '心エコー検査を治療前・治療中・治療後に。<br>動悸・息切れ・足のむくみ があれば 主治医に。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '通院日 + 回復 2-3日 / 週は休む or 在宅勤務。残り 4日は通常勤務できる方も多いです。傷病手当金・時短勤務・有給の使い方を、社労士相談で整理。' },
+      { icon: '🏠', title: '家事・育児', desc: 'Day 2-5 は休む、Day 6-21 は徐々に活動。家族・配食サービス・家事代行に頼る時期と判断する勇気。子どもへの伝え方は、SATOIに先輩のリアル文例があります。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 30-50万円</strong> の自己負担。<br>高額療養費制度で <strong>月8-9万円程度</strong> まで抑えられます。<br>がん保険給付の対象になる場合多数。SATOI で書類作成サポート。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '配偶者・親・子どもに、どう伝えるか。「ぜんぶ言わなくていいけど、嘘もつかない」が、先輩の知恵。家族自身もつらい時期があり、家族向け相談窓口もあります。' }
+    ],
+    seniors: [
+      { name: 'M.K.さん', age: 38, cancer: '乳がんII期 ・ TC療法完走', img: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「子ども2人を育てながら、TC療法を完走しました。Day 3が一番きつかった。Day 6-7で動けるようになるリズムをつかんだら、少し楽になりました」' },
+      { name: 'A.S.さん', age: 52, cancer: '乳がんII期 ・ 仕事継続', img: 'https://images.unsplash.com/photo-1556139966-56c3df1ddc63?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「仕事を続けたかったんです。Day 1-4 は休み、Day 5以降は在宅勤務に切り替えた。会社の理解が、本当にありがたかった」' },
+      { name: 'H.T.さん', age: 45, cancer: '乳がんII期 ・ ウィッグ', img: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「脱毛が一番つらかった。SATOIで先輩の話を読んで、ウィッグを早めに準備したのが良かったです。子どもに「お母さんの帽子だよ」って言ってくれて、救われました」' }
+    ],
+    pubmed: [
+      { source: 'JCO 2009 ・ Jones et al.', title: 'TC療法 vs AC療法:7年無再発生存率の比較', summary: '初期乳がんに対するTC療法は AC療法と比較して、7年無再発生存率が <strong>5%</strong> 有意に高く(81% vs 75%)、心毒性も低いと報告。日本でも標準療法として採用されています。' },
+      { source: '日本がん治療認定医機構 2022', title: '日本人乳がん患者における TC療法の安全性プロファイル', summary: '日本人600例の検討で、欧米同等の効果・副作用プロファイルが確認されました。アジア人特有の差異は限定的で、日本人の標準治療として安全に推奨されています。' },
+      { source: 'St.Gallen Consensus 2023', title: 'TC療法のサイクル数 4 vs 6 ・ どちらが適切か', summary: 'ステージII・リンパ節転移無し・HER2陰性 では <strong>4サイクルが推奨</strong>。6サイクルとの差は小さく、副作用が増えるためです。リンパ節転移ありなら 6サイクル も選択肢です。' }
+    ],
+    sdm: [
+      { q: 'なぜ私に、TC療法を勧めるのですか?(他の選択肢ではなく)', checked: true },
+      { q: 'TC療法を受けない場合、どうなる可能性がありますか?', checked: true },
+      { q: '他の選択肢(EC療法・AC-T療法 等)と比べて、何が違いますか?', checked: true },
+      { q: '途中で副作用がつらすぎたら、中止・減量・延期 はできますか?', checked: true },
+      { q: '副作用が出た時、休日・夜間も連絡できますか?', checked: false },
+      { q: '治療と仕事の両立で、診断書・配慮の依頼書 を書いてもらえますか?', checked: false },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+  'FOLFOX': {
+    cancer: '大腸がん', stage: 'III', name: 'FOLFOX療法',
+    fullName: '5-FU + ロイコボリン + オキサリプラチン',
+    people: 9842,
+    purposeType: '完治を目指す ・ 補助化学療法',
+    purposeTitle: '手術後の再発予防(術後補助化学療法)',
+    purposeDetail: '手術で取り切れた後、見えないがん細胞を叩く目的の治療。リンパ節転移があった場合、5年生存率を大きく上げます。',
+    purposeIcon: '🎯',
+    regimen: {
+      meta: [
+        { label: 'サイクル', value: '2週間 × 12サイクル' },
+        { label: '期間', value: '約 6か月' },
+        { label: '投与', value: '点滴・通院(中心静脈ポート使用)' },
+        { label: '1回の時間', value: '約 2時間 + 持続点滴 46時間(自宅で携帯型ポンプ)' }
+      ],
+      cycleTitle: '1サイクル(14日間)の流れ ・ Day 1 が投与日'
+    },
+    eff: {
+      head: '3年無病生存率を <span class="big">+8〜10%</span> 改善',
+      detail: 'ステージIII大腸がんで、FOLFOX 6か月の追加で <strong>再発リスクを20%以上減らせる</strong> と複数の研究で報告。MOSAIC試験で確立された標準療法です。',
+      sources: '出典:NEJM 2004 (MOSAIC試験) ・ JSCO/JSGCS 2024 ガイドライン'
+    },
+    common: [
+      { name: '末梢神経障害(手足のしびれ)', timing: '回数を重ねるごと', manage: 'FOLFOX のオキサリプラチン に特有。冷たいもの(冷蔵庫・冬の外気)に触れると痺れが悪化。冷却を避ける生活が必要。<br>累積していくため、サイクル数の調整が議論されるポイント。' },
+      { name: '倦怠感', timing: 'Day 3-7', manage: '休息と栄養。Day 8以降は徐々に回復。' },
+      { name: '吐き気・食欲低下', timing: 'Day 1-4', manage: '制吐剤を予防的に投与。携帯型ポンプ装着中は、食事の感じ方が変わることも。' },
+      { name: '下痢・口内炎', timing: 'Day 3-10', manage: '5-FU に多い。脱水に注意。電解質補給(OS-1等)を備える。' }
+    ],
+    sometimes: [
+      { name: 'ポート部トラブル', timing: '通院ごと', manage: '感染・閉塞 が起きることがあります。発赤・痛みがあれば早めに伝える。' },
+      { name: '骨髄抑制', timing: 'Day 7-14', manage: '白血球・血小板の低下。採血で確認。発熱・出血斑 はサイン。' }
+    ],
+    rare: [
+      { name: 'アレルギー反応', timing: 'オキサリプラチン投与時', manage: '回数を重ねると突然出ることが。医療者が観察しています。' },
+      { name: '心毒性・血栓', timing: '累積投与で', manage: '深部静脈血栓 のリスク。ふくらはぎの腫れ・痛み に注意。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: 'ポート + 携帯ポンプで、通院日以外は通常勤務できる方が多い。冷たいものを扱う仕事(調理・冷蔵庫業務)は配慮が必要。' },
+      { icon: '🏠', title: '家事・育児', desc: '46時間ポンプ装着中もシャワー浴可。冷たい水道水を直接触らない(神経障害悪化)。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 50-80万円</strong> の自己負担。<br>高額療養費で <strong>月8-9万円</strong>。長期治療になるため、医療費控除と限度額認定証 をセットで申請。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: 'ポンプ装着中も日常生活はできる、を家族に共有。「治療中だから何もできない」ではなく「今は休む、来週は動ける」のリズムで。' }
+    ],
+    seniors: [
+      { name: 'S.N.さん', age: 58, cancer: '大腸がんIII期', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「冷蔵庫を開けるのが怖かった時期があった。でも、ポートと携帯ポンプのおかげで仕事は続けられました」' },
+      { name: 'K.O.さん', age: 64, cancer: '大腸がんIII期', img: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「6か月、長かった。でも先輩の話を読むと、自分だけじゃないと思えた」' }
+    ],
+    pubmed: [
+      { source: 'NEJM 2004 ・ MOSAIC試験', title: 'FOLFOX による術後補助化学療法 の効果', summary: 'ステージIII大腸がんでFOLFOX群はFL群に比べ、5年無病生存率が <strong>8%高い</strong> 結果(73% vs 65%)。標準療法として確立。' },
+      { source: 'JSCO 2024 ガイドライン', title: '日本での FOLFOX 標準療法プロトコル', summary: '日本では mFOLFOX6 が標準。3か月 vs 6か月の比較研究(IDEA試験)から、低リスク群では 3か月も検討可能。あなたの状況での適切な期間を主治医と相談を。' }
+    ],
+    sdm: [
+      { q: 'なぜ私に、FOLFOX療法を勧めるのですか?', checked: true },
+      { q: '3か月と6か月、どちらが私には適していますか?(IDEA試験を踏まえて)', checked: true },
+      { q: 'オキサリプラチンの神経障害は、どこまで続きますか?', checked: true },
+      { q: '副作用がつらすぎたら、減量・休薬 はできますか?', checked: true },
+      { q: '中心静脈ポートの手術は、いつ・どこでしますか?', checked: false },
+      { q: '通院 vs 入院は選べますか?', checked: false },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+  'OSIMERTINIB': {
+    cancer: '肺がん', stage: 'IV', name: 'オシメルチニブ',
+    fullName: 'タグリッソ ・ EGFR-TKI 第3世代',
+    people: 4218,
+    purposeType: '延命・がん抑制 ・ 分子標的薬',
+    purposeTitle: 'EGFR変異陽性のあなたへの、ぴったり合う治療',
+    purposeDetail: '肺がんでEGFR遺伝子変異がある方には、オシメルチニブ が劇的に効くことが知られています。点滴ではなく経口薬で、長期間 がん を抑え込みます。',
+    purposeIcon: '🧬',
+    regimen: {
+      meta: [
+        { label: '投与', value: '1日1回 経口(80mg)' },
+        { label: '期間', value: '効果が続く限り(年単位)' },
+        { label: '通院', value: '月1回 採血・診察' },
+        { label: 'タイミング', value: '食前・食後どちらでも' }
+      ],
+      cycleTitle: '毎日の服用 ・ ストレスなく日常に組み込む'
+    },
+    eff: {
+      head: '無増悪生存期間 中央値 <span class="big">18.9 か月</span>',
+      detail: 'FLAURA試験でEGFR変異陽性 進行肺がんに対し、無増悪生存期間 中央値 <strong>18.9か月</strong>(従来薬の約2倍)。第一選択薬として推奨されています。',
+      sources: '出典:NEJM 2018 (FLAURA試験) ・ 日本肺癌学会ガイドライン 2025'
+    },
+    common: [
+      { name: '皮膚症状(皮疹・乾燥)', timing: '服用開始 2-3週から', manage: '保湿(ヘパリン類似物質クリーム)・低刺激の洗顔料。日焼け対策必須。皮膚科併診で軽減できます。' },
+      { name: '下痢', timing: '服用開始期', manage: 'ロペラミド等の薬で対応。脱水に注意。OS-1等の経口補水液を備える。' },
+      { name: '爪の変化', timing: '2-3か月後', manage: '保湿・ネイルケア。' }
+    ],
+    sometimes: [
+      { name: '間質性肺炎', timing: 'いつでも(まれだが重要)', manage: '<strong>息切れ・発熱・空咳 は すぐに連絡。</strong>定期的にCT検査で確認。早期発見で対応できます。' },
+      { name: '心毒性', timing: '長期投与で', manage: '心エコー・心電図 を定期的に。動悸・足のむくみ はサイン。' }
+    ],
+    rare: [
+      { name: '肝障害', timing: 'いつでも', manage: '月1回の血液検査で確認。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '経口薬のため、通常勤務を継続できる方が多数。月1回の通院だけで済む。皮膚症状で人前に出るのが気になる時期はある。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活はほぼ通常通り。日焼け対策・保湿はルーチンに。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 60万円</strong> の薬剤費。<br>高額療養費制度で <strong>月8-9万円</strong> まで抑えられます。<br>長期治療のため 限度額認定証 と医療費控除 は必須。がん保険の通院給付対象。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '長期治療になるため、家族のサポート体制を整える。「いつ終わるか分からない」ストレスを、SATOIで吐き出せる場所として活用を。' }
+    ],
+    seniors: [
+      { name: 'Y.K.さん', age: 62, cancer: '肺がんIV ・ EGFR+', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「4年目に入りました。皮疹は最初つらかったけど、慣れました。仕事も続けられています」' },
+      { name: 'T.M.さん', age: 55, cancer: '肺がんIV ・ EGFR+', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「『進行肺がん』と言われた時は絶望した。でも、遺伝子検査で EGFR+ と分かって、希望が見えた」' }
+    ],
+    pubmed: [
+      { source: 'NEJM 2018 ・ FLAURA試験', title: 'オシメルチニブ vs 第1世代EGFR-TKI(進行EGFR陽性肺がん)', summary: '無増悪生存期間 中央値 <strong>18.9か月 vs 10.2か月</strong>。脳転移への効果も優れる。全生存期間でも有意に上回ったため、第一選択として推奨。' },
+      { source: '日本肺癌学会 ガイドライン 2025', title: 'EGFR陽性 進行肺がんへの第一選択薬', summary: 'EGFR変異陽性 進行肺がんでは オシメルチニブ が第一選択。コンパニオン診断で確実に判定。耐性化後の戦略も同時に検討。' }
+    ],
+    sdm: [
+      { q: '私のEGFR変異タイプは何ですか?(Exon19, L858R 等)', checked: true },
+      { q: '皮膚症状を予防的に減らす方法はありますか?', checked: true },
+      { q: '間質性肺炎の症状を、どうやって自分で見つけたらいいですか?', checked: true },
+      { q: '耐性化したら、次の治療はどうなりますか?', checked: true },
+      { q: '長期間飲み続けるので、肝臓は大丈夫ですか?', checked: false },
+      { q: '海外旅行や運転は、続けて大丈夫ですか?', checked: false },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  /* ========== 乳がん:他治療 ========== */
+  'SURGERY_BREAST_PARTIAL': {
+    cancer: '乳がん', stage: 'I-III', name: '手術(乳房温存)',
+    fullName: '乳房部分切除術 + センチネルリンパ節生検',
+    people: 14250,
+    purposeType: '完治を目指す ・ 外科手術',
+    purposeTitle: '乳房を残しながら、がんを取り除く',
+    purposeDetail: '乳房の形をできるだけ残しながら、がんとその周囲を切除する手術です。術後の放射線治療と組み合わせることで、全摘術と同等の生存率を目指せます。',
+    purposeIcon: '✂️',
+    regimen: {
+      meta: [
+        { label: '入院期間', value: '5〜7日(片側)' },
+        { label: '手術時間', value: '2〜3時間' },
+        { label: '麻酔', value: '全身麻酔' },
+        { label: '術後放射線', value: 'ほぼ必須(25〜30回)' }
+      ],
+      cycleTitle: '入院 → 手術 → 退院 → 病理結果 → 術後治療'
+    },
+    eff: {
+      head: '10年生存率 <span class="big">90%以上</span>(I-II期)',
+      detail: '温存術後に放射線治療を行うことで、全摘術と同等の生存率が得られます。再発率は局所で 5-10%程度。乳房の形を保てる点が大きなメリットです。',
+      sources: '出典:NSABP B-06 試験 ・ 日本乳癌学会ガイドライン 2024'
+    },
+    common: [
+      { name: '創部の痛み', timing: '術後 1〜2週', manage: '鎮痛薬で対応可能。多くの方が 2週間程度で日常生活に戻れます。' },
+      { name: '腕の挙上制限', timing: '術後すぐ〜', manage: 'リハビリ体操を術後早期から。理学療法士の指導を受けると安心。' },
+      { name: '感覚の変化', timing: '長期', manage: '創部周囲の感覚が鈍くなる/しびれる。多くは半年〜1年で改善。' }
+    ],
+    sometimes: [
+      { name: 'リンパ浮腫', timing: '術後数か月〜数年', manage: 'センチネルリンパ節生検なら頻度は低い(5%程度)。腕を心臓より高く・重い物を持たない・着圧スリーブ。' },
+      { name: '創部感染', timing: '術後 1〜2週', manage: '発赤・腫れ・発熱 はすぐ連絡。抗生剤で対応。' }
+    ],
+    rare: [
+      { name: 'セロマ(漿液腫)', timing: '術後数週間', manage: '創部下に液が溜まる。針で抜去することがあります。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: 'デスクワークなら 2〜3週で復帰可能。重い物を扱う仕事は 1か月程度の休養を。' },
+      { icon: '🏠', title: '家事・育児', desc: '術後 2週間は重い物を持たない。子どもの抱っこは反対側の腕で。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 50-80万円</strong>(高額療養費後の自己負担 <strong>約 8〜9万円</strong>)。がん保険の手術給付対象。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '入院は短いので、家族の付き添いは退院日のみで十分。退院後の家事サポートを段取り。' }
+    ],
+    seniors: [
+      { name: 'Y.H.さん', age: 48, cancer: '乳がんII ・ 温存術', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「乳房を残せたことで、心の負担が大きく減りました。鏡を見ても、自分を受け入れられます」' },
+      { name: 'R.N.さん', age: 55, cancer: '乳がんI ・ 温存術', img: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「術後3週間で職場復帰しました。リハビリ体操を続けたのが良かったです」' }
+    ],
+    pubmed: [
+      { source: 'NSABP B-06 試験 (NEJM)', title: '温存術 + 放射線 vs 全摘術 ・ 長期成績', summary: '20年追跡で 全生存率に有意差なし。温存術 + 放射線は標準治療として確立されました。' },
+      { source: '日本乳癌学会 2024', title: '乳房温存術の適応と限界', summary: 'がんの大きさ・位置・乳房との比率で適応が決まります。複数の腫瘤がある場合は温存が難しいことも。' }
+    ],
+    sdm: [
+      { q: '私のがんは、温存術で取り切れる位置ですか?', checked: true },
+      { q: '温存後の見た目は、どのくらい変わりますか?', checked: true },
+      { q: '術後の放射線治療は、何回・何週間かかりますか?', checked: true },
+      { q: '腕のリハビリは、いつから始めますか?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'SURGERY_BREAST_TOTAL': {
+    cancer: '乳がん', stage: 'I-IV', name: '手術(乳房全摘)',
+    fullName: '乳房全摘術 + センチネルリンパ節生検(±腋窩リンパ節郭清)',
+    people: 9500,
+    purposeType: '完治を目指す ・ 外科手術',
+    purposeTitle: '乳房を全て取り除き、再発リスクを最小にする',
+    purposeDetail: 'がんが広範囲・多発・温存術に適さない場合の選択肢。再建術と組み合わせる方も増えています。',
+    purposeIcon: '✂️',
+    regimen: {
+      meta: [
+        { label: '入院期間', value: '7〜10日' },
+        { label: '手術時間', value: '3〜5時間(再建同時なら長い)' },
+        { label: '麻酔', value: '全身麻酔' },
+        { label: '術後放射線', value: '症例による(リンパ節転移多数なら推奨)' }
+      ],
+      cycleTitle: '入院 → 手術(±再建) → 退院 → 病理結果 → 術後治療'
+    },
+    eff: {
+      head: '10年生存率 <span class="big">85〜95%</span>(I-II期)',
+      detail: '温存術と同等の生存率が期待できます。局所再発率はより低く(2-5%)、放射線治療を回避できるケースも。',
+      sources: '出典:Veronesi et al. NEJM 2002 ・ 日本乳癌学会ガイドライン 2024'
+    },
+    common: [
+      { name: '創部の痛み', timing: '術後 2〜3週', manage: '鎮痛薬で対応。温存術より痛みは長引く傾向。' },
+      { name: '腕のしびれ・つっぱり感', timing: '術後数週〜数か月', manage: 'リハビリ体操継続。理学療法士に相談。' },
+      { name: 'ボディイメージの変化', timing: '心理的', manage: 'カウンセリング・再建術・パッド・専用下着で支える。SATOIに先輩の声があります。' }
+    ],
+    sometimes: [
+      { name: 'リンパ浮腫', timing: '術後数か月〜数年', manage: '腋窩郭清をした場合 10-20%程度。着圧スリーブ・リンパドレナージ。' },
+      { name: '創部感染・血腫', timing: '術後 1〜2週', manage: '発赤・腫れ・発熱 はすぐ連絡。' }
+    ],
+    rare: [
+      { name: '神経損傷', timing: '術後', manage: '腋窩リンパ節郭清で長胸神経損傷が起きると肩甲骨が浮き出る(翼状肩甲)。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: 'デスクワークなら 3〜4週で復帰。再建同時なら 1〜2か月の休養を。' },
+      { icon: '🏠', title: '家事・育児', desc: '術後 3-4週は重い物を持たない。子どもの抱っこは反対側で。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 60-100万円</strong>(高額療養費後 <strong>約 8〜9万円</strong>)。再建術は別途。乳房再建も保険適用。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '入院がやや長いので家族の支えが大きい。退院後の身体的・心理的サポートを準備。' }
+    ],
+    seniors: [
+      { name: 'M.T.さん', age: 42, cancer: '乳がんIIB ・ 全摘+再建', img: 'https://images.unsplash.com/photo-1556139966-56c3df1ddc63?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「全摘の選択は迷いましたが、再建を同時に決めたので前向きに乗り越えられました」' },
+      { name: 'K.S.さん', age: 60, cancer: '乳がんIII ・ 全摘', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「再建はしませんでしたが、専用下着とパッドで普通の生活ができています」' }
+    ],
+    pubmed: [
+      { source: 'Veronesi et al. NEJM 2002', title: '温存 vs 全摘の長期成績(20年)', summary: '生存率に有意差なし。乳房再建の選択肢も含めて主治医と相談を。' },
+      { source: '日本乳癌学会 2024', title: '乳房再建の保険適用とタイミング', summary: '同時再建・二期再建いずれも保険適用。インプラント・自家組織から選択。' }
+    ],
+    sdm: [
+      { q: 'なぜ温存術ではなく全摘術を勧めるのですか?', checked: true },
+      { q: '同時再建は可能ですか?二期再建との違いは?', checked: true },
+      { q: '腋窩リンパ節郭清は必要ですか?センチネル生検だけで済みますか?', checked: true },
+      { q: 'リンパ浮腫を予防する方法はありますか?', checked: true },
+      { q: '術後の補助療法(ホルモン・化学・放射線)はどうなりますか?', checked: false },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'HORMONE': {
+    cancer: '乳がん', stage: 'I-IV', name: 'ホルモン療法',
+    fullName: 'タモキシフェン / アロマターゼ阻害薬(5〜10年継続)',
+    people: 22050,
+    purposeType: '完治を目指す/抑える ・ 内分泌療法',
+    purposeTitle: '女性ホルモン依存性のがんを、長期に抑え込む',
+    purposeDetail: 'ホルモン受容体陽性の乳がん細胞は、女性ホルモンで増殖します。その作用を遮断し、長期間にわたって再発を防ぎます。',
+    purposeIcon: '💊',
+    regimen: {
+      meta: [
+        { label: '服用', value: '1日1回 経口' },
+        { label: '期間', value: '5〜10年' },
+        { label: '通院', value: '3〜6か月に1回' },
+        { label: '薬剤', value: '閉経前:タモキシフェン / 閉経後:アロマターゼ阻害薬' }
+      ],
+      cycleTitle: '毎日1錠 ・ 長期戦を見据えた生活設計'
+    },
+    eff: {
+      head: '10年再発リスクを <span class="big">約50%</span> 低下',
+      detail: 'ホルモン受容体陽性乳がんでは、ホルモン療法 5-10年継続で再発リスクを半減させます。10年継続で更に効果が増すことも報告されています。',
+      sources: '出典:EBCTCG (Lancet 2011) ・ ATLAS試験 (Lancet 2013) ・ 日本乳癌学会 2024'
+    },
+    common: [
+      { name: 'ホットフラッシュ(のぼせ・発汗)', timing: '服用開始〜数か月', manage: '更年期様症状。漢方薬(加味逍遙散等)・服装調節・睡眠環境改善で軽減。' },
+      { name: '関節痛・骨痛', timing: 'アロマターゼ阻害薬で頻発', manage: '運動・ストレッチが効果的。痛みが強ければ薬剤変更を相談。' },
+      { name: '骨密度低下', timing: '長期で', manage: '骨密度検査を定期的に。カルシウム・ビタミンD補給。必要なら骨粗鬆症治療薬。' },
+      { name: '性機能・気分の変化', timing: '長期', manage: '我慢せず主治医に。緩和できる方法があります。' }
+    ],
+    sometimes: [
+      { name: '子宮体がんリスク(タモキシフェン)', timing: '長期投与で', manage: '不正出血があれば必ず婦人科受診。定期的な内診検査。' },
+      { name: '血栓症', timing: '長期投与で', manage: 'ふくらはぎの腫れ・痛み・息切れ は要注意。長時間の同じ姿勢を避ける。' }
+    ],
+    rare: [
+      { name: '肝障害', timing: 'いつでも', manage: '定期血液検査で確認。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '通常勤務可能。長期治療なので「終わりが見えない」ストレスケアを大切に。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活は通常通り。骨密度を保つため運動習慣を。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:タモキシフェン 数千円・アロマターゼ阻害薬 約 1万円</strong>。長期になるので医療費控除を毎年申請。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '更年期様症状を家族にも共有。「ホルモン療法中だから今は調子が悪い」と言える環境を。' }
+    ],
+    seniors: [
+      { name: 'R.A.さん', age: 46, cancer: '乳がんII ・ ホルモン5年目', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「最初のホットフラッシュはきつかった。漢方薬と運動で乗り切りました」' },
+      { name: 'S.I.さん', age: 58, cancer: '乳がんI ・ AI 3年目', img: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「関節痛がつらかった。薬剤を変えてもらったら、生活の質が戻りました」' }
+    ],
+    pubmed: [
+      { source: 'EBCTCG Lancet 2011', title: 'タモキシフェン 5年投与の長期効果', summary: '10年再発リスクが約50%減少。15年後でも効果が続くことが示されました。' },
+      { source: 'ATLAS試験 Lancet 2013', title: 'タモキシフェン 5年 vs 10年', summary: '10年継続でさらに再発・死亡率が低下。リスクとベネフィットを主治医と相談。' }
+    ],
+    sdm: [
+      { q: '私のがんは、ER/PR受容体 何%陽性ですか?', checked: true },
+      { q: '5年と10年、どちらの期間が私には適していますか?', checked: true },
+      { q: '副作用がつらい時、薬剤の変更や減量はできますか?', checked: true },
+      { q: '骨密度検査は、どのくらいの頻度で受けますか?', checked: true },
+      { q: '更年期様症状を緩和する方法はありますか?', checked: false },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'HER2_TARGETED': {
+    cancer: '乳がん', stage: 'I-IV', name: '分子標的薬(HER2)',
+    fullName: 'トラスツズマブ(ハーセプチン) + ペルツズマブ(パージェタ)',
+    people: 6100,
+    purposeType: '完治を目指す/抑える ・ 分子標的薬',
+    purposeTitle: 'HER2陽性のあなたへの、ぴったり合う治療',
+    purposeDetail: 'HER2タンパクを大量に発現するがん細胞だけを狙い撃ちする抗体薬。化学療法と組み合わせて高い効果を発揮します。',
+    purposeIcon: '🧬',
+    regimen: {
+      meta: [
+        { label: '投与', value: '3週間に1回 点滴' },
+        { label: '期間', value: '1年(術後補助)or 効果持続まで(進行)' },
+        { label: '通院', value: '3週間に1回' },
+        { label: '化学療法併用', value: '初期は併用、その後単独に' }
+      ],
+      cycleTitle: '3週間サイクル ・ 1年間の長期治療'
+    },
+    eff: {
+      head: '10年無再発生存率を <span class="big">+12〜15%</span> 改善',
+      detail: 'HER2陽性早期乳がんで、トラスツズマブの追加により再発リスクが約40%減少。HERA試験で長期効果が確認されています。',
+      sources: '出典:HERA試験 (NEJM 2017) ・ CLEOPATRA試験 (NEJM 2015) ・ 日本乳癌学会 2024'
+    },
+    common: [
+      { name: '点滴反応(初回)', timing: '初回点滴中', manage: '発熱・悪寒・吐き気。医療者が観察。予防的に抗ヒスタミン薬。' },
+      { name: '倦怠感', timing: '点滴後数日', manage: '徐々に慣れる方が多い。' },
+      { name: '下痢(ペルツズマブ)', timing: '随時', manage: 'ロペラミドで対応。脱水に注意。' }
+    ],
+    sometimes: [
+      { name: '心毒性(心機能低下)', timing: '長期投与で', manage: '<strong>3か月に1回 心エコー必須。</strong>左室駆出率(EF)を経過観察。低下したら一時休薬。' },
+      { name: '皮膚症状', timing: '長期', manage: '保湿・低刺激スキンケア。' }
+    ],
+    rare: [
+      { name: '間質性肺炎', timing: 'いつでも', manage: '空咳・息切れ はすぐ連絡。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '3週間に1回の通院 + 化学療法併用期は休む日が増える。単独投与期は通常勤務可能。' },
+      { icon: '🏠', title: '家事・育児', desc: '点滴日は休む、それ以外は通常生活。心機能を保つため適度な運動を。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 60-80万円</strong>(高額療養費後 <strong>月 8〜9万円</strong>)。長期治療のため医療費控除・限度額認定証を毎年申請。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '1年間の長期治療。家族の協力体制を最初から整える。' }
+    ],
+    seniors: [
+      { name: 'A.M.さん', age: 45, cancer: '乳がんII ・ HER2+ 治療中', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「HER2+と聞いて落ち込みましたが、ぴったり合う薬があると説明され、希望が持てました」' },
+      { name: 'N.K.さん', age: 52, cancer: '乳がんIII ・ HER2+ 完走', img: 'https://images.unsplash.com/photo-1556139966-56c3df1ddc63?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「1年間の治療を完走しました。心機能も問題なく、今は経過観察です」' }
+    ],
+    pubmed: [
+      { source: 'HERA試験 NEJM 2017', title: 'トラスツズマブ 1年投与の長期効果', summary: '11年追跡で 無病生存率 +9%、全生存率 +6.5%。HER2陽性乳がんの標準治療として確立。' },
+      { source: 'CLEOPATRA試験 NEJM 2015', title: 'ペルツズマブ追加で全生存期間 +15.7か月', summary: '進行HER2陽性乳がんで、トラスツズマブ単独より全生存期間が大きく延長。' }
+    ],
+    sdm: [
+      { q: '私のHER2スコアは何ですか?(IHC 3+ / FISH陽性 等)', checked: true },
+      { q: '心機能は治療中どう管理しますか?', checked: true },
+      { q: '化学療法併用期と単独期で、副作用はどう変わりますか?', checked: true },
+      { q: '1年経過後、再発したらどう対応しますか?', checked: true },
+      { q: '妊娠希望がある場合、治療はどう調整できますか?', checked: false },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'CDK46': {
+    cancer: '乳がん', stage: 'IV', name: 'CDK4/6阻害薬',
+    fullName: 'パルボシクリブ(イブランス) + ホルモン療法',
+    people: 3800,
+    purposeType: '抑える ・ 分子標的薬',
+    purposeTitle: '進行・転移乳がんの細胞増殖を、長く止める',
+    purposeDetail: 'がん細胞の細胞周期(CDK4/6)を阻害し、増殖を抑える経口薬。ホルモン療法と併用することで、無増悪生存期間を大きく延長します。',
+    purposeIcon: '🧬',
+    regimen: {
+      meta: [
+        { label: '服用', value: '3週間内服 + 1週間休薬 サイクル' },
+        { label: '期間', value: '効果が続く限り' },
+        { label: '通院', value: '月1回(血液検査必須)' },
+        { label: '併用', value: 'AI または フルベストラント' }
+      ],
+      cycleTitle: '4週間サイクル ・ 21日内服 + 7日休薬'
+    },
+    eff: {
+      head: '無増悪生存期間 中央値 <span class="big">24か月以上</span>',
+      detail: 'PALOMA試験で、進行HR+/HER2-乳がんでパルボシクリブ追加により無増悪生存期間が約2倍に延長。日本でも標準治療。',
+      sources: '出典:PALOMA-2試験 (Lancet Oncol 2016) ・ 日本乳癌学会 2024'
+    },
+    common: [
+      { name: '好中球減少', timing: '服用2週目以降', manage: '<strong>月1回必須の採血</strong>で確認。減少が強ければ休薬・減量。' },
+      { name: '倦怠感', timing: '服用期', manage: '休薬期間に回復する方が多い。' },
+      { name: '吐き気・食欲低下', timing: '服用初期', manage: '徐々に慣れることが多い。制吐剤で対応可。' }
+    ],
+    sometimes: [
+      { name: '発熱性好中球減少', timing: '服用期', manage: '<strong>38度以上の発熱は すぐ連絡。</strong>感染予防(手洗い・マスク)を徹底。' },
+      { name: '間質性肺炎', timing: 'いつでも', manage: '空咳・息切れ ・発熱はすぐ連絡。' }
+    ],
+    rare: [
+      { name: '血栓症', timing: '長期投与で', manage: 'ふくらはぎの腫れ・痛み に注意。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '経口薬のため通常勤務可能。月1回の通院だけで済む。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活は通常通り。感染予防を意識した生活を。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 50-70万円</strong>(高額療養費後 <strong>月 8〜9万円</strong>)。長期治療のため毎年医療費控除を。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '進行乳がんでの長期治療。家族とのコミュニケーションを大切に。' }
+    ],
+    seniors: [
+      { name: 'J.K.さん', age: 50, cancer: '乳がんIV ・ HR+ パルボシクリブ', img: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「進行と言われた時は絶望でしたが、3年経った今も日常生活を送れています」' }
+    ],
+    pubmed: [
+      { source: 'PALOMA-2試験 Lancet Oncol 2016', title: 'パルボシクリブ + レトロゾール 対 レトロゾール単独', summary: '無増悪生存期間 中央値 24.8か月 vs 14.5か月。HR+/HER2-進行乳がんの第一選択薬。' }
+    ],
+    sdm: [
+      { q: '私のがんはHR+/HER2-で確実ですか?', checked: true },
+      { q: '好中球減少はどう管理しますか?', checked: true },
+      { q: '効かなくなった時、次の選択肢は?', checked: true },
+      { q: '副作用がつらい時、減量・休薬はできますか?', checked: true },
+      { q: '感染予防のために日常で気をつけることは?', checked: false }
+    ]
+  }
+,
+
+  /* ========== 大腸がん:他治療 ========== */
+  'SURGERY_LAPAROSCOPIC': {
+    cancer: '大腸がん', stage: 'I-III', name: '手術(腹腔鏡)',
+    fullName: '腹腔鏡下大腸切除術',
+    people: 23700,
+    purposeType: '完治を目指す ・ 外科手術',
+    purposeTitle: '小さな傷で、がんを根治する',
+    purposeDetail: '5mm-1cmの傷数か所からカメラと器具を入れて、開腹せずに大腸を切除します。傷が小さく、回復が早いのが特長。',
+    purposeIcon: '✂️',
+    regimen: {
+      meta: [
+        { label: '入院期間', value: '7〜10日' },
+        { label: '手術時間', value: '3〜5時間' },
+        { label: '麻酔', value: '全身麻酔' },
+        { label: '食事再開', value: '術後 2〜3日から' }
+      ],
+      cycleTitle: '入院 → 手術 → 食事再開 → 退院 → 病理結果 → 補助療法'
+    },
+    eff: {
+      head: '5年生存率 ステージI <span class="big">95%以上</span>',
+      detail: '腹腔鏡手術と開腹手術で、5年生存率に有意差なし。回復が早く社会復帰が早い点で腹腔鏡が標準化しています。',
+      sources: '出典:COST試験 (NEJM 2004) ・ JCOG0404試験 ・ 日本大腸癌研究会 2024'
+    },
+    common: [
+      { name: '創部の痛み', timing: '術後 1〜2週', manage: '小さな傷でも痛みはあります。鎮痛薬で対応。' },
+      { name: '排便習慣の変化', timing: '術後数か月', manage: '頻便・残便感・下痢。徐々に安定。食事内容で調整。' },
+      { name: '腸閉塞リスク', timing: '長期', manage: '腹部膨満・嘔吐 はすぐ連絡。脱水予防。' }
+    ],
+    sometimes: [
+      { name: '縫合不全', timing: '術後 1週前後', manage: '腹痛・発熱・腹膜炎症状。再手術や ドレナージが必要なことも。' },
+      { name: '創部感染', timing: '術後 1〜2週', manage: '発赤・腫れ・発熱 はすぐ連絡。' }
+    ],
+    rare: [
+      { name: '人工肛門(ストーマ)造設', timing: '症例による', manage: '直腸下部のがんで一時的または永久的に必要なことも。ストーマケアの専門看護師が支援。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: 'デスクワークなら 3〜4週で復帰。重い物を扱う仕事は 2か月程度。' },
+      { icon: '🏠', title: '家事・育児', desc: '術後 1か月は重い物を持たない。子どもの抱っこは控える。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 60-100万円</strong>(高額療養費後 <strong>約 8〜9万円</strong>)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '退院後の食事サポートが重要。少量頻回・繊維調整。' }
+    ],
+    seniors: [
+      { name: 'K.M.さん', age: 62, cancer: '大腸がんII ・ 腹腔鏡', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「3週間で職場に戻れました。傷が小さくて回復が早かったです」' }
+    ],
+    pubmed: [
+      { source: 'COST試験 NEJM 2004', title: '腹腔鏡 vs 開腹大腸手術 ・ 長期成績', summary: '5年生存率に有意差なし。腹腔鏡は早期回復という利点があります。' },
+      { source: 'JCOG0404試験', title: '日本人での腹腔鏡手術の安全性', summary: '日本の多施設研究で同等の生存率・低い合併症率が確認されました。' }
+    ],
+    sdm: [
+      { q: '私のがんは腹腔鏡で対応可能ですか?', checked: true },
+      { q: '人工肛門は必要になりますか?', checked: true },
+      { q: '排便習慣はどのくらいで安定しますか?', checked: true },
+      { q: '術後の食事制限はありますか?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'FOLFIRI': {
+    cancer: '大腸がん', stage: 'III-IV', name: 'FOLFIRI療法',
+    fullName: '5-FU + ロイコボリン + イリノテカン',
+    people: 7400,
+    purposeType: '抑える ・ 化学療法(二次治療)',
+    purposeTitle: 'FOLFOX後の二次治療として',
+    purposeDetail: 'FOLFOXで使ったオキサリプラチンの代わりに、イリノテカンを使う組み合わせ。FOLFOX効果不十分や副作用で継続困難な場合の選択肢。',
+    purposeIcon: '🎯',
+    regimen: {
+      meta: [
+        { label: 'サイクル', value: '2週間ごと' },
+        { label: '期間', value: '効果が続く限り' },
+        { label: '投与', value: '点滴・通院(中心静脈ポート使用)' },
+        { label: '1回の時間', value: '約 2時間 + 持続点滴 46時間' }
+      ],
+      cycleTitle: '2週間サイクル ・ Day 1 が投与日'
+    },
+    eff: {
+      head: '無増悪生存期間 中央値 <span class="big">約 8か月</span>',
+      detail: '二次治療として FOLFIRI ± 分子標的薬で、無増悪生存期間を延ばせます。1次・2次の組み合わせ全体で生存期間を最大化。',
+      sources: '出典:GERCOR試験 ・ 日本大腸癌研究会ガイドライン 2024'
+    },
+    common: [
+      { name: '下痢(イリノテカンに特有)', timing: '投与後 数時間〜数日', manage: '<strong>早期下痢:</strong>投与中〜直後。抗コリン薬で対応。<strong>遅発性下痢:</strong>Day 4-10。ロペラミド・水分・電解質補給。' },
+      { name: '脱毛', timing: '投与開始 2-3週から', manage: 'ウィッグ・帽子・スカーフ。' },
+      { name: '倦怠感', timing: 'Day 3-7', manage: '休息と栄養。' }
+    ],
+    sometimes: [
+      { name: '骨髄抑制', timing: 'Day 7-14', manage: '白血球減少。発熱・出血斑 はサイン。' },
+      { name: '吐き気・食欲低下', timing: 'Day 1-4', manage: '制吐剤を予防的に。' }
+    ],
+    rare: [
+      { name: '腸管穿孔', timing: 'まれ', manage: '激しい腹痛・発熱 はすぐ連絡。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: 'ポート + 携帯ポンプで、通院日以外は通常勤務できる方が多い。' },
+      { icon: '🏠', title: '家事・育児', desc: '下痢への対応で外出計画を立てる。トイレの場所を事前確認。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:継続するため長期で 100万円以上</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '長期治療のため家族のサポートを継続的に。' }
+    ],
+    seniors: [
+      { name: 'T.S.さん', age: 60, cancer: '大腸がんIV ・ FOLFIRI', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「FOLFOX後の二次治療として。下痢対策を覚えたら生活ができました」' }
+    ],
+    pubmed: [
+      { source: 'GERCOR試験', title: 'FOLFOX → FOLFIRI vs FOLFIRI → FOLFOX', summary: '順番に関わらず、両方を使うことで生存期間が延びることが示されました。' }
+    ],
+    sdm: [
+      { q: 'なぜFOLFOXからFOLFIRIに変更するのですか?', checked: true },
+      { q: 'イリノテカン特有の下痢対策は?', checked: true },
+      { q: '分子標的薬の追加は検討できますか?', checked: true },
+      { q: '副作用がつらい時、減量・休薬は?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'BEVACIZUMAB': {
+    cancer: '大腸がん', stage: 'IV', name: 'ベバシズマブ併用',
+    fullName: 'アバスチン(血管新生阻害) + 化学療法',
+    people: 10100,
+    purposeType: '抑える ・ 分子標的薬',
+    purposeTitle: 'がんの血管を断ち切る',
+    purposeDetail: 'がんが新しい血管を作る働き(VEGF)を阻害する抗体薬。化学療法と併用することで効果を高めます。',
+    purposeIcon: '🧬',
+    regimen: {
+      meta: [
+        { label: '投与', value: '化学療法と同じスケジュール(2〜3週ごと)' },
+        { label: '期間', value: '効果が続く限り' },
+        { label: '通院', value: '化学療法と同じ' },
+        { label: '1回の時間', value: '化学療法と一緒に点滴' }
+      ],
+      cycleTitle: '化学療法(FOLFOX/FOLFIRI)と同じサイクル'
+    },
+    eff: {
+      head: '全生存期間を <span class="big">+4〜5か月</span> 延長',
+      detail: 'AVF2107g試験などで、化学療法へのベバシズマブ追加により全生存期間が有意に延長。',
+      sources: '出典:AVF2107g試験 (NEJM 2004) ・ 日本大腸癌研究会 2024'
+    },
+    common: [
+      { name: '高血圧', timing: '投与開始数週後', manage: '降圧薬で対応。家庭血圧測定を習慣に。' },
+      { name: '蛋白尿', timing: '随時', manage: '定期検尿で確認。基準を超えたら休薬。' },
+      { name: '出血傾向', timing: '随時', manage: '鼻出血・歯肉出血 等。' }
+    ],
+    sometimes: [
+      { name: '血栓塞栓症', timing: '長期投与で', manage: 'ふくらはぎの腫れ・痛み・息切れ・胸痛 はすぐ連絡。' },
+      { name: '創傷治癒遅延', timing: '手術前後', manage: '手術前後4週間は休薬必要。' }
+    ],
+    rare: [
+      { name: '消化管穿孔', timing: 'まれ', manage: '激しい腹痛 はすぐ連絡。緊急手術が必要。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '化学療法のリズムに準じる。高血圧管理を生活に組み込む。' },
+      { icon: '🏠', title: '家事・育児', desc: '出血しやすいので包丁等の取り扱いに注意。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:化学療法 + 30-50万円</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '高血圧・出血の管理を家族にも共有。' }
+    ],
+    seniors: [
+      { name: 'I.H.さん', age: 55, cancer: '大腸がんIV ・ ベバシズマブ併用', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「血圧管理は最初大変でしたが、家庭血圧測定を習慣にしたら安定しました」' }
+    ],
+    pubmed: [
+      { source: 'AVF2107g試験 NEJM 2004', title: 'ベバシズマブ + IFL の効果', summary: '全生存期間 中央値 20.3か月 vs 15.6か月。標準治療として確立。' }
+    ],
+    sdm: [
+      { q: 'なぜ私にベバシズマブを推奨するのですか?', checked: true },
+      { q: '高血圧の管理はどうしますか?', checked: true },
+      { q: '出血リスクで気をつけることは?', checked: true },
+      { q: '手術予定があったら休薬は必要ですか?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'CETUXIMAB': {
+    cancer: '大腸がん', stage: 'IV', name: 'セツキシマブ',
+    fullName: 'アービタックス(EGFR標的・RAS野生型に有効)',
+    people: 6080,
+    purposeType: '抑える ・ 分子標的薬',
+    purposeTitle: 'RAS野生型のあなたに効く、EGFR標的薬',
+    purposeDetail: 'がん細胞の表面のEGFRを標的にする抗体薬。RAS遺伝子に変異がない場合(野生型)に高い効果を発揮します。',
+    purposeIcon: '🧬',
+    regimen: {
+      meta: [
+        { label: '投与', value: '週1回 点滴' },
+        { label: '期間', value: '効果が続く限り' },
+        { label: '通院', value: '週1回' },
+        { label: '1回の時間', value: '約 1〜2時間' }
+      ],
+      cycleTitle: '週1回サイクル ・ 化学療法と組み合わせ'
+    },
+    eff: {
+      head: '無増悪生存期間 中央値 <span class="big">約 10か月</span>',
+      detail: 'CRYSTAL試験で、RAS野生型大腸がんに対してセツキシマブ追加により無増悪生存期間が有意に延長。',
+      sources: '出典:CRYSTAL試験 (NEJM 2009) ・ 日本大腸癌研究会 2024'
+    },
+    common: [
+      { name: 'にきび様皮膚障害', timing: '投与開始 2-3週から', manage: '<strong>皮膚科併診を推奨。</strong>保湿・低刺激スキンケア・日焼け対策。テトラサイクリン系内服が予防に有効。' },
+      { name: '皮膚乾燥・爪囲炎', timing: '長期', manage: '保湿継続。爪の処置は皮膚科で。' },
+      { name: '点滴反応(初回)', timing: '初回点滴中', manage: '医療者が観察。予防的に抗ヒスタミン薬。' }
+    ],
+    sometimes: [
+      { name: '低マグネシウム血症', timing: '長期投与で', manage: '定期血液検査。補充必要なら点滴・経口補充。' },
+      { name: '下痢', timing: '随時', manage: 'ロペラミドで対応。' }
+    ],
+    rare: [
+      { name: '間質性肺炎', timing: 'いつでも', manage: '空咳・息切れ はすぐ連絡。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '皮膚症状で人前に出るのが気になる時期がある。マスクなど活用。' },
+      { icon: '🏠', title: '家事・育児', desc: '日焼け対策を徹底。日傘・帽子・SPFの高い日焼け止め。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 30-50万円</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '皮膚症状について家族に説明。「治療の証」として前向きに。' }
+    ],
+    seniors: [
+      { name: 'O.A.さん', age: 58, cancer: '大腸がんIV ・ RAS野生 セツキシマブ', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「にきびがつらかったけど、皮膚科の予防内服で軽減。1年経過、効いています」' }
+    ],
+    pubmed: [
+      { source: 'CRYSTAL試験 NEJM 2009', title: 'セツキシマブ + FOLFIRI ・ RAS野生型', summary: '無増悪生存期間 中央値 9.9か月 vs 8.7か月。RAS野生型で効果が顕著。' }
+    ],
+    sdm: [
+      { q: 'RAS遺伝子検査の結果は、野生型ですか変異型ですか?', checked: true },
+      { q: '皮膚症状を予防する方法は?', checked: true },
+      { q: '効果が出ているかどう判定しますか?', checked: true },
+      { q: '副作用がつらい時、減量・休薬は?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  }
+,
+
+  /* ========== 肺がん:他治療 ========== */
+  'SURGERY_LOBECTOMY': {
+    cancer: '肺がん', stage: 'I-II', name: '手術(肺葉切除)',
+    fullName: '肺葉切除術 + リンパ節郭清',
+    people: 10160,
+    purposeType: '完治を目指す ・ 外科手術',
+    purposeTitle: '肺葉ごとがんを切除し、根治を目指す',
+    purposeDetail: 'がんがある肺葉を1つ取り、周囲のリンパ節も切除。完治率が最も高い治療法です。早期肺がんの第一選択。',
+    purposeIcon: '✂️',
+    regimen: {
+      meta: [
+        { label: '入院期間', value: '7〜14日' },
+        { label: '手術時間', value: '3〜5時間' },
+        { label: '麻酔', value: '全身麻酔' },
+        { label: '術式', value: '胸腔鏡 or 開胸 or ロボット支援' }
+      ],
+      cycleTitle: '入院 → 手術 → 呼吸リハビリ → 退院 → 病理結果 → 補助療法'
+    },
+    eff: {
+      head: 'I期5年生存率 <span class="big">82%以上</span>',
+      detail: '早期肺がんでは手術が最も効果的。完全切除できれば長期生存が期待できます。',
+      sources: '出典:日本肺癌学会ガイドライン 2025 ・ 国立がん研究センター'
+    },
+    common: [
+      { name: '創部痛・呼吸時痛', timing: '術後 1〜3週', manage: '鎮痛薬で対応。深呼吸・咳の練習で肺の再膨張を促進。' },
+      { name: '息切れ', timing: '術後数か月', manage: '肺葉を1つ失うため一時的に息切れ。呼吸リハビリで改善。' },
+      { name: '声枯れ', timing: '術後数週', manage: '反回神経刺激による。多くは自然回復。' }
+    ],
+    sometimes: [
+      { name: '気胸・空気漏れ', timing: '術後数日', manage: 'ドレーンで管理。通常 数日で改善。' },
+      { name: '肺炎', timing: '術後 1〜2週', manage: '発熱・痰増加 はすぐ連絡。' }
+    ],
+    rare: [
+      { name: '心房細動・不整脈', timing: '術後数日', manage: '心電図モニター。薬剤調整。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: 'デスクワークなら 1-2か月で復帰。肉体労働は 3か月程度。' },
+      { icon: '🏠', title: '家事・育児', desc: '退院後 1か月は重い物を持たない。階段は徐々に。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 100-150万円</strong>(高額療養費後 <strong>約 8〜9万円</strong>)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '退院後の呼吸リハビリと禁煙環境を整える。' }
+    ],
+    seniors: [
+      { name: 'F.T.さん', age: 65, cancer: '肺がんI ・ 肺葉切除', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「3か月のリハビリで息切れも改善。早期発見で良かったです」' }
+    ],
+    pubmed: [
+      { source: '日本肺癌学会 2025', title: '早期肺がんへの肺葉切除術 標準化', summary: 'I-II期の標準治療。長期生存に大きく寄与。' }
+    ],
+    sdm: [
+      { q: '私のがんは肺葉切除で取り切れますか?', checked: true },
+      { q: '胸腔鏡・開胸・ロボット どれが私には適していますか?', checked: true },
+      { q: '術後の呼吸機能はどうなりますか?', checked: true },
+      { q: 'リンパ節転移があった場合の追加治療は?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'PLATINUM_DOUBLET': {
+    cancer: '肺がん', stage: 'III-IV', name: 'プラチナ併用化学療法',
+    fullName: 'シスプラチン + ペメトレキセド(or 他併用薬)',
+    people: 15240,
+    purposeType: '抑える ・ 化学療法',
+    purposeTitle: '進行肺がんの第一選択化学療法',
+    purposeDetail: 'プラチナ製剤を中心に、もう1剤を組み合わせる標準的な化学療法。多くの場合、免疫療法と併用されます。',
+    purposeIcon: '🎯',
+    regimen: {
+      meta: [
+        { label: 'サイクル', value: '3週間ごと × 4-6サイクル' },
+        { label: '期間', value: '約 3〜5か月' },
+        { label: '投与', value: '点滴・通院 or 短期入院' },
+        { label: '1回の時間', value: '約 4〜6時間' }
+      ],
+      cycleTitle: '3週間サイクル ・ Day 1 が投与日'
+    },
+    eff: {
+      head: '免疫療法併用で全生存期間 <span class="big">大幅延長</span>',
+      detail: 'KEYNOTE-189試験で、化学療法 + ペムブロリズマブで全生存期間 中央値 22か月以上に。',
+      sources: '出典:KEYNOTE-189 (NEJM 2018) ・ 日本肺癌学会 2025'
+    },
+    common: [
+      { name: '吐き気・食欲低下', timing: 'Day 1-4', manage: '制吐剤(5-HT3拮抗薬・NK1拮抗薬・デキサメタゾン)を組み合わせて予防。' },
+      { name: '倦怠感', timing: 'Day 2-7', manage: '休息と栄養。徐々に回復。' },
+      { name: '腎機能低下(シスプラチン)', timing: '蓄積で', manage: '十分な輸液で予防。腎機能を定期検査。' },
+      { name: '骨髄抑制', timing: 'Day 10-14', manage: '採血で確認。発熱・出血斑 はサイン。' }
+    ],
+    sometimes: [
+      { name: '末梢神経障害', timing: '回数を重ねるごと', manage: 'しびれ・感覚低下。残ることがあるため早めに伝える。' },
+      { name: '聴力低下・耳鳴り(シスプラチン)', timing: '蓄積で', manage: '聴力検査を定期的に。聴力低下があれば薬剤変更。' }
+    ],
+    rare: [
+      { name: 'アレルギー反応', timing: '点滴中', manage: '医療者が観察。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '通院日 + 回復 1週 / 3週は休む。残り 2週は活動可能。' },
+      { icon: '🏠', title: '家事・育児', desc: 'Day 1-7 は休む。家族・配食サービスに頼る時期。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 80-120万円</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '副作用のリズムを家族と共有。「来週は動ける」予測ができると気持ちが楽。' }
+    ],
+    seniors: [
+      { name: 'U.E.さん', age: 70, cancer: '肺がんIV ・ プラチナ+免疫', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「免疫療法併用で長く効いています。2年経過、生活も普通に送れています」' }
+    ],
+    pubmed: [
+      { source: 'KEYNOTE-189 NEJM 2018', title: 'プラチナ併用 + ペムブロリズマブ', summary: '全生存期間 中央値 22か月以上。非小細胞肺がんの第一選択。' }
+    ],
+    sdm: [
+      { q: 'なぜシスプラチンを選びますか?(カルボプラチンとの違い)', checked: true },
+      { q: '免疫療法は併用しますか?', checked: true },
+      { q: 'サイクル数はいくつですか?', checked: true },
+      { q: '副作用がつらい時、減量・休薬は?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'ALECTINIB': {
+    cancer: '肺がん', stage: 'III-IV', name: 'アレクチニブ',
+    fullName: 'アレセンサ(ALK融合遺伝子陽性 ・ 経口)',
+    people: 3050,
+    purposeType: '抑える ・ 分子標的薬',
+    purposeTitle: 'ALK融合遺伝子陽性のあなたに、ぴったりの治療',
+    purposeDetail: 'ALK遺伝子の異常を持つ肺がん細胞だけを狙い撃ちする経口薬。脳転移にも有効。',
+    purposeIcon: '🧬',
+    regimen: {
+      meta: [
+        { label: '服用', value: '1日2回 経口(300mg×2)' },
+        { label: '期間', value: '効果が続く限り(年単位)' },
+        { label: '通院', value: '月1回 採血・診察' },
+        { label: 'タイミング', value: '食後' }
+      ],
+      cycleTitle: '毎日2回服用 ・ 長期治療'
+    },
+    eff: {
+      head: '無増悪生存期間 中央値 <span class="big">34.8か月</span>',
+      detail: 'ALEX試験で第1世代と比較し、無増悪生存期間が大きく延長。脳転移への効果も優れる。',
+      sources: '出典:ALEX試験 (NEJM 2017) ・ 日本肺癌学会 2025'
+    },
+    common: [
+      { name: '便秘', timing: '随時', manage: '水分・繊維・運動・緩下剤。' },
+      { name: '筋肉痛・倦怠感', timing: '服用開始期', manage: '徐々に慣れることが多い。' },
+      { name: '貧血', timing: '長期', manage: '採血で確認。鉄剤等の補充。' }
+    ],
+    sometimes: [
+      { name: '肝障害', timing: 'いつでも', manage: '月1回の血液検査で確認。' },
+      { name: '徐脈', timing: '長期', manage: '心電図検査。' }
+    ],
+    rare: [
+      { name: '間質性肺炎', timing: 'いつでも', manage: '<strong>空咳・息切れ・発熱はすぐ連絡。</strong>' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '経口薬で通常勤務可能。月1回通院。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活通常通り。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 50-70万円</strong>(高額療養費後 月 8-9万円)。長期治療で医療費控除毎年。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '長期戦のため家族の支えが大切。' }
+    ],
+    seniors: [
+      { name: 'H.O.さん', age: 48, cancer: '肺がんIV ・ ALK+ アレクチニブ', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「進行肺がんと言われたが、ALK+とわかってアレクチニブが効いています。5年目です」' }
+    ],
+    pubmed: [
+      { source: 'ALEX試験 NEJM 2017', title: 'アレクチニブ vs クリゾチニブ', summary: '無増悪生存期間 34.8か月 vs 10.9か月。脳転移にも顕著な効果。' }
+    ],
+    sdm: [
+      { q: 'ALK融合遺伝子の検査結果は陽性で間違いないですか?', checked: true },
+      { q: '脳転移への効果はどうですか?', checked: true },
+      { q: '耐性化したら次の選択肢は?', checked: true },
+      { q: '長期服用で気をつけることは?', checked: false },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'ICI': {
+    cancer: '肺がん', stage: 'III-IV', name: '免疫チェックポイント阻害薬',
+    fullName: 'ペムブロリズマブ(キイトルーダ) ・ ニボルマブ 等',
+    people: 11700,
+    purposeType: '抑える ・ 免疫療法',
+    purposeTitle: '自分の免疫力で、がんを叩く',
+    purposeDetail: 'PD-1/PD-L1のブレーキを外して、免疫細胞ががんを攻撃できるようにする画期的治療。長期間効くことがあります。',
+    purposeIcon: '🛡️',
+    regimen: {
+      meta: [
+        { label: '投与', value: '3週間に1回 点滴' },
+        { label: '期間', value: '効果が続く限り(最大2年など)' },
+        { label: '通院', value: '3週間に1回' },
+        { label: '1回の時間', value: '約 30分〜1時間' }
+      ],
+      cycleTitle: '3週間サイクル'
+    },
+    eff: {
+      head: '長期生存(5年以上)が <span class="big">10〜30%</span>',
+      detail: 'PD-L1高発現肺がんで第一選択。一部の方では長期にわたって効果が続きます。',
+      sources: '出典:KEYNOTE-024 (NEJM 2016) ・ 日本肺癌学会 2025'
+    },
+    common: [
+      { name: '倦怠感', timing: '随時', manage: '休息。多くは軽度。' },
+      { name: '皮膚症状(皮疹・かゆみ)', timing: 'いつでも', manage: '保湿・ステロイド軟膏。' },
+      { name: '下痢', timing: 'いつでも', manage: 'ロペラミドで対応。長引く場合は連絡。' }
+    ],
+    sometimes: [
+      { name: '甲状腺機能異常', timing: 'いつでも', manage: '採血で確認。ホルモン補充。' },
+      { name: '間質性肺炎', timing: 'いつでも', manage: '<strong>空咳・息切れ はすぐ連絡。</strong>ステロイド治療が必要なことも。' }
+    ],
+    rare: [
+      { name: '重症免疫関連有害事象', timing: 'いつでも', manage: '<strong>下垂体・副腎・1型糖尿病・心筋炎 等のリスク。</strong>「いつもと違う」と感じたら早めに連絡。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '通院日以外は通常勤務可能な方が多い。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活通常。免疫関連症状の早期発見を意識。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 50-90万円</strong>(高額療養費後 月 8-9万円)。長期治療で医療費控除毎年。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '「いつもと違う」変化を家族にも見ていてもらう。' }
+    ],
+    seniors: [
+      { name: 'L.M.さん', age: 58, cancer: '肺がんIV ・ ペムブロリズマブ', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「3年効いています。免疫療法は副作用予測が難しいので、SATOIで毎日記録しています」' }
+    ],
+    pubmed: [
+      { source: 'KEYNOTE-024 NEJM 2016', title: 'ペムブロリズマブ 単剤 vs 化学療法', summary: 'PD-L1高発現で全生存期間が有意に延長。第一選択として確立。' }
+    ],
+    sdm: [
+      { q: '私のPD-L1発現率は何%ですか?', checked: true },
+      { q: '免疫関連副作用の早期発見方法は?', checked: true },
+      { q: '効果判定はいつ・どうやって?', checked: true },
+      { q: '2年間続けたあとはどうなりますか?', checked: false },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'SBRT': {
+    cancer: '肺がん', stage: 'I', name: '定位放射線治療(SBRT)',
+    fullName: '体幹部定位放射線治療(早期・手術不可例)',
+    people: 3550,
+    purposeType: '完治を目指す ・ 放射線治療',
+    purposeTitle: '手術しないで、ピンポイントで がん を叩く',
+    purposeDetail: '高線量の放射線を、がんだけにピンポイントで当てる治療。手術が困難な早期肺がんで、手術と同等の成績が報告されています。',
+    purposeIcon: '⚡',
+    regimen: {
+      meta: [
+        { label: '回数', value: '4〜10回(1〜2週間)' },
+        { label: '期間', value: '約 1〜2週' },
+        { label: '通院', value: '回数分(連日 or 隔日)' },
+        { label: '1回の時間', value: '約 30分〜1時間' }
+      ],
+      cycleTitle: '短期集中 ・ 通院のみ'
+    },
+    eff: {
+      head: 'I期5年生存率 <span class="big">60〜80%</span>',
+      detail: '手術困難な早期肺がんで、手術に匹敵する局所制御率。複数の試験で確認されています。',
+      sources: '出典:RTOG 0236 ・ JCOG 0403 ・ 日本肺癌学会 2025'
+    },
+    common: [
+      { name: '倦怠感', timing: '治療中〜数週後', manage: '軽度のことが多い。休息で改善。' },
+      { name: '咳', timing: '治療中', manage: '軽度。続く場合は連絡。' }
+    ],
+    sometimes: [
+      { name: '放射線肺臓炎', timing: '治療後 1〜6か月', manage: '<strong>息切れ・発熱 はすぐ連絡。</strong>ステロイド治療が必要なことも。' },
+      { name: '肋骨骨折', timing: '長期', manage: '肋骨近くの病変で起こることが。' }
+    ],
+    rare: [
+      { name: '気管支狭窄', timing: '長期', manage: '中心部病変で起こることが。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '通院のみで完結。仕事を続けながら治療可能。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活通常通り。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 30-60万円</strong>(高額療養費後 <strong>約 8〜9万円</strong>)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '入院不要のため家族への負担は少ない。' }
+    ],
+    seniors: [
+      { name: 'N.S.さん', age: 78, cancer: '肺がんI ・ SBRT', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「高齢で手術が難しいと言われたが、SBRTで治療完了。3年経過、再発なしです」' }
+    ],
+    pubmed: [
+      { source: 'JCOG 0403', title: '日本人 早期肺がんへの SBRT', summary: '手術困難例で 5年局所制御率 80%以上。日本の標準治療として位置づけ。' }
+    ],
+    sdm: [
+      { q: 'なぜ手術ではなく SBRT を勧めるのですか?', checked: true },
+      { q: '何回照射しますか?副作用はどの程度ですか?', checked: true },
+      { q: '放射線肺臓炎の兆候は?', checked: true },
+      { q: '効果判定はいつ?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  }
+,
+
+  /* ========== 胃がん:他治療 ========== */
+  'ESD': {
+    cancer: '胃がん', stage: 'I', name: '内視鏡治療(ESD)',
+    fullName: '内視鏡的粘膜下層剥離術',
+    people: 9920,
+    purposeType: '完治を目指す ・ 内視鏡治療',
+    purposeTitle: 'お腹を切らずに、胃の中からがんを取る',
+    purposeDetail: '内視鏡を口から入れて、胃の内側からがんとその周囲の粘膜を一括切除。早期がんで適応があれば、第一選択です。',
+    purposeIcon: '🔬',
+    regimen: {
+      meta: [
+        { label: '入院期間', value: '5〜7日' },
+        { label: '治療時間', value: '1〜3時間' },
+        { label: '麻酔', value: '鎮静(全身麻酔ではない場合多い)' },
+        { label: '食事再開', value: '治療翌日から段階的' }
+      ],
+      cycleTitle: '入院 → 治療 → 経過観察 → 退院 → 病理結果'
+    },
+    eff: {
+      head: '5年生存率 <span class="big">95%以上</span>(適応症例)',
+      detail: '内視鏡治療の絶対適応・拡大適応症例で 完治率が非常に高い治療。傷がなく回復が早い。',
+      sources: '出典:JCOG 0607 ・ 日本胃癌学会ガイドライン 2024'
+    },
+    common: [
+      { name: '腹部不快感', timing: '治療後 数日', manage: '徐々に改善。鎮痛薬で対応。' },
+      { name: '一時的な食欲低下', timing: '治療後数日〜1週', manage: '段階的な食事再開で改善。' }
+    ],
+    sometimes: [
+      { name: '出血', timing: '治療中〜後', manage: '内視鏡で止血。輸血が必要なことも稀にあり。' },
+      { name: '穿孔(胃壁の穴)', timing: '治療中', manage: '内視鏡的にクリップで閉鎖。手術が必要なことは稀。' }
+    ],
+    rare: [
+      { name: '狭窄', timing: '治療後数週', manage: '広範囲切除後にバルーン拡張が必要なことが。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '退院後 1週間で復帰可能なことが多い。' },
+      { icon: '🏠', title: '家事・育児', desc: '退院後 1週間は刺激物・アルコールを避ける。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 30-50万円</strong>(高額療養費後 <strong>約 8〜9万円</strong>)。早期がんで治療費を抑えられる選択。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '入院短期・回復早いため家族の負担少ない。' }
+    ],
+    seniors: [
+      { name: 'B.Y.さん', age: 70, cancer: '胃がんI ・ ESD', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「胃カメラ検診で早期発見し、ESDで治療完了。3日入院、傷もありません」' }
+    ],
+    pubmed: [
+      { source: 'JCOG 0607', title: '早期胃がん ESD の長期成績', summary: '5年無再発生存率 95%以上。早期発見・早期治療の重要性を示すデータ。' }
+    ],
+    sdm: [
+      { q: '私のがんは ESD の適応ですか?(絶対適応・拡大適応)', checked: true },
+      { q: '一括切除できる可能性は?', checked: true },
+      { q: '病理結果次第で追加手術になることは?', checked: true },
+      { q: '治療後の検診頻度は?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'SURGERY_GASTRECTOMY': {
+    cancer: '胃がん', stage: 'I-III', name: '手術(胃切除)',
+    fullName: '幽門側胃切除術 / 胃全摘術',
+    people: 17050,
+    purposeType: '完治を目指す ・ 外科手術',
+    purposeTitle: '胃の一部または全部を切除して、完治を目指す',
+    purposeDetail: 'がんの場所・進行度に応じて、胃の下部(幽門側)を切るか、全部を切るかが決まります。腹腔鏡またはロボット支援手術が主流。',
+    purposeIcon: '✂️',
+    regimen: {
+      meta: [
+        { label: '入院期間', value: '10〜14日' },
+        { label: '手術時間', value: '4〜6時間' },
+        { label: '麻酔', value: '全身麻酔' },
+        { label: '食事再開', value: '術後 3〜5日から段階的' }
+      ],
+      cycleTitle: '入院 → 手術 → 食事リハビリ → 退院 → 病理結果 → 補助療法'
+    },
+    eff: {
+      head: '5年生存率 II期 <span class="big">67%</span>・III期 <span class="big">46%</span>',
+      detail: '完全切除 + 術後補助化学療法(S-1 等)で長期生存が期待できます。',
+      sources: '出典:日本胃癌学会ガイドライン 2024 ・ ACTS-GC試験'
+    },
+    common: [
+      { name: '体重減少', timing: '術後 数か月', manage: '少量頻回食(1日5-6回)が標準。栄養士相談を活用。' },
+      { name: 'ダンピング症候群', timing: '食後', manage: '食事をゆっくり・少量・低糖質。横になって休む。' },
+      { name: '貧血(ビタミンB12・鉄欠乏)', timing: '術後 数か月以降', manage: '定期血液検査。ビタミンB12注射・鉄剤補充。' }
+    ],
+    sometimes: [
+      { name: '縫合不全', timing: '術後 1週', manage: '腹痛・発熱 はすぐ連絡。再手術 or ドレナージ。' },
+      { name: '胆汁逆流性食道炎', timing: '長期', manage: '胃酸抑制薬で対応。' }
+    ],
+    rare: [
+      { name: '消化管出血', timing: 'いつでも', manage: '黒色便・嘔吐 はすぐ連絡。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: 'デスクワークなら 1〜2か月で復帰。食事のタイミング調整が必要。' },
+      { icon: '🏠', title: '家事・育児', desc: '少量頻回食を家族とも共有。食事内容の工夫を栄養士と相談。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 80-150万円</strong>(高額療養費後 <strong>約 8〜9万円</strong>)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '食事の準備に家族の協力が大きい。「治療食ではなく工夫食」の意識を。' }
+    ],
+    seniors: [
+      { name: 'C.H.さん', age: 65, cancer: '胃がんII ・ 幽門側切除', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「少量頻回食に慣れるのに3か月かかりましたが、今は安定しています」' }
+    ],
+    pubmed: [
+      { source: 'ACTS-GC試験', title: '胃切除術後 S-1 補助療法', summary: '5年無再発生存率が向上。II期以上の標準治療として確立。' }
+    ],
+    sdm: [
+      { q: '私のがんは幽門側切除で済みますか?それとも全摘ですか?', checked: true },
+      { q: '腹腔鏡 / ロボット支援 / 開腹 どれが私には適していますか?', checked: true },
+      { q: '術後の食事はどう変わりますか?', checked: true },
+      { q: '術後補助化学療法は必要ですか?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'TRASTUZUMAB_GASTRIC': {
+    cancer: '胃がん', stage: 'III-IV', name: 'トラスツズマブ(胃)',
+    fullName: 'ハーセプチン(HER2陽性胃がんに化学療法と併用)',
+    people: 2980,
+    purposeType: '抑える ・ 分子標的薬',
+    purposeTitle: 'HER2陽性胃がんに、ぴったり合う治療',
+    purposeDetail: 'HER2陽性の進行・再発胃がんで、化学療法に追加することで生存期間を延長。ToGA試験で確立された治療です。',
+    purposeIcon: '🧬',
+    regimen: {
+      meta: [
+        { label: '投与', value: '3週間に1回 点滴' },
+        { label: '期間', value: '効果が続く限り' },
+        { label: '通院', value: '3週間に1回(化学療法と同時)' },
+        { label: '1回の時間', value: '約 1時間 + 化学療法併用' }
+      ],
+      cycleTitle: '化学療法 + トラスツズマブ 3週間サイクル'
+    },
+    eff: {
+      head: '全生存期間 <span class="big">13.8か月</span>',
+      detail: 'ToGA試験で、HER2陽性進行胃がんで化学療法+トラスツズマブが化学療法単独より全生存期間を有意に延長。',
+      sources: '出典:ToGA試験 (Lancet 2010) ・ 日本胃癌学会 2024'
+    },
+    common: [
+      { name: '点滴反応(初回)', timing: '初回点滴中', manage: '医療者が観察。予防的に抗ヒスタミン薬。' },
+      { name: '倦怠感', timing: '点滴後数日', manage: '徐々に慣れる。' }
+    ],
+    sometimes: [
+      { name: '心毒性', timing: '長期投与で', manage: '心エコー定期検査必須。' },
+      { name: '皮膚症状', timing: '長期', manage: '保湿。' }
+    ],
+    rare: [
+      { name: '間質性肺炎', timing: 'いつでも', manage: '空咳・息切れ はすぐ連絡。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '化学療法のリズムに準じる。' },
+      { icon: '🏠', title: '家事・育児', desc: '心機能を保つため適度な運動。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:化学療法 + 30-50万円</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '長期治療のため家族のサポートを継続。' }
+    ],
+    seniors: [
+      { name: 'V.E.さん', age: 60, cancer: '胃がんIV ・ HER2+ トラスツズマブ', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「HER2+とわかってトラスツズマブが効きました。2年経過しています」' }
+    ],
+    pubmed: [
+      { source: 'ToGA試験 Lancet 2010', title: 'HER2陽性胃がんへのトラスツズマブ', summary: '全生存期間 13.8か月 vs 11.1か月。HER2陽性胃がんの標準治療。' }
+    ],
+    sdm: [
+      { q: '私の HER2 スコアは何ですか?', checked: true },
+      { q: '化学療法は何を併用しますか?', checked: true },
+      { q: '心機能管理はどうしますか?', checked: true },
+      { q: '効果判定はいつ?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'SP': {
+    cancer: '胃がん', stage: 'III', name: 'SP療法',
+    fullName: 'S-1 + シスプラチン',
+    people: 9420,
+    purposeType: '抑える ・ 化学療法',
+    purposeTitle: '進行胃がんの標準的化学療法',
+    purposeDetail: 'S-1経口薬とシスプラチン点滴を組み合わせた、日本で標準的な進行胃がん化学療法。',
+    purposeIcon: '🎯',
+    regimen: {
+      meta: [
+        { label: 'サイクル', value: '5週間ごと' },
+        { label: '期間', value: '効果が続く限り' },
+        { label: 'S-1', value: '3週間内服 + 2週間休薬' },
+        { label: 'シスプラチン', value: 'Day 8 点滴' }
+      ],
+      cycleTitle: '5週間サイクル ・ S-1 + シスプラチン'
+    },
+    eff: {
+      head: '全生存期間 中央値 <span class="big">13か月</span>',
+      detail: 'SPIRITS試験で、進行胃がんで SP療法が S-1単独より生存期間を有意に延長。',
+      sources: '出典:SPIRITS試験 (Lancet Oncol 2008) ・ 日本胃癌学会 2024'
+    },
+    common: [
+      { name: '吐き気・食欲低下', timing: 'Day 1-5(シスプラチン)', manage: '制吐剤を予防的に。' },
+      { name: '下痢・口内炎', timing: 'S-1服用期', manage: 'うがい励行・水分補給。' },
+      { name: '骨髄抑制', timing: 'Day 14-21', manage: '採血で確認。' },
+      { name: '腎機能低下(シスプラチン)', timing: '蓄積で', manage: '十分な輸液で予防。' }
+    ],
+    sometimes: [
+      { name: '末梢神経障害', timing: '回数を重ねるごと', manage: '残ることがあるため早めに伝える。' },
+      { name: '聴力低下', timing: '蓄積で', manage: '聴力検査定期的に。' }
+    ],
+    rare: [
+      { name: 'アレルギー反応', timing: '点滴中', manage: '医療者が観察。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: 'S-1内服中は通常勤務可能、シスプラチン投与日は休む。' },
+      { icon: '🏠', title: '家事・育児', desc: '副作用のリズムを把握し、計画的に。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:月 30-50万円</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '食事面のサポートを家族と。' }
+    ],
+    seniors: [
+      { name: 'W.K.さん', age: 68, cancer: '胃がんIV ・ SP療法', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「副作用は予想通りでしたが、対策が事前に分かっていたので乗り切れました」' }
+    ],
+    pubmed: [
+      { source: 'SPIRITS試験 Lancet Oncol 2008', title: 'SP vs S-1単独', summary: '全生存期間 13.0か月 vs 11.0か月。日本の標準治療。' }
+    ],
+    sdm: [
+      { q: 'なぜ SP療法を勧めるのですか?', checked: true },
+      { q: '免疫療法の追加は検討できますか?', checked: true },
+      { q: '副作用がつらい時、減量・休薬は?', checked: true },
+      { q: '効果判定はいつ?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'NIVOLUMAB': {
+    cancer: '胃がん', stage: 'III-IV', name: 'ニボルマブ',
+    fullName: 'オプジーボ(進行胃がんの三次治療以降)',
+    people: 4960,
+    purposeType: '抑える ・ 免疫療法',
+    purposeTitle: '自分の免疫で、胃がんを抑える',
+    purposeDetail: 'PD-1阻害により免疫細胞ががんを攻撃。化学療法後に進行した胃がんでの選択肢として確立。',
+    purposeIcon: '🛡️',
+    regimen: {
+      meta: [
+        { label: '投与', value: '2週間に1回 点滴' },
+        { label: '期間', value: '効果が続く限り' },
+        { label: '通院', value: '2週間に1回' },
+        { label: '1回の時間', value: '約 30分〜1時間' }
+      ],
+      cycleTitle: '2週間サイクル'
+    },
+    eff: {
+      head: '全生存期間 中央値 <span class="big">5.3か月</span>',
+      detail: 'ATTRACTION-2試験で、ニボルマブが進行胃がんの三次治療として全生存期間を有意に延長。',
+      sources: '出典:ATTRACTION-2 (Lancet 2017) ・ 日本胃癌学会 2024'
+    },
+    common: [
+      { name: '倦怠感', timing: '随時', manage: '休息。' },
+      { name: '皮膚症状', timing: 'いつでも', manage: '保湿・ステロイド軟膏。' },
+      { name: '下痢', timing: 'いつでも', manage: 'ロペラミド。長引く場合は連絡。' }
+    ],
+    sometimes: [
+      { name: '甲状腺機能異常', timing: 'いつでも', manage: '採血で確認。ホルモン補充。' },
+      { name: '間質性肺炎', timing: 'いつでも', manage: '<strong>空咳・息切れ はすぐ連絡。</strong>' }
+    ],
+    rare: [
+      { name: '重症免疫関連有害事象', timing: 'いつでも', manage: '下垂体・副腎・1型糖尿病等のリスク。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '2週間に1回通院。通常勤務可能な方多い。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活通常。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 30-60万円</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '「いつもと違う」変化を家族にも見ていてもらう。' }
+    ],
+    seniors: [
+      { name: 'X.T.さん', age: 62, cancer: '胃がんIV ・ ニボルマブ', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「化学療法後の選択肢としてニボルマブを始めました。1年効いています」' }
+    ],
+    pubmed: [
+      { source: 'ATTRACTION-2 Lancet 2017', title: 'ニボルマブ vs プラセボ(三次治療胃がん)', summary: '全生存期間 5.3か月 vs 4.1か月。アジア人で効果が顕著。' }
+    ],
+    sdm: [
+      { q: 'なぜ三次治療で ニボルマブを選びますか?', checked: true },
+      { q: '免疫関連副作用の早期発見方法は?', checked: true },
+      { q: '効果判定はいつ?', checked: true },
+      { q: '免疫療法の併用は?', checked: false },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  }
+,
+
+  /* ========== 前立腺がん:他治療 ========== */
+  'ACTIVE_SURVEILLANCE': {
+    cancer: '前立腺がん', stage: 'I', name: '監視療法',
+    fullName: 'PSA定期測定による経過観察(早期低リスク例)',
+    people: 5700,
+    purposeType: '経過観察 ・ 即時治療を行わず慎重に追跡',
+    purposeTitle: '今すぐ治療せず、慎重に経過を見る',
+    purposeDetail: '早期・低リスクの前立腺がんで、PSAと生検で慎重に追跡。進行の兆候があれば治療開始。過剰治療を避ける選択肢です。',
+    purposeIcon: '👁️',
+    regimen: {
+      meta: [
+        { label: 'PSA測定', value: '3〜6か月に1回' },
+        { label: '生検', value: '1〜3年に1回(MRI併用)' },
+        { label: '通院', value: '3〜6か月に1回' },
+        { label: '期間', value: '進行の兆候まで' }
+      ],
+      cycleTitle: '定期的な検査による慎重な追跡'
+    },
+    eff: {
+      head: '15年生存率 <span class="big">99%以上</span>(低リスク群)',
+      detail: 'PROTECT試験で、低リスク前立腺がんでは監視療法と治療群で生存率に差がないと報告。',
+      sources: '出典:PROTECT試験 (NEJM 2016) ・ 日本泌尿器科学会ガイドライン 2024'
+    },
+    common: [
+      { name: '心理的不安', timing: '継続的', manage: '「治療しないで本当にいいのか」という不安は普通。サポートグループ・カウンセリング活用。' },
+      { name: '生検の不快感', timing: '生検時', manage: '局所麻酔で対応。出血等のリスク説明あり。' }
+    ],
+    sometimes: [
+      { name: 'PSA上昇による不安', timing: 'PSA測定ごと', manage: '一時的な上昇は炎症等が原因のことも。主治医と相談。' }
+    ],
+    rare: [
+      { name: '進行発見の遅れ', timing: '長期', manage: '定期検査を守ることで最小化。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '通常生活そのまま。検査日のみ通院。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活そのまま。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>年間目安:約 5-15万円</strong>(検査費用のみ)。治療費よりも大幅に低い。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '家族の理解と協力が大切。「今は治療しない」選択を家族と共有。' }
+    ],
+    seniors: [
+      { name: 'R.O.さん', age: 68, cancer: '前立腺がんI ・ 監視療法', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「不安はありましたが、定期検査でPSA安定。5年経過、治療せずに過ごせています」' }
+    ],
+    pubmed: [
+      { source: 'PROTECT試験 NEJM 2016', title: '監視療法 vs 手術 vs 放射線', summary: '15年追跡で低リスク群では生存率に差なし。過剰治療を避ける選択肢。' }
+    ],
+    sdm: [
+      { q: '私のリスクグループは?(低・中・高)', checked: true },
+      { q: '進行の兆候はどう見つけますか?', checked: true },
+      { q: 'いつ治療に切り替えますか?', checked: true },
+      { q: '生検の頻度・回数は?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'PROSTATECTOMY': {
+    cancer: '前立腺がん', stage: 'I-II', name: '手術(全摘)',
+    fullName: 'ロボット支援前立腺全摘術(ダヴィンチ)',
+    people: 10240,
+    purposeType: '完治を目指す ・ 外科手術',
+    purposeTitle: '前立腺を全摘して、根治を目指す',
+    purposeDetail: 'ロボット支援(ダヴィンチ)による精密な手術。神経温存により尿失禁・性機能温存の可能性が高まります。',
+    purposeIcon: '✂️',
+    regimen: {
+      meta: [
+        { label: '入院期間', value: '7〜10日' },
+        { label: '手術時間', value: '3〜5時間' },
+        { label: '麻酔', value: '全身麻酔' },
+        { label: '尿カテーテル', value: '1〜2週間' }
+      ],
+      cycleTitle: '入院 → 手術 → カテーテル → 退院 → 病理結果'
+    },
+    eff: {
+      head: '10年生存率 <span class="big">95%以上</span>(I-II期)',
+      detail: 'ロボット支援手術で根治率を維持しながら、神経温存により合併症を最小化。',
+      sources: '出典:日本泌尿器科学会ガイドライン 2024'
+    },
+    common: [
+      { name: '尿失禁', timing: '術後 数か月', manage: '骨盤底筋訓練を術前から開始。多くは3-6か月で改善。' },
+      { name: '勃起障害', timing: '術後', manage: '神経温存術 + PDE5阻害薬で改善可能性。年齢と神経温存度による。' },
+      { name: '創部痛', timing: '術後 1-2週', manage: '小さな傷数か所のため軽度。' }
+    ],
+    sometimes: [
+      { name: '尿道狭窄', timing: '長期', manage: '尿線細・排尿困難。内視鏡的拡張。' },
+      { name: 'リンパ漏', timing: '術後数日', manage: 'ドレナージで管理。' }
+    ],
+    rare: [
+      { name: '直腸損傷', timing: '術中', manage: '即座に修復。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: 'デスクワークなら 3-4週で復帰。' },
+      { icon: '🏠', title: '家事・育児', desc: '退院後 1か月は重い物を持たない。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 100-180万円</strong>(高額療養費後 <strong>約 8〜9万円</strong>)。ロボット手術は保険適用。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '尿失禁・性機能の話は家族とオープンに。SATOI に先輩の声多数。' }
+    ],
+    seniors: [
+      { name: 'P.J.さん', age: 65, cancer: '前立腺がんII ・ ダヴィンチ手術', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「尿失禁は半年で改善。神経温存ありで性機能も戻りました。今は仕事復帰しています」' }
+    ],
+    pubmed: [
+      { source: '日本泌尿器科学会 2024', title: 'ロボット支援前立腺全摘術 標準化', summary: 'ロボット手術で根治率を維持しつつ、合併症を最小化。' }
+    ],
+    sdm: [
+      { q: '神経温存は可能ですか?(両側・片側・なし)', checked: true },
+      { q: '尿失禁・性機能はどのくらいで戻りますか?', checked: true },
+      { q: '骨盤底筋訓練はいつから始めますか?', checked: true },
+      { q: '術後の PSA はいつから測定しますか?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'IMRT': {
+    cancer: '前立腺がん', stage: 'I-III', name: '放射線治療(IMRT)',
+    fullName: '強度変調放射線治療(外照射)',
+    people: 8960,
+    purposeType: '完治を目指す ・ 放射線治療',
+    purposeTitle: '手術なしで、根治を目指す',
+    purposeDetail: 'コンピューター制御で前立腺だけに高線量を、周囲臓器は低線量に。手術と同等の成績を、入院なしで実現。',
+    purposeIcon: '⚡',
+    regimen: {
+      meta: [
+        { label: '回数', value: '37〜39回(約 8週間)' },
+        { label: '通院', value: '平日毎日' },
+        { label: '1回の時間', value: '約 15-20分' },
+        { label: 'ホルモン併用', value: '中-高リスクで併用' }
+      ],
+      cycleTitle: '平日毎日 8週間 ・ 仕事を続けながら'
+    },
+    eff: {
+      head: '10年無病生存率 <span class="big">85〜95%</span>',
+      detail: '手術と同等の成績。神経温存手術より勃起機能温存が良好な場合も。',
+      sources: '出典:PROTECT試験 ・ 日本放射線腫瘍学会 2024'
+    },
+    common: [
+      { name: '頻尿・尿意切迫', timing: '治療中〜数か月', manage: 'カフェイン制限。水分は適切に。' },
+      { name: '下痢・血便', timing: '治療中', manage: '直腸刺激による。食事内容調整・整腸剤。' },
+      { name: '倦怠感', timing: '治療後半', manage: '休息と栄養。' }
+    ],
+    sometimes: [
+      { name: '勃起障害', timing: '治療後数か月〜', manage: 'PDE5阻害薬で改善可能性。' },
+      { name: '直腸出血', timing: '治療数か月〜年単位', manage: '少量で持続することがある。粘膜保護薬。' }
+    ],
+    rare: [
+      { name: '尿閉', timing: '治療中', manage: 'カテーテル留置で対応。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '平日毎日通院 + 通常勤務可能。柔軟な勤務時間を相談。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活通常通り。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 60-100万円</strong>(高額療養費後 <strong>約 8〜9万円</strong>)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '8週間の継続通院。家族の理解と協力を。' }
+    ],
+    seniors: [
+      { name: 'Q.U.さん', age: 70, cancer: '前立腺がんII ・ IMRT', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「手術ではなく放射線を選択。仕事を続けながら治療完了しました」' }
+    ],
+    pubmed: [
+      { source: '日本放射線腫瘍学会 2024', title: '前立腺がん IMRT の長期成績', summary: '手術と同等の長期生存率。患者選好で選択可能。' }
+    ],
+    sdm: [
+      { q: 'なぜ手術ではなく IMRT を勧めるのですか?', checked: true },
+      { q: 'ホルモン療法は併用しますか?', checked: true },
+      { q: '治療中の生活制限は?', checked: true },
+      { q: '効果判定はいつ?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'BRACHYTHERAPY': {
+    cancer: '前立腺がん', stage: 'I-II', name: '小線源治療',
+    fullName: '前立腺内に放射線源を埋め込む(短期入院)',
+    people: 3840,
+    purposeType: '完治を目指す ・ 放射線治療',
+    purposeTitle: '前立腺内から、ピンポイントで叩く',
+    purposeDetail: '小さなチタンカプセル(I-125 シード)を前立腺内に直接埋め込む治療。低-中リスクで適応。',
+    purposeIcon: '💎',
+    regimen: {
+      meta: [
+        { label: '入院期間', value: '2〜3日' },
+        { label: '治療時間', value: '1〜2時間' },
+        { label: '麻酔', value: '腰椎麻酔 or 全身麻酔' },
+        { label: '効果期間', value: '半永久(シード半減期 60日)' }
+      ],
+      cycleTitle: '短期入院 → 埋め込み → 退院 → 経過観察'
+    },
+    eff: {
+      head: '10年無病生存率 <span class="big">85〜95%</span>(低-中リスク)',
+      detail: '低-中リスク前立腺がんで手術・IMRTと同等の成績。短期入院で完結。',
+      sources: '出典:日本Brachytherapy研究会 ・ 日本泌尿器科学会 2024'
+    },
+    common: [
+      { name: '尿線細・排尿困難', timing: '治療後 数週〜数か月', manage: 'α遮断薬で改善。前立腺肥大があると強い。' },
+      { name: '頻尿', timing: '治療後数か月', manage: '水分調整・カフェイン制限。' },
+      { name: '会陰部不快感', timing: '治療後 数日', manage: '徐々に改善。' }
+    ],
+    sometimes: [
+      { name: '直腸症状', timing: '治療後数か月', manage: '少量出血等。粘膜保護薬。' },
+      { name: '勃起障害', timing: '長期', manage: 'PDE5阻害薬で改善可能性。' }
+    ],
+    rare: [
+      { name: '尿閉', timing: '治療後', manage: 'カテーテル留置で対応。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '1週間程度の休養で復帰可能。' },
+      { icon: '🏠', title: '家事・育児', desc: '治療後 2か月は妊娠中・小児との長時間接触を避ける(放射線安全)。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 100-150万円</strong>(高額療養費後 <strong>約 8〜9万円</strong>)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '放射線安全のため初期数か月は子ども・妊婦との接触に注意。' }
+    ],
+    seniors: [
+      { name: 'D.N.さん', age: 64, cancer: '前立腺がんI ・ 小線源', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「2日入院で完了。1週間で仕事復帰しました」' }
+    ],
+    pubmed: [
+      { source: '日本Brachytherapy研究会', title: '小線源治療の長期成績', summary: '低-中リスクで根治率高。短期入院の利点。' }
+    ],
+    sdm: [
+      { q: '私のリスクグループで小線源は適応ですか?', checked: true },
+      { q: '排尿症状はどのくらい続きますか?', checked: true },
+      { q: '放射線安全の制限期間は?', checked: true },
+      { q: '効果判定はいつ?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'ADT': {
+    cancer: '前立腺がん', stage: 'II-IV', name: 'ホルモン療法(ADT)',
+    fullName: 'LH-RH アゴニスト / アンタゴニスト + 抗アンドロゲン薬',
+    people: 14400,
+    purposeType: '抑える ・ ホルモン療法',
+    purposeTitle: '男性ホルモンを抑えて、前立腺がんを抑制',
+    purposeDetail: '前立腺がんはテストステロンで増殖。LH-RH 注射 + 経口抗アンドロゲン薬で完全アンドロゲン遮断。',
+    purposeIcon: '💊',
+    regimen: {
+      meta: [
+        { label: 'LH-RH 注射', value: '1〜6か月に1回' },
+        { label: '抗アンドロゲン経口', value: '毎日' },
+        { label: '通院', value: '1〜3か月に1回' },
+        { label: '期間', value: '症例による(数年〜永久)' }
+      ],
+      cycleTitle: '注射 + 内服 ・ 長期治療'
+    },
+    eff: {
+      head: '進行例で生存期間 <span class="big">数年単位</span>',
+      detail: '転移性・進行例で大幅に進行を抑制。新規ホルモン薬との併用で更に効果向上。',
+      sources: '出典:日本泌尿器科学会ガイドライン 2024'
+    },
+    common: [
+      { name: 'ホットフラッシュ', timing: '治療開始 数週から', manage: '更年期様症状。漢方薬で軽減可能。' },
+      { name: '性欲低下・勃起障害', timing: '治療中継続', manage: '治療効果と引き換え。パートナーとのコミュニケーション大切。' },
+      { name: '骨粗鬆症リスク', timing: '長期', manage: '骨密度検査・カルシウム・運動。必要なら骨粗鬆症治療薬。' },
+      { name: '体重増加・代謝変化', timing: '長期', manage: '食事・運動で対策。' }
+    ],
+    sometimes: [
+      { name: '抑うつ', timing: '長期', manage: 'カウンセリング・抗うつ薬。' },
+      { name: '心血管リスク', timing: '長期', manage: '血圧・脂質管理。' }
+    ],
+    rare: [
+      { name: 'フレア現象(初回投与時の一時悪化)', timing: '注射開始時', manage: '抗アンドロゲン薬を先行投与で予防。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '通常勤務可能。注射日の通院のみ。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活通常通り。骨密度維持の運動を。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 3-15万円</strong>(高額療養費後 月 8-9万円)。長期治療で医療費控除。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: 'パートナーへの影響を共有。新規ホルモン薬の話題も主治医と。' }
+    ],
+    seniors: [
+      { name: 'G.W.さん', age: 72, cancer: '前立腺がんIV ・ ADT 5年目', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「ホットフラッシュは最初きつかったが慣れました。仕事も続けられています」' }
+    ],
+    pubmed: [
+      { source: '日本泌尿器科学会 2024', title: 'ADT の標準的使い方', summary: 'LH-RH + 抗アンドロゲンの完全遮断 vs 単独療法のエビデンス。' }
+    ],
+    sdm: [
+      { q: 'LH-RH アゴニスト と アンタゴニスト、どちらが私には適していますか?', checked: true },
+      { q: '完全アンドロゲン遮断は必要ですか?', checked: true },
+      { q: '骨密度はどうやって守りますか?', checked: true },
+      { q: '心血管リスクの管理は?', checked: true },
+      { q: '新規ホルモン薬の併用は?', checked: false },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'ENZALUTAMIDE': {
+    cancer: '前立腺がん', stage: 'IV', name: 'エンザルタミド',
+    fullName: 'イクスタンジ(CRPC の新規ホルモン薬)',
+    people: 4800,
+    purposeType: '抑える ・ 新規ホルモン薬',
+    purposeTitle: '去勢抵抗性前立腺がん(CRPC)に強く効く',
+    purposeDetail: '従来のホルモン療法で進行した CRPC で、アンドロゲン受容体を強力に阻害する経口薬。生存期間を有意に延長。',
+    purposeIcon: '🧬',
+    regimen: {
+      meta: [
+        { label: '服用', value: '1日1回 経口(160mg)' },
+        { label: '期間', value: '効果が続く限り' },
+        { label: '通院', value: '月1回 採血・診察' },
+        { label: 'タイミング', value: '食前・食後どちらでも' }
+      ],
+      cycleTitle: '毎日1回服用 ・ 長期治療'
+    },
+    eff: {
+      head: '全生存期間 中央値 <span class="big">35.3か月</span>',
+      detail: 'PREVAIL試験で、化学療法歴のない CRPC に対し全生存期間を有意に延長。',
+      sources: '出典:PREVAIL試験 (NEJM 2014) ・ 日本泌尿器科学会 2024'
+    },
+    common: [
+      { name: '倦怠感', timing: '随時', manage: '休息。' },
+      { name: '高血圧', timing: '随時', manage: '降圧薬で対応。家庭血圧測定。' },
+      { name: '便秘', timing: '随時', manage: '水分・繊維・運動・緩下剤。' }
+    ],
+    sometimes: [
+      { name: 'ホットフラッシュ', timing: '長期', manage: '従来ADTより軽度のことも。' },
+      { name: '骨折リスク', timing: '長期', manage: '骨密度検査・骨保護薬。' }
+    ],
+    rare: [
+      { name: '痙攣発作', timing: 'まれ', manage: '既往があれば事前申告。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '経口薬で通常勤務可能。月1回通院。' },
+      { icon: '🏠', title: '家事・育児', desc: '日常生活通常。血圧管理を意識。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 50-70万円</strong>(高額療養費後 月 8-9万円)。長期治療で医療費控除毎年。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '長期治療のため家族のサポートを継続。' }
+    ],
+    seniors: [
+      { name: 'E.Y.さん', age: 75, cancer: 'CRPC ・ エンザルタミド 3年目', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「ADT後に進行したが、エンザルタミドで PSA 抑えられています」' }
+    ],
+    pubmed: [
+      { source: 'PREVAIL試験 NEJM 2014', title: 'エンザルタミド vs プラセボ', summary: '全生存期間 35.3か月 vs 31.3か月。化学療法前 CRPC で標準。' }
+    ],
+    sdm: [
+      { q: 'なぜ私にエンザルタミドを勧めるのですか?', checked: true },
+      { q: '他の新規ホルモン薬(アビラテロン等)との違いは?', checked: true },
+      { q: '効果判定はどうやって?', checked: true },
+      { q: '副作用がつらい時、減量・休薬は?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  }
+,
+
+  /* ========== 膵がん:他治療 ========== */
+  'WHIPPLE': {
+    cancer: '膵がん', stage: 'I-III', name: '手術(膵頭十二指腸切除)',
+    fullName: '切除可能例の根治治療(難度高い大手術)',
+    people: 1968,
+    purposeType: '完治を目指す ・ 外科手術',
+    purposeTitle: '切除可能な膵がんに、根治のチャンス',
+    purposeDetail: '膵頭部 + 十二指腸 + 胆嚢 + 胆管下部 + 胃の一部を切除する大手術。完全切除できれば根治の可能性。',
+    purposeIcon: '✂️',
+    regimen: {
+      meta: [
+        { label: '入院期間', value: '3〜4週間' },
+        { label: '手術時間', value: '6〜10時間' },
+        { label: '麻酔', value: '全身麻酔' },
+        { label: '食事再開', value: '術後 5〜7日から段階的' }
+      ],
+      cycleTitle: '入院 → 大手術 → 集中治療室 → 一般病棟 → 退院 → 補助化学療法'
+    },
+    eff: {
+      head: '5年生存率 <span class="big">25〜40%</span>(切除例)',
+      detail: '切除可能な膵がんでは手術が唯一の根治治療。術後補助化学療法併用で生存率が向上。',
+      sources: '出典:日本膵臓学会ガイドライン 2024 ・ 日本肝胆膵外科学会'
+    },
+    common: [
+      { name: '体重減少', timing: '術後数か月', manage: '少量頻回食。膵酵素補充剤(リパクレオン等)。' },
+      { name: '消化吸収障害', timing: '長期', manage: '膵酵素補充剤継続。脂肪便への対応。' },
+      { name: '糖尿病', timing: '術後', manage: '血糖モニタリング。インスリン or 経口薬。' }
+    ],
+    sometimes: [
+      { name: '膵液瘻', timing: '術後 1〜2週', manage: 'ドレーンで管理。重症化すれば再手術。' },
+      { name: '胆汁瘻・出血', timing: '術後数日', manage: '医療者が観察。' }
+    ],
+    rare: [
+      { name: '腹腔内感染', timing: '術後 1〜3週', manage: '抗生剤・ドレナージ。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '2〜3か月の休養が必要。デスクワークなら段階的に。' },
+      { icon: '🏠', title: '家事・育児', desc: '少量頻回食を家族と共有。栄養士相談を継続。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 200-300万円</strong>(高額療養費後 <strong>約 8〜9万円</strong>)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '長期入院・回復期に家族のサポートが大きい。' }
+    ],
+    seniors: [
+      { name: 'Z.A.さん', age: 65, cancer: '膵がんIIA ・ ホイップル手術', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「3週間入院、半年でなんとか元の生活。膵酵素補充は欠かせません」' }
+    ],
+    pubmed: [
+      { source: '日本膵臓学会 2024', title: '膵頭十二指腸切除の長期成績', summary: '高難度手術だが、専門施設での実施で安全性向上。' }
+    ],
+    sdm: [
+      { q: '私のがんは切除可能ですか?(R0 切除の可能性)', checked: true },
+      { q: '術後補助化学療法は何を使いますか?', checked: true },
+      { q: '糖尿病になる可能性は?', checked: true },
+      { q: '消化吸収障害への対応は?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'FOLFIRINOX': {
+    cancer: '膵がん', stage: 'III-IV', name: 'FOLFIRINOX療法',
+    fullName: '5-FU + ロイコボリン + イリノテカン + オキサリプラチン',
+    people: 1842,
+    purposeType: '抑える ・ 強力な化学療法',
+    purposeTitle: '膵がんの第一選択化学療法',
+    purposeDetail: '4剤併用で強力な抗腫瘍効果。全身状態良好なら第一選択。副作用も強いため、慎重な管理が必要。',
+    purposeIcon: '🎯',
+    regimen: {
+      meta: [
+        { label: 'サイクル', value: '2週間ごと' },
+        { label: '期間', value: '効果が続く限り(目安 6か月)' },
+        { label: '投与', value: '点滴 + 持続(中心静脈ポート使用)' },
+        { label: '1回の時間', value: '約 4時間 + 持続点滴 46時間' }
+      ],
+      cycleTitle: '2週間サイクル ・ Day 1 が投与日'
+    },
+    eff: {
+      head: '全生存期間 中央値 <span class="big">11.1か月</span>',
+      detail: 'ACCORD試験で、ゲムシタビン単独より全生存期間が有意に延長。',
+      sources: '出典:ACCORD試験 (NEJM 2011) ・ 日本膵臓学会 2024'
+    },
+    common: [
+      { name: '骨髄抑制', timing: 'Day 7-14', manage: '採血で確認。G-CSF 投与で予防的に対応することも。' },
+      { name: '下痢', timing: 'Day 3-10', manage: 'イリノテカンの遅発性下痢に注意。ロペラミド・水分補給。' },
+      { name: '末梢神経障害', timing: '回数を重ねるごと', manage: 'オキサリプラチン特有。冷たいもの回避。' },
+      { name: '吐き気・倦怠感', timing: 'Day 1-7', manage: '制吐剤を予防的に。' }
+    ],
+    sometimes: [
+      { name: '発熱性好中球減少', timing: 'Day 7-14', manage: '38度以上はすぐ連絡。' },
+      { name: 'ポート部トラブル', timing: '通院ごと', manage: '発赤・痛みがあれば早めに伝える。' }
+    ],
+    rare: [
+      { name: '心毒性', timing: '蓄積で', manage: '心エコー定期検査。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '副作用が強い治療のため、就労継続は難しいことが多い。傷病手当金活用。' },
+      { icon: '🏠', title: '家事・育児', desc: 'Day 1-7 は休む、Day 8-14 は徐々に活動。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:長期で 100万円以上</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '副作用が強いため家族のサポートが大きい。緩和ケア併走も大切。' }
+    ],
+    seniors: [
+      { name: 'J.A.さん', age: 58, cancer: '膵がんIII ・ FOLFIRINOX', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「副作用は予想以上にきつかったが、家族と緩和ケアチームの支えで続けられました」' }
+    ],
+    pubmed: [
+      { source: 'ACCORD試験 NEJM 2011', title: 'FOLFIRINOX vs ゲムシタビン', summary: '全生存期間 11.1か月 vs 6.8か月。膵がんの第一選択。' }
+    ],
+    sdm: [
+      { q: '私の全身状態で FOLFIRINOX は適応ですか?(PS 0-1)', checked: true },
+      { q: 'ゲムシタビン + nab-PTX との違いは?', checked: true },
+      { q: '副作用がつらい時、減量・休薬は?', checked: true },
+      { q: '緩和ケアの併走はいつから?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'GEM_NAB': {
+    cancer: '膵がん', stage: 'III-IV', name: 'ゲムシタビン + nab-パクリタキセル',
+    fullName: 'GEM + nab-PTX(副作用比較的軽い標準的併用)',
+    people: 3344,
+    purposeType: '抑える ・ 化学療法',
+    purposeTitle: 'FOLFIRINOX より副作用軽めの選択肢',
+    purposeDetail: '全身状態が中程度の方や高齢者に。MPACT試験で生存期間延長が確認された標準併用療法。',
+    purposeIcon: '🎯',
+    regimen: {
+      meta: [
+        { label: 'サイクル', value: '4週間ごと(Day 1, 8, 15 投与・Day 22 休)' },
+        { label: '期間', value: '効果が続く限り' },
+        { label: '投与', value: '点滴・通院' },
+        { label: '1回の時間', value: '約 1〜2時間' }
+      ],
+      cycleTitle: '4週間サイクル'
+    },
+    eff: {
+      head: '全生存期間 中央値 <span class="big">8.5か月</span>',
+      detail: 'MPACT試験で、ゲムシタビン単独より全生存期間が有意に延長。',
+      sources: '出典:MPACT試験 (NEJM 2013) ・ 日本膵臓学会 2024'
+    },
+    common: [
+      { name: '骨髄抑制', timing: '随時', manage: '採血で確認。' },
+      { name: '末梢神経障害', timing: '回数を重ねるごと', manage: 'nab-パクリタキセル特有。' },
+      { name: '倦怠感', timing: '随時', manage: '休息。' },
+      { name: '脱毛', timing: '治療開始 2-3週から', manage: 'ウィッグ・帽子・スカーフ。' }
+    ],
+    sometimes: [
+      { name: '発熱性好中球減少', timing: '随時', manage: '38度以上はすぐ連絡。' },
+      { name: '皮膚症状', timing: '長期', manage: '保湿。' }
+    ],
+    rare: [
+      { name: 'アレルギー反応', timing: '点滴中', manage: '医療者が観察。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '副作用が比較的軽いため、調整次第で就労継続も。' },
+      { icon: '🏠', title: '家事・育児', desc: '体調に合わせた生活。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 30-50万円</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '長期治療のため家族のサポートを継続。' }
+    ],
+    seniors: [
+      { name: 'B.O.さん', age: 70, cancer: '膵がんIV ・ GEM+nab-PTX', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「FOLFIRINOXより楽でした。1年経過、生活も維持できています」' }
+    ],
+    pubmed: [
+      { source: 'MPACT試験 NEJM 2013', title: 'GEM + nab-PTX vs GEM 単独', summary: '全生存期間 8.5か月 vs 6.7か月。標準併用療法。' }
+    ],
+    sdm: [
+      { q: 'FOLFIRINOX との違いは?私にはどちらが適している?', checked: true },
+      { q: '副作用がつらい時、減量・休薬は?', checked: true },
+      { q: '効果判定はいつ?', checked: true },
+      { q: '緩和ケアの併走はいつから?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'GEM_S1': {
+    cancer: '膵がん', stage: 'III-IV', name: 'ゲムシタビン + S-1',
+    fullName: 'GEM + S-1(日本でよく使われる組み合わせ)',
+    people: 2464,
+    purposeType: '抑える ・ 化学療法',
+    purposeTitle: '日本で広く使われている膵がん化学療法',
+    purposeDetail: '点滴 + 経口の組み合わせで、副作用が比較的軽い。日本で多く用いられる治療法。',
+    purposeIcon: '🎯',
+    regimen: {
+      meta: [
+        { label: 'サイクル', value: '3週間ごと' },
+        { label: 'GEM', value: 'Day 1, 8 点滴' },
+        { label: 'S-1', value: 'Day 1-14 内服 + Day 15-21 休薬' },
+        { label: '期間', value: '効果が続く限り' }
+      ],
+      cycleTitle: '3週間サイクル'
+    },
+    eff: {
+      head: '全生存期間 中央値 <span class="big">10か月前後</span>',
+      detail: 'GEST試験で、ゲムシタビン単独と同等以上の効果。日本人での経験が豊富。',
+      sources: '出典:GEST試験 ・ 日本膵臓学会 2024'
+    },
+    common: [
+      { name: '骨髄抑制', timing: '随時', manage: '採血で確認。' },
+      { name: '下痢・口内炎(S-1)', timing: '内服期', manage: 'うがい励行・水分補給。' },
+      { name: '倦怠感', timing: '随時', manage: '休息。' }
+    ],
+    sometimes: [
+      { name: '皮膚症状(色素沈着)', timing: '長期', manage: '日焼け対策。' },
+      { name: '間質性肺炎', timing: 'まれ', manage: '空咳・息切れ はすぐ連絡。' }
+    ],
+    rare: [
+      { name: '溶血性尿毒症症候群', timing: 'まれ', manage: '定期検査で確認。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '副作用比較的軽く、調整次第で就労継続可能。' },
+      { icon: '🏠', title: '家事・育児', desc: '体調に合わせた生活。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>月額目安:約 20-40万円</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '家族のサポートを継続。' }
+    ],
+    seniors: [
+      { name: 'A.K.さん', age: 65, cancer: '膵がんIII ・ GEM+S-1', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「経口薬併用で通院も少なく、仕事を続けながら治療できました」' }
+    ],
+    pubmed: [
+      { source: 'GEST試験', title: 'GEM + S-1 の日本人での効果', summary: 'GEM 単独と同等以上の効果が確認されました。' }
+    ],
+    sdm: [
+      { q: 'FOLFIRINOX・GEM+nab-PTX との違いは?', checked: true },
+      { q: '副作用がつらい時、減量・休薬は?', checked: true },
+      { q: '効果判定はいつ?', checked: true },
+      { q: '緩和ケアの併走はいつから?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'CRT': {
+    cancer: '膵がん', stage: 'III', name: '化学放射線療法',
+    fullName: '局所進行例で化学療法と放射線を組み合わせ',
+    people: 1320,
+    purposeType: '抑える ・ 化学+放射線',
+    purposeTitle: '局所進行膵がんでの選択肢',
+    purposeDetail: '化学療法 + 放射線で、局所進行膵がんの病勢コントロール。手術不能例での選択肢。',
+    purposeIcon: '⚡',
+    regimen: {
+      meta: [
+        { label: '放射線', value: '25〜28回(5〜6週間)' },
+        { label: '化学療法', value: '同時併用(5-FU or S-1)' },
+        { label: '通院', value: '平日毎日 + 化学療法' },
+        { label: '期間', value: '5〜6週間' }
+      ],
+      cycleTitle: '5-6週間 集中治療'
+    },
+    eff: {
+      head: '全生存期間 中央値 <span class="big">15-18か月</span>',
+      detail: '局所進行膵がんで、化学放射線療法により病勢コントロール。' ,
+      sources: '出典:日本膵臓学会 2024 ・ JASPAC研究'
+    },
+    common: [
+      { name: '吐き気・食欲低下', timing: '治療中', manage: '制吐剤で対応。' },
+      { name: '倦怠感', timing: '治療中〜数週後', manage: '休息と栄養。' },
+      { name: '消化器症状', timing: '治療中', manage: '食事内容調整。' }
+    ],
+    sometimes: [
+      { name: '骨髄抑制', timing: '治療中', manage: '採血で確認。' },
+      { name: '皮膚反応', timing: '治療中', manage: '保湿。' }
+    ],
+    rare: [
+      { name: '消化管潰瘍', timing: '治療後', manage: '胃酸抑制薬。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '5-6週間の通院が必要。柔軟な勤務調整を。' },
+      { icon: '🏠', title: '家事・育児', desc: '治療期間中は体調に合わせて。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>総額目安:約 60-100万円</strong>(高額療養費後 月 8-9万円)。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '集中治療期間中の家族サポート。' }
+    ],
+    seniors: [
+      { name: 'P.S.さん', age: 60, cancer: '膵がんIII ・ 化学放射線', img: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「5週間集中通院。家族の送迎が支えでした」' }
+    ],
+    pubmed: [
+      { source: '日本膵臓学会 2024', title: '局所進行膵がんへの化学放射線療法', summary: '病勢コントロール・症状緩和に有効。' }
+    ],
+    sdm: [
+      { q: 'なぜ化学放射線療法を勧めるのですか?', checked: true },
+      { q: '化学療法は何を使いますか?', checked: true },
+      { q: '通院は何回必要ですか?', checked: true },
+      { q: '副作用がつらい時、休薬は?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  },
+
+  'EARLY_PC': {
+    cancer: '膵がん', stage: 'I-IV', name: '緩和ケア早期導入',
+    fullName: '症状緩和・QOL維持(膵がんでは早期からの導入推奨)',
+    people: 5280,
+    purposeType: '症状緩和 ・ QOL維持',
+    purposeTitle: '治療と並行して、QOLを守る',
+    purposeDetail: '膵がんは痛み・倦怠感・食欲低下が強いため、診断時から緩和ケアを並走させることが推奨されています。延命効果も報告されています。',
+    purposeIcon: '💝',
+    regimen: {
+      meta: [
+        { label: '導入', value: '診断時から並行' },
+        { label: '通院', value: '症状に応じて' },
+        { label: '専門医', value: '緩和ケア科 / ペインクリニック' },
+        { label: '在宅ケア', value: '訪問診療・訪問看護も活用' }
+      ],
+      cycleTitle: '治療と並走 ・ 症状に応じた柔軟な対応'
+    },
+    eff: {
+      head: 'QOL大幅向上 + <span class="big">生存期間延長</span> も報告',
+      detail: 'Temel et al. NEJM 2010 で、緩和ケア早期導入により QOL 向上と生存期間延長が確認。膵がんでは特に重要。',
+      sources: '出典:Temel et al. (NEJM 2010) ・ 日本緩和医療学会ガイドライン 2024'
+    },
+    common: [
+      { name: '副作用は治療によって異なる', timing: '対症療法', manage: '症状に応じた薬剤を細かく調整。痛み・吐き気・食欲・倦怠感・不安。' }
+    ],
+    sometimes: [
+      { name: '麻薬性鎮痛薬の副作用', timing: '随時', manage: '便秘・吐き気は予防的対応で軽減可能。「麻薬=怖い」誤解は不要。' }
+    ],
+    rare: [
+      { name: '在宅ケアの導入困難', timing: 'まれ', manage: 'ソーシャルワーカー相談で支援体制整備。' }
+    ],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '症状緩和により就労継続可能性が広がる。' },
+      { icon: '🏠', title: '家事・育児', desc: '症状コントロールで日常生活の質を維持。' },
+      { icon: '💰', title: 'お金のこと', desc: '<strong>緩和ケアは保険適用</strong>。訪問診療・訪問看護も保険適用。介護保険(40歳以上のがん患者)も活用可能。' },
+      { icon: '👨‍👩‍👧', title: '家族のこと', desc: '家族のグリーフケアも緩和ケアチームが支援。家族の負担軽減。' }
+    ],
+    seniors: [
+      { name: 'M.E.さん', age: 62, cancer: '膵がんIV ・ 化学療法 + 緩和ケア', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?fm=jpg&q=80&w=900&auto=format&fit=crop', quote: '「緩和ケアを早く始めて良かった。痛みコントロールができて家族と過ごせています」' }
+    ],
+    pubmed: [
+      { source: 'Temel et al. NEJM 2010', title: '進行肺がんへの緩和ケア早期導入', summary: 'QOL 改善 + 生存期間延長を報告。膵がんでも同様の効果が期待されます。' },
+      { source: '日本緩和医療学会 2024', title: '膵がんへの早期緩和ケア導入推奨', summary: '診断時から緩和ケア併走を強く推奨。' }
+    ],
+    sdm: [
+      { q: '緩和ケアと標準治療は同時に受けられますか?', checked: true },
+      { q: '痛みのコントロールはどのくらいできますか?', checked: true },
+      { q: '在宅ケアへの移行はいつ?', checked: true },
+      { q: '家族のサポートは受けられますか?', checked: true },
+      { q: '緩和ケア病棟への入院は?', checked: false }
+    ]
+  }
+,
+
+  /* ========== 汎用フォールバック ========== */
+  'SURGERY_GENERAL': {
+    cancer: 'がん', stage: '?', name: '手術療法',
+    fullName: 'がんを切除する治療(術式は主治医と相談)',
+    people: 60000,
+    purposeType: '完治を目指す ・ 外科手術',
+    purposeTitle: 'がんを切除して、根治を目指す',
+    purposeDetail: 'がんの部位・大きさ・進行度によって術式が決まります。主治医に詳しい説明を受けましょう。',
+    purposeIcon: '✂️',
+    regimen: { meta: [
+      { label: '入院期間', value: '部位による(数日〜2週間)' },
+      { label: '手術時間', value: '部位による(1〜10時間)' },
+      { label: '麻酔', value: '全身麻酔 が多い' },
+      { label: '回復期', value: '数週間〜数か月' }
+    ], cycleTitle: '入院 → 手術 → 退院 → 経過観察' },
+    eff: { head: 'がん種・ステージによる',
+      detail: '主治医に5年生存率・予後を確認しましょう。SATOIで一緒に質問を整理できます。',
+      sources: '出典:各がん種ガイドライン' },
+    common: [{ name: '創部痛・倦怠感', timing: '術後 数週', manage: '鎮痛薬・休息で対応。' }],
+    sometimes: [{ name: '感染・出血', timing: '術後', manage: '医療者が観察。' }],
+    rare: [{ name: '臓器損傷', timing: 'まれ', manage: '対応体制完備。' }],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '術式により休養期間が異なる。主治医に確認。' },
+      { icon: '💰', title: 'お金のこと', desc: '高額療養費制度活用。' }
+    ],
+    seniors: [], pubmed: [],
+    sdm: [
+      { q: 'どの術式が私には適していますか?', checked: true },
+      { q: '入院期間と回復期間は?', checked: true },
+      { q: '合併症のリスクは?', checked: true },
+      { q: '術後の治療は?', checked: true }
+    ]
+  },
+
+  'CHEMO_GENERAL': {
+    cancer: 'がん', stage: '?', name: '化学療法',
+    fullName: '抗がん剤による薬物療法',
+    people: 75000,
+    purposeType: '抑える ・ 化学療法',
+    purposeTitle: 'がん細胞の増殖を抑える',
+    purposeDetail: '抗がん剤の組み合わせ(レジメン)は、がん種・ステージ・遺伝子により決まります。',
+    purposeIcon: '🎯',
+    regimen: { meta: [
+      { label: 'サイクル', value: '2〜4週間ごと' },
+      { label: '期間', value: '効果と副作用次第' },
+      { label: '投与', value: '点滴 or 経口' },
+      { label: '通院', value: 'サイクルに応じて' }
+    ], cycleTitle: 'サイクルを繰り返す' },
+    eff: { head: 'レジメンとがん種による',
+      detail: '主治医に効果見込みを確認しましょう。',
+      sources: '出典:各がん種ガイドライン' },
+    common: [
+      { name: '吐き気・倦怠感', timing: '投与後 数日', manage: '制吐剤・休息。' },
+      { name: '骨髄抑制', timing: 'Day 7-14', manage: '採血で確認。' }
+    ],
+    sometimes: [{ name: '脱毛・末梢神経障害', timing: 'レジメンによる', manage: '対症療法。' }],
+    rare: [{ name: '重症アレルギー', timing: '点滴中', manage: '医療者が観察。' }],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: 'サイクルのリズムで計画。' },
+      { icon: '💰', title: 'お金のこと', desc: '高額療養費・がん保険給付確認。' }
+    ],
+    seniors: [], pubmed: [],
+    sdm: [
+      { q: 'どのレジメンが私には適していますか?', checked: true },
+      { q: 'サイクル数は?', checked: true },
+      { q: '副作用がつらい時、減量・休薬は?', checked: true },
+      { q: '効果判定はいつ?', checked: true }
+    ]
+  },
+
+  'RADIATION_GENERAL': {
+    cancer: 'がん', stage: '?', name: '放射線治療',
+    fullName: '放射線によりがん細胞を抑える治療',
+    people: 42000,
+    purposeType: '完治・抑制 ・ 放射線治療',
+    purposeTitle: '手術なしで がん を叩く',
+    purposeDetail: '高エネルギーX線等でがん細胞のDNA を傷つけ、増殖を抑えます。',
+    purposeIcon: '⚡',
+    regimen: { meta: [
+      { label: '回数', value: '5〜40回(部位・目的による)' },
+      { label: '通院', value: '平日毎日 が多い' },
+      { label: '1回の時間', value: '15〜30分' },
+      { label: '期間', value: '1〜8週間' }
+    ], cycleTitle: '通院のみ ・ 仕事継続可能なことが多い' },
+    eff: { head: '部位・線量による',
+      detail: '主治医に効果見込みを確認しましょう。',
+      sources: '出典:日本放射線腫瘍学会' },
+    common: [
+      { name: '皮膚反応', timing: '治療中〜数週', manage: '保湿・低刺激ケア。' },
+      { name: '倦怠感', timing: '治療後半', manage: '休息。' }
+    ],
+    sometimes: [{ name: '部位特有の症状', timing: '治療中〜後', manage: '対症療法。' }],
+    rare: [{ name: '長期合併症', timing: '数年後', manage: '定期検査。' }],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '通院だけで完結。仕事継続可能。' },
+      { icon: '💰', title: 'お金のこと', desc: '高額療養費活用。' }
+    ],
+    seniors: [], pubmed: [],
+    sdm: [
+      { q: '何回照射しますか?', checked: true },
+      { q: '副作用はどの程度ですか?', checked: true },
+      { q: '長期的な影響は?', checked: true },
+      { q: '効果判定はいつ?', checked: true }
+    ]
+  },
+
+  'TARGETED_GENERAL': {
+    cancer: 'がん', stage: '?', name: '分子標的薬',
+    fullName: 'がんの特定の分子を狙い撃ちする薬',
+    people: 28000,
+    purposeType: '抑える ・ 分子標的薬',
+    purposeTitle: 'あなたのがんに合う、ぴったりの薬',
+    purposeDetail: 'がん細胞の特定の分子(遺伝子変異等)を狙い撃ちすることで、効果と副作用のバランスが良好。コンパニオン診断が必要。',
+    purposeIcon: '🧬',
+    regimen: { meta: [
+      { label: '投与', value: '経口 or 点滴(薬による)' },
+      { label: '期間', value: '効果が続く限り' },
+      { label: '通院', value: '月1回程度' },
+      { label: 'コンパニオン診断', value: '事前に必須' }
+    ], cycleTitle: '長期治療 ・ 効果が続く限り' },
+    eff: { head: '適応陽性で大きな効果',
+      detail: 'コンパニオン診断陽性なら高い奏効率。',
+      sources: '出典:各がん種ガイドライン' },
+    common: [
+      { name: '皮膚症状', timing: '随時', manage: '保湿・低刺激スキンケア。' },
+      { name: '消化器症状', timing: '随時', manage: '対症療法。' }
+    ],
+    sometimes: [{ name: '間質性肺炎', timing: 'いつでも', manage: '空咳・息切れはすぐ連絡。' }],
+    rare: [{ name: '重症薬剤性肝障害', timing: 'まれ', manage: '定期血液検査。' }],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '経口薬中心で通常勤務可能。' },
+      { icon: '💰', title: 'お金のこと', desc: '高額療養費・限度額認定証を毎年。' }
+    ],
+    seniors: [], pubmed: [],
+    sdm: [
+      { q: '私のコンパニオン診断結果は?', checked: true },
+      { q: '効果判定はいつ?', checked: true },
+      { q: '副作用管理は?', checked: true },
+      { q: '耐性化したら次の選択肢は?', checked: true }
+    ]
+  },
+
+  'IMMUNO_GENERAL': {
+    cancer: 'がん', stage: '?', name: '免疫療法',
+    fullName: '免疫の力でがんを叩く治療',
+    people: 18000,
+    purposeType: '抑える ・ 免疫療法',
+    purposeTitle: '自分の免疫力で、がんを抑える',
+    purposeDetail: '免疫チェックポイント阻害薬等で、免疫細胞ががんを攻撃できるようにします。',
+    purposeIcon: '🛡️',
+    regimen: { meta: [
+      { label: '投与', value: '2〜3週間に1回 点滴' },
+      { label: '期間', value: '効果が続く限り' },
+      { label: '通院', value: '2〜3週間に1回' },
+      { label: '1回の時間', value: '30分〜1時間' }
+    ], cycleTitle: '2-3週間サイクル' },
+    eff: { head: '長期効果が期待できることが特徴',
+      detail: '一部の方では長期奏効が報告されています。',
+      sources: '出典:各がん種ガイドライン' },
+    common: [
+      { name: '倦怠感', timing: '随時', manage: '休息。' },
+      { name: '皮膚症状', timing: '随時', manage: '保湿。' }
+    ],
+    sometimes: [{ name: '甲状腺機能異常', timing: 'いつでも', manage: '採血確認・補充。' }],
+    rare: [{ name: '重症免疫関連有害事象', timing: 'いつでも', manage: '「いつもと違う」変化はすぐ連絡。' }],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '通常勤務可能な方多い。' },
+      { icon: '💰', title: 'お金のこと', desc: '高額療養費・限度額認定証。' }
+    ],
+    seniors: [], pubmed: [],
+    sdm: [
+      { q: '私には免疫療法が効きそうですか?', checked: true },
+      { q: '免疫関連副作用の早期発見は?', checked: true },
+      { q: '効果判定はいつ?', checked: true },
+      { q: 'いつまで続けますか?', checked: true }
+    ]
+  },
+
+  'GENERIC': {
+    cancer: 'がん', stage: '?', name: '治療法',
+    fullName: '治療詳細は主治医と相談しましょう',
+    people: 1200,
+    purposeType: '治療の目的を主治医と共有しましょう',
+    purposeTitle: 'この治療の目的',
+    purposeDetail: 'この治療があなたにとって何を目指すものなのか、主治医と一緒に確認することが、いちばん大切な第一歩です。',
+    purposeIcon: '🎯',
+    regimen: { meta: [
+      { label: 'スケジュール', value: '主治医に確認' },
+      { label: '期間', value: '個別判断' },
+      { label: '投与方法', value: '治療により異なる' },
+      { label: '通院頻度', value: '個別設定' }
+    ], cycleTitle: '一般的な治療リズム' },
+    eff: { head: '効果は、個別の状況で大きく異なります',
+      detail: 'がんのタイプ・進行度・体力・他の治療との組み合わせで、効果の見通しは変わります。主治医とSDMカードで話し合うのが最善です。',
+      sources: '出典:日本臨床腫瘍学会 ガイドライン 2025' },
+    common: [{ name: '一般的な副作用', timing: '治療により異なる', manage: '具体的な副作用は、選択された治療の薬剤情報をご確認ください。SATOIで主治医に質問カードを作成できます。' }],
+    sometimes: [], rare: [],
+    lifestyle: [
+      { icon: '💼', title: '仕事との両立', desc: '治療内容により異なります。主治医に「治療と仕事の両立」を相談してください。' },
+      { icon: '💰', title: 'お金のこと', desc: '高額療養費制度・医療費控除・がん保険給付 を確認しましょう。SATOIで一括サポート。' }
+    ],
+    seniors: [], pubmed: [],
+    sdm: [
+      { q: 'なぜ、この治療を勧めるのですか?', checked: true },
+      { q: 'この治療を受けない場合、どうなりますか?', checked: true },
+      { q: '他の選択肢はありますか?', checked: true },
+      { q: '副作用には、どんなものがありますか?', checked: true },
+      { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+    ]
+  }
+};
+
+// 汎用テンプレート(マッチしない治療用)
+const GENERIC_TEMPLATE = {
+  cancer: 'がん', stage: '?', name: '治療法',
+  fullName: '治療詳細',
+  people: 1200,
+  purposeType: '治療の目的を主治医と共有しましょう',
+  purposeTitle: 'この治療の目的',
+  purposeDetail: 'この治療があなたにとって何を目指すものなのか、主治医と一緒に確認することが、いちばん大切な第一歩です。',
+  purposeIcon: '🎯',
+  regimen: {
+    meta: [
+      { label: 'スケジュール', value: '主治医に確認' },
+      { label: '期間', value: '個別判断' },
+      { label: '投与方法', value: '治療により異なる' },
+      { label: '通院頻度', value: '個別設定' }
+    ],
+    cycleTitle: '一般的な治療リズム'
+  },
+  eff: {
+    head: '効果は、個別の状況で大きく異なります',
+    detail: 'がんのタイプ・進行度・体力・他の治療との組み合わせで、効果の見通しは変わります。主治医とSDMカードで話し合うのが最善です。',
+    sources: '出典:日本臨床腫瘍学会 ガイドライン 2025'
+  },
+  common: [
+    { name: '一般的な副作用', timing: '治療により異なる', manage: '具体的な副作用は、選択された治療の薬剤情報をご確認ください。SATOIで主治医に質問カードを作成できます。' }
+  ],
+  sometimes: [],
+  rare: [],
+  lifestyle: [
+    { icon: '💼', title: '仕事との両立', desc: '治療内容により異なります。主治医に「治療と仕事の両立」を相談してください。' },
+    { icon: '💰', title: 'お金のこと', desc: '高額療養費制度・医療費控除・がん保険給付 を確認しましょう。SATOIで一括サポート。' }
+  ],
+  seniors: [],
+  pubmed: [],
+  sdm: [
+    { q: 'なぜ、この治療を勧めるのですか?', checked: true },
+    { q: 'この治療を受けない場合、どうなりますか?', checked: true },
+    { q: '他の選択肢はありますか?', checked: true },
+    { q: '副作用には、どんなものがありますか?', checked: true },
+    { q: 'セカンドオピニオンを受けたいです、紹介状をいただけますか?', checked: false }
+  ]
+};
+
+/* ===== 起動 ===== */
+// cancer URLパラメータから治療を自動選択(明示的treatmentがあればそれ優先)
+let treatmentKey = (params.get('treatment') || '').toUpperCase();
+if (!treatmentKey && cancerParam && CANCER_TO_TREATMENT[cancerParam]) {
+  treatmentKey = CANCER_TO_TREATMENT[cancerParam];
+}
+if (!treatmentKey) treatmentKey = 'TC';
+// 2026-05-20:全38治療法 + 5汎用 + GENERIC を TREATMENTS オブジェクトに完全データとして実装済。
+// 未知のキーは GENERIC へフォールバック。
+const data = TREATMENTS[treatmentKey] || TREATMENTS['GENERIC'] || GENERIC_TEMPLATE;
+
+// パラメータでがん種・ステージを上書き可能
+const cancer = params.get('cancer') || sessionStorage.getItem('satoi_cancer') || data.cancer;
+const stage = params.get('stage') || data.stage;
+
+document.getElementById('hCrumb').textContent = `${cancer} ・ ステージ${stage} ・ ${data.name}`;
+document.getElementById('ctxCancer').textContent = cancer;
+document.getElementById('ctxStage').textContent = stage;
+document.getElementById('ctxName').textContent = data.name;
+document.getElementById('ctxFullname').textContent = data.fullName;
+document.getElementById('ctxPeople').textContent = data.people.toLocaleString();
+document.getElementById('purposeIcon').textContent = data.purposeIcon;
+document.getElementById('purposeType').textContent = data.purposeType;
+document.getElementById('purposeTitle').textContent = data.purposeTitle;
+document.getElementById('purposeDetail').innerHTML = data.purposeDetail;
+document.getElementById('cycleTitle').textContent = data.regimen.cycleTitle;
+document.getElementById('effHead').innerHTML = data.eff.head;
+document.getElementById('effDetail').innerHTML = data.eff.detail;
+document.getElementById('effSources').innerHTML = data.eff.sources;
+document.getElementById('sdmHTitle').textContent = `${data.name}について、聞きたいこと`;
+
+/* レジメンメタ */
+const rmEl = document.getElementById('regimenMeta');
+data.regimen.meta.forEach(m => {
+  rmEl.insertAdjacentHTML('beforeend',
+    `<div class="meta-card"><div class="meta-label">${m.label}</div><div class="meta-value">${m.value}</div></div>`);
+});
+
+/* サイクルカレンダー(21日 or 14日 or 30日) */
+const cgEl = document.getElementById('cycleGrid');
+const cycleLen = treatmentKey === 'FOLFOX' ? 14 : (treatmentKey === 'OSIMERTINIB' ? 14 : 21);
+const cyclePattern = {
+  'TC':       d => d === 1 ? 'invest' : (d >= 2 && d <= 4 ? 'peak' : (d >= 5 && d <= 10 ? 'recover' : (d === 14 || d === 15 ? 'test' : ''))),
+  'FOLFOX':   d => d === 1 ? 'invest' : (d >= 2 && d <= 3 ? 'peak' : (d >= 4 && d <= 10 ? 'recover' : (d === 13 ? 'test' : ''))),
+  'OSIMERTINIB': d => 'invest'
+};
+const pat = cyclePattern[treatmentKey] || (d => '');
+for (let d = 1; d <= cycleLen; d++) {
+  const cls = pat(d);
+  cgEl.insertAdjacentHTML('beforeend',
+    `<div class="cycle-day ${cls}" title="Day ${d}" onclick="satoiNotify('Day ${d}: ${cls === 'invest' ? '投与日' : (cls === 'peak' ? '副作用ピーク帯' : (cls === 'recover' ? '回復期' : (cls === 'test' ? '採血・診察' : '通常日')))}')">${d}</div>`);
+}
+
+/* 副作用 */
+function renderSide(arr, el) {
+  arr.forEach(s => {
+    el.insertAdjacentHTML('beforeend', `
+      <div class="side-item" onclick="this.classList.toggle('open')">
+        <div class="side-item-head">
+          <div class="side-item-name">${s.name}</div>
+          <div class="side-item-timing">${s.timing}</div>
+          <div class="side-item-arrow">▼</div>
+        </div>
+        <div class="side-item-body">${s.manage}</div>
+      </div>
+    `);
+  });
+}
+renderSide(data.common, document.getElementById('sideCommon'));
+renderSide(data.sometimes || [], document.getElementById('sideSometimes'));
+renderSide(data.rare || [], document.getElementById('sideRare'));
+
+/* 生活 */
+const lgEl = document.getElementById('lifestyleGrid');
+data.lifestyle.forEach(l => {
+  lgEl.insertAdjacentHTML('beforeend',
+    `<div class="lifestyle-card"><div class="lifestyle-icon">${l.icon}</div><div class="lifestyle-title">${l.title}</div><div class="lifestyle-desc">${l.desc}</div></div>`);
+});
+
+/* 先輩 */
+const sgEl = document.getElementById('seniorsGrid');
+(data.seniors || []).forEach(s => {
+  sgEl.insertAdjacentHTML('beforeend', `
+    <div class="senior-card" onclick="window.location.href='SATOI_Mock_v1_D1_stories.html'">
+      <div class="senior-img"><img src="${s.img}" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="senior-body">
+        <div class="senior-meta">${s.cancer}</div>
+        <div class="senior-name">${s.name} ・ ${s.age}歳</div>
+        <div class="senior-quote">${s.quote}</div>
+      </div>
+    </div>
+  `);
+});
+
+/* PubMed */
+const pmEl = document.getElementById('pubmedList');
+(data.pubmed || []).forEach(p => {
+  pmEl.insertAdjacentHTML('beforeend', `
+    <div class="pubmed-card">
+      <div class="pubmed-source">${p.source}</div>
+      <div class="pubmed-title">${p.title}</div>
+      <div class="pubmed-summary">${p.summary}</div>
+      <div class="pubmed-actions">
+        <button class="pubmed-action" onclick="window.open('https://pubmed.ncbi.nlm.nih.gov/?term=' + encodeURIComponent(this.closest('.pubmed-card').querySelector('.pubmed-title').textContent), '_blank')">医療者向け原文を見る(PubMed)</button>
+        <button class="pubmed-action" onclick="satoiNotify('✓ 家族向け要約PDFを生成\n\n専門用語を平易な言葉に翻訳し、A4一枚に整形しました。\nLINE / メール で家族に転送できます。')">家族に分かりやすく共有</button>
+        <button class="pubmed-action" onclick="satoiNotify('✓ SDMカードに連携\n\n「先生、こういう情報を見ました」として、次回診察の質問に追加されました。')">SDMカードに連携</button>
+      </div>
+    </div>
+  `);
+});
+
+/* SDM */
+const sdmEl = document.getElementById('sdmList');
+(data.sdm || []).forEach((s, i) => {
+  sdmEl.insertAdjacentHTML('beforeend',
+    `<div class="sdm-q ${s.checked ? 'checked' : ''}" onclick="toggleSdm(this)"><span class="sdm-check"></span><span>${s.q}</span></div>`);
+});
+
+function toggleSdm(el) { el.classList.toggle('checked'); }
+function addCustomSdmQ() {
+  const inp = document.getElementById('sdmCustomInput');
+  if (!inp || !inp.value.trim()) return;
+  const list = document.getElementById('sdmList');
+  list.insertAdjacentHTML('beforeend',
+    `<div class="sdm-q checked" onclick="toggleSdm(this)"><span class="sdm-check"></span><span>${inp.value.replace(/</g,'&lt;')}</span></div>`);
+  inp.value = '';
+}
+function sdmExport(type) {
+  const n = document.querySelectorAll('.sdm-q.checked').length;
+  const map = {
+    pdf:  `✓ PDF 出力(${n}問)\n\nA4一枚に整形して印刷できます。`,
+    qr:   `✓ QRコード生成(${n}問)\n\n診察室で先生のスマホに飛ばせます。`,
+    mail: `✓ メール送信(${n}問)\n\n主治医・登録済みご家族に送信できます。`,
+    save: `✓ 物語の壺に記録(${n}問)\n\nマイページに保存されました。`
+  };
+  alert(map[type] || '出力');
+}
+
+function scrollToSdm() {
+  document.querySelector('.sdm-block').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* 星 */
+(function genStars(){
+  const layer = document.getElementById('heroStars');
+  if (!layer) return;
+  for (let i=0; i<55; i++) {
+    const s = document.createElement('div');
+    s.className = 'h-star';
+    const sz = Math.random()*2.2 + 0.6;
+    s.style.width = sz + 'px'; s.style.height = sz + 'px';
+    s.style.left = (Math.random()*100) + '%';
+    s.style.top = (Math.random()*70) + '%';
+    s.style.animationDelay = (Math.random()*4) + 's';
+    s.style.animationDuration = (3 + Math.random()*2.5) + 's';
+    layer.appendChild(s);
+  }
+})();
+
+/* companion lamp */
+function toggleLamp() { document.getElementById('lampBubble').classList.toggle('show'); }
+setTimeout(() => document.getElementById('lampBubble').classList.add('show'), 2400);
+setTimeout(() => document.getElementById('lampBubble').classList.remove('show'), 9000);
+
+/* ticker */
+setInterval(() => {
+  const el = document.getElementById('tickerNum');
+  if (!el) return;
+  const cur = parseInt(el.textContent.replace(/,/g,''));
+  const next = cur + Math.floor(Math.random()*5) - 2;
+  el.textContent = Math.max(100, next).toLocaleString('en-US');
+}, 4500);
+
+/* 深夜モード */
+(function timeMode(){
+  const h = new Date().getHours();
+  const bubble = document.getElementById('lampBubble');
+  if (h >= 22 || h < 5) {
+    bubble.textContent = '眠れない夜は、ここで、ゆっくりしてください。';
+    document.getElementById('tickerNum').textContent = '143';
+  } else if (h >= 5 && h < 9) {
+    bubble.textContent = 'おはようございます。少しずつで、いいんです。';
+  }
+})();
+</script>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

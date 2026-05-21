@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - 自由診療・標準外マップ ・ あなたの気持ちを尊重</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --starlight: #D4A95E;
+  --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0;
+  --morning-cream: #F6EFE3;
+  --teal: #0D7377;
+  --teal-soft: #14A6AB;
+  --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A;
+  --warm-coral: #E08461;
+  --rose: #C76B7F;
+  --ink-deep: #1A2A40;
+  --ink-medium: rgba(26,42,64,0.78);
+  --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --evidence-low: #E0A56B;
+  --evidence-mid: #A8C0D8;
+  --evidence-high: #14A6AB;
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+body {
+  font-family: var(--font);
+  color: var(--ink-deep);
+  background: var(--morning-white);
+  line-height: 1.85;
+  font-size: 16px;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); cursor: pointer; }
+
+/* ヘッダー */
+.header {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(248,246,240,0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(11,23,54,0.06);
+}
+.logo { font-size: 20px; font-weight: 500; letter-spacing: 0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background:var(--rose); border-radius:50%; margin-right:10px; box-shadow:0 0 10px rgba(199,107,127,0.6); }
+.back-btn { padding: 8px 18px; background: transparent; color: var(--ink-medium); border: 1px solid rgba(11,23,54,0.18); border-radius: 20px; font-size: 12px; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+/* === スタンス・ヒーロー === */
+.stance-hero {
+  padding: 130px 32px 60px;
+  background: linear-gradient(135deg, rgba(199,107,127,0.08) 0%, var(--morning-cream) 50%, rgba(13,115,119,0.06) 100%);
+  text-align: center;
+  position: relative;
+}
+.stance-content { max-width: 800px; margin: 0 auto; }
+.stance-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  color: var(--rose);
+  padding: 6px 18px;
+  border: 1px solid rgba(199,107,127,0.4);
+  border-radius: 24px;
+  margin-bottom: 24px;
+}
+.stance-title {
+  font-size: clamp(28px, 4.5vw, 42px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--ink-deep);
+  margin-bottom: 20px;
+}
+.stance-title strong { color: var(--rose); font-weight: 600; }
+.stance-sub {
+  font-size: 15px;
+  color: var(--ink-medium);
+  line-height: 2;
+  margin-bottom: 26px;
+}
+.stance-pledge {
+  background: var(--morning-white);
+  border-radius: 18px;
+  padding: 22px 28px;
+  border-left: 4px solid var(--rose);
+  max-width: 660px;
+  margin: 0 auto;
+  text-align: left;
+}
+.stance-pledge-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--rose);
+  margin-bottom: 8px;
+}
+.stance-pledge-text { font-size: 13.5px; color: var(--ink-medium); line-height: 2; }
+
+/* === セクション === */
+.section { padding: 70px 32px; max-width: 1180px; margin: 0 auto; }
+.section-head { text-align: center; margin-bottom: 40px; }
+.section-eyebrow { font-size: 11px; letter-spacing: 0.36em; color: var(--warm-orange); margin-bottom: 12px; font-weight: 600; }
+.section-title { font-size: clamp(24px, 3.2vw, 32px); font-weight: 500; color: var(--ink-deep); margin-bottom: 12px; line-height: 1.5; }
+.section-sub { font-size: 14px; color: var(--ink-medium); max-width: 640px; margin: 0 auto; line-height: 1.85; }
+
+/* === エビデンスレベル凡例 === */
+.legend {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  padding: 16px; background: var(--morning-cream); border-radius: 14px;
+  margin-bottom: 30px;
+}
+.legend-item {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--ink-medium);
+}
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+/* === マップエリア === */
+.map-wrap {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  margin-top: 24px;
+}
+.map-area {
+  position: relative;
+  height: 540px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #DDE7EA 0%, #C3D4DA 100%);
+  border: 1px solid var(--line);
+}
+.map-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.map-pin {
+  position: absolute;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 3px solid white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+.map-pin:hover {
+  transform: scale(1.3);
+  z-index: 20;
+}
+.map-pin.low { background: var(--evidence-low); }
+.map-pin.mid { background: var(--evidence-mid); color: var(--ink-deep); }
+.map-pin.high { background: var(--evidence-high); }
+
+.map-label {
+  position: absolute;
+  bottom: 16px; left: 16px;
+  background: rgba(11,23,54,0.86);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-size: 12px;
+  z-index: 10;
+}
+
+/* === リスト === */
+.clinics-list {
+  background: var(--morning-cream);
+  border-radius: 18px;
+  padding: 22px;
+  height: 540px;
+  overflow-y: auto;
+}
+.clinics-list h4 {
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: var(--ink-deep);
+  margin-bottom: 14px;
+}
+.clinic-card {
+  background: var(--morning-white);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  border-left: 3px solid;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.clinic-card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(11,23,54,0.10); }
+.clinic-card.low { border-left-color: var(--evidence-low); }
+.clinic-card.mid { border-left-color: var(--evidence-mid); }
+.clinic-card.high { border-left-color: var(--evidence-high); }
+.clinic-name { font-size: 14.5px; font-weight: 600; color: var(--ink-deep); margin-bottom: 4px; }
+.clinic-meta { font-size: 11.5px; color: var(--ink-light); margin-bottom: 8px; }
+.clinic-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.clinic-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  padding: 3px 8px;
+  background: rgba(11,23,54,0.06);
+  border-radius: 8px;
+  color: var(--ink-medium);
+}
+.clinic-tag.evidence-low { background: rgba(224,165,107,0.18); color: #8B5A1F; }
+.clinic-tag.evidence-mid { background: rgba(168,192,216,0.20); color: #4A6B8A; }
+.clinic-tag.evidence-high { background: rgba(20,166,171,0.18); color: var(--teal); }
+
+/* === 治療カテゴリ === */
+.tx-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 30px;
+}
+.tx-cat-card {
+  background: var(--morning-white);
+  padding: 22px 22px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+.tx-cat-card:hover { border-color: var(--starlight); transform: translateY(-3px); box-shadow: 0 10px 26px rgba(11,23,54,0.08); }
+.tx-cat-title { font-size: 16px; font-weight: 600; color: var(--ink-deep); margin-bottom: 6px; }
+.tx-cat-evidence {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.tx-cat-evidence.low { background: rgba(224,165,107,0.18); color: #8B5A1F; }
+.tx-cat-evidence.mid { background: rgba(168,192,216,0.20); color: #4A6B8A; }
+.tx-cat-evidence.high { background: rgba(20,166,171,0.18); color: var(--teal); }
+.tx-cat-desc { font-size: 12.5px; color: var(--ink-medium); line-height: 1.8; }
+
+/* === 質問カード === */
+.ask-cta {
+  background: linear-gradient(135deg, rgba(199,107,127,0.10), rgba(212,98,42,0.10));
+  border-radius: 20px;
+  padding: 36px 32px;
+  margin-top: 40px;
+  text-align: center;
+}
+.ask-cta h3 { font-size: 22px; font-weight: 500; color: var(--ink-deep); margin-bottom: 8px; }
+.ask-cta p { font-size: 14px; color: var(--ink-medium); margin-bottom: 22px; line-height: 1.85; }
+.ask-cta-btn {
+  padding: 14px 28px;
+  background: var(--rose);
+  color: white;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(199,107,127,0.3);
+}
+.ask-cta-btn:hover { background: #B85870; }
+
+@media (max-width: 768px) {
+  .map-wrap { grid-template-columns: 1fr; }
+  .map-area, .clinics-list { height: 420px; }
+  .stance-hero { padding: 110px 18px 50px; }
+  .section { padding: 50px 18px; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) {
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+
+
+/* === SATOI 共通モバイル対応(iPad/iPhone)=== */
+@media (max-width: 1024px) {
+  /* iPad 縦 ・ ヘッダー狭め */
+  .header { padding: 14px 22px !important; }
+  .section, .wrap, .container, main, .main { padding-left: 22px !important; padding-right: 22px !important; }
+}
+@media (max-width: 768px) {
+  /* iPhone ・ 主要メトリクスをモバイル最適化 */
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title, .hero-title-l1 { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title, .nbm-title, .mission-line { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  .section, .container, .wrap, main, .main, section { padding-left: 14px !important; padding-right: 14px !important; }
+  section, .section { padding-top: 50px !important; padding-bottom: 50px !important; }
+  /* グリッドを1列に */
+  .grid, .cards, .types-grid, .stories-grid, .forum-grid, .family-grid, .promise-list, .partner-grid, .gov-grid, .numbers-grid, .empse-grid, .pubmed-list, .sources-grid, .criteria-grid, .tx-cat-grid, .map-wrap, .emg-grid, .emg-consent-grid, .emg-contacts, .kids-talk-wrap, .cat-grid, .videos-grid, .cat-cards, .partner-cards, .promise-cards, .principle-cards, .pricing-grid, .pricing-cards, .step-cards, .info-cards, .role-cards, .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* 横スクロールのみ許す要素は残す */
+  .b1-journey-bar, .journey-bar, .types-tabs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  /* ヒーローの padding 圧縮 */
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  /* 大きい見出し */
+  .opener-line { font-size: 24px !important; margin-bottom: 40px !important; }
+  /* タップ領域 44px 最低 */
+  .btn, button, .login-btn, .nav-mini a, .filter-chip, .cat-card, .type-card, .story-card, .forum-card { min-height: 40px; }
+  /* テーブル横スクロール */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* マイチーム ホイール → 縦並びに */
+  .team-wheel-wrap, .team-wheel { width: 100% !important; height: auto !important; min-height: 360px; }
+  /* モーダル系: 画面いっぱいに */
+  .modal, .overlay-modal, [class*='Modal'], [class*='modal'] { max-width: 100vw !important; }
+  /* ナビ縮小 */
+  .nav-mini, .nav { gap: 12px !important; font-size: 12px !important; }
+  /* フォーム入力 */
+  input, textarea, select { font-size: 16px !important; } /* iOSのズーム防止 */
+  /* SVG レーダーチャートの収まり */
+  .empse-chart, .empse-chart-wrap { width: 100% !important; max-width: 320px; height: auto !important; margin: 0 auto !important; }
+  /* B1 7ステップを横スクロールに */
+  .steps-row { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 10px; }
+  .steps-row .step { flex-shrink: 0; min-width: 80px; }
+  /* G2 サイドナビは画面下部固定 or hamburger 想定 */
+  .sidebar, .side-nav, .g2-sidebar { position: relative !important; width: 100% !important; height: auto !important; overflow-x: auto !important; display: flex !important; }
+}
+@media (max-width: 480px) {
+  /* 極小画面 */
+  .hero { padding: 80px 12px 40px !important; }
+  .b1-journey-bar { padding: 8px 10px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+
+/* === SATOI ユニバーサル横断ナビ(戻る/ホーム/言語) === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-univ-btn[title]::after { content: attr(title); position: absolute; right: 54px; background: rgba(11,23,54,0.92); color: #F8F6F0; font-size: 11px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.satoi-univ-btn:hover::after { opacity: 1; }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_B1_hub.html" class="logo"><span class="dot"></span>SATOI ・ 自由診療マップ</a>
+  <button class="back-btn" onclick="history.back()">← 戻る</button>
+</header>
+
+<!-- スタンス・ヒーロー -->
+<section class="stance-hero">
+  <div class="stance-content">
+    <div class="stance-eyebrow">OUR STANCE</div>
+    <h1 class="stance-title">標準治療の<strong>外側</strong>を、<br>選びたい時もあります。</h1>
+    <p class="stance-sub">
+      私たちは標準治療を最も推奨します。<br>
+      でも、「標準だけでは納得できない」「もっと自分らしく治したい」という気持ちも、否定しません。<br>
+      情報を <strong>エビデンスの強さで色分け</strong> して、フェアに並べます。
+    </p>
+    <div class="stance-pledge">
+      <div class="stance-pledge-title">📜 SATOI の約束</div>
+      <div class="stance-pledge-text">
+        ・ 標準治療を <strong>否定する自由診療は、リストに載せません</strong>(主治医を変える前提のもののみ追加検討)<br>
+        ・ <strong>科学的根拠</strong>(エビデンス)を3段階で明示<br>
+        ・ <strong>費用</strong> を可能な限り公開・透明化<br>
+        ・ <strong>「主治医に相談してから検討」</strong> を必ず推奨
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- マップ -->
+<section class="section">
+  <div class="section-head">
+    <div class="section-eyebrow">CLINIC MAP</div>
+    <h2 class="section-title">あなたの近くの、自由診療クリニック</h2>
+    <p class="section-sub">
+      6施設をプロット(東京エリア例 ・ デモ用)。<br>
+      ピンの色で <strong>エビデンスレベル</strong> が分かります。詳細は右のリストから。
+    </p>
+  </div>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:var(--evidence-low);"></span> 低 ・ 症例報告レベル</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--evidence-mid);"></span> 中 ・ 観察研究あり</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--evidence-high);"></span> 高 ・ RCT/メタ解析</span>
+  </div>
+
+  <div class="map-wrap">
+    <div class="map-area" id="mapArea">
+      <!-- 簡易マップ背景 SVG -->
+      <svg class="map-svg" viewBox="0 0 800 540" xmlns="http://www.w3.org/2000/svg">
+        <!-- 海・陸 -->
+        <rect x="0" y="0" width="800" height="540" fill="#DDE7EA"/>
+        <path d="M 0,150 Q 100,140 200,160 T 400,170 T 600,150 T 800,170 L 800,540 L 0,540 Z" fill="#E8EFE6"/>
+        <!-- 道路グリッド -->
+        <g stroke="rgba(11,23,54,0.10)" stroke-width="1" fill="none">
+          <line x1="0" y1="200" x2="800" y2="200"/>
+          <line x1="0" y1="280" x2="800" y2="280"/>
+          <line x1="0" y1="360" x2="800" y2="360"/>
+          <line x1="0" y1="440" x2="800" y2="440"/>
+          <line x1="160" y1="150" x2="160" y2="540"/>
+          <line x1="320" y1="150" x2="320" y2="540"/>
+          <line x1="480" y1="150" x2="480" y2="540"/>
+          <line x1="640" y1="150" x2="640" y2="540"/>
+        </g>
+        <!-- 主要道路 -->
+        <g stroke="rgba(248,246,240,0.85)" stroke-width="6" fill="none">
+          <path d="M 0,300 Q 200,280 400,310 T 800,300"/>
+          <path d="M 400,150 L 400,540"/>
+        </g>
+        <!-- 河川 -->
+        <path d="M 200,540 Q 220,400 280,300 T 350,150" stroke="#9EBCD0" stroke-width="14" fill="none" opacity="0.6"/>
+        <!-- 緑地 -->
+        <circle cx="180" cy="380" r="36" fill="#C5D8B5" opacity="0.55"/>
+        <circle cx="620" cy="220" r="42" fill="#C5D8B5" opacity="0.55"/>
+        <!-- ランドマーク -->
+        <text x="400" y="510" text-anchor="middle" font-size="11" fill="rgba(11,23,54,0.45)" font-family="Noto Sans JP">東京駅 (中央)</text>
+        <text x="200" y="80" text-anchor="middle" font-size="11" fill="rgba(11,23,54,0.45)" font-family="Noto Sans JP">新宿エリア</text>
+        <text x="600" y="80" text-anchor="middle" font-size="11" fill="rgba(11,23,54,0.45)" font-family="Noto Sans JP">六本木・赤坂</text>
+        <text x="100" y="490" text-anchor="middle" font-size="11" fill="rgba(11,23,54,0.45)" font-family="Noto Sans JP">渋谷</text>
+        <text x="700" y="450" text-anchor="middle" font-size="11" fill="rgba(11,23,54,0.45)" font-family="Noto Sans JP">築地</text>
+      </svg>
+
+      <!-- ピン -->
+      <div class="map-pin high" style="top: 28%; left: 22%;" data-id="c1" title="銀座統合医療クリニック">1</div>
+      <div class="map-pin mid" style="top: 45%; left: 38%;" data-id="c2" title="新宿温熱療法センター">2</div>
+      <div class="map-pin low" style="top: 38%; left: 56%;" data-id="c3" title="赤坂免疫細胞療法">3</div>
+      <div class="map-pin high" style="top: 62%; left: 28%;" data-id="c4" title="渋谷ハイパーサーミア">4</div>
+      <div class="map-pin mid" style="top: 70%; left: 60%;" data-id="c5" title="築地統合医療">5</div>
+      <div class="map-pin low" style="top: 52%; left: 70%;" data-id="c6" title="六本木水素吸入">6</div>
+
+      <div class="map-label">📍 東京エリア ・ デモ表示</div>
+    </div>
+
+    <!-- リスト -->
+    <div class="clinics-list">
+      <h4>6施設(エビデンス順)</h4>
+      <div class="clinic-card high" data-id="c1" onclick="openClinic('c1')">
+        <div class="clinic-name">1. 銀座統合医療クリニック</div>
+        <div class="clinic-meta">銀座1丁目 ・ 03-XXXX-XXXX</div>
+        <div class="clinic-tags">
+          <span class="clinic-tag evidence-high">エビデンス: 高</span>
+          <span class="clinic-tag">標準治療併用</span>
+          <span class="clinic-tag">主治医連携◯</span>
+        </div>
+      </div>
+      <div class="clinic-card high" data-id="c4" onclick="openClinic('c4')">
+        <div class="clinic-name">4. 渋谷ハイパーサーミア</div>
+        <div class="clinic-meta">渋谷桜丘 ・ 03-YYYY-YYYY</div>
+        <div class="clinic-tags">
+          <span class="clinic-tag evidence-high">エビデンス: 高</span>
+          <span class="clinic-tag">温熱療法</span>
+          <span class="clinic-tag">3割保険適用</span>
+        </div>
+      </div>
+      <div class="clinic-card mid" data-id="c2" onclick="openClinic('c2')">
+        <div class="clinic-name">2. 新宿温熱療法センター</div>
+        <div class="clinic-meta">新宿西口 ・ 03-AAAA-AAAA</div>
+        <div class="clinic-tags">
+          <span class="clinic-tag evidence-mid">エビデンス: 中</span>
+          <span class="clinic-tag">高濃度ビタミンC</span>
+          <span class="clinic-tag">¥30,000/回</span>
+        </div>
+      </div>
+      <div class="clinic-card mid" data-id="c5" onclick="openClinic('c5')">
+        <div class="clinic-name">5. 築地統合医療</div>
+        <div class="clinic-meta">築地2丁目 ・ 03-BBBB-BBBB</div>
+        <div class="clinic-tags">
+          <span class="clinic-tag evidence-mid">エビデンス: 中</span>
+          <span class="clinic-tag">サプリ・食事療法</span>
+          <span class="clinic-tag">初診¥15,000</span>
+        </div>
+      </div>
+      <div class="clinic-card low" data-id="c3" onclick="openClinic('c3')">
+        <div class="clinic-name">3. 赤坂免疫細胞療法</div>
+        <div class="clinic-meta">赤坂4丁目 ・ 03-CCCC-CCCC</div>
+        <div class="clinic-tags">
+          <span class="clinic-tag evidence-low">エビデンス: 低</span>
+          <span class="clinic-tag">自家NK細胞</span>
+          <span class="clinic-tag">¥1,500,000〜</span>
+        </div>
+      </div>
+      <div class="clinic-card low" data-id="c6" onclick="openClinic('c6')">
+        <div class="clinic-name">6. 六本木水素吸入</div>
+        <div class="clinic-meta">六本木6丁目 ・ 03-DDDD-DDDD</div>
+        <div class="clinic-tags">
+          <span class="clinic-tag evidence-low">エビデンス: 低</span>
+          <span class="clinic-tag">水素・高気圧酸素</span>
+          <span class="clinic-tag">¥8,000/回</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 治療カテゴリ別 -->
+<section class="section">
+  <div class="section-head">
+    <div class="section-eyebrow">TREATMENT CATEGORIES</div>
+    <h2 class="section-title">治療カテゴリ別の、エビデンス</h2>
+    <p class="section-sub">それぞれの治療法について、現時点での科学的根拠の強さをフェアに表示します。</p>
+  </div>
+
+  <div class="tx-cat-grid">
+    <div class="tx-cat-card" onclick="openCat('hyperthermia')">
+      <div class="tx-cat-title">温熱療法(ハイパーサーミア)</div>
+      <div class="tx-cat-evidence high">エビデンス: 高</div>
+      <div class="tx-cat-desc">放射線・化学療法との併用で効果。一部がんで保険適用。RCTでDFS改善。</div>
+    </div>
+    <div class="tx-cat-card" onclick="openCat('vitamin-c')">
+      <div class="tx-cat-title">高濃度ビタミンC点滴</div>
+      <div class="tx-cat-evidence mid">エビデンス: 中</div>
+      <div class="tx-cat-desc">QOL改善の観察研究あり。腫瘍縮小効果はRCTで未確認。費用¥30,000/回。</div>
+    </div>
+    <div class="tx-cat-card" onclick="openCat('integrative')">
+      <div class="tx-cat-title">統合医療(食事・サプリ・運動)</div>
+      <div class="tx-cat-evidence mid">エビデンス: 中</div>
+      <div class="tx-cat-desc">食事介入・運動はQOL改善のRCTあり。サプリは個別の根拠を確認推奨。</div>
+    </div>
+    <div class="tx-cat-card" onclick="openCat('immune-cell')">
+      <div class="tx-cat-title">自家免疫細胞療法</div>
+      <div class="tx-cat-evidence low">エビデンス: 低</div>
+      <div class="tx-cat-desc">臨床試験段階。費用¥1,500,000〜。標準治療と併用前提でも要相談。</div>
+    </div>
+    <div class="tx-cat-card" onclick="openCat('hydrogen')">
+      <div class="tx-cat-title">水素吸入・高気圧酸素</div>
+      <div class="tx-cat-evidence low">エビデンス: 低</div>
+      <div class="tx-cat-desc">基礎研究レベル。ヒト試験は症例報告中心。費用対効果に注意。</div>
+    </div>
+    <div class="tx-cat-card" onclick="openCat('acupuncture')">
+      <div class="tx-cat-title">鍼灸・東洋医学</div>
+      <div class="tx-cat-evidence mid">エビデンス: 中</div>
+      <div class="tx-cat-desc">化学療法の副作用(吐き気・しびれ)軽減で観察研究あり。WHO推奨疾患も。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 質問カード -->
+<section class="section">
+  <div class="ask-cta">
+    <h3>主治医に、こう聞いてみませんか?</h3>
+    <p>
+      「先生、自由診療の◯◯を検討しているのですが、<br>
+      標準治療との併用は問題ないでしょうか?副作用や相互作用が気になります。」
+    </p>
+    <button class="ask-cta-btn" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?from=freemap&sdm=1&topic=alternative'">SDM質問カードを作る →</button>
+  </div>
+</section>
+
+<script>
+
+/* === SATOI 共通リッチトースト関数 === */
+(function ensureToastHost(){
+  if (document.getElementById('satoi-toast-host')) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div');
+      host.id = 'satoi-toast-host';
+      document.body.appendChild(host);
+    }
+  });
+  if (document.body && !document.getElementById('satoi-toast-host')) {
+    const host = document.createElement('div');
+    host.id = 'satoi-toast-host';
+    document.body.appendChild(host);
+  }
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) {
+    html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  }
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+// 既存の alert を全て satoiNotify にフォールバック(他コードからのalert呼び出しもキャッチ)
+window.__origAlert = window.alert;
+
+/* === SATOI ユニバーサル横断ナビ JS === */
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div');
+    nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る" aria-label="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム" aria-label="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ" aria-label="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語" aria-label="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn');
+    const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const lang = b.dataset.lang;
+        const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+        if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+        document.documentElement.lang = lang;
+        langPop.classList.remove('show');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+
+const CLINIC_DETAIL = {
+  c1: { name: '銀座統合医療クリニック', evidence: '高', treatments: 'ハイパーサーミア(保険適用)・運動療法・栄養指導', stance: '主治医と連携・標準治療を補完する立場', cost: '¥10,000〜30,000/回(保険適用範囲あり)' },
+  c2: { name: '新宿温熱療法センター', evidence: '中', treatments: '高濃度ビタミンC点滴 ・ ハイパーサーミア(自費)', stance: 'QOL改善目的 ・ 主治医への報告書を発行', cost: '初診¥10,000 ・ 点滴¥30,000/回' },
+  c3: { name: '赤坂免疫細胞療法', evidence: '低', treatments: '自家NK細胞療法 ・ 樹状細胞ワクチン', stance: '臨床試験段階 ・ 慎重な相談を推奨', cost: '¥1,500,000〜(6か月コース)' },
+  c4: { name: '渋谷ハイパーサーミア', evidence: '高', treatments: '深部加温療法(8MHz RF)・放射線併用', stance: '主治医からの紹介状必須 ・ 拠点病院連携', cost: '¥10,000/回(3割保険適用)' },
+  c5: { name: '築地統合医療', evidence: '中', treatments: 'マインドフルネス・栄養指導・鍼灸', stance: '心身ケア中心 ・ 標準治療と並行', cost: '初診¥15,000 ・ 月¥30,000〜' },
+  c6: { name: '六本木水素吸入', evidence: '低', treatments: '水素吸入 ・ 高気圧酸素 ・ オゾン療法', stance: '症例報告レベル ・ 費用対効果に注意', cost: '¥8,000/回' },
+};
+
+function openClinic(id) {
+  const c = CLINIC_DETAIL[id];
+  if (!c) return;
+  alert(`【${c.name}】\n\nエビデンス: ${c.evidence}\n施術内容: ${c.treatments}\nスタンス: ${c.stance}\n費用: ${c.cost}\n\n主治医に相談してから、検討されることを推奨します。\nSDM質問カードを作成しますか?`);
+}
+
+const CAT_DETAIL = {
+  'hyperthermia': '温熱療法は42-43℃で腫瘍を加温。放射線・化学療法との併用RCTでDFS改善。一部保険適用あり。',
+  'vitamin-c': '高濃度ビタミンC点滴は腫瘍縮小のRCT根拠が乏しいが、QOL改善の観察研究あり。',
+  'integrative': '統合医療(運動・食事・マインドフルネス)はQOL改善でレベル1エビデンスあり。サプリは個別評価が必要。',
+  'immune-cell': '自家免疫細胞療法は臨床試験段階。費用が高額で標準治療を諦めないよう注意。',
+  'hydrogen': '水素吸入は基礎研究レベル。ヒト効果はまだ症例報告中心。',
+  'acupuncture': '鍼灸はWHOで化学療法副作用への有効性を認定。吐き気・しびれの軽減に効果。',
+};
+function openCat(k) {
+  alert(CAT_DETAIL[k] + '\n\n詳細を学術ページで見ますか?');
+  // 学術ページへ
+  setTimeout(() => {
+    if (confirm('学術ページで PubMed 検索しますか?')) {
+      location.href = 'SATOI_Mock_v1_ACAD_research.html?topic=' + k;
+    }
+  }, 200);
+}
+
+/* ピンクリック → リストの該当カードへ */
+document.querySelectorAll('.map-pin').forEach(pin => {
+  pin.addEventListener('click', () => {
+    const id = pin.dataset.id;
+    const card = document.querySelector(`.clinic-card[data-id="${id}"]`);
+    if (card) {
+      card.style.background = 'rgba(212,98,42,0.10)';
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => { card.style.background = ''; }, 1600);
+    }
+    openClinic(id);
+  });
+});
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

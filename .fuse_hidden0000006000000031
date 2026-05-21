@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - Satoiができること</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --starlight: #D4A95E;
+  --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0;
+  --morning-cream: #F6EFE3;
+  --teal: #0D7377;
+  --teal-soft: #14A6AB;
+  --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A;
+  --warm-coral: #E08461;
+  --rose: #C76B7F;
+  --ink-deep: #1A2A40;
+  --ink-medium: rgba(26,42,64,0.78);
+  --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+body {
+  font-family: var(--font);
+  color: var(--ink-deep);
+  background: linear-gradient(180deg, #0B1736 0%, #1A2548 30%, #2E3A5C 60%, #D8A98A 82%, #F6EFE3 92%, #FBF7F0 100%);
+  background-attachment: fixed;
+  line-height: 1.85;
+  font-size: 16px;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); cursor: pointer; }
+
+/* === ヘッダー === */
+.header {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(11,23,54,0.7), rgba(11,23,54,0));
+  backdrop-filter: blur(10px);
+}
+.logo { font-size: 20px; font-weight: 500; letter-spacing: 0.22em; color: var(--morning-white); display: inline-flex; align-items: center; }
+.logo .dot { width: 8px; height: 8px; background: var(--starlight); border-radius: 50%; margin-right: 10px; box-shadow: 0 0 12px var(--starlight); }
+.back-btn { padding: 8px 18px; background: rgba(248,246,240,0.10); color: var(--morning-white); border: 1px solid rgba(248,246,240,0.30); border-radius: 20px; font-size: 12px; }
+
+/* === ヒーロー(夜空)=== */
+.hero {
+  padding: 130px 32px 60px;
+  text-align: center;
+  color: var(--morning-white);
+  position: relative;
+}
+.hero-title { transition: opacity 1.2s ease, transform 1.2s ease; opacity: 0.42; }
+.hero-sub { transition: opacity 1.4s ease 0.2s; opacity: 0.32; }
+.hero-eyebrow { transition: opacity 1s ease; opacity: 0.6; }
+body.scrolled .hero-title { opacity: 1; transform: translateY(-4px); }
+body.scrolled .hero-sub { opacity: 0.92; }
+body.scrolled .hero-eyebrow { opacity: 1; }
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  color: var(--starlight);
+  padding: 6px 18px;
+  border: 1px solid rgba(212,169,94,0.4);
+  border-radius: 24px;
+  margin-bottom: 24px;
+}
+.hero-title {
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 300;
+  line-height: 1.55;
+  letter-spacing: 0.06em;
+  margin-bottom: 22px;
+}
+.hero-title strong { color: var(--starlight-strong); font-weight: 500; }
+.hero-sub {
+  font-size: 15px;
+  color: rgba(248,246,240,0.85);
+  line-height: 2;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* === 7つの「できる」 === */
+.cando-section {
+  padding: 80px 32px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.cando-section-head {
+  text-align: center;
+  margin-bottom: 50px;
+  color: var(--morning-white);
+}
+.cando-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--starlight);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.cando-title {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 400;
+  margin-bottom: 14px;
+  line-height: 1.55;
+}
+.cando-sub {
+  font-size: 14px;
+  color: rgba(248,246,240,0.7);
+  max-width: 660px;
+  margin: 0 auto;
+}
+.cando-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin-top: 30px;
+}
+.cando-card {
+  background: rgba(248,246,240,0.06);
+  border: 1px solid rgba(212,169,94,0.25);
+  border-radius: 18px;
+  padding: 28px 26px;
+  color: var(--morning-white);
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.cando-card:hover {
+  background: rgba(212,169,94,0.12);
+  border-color: var(--starlight);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.3), 0 0 28px rgba(212,169,94,0.20);
+}
+.cando-card-num {
+  display: inline-block;
+  font-size: 32px;
+  font-weight: 100;
+  color: var(--starlight);
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+}
+.cando-card-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--morning-white);
+}
+.cando-card-desc {
+  font-size: 13px;
+  color: rgba(248,246,240,0.78);
+  line-height: 1.95;
+  margin-bottom: 18px;
+}
+.cando-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--starlight-strong);
+  border-bottom: 1px solid rgba(212,169,94,0.4);
+  padding-bottom: 2px;
+}
+
+/* === できないこと === */
+.cannot-section {
+  padding: 80px 32px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.cannot-card {
+  background: var(--morning-white);
+  border-radius: 22px;
+  padding: 50px 44px;
+  border-left: 4px solid var(--rose);
+  box-shadow: 0 22px 50px rgba(0,0,0,0.10);
+}
+.cannot-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--rose);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.cannot-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--ink-deep);
+  margin-bottom: 18px;
+  line-height: 1.55;
+}
+.cannot-list {
+  display: grid;
+  gap: 14px;
+}
+.cannot-item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  color: var(--ink-medium);
+  line-height: 1.85;
+}
+.cannot-item-i {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(199,107,127,0.18);
+  color: var(--rose);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.cannot-item strong { color: var(--ink-deep); font-weight: 500; }
+
+/* === 哲学(decide)=== */
+.philo-section {
+  padding: 80px 32px;
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+}
+.philo-quote {
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--ink-deep);
+  line-height: 1.95;
+  letter-spacing: 0.05em;
+  margin-bottom: 32px;
+  font-style: italic;
+}
+.philo-quote strong {
+  color: var(--warm-orange);
+  font-weight: 500;
+  font-style: normal;
+}
+.philo-divider {
+  width: 60px;
+  height: 1px;
+  background: var(--starlight);
+  margin: 22px auto;
+  opacity: 0.6;
+}
+.philo-from {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--ink-light);
+}
+
+/* === 始める === */
+.start-section {
+  padding: 100px 32px;
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+}
+.start-title {
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink-deep);
+  margin-bottom: 14px;
+}
+.start-sub {
+  font-size: 14px;
+  color: var(--ink-medium);
+  margin-bottom: 32px;
+}
+.start-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.start-btn {
+  padding: 16px 32px;
+  background: var(--warm-orange);
+  color: white;
+  border: none;
+  border-radius: 28px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(212,98,42,0.32);
+  transition: all 0.3s;
+}
+.start-btn:hover { background: var(--warm-coral); transform: translateY(-2px); }
+.start-btn.outline { background: transparent; color: var(--ink-deep); border: 1px solid var(--ink-light); box-shadow: none; }
+.start-btn.outline:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+@media (max-width: 768px) {
+  .hero { padding: 100px 16px 50px; }
+  .cando-section, .cannot-section, .philo-section, .start-section { padding: 50px 16px; }
+  .cannot-card { padding: 32px 24px; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+
+/* === SATOI ユニバーサル横断ナビ === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+/* === SATOI 共通モバイル対応 === */
+@media (max-width: 1024px) {
+  .header { padding: 14px 22px !important; }
+}
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  section, .section { padding-left: 14px !important; padding-right: 14px !important; padding-top: 50px !important; padding-bottom: 50px !important; }
+  .grid, .cards { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  input, textarea, select { font-size: 16px !important; }
+}
+@media (max-width: 480px) {
+  .hero { padding: 80px 12px 40px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="history.back()">← 戻る</button>
+</header>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <div class="hero-eyebrow">WHAT SATOI CAN DO</div>
+  <h1 class="hero-title">Satoi ・ SATOI が、<br><strong>できること</strong>を、お伝えします。</h1>
+  <p class="hero-sub">
+    過大広告も、過小評価も、したくありません。<br>
+    SATOI に「できること」「できないこと」を、最初に明示しておきます。
+  </p>
+</section>
+
+<!-- 7つのできること -->
+<section class="cando-section">
+  <div class="cando-section-head">
+    <div class="cando-eyebrow">7 THINGS SATOI CAN DO</div>
+    <h2 class="cando-title">SATOI に、できる 7つのこと</h2>
+    <p class="cando-sub">タップすると、その機能の使い方ページに遷移します。</p>
+  </div>
+
+  <div class="cando-grid">
+    <div class="cando-card" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?from=phi'">
+      <div class="cando-card-num">01</div>
+      <div class="cando-card-title">夜中でも、聞いてくれる</div>
+      <div class="cando-card-desc">AI が 24時間 365日、あなたの言葉を聞きます。「相手の都合」を気にせず、いつでも話せます。</div>
+      <span class="cando-card-cta">対話を試す →</span>
+    </div>
+    <div class="cando-card" onclick="location.href='SATOI_Mock_v1_B1_hub.html?from=phi'">
+      <div class="cando-card-num">02</div>
+      <div class="cando-card-title">広いマップを、見せる</div>
+      <div class="cando-card-desc">がんと診断されてから、これから歩む道全体を、マインドマップで俯瞰できます。</div>
+      <span class="cando-card-cta">マインドマップ →</span>
+    </div>
+    <div class="cando-card" onclick="location.href='SATOI_Mock_v1_KB_treatment.html?from=phi'">
+      <div class="cando-card-num">03</div>
+      <div class="cando-card-title">治療を、平易な言葉に</div>
+      <div class="cando-card-desc">手術・薬物療法・放射線・緩和ケアの全体像から、詳しい治療法まで。すべて患者さんの言葉で。</div>
+      <span class="cando-card-cta">治療を知る →</span>
+    </div>
+    <div class="cando-card" onclick="location.href='SATOI_Mock_v1_C1_mypage.html?from=phi'">
+      <div class="cando-card-num">04</div>
+      <div class="cando-card-title">物語を、ためる</div>
+      <div class="cando-card-desc">あなたの選択・気持ち・対話の足跡を、物語の壺に。EMPSe 5軸で多面的に。</div>
+      <span class="cando-card-cta">マイページ →</span>
+    </div>
+    <div class="cando-card" onclick="location.href='SATOI_Mock_v1_F4_side_effects.html?from=phi'">
+      <div class="cando-card-num">05</div>
+      <div class="cando-card-title">副作用を、声で記録</div>
+      <div class="cando-card-desc">バーで症状の強さ・音声入力で気持ち。家族と主治医にもリアルタイム共有。</div>
+      <span class="cando-card-cta">副作用報告 →</span>
+    </div>
+    <div class="cando-card" onclick="location.href='SATOI_Mock_v1_E1_money.html?from=phi'">
+      <div class="cando-card-num">06</div>
+      <div class="cando-card-title">お金・仕事を、整理</div>
+      <div class="cando-card-desc">8制度マッチング・治療ローン・社労士FP相談。「使える制度」をAIが自動で。</div>
+      <span class="cando-card-cta">お金・仕事 →</span>
+    </div>
+    <div class="cando-card" onclick="location.href='SATOI_Mock_v1_FAM_view.html?from=phi'">
+      <div class="cando-card-num">07</div>
+      <div class="cando-card-title">家族との、橋渡し</div>
+      <div class="cando-card-desc">夜中の気持ちをAI代弁・親戚説明シート自動生成・終末期コミュニケーションまで。</div>
+      <span class="cando-card-cta">ファミリービュー →</span>
+    </div>
+    <div class="cando-card" onclick="location.href='SATOI_Mock_v1_D1_stories.html?from=phi'">
+      <div class="cando-card-num">08</div>
+      <div class="cando-card-title">先輩の物語に、繋ぐ</div>
+      <div class="cando-card-desc">15+件のナラティブ ・ AI推薦 ・ YouTube/Spotify/Apple Music 外部連携。</div>
+      <span class="cando-card-cta">物語ライブラリ →</span>
+    </div>
+  </div>
+</section>
+
+<!-- できないこと -->
+<section class="cannot-section">
+  <div class="cannot-card">
+    <div class="cannot-eyebrow">WHAT SATOI CANNOT DO</div>
+    <h3 class="cannot-title">逆に、SATOI に <span style="color:var(--rose);">できないこと</span> も、お伝えします。</h3>
+    <div class="cannot-list">
+      <div class="cannot-item">
+        <span class="cannot-item-i">×</span>
+        <div><strong>医師の代わりにはなりません。</strong>診断・治療の最終判断は、必ず医療機関で行ってください。SATOI は、その対話を助ける場所です。</div>
+      </div>
+      <div class="cannot-item">
+        <span class="cannot-item-i">×</span>
+        <div><strong>「治す」ことはできません。</strong>SATOI は治療そのものではなく、治療と歩む時間を支える存在です。</div>
+      </div>
+      <div class="cannot-item">
+        <span class="cannot-item-i">×</span>
+        <div><strong>緊急対応はしません。</strong>緊急時は、救急車(119)・主治医・<a href="SATOI_Mock_v1_EMG_qr.html" style="color:var(--rose); text-decoration: underline;">緊急QR</a> をお使いください。</div>
+      </div>
+      <div class="cannot-item">
+        <span class="cannot-item-i">×</span>
+        <div><strong>勝手に情報を流しません。</strong>家族・主治医・保険会社への共有は、すべて本人同意ベースで、撤回可能です。</div>
+      </div>
+      <div class="cannot-item">
+        <span class="cannot-item-i">×</span>
+        <div><strong>標準治療を否定しません。</strong>自由診療は <a href="SATOI_Mock_v1_FREE_map.html" style="color:var(--rose); text-decoration: underline;">エビデンスの強さで色分け</a> して並べますが、SATOI の推奨は常に「標準治療+主治医に相談」です。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 哲学 -->
+<section class="philo-section">
+  <div class="philo-quote">
+    SATOI は、<strong>「決める」</strong> ことを急がせません。<br>
+    決めないこと ・ 揺れること ・ 戻ること を、すべて受け入れる場所です。<br>
+    あなたが、<strong>あなたのペースで決める</strong> のを、ただ、そばで支えるだけです。
+  </div>
+  <div class="philo-divider"></div>
+  <div class="philo-from">— SATOI フィロソフィー</div>
+</section>
+
+<!-- 始める -->
+<section class="start-section">
+  <h2 class="start-title">それでは、始めましょうか?</h2>
+  <p class="start-sub">何も決めなくていいです。読むだけでも、いいです。</p>
+  <div class="start-actions">
+    <button class="start-btn" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?from=phi'">対話を、始めてみる →</button>
+    <button class="start-btn outline" onclick="location.href='SATOI_Mock_v1_B1_hub.html?from=phi'">マインドマップを、見る</button>
+    <button class="start-btn outline" onclick="location.href='SATOI_Mock_v1_D1_stories.html?from=phi'">先輩の物語を、読む</button>
+  </div>
+</section>
+
+<script>
+/* === SATOI 共通トースト + ユニバーサルナビ === */
+(function ensureToastHost(){
+  function inject(){
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host);
+    }
+  }
+  if (document.body) inject(); else document.addEventListener('DOMContentLoaded', inject);
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+window.__origAlert = window.alert;
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div'); nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn'); const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => { b.addEventListener('click', () => {
+      langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active')); b.classList.add('active');
+      const lang = b.dataset.lang;
+      const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+      if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+      document.documentElement.lang = lang; langPop.classList.remove('show');
+    }); });
+  }
+  if (document.body) inject(); else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+/* PHI ヒーロー文字 ・ スクロールで夜明けが開ける演出 */
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 60) document.body.classList.add('scrolled');
+  else document.body.classList.remove('scrolled');
+}, { passive: true });
+
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

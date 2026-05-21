@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>肺がん | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10); --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --accent: #7FA8C9; --accent-bg: rgba(127,168,201,0.08); --accent-border: rgba(127,168,201,0.4);
+  --teal: #0D7377; --teal-soft: #14A6AB;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --font: "Noto Sans JP", "Meiryo UI", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: var(--morning-white); line-height: 1.9; font-size: 16px; }
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); cursor: pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; justify-content:space-between; align-items:center; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom: 1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--accent); border-radius:50%; margin-right:10px; box-shadow:0 0 12px var(--accent-border); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.hero { padding: 120px 32px 56px; position:relative; }
+.hero-bg { position:absolute; inset:0; opacity:0.22; background: radial-gradient(circle at 70% 20%, rgba(127,168,201,0.45), transparent 60%); }
+.hero-overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(248,246,240,0.7), rgba(248,246,240,0.98)); }
+.hero-content { position:relative; z-index:2; max-width: 1100px; margin: 0 auto; text-align: center; }
+.hero-eyebrow { display: inline-block; font-size: 12px; letter-spacing: 0.42em; color: var(--accent); padding: 6px 18px; border: 1px solid var(--accent-border); border-radius: 24px; margin-bottom: 22px; }
+.hero-title { font-size: clamp(34px, 5vw, 50px); font-weight: 300; letter-spacing: 0.06em; line-height: 1.4; color: var(--ink-deep); margin-bottom: 12px; }
+.hero-lead { font-size: 15px; color: var(--ink-medium); line-height: 2; max-width: 640px; margin: 8px auto 0; }
+.hero-meta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+.meta-card { padding: 13px 20px; background: white; border-radius: 14px; border:1px solid var(--line); font-size: 12.5px; color: var(--ink-medium); }
+.meta-card strong { color: var(--accent); font-weight: 600; font-size: 15px; display:block; margin-bottom:2px; }
+
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 13px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc a { padding:7px 14px; background: var(--accent-bg); border:1px solid var(--accent-border); border-radius:18px; color: var(--ink-medium); font-size:11.5px; }
+.toc a:hover { background: var(--accent); color: white; }
+
+.section { padding: 52px 32px; max-width: 1040px; margin: 0 auto; }
+.section-eyebrow { font-size: 11px; letter-spacing: 0.36em; color: var(--accent); margin-bottom: 10px; font-weight: 600; }
+.section-title { font-size: clamp(23px, 3vw, 29px); font-weight: 500; color: var(--ink-deep); margin-bottom: 14px; line-height:1.5; }
+.info-card { background: white; border-radius: 18px; padding: 26px 30px; border: 1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 18px; }
+.info-card p { font-size: 14px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 12px; }
+.info-card h4 { font-size:15px; font-weight:600; color: var(--accent); margin: 16px 0 8px; }
+.info-card ul { padding-left: 22px; margin: 8px 0 12px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.info-card li { margin-bottom: 5px; }
+.info-card strong { color: var(--ink-deep); font-weight: 600; }
+.info-card blockquote { border-left: 3px solid var(--accent); padding: 10px 18px; margin: 14px 0; background: var(--accent-bg); color: var(--ink-medium); font-size:13px; }
+
+.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 22px; }
+.action-card { padding: 20px 22px; background: var(--accent-bg); border-radius: 14px; border: 1px solid var(--accent-border); cursor: pointer; transition: all 0.3s; text-decoration: none; color: var(--ink-deep); }
+.action-card:hover { background: white; transform: translateY(-3px); box-shadow: 0 10px 26px rgba(11,23,54,0.08); }
+.action-card-icon { font-size: 24px; margin-bottom: 8px; }
+.action-card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.action-card-desc { font-size: 11.5px; color: var(--ink-light); line-height: 1.7; }
+
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 24px 28px; margin: 24px 0 0; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 15.5px; font-weight:600; color: var(--teal); margin-bottom: 6px; }
+.ai-cta p { font-size: 13px; color: var(--ink-medium); line-height: 1.9; margin-bottom: 12px; }
+.ai-cta-btn { display:inline-block; padding: 11px 22px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
+
+.voices { background: var(--morning-cream); padding: 24px 28px; border-radius: 18px; border-left: 4px solid var(--accent); margin: 18px 0; }
+.voices p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 8px; }
+.note-box { background: rgba(212,98,42,0.07); border:1px solid rgba(212,98,42,0.25); border-radius: 14px; padding: 16px 20px; font-size: 12.5px; color: var(--ink-medium); line-height:1.9; }
+.note-box strong { color: #D4622A; }
+
+@media (max-width: 768px) { .action-grid { grid-template-columns: 1fr; } .section { padding: 40px 16px; } .info-card { padding: 22px 20px; } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_B1_hub.html'; })()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">LUNG CANCER ・ 肺がん</div>
+    <h1 class="hero-title">肺がん</h1>
+    <p class="hero-lead">かつては治療が難しいとされましたが、近年は遺伝子のタイプに合わせた薬や免疫療法が登場し、選択肢が大きく広がっています。タイプを正しく調べることが、これまで以上に大切になっています。</p>
+    <div class="hero-meta">
+      <div class="meta-card"><strong>治療が大きく進化</strong>分子標的薬・免疫療法の登場</div>
+      <div class="meta-card"><strong>タイプ判定が重要</strong>遺伝子検査で薬を選ぶ</div>
+    </div>
+  </div>
+</section>
+
+<nav class="toc">
+  <a href="#s1">肺がんとは</a>
+  <a href="#s2">タイプ</a>
+  <a href="#s3">検査</a>
+  <a href="#s4">ステージ</a>
+  <a href="#s5">治療</a>
+  <a href="#s6">治療後の暮らし</a>
+  <a href="#s7">よくある不安</a>
+</nav>
+
+<main>
+
+<section class="section" id="s1">
+  <div class="section-eyebrow">ABOUT</div>
+  <h2 class="section-title">肺がんとは ・ どんながん?</h2>
+  <div class="info-card">
+    <p>肺がんは、息をするための臓器である肺の細胞ががん化したものです。喫煙が大きな要因のひとつですが、<strong>たばこを吸わない方にも起こります</strong>。初期は症状が出にくく、咳や胸の違和感、健診の画像をきっかけに見つかることが多いがんです。</p>
+    <p>「肺がん=こわい」というイメージがあるかもしれませんが、ここ数年で治療は大きく進歩しました。とくに、がんのタイプに合わせた薬が増え、長く付き合えるケースも増えています。</p>
+    <blockquote>たとえ喫煙歴があっても、ご自分を責めないでください。大切なのは、これから何ができるかです。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 肺がんについて、AIと話す</div>
+    <p>診断されたばかりの不安も含めて、あなたの状況に合わせてやさしくお話しします。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?cancer=lung&from=can_lung">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s2">
+  <div class="section-eyebrow">SUBTYPE</div>
+  <h2 class="section-title">タイプ ・ 大きく2種類に分かれます</h2>
+  <div class="info-card">
+    <p>肺がんは、大きく<strong>非小細胞肺がん</strong>(全体の8割以上)と<strong>小細胞肺がん</strong>に分かれ、治療の進め方が異なります。</p>
+    <h4>非小細胞肺がん</h4>
+    <p>腺がん・扁平上皮がんなどが含まれます。とくにこのタイプでは、がん細胞の<strong>遺伝子の変化(EGFR、ALK、ROS1 など)や免疫の目印(PD-L1)</strong>を調べることで、ねらい撃ちの分子標的薬や免疫療法が使えることがあります。</p>
+    <h4>小細胞肺がん</h4>
+    <p>進行が速い傾向があり、薬物療法(化学療法)と放射線を中心に治療します。</p>
+    <p>だからこそ、治療前に<strong>遺伝子検査などでタイプを正しく調べること</strong>が、合った治療への第一歩になります。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 検査結果の意味を、AIと読み解く</div>
+    <p>「EGFR陽性って?」「PD-L1って?」——あなたの結果に合わせて整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?cancer=lung&from=can_lung">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s3">
+  <div class="section-eyebrow">EXAMS</div>
+  <h2 class="section-title">主な検査</h2>
+  <div class="info-card">
+    <ul>
+      <li><strong>胸部X線・CT</strong> ・ 肺の影や、がんの場所・大きさを調べる。</li>
+      <li><strong>PET-CT</strong> ・ 全身の転移の有無を調べる。</li>
+      <li><strong>気管支鏡・生検</strong> ・ 組織を採ってがんを確定し、タイプを調べる。</li>
+      <li><strong>遺伝子検査・PD-L1検査(コンパニオン診断)</strong> ・ 使える薬を見極める。肺がんではとくに重要。</li>
+    </ul>
+  </div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_KB_about.html"><div class="action-card-icon">📘</div><div class="action-card-title">検査と診断の基礎</div><div class="action-card-desc">何のために何を調べる?</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CHP_exam.html"><div class="action-card-icon">🔬</div><div class="action-card-title">検査の段階を見る</div><div class="action-card-desc">検査のとき</div></a>
+  </div>
+</section>
+
+<section class="section" id="s4">
+  <div class="section-eyebrow">STAGE</div>
+  <h2 class="section-title">ステージの考え方</h2>
+  <div class="info-card">
+    <p>肺がんのステージは、がんの大きさ・場所、リンパ節への広がり、離れた臓器への転移で、I〜IVに分けられます。</p>
+    <ul>
+      <li><strong>I〜II期</strong> ・ がんが肺やその周りにとどまる段階。手術が中心の選択肢になります。</li>
+      <li><strong>III期</strong> ・ 周りやリンパ節への広がりが進んだ段階。手術・放射線・薬物を組み合わせます。</li>
+      <li><strong>IV期</strong> ・ 離れた場所に転移がある段階。薬物療法(分子標的薬・免疫療法など)が中心になります。</li>
+    </ul>
+    <p>進行した段階でも、タイプに合う薬で長く付き合えるケースが増えています。</p>
+  </div>
+</section>
+
+<section class="section" id="s5">
+  <div class="section-eyebrow">TREATMENT</div>
+  <h2 class="section-title">主な治療</h2>
+  <div class="info-card">
+    <h4>手術</h4>
+    <p>がんが肺の一部にとどまっている場合、その部分を取り除きます。体への負担を抑える胸腔鏡手術も広がっています。</p>
+    <h4>放射線治療</h4>
+    <p>手術が難しい場合や、手術と組み合わせて行います。ねらいを定めて当てる技術(定位放射線治療など)も進んでいます。</p>
+    <h4>薬物療法</h4>
+    <p>化学療法に加え、遺伝子のタイプに合う<strong>分子標的薬</strong>、免疫の力を利用する<strong>免疫療法</strong>が、肺がんでは大きな役割を果たしています。タイプによって、最初から飲み薬の分子標的薬が選べることもあります。</p>
+  </div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_KB_treatment.html"><div class="action-card-icon">💊</div><div class="action-card-title">治療の基本</div><div class="action-card-desc">手術・薬・放射線・緩和</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_B3_treatment_detail.html?cancer=lung"><div class="action-card-icon">📋</div><div class="action-card-title">治療レジメンの詳細</div><div class="action-card-desc">具体的な薬と副作用</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CHP_consider.html"><div class="action-card-icon">🧭</div><div class="action-card-title">治療を考える</div><div class="action-card-desc">SDM・セカンドオピニオン</div></a>
+  </div>
+</section>
+
+<section class="section" id="s6">
+  <div class="section-eyebrow">AFTER</div>
+  <h2 class="section-title">治療後の暮らし・経過観察</h2>
+  <div class="info-card">
+    <ul>
+      <li><strong>呼吸と体力</strong> ・ 手術のあと、息切れを感じることがあります。少しずつ体を慣らし、無理なく動きます。</li>
+      <li><strong>禁煙の支え</strong> ・ 禁煙は治療の効果や回復にも役立ちます。一人で難しければ、禁煙外来などの支えがあります。</li>
+      <li><strong>定期通院</strong> ・ 再発や転移を早めに見つけるため、定期的に画像などで確認します。</li>
+      <li><strong>長く続く薬</strong> ・ 分子標的薬や免疫療法を続ける場合、副作用と付き合いながら、生活の質を保つことを大切にします。</li>
+    </ul>
+  </div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_KB_sideeffects.html"><div class="action-card-icon">🩹</div><div class="action-card-title">副作用と対処</div><div class="action-card-desc">免疫療法の注意も</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_KB_life.html"><div class="action-card-icon">🌿</div><div class="action-card-title">暮らしと仕事</div><div class="action-card-desc">体力・両立</div></a>
+  </div>
+</section>
+
+<section class="section" id="s7">
+  <div class="section-eyebrow">VOICES &amp; NEXT</div>
+  <h2 class="section-title">よくある不安と、次の一歩</h2>
+  <div class="voices">
+    <p>「息苦しさが不安」「たばこを吸っていた自分を責めてしまう」「新しい薬についていけるか」——多くの方が、同じ気持ちを通ってきました。</p>
+    <p>肺がんの治療は、今いちばん進歩している分野のひとつです。一人で抱えず、少しずつ。同じ夜を過ごしている方が、ここにいます。</p>
+  </div>
+  <div class="action-grid">
+    <a class="action-card" href="SATOI_Mock_v1_A2_dialog.html?cancer=lung&from=can_lung"><div class="action-card-icon">💬</div><div class="action-card-title">AIと話す</div><div class="action-card-desc">肺がんについて深掘り</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_D1_stories.html?cancer=lung"><div class="action-card-icon">📖</div><div class="action-card-title">先輩の物語</div><div class="action-card-desc">同じ道を歩んだ方の声</div></a>
+    <a class="action-card" href="SATOI_Mock_v1_CON_concierge.html"><div class="action-card-icon">📞</div><div class="action-card-title">コンシェルジュ</div><div class="action-card-desc">AI+電話で相談</div></a>
+  </div>
+  <div class="note-box" style="margin-top:20px;">
+    <strong>この情報について。</strong> ここに書かれているのは、肺がんを理解するための一般的な説明です。タイプや進行度によって治療は異なり、標準治療も日々更新されます。診断や治療方針は、必ず主治医とご相談ください。
+  </div>
+</section>
+
+</main>
+
+<script src="satoi_chp_insight.js"></script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

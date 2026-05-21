@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - 制度・お金ハブ・お金で治療をあきらめない</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --dawn-pink: #D8A98A;
+  --morning-cream: #F6EFE3;
+  --morning-white: #FBF7F0;
+  --starlight: #D4A95E;
+  --starlight-strong: #F0C97A;
+  --teal: #0D7377;
+  --teal-deep: #0A5A5D;
+  --teal-soft: #14A6AB;
+  --warm-orange: #D4622A;
+  --warn-yellow: #F4B860;
+  --money-green: #2D8659;
+  --money-green-light: #6FAE89;
+  --navy: #0A1628;
+  --bg-cream: #FBF8F2;
+  --bg-soft: #F4EFE6;
+  --bg-paper: #FFFCF6;
+  --line: rgba(10,22,40,0.10);
+  --line-soft: rgba(10,22,40,0.06);
+  --text-primary: #1A2A40;
+  --text-secondary: rgba(26,42,64,0.72);
+  --text-muted: rgba(26,42,64,0.50);
+  --text-on-dark: rgba(248,246,240,0.96);
+  --text-on-dark-soft: rgba(248,246,240,0.74);
+  --font: "Noto Sans JP", "Meiryo UI", "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+body { font-family: var(--font); color: var(--text-primary); background: var(--morning-white); line-height: 1.8; font-size: 16px; }
+
+/* === ヘッダー === */
+.header {
+  position: fixed; top:0; left:0; right:0; z-index:200;
+  padding: 16px 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(11,23,54,0.92), rgba(11,23,54,0));
+  backdrop-filter: blur(12px);
+}
+.logo { font-size: 22px; font-weight: 500; letter-spacing: 0.22em; color: var(--text-on-dark); display: inline-flex; align-items: center; text-decoration: none; }
+.logo .dot { display: inline-block; width: 8px; height: 8px; background: var(--starlight); border-radius: 50%; margin-right: 10px; box-shadow: 0 0 12px var(--starlight); }
+.h-right { display: flex; align-items: center; gap: 12px; }
+.h-link { color: var(--text-on-dark-soft); text-decoration: none; font-size: 13px; padding: 8px 14px; border-radius: 18px; transition: background 0.2s; }
+.h-link:hover { background: rgba(248,246,240,0.08); }
+
+/* === ヒーロー === */
+.hero {
+  position: relative;
+  padding: 120px 40px 70px;
+  background: linear-gradient(180deg, var(--night-deep) 0%, var(--night-medium) 40%, var(--dawn-pink) 85%, var(--morning-cream) 100%);
+  color: var(--text-on-dark);
+  overflow: hidden;
+  text-align: center;
+}
+.hero-stars { position: absolute; inset: 0; pointer-events: none; }
+.h-star { position: absolute; background: var(--starlight); border-radius: 50%; opacity: 0; animation: twinkle 4.5s infinite ease-in-out; }
+@keyframes twinkle { 0%,100%{opacity:.15;transform:scale(.7);} 50%{opacity:.75;transform:scale(1.1);} }
+
+.hero-eyebrow { font-size: 12px; letter-spacing: 0.32em; color: var(--text-on-dark-soft); margin-bottom: 18px; }
+.hero-title { font-size: 46px; font-weight: 300; letter-spacing: 0.04em; line-height: 1.3; color: var(--text-on-dark); margin-bottom: 22px; }
+.hero-title .accent { color: var(--starlight-strong); font-weight: 500; }
+.hero-sub { font-size: 15px; font-weight: 300; color: var(--text-on-dark-soft); line-height: 1.95; max-width: 640px; margin: 0 auto 30px; }
+.hero-stats {
+  display: flex; gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 12px 22px;
+  background: rgba(248,246,240,0.10);
+  border: 1px solid rgba(248,246,240,0.22);
+  border-radius: 22px;
+  font-size: 13px; color: var(--text-on-dark);
+}
+.hero-stat .num { color: var(--starlight-strong); font-weight: 600; font-size: 17px; }
+.hero-stat .num.big { font-size: 21px; }
+
+/* === セクション === */
+.section { max-width: 1100px; margin: 0 auto; padding: 70px 36px; }
+.section.bg { background: var(--bg-cream); max-width: none; padding-left: 0; padding-right: 0; }
+.section.bg > .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 36px; }
+.section-eyebrow { font-size: 12px; letter-spacing: 0.32em; color: var(--teal); text-transform: uppercase; margin-bottom: 10px; }
+.section-title { font-size: 28px; font-weight: 400; letter-spacing: 0.04em; line-height: 1.4; margin-bottom: 12px; color: var(--text-primary); }
+.section-sub { font-size: 14px; color: var(--text-secondary); line-height: 2; margin-bottom: 32px; max-width: 720px; }
+
+/* === AI判定セクション === */
+.ai-judge-card {
+  background: linear-gradient(135deg, rgba(212,169,94,0.06), var(--bg-paper));
+  border: 1px solid rgba(212,169,94,0.30);
+  border-radius: 22px;
+  padding: 32px;
+  margin-bottom: 24px;
+}
+.ai-judge-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px;
+}
+.ai-judge-orb {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--starlight-strong), var(--starlight) 60%, rgba(212,169,94,0.2));
+  box-shadow: 0 0 14px rgba(212,169,94,0.4);
+  animation: orb-pulse 3s ease-in-out infinite;
+}
+@keyframes orb-pulse { 0%,100%{transform:scale(.95);opacity:.85;} 50%{transform:scale(1.08);opacity:1;} }
+.ai-judge-title { font-size: 17px; font-weight: 500; color: var(--text-primary); }
+.ai-judge-sub { font-size: 12px; color: var(--text-secondary); }
+
+.q-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+.q-card {
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.q-label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.06em; margin-bottom: 8px; }
+.q-value {
+  font-size: 15px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.q-select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-family: var(--font);
+  font-size: 14px;
+  background: var(--morning-white);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.q-select:focus { outline: none; border-color: var(--teal); }
+
+.ai-result-summary {
+  margin-top: 26px;
+  background: rgba(13,115,119,0.08);
+  border-left: 4px solid var(--teal);
+  padding: 18px 22px;
+  border-radius: 0 14px 14px 0;
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.95;
+}
+.ai-result-summary strong {
+  color: var(--money-green); font-weight: 600;
+  font-size: 17px;
+}
+
+/* === 制度カタログ === */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+.benefit-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px 24px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.benefit-card:hover {
+  border-color: var(--teal);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(10,22,40,0.06);
+}
+.benefit-status {
+  position: absolute; top: 14px; right: 16px;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.benefit-status.ok { background: rgba(45,134,89,0.12); color: var(--money-green); border: 1px solid var(--money-green); }
+.benefit-status.maybe { background: rgba(244,184,96,0.18); color: #8B5A1F; border: 1px solid var(--warn-yellow); }
+.benefit-status.ng { background: rgba(120,120,120,0.10); color: var(--text-muted); border: 1px solid rgba(120,120,120,0.20); }
+.benefit-num {
+  font-size: 24px;
+  font-weight: 200;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+.benefit-title { font-size: 16px; font-weight: 500; margin-bottom: 10px; color: var(--text-primary); }
+.benefit-target { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+.benefit-amount {
+  font-size: 13px;
+  color: var(--money-green);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.benefit-amount .yen { font-size: 18px; }
+.benefit-difficulty {
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex; align-items: center; gap: 6px;
+}
+.diff-dots { display: inline-flex; gap: 2px; }
+.diff-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bg-soft); }
+.diff-dot.active { background: var(--warm-orange); }
+
+.benefit-detail {
+  display: none;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--text-secondary);
+}
+.benefit-card.open .benefit-detail { display: block; }
+.benefit-card.open { background: linear-gradient(135deg, rgba(13,115,119,0.04), var(--bg-paper)); }
+.benefit-detail strong { color: var(--text-primary); font-weight: 500; }
+.benefit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.benefit-btn {
+  padding: 8px 14px;
+  background: var(--teal);
+  color: var(--morning-white);
+  border: none;
+  border-radius: 14px;
+  font-family: var(--font);
+  font-size: 12px;
+  cursor: pointer;
+}
+.benefit-btn.outline { background: transparent; color: var(--teal); border: 1px solid var(--teal); }
+
+/* === 申請書類アシスタント === */
+.assistant-card {
+  background: linear-gradient(135deg, rgba(45,134,89,0.04), var(--bg-paper));
+  border: 1px solid rgba(45,134,89,0.20);
+  border-radius: 22px;
+  padding: 32px;
+}
+.assistant-head { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.assistant-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--money-green);
+  color: var(--morning-white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.assistant-title { font-size: 18px; font-weight: 500; color: var(--text-primary); }
+.assistant-list { display: grid; gap: 12px; }
+.assistant-doc {
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+.assistant-doc-name { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+.assistant-doc-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.7; }
+.assistant-doc-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.assistant-doc-btn {
+  padding: 8px 14px;
+  background: var(--money-green);
+  color: var(--morning-white);
+  border: none;
+  border-radius: 14px;
+  font-family: var(--font);
+  font-size: 12px;
+  cursor: pointer;
+}
+.assistant-doc-btn.outline { background: transparent; color: var(--money-green); border: 1px solid var(--money-green); }
+
+/* === シミュレーター === */
+.simulator-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 32px;
+}
+.sim-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.sim-input {
+  background: var(--bg-soft);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.sim-input label { display: block; font-size: 11.5px; color: var(--text-muted); letter-spacing: 0.06em; margin-bottom: 8px; }
+.sim-input select, .sim-input input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-family: var(--font);
+  font-size: 14px;
+  background: var(--morning-white);
+}
+
+.sim-result {
+  display: grid;
+  gap: 14px;
+}
+.sim-bar-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 120px;
+  align-items: center;
+  gap: 14px;
+}
+.sim-bar-label { font-size: 13px; color: var(--text-secondary); }
+.sim-bar-track {
+  height: 32px;
+  background: var(--bg-soft);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.sim-bar-fill {
+  height: 100%;
+  border-radius: 16px;
+  display: flex; align-items: center; padding-left: 14px;
+  font-size: 12px;
+  color: var(--morning-white);
+  font-weight: 500;
+  transition: width 1.4s cubic-bezier(0.4,0,0.2,1);
+}
+.sim-bar-fill.total { background: rgba(184,84,80,0.55); }
+.sim-bar-fill.self { background: var(--warm-orange); }
+.sim-bar-fill.after-h { background: var(--teal); }
+.sim-bar-fill.after-d { background: var(--money-green); }
+.sim-bar-num { font-size: 14px; font-weight: 500; color: var(--text-primary); text-align: right; }
+.sim-foot {
+  margin-top: 24px;
+  padding: 18px 22px;
+  background: rgba(45,134,89,0.08);
+  border-radius: 14px;
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.95;
+  text-align: center;
+}
+.sim-foot strong { color: var(--money-green); font-size: 17px; font-weight: 600; }
+
+/* === 専門家 === */
+.experts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+.expert-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.2s;
+}
+.expert-card:hover { border-color: var(--teal); transform: translateY(-3px); }
+.expert-avatar {
+  width: 84px; height: 84px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--teal-soft));
+  color: var(--morning-white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  margin: 0 auto 14px;
+  font-family: var(--font);
+}
+.expert-name { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+.expert-role { font-size: 12px; color: var(--teal); letter-spacing: 0.04em; margin-bottom: 10px; }
+.expert-spec { font-size: 12px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 14px; min-height: 50px; }
+.expert-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.expert-btn {
+  background: var(--teal);
+  color: var(--morning-white);
+  border: none;
+  padding: 10px 22px;
+  border-radius: 18px;
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* === 物語 === */
+.stories-mini {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+.story-mini {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.story-mini:hover { border-color: var(--starlight); transform: translateY(-2px); }
+.story-mini-meta { font-size: 11px; color: var(--teal); letter-spacing: 0.06em; margin-bottom: 6px; }
+.story-mini-title { font-size: 14.5px; font-weight: 500; color: var(--text-primary); margin-bottom: 10px; line-height: 1.5; }
+.story-mini-quote { font-size: 12.5px; color: var(--text-secondary); line-height: 1.85; font-style: italic; }
+
+/* === 申請カレンダー === */
+.calendar-card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 32px;
+}
+.cal-list { display: grid; gap: 12px; }
+.cal-item {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 20px;
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.cal-item.urgent { border-color: var(--warm-orange); background: rgba(212,98,42,0.04); }
+.cal-month {
+  background: var(--teal);
+  color: var(--morning-white);
+  padding: 8px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 1.2;
+}
+.cal-month.urgent { background: var(--warm-orange); }
+.cal-month-m { font-size: 22px; font-weight: 600; }
+.cal-month-y { font-size: 10px; opacity: 0.85; }
+.cal-info-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+.cal-info-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.7; }
+.cal-due {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* === companion lamp & ticker === */
+.companion-lamp { position: fixed; right: 28px; bottom: 50px; width: 70px; height: 70px; z-index: 150; cursor: pointer; }
+.lamp-orb {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--starlight-strong) 0%, var(--starlight) 38%, rgba(212,169,94,0.18) 70%, transparent 100%);
+  animation: orb-pulse 4s ease-in-out infinite;
+}
+.lamp-bubble {
+  position: absolute; right: 84px; bottom: 12px;
+  background: var(--morning-white);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(10,22,40,0.18);
+  opacity: 0; transform: translateX(8px);
+  transition: opacity 0.4s, transform 0.4s;
+  pointer-events: none;
+}
+.lamp-bubble.show { opacity: 1; transform: translateX(0); }
+.lamp-bubble::after {
+  content: ''; position: absolute;
+  right: -7px; top: 50%; transform: translateY(-50%);
+  border: 7px solid transparent; border-left-color: var(--morning-white);
+}
+.ticker {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(11,23,54,0.92);
+  color: var(--text-on-dark);
+  padding: 11px 20px;
+  font-size: 12.5px; text-align: center; z-index: 140;
+  backdrop-filter: blur(10px);
+}
+.ticker .dot { display: inline-block; width: 6px; height: 6px; background: var(--starlight); border-radius: 50%; box-shadow: 0 0 8px var(--starlight); margin-right: 8px; vertical-align: middle; animation: pulse-soft 2.4s infinite; }
+@keyframes pulse-soft { 0%,100%{opacity:.6;} 50%{opacity:1;} }
+.ticker-num { color: var(--starlight-strong); font-weight: 600; }
+
+/* === フッター === */
+.footer { background: var(--navy); color: var(--text-on-dark-soft); padding: 50px 40px 100px; text-align: center; }
+.footer-logo { font-size: 20px; letter-spacing: 0.28em; margin-bottom: 12px; color: var(--text-on-dark); }
+.footer-row { display: flex; justify-content: center; gap: 22px; margin-bottom: 18px; flex-wrap: wrap; }
+.footer-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px;
+  background: rgba(248,246,240,0.06);
+  border: 1px solid rgba(248,246,240,0.14);
+  border-radius: 18px;
+  font-size: 11.5px;
+}
+
+/* === レスポンシブ === */
+@media (max-width: 760px) {
+  .header { padding: 14px 18px; }
+  .hero { padding: 100px 22px 60px; }
+  .hero-title { font-size: 30px; }
+  .section { padding: 50px 20px; }
+  .section.bg > .section-inner { padding: 0 20px; }
+  .section-title { font-size: 22px; }
+  .ai-judge-card, .simulator-card, .calendar-card, .assistant-card { padding: 22px 20px; }
+  .sim-bar-row { grid-template-columns: 1fr; }
+  .assistant-doc { grid-template-columns: 1fr; gap: 12px; }
+  .cal-item { grid-template-columns: 70px 1fr; gap: 14px; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) {
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+
+
+/* === SATOI 共通モバイル対応(iPad/iPhone)=== */
+@media (max-width: 1024px) {
+  /* iPad 縦 ・ ヘッダー狭め */
+  .header { padding: 14px 22px !important; }
+  .section, .wrap, .container, main, .main { padding-left: 22px !important; padding-right: 22px !important; }
+}
+@media (max-width: 768px) {
+  /* iPhone ・ 主要メトリクスをモバイル最適化 */
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title, .hero-title-l1 { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title, .nbm-title, .mission-line { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  .section, .container, .wrap, main, .main, section { padding-left: 14px !important; padding-right: 14px !important; }
+  section, .section { padding-top: 50px !important; padding-bottom: 50px !important; }
+  /* グリッドを1列に */
+  .grid, .cards, .types-grid, .stories-grid, .forum-grid, .family-grid, .promise-list, .partner-grid, .gov-grid, .numbers-grid, .empse-grid, .pubmed-list, .sources-grid, .criteria-grid, .tx-cat-grid, .map-wrap, .emg-grid, .emg-consent-grid, .emg-contacts, .kids-talk-wrap, .cat-grid, .videos-grid, .cat-cards, .partner-cards, .promise-cards, .principle-cards, .pricing-grid, .pricing-cards, .step-cards, .info-cards, .role-cards, .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* 横スクロールのみ許す要素は残す */
+  .b1-journey-bar, .journey-bar, .types-tabs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  /* ヒーローの padding 圧縮 */
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  /* 大きい見出し */
+  .opener-line { font-size: 24px !important; margin-bottom: 40px !important; }
+  /* タップ領域 44px 最低 */
+  .btn, button, .login-btn, .nav-mini a, .filter-chip, .cat-card, .type-card, .story-card, .forum-card { min-height: 40px; }
+  /* テーブル横スクロール */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* マイチーム ホイール → 縦並びに */
+  .team-wheel-wrap, .team-wheel { width: 100% !important; height: auto !important; min-height: 360px; }
+  /* モーダル系: 画面いっぱいに */
+  .modal, .overlay-modal, [class*='Modal'], [class*='modal'] { max-width: 100vw !important; }
+  /* ナビ縮小 */
+  .nav-mini, .nav { gap: 12px !important; font-size: 12px !important; }
+  /* フォーム入力 */
+  input, textarea, select { font-size: 16px !important; } /* iOSのズーム防止 */
+  /* SVG レーダーチャートの収まり */
+  .empse-chart, .empse-chart-wrap { width: 100% !important; max-width: 320px; height: auto !important; margin: 0 auto !important; }
+  /* B1 7ステップを横スクロールに */
+  .steps-row { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 10px; }
+  .steps-row .step { flex-shrink: 0; min-width: 80px; }
+  /* G2 サイドナビは画面下部固定 or hamburger 想定 */
+  .sidebar, .side-nav, .g2-sidebar { position: relative !important; width: 100% !important; height: auto !important; overflow-x: auto !important; display: flex !important; }
+}
+@media (max-width: 480px) {
+  /* 極小画面 */
+  .hero { padding: 80px 12px 40px !important; }
+  .b1-journey-bar { padding: 8px 10px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+
+/* === SATOI ユニバーサル横断ナビ(戻る/ホーム/言語) === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-univ-btn[title]::after { content: attr(title); position: absolute; right: 54px; background: rgba(11,23,54,0.92); color: #F8F6F0; font-size: 11px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.satoi-univ-btn:hover::after { opacity: 1; }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <div class="h-right">
+    <a class="h-link" href="SATOI_Mock_v1_C1_mypage.html">マイページ</a>
+    <a class="h-link" href="SATOI_Mock_v1_B1_hub.html">マインドマップ</a>
+    <a class="h-link" href="SATOI_Mock_v1_D1_stories.html">物語ライブラリ</a>
+  </div>
+</header>
+
+<!-- ===== ヒーロー ===== -->
+<section class="hero">
+  <div class="hero-stars" id="heroStars"></div>
+  <div class="hero-eyebrow">MONEY ・ BENEFITS HUB</div>
+  <h1 class="hero-title">お金のことで、<br><span class="accent">治療をあきらめないでください</span></h1>
+  <p class="hero-sub">
+    使える制度は、たくさんあります。でも、知らないと、使えない。<br>
+    AIが、あなたの状況で使える制度を判定し、申請書類まで一緒に作ります。
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span>SATOI経由で利用した方</span>
+      <span class="num">8,247</span><span>人</span>
+    </div>
+    <div class="hero-stat">
+      <span>平均で 年間</span>
+      <span class="num big">¥1,820,000</span><span>助かっています</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 1. AI判定 ===== -->
+<section class="section">
+  <div class="section-eyebrow">01 / AI ASSESS</div>
+  <h2 class="section-title">あなたが、使える制度は</h2>
+  <p class="section-sub">3項目だけ確認させてください。あなたの状況に合った制度を、AIが瞬時に判定します。</p>
+
+  <div class="ai-judge-card">
+    <div class="ai-judge-head">
+      <div class="ai-judge-orb"></div>
+      <div>
+        <div class="ai-judge-title">あなたの状況・確認</div>
+        <div class="ai-judge-sub">マイページから自動入力済 ・ 変更可</div>
+      </div>
+    </div>
+
+    <div class="q-row">
+      <div class="q-card">
+        <div class="q-label">がん種・ステージ</div>
+        <div class="q-value">乳がん ・ ステージII</div>
+      </div>
+      <div class="q-card">
+        <div class="q-label">治療内容</div>
+        <div class="q-value">手術 + TC療法 + ホルモン療法</div>
+      </div>
+      <div class="q-card">
+        <div class="q-label">就業状況</div>
+        <select class="q-select" id="qWork" onchange="recomputeBenefits()">
+          <option value="employee" selected>会社員(正社員)</option>
+          <option value="parttime">パート・アルバイト</option>
+          <option value="self">自営業・フリーランス</option>
+          <option value="house">専業主婦・主夫</option>
+          <option value="retire">退職・年金生活</option>
+          <option value="student">学生</option>
+        </select>
+      </div>
+      <div class="q-card">
+        <div class="q-label">世帯収入レンジ(任意)</div>
+        <select class="q-select" id="qIncome" onchange="recomputeBenefits()">
+          <option value="low">〜370万円</option>
+          <option value="mid" selected>370〜770万円</option>
+          <option value="high">770〜1160万円</option>
+          <option value="vhigh">1160万円〜</option>
+          <option value="">回答しない</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ai-result-summary">
+      <span style="font-size:13px; letter-spacing:.16em; color:var(--teal); display:block; margin-bottom:6px;">✦ AI 判定結果</span>
+      あなたの状況では、<strong id="benefitCount">7</strong> 個の制度を使えます。<br>
+      合計で <strong id="benefitTotal">¥1,950,000</strong> の援助(年間目安)が、見込まれます。<br>
+      <span style="font-size:12px; color:var(--text-muted);">下の制度カードをタップして、適用条件・申請方法を確認してください。</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. 制度カタログ ===== -->
+<section class="section bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">02 / BENEFITS CATALOG</div>
+    <h2 class="section-title">使える制度・8つの柱</h2>
+    <p class="section-sub">各カードをタップして、申請方法・必要書類・期限を展開できます。</p>
+
+    <div class="benefits-grid" id="benefitsGrid">
+      <!-- JS で生成 -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 申請書類アシスタント ===== -->
+<section class="section">
+  <div class="section-eyebrow">03 / AUTO DOCUMENTS</div>
+  <h2 class="section-title">申請書類を、半自動生成</h2>
+  <p class="section-sub">あなたの情報を差し込んだ申請書類のドラフトを、AIが用意します。後は主治医・会社の総務に届けるだけ。</p>
+
+  <div class="assistant-card">
+    <div class="assistant-head">
+      <div class="assistant-icon">📄</div>
+      <div>
+        <div class="assistant-title">あなた専用 ・ 申請書類アシスタント</div>
+        <div style="font-size:12px; color:var(--text-secondary);">差込済みドラフトをPDFで出力 → 印刷 or 関係者にメール</div>
+      </div>
+    </div>
+
+    <div class="assistant-list">
+      <div class="assistant-doc">
+        <div>
+          <div class="assistant-doc-name">① 高額療養費 申請書(健康保険組合宛)</div>
+          <div class="assistant-doc-desc">あなたの保険証情報 + 主治医の診断書情報 が差込済。月の医療費を超えた分が返金されます。</div>
+        </div>
+        <div class="assistant-doc-actions">
+          <button class="assistant-doc-btn">PDF生成</button>
+          <button class="assistant-doc-btn outline">編集</button>
+        </div>
+      </div>
+      <div class="assistant-doc">
+        <div>
+          <div class="assistant-doc-name">② 限度額認定証 申請書</div>
+          <div class="assistant-doc-desc">事前に提出しておくと、窓口で限度額しか払わなくて済む。立て替えなしで楽に。</div>
+        </div>
+        <div class="assistant-doc-actions">
+          <button class="assistant-doc-btn">PDF生成</button>
+        </div>
+      </div>
+      <div class="assistant-doc">
+        <div>
+          <div class="assistant-doc-name">③ 傷病手当金 申請書(会社の総務宛)</div>
+          <div class="assistant-doc-desc">会社員の場合、休業時に給与の2/3が1年6か月。主治医意見書テンプレート + 会社への依頼文 もセット。</div>
+        </div>
+        <div class="assistant-doc-actions">
+          <button class="assistant-doc-btn">PDF生成</button>
+          <button class="assistant-doc-btn outline">主治医に依頼</button>
+        </div>
+      </div>
+      <div class="assistant-doc">
+        <div>
+          <div class="assistant-doc-name">④ 医療費控除 確定申告ファイル(国税庁e-Tax対応)</div>
+          <div class="assistant-doc-desc">家族分も含めて自動集計。e-Tax 直接アップロード可能。所得税還付の見込み額もすぐ確認。</div>
+        </div>
+        <div class="assistant-doc-actions">
+          <button class="assistant-doc-btn">CSV/PDF生成</button>
+        </div>
+      </div>
+      <div class="assistant-doc">
+        <div>
+          <div class="assistant-doc-name">⑤ がん保険給付金 請求書(加入保険会社)</div>
+          <div class="assistant-doc-desc">登録済み保険会社情報 + 診断書テンプレ。診断給付金 + 治療給付金 を一括請求できます。</div>
+        </div>
+        <div class="assistant-doc-actions">
+          <button class="assistant-doc-btn">PDF生成</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. シミュレーター ===== -->
+<section class="section bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">04 / SIMULATOR</div>
+    <h2 class="section-title">お金の、シミュレーター</h2>
+    <p class="section-sub">「制度を使う/使わない」で、実質負担が何百万円も変わります。あなたの治療内容で、見てみましょう。</p>
+
+    <div class="simulator-card">
+      <div class="sim-inputs">
+        <div class="sim-input">
+          <label>がん種</label>
+          <select id="simCancer" onchange="recomputeSim()">
+            <option value="breast" selected>乳がん</option>
+            <option value="colon">大腸がん</option>
+            <option value="lung">肺がん</option>
+            <option value="stomach">胃がん</option>
+          </select>
+        </div>
+        <div class="sim-input">
+          <label>ステージ</label>
+          <select id="simStage" onchange="recomputeSim()">
+            <option value="I">I</option>
+            <option value="II" selected>II</option>
+            <option value="III">III</option>
+            <option value="IV">IV</option>
+          </select>
+        </div>
+        <div class="sim-input">
+          <label>治療内容</label>
+          <select id="simTreat" onchange="recomputeSim()">
+            <option value="surgery">手術のみ</option>
+            <option value="chemo">化学療法</option>
+            <option value="full" selected>手術 + 化学療法 + ホルモン療法</option>
+            <option value="molecular">分子標的薬(長期)</option>
+          </select>
+        </div>
+        <div class="sim-input">
+          <label>世帯収入</label>
+          <select id="simIncome" onchange="recomputeSim()">
+            <option value="low">〜370万円</option>
+            <option value="mid" selected>370〜770万円</option>
+            <option value="high">770〜1160万円</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="sim-result" id="simResult">
+        <!-- JS で生成 -->
+      </div>
+
+      <div class="sim-foot" id="simFoot">
+        <!-- JS で生成 -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. 専門家 ===== -->
+<section class="section">
+  <div class="section-eyebrow">05 / EXPERTS</div>
+  <h2 class="section-title">人間の伴走者・社労士 / FP</h2>
+  <p class="section-sub">複雑な制度や、長期化したお金の設計は、人間に相談するのが最短です。SATOI提携の専門家・初回30分無料。</p>
+
+  <div class="experts-grid">
+    <div class="expert-card">
+      <div class="expert-avatar">社</div>
+      <div class="expert-name">社労士 A(女性・40代)</div>
+      <div class="expert-role">傷病手当金・障害年金 専門</div>
+      <div class="expert-spec">乳がん患者の傷病手当・障害年金申請を 500件以上 サポート。会社との交渉も伴走。</div>
+      <div class="expert-meta">⭐ 4.9 ・ 312件のレビュー ・ 初回30分無料</div>
+      <button class="expert-btn" onclick="satoiNotify('予約画面へ・空き枠表示')">予約する</button>
+    </div>
+    <div class="expert-card">
+      <div class="expert-avatar">社</div>
+      <div class="expert-name">社労士 B(男性・50代)</div>
+      <div class="expert-role">休職制度・復職支援 専門</div>
+      <div class="expert-spec">「治療と仕事の両立」を会社とすり合わせる相談多数。中小企業から大企業まで対応。</div>
+      <div class="expert-meta">⭐ 4.8 ・ 198件のレビュー ・ 初回30分無料</div>
+      <button class="expert-btn" onclick="satoiNotify('予約画面へ')">予約する</button>
+    </div>
+    <div class="expert-card">
+      <div class="expert-avatar">FP</div>
+      <div class="expert-name">ファイナンシャル・プランナー C(女性・40代)</div>
+      <div class="expert-role">治療費全体設計 ・ がん保険診断</div>
+      <div class="expert-spec">長期治療のキャッシュフロー設計・既存がん保険の保障見直し・新規加入の必要性判断。中立な視点で。</div>
+      <div class="expert-meta">⭐ 4.9 ・ 256件のレビュー ・ 初回30分無料</div>
+      <button class="expert-btn" onclick="satoiNotify('予約画面へ')">予約する</button>
+    </div>
+    <div class="expert-card">
+      <div class="expert-avatar">FP</div>
+      <div class="expert-name">提携FP・S氏</div>
+      <div class="expert-role">教育資金・住宅ローン 影響</div>
+      <div class="expert-spec">子どもの教育費・住宅ローンを抱えながらの治療設計。家族全体のお金の不安を整理。</div>
+      <div class="expert-meta">⭐ 4.8 ・ 174件のレビュー ・ 初回30分無料</div>
+      <button class="expert-btn" onclick="satoiNotify('予約画面へ')">予約する</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. 先輩物語 ===== -->
+<section class="section bg">
+  <div class="section-inner">
+    <div class="section-eyebrow">06 / STORIES</div>
+    <h2 class="section-title">先輩の、お金の物語</h2>
+    <p class="section-sub">「同じ立場の方が、どう乗り越えたか」が、いちばん参考になります。</p>
+
+    <div class="stories-mini">
+      <div class="story-mini" onclick="location.href='SATOI_Mock_v1_D1_stories.html'">
+        <div class="story-mini-meta">Y.M.さん ・ 乳がんIV ・ 50歳</div>
+        <div class="story-mini-title">治療費の現実と、使えた制度</div>
+        <div class="story-mini-quote">「高額療養費・医療費控除・がん保険・自治体補助・限度額認定証。これだけで、年間100万円ちかく変わりました。」</div>
+      </div>
+      <div class="story-mini" onclick="location.href='SATOI_Mock_v1_D1_stories.html'">
+        <div class="story-mini-meta">D.S.さん ・ 肺がんIII ・ 42歳</div>
+        <div class="story-mini-title">会社に、いつ、どこまで伝えたか</div>
+        <div class="story-mini-quote">「人事に相談して、傷病手当金・休職制度・復職時の時短勤務を全部教えてもらえた。知らなかったら、辞めていたかも。」</div>
+      </div>
+      <div class="story-mini" onclick="location.href='SATOI_Mock_v1_D1_stories.html'">
+        <div class="story-mini-meta">A.S.さん ・ 乳がんII ・ 52歳</div>
+        <div class="story-mini-title">仕事を続けるための、お金の工夫</div>
+        <div class="story-mini-quote">「有給 + 在宅勤務で 傷病手当金 を使わず仕事継続。会社の柔軟性が、本当にありがたかった。」</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. 申請カレンダー ===== -->
+<section class="section">
+  <div class="section-eyebrow">07 / CALENDAR</div>
+  <h2 class="section-title">申請カレンダー ・ 期限を逃さない</h2>
+  <p class="section-sub">あなたの治療予定と連動して、申請期限が来る前にリマインドします。</p>
+
+  <div class="calendar-card">
+    <div class="cal-list">
+      <div class="cal-item urgent">
+        <div class="cal-month urgent">
+          <div class="cal-month-m">6</div>
+          <div class="cal-month-y">2026</div>
+        </div>
+        <div>
+          <div class="cal-info-title">高額療養費 ・ 5月分の申請</div>
+          <div class="cal-info-desc">5月の医療費分を健保に申請。診察明細書・領収書 を添付。AIが書類準備済み。</div>
+        </div>
+        <div class="cal-due">期限まで<br><strong style="color:var(--warm-orange);">あと 18日</strong></div>
+      </div>
+      <div class="cal-item">
+        <div class="cal-month">
+          <div class="cal-month-m">7</div>
+          <div class="cal-month-y">2026</div>
+        </div>
+        <div>
+          <div class="cal-info-title">限度額認定証 ・ 更新</div>
+          <div class="cal-info-desc">年度更新時期。所得区分の見直しもチェック。</div>
+        </div>
+        <div class="cal-due">7月中</div>
+      </div>
+      <div class="cal-item">
+        <div class="cal-month">
+          <div class="cal-month-m">8</div>
+          <div class="cal-month-y">2026</div>
+        </div>
+        <div>
+          <div class="cal-info-title">傷病手当金 ・ 2回目申請</div>
+          <div class="cal-info-desc">7月分の傷病手当金。主治医意見書を依頼する時期。</div>
+        </div>
+        <div class="cal-due">8月上旬</div>
+      </div>
+      <div class="cal-item">
+        <div class="cal-month">
+          <div class="cal-month-m">12</div>
+          <div class="cal-month-y">2026</div>
+        </div>
+        <div>
+          <div class="cal-info-title">年末調整・確定申告 準備</div>
+          <div class="cal-info-desc">医療費控除のためのレシート集計・領収書整理。家族分も合算。</div>
+        </div>
+        <div class="cal-due">12月-2月</div>
+      </div>
+      <div class="cal-item">
+        <div class="cal-month">
+          <div class="cal-month-m">3</div>
+          <div class="cal-month-y">2027</div>
+        </div>
+        <div>
+          <div class="cal-info-title">確定申告 ・ 還付金請求</div>
+          <div class="cal-info-desc">医療費控除で所得税還付。e-Taxで簡単に。AIが申告書ドラフト準備。</div>
+        </div>
+        <div class="cal-due">3/15</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== companion lamp ===== -->
+<div class="companion-lamp" onclick="toggleLamp()">
+  <div class="lamp-orb"></div>
+  <div class="lamp-bubble" id="lampBubble">お金の不安、ひとつずつ、整理していきましょう。</div>
+</div>
+
+<!-- ===== ティッカー ===== -->
+<div class="ticker">
+  <span class="dot"></span>
+  いま、<span class="ticker-num" id="tickerNum">412</span> 人が、制度の申請をSATOIで進めています
+</div>
+
+<!-- ===== フッター ===== -->
+<footer class="footer">
+  <div class="footer-logo">● SATOI</div>
+  <div style="font-size:13px; margin-bottom:16px; max-width:560px; margin-left:auto; margin-right:auto; line-height:1.85;">
+    SATOIの制度サポートは、C会員サブスク内で すべて無料 です。<br>
+    特定の保険会社・金融機関への誘導はしません。
+  </div>
+  <div class="footer-row">
+    <div class="footer-badge"><span>⚖️</span><span>JOInT 諮問委員会承認</span></div>
+    <div class="footer-badge"><span>🤝</span><span>独立資格者・社労士/FP</span></div>
+    <div class="footer-badge"><span>🔒</span><span>SOC2 ・ 個人情報保護</span></div>
+  </div>
+</footer>
+
+<script>
+
+/* === SATOI 共通リッチトースト関数 === */
+(function ensureToastHost(){
+  if (document.getElementById('satoi-toast-host')) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div');
+      host.id = 'satoi-toast-host';
+      document.body.appendChild(host);
+    }
+  });
+  if (document.body && !document.getElementById('satoi-toast-host')) {
+    const host = document.createElement('div');
+    host.id = 'satoi-toast-host';
+    document.body.appendChild(host);
+  }
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) {
+    html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  }
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+// 既存の alert を全て satoiNotify にフォールバック(他コードからのalert呼び出しもキャッチ)
+window.__origAlert = window.alert;
+
+/* === SATOI ユニバーサル横断ナビ JS === */
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div');
+    nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る" aria-label="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム" aria-label="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ" aria-label="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語" aria-label="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn');
+    const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const lang = b.dataset.lang;
+        const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+        if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+        document.documentElement.lang = lang;
+        langPop.classList.remove('show');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+
+/* ===== 制度データ ===== */
+const BENEFITS = [
+  {
+    n: '①', title: '高額療養費制度', status: 'ok',
+    target: 'ほぼすべてのがん患者・健保加入者',
+    amount: '月8-9万円超を還付', amountVal: 720000,
+    difficulty: 2,
+    detail: '<strong>仕組み:</strong>月の医療費が一定額(年収により8-25万円程度)を超えると、超えた分が戻ってくる制度。<br><strong>申請先:</strong>加入している健康保険組合(協会けんぽ・組合健保等)。<br><strong>必要書類:</strong>申請書・医療費明細書・領収書。SATOIで自動準備可能。<br><strong>期限:</strong>診療月から2年以内。<br><strong>あなたの場合:</strong>年収370-770万円なら自己負担上限 月¥80,100 + (医療費-267,000)×1%。'
+  },
+  {
+    n: '②', title: '限度額認定証', status: 'ok',
+    target: 'ほぼすべての患者',
+    amount: '立替不要に・キャッシュフロー改善', amountVal: 0,
+    difficulty: 1,
+    detail: '<strong>仕組み:</strong>事前に取得しておくと、窓口で限度額しか払わなくて済む(立て替え不要)。<br><strong>申請先:</strong>加入している健康保険組合。<br><strong>必要書類:</strong>申請書のみ・1-2週間で郵送される。<br><strong>有効期限:</strong>毎年7月更新。<br><strong>あなたの場合:</strong>大手術・継続治療があるなら、ほぼ必須。今すぐ申請推奨。'
+  },
+  {
+    n: '③', title: '医療費控除(確定申告)', status: 'ok',
+    target: '年10万円超の医療費・家族分も合算',
+    amount: '所得税・住民税の還付(数十万円)', amountVal: 400000,
+    difficulty: 3,
+    detail: '<strong>仕組み:</strong>年間10万円超(年収200万円未満は5%超)の医療費を支払った場合、所得から控除・所得税が戻る。<br><strong>申請先:</strong>税務署(e-Tax可)。<br><strong>必要書類:</strong>領収書(2017年以降は明細書でOK)・医療費控除明細書。<br><strong>期限:</strong>確定申告期間(通常2/16-3/15)・5年遡って申告可。<br><strong>あなたの場合:</strong>家族分も合算可・年収370-770万円なら所得税還付率20%が目安。'
+  },
+  {
+    n: '④', title: '傷病手当金', status: 'ok',
+    target: '会社員(健保加入者)・休業時',
+    amount: '給与2/3 × 1年6か月', amountVal: 600000,
+    difficulty: 3,
+    detail: '<strong>仕組み:</strong>病気で4日以上連続して仕事を休んだ時、給与の約2/3が、最大1年6か月支給される。<br><strong>申請先:</strong>会社経由 → 健康保険組合。<br><strong>必要書類:</strong>傷病手当金支給申請書(本人欄+会社欄+主治医意見書)。<br><strong>期限:</strong>権利は2年で時効。早めに。<br><strong>あなたの場合:</strong>会社員なので適用。SATOIで主治医意見書テンプレと会社への依頼文を準備可。'
+  },
+  {
+    n: '⑤', title: 'がん保険給付金', status: 'maybe',
+    target: 'がん保険加入者',
+    amount: '診断・治療・通院給付', amountVal: 200000,
+    difficulty: 2,
+    detail: '<strong>仕組み:</strong>加入しているがん保険から、診断給付金・入院給付金・通院給付金 等が支払われる。<br><strong>申請先:</strong>保険会社。<br><strong>必要書類:</strong>診断書(主治医作成)・保険会社所定の請求書。<br><strong>期限:</strong>請求権は通常3年で時効。<br><strong>あなたの場合:</strong>SATOIに加入保険会社を登録してください。請求漏れチェックと自動請求書生成が可能。'
+  },
+  {
+    n: '⑥', title: '自治体補助・ウィッグ/再建補助', status: 'ok',
+    target: '居住自治体による',
+    amount: '数万円〜10万円', amountVal: 30000,
+    difficulty: 2,
+    detail: '<strong>仕組み:</strong>多くの自治体で、医療用ウィッグ(2-3万円補助)・乳房再建用補正下着(5万円補助)等の制度がある。<br><strong>申請先:</strong>居住地の市区町村役所(健康課)。<br><strong>必要書類:</strong>申請書・領収書・診断書のコピー。<br><strong>あなたの場合:</strong>SATOIに郵便番号を登録すると、お住まいの自治体の制度を自動表示。'
+  },
+  {
+    n: '⑦', title: '障害年金', status: 'maybe',
+    target: '長期治療・重度の場合',
+    amount: '月額6-20万円', amountVal: 0,
+    difficulty: 4,
+    detail: '<strong>仕組み:</strong>がんによって、日常生活・労働能力が著しく制限される場合、年金として支給。<br><strong>申請先:</strong>年金事務所。<br><strong>必要書類:</strong>診断書(障害年金専用フォーマット)・申立書 等。<br><strong>難易度:</strong>高め。社労士のサポート推奨。<br><strong>あなたの場合:</strong>治療開始から1年6か月以降・症状次第。社労士相談ボタンから無料相談へ。'
+  },
+  {
+    n: '⑧', title: '介護保険(40-65歳・がん末期)', status: 'ng',
+    target: '40-65歳・末期がんに該当',
+    amount: 'サービス利用(訪問介護・看護等)', amountVal: 0,
+    difficulty: 3,
+    detail: '<strong>仕組み:</strong>通常65歳以上対象だが、がん末期は40-64歳でも利用可。介護サービスを1-3割負担で受けられる。<br><strong>申請先:</strong>居住地の地域包括支援センター。<br><strong>あなたの場合:</strong>現時点では対象外(治療中・進行度II)。将来必要になった時のために、流れだけ知っておくと安心。'
+  }
+];
+
+function renderBenefit(b) {
+  const dots = '<span class="diff-dots">' + Array.from({length: 5}, (_, i) => `<span class="diff-dot ${i < b.difficulty ? 'active' : ''}"></span>`).join('') + '</span>';
+  const statusLabel = b.status === 'ok' ? '✓ 適用OK' : (b.status === 'maybe' ? '? 要確認' : '✗ 対象外');
+  return `<div class="benefit-card" onclick="this.classList.toggle('open')">
+    <div class="benefit-status ${b.status}">${statusLabel}</div>
+    <div class="benefit-num">${b.n}</div>
+    <div class="benefit-title">${b.title}</div>
+    <div class="benefit-target">対象:${b.target}</div>
+    <div class="benefit-amount"><span class="yen">${b.amount}</span></div>
+    <div class="benefit-difficulty">申請難易度 ${dots} ${b.difficulty <= 2 ? '簡単' : (b.difficulty <= 3 ? '普通' : 'やや複雑・専門家推奨')}</div>
+    <div class="benefit-detail">${b.detail}
+      <div class="benefit-actions">
+        ${b.status !== 'ng' ? '<button class="benefit-btn" onclick="event.stopPropagation(); scrollToAssistant()">申請書類を作る</button>' : ''}
+        <button class="benefit-btn outline" onclick="event.stopPropagation(); satoiNotify(\'詳細ガイド・プレースホルダ\')">詳しいガイドを読む</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+document.getElementById('benefitsGrid').innerHTML = BENEFITS.map(renderBenefit).join('');
+
+function recomputeBenefits() {
+  const work = document.getElementById('qWork').value;
+  let count = 0, total = 0;
+  BENEFITS.forEach(b => {
+    let s = b.status;
+    // 就業状況による調整
+    if (b.title === '傷病手当金' && work !== 'employee') s = work === 'parttime' ? 'maybe' : 'ng';
+    if (s === 'ok') { count++; total += b.amountVal; }
+    if (s === 'maybe') { count++; total += b.amountVal * 0.5; }
+  });
+  document.getElementById('benefitCount').textContent = count;
+  document.getElementById('benefitTotal').textContent = '¥' + total.toLocaleString('en-US');
+}
+
+/* ===== シミュレーター ===== */
+function recomputeSim() {
+  const cancer = document.getElementById('simCancer').value;
+  const stage = document.getElementById('simStage').value;
+  const treat = document.getElementById('simTreat').value;
+  const income = document.getElementById('simIncome').value;
+
+  // 治療費総額(円)
+  const treatCosts = {
+    surgery: 1200000, chemo: 800000, full: 1850000, molecular: 6500000
+  };
+  let total = treatCosts[treat] || 1000000;
+
+  // ステージ係数
+  if (stage === 'III') total *= 1.2;
+  if (stage === 'IV') total *= 1.5;
+  if (stage === 'I') total *= 0.7;
+
+  total = Math.round(total / 10000) * 10000;
+  const self = Math.round(total * 0.3);
+
+  // 高額療養費後(所得別上限)
+  const monthlyCap = income === 'low' ? 35400 : (income === 'mid' ? 87000 : 167400);
+  const monthsTreat = treat === 'molecular' ? 12 : (treat === 'full' ? 6 : 3);
+  const afterH = Math.min(self, monthlyCap * monthsTreat);
+
+  // 医療費控除後(所得税還付分)
+  const taxRate = income === 'low' ? 0.05 : (income === 'mid' ? 0.10 : 0.20);
+  const deduction = Math.max(0, afterH - 100000) * taxRate;
+  const afterD = afterH - Math.round(deduction / 10000) * 10000;
+
+  const yen = n => '¥' + n.toLocaleString('en-US');
+  document.getElementById('simResult').innerHTML = `
+    <div class="sim-bar-row">
+      <div class="sim-bar-label">① 治療費・総額</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill total" style="width:100%;">${yen(total)}</div></div>
+      <div class="sim-bar-num">${yen(total)}</div>
+    </div>
+    <div class="sim-bar-row">
+      <div class="sim-bar-label">② 自己負担(健保3割)</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill self" style="width:${(self/total*100).toFixed(0)}%;">${yen(self)}</div></div>
+      <div class="sim-bar-num">${yen(self)}</div>
+    </div>
+    <div class="sim-bar-row">
+      <div class="sim-bar-label">③ 高額療養費・後</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill after-h" style="width:${(afterH/total*100).toFixed(0)}%;">${yen(afterH)}</div></div>
+      <div class="sim-bar-num">${yen(afterH)}</div>
+    </div>
+    <div class="sim-bar-row">
+      <div class="sim-bar-label">④ 医療費控除・後 ★実質負担</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill after-d" style="width:${(afterD/total*100).toFixed(0)}%;">${yen(afterD)}</div></div>
+      <div class="sim-bar-num">${yen(afterD)}</div>
+    </div>
+  `;
+  const saved = self - afterD;
+  document.getElementById('simFoot').innerHTML = `
+    制度を使うと、自己負担 ${yen(self)} が、実質 <strong>${yen(afterD)}</strong> に。<br>
+    <strong>${yen(saved)}</strong> 助かる試算です(がん保険・自治体補助 を加えるとさらに削減可)。
+  `;
+}
+recomputeSim();
+
+function scrollToAssistant() {
+  document.querySelector('.assistant-card').scrollIntoView({ behavior: 'smooth' });
+}
+
+/* ===== 星 ===== */
+(function genStars(){
+  const layer = document.getElementById('heroStars');
+  if (!layer) return;
+  for (let i=0; i<50; i++) {
+    const s = document.createElement('div');
+    s.className = 'h-star';
+    const sz = Math.random()*2 + 0.6;
+    s.style.width = sz + 'px'; s.style.height = sz + 'px';
+    s.style.left = (Math.random()*100) + '%';
+    s.style.top = (Math.random()*65) + '%';
+    s.style.animationDelay = (Math.random()*4) + 's';
+    s.style.animationDuration = (3 + Math.random()*2.5) + 's';
+    layer.appendChild(s);
+  }
+})();
+
+function toggleLamp() { document.getElementById('lampBubble').classList.toggle('show'); }
+setTimeout(() => document.getElementById('lampBubble').classList.add('show'), 2400);
+setTimeout(() => document.getElementById('lampBubble').classList.remove('show'), 9500);
+
+setInterval(() => {
+  const el = document.getElementById('tickerNum');
+  if (!el) return;
+  const cur = parseInt(el.textContent.replace(/,/g,''));
+  el.textContent = Math.max(50, cur + Math.floor(Math.random()*5) - 2).toLocaleString('en-US');
+}, 4500);
+</script>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

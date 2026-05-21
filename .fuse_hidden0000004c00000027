@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About SATOI - 同じ夜を、過ごしている人がいます</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --night-glow: #2A3558;
+  --dawn-soft: #2E3A5C;
+  --dawn-pink: #D8A98A;
+  --morning-cream: #F6EFE3;
+  --morning-white: #FBF7F0;
+  --starlight: #D4A95E;
+  --starlight-soft: #E5C68A;
+  --starlight-strong: #F0C97A;
+  --teal: #0D7377;
+  --teal-deep: #0A5A5D;
+  --teal-soft: #14A6AB;
+  --warm-orange: #D4622A;
+  --navy: #0A1628;
+  --line: rgba(248,246,240,0.10);
+  --text-primary: #1A2A40;
+  --text-secondary: rgba(26,42,64,0.72);
+  --text-muted: rgba(26,42,64,0.50);
+  --text-on-dark: rgba(248,246,240,0.96);
+  --text-on-dark-soft: rgba(248,246,240,0.74);
+  --text-on-dark-quiet: rgba(248,246,240,0.50);
+  --font: "Noto Sans JP", "Meiryo UI", "Meiryo", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; overflow-x:hidden; }
+body {
+  font-family: var(--font);
+  color: var(--text-on-dark);
+  background:
+    linear-gradient(180deg,
+      var(--night-deep) 0%,
+      var(--night-medium) 18%,
+      var(--dawn-soft) 36%,
+      var(--dawn-pink) 56%,
+      var(--morning-cream) 72%,
+      var(--morning-white) 88%,
+      var(--night-deep) 100%) no-repeat;
+  background-size: 100% 100%;
+  line-height: 2;
+  font-weight: 300;
+}
+
+/* スクロール背景は body に直接適用(viewport固定をやめて、スクロールに追従) */
+.scroll-bg { display: none; }
+
+/* === 星(固定背景) === */
+.stars-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.star {
+  position: absolute;
+  background: var(--starlight);
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 5s infinite ease-in-out;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.12; transform: scale(0.7); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+/* === ヘッダー === */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(11,23,54,0.6), rgba(11,23,54,0));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.logo {
+  font-size: 22px; font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--text-on-dark);
+  display: inline-flex; align-items: center;
+  text-decoration: none;
+}
+.logo .dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: var(--starlight);
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 0 12px var(--starlight);
+}
+.h-right { display: flex; gap: 12px; }
+.h-link {
+  color: var(--text-on-dark-soft);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 18px;
+  transition: background 0.3s;
+}
+.h-link:hover { background: rgba(248,246,240,0.08); }
+
+/* === 共通セクション === */
+section {
+  min-height: 92vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 80px 40px;
+  position: relative;
+}
+section.compact {
+  min-height: auto;
+  padding: 110px 40px;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--text-on-dark-quiet);
+  margin-bottom: 24px;
+  text-align: center;
+}
+.eyebrow.dark { color: rgba(26,42,64,0.55); }
+
+/* ========== 0. オープニング ========== */
+.opener {
+  text-align: center;
+  color: var(--text-on-dark);
+  max-width: 740px;
+}
+.opener-quiet-text {
+  font-size: 13px;
+  letter-spacing: 0.36em;
+  color: var(--text-on-dark-quiet);
+  margin-bottom: 60px;
+}
+.opener-line {
+  font-size: 38px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+  color: var(--text-on-dark);
+  margin-bottom: 80px;
+}
+.opener-scroll {
+  display: inline-flex; flex-direction: column;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: var(--text-on-dark-quiet);
+  gap: 14px;
+}
+.opener-scroll-arrow {
+  width: 18px; height: 28px;
+  border: 1px solid var(--text-on-dark-quiet);
+  border-radius: 9px;
+  position: relative;
+}
+.opener-scroll-arrow::after {
+  content: '';
+  position: absolute;
+  left: 50%; top: 6px;
+  transform: translateX(-50%);
+  width: 2px; height: 6px;
+  background: var(--text-on-dark-quiet);
+  border-radius: 2px;
+  animation: scroll-hint 2s infinite;
+}
+@keyframes scroll-hint {
+  0% { transform: translate(-50%, 0); opacity: 1; }
+  60% { transform: translate(-50%, 10px); opacity: 0; }
+  100% { transform: translate(-50%, 10px); opacity: 0; }
+}
+
+/* ========== 1. ミッション ========== */
+.mission {
+  text-align: center;
+  max-width: 880px;
+  color: var(--text-on-dark);
+}
+.mission-tag {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  color: var(--starlight);
+  margin-bottom: 32px;
+}
+.mission-line {
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 2;
+  margin-bottom: 32px;
+  color: var(--text-on-dark);
+}
+.mission-line strong {
+  color: var(--starlight-strong);
+  font-weight: 500;
+  font-size: 32px;
+}
+.mission-divider {
+  width: 60px;
+  height: 1px;
+  background: var(--starlight);
+  margin: 40px auto;
+  opacity: 0.5;
+}
+.mission-foot {
+  font-size: 14px;
+  color: var(--text-on-dark-soft);
+  letter-spacing: 0.04em;
+  line-height: 2.1;
+}
+
+/* ========== 2. NBM ========== */
+.nbm {
+  max-width: 1000px;
+  width: 100%;
+  text-align: center;
+  color: var(--text-on-dark);
+}
+.nbm-title {
+  font-size: 32px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.nbm-title .en {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  color: var(--starlight);
+  margin-bottom: 16px;
+}
+.nbm-sub {
+  font-size: 15px;
+  color: var(--text-on-dark-soft);
+  margin-bottom: 60px;
+  line-height: 2.1;
+  max-width: 640px;
+  margin-left: auto; margin-right: auto;
+}
+.nbm-quotes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  text-align: left;
+}
+.nbm-quote {
+  background: rgba(248,246,240,0.04);
+  border: 1px solid rgba(248,246,240,0.12);
+  border-radius: 18px;
+  padding: 30px 28px;
+  line-height: 2;
+}
+.nbm-quote-mark {
+  font-size: 42px;
+  color: var(--starlight);
+  line-height: 1;
+  margin-bottom: 14px;
+  opacity: 0.7;
+}
+.nbm-quote-text {
+  font-size: 14.5px;
+  color: var(--text-on-dark);
+  margin-bottom: 18px;
+  font-weight: 300;
+}
+.nbm-quote-text strong {
+  color: var(--starlight-strong);
+  font-weight: 500;
+}
+.nbm-quote-from {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--text-on-dark-quiet);
+}
+
+/* ========== 3. 沈黙のUX ========== */
+.silent-ux {
+  max-width: 1000px;
+  width: 100%;
+  text-align: center;
+  color: var(--text-on-dark);
+}
+.silent-headline {
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+  margin-bottom: 24px;
+}
+.silent-headline strong {
+  color: var(--starlight-strong); font-weight: 500;
+}
+.silent-body {
+  font-size: 15px;
+  color: var(--text-on-dark-soft);
+  line-height: 2.1;
+  max-width: 700px;
+  margin: 0 auto 50px;
+}
+.silent-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  text-align: left;
+}
+.silent-card {
+  background: rgba(248,246,240,0.04);
+  border: 1px solid rgba(248,246,240,0.12);
+  border-radius: 18px;
+  padding: 28px 26px;
+}
+.silent-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--starlight-strong), var(--starlight) 60%, rgba(212,169,94,0.2));
+  margin-bottom: 18px;
+  animation: orb-pulse 4s infinite;
+}
+@keyframes orb-pulse {
+  0%,100% { transform: scale(0.95); opacity: 0.85; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+.silent-card-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-on-dark);
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+.silent-card-desc {
+  font-size: 13px;
+  color: var(--text-on-dark-soft);
+  line-height: 1.95;
+  font-weight: 300;
+}
+
+/* ========== 4. 5つの約束 ========== */
+.promises {
+  max-width: 880px;
+  width: 100%;
+  color: var(--text-on-dark);
+}
+.promises-title {
+  font-size: 28px;
+  font-weight: 300;
+  text-align: center;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+.promises-sub {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-on-dark-soft);
+  margin-bottom: 56px;
+}
+.promise-list {
+  display: grid;
+  gap: 12px;
+}
+.promise-item {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 24px;
+  padding: 24px 28px;
+  background: rgba(248,246,240,0.03);
+  border: 1px solid rgba(248,246,240,0.10);
+  border-radius: 14px;
+  align-items: start;
+}
+.promise-num {
+  font-size: 28px;
+  font-weight: 200;
+  color: var(--starlight);
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+.promise-text { line-height: 2.1; }
+.promise-head {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--text-on-dark);
+}
+.promise-desc {
+  font-size: 13px;
+  color: var(--text-on-dark-soft);
+  font-weight: 300;
+}
+
+/* ========== 5. ガバナンス ========== */
+.governance {
+  max-width: 900px; width: 100%;
+  text-align: center;
+}
+.governance-title {
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+.governance-body {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 2.1;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+.governance-body strong { color: var(--teal); font-weight: 500; }
+.governance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  text-align: left;
+}
+.gov-card {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(10,22,40,0.08);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+.gov-card-eyebrow {
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+.gov-card-text {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+/* ========== 6. 数字 ========== */
+.numbers {
+  max-width: 1000px; width: 100%;
+  text-align: center;
+}
+.numbers-title {
+  font-size: 26px;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+.numbers-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 50px;
+  line-height: 1.95;
+}
+.numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 18px;
+  margin-bottom: 36px;
+}
+.num-card {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(10,22,40,0.08);
+  border-radius: 18px;
+  padding: 28px 22px;
+}
+.num-eyebrow {
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  color: var(--teal);
+  margin-bottom: 10px;
+}
+.num-big {
+  font-size: 40px;
+  font-weight: 200;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.num-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.num-foot {
+  margin-top: 30px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.95;
+  max-width: 680px;
+  margin-left: auto; margin-right: auto;
+  font-style: italic;
+}
+.num-foot strong { color: var(--teal); font-style: normal; }
+
+/* ========== 7. パートナー ========== */
+.partners {
+  max-width: 900px; width: 100%;
+  text-align: center;
+}
+.partners-title {
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+.partners-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+}
+.partner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  text-align: left;
+}
+.partner-card {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(10,22,40,0.08);
+  border-radius: 14px;
+  padding: 22px 22px;
+}
+.partner-eyebrow {
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  color: var(--warm-orange);
+  margin-bottom: 6px;
+}
+.partner-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.55;
+}
+.partner-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+
+/* ========== 8. 入口 ========== */
+.entry {
+  max-width: 900px; width: 100%;
+  text-align: center;
+}
+.entry-title {
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+.entry-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 48px;
+  line-height: 2;
+}
+.entry-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.entry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: var(--text-primary);
+  color: var(--morning-white);
+  border: none;
+  border-radius: 30px;
+  font-family: var(--font);
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+.entry-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(10,22,40,0.15); }
+.entry-btn.outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+}
+.entry-btn.outline:hover { background: var(--text-primary); color: var(--morning-white); }
+.entry-contact {
+  margin-top: 50px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.95;
+}
+.entry-contact a { color: var(--teal); text-decoration: underline; }
+
+/* ========== 9. クロージング ========== */
+.closing {
+  background: var(--night-deep);
+  color: var(--text-on-dark);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.closing-stars {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.closing-line {
+  font-size: 26px;
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  line-height: 2;
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+}
+.closing-foot {
+  margin-top: 50px;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  color: var(--text-on-dark-quiet);
+}
+.closing-logo {
+  margin-top: 30px;
+  font-size: 22px;
+  letter-spacing: 0.32em;
+  color: var(--text-on-dark);
+}
+
+/* === companion lamp === */
+.companion-lamp {
+  position: fixed; right: 28px; bottom: 28px;
+  width: 70px; height: 70px;
+  z-index: 150;
+}
+.lamp-orb {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--starlight-strong) 0%, var(--starlight) 38%, rgba(212,169,94,0.18) 70%, transparent 100%);
+  animation: orb-pulse 4s infinite;
+}
+
+/* === レスポンシブ === */
+@media (max-width: 760px) {
+  .header { padding: 14px 18px; }
+  section { padding: 80px 22px; min-height: auto; }
+  .opener-line { font-size: 26px; }
+  .mission-line { font-size: 22px; }
+  .mission-line strong { font-size: 24px; }
+  .nbm-title { font-size: 24px; }
+  .silent-headline { font-size: 22px; }
+  .promises-title { font-size: 24px; }
+  .closing-line { font-size: 20px; }
+  .companion-lamp { right: 14px; bottom: 14px; width: 60px; height: 60px; }
+  .promise-item { grid-template-columns: 44px 1fr; gap: 16px; padding: 20px 22px; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) {
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+
+
+/* === SATOI 共通モバイル対応(iPad/iPhone)=== */
+@media (max-width: 1024px) {
+  /* iPad 縦 ・ ヘッダー狭め */
+  .header { padding: 14px 22px !important; }
+  .section, .wrap, .container, main, .main { padding-left: 22px !important; padding-right: 22px !important; }
+}
+@media (max-width: 768px) {
+  /* iPhone ・ 主要メトリクスをモバイル最適化 */
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title, .hero-title-l1 { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title, .nbm-title, .mission-line { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  .section, .container, .wrap, main, .main, section { padding-left: 14px !important; padding-right: 14px !important; }
+  section, .section { padding-top: 50px !important; padding-bottom: 50px !important; }
+  /* グリッドを1列に */
+  .grid, .cards, .types-grid, .stories-grid, .forum-grid, .family-grid, .promise-list, .partner-grid, .gov-grid, .numbers-grid, .empse-grid, .pubmed-list, .sources-grid, .criteria-grid, .tx-cat-grid, .map-wrap, .emg-grid, .emg-consent-grid, .emg-contacts, .kids-talk-wrap, .cat-grid, .videos-grid, .cat-cards, .partner-cards, .promise-cards, .principle-cards, .pricing-grid, .pricing-cards, .step-cards, .info-cards, .role-cards, .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* 横スクロールのみ許す要素は残す */
+  .b1-journey-bar, .journey-bar, .types-tabs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  /* ヒーローの padding 圧縮 */
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  /* 大きい見出し */
+  .opener-line { font-size: 24px !important; margin-bottom: 40px !important; }
+  /* タップ領域 44px 最低 */
+  .btn, button, .login-btn, .nav-mini a, .filter-chip, .cat-card, .type-card, .story-card, .forum-card { min-height: 40px; }
+  /* テーブル横スクロール */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* マイチーム ホイール → 縦並びに */
+  .team-wheel-wrap, .team-wheel { width: 100% !important; height: auto !important; min-height: 360px; }
+  /* モーダル系: 画面いっぱいに */
+  .modal, .overlay-modal, [class*='Modal'], [class*='modal'] { max-width: 100vw !important; }
+  /* ナビ縮小 */
+  .nav-mini, .nav { gap: 12px !important; font-size: 12px !important; }
+  /* フォーム入力 */
+  input, textarea, select { font-size: 16px !important; } /* iOSのズーム防止 */
+  /* SVG レーダーチャートの収まり */
+  .empse-chart, .empse-chart-wrap { width: 100% !important; max-width: 320px; height: auto !important; margin: 0 auto !important; }
+  /* B1 7ステップを横スクロールに */
+  .steps-row { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 10px; }
+  .steps-row .step { flex-shrink: 0; min-width: 80px; }
+  /* G2 サイドナビは画面下部固定 or hamburger 想定 */
+  .sidebar, .side-nav, .g2-sidebar { position: relative !important; width: 100% !important; height: auto !important; overflow-x: auto !important; display: flex !important; }
+}
+@media (max-width: 480px) {
+  /* 極小画面 */
+  .hero { padding: 80px 12px 40px !important; }
+  .b1-journey-bar { padding: 8px 10px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+
+/* === SATOI ユニバーサル横断ナビ(戻る/ホーム/言語) === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-univ-btn[title]::after { content: attr(title); position: absolute; right: 54px; background: rgba(11,23,54,0.92); color: #F8F6F0; font-size: 11px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.satoi-univ-btn:hover::after { opacity: 1; }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+</style>
+</head>
+<body>
+
+<div class="scroll-bg"></div>
+<div class="stars-layer" id="starsLayer"></div>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <div class="h-right">
+    <a class="h-link" href="SATOI_Mock_v1_A1_entrance.html">入口に戻る</a>
+    <a class="h-link" href="SATOI_Mock_v1_A2_dialog.html">AI対話</a>
+    <a class="h-link" href="SATOI_Mock_v1_D1_stories.html">物語</a>
+  </div>
+</header>
+
+<!-- ===== 0. オープニング ===== -->
+<section class="opener-section">
+  <div class="opener">
+    <div class="opener-quiet-text">ABOUT SATOI</div>
+    <div class="opener-line">
+      同じ夜を、<br>過ごしている人がいます。
+    </div>
+    <div class="opener-scroll">
+      <div class="opener-scroll-arrow"></div>
+      <div>SCROLL</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 1. ミッション ===== -->
+<section>
+  <div class="mission">
+    <div class="mission-tag">OUR MISSION</div>
+    <div class="mission-line">
+      すべてのがん患者が、<br>
+      がんにかかったら必ず<br>
+      <strong>最初に思い出す唯一の場所</strong> で<br>
+      あること。
+    </div>
+    <div class="mission-divider"></div>
+    <div class="mission-line">
+      すべてのがん治療法が、<br>
+      <strong>患者のために提供されている</strong><br>
+      情報であること。
+    </div>
+    <div class="mission-foot">
+      検索 ・ マッチング ・ 制度サポート ・ コミュニティ ・ データビジネス —<br>
+      これらはすべて、この2つの目標のための <strong style="color:var(--starlight-strong);">手段</strong> です。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. NBM ===== -->
+<section id="nbm">
+  <div class="nbm">
+    <div class="nbm-title">
+      <span class="en">NARRATIVE-BASED MEDICINE</span>
+      物語に、寄り添う医療を。
+    </div>
+    <div class="nbm-sub">
+      EBM(エビデンスベース医療)だけでは、人を救えないと、わたしたちは考えています。<br>
+      数字の前に、<strong>あなたという物語があります。</strong>
+    </div>
+
+    <div class="nbm-quotes">
+      <div class="nbm-quote">
+        <div class="nbm-quote-mark">"</div>
+        <div class="nbm-quote-text">
+          あなたは<strong>「がん」ではありません</strong>。<br>
+          物語のある、一人の人間です。<br>
+          治療は、これから「あなたの物語」になっていきます。
+        </div>
+        <div class="nbm-quote-from">— SATOI のフィロソフィー</div>
+      </div>
+      <div class="nbm-quote">
+        <div class="nbm-quote-mark">"</div>
+        <div class="nbm-quote-text">
+          医療には、<strong>「治す」だけでなく、「聞く」</strong> ことが要る。<br>
+          患者は、説明される存在ではなく、語る存在として、迎えられるべきです。
+        </div>
+        <div class="nbm-quote-from">— 医療アドバイザリーボードより</div>
+      </div>
+      <div class="nbm-quote">
+        <div class="nbm-quote-mark">"</div>
+        <div class="nbm-quote-text">
+          告知の夜、いちばん欲しかったのは、医学情報ではなく<br>
+          <strong>「同じ夜を、過ごしている人がいる」</strong> という、それだけのことでした。
+        </div>
+        <div class="nbm-quote-from">— ある患者さんの言葉</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 沈黙のUX ===== -->
+<section>
+  <div class="silent-ux">
+    <div class="eyebrow">SILENCE UX</div>
+    <div class="silent-headline">
+      <strong>「今は、何もしなくていい」</strong><br>
+      を、デザインに、組み込みました。
+    </div>
+    <div class="silent-body">
+      告知直後、人は能動的に検索をしません。<br>
+      情報を読めない、選べない、決められない時間が、あります。<br>
+      だから、SATOIは <strong style="color:var(--starlight-strong);">手を差し伸べる構造</strong> にしました。
+    </div>
+    <div class="silent-cards">
+      <div class="silent-card">
+        <div class="silent-icon"></div>
+        <div class="silent-card-title">ゆっくりモード</div>
+        <div class="silent-card-desc">「魔の2週間」(告知直後)の方へ、すべてのアニメーション・通知・音を、穏やかに切り替えます。何も決めなくていい時間を、守るために。</div>
+      </div>
+      <div class="silent-card">
+        <div class="silent-icon"></div>
+        <div class="silent-card-title">companion lamp</div>
+        <div class="silent-card-desc">隣で静かに灯っている、AIの存在。深夜は「眠れない夜も、ここに」、朝は「おはようございます」と、時刻でトーンを変えます。</div>
+      </div>
+      <div class="silent-card">
+        <div class="silent-icon"></div>
+        <div class="silent-card-title">物語の壺</div>
+        <div class="silent-card-desc">あなたが過ごしてきた日々が、ひとつずつ、光になって溜まる場所。話せなかった夜のことも、ここに、そっと記録されています。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    <!-- ===== Satoi の3つの姿勢(寄り添う/つながる/道しるべ)===== -->
+    <div class="promises-3posture" style="margin: 50px auto 40px; max-width: 980px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
+      <a href="SATOI_Mock_v1_POSTURE_yorisou.html" style="background: rgba(248,246,240,0.06); border: 1px solid rgba(212,169,94,0.35); border-radius: 18px; padding: 28px; color: var(--text-on-dark); text-decoration: none; transition: all 0.3s; cursor: pointer;">
+        <div style="font-size: 11px; letter-spacing: 0.32em; color: var(--starlight); margin-bottom: 8px;">01 ・ POSTURE</div>
+        <h3 style="font-size: 22px; font-weight: 400; margin-bottom: 12px;">寄り添う</h3>
+        <p style="font-size: 13px; color: var(--text-on-dark-soft); line-height: 1.95;">数字より、言葉を信じる。あなたの揺れ・沈黙・気持ちを、医療の一部として扱います。</p>
+        <div style="margin-top: 14px; font-size: 11.5px; color: var(--starlight-strong);">▸ 詳細を読む</div>
+      </a>
+      <a href="SATOI_Mock_v1_POSTURE_tsunagaru.html" style="background: rgba(248,246,240,0.06); border: 1px solid rgba(13,115,119,0.5); border-radius: 18px; padding: 28px; color: var(--text-on-dark); text-decoration: none; transition: all 0.3s;">
+        <div style="font-size: 11px; letter-spacing: 0.32em; color: var(--teal-soft); margin-bottom: 8px;">02 ・ CONNECT</div>
+        <h3 style="font-size: 22px; font-weight: 400; margin-bottom: 12px;">つながる</h3>
+        <p style="font-size: 13px; color: var(--text-on-dark-soft); line-height: 1.95;">家族・先輩・主治医の先生・コーディネーター・AI。あなたを支えるチームを、同意ベースで繋ぎます。</p>
+        <div style="margin-top: 14px; font-size: 11.5px; color: var(--starlight-strong);">▸ 詳細を読む</div>
+      </a>
+      <a href="SATOI_Mock_v1_POSTURE_michishirube.html" style="background: rgba(248,246,240,0.06); border: 1px solid rgba(212,98,42,0.5); border-radius: 18px; padding: 28px; color: var(--text-on-dark); text-decoration: none; transition: all 0.3s;">
+        <div style="font-size: 11px; letter-spacing: 0.32em; color: var(--warm-orange); margin-bottom: 8px;">03 ・ COMPASS</div>
+        <h3 style="font-size: 22px; font-weight: 400; margin-bottom: 12px;">道しるべ</h3>
+        <p style="font-size: 13px; color: var(--text-on-dark-soft); line-height: 1.95;">広いマインドマップで、あなたが今どこにいるか・これから歩む道を俯瞰できます。標準治療を尊重します。</p>
+        <div style="margin-top: 14px; font-size: 11.5px; color: var(--starlight-strong);">▸ 詳細を読む</div>
+      </a>
+    </div>
+
+<!-- ===== 4. 5つの約束 ===== -->
+<section>
+  <div class="promises">
+    <div class="promises-title">SATOIから、あなたへの 5つの約束</div>
+    <div class="promises-sub">どれも、当たり前のようで、当たり前にされていないものを、ひとつずつ。</div>
+    <div class="promise-list">
+      <div class="promise-item">
+        <div class="promise-num">01</div>
+        <div class="promise-text">
+          <div class="promise-head">あなたの物語は、あなたのものです。</div>
+          <div class="promise-desc">記録されるすべての情報は、本人同意ベース。共有先はあなたが選び、いつでも撤回できます。</div>
+        </div>
+      </div>
+      <div class="promise-item">
+        <div class="promise-num">02</div>
+        <div class="promise-text">
+          <div class="promise-head">数字より、言葉を、信じます。</div>
+          <div class="promise-desc">NBM中心。検査値だけでなく、あなたの言葉・揺れ・沈黙を、医療の一部として扱います。</div>
+        </div>
+      </div>
+      <div class="promise-item">
+        <div class="promise-num">03</div>
+        <div class="promise-text">
+          <div class="promise-head">急がせません。</div>
+          <div class="promise-desc">沈黙のUXを、すべての画面に。何も決めない夜が、許されています。明日また、続きから始められます。</div>
+        </div>
+      </div>
+      <div class="promise-item">
+        <div class="promise-num">04</div>
+        <div class="promise-text">
+          <div class="promise-head">医療従事者から指摘されないレベルの、情報精度。</div>
+          <div class="promise-desc">医療アドバイザリーボードと、JOInT諮問委員会が、すべての医療情報をレビューしています。事実誤認は、丁寧に修正します。</div>
+        </div>
+      </div>
+      <div class="promise-item">
+        <div class="promise-num">05</div>
+        <div class="promise-text">
+          <div class="promise-head">広告を、流しません。特定の商品への誘導も、しません。</div>
+          <div class="promise-desc">SATOIは中立です。特定の保険会社・製薬企業・金融商品への誘導はしません。すべての制度サポートは、サブスク内で無料です。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4.5 EMPSe 5軸 ・ SATOIの測定指標 ===== -->
+<section class="compact" id="empse">
+  <div style="max-width:1000px; width:100%; margin: 0 auto;">
+    <div class="eyebrow dark">EMPSe ・ MEASUREMENT</div>
+    <div style="font-size:30px; font-weight:300; color: var(--text-primary); letter-spacing:0.06em; line-height:1.55; margin-bottom:16px; text-align: center;">
+      SATOI の<strong style="color: var(--teal); font-weight:600;">測定指標</strong> ・ EMPSe 5軸
+    </div>
+    <div style="font-size:14px; color: var(--text-secondary); line-height:2; max-width:680px; margin: 0 auto 40px; text-align: center;">
+      数字より言葉を信じる、と言いつつ、私たちは独自の <strong>多面的測定指標</strong> を持っています。<br>
+      EBM が見落としがちな「あなたの全体性」を、5つの軸で多面的に捉える試みです。
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:14px; margin-bottom: 30px;">
+      <div onclick="showEmpseDetail('energy')" style="background: rgba(212,98,42,0.10); border:1px solid rgba(212,98,42,0.35); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
+        <div style="font-size:42px; margin-bottom:8px; color: #D4622A; font-weight:300;">E</div>
+        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">活力(Energy)</div>
+        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">疲労・気力・活動量</div>
+        <div style="font-size: 10px; color: var(--starlight-strong); margin-top: 8px;">▸ クリックで詳細</div>
+      </div>
+      <div onclick="showEmpseDetail('empathy')" style="background: rgba(13,115,119,0.10); border:1px solid rgba(13,115,119,0.35); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
+        <div style="font-size:42px; margin-bottom:8px; color: #0D7377; font-weight:300;">M</div>
+        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">共感(e<u>M</u>pathy)</div>
+        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">家族・先輩との繋がり</div>
+        <div style="font-size: 10px; color: var(--starlight-strong); margin-top: 8px;">▸ クリックで詳細</div>
+      </div>
+      <div onclick="showEmpseDetail('psychological')" style="background: rgba(127,168,201,0.15); border:1px solid rgba(127,168,201,0.4); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
+        <div style="font-size:42px; margin-bottom:8px; color: #5483A8; font-weight:300;">P</div>
+        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">精神(Psychological)</div>
+        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">不安・希望・物語感</div>
+        <div style="font-size: 10px; color: var(--starlight-strong); margin-top: 8px;">▸ クリックで詳細</div>
+      </div>
+      <div onclick="showEmpseDetail('social')" style="background: rgba(20,166,171,0.10); border:1px solid rgba(20,166,171,0.35); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
+        <div style="font-size:42px; margin-bottom:8px; color: #14A6AB; font-weight:300;">S</div>
+        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">社会(Social)</div>
+        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">仕事・社会的接続</div>
+        <div style="font-size: 10px; color: var(--starlight-strong); margin-top: 8px;">▸ クリックで詳細</div>
+      </div>
+      <div onclick="showEmpseDetail('physical')" style="background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.35); border-radius:14px; padding:22px 18px; text-align:center; cursor:pointer; transition: all 0.3s;">
+        <div style="font-size:42px; margin-bottom:8px; color: #D4A95E; font-weight:300;">e</div>
+        <div style="font-size:15px; font-weight:500; color: var(--text-primary); margin-bottom:4px;">身体(physical bod<u>y</u>)</div>
+        <div style="font-size:11.5px; color: var(--text-secondary); line-height:1.75;">体調・痛み・睡眠</div>
+        <div style="font-size: 10px; color: var(--starlight-strong); margin-top: 8px;">▸ クリックで詳細</div>
+      </div>
+    </div>
+
+    <div style="background: rgba(11,23,54,0.78); border-radius:18px; padding:26px 30px; color: var(--text-on-dark); border: 1px solid rgba(212,169,94,0.35);">
+      <div style="font-size:14px; font-weight:500; color: var(--starlight-strong); margin-bottom:10px;">▸ なぜ多面評価なのか</div>
+      <div style="font-size:13.5px; color: var(--text-on-dark); line-height:2;">
+        「検査値が改善しても、患者が辛ければ治療は成功ではない」。<br>
+        EMPSeは、AIが日々の対話・副作用記録・物語の壺記録から自動推定 + 本人入力で更新されます。<br>
+        症状バーを動かすと、<strong style="color: var(--starlight-strong);">リアルタイムで5軸が連動</strong>し、マイページのレーダーチャートに反映されます。
+      </div>
+      <div style="margin-top: 16px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a href="SATOI_Mock_v1_C1_mypage.html" style="padding:8px 18px; background: var(--starlight); color: var(--night-deep); border-radius:18px; font-size:12px; text-decoration:none;">マイページで EMPSe を見る →</a>
+        <a href="SATOI_Mock_v1_F4_side_effects.html" style="padding:8px 18px; background: transparent; color: var(--text-on-dark); border:1px solid rgba(248,246,240,0.4); border-radius:18px; font-size:12px; text-decoration:none;">副作用記録で連動を体験 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. ガバナンス ===== -->
+<section class="compact" id="governance">
+  <div class="governance">
+    <div class="eyebrow dark">GOVERNANCE</div>
+    <div class="governance-title">独立性と、ガバナンス</div>
+    <div class="governance-body">
+      SATOI は、コンパニオン非営利法人 <strong>JOInT</strong> が医療機関ネットワークと諮問委員会ガバナンスを担う構造です。MVP拠点は <strong>Light Clinic Ginza</strong>。独立した立場で、医療精度と倫理性を、第三者がレビューします。
+    </div>
+    <div class="governance-grid">
+      <div class="gov-card">
+        <div class="gov-card-eyebrow">PMDA</div>
+        <div class="gov-card-text">厚労省 副作用報告 連携(本人同意ベース・統計のみ)</div>
+      </div>
+      <div class="gov-card">
+        <div class="gov-card-eyebrow">JOInT</div>
+        <div class="gov-card-text">諮問委員会レビュー(独立法人)</div>
+      </div>
+      <div class="gov-card">
+        <div class="gov-card-eyebrow">SOC 2</div>
+        <div class="gov-card-text">情報セキュリティ ・ プライバシー基準</div>
+      </div>
+      <div class="gov-card">
+        <div class="gov-card-eyebrow">MEDICAL BOARD</div>
+        <div class="gov-card-text">医療アドバイザリーボードが情報精度を監修</div>
+      </div>
+    </div>
+  </div>
+<div style="text-align:center; margin-top: 40px;"><a href="SATOI_Mock_v1_PRO_promises.html" style="display:inline-block; padding:14px 28px; background: var(--starlight); color: var(--night-deep); border-radius:24px; font-size:13px; font-weight:500; text-decoration:none; box-shadow: 0 8px 22px rgba(212,169,94,0.3);">5つの約束 ・ 詳細を読む →</a></div>
+</section>
+
+<!-- ===== 6. 数字 ===== -->
+<section class="compact">
+  <div class="numbers">
+    <div class="eyebrow dark">BY THE NUMBERS</div>
+    <div class="numbers-title">SATOIを、数字で見る</div>
+    <div class="numbers-sub">これらは「手段」です。中核ゴールは、患者ひとりひとりの夜を支えることです。</div>
+
+    <div class="numbers-grid">
+      <div class="num-card">
+        <div class="num-eyebrow">登録患者</div>
+        <div class="num-big" id="numUsers">42,318</div>
+        <div class="num-label">2026年5月時点(累計)</div>
+      </div>
+      <div class="num-card">
+        <div class="num-eyebrow">物語の蓄積</div>
+        <div class="num-big" id="numStories">2,847</div>
+        <div class="num-label">本人同意による物語</div>
+      </div>
+      <div class="num-card">
+        <div class="num-eyebrow">SDMカード生成</div>
+        <div class="num-big" id="numSdm">18,624</div>
+        <div class="num-label">主治医に届いた質問カード</div>
+      </div>
+      <div class="num-card">
+        <div class="num-eyebrow">制度サポート総額</div>
+        <div class="num-big" id="numMoney">¥15億+</div>
+        <div class="num-label">SATOI経由で患者が受けた援助</div>
+      </div>
+    </div>
+
+    <div class="num-foot">
+      2027年の目標:<strong>すべてのがん新規診断者の50%</strong>がSATOIに最初にアクセスする状態。<br>
+      到達点は数字ではなく、「告知の夜、ひとりにしない」という体験そのものです。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. パートナー ===== -->
+<section class="compact" id="advisors">
+  <div class="partners">
+    <div class="eyebrow dark">PARTNERS</div>
+    <div class="partners-title">一緒に、歩いてくださっている方たち</div>
+    <div class="partners-sub">SATOIは、ひとつの組織だけで成り立つものではありません。</div>
+
+    <div class="partner-grid">
+      <div class="partner-card">
+        <div class="partner-eyebrow">MEDICAL</div>
+        <div class="partner-title">医療機関ネットワーク</div>
+        <div class="partner-desc">Light Clinic Ginza を中心に、提携病院・診療所・コーディネーターと連携。</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-eyebrow">PHARMA</div>
+        <div class="partner-title">製薬企業</div>
+        <div class="partner-desc">統計データの提供を通じて、新薬開発・市販後調査の精度向上に貢献。</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-eyebrow">INSURANCE</div>
+        <div class="partner-title">保険会社</div>
+        <div class="partner-desc">加入者の治療体験サポート・統計連携(本人同意ベース)。</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-eyebrow">ACADEMIC</div>
+        <div class="partner-title">アカデミア・学会</div>
+        <div class="partner-desc">日本臨床腫瘍学会・JCPM(精密医療) 等と研究連携。</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-eyebrow">GOVERNMENT</div>
+        <div class="partner-title">政府・自治体</div>
+        <div class="partner-desc">厚労省 PMDA連携・自治体補助制度の案内・制度設計への提言。</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-eyebrow">NPO</div>
+        <div class="partner-title">非営利法人 JOInT</div>
+        <div class="partner-desc">独立した諮問委員会として、SATOIの倫理・編集方針をガバナンス。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. 入口 ===== -->
+<section class="compact" id="contact">
+  <div class="entry">
+    <div class="eyebrow dark">YOUR FIRST STEP</div>
+    <div class="entry-title">
+      あなたのペースで、<br>
+      SATOI を、試してみませんか?
+    </div>
+    <div class="entry-sub">
+      決めなくていいです。読むだけでも、いいです。<br>
+      何かを残したくなった時、ここに、戻ってきてください。
+    </div>
+    <div class="entry-buttons">
+      <a class="entry-btn" href="SATOI_Mock_v1_A2_dialog.html">対話を、始めてみる</a>
+      <a class="entry-btn outline" href="SATOI_Mock_v1_B1_hub.html">マインドマップを、見る</a>
+      <a class="entry-btn outline" href="SATOI_Mock_v1_D1_stories.html">先輩の物語を、読む</a>
+    </div>
+    <div class="entry-contact">
+      お問い合わせ ・ パートナー希望 ・ 取材依頼:<a href="mailto:hello@satoi.example">hello@satoi.example</a><br>
+      JOInT諮問委員会へのご相談:<a href="mailto:joint@satoi.example">joint@satoi.example</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 9. クロージング ===== -->
+<section class="closing">
+  <div class="closing-stars" id="closingStars"></div>
+  <div>
+    <div class="closing-line">同じ夜を、<br>過ごしている人がいます。</div>
+    <div class="closing-foot">— SATOI —</div>
+    <div class="closing-logo">● SATOI</div>
+    <div style="margin-top:40px; font-size:11.5px; color: var(--text-on-dark-quiet); letter-spacing: 0.04em; line-height: 2;">
+      🇯🇵 PMDA連携 ・ ⚖️ JOInT諮問委員会 ・ 🔒 SOC2 ・ 本人同意・撤回いつでも可
+    </div>
+  </div>
+</section>
+
+<!-- ===== companion lamp ===== -->
+<div class="companion-lamp">
+  <div class="lamp-orb"></div>
+</div>
+
+<script>
+
+/* === SATOI 共通リッチトースト関数 === */
+(function ensureToastHost(){
+  if (document.getElementById('satoi-toast-host')) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div');
+      host.id = 'satoi-toast-host';
+      document.body.appendChild(host);
+    }
+  });
+  if (document.body && !document.getElementById('satoi-toast-host')) {
+    const host = document.createElement('div');
+    host.id = 'satoi-toast-host';
+    document.body.appendChild(host);
+  }
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) {
+    html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  }
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+// 既存の alert を全て satoiNotify にフォールバック(他コードからのalert呼び出しもキャッチ)
+window.__origAlert = window.alert;
+
+/* === SATOI ユニバーサル横断ナビ JS === */
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div');
+    nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る" aria-label="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム" aria-label="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ" aria-label="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語" aria-label="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn');
+    const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const lang = b.dataset.lang;
+        const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+        if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+        document.documentElement.lang = lang;
+        langPop.classList.remove('show');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+
+/* === 星 === */
+(function genStars(){
+  const layer = document.getElementById('starsLayer');
+  if (!layer) return;
+  for (let i=0; i<70; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random()*2.2 + 0.6;
+    s.style.width = sz + 'px'; s.style.height = sz + 'px';
+    s.style.left = (Math.random()*100) + '%';
+    s.style.top = (Math.random()*55) + '%';
+    s.style.animationDelay = (Math.random()*5) + 's';
+    s.style.animationDuration = (3.5 + Math.random()*2.5) + 's';
+    layer.appendChild(s);
+  }
+  const closing = document.getElementById('closingStars');
+  if (closing) {
+    for (let i=0; i<40; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const sz = Math.random()*2 + 0.5;
+      s.style.width = sz + 'px'; s.style.height = sz + 'px';
+      s.style.left = (Math.random()*100) + '%';
+      s.style.top = (Math.random()*100) + '%';
+      s.style.animationDelay = (Math.random()*5) + 's';
+      s.style.animationDuration = (3.5 + Math.random()*2.5) + 's';
+      closing.appendChild(s);
+    }
+  }
+})();
+
+/* === 数字のふらつき === */
+function fluctuate(id, base, range) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  setInterval(() => {
+    const delta = Math.floor(Math.random() * range) - range/2;
+    const cur = (typeof base === 'string') ? null : base;
+    if (cur !== null) {
+      el.textContent = (cur + delta).toLocaleString('en-US');
+    }
+  }, 5500);
+}
+fluctuate('numUsers', 42318, 10);
+fluctuate('numStories', 2847, 4);
+fluctuate('numSdm', 18624, 8);
+
+function showEmpseDetail(axis) {
+  const details = {
+    energy: {title: '活力 (Energy)', body: '疲労・気力・活動量を測る軸。\n\n■ AIが推定するソース\n・F4 副作用記録(倦怠感の強さ)\n・対話の文章量・時間帯\n・睡眠時間の自己申告\n\n■ 上げ方\n短い散歩(5分でOK)・日光浴・無理しない休息リズム。先輩データで Day 6-7 から徐々に回復するパターンが多い。'},
+    empathy: {title: '共感 (eMpathy)', body: '家族・先輩・コーディネーターとの繋がり感を測る軸。\n\n■ AIが推定するソース\n・マイチーム内のやり取り頻度\n・先輩物語の閲覧数\n・コーディネーター対話\n\n■ 上げ方\n「言わなくても通じる」「同じ気持ちの人がいる」と感じられる体験を増やす。ファミリービューで遠方家族と繋がる、患者サロンに参加する。'},
+    psychological: {title: '精神 (Psychological)', body: '不安・希望・物語感を測る軸。\n\n■ AIが推定するソース\n・気持ち軌跡の自己入力\n・対話で出てくる感情語(不安/希望/怖い/前向き 等)\n・物語の壺の蓄積\n\n■ 上げ方\n揺れていい時期だと知る・コンシェルジュに話す・物語を書く。「決めなくていい夜」も精神を支える。'},
+    social: {title: '社会 (Social)', body: '仕事・社会的接続感を測る軸。\n\n■ AIが推定するソース\n・仕事継続フラグ\n・友人/同僚への招待状況\n・SNS共有頻度\n\n■ 上げ方\n両立支援制度を使う・休職復職を計画する・仲間とつながる。社労士相談で「使える制度」を整理。'},
+    physical: {title: '身体 (physical bodY)', body: 'EMPSe の "e" は身体軸を表します。体調・痛み・睡眠を測る軸。\n\n■ AIが推定するソース\n・F4 副作用記録(身体症状の強さ)\n・腫瘍マーカー・検査値(本人同意で連携)\n・服薬遵守\n\n■ 上げ方\n症状を我慢せず伝える・F4で記録を続ける・主治医チームと密に共有する。'},
+  };
+  const d = details[axis] || { title: 'EMPSe', body: '5軸の詳細' };
+  if (typeof satoiNotify === 'function') {
+    satoiNotify('【' + d.title + '】\n\n' + d.body, { duration: 16000 });
+  } else {
+    alert(d.title + '\n\n' + d.body);
+  }
+}
+
+</script>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

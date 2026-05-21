@@ -308,6 +308,7 @@
   /* ====== さがす ・ 全画面共通フローティングメニュー ====== */
   const SATOI_FIND_GROUPS = [
     { title:'まず知る(基礎)', items:[
+      { label:'📚 学びの部屋(まるごと知る)', url:'SATOI_Mock_v1_LEARN_room.html' },
       { label:'がんとは?(基礎知識)',     url:'SATOI_Mock_v1_KB_about.html' },
       { label:'がんの治療(基本)',         url:'SATOI_Mock_v1_KB_treatment.html' },
       { label:'暮らしと仕事(基礎)',       url:'SATOI_Mock_v1_KB_life.html' },
@@ -809,17 +810,11 @@
      #satoi-pickup というプレースホルダがあるページに、カード一覧を流し込む。
      ハブ・マイページに設置。 */
   const SATOI_PICKUP = [
-    { icon:'📚', title:'学びの部屋',           desc:'がんを、まるごと知る（読む・調べる・伝える）', url:'SATOI_Mock_v1_LEARN_room.html' },
-    { icon:'📘', title:'がんとは?(基礎)',   desc:'がん・ステージ・検査の基本', url:'SATOI_Mock_v1_KB_about.html' },
-    { icon:'💊', title:'がんの治療(基本)',   desc:'手術・薬・放射線・緩和',     url:'SATOI_Mock_v1_KB_treatment.html' },
-    { icon:'🩹', title:'副作用と対処',         desc:'時期・備え方・伝えるサイン', url:'SATOI_Mock_v1_KB_sideeffects.html' },
-    { icon:'💰', title:'お金と制度',           desc:'高額療養費・傷病手当金ほか', url:'SATOI_Mock_v1_KB_money.html' },
-    { icon:'🌿', title:'暮らしと仕事',         desc:'食事・両立・外見ケア',       url:'SATOI_Mock_v1_KB_life.html' },
-    { icon:'👨‍👩‍👧', title:'世代別の情報',     desc:'小児・AYA・働く世代・高齢', url:'SATOI_Mock_v1_KB_generation.html' },
+    { icon:'📚', title:'学びの部屋',           desc:'がんを、まるごと知る（読む・観る・調べる・伝える）', url:'SATOI_Mock_v1_LEARN_room.html' },
     { icon:'🗺', title:'治療の全体像',         desc:'あなたの治療マインドマップ', url:'SATOI_Mock_v1_B1_mindmap.html' },
-    { icon:'💛', title:'家族との共有',         desc:'伝え方・家族とつながる',     url:'SATOI_Mock_v1_FAM_view.html' },
-    { icon:'📖', title:'同じ境遇の物語',       desc:'体験談・先輩の声',           url:'SATOI_Mock_v1_D1_stories.html' },
     { icon:'📝', title:'先生に聞きたいこと',   desc:'SDMカードを作る',            url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' },
+    { icon:'📖', title:'同じ境遇の物語',       desc:'体験談・先輩の声',           url:'SATOI_Mock_v1_D1_stories.html' },
+    { icon:'💛', title:'家族との共有',         desc:'伝え方・家族とつながる',     url:'SATOI_Mock_v1_FAM_view.html' },
     { icon:'💬', title:'相談する',             desc:'コンシェルジュ(AI+電話)',  url:'SATOI_Mock_v1_CON_concierge.html' },
     { icon:'🆘', title:'緊急時の備え',         desc:'医療情報・QRコード',         url:'SATOI_Mock_v1_EMG_qr.html' }
   ];

@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - 治療マインドマップ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --night-glow: #2A3558;
+  --starlight: #D4A95E;
+  --starlight-soft: #E5C68A;
+  --starlight-strong: #F0C97A;
+  --morning-white: #F8F6F0;
+  --healing-blue: #7FA8C9;
+  --teal: #0D7377;
+  --warm-orange: #D4622A;
+  --text-primary: rgba(248,246,240,0.96);
+  --text-secondary: rgba(248,246,240,0.78);
+  --text-muted: rgba(248,246,240,0.55);
+  --font: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+body {
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: linear-gradient(to bottom, var(--night-deep) 0%, var(--night-medium) 60%, var(--night-glow) 100%);
+  font-size: 16px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* === ヘッダー === */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  background: linear-gradient(to bottom, rgba(11,23,54,0.95), rgba(11,23,54,0.1));
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(212,169,94,0.18);
+}
+
+.logo {
+  font-size: 20px; font-weight: 500; letter-spacing: 0.22em; color: var(--text-primary);
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.logo .dot {
+  display: inline-block; width: 7px; height: 7px;
+  background: var(--starlight); border-radius: 50%; margin-right: 9px;
+  box-shadow: 0 0 8px var(--starlight);
+}
+
+.title-block { flex: 1; text-align: center; min-width: 0; }
+.title-block h1 { font-size: 18px; font-weight: 500; color: var(--text-primary); }
+.title-block .sub { font-size: 12px; color: var(--starlight); letter-spacing: 0.1em; margin-top: 2px; }
+
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.btn-action {
+  padding: 8px 16px; border-radius: 22px; font-size: 13px;
+  background: transparent; border: 1px solid rgba(212,169,94,0.4); color: var(--text-secondary);
+  cursor: pointer; transition: all 0.3s; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-action:hover { border-color: var(--starlight); color: var(--starlight); }
+.btn-action.primary { background: var(--starlight); color: var(--night-deep); border-color: var(--starlight); font-weight: 500; }
+.btn-action.primary:hover { background: var(--starlight-strong); color: var(--night-deep); }
+
+/* === コントロール === */
+.controls {
+  position: fixed; top: 76px; left: 0; right: 0; z-index: 90;
+  padding: 12px 32px;
+  background: rgba(11,23,54,0.7); backdrop-filter: blur(10px);
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  border-bottom: 1px solid rgba(248,246,240,0.05);
+}
+
+.ctrl-group { display: inline-flex; align-items: center; gap: 8px; }
+.ctrl-label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.08em; }
+
+.ctrl-select {
+  background: rgba(248,246,240,0.05); color: var(--text-primary);
+  border: 1px solid rgba(248,246,240,0.2);
+  padding: 7px 14px; border-radius: 18px;
+  font-family: var(--font); font-size: 13px;
+  cursor: pointer; outline: none;
+}
+.ctrl-select option { background: var(--night-deep); }
+.ctrl-select:focus { border-color: var(--starlight); }
+
+.view-toggle { display: inline-flex; background: rgba(248,246,240,0.05); border-radius: 18px; padding: 3px; gap: 2px; }
+.view-toggle-btn {
+  padding: 6px 14px; background: transparent; color: var(--text-secondary);
+  border: 0; border-radius: 16px; font-family: var(--font); font-size: 12px;
+  cursor: pointer; transition: all 0.3s;
+}
+.view-toggle-btn.active { background: var(--starlight); color: var(--night-deep); font-weight: 500; }
+
+.spacer { flex: 1; }
+
+.stat-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px;
+  background: linear-gradient(135deg, rgba(212,169,94,0.12), rgba(127,168,201,0.08));
+  border: 1px solid rgba(212,169,94,0.3); border-radius: 18px;
+  font-size: 12px; color: var(--text-secondary);
+}
+.stat-pill .num { color: var(--starlight); font-weight: 700; font-size: 14px; }
+
+/* === メインキャンバス === */
+.canvas-wrap {
+  position: fixed; top: 138px; left: 0; right: 0; bottom: 0;
+  overflow: auto;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(212,169,94,0.05), transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(127,168,201,0.05), transparent 60%);
+}
+
+.stars-layer { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.star {
+  position: absolute; background: var(--starlight); border-radius: 50%;
+  opacity: 0; animation: twinkle 4s infinite ease-in-out;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(0.8); }
+  50% { opacity: 0.45; transform: scale(1); }
+}
+
+#mindmap {
+  display: block;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* === ノードスタイル === */
+.node {
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.node circle, .node rect { transition: all 0.3s; }
+.node:hover circle, .node:hover rect { filter: drop-shadow(0 0 12px rgba(212,169,94,0.7)); }
+
+.node-label {
+  font-family: var(--font);
+  fill: var(--text-primary);
+  pointer-events: none;
+  user-select: none;
+}
+
+.node-count {
+  font-family: var(--font);
+  fill: var(--starlight);
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+}
+
+.branch-line {
+  fill: none;
+  stroke: rgba(212,169,94,0.4);
+  stroke-width: 1.5;
+  transition: stroke 0.3s;
+}
+.branch-line.highlight { stroke: var(--starlight); stroke-width: 2.5; }
+
+/* === ノード詳細パネル(右側固定) === */
+.detail-panel {
+  position: fixed;
+  top: 138px; right: 0; bottom: 0; width: 380px;
+  background: linear-gradient(180deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96));
+  border-left: 1px solid rgba(212,169,94,0.25);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  z-index: 80;
+  padding: 28px 26px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.detail-panel.open { transform: translateX(0); }
+
+.detail-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 32px; height: 32px;
+  background: rgba(248,246,240,0.08);
+  border: 1px solid rgba(248,246,240,0.2);
+  border-radius: 50%; cursor: pointer;
+  color: var(--text-secondary); font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.detail-close:hover { background: rgba(212,169,94,0.15); color: var(--starlight); }
+
+.detail-eyebrow { font-size: 12px; color: var(--starlight); letter-spacing: 0.2em; margin-bottom: 8px; }
+.detail-title { font-size: 22px; font-weight: 500; color: var(--text-primary); margin-bottom: 12px; line-height: 1.4; }
+.detail-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+
+.detail-section { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid rgba(248,246,240,0.08); }
+.detail-section:last-child { border-bottom: 0; }
+.detail-section h4 {
+  font-size: 13px; color: var(--starlight); margin-bottom: 10px;
+  letter-spacing: 0.12em; font-weight: 500;
+}
+.detail-section p { font-size: 14px; color: var(--text-secondary); line-height: 1.85; margin-bottom: 6px; }
+.detail-section .stat-row {
+  display: flex; justify-content: space-between; padding: 8px 0;
+  font-size: 13px; color: var(--text-primary); border-bottom: 1px dotted rgba(248,246,240,0.1);
+}
+.detail-section .stat-row:last-child { border-bottom: 0; }
+.detail-section .stat-row .v { color: var(--starlight); font-weight: 700; }
+
+.detail-cta {
+  display: block; margin-top: 22px;
+  padding: 13px 20px;
+  background: var(--starlight); color: var(--night-deep);
+  border: 0; border-radius: 26px;
+  font-family: var(--font); font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all 0.3s; text-decoration: none;
+  text-align: center;
+}
+.detail-cta:hover { background: var(--starlight-strong); transform: translateY(-1px); }
+.detail-cta.secondary { background: transparent; color: var(--starlight); border: 1px solid var(--starlight); margin-top: 10px; }
+.detail-cta.secondary:hover { background: rgba(212,169,94,0.1); }
+
+/* === 凡例(右下) === */
+.legend {
+  position: fixed; left: 24px; bottom: 24px; z-index: 70;
+  background: rgba(11,23,54,0.9);
+  border: 1px solid rgba(212,169,94,0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 12px;
+  backdrop-filter: blur(8px);
+  max-width: 320px;
+}
+.legend-title { color: var(--starlight); font-weight: 500; margin-bottom: 8px; letter-spacing: 0.1em; }
+.legend-row { display: flex; align-items: center; gap: 10px; padding: 4px 0; color: var(--text-secondary); }
+.legend-row .swatch { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+.legend-row .swatch.you { background: radial-gradient(circle, var(--starlight-strong), var(--starlight)); box-shadow: 0 0 8px var(--starlight); }
+.legend-row .swatch.cat { background: var(--healing-blue); }
+.legend-row .swatch.std { background: var(--teal); }
+.legend-row .swatch.support { background: var(--warm-orange); }
+
+/* === モバイル === */
+@media (max-width: 768px) {
+  .header { padding: 12px 14px; flex-wrap: wrap; }
+  .title-block h1 { font-size: 14px; }
+  .title-block .sub { font-size: 10px; }
+  .btn-action { padding: 6px 10px; font-size: 11px; }
+
+  .controls { top: 68px; padding: 10px 14px; }
+  .ctrl-label { font-size: 11px; }
+  .ctrl-select { font-size: 12px; padding: 5px 10px; }
+  .stat-pill { display: none; }
+
+  .canvas-wrap { top: 132px; }
+
+  .detail-panel { width: 100%; max-width: 100%; top: 132px; padding: 22px 18px; }
+  .detail-title { font-size: 19px; }
+
+  /* スマホでは凡例が地図に被るので非表示(浮遊要素を出さない方針) */
+  .legend { display: none !important; }
+}
+
+:focus-visible { outline: 2px solid var(--starlight); outline-offset: 3px; }
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) {
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+
+
+/* === SATOI 共通モバイル対応(iPad/iPhone)=== */
+@media (max-width: 1024px) {
+  /* iPad 縦 ・ ヘッダー狭め */
+  .header { padding: 14px 22px !important; }
+  .section, .wrap, .container, main, .main { padding-left: 22px !important; padding-right: 22px !important; }
+}
+@media (max-width: 768px) {
+  /* iPhone ・ 主要メトリクスをモバイル最適化 */
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title, .hero-title-l1 { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title, .nbm-title, .mission-line { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  .section, .container, .wrap, main, .main, section { padding-left: 14px !important; padding-right: 14px !important; }
+  section, .section { padding-top: 50px !important; padding-bottom: 50px !important; }
+  /* グリッドを1列に */
+  .grid, .cards, .types-grid, .stories-grid, .forum-grid, .family-grid, .promise-list, .partner-grid, .gov-grid, .numbers-grid, .empse-grid, .pubmed-list, .sources-grid, .criteria-grid, .tx-cat-grid, .map-wrap, .emg-grid, .emg-consent-grid, .emg-contacts, .kids-talk-wrap, .cat-grid, .videos-grid, .cat-cards, .partner-cards, .promise-cards, .principle-cards, .pricing-grid, .pricing-cards, .step-cards, .info-cards, .role-cards, .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* 横スクロールのみ許す要素は残す */
+  .b1-journey-bar, .journey-bar, .types-tabs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  /* ヒーローの padding 圧縮 */
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  /* 大きい見出し */
+  .opener-line { font-size: 24px !important; margin-bottom: 40px !important; }
+  /* タップ領域 44px 最低 */
+  .btn, button, .login-btn, .nav-mini a, .filter-chip, .cat-card, .type-card, .story-card, .forum-card { min-height: 40px; }
+  /* テーブル横スクロール */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* マイチーム ホイール → 縦並びに */
+  .team-wheel-wrap, .team-wheel { width: 100% !important; height: auto !important; min-height: 360px; }
+  /* モーダル系: 画面いっぱいに */
+  .modal, .overlay-modal, [class*='Modal'], [class*='modal'] { max-width: 100vw !important; }
+  /* ナビ縮小 */
+  .nav-mini, .nav { gap: 12px !important; font-size: 12px !important; }
+  /* フォーム入力 */
+  input, textarea, select { font-size: 16px !important; } /* iOSのズーム防止 */
+  /* SVG レーダーチャートの収まり */
+  .empse-chart, .empse-chart-wrap { width: 100% !important; max-width: 320px; height: auto !important; margin: 0 auto !important; }
+  /* B1 7ステップを横スクロールに */
+  .steps-row { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 10px; }
+  .steps-row .step { flex-shrink: 0; min-width: 80px; }
+  /* G2 サイドナビは画面下部固定 or hamburger 想定 */
+  .sidebar, .side-nav, .g2-sidebar { position: relative !important; width: 100% !important; height: auto !important; overflow-x: auto !important; display: flex !important; }
+}
+@media (max-width: 480px) {
+  /* 極小画面 */
+  .hero { padding: 80px 12px 40px !important; }
+  .b1-journey-bar { padding: 8px 10px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+
+/* === SATOI ユニバーサル横断ナビ(戻る/ホーム/言語) === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-univ-btn[title]::after { content: attr(title); position: absolute; right: 54px; background: rgba(11,23,54,0.92); color: #F8F6F0; font-size: 11px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.satoi-univ-btn:hover::after { opacity: 1; }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+</style>
+</head>
+
+<body>
+
+<!-- ヘッダー -->
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <div class="title-block">
+    <h1 id="mapTitle">あなたの治療マインドマップ</h1>
+    <div class="sub" id="mapSub">読み込み中…</div>
+  </div>
+  <div class="header-actions">
+    <a href="SATOI_Mock_v1_A2_dialog.html" class="btn-action">← 対話に戻る</a>
+    <a href="SATOI_Mock_v1_C1_mypage.html" class="btn-action primary">マイページ</a>
+  </div>
+</header>
+
+<!-- コントロール -->
+<div class="controls">
+  <div class="ctrl-group">
+    <span class="ctrl-label">がん種:</span>
+    <select class="ctrl-select" id="cancerSelect">
+      <option value="breast">乳がん</option>
+      <option value="colon">大腸がん</option>
+      <option value="lung">肺がん</option>
+      <option value="stomach">胃がん</option>
+      <option value="prostate">前立腺がん</option>
+      <option value="pancreas">膵がん</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">ステージ:</span>
+    <select class="ctrl-select" id="stageSelect">
+      <option value="I">期</option>
+      <option value="II" selected>II 期</option>
+      <option value="III">III 期</option>
+      <option value="IV">IV 期</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">表示:</span>
+    <div class="view-toggle">
+      <button class="view-toggle-btn active" data-view="overview">俯瞰</button>
+      <button class="view-toggle-btn" data-view="focus">フォーカス</button>
+      <button class="view-toggle-btn" data-view="compare">比較</button>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="stat-pill">
+    あなたと同じ状況の方:<span class="num" id="cohortCount">—</span>人
+  </div>
+</div>
+
+<!-- キャンバス -->
+<div class="canvas-wrap" id="canvasWrap">
+  <div class="stars-layer" id="starsLayer"></div>
+  <svg id="mindmap" width="1600" height="1100" viewBox="0 0 1600 1100" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<!-- 詳細パネル -->
+<aside class="detail-panel" id="detailPanel">
+  <button class="detail-close" id="detailClose">×</button>
+  <div id="detailContent"></div>
+</aside>
+
+<!-- 凡例 -->
+<div class="legend">
+  <div class="legend-title">マップの見方</div>
+  <div class="legend-row"><span class="swatch you"></span>あなた(現在地)</div>
+  <div class="legend-row"><span class="swatch cat"></span>治療カテゴリ</div>
+  <div class="legend-row"><span class="swatch std"></span>標準治療(具体)</div>
+  <div class="legend-row"><span class="swatch support"></span>支援・補完療法</div>
+  <div style="margin-top: 8px; color: var(--text-muted); font-size: 11px; line-height: 1.5;">
+    各ノードに「同じ道を選んだ方の人数」が表示されます。<br>
+    クリックで治療詳細・物語・SDM質問カードへ。
+  </div>
+</div>
+
+<script>
+
+/* === SATOI 共通リッチトースト関数 === */
+(function ensureToastHost(){
+  if (document.getElementById('satoi-toast-host')) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div');
+      host.id = 'satoi-toast-host';
+      document.body.appendChild(host);
+    }
+  });
+  if (document.body && !document.getElementById('satoi-toast-host')) {
+    const host = document.createElement('div');
+    host.id = 'satoi-toast-host';
+    document.body.appendChild(host);
+  }
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) {
+    html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  }
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+// 既存の alert を全て satoiNotify にフォールバック(他コードからのalert呼び出しもキャッチ)
+window.__origAlert = window.alert;
+
+/* === SATOI ユニバーサル横断ナビ JS === */
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div');
+    nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る" aria-label="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム" aria-label="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ" aria-label="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語" aria-label="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn');
+    const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const lang = b.dataset.lang;
+        const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+        if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+        document.documentElement.lang = lang;
+        langPop.classList.remove('show');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+
+// ===== データ =====
+const TREATMENT_TREE = {
+  breast: {
+    name: "乳がん",
+    totalPatients: 95000,
+    stageDist: { I: 28500, II: 23750, III: 19000, IV: 6650 },
+    survival: { I: 99, II: 92, III: 75, IV: 38 },
+    categories: [
+      {
+        id: "surgery", name: "手術", chosen: 78,
+        treatments: [
+          { id: "breast-conserving", name: "乳房温存術", chosen: 42, drugs: "—", price: "保険(3割で約15万円)", side: "傷の痛み・腋窩リンパ節郭清でリンパ浮腫", outcome: "5年生存率 II期で約92%", note: "放射線治療と組合せが標準" },
+          { id: "mastectomy", name: "乳房全摘術", chosen: 28, drugs: "—", price: "保険(3割で約20万円)", side: "傷の痛み・乳房の喪失感", outcome: "再建術と組み合わせ可", note: "予防的全摘も近年選択肢" },
+          { id: "sentinel", name: "センチネルリンパ節生検", chosen: 56, drugs: "—", price: "保険適用", side: "わずかな腫れ", outcome: "リンパ浮腫リスク軽減", note: "腋窩郭清省略の判断材料" }
+        ]
+      },
+      {
+        id: "drug", name: "薬物療法", chosen: 88,
+        treatments: [
+          { id: "tamoxifen", name: "ホルモン療法(タモキシフェン)", chosen: 35, drugs: "タモキシフェン 20mg/日", price: "月約1,500円(3割)", side: "ホットフラッシュ・血栓リスク", outcome: "再発率 約45%減", note: "ER陽性閉経前で5〜10年継続" },
+          { id: "ai", name: "ホルモン療法(アロマターゼ阻害薬)", chosen: 30, drugs: "アナストロゾール・レトロゾール 1mg/日", price: "月約2,500円(3割)", side: "関節痛・骨密度低下", outcome: "再発率 約50%減", note: "閉経後ER陽性" },
+          { id: "ac-t", name: "化学療法(AC→T療法)", chosen: 38, drugs: "アドリアマイシン+シクロホスファミド→パクリタキセル", price: "高額療養費対象", side: "脱毛・吐き気・好中球減少", outcome: "再発率 約30%減", note: "HER2陰性のハイリスク例" },
+          { id: "trastuzumab", name: "分子標的薬(トラスツズマブ)", chosen: 18, drugs: "ハーセプチン 6mg/kg 3週毎", price: "高額療養費対象(月20万円超)", side: "心毒性(心エコーで管理)", outcome: "HER2陽性で再発率 約50%減", note: "ペルツズマブと併用が標準" },
+          { id: "cdk46", name: "CDK4/6阻害薬", chosen: 12, drugs: "パルボシクリブ・アベマシクリブ", price: "高額療養費対象", side: "好中球減少・下痢", outcome: "進行・再発例で奏効", note: "ホルモン療法と併用" }
+        ]
+      },
+      {
+        id: "radiation", name: "放射線治療", chosen: 52,
+        treatments: [
+          { id: "wbrt", name: "全乳房照射", chosen: 48, drugs: "—", price: "保険適用(3割で約8万円)", side: "皮膚炎・倦怠感", outcome: "局所再発リスク 約70%減", note: "温存術後の標準" },
+          { id: "boost", name: "ブースト照射", chosen: 22, drugs: "—", price: "保険適用", side: "皮膚炎強め", outcome: "腫瘍床への追加照射", note: "若年・断端陽性例に追加" },
+          { id: "imrt-breast", name: "IMRT(強度変調)", chosen: 8, drugs: "—", price: "保険適用", side: "皮膚炎軽め", outcome: "心肺への線量低下", note: "左乳房・心臓近接例" }
+        ]
+      },
+      {
+        id: "support", name: "支援・補完", chosen: 95,
+        treatments: [
+          { id: "palliative", name: "緩和ケア早期導入", chosen: 65, drugs: "症状緩和薬", price: "保険適用", side: "—", outcome: "QOL改善・生存期間延長報告", note: "診断時から並行が推奨" },
+          { id: "rehab", name: "リハビリテーション", chosen: 58, drugs: "—", price: "保険適用", side: "—", outcome: "肩関節可動域回復", note: "腋窩郭清後に必須" },
+          { id: "psy", name: "心理サポート(CBT)", chosen: 32, drugs: "—", price: "保険適用(認知行動療法)", side: "—", outcome: "うつ・不安スコア改善", note: "公認心理師面談" },
+          { id: "fertility", name: "妊孕性温存", chosen: 8, drugs: "GnRHアゴニスト等", price: "若年がん患者妊孕性温存治療費助成", side: "—", outcome: "化学療法前の卵子保存", note: "若年世代に選択肢として必須" }
+        ]
+      }
+    ]
+  },
+  colon: {
+    name: "大腸がん", totalPatients: 147000,
+    stageDist: { I: 44100, II: 36750, III: 32340, IV: 26460 },
+    survival: { I: 98, II: 88, III: 75, IV: 22 },
+    categories: [
+      { id: "surgery", name: "手術", chosen: 88, treatments: [
+        { id: "lap-colon", name: "腹腔鏡下大腸切除", chosen: 70, drugs: "—", price: "保険(3割で約25万円)", side: "腸閉塞リスク", outcome: "傷小さく回復早い", note: "I〜III期の標準" },
+        { id: "open-colon", name: "開腹大腸切除", chosen: 22, drugs: "—", price: "保険適用", side: "傷大きい", outcome: "進行例・癒着例に", note: "腹腔鏡困難例" },
+        { id: "esd-colon", name: "内視鏡治療(ESD)", chosen: 18, drugs: "—", price: "保険適用", side: "出血・穿孔リスク", outcome: "早期がんで根治", note: "粘膜内がん対象" }
+      ]},
+      { id: "drug", name: "薬物療法", chosen: 65, treatments: [
+        { id: "folfox", name: "FOLFOX療法", chosen: 45, drugs: "5-FU+ロイコボリン+オキサリプラチン", price: "高額療養費対象", side: "末梢神経障害・好中球減少", outcome: "III期再発率 約30%減", note: "術後補助の標準" },
+        { id: "folfiri", name: "FOLFIRI療法", chosen: 22, drugs: "5-FU+ロイコボリン+イリノテカン", price: "高額療養費対象", side: "下痢・脱毛", outcome: "FOLFOX後の二次治療", note: "進行・再発例" },
+        { id: "bev", name: "ベバシズマブ(アバスチン)", chosen: 30, drugs: "5mg/kg or 10mg/kg 2週毎", price: "高額療養費対象", side: "高血圧・蛋白尿・出血", outcome: "化学療法と併用で奏効率UP", note: "RAS変異も使用可" },
+        { id: "cetuximab", name: "セツキシマブ(アービタックス)", chosen: 18, drugs: "400mg/m² 初回, 250mg/m² 毎週", price: "高額療養費対象", side: "ざ瘡様皮疹・低Mg血症", outcome: "RAS野生型に効果", note: "RAS遺伝子検査必須" },
+        { id: "panitumumab", name: "パニツムマブ(ベクティビックス)", chosen: 8, drugs: "6mg/kg 2週毎", price: "高額療養費対象", side: "皮膚障害・電解質異常", outcome: "RAS野生型に効果", note: "セツキシマブ代替" }
+      ]},
+      { id: "radiation", name: "放射線治療", chosen: 15, treatments: [
+        { id: "rt-rectum", name: "直腸がん術前化学放射線", chosen: 12, drugs: "5-FU/カペシタビン併用", price: "保険適用", side: "肛門部炎症・下痢", outcome: "局所再発率低下", note: "直腸がんII〜III期" },
+        { id: "rt-palliative", name: "緩和的放射線", chosen: 6, drugs: "—", price: "保険適用", side: "倦怠感", outcome: "症状緩和", note: "骨転移・出血" }
+      ]},
+      { id: "support", name: "支援・補完", chosen: 92, treatments: [
+        { id: "stoma", name: "人工肛門ケア", chosen: 18, drugs: "—", price: "保険適用・身体障害者手帳対象", side: "—", outcome: "QOL維持", note: "ストーマ装具・術後指導" },
+        { id: "palliative", name: "緩和ケア早期導入", chosen: 55, drugs: "症状緩和薬", price: "保険適用", side: "—", outcome: "QOL改善", note: "診断時から並行" },
+        { id: "rehab-colon", name: "リハビリ・栄養指導", chosen: 48, drugs: "—", price: "保険適用", side: "—", outcome: "術後回復・体力維持", note: "管理栄養士面談" }
+      ]}
+    ]
+  },
+  lung: {
+    name: "肺がん", totalPatients: 127000,
+    stageDist: { I: 38100, II: 25400, III: 30480, IV: 33020 },
+    survival: { I: 82, II: 47, III: 22, IV: 7 },
+    categories: [
+      { id: "surgery", name: "手術", chosen: 35, treatments: [
+        { id: "lobectomy", name: "肺葉切除術", chosen: 30, drugs: "—", price: "保険(3割で約25万円)", side: "肺機能低下", outcome: "I〜II期の根治治療", note: "胸腔鏡・ロボット支援も増加" },
+        { id: "wedge", name: "縮小手術(楔状切除)", chosen: 8, drugs: "—", price: "保険適用", side: "—", outcome: "高齢・併存症例に", note: "肺機能温存重視" }
+      ]},
+      { id: "drug", name: "薬物療法", chosen: 78, treatments: [
+        { id: "platinum", name: "プラチナ併用化学療法", chosen: 50, drugs: "シスプラチン+ペメトレキセド等", price: "高額療養費対象", side: "腎機能低下・吐き気", outcome: "標準的細胞傷害療法", note: "扁平上皮以外でペメトレキセド有効" },
+        { id: "osimertinib", name: "オシメルチニブ(タグリッソ)", chosen: 28, drugs: "80mg/日 経口", price: "高額療養費対象(月60万円超)", side: "下痢・皮疹・間質性肺炎", outcome: "EGFR変異 PFS約19ヶ月", note: "EGFR T790M含む変異陽性に第一選択" },
+        { id: "alectinib", name: "アレクチニブ(アレセンサ)", chosen: 15, drugs: "300mg×2回/日 経口", price: "高額療養費対象", side: "便秘・浮腫", outcome: "ALK融合 PFS約34ヶ月", note: "ALK陽性に最高エビデンス" },
+        { id: "icpi", name: "免疫チェックポイント阻害薬", chosen: 38, drugs: "ペムブロリズマブ(キイトルーダ)等", price: "高額療養費対象", side: "免疫関連有害事象(irAE)", outcome: "PD-L1高発現で長期生存例", note: "第一選択にも採用" },
+        { id: "combo-immune", name: "化学療法+ICI併用", chosen: 25, drugs: "プラチナ+ICI", price: "高額療養費対象", side: "複合副作用", outcome: "進行例で標準", note: "PD-L1陰性でも適応" }
+      ]},
+      { id: "radiation", name: "放射線治療", chosen: 42, treatments: [
+        { id: "sbrt", name: "定位放射線(SBRT)", chosen: 18, drugs: "—", price: "保険適用", side: "肺臓炎リスク", outcome: "早期 I期で手術同等成績", note: "手術不可例の標準" },
+        { id: "chemo-rt", name: "化学放射線併用", chosen: 22, drugs: "シスプラチン+放射線", price: "高額療養費対象", side: "食道炎・肺臓炎", outcome: "III期の標準", note: "デュルバルマブ地固めも" },
+        { id: "rt-brain", name: "脳転移への定位放射線", chosen: 12, drugs: "—", price: "保険適用", side: "—", outcome: "脳転移制御", note: "ガンマナイフ等" }
+      ]},
+      { id: "support", name: "支援・補完", chosen: 95, treatments: [
+        { id: "palliative-lung", name: "緩和ケア早期導入", chosen: 70, drugs: "症状緩和薬", price: "保険適用", side: "—", outcome: "QOL改善・生存延長(Temel試験)", note: "肺がんでは早期導入が最も推奨" },
+        { id: "rehab-lung", name: "呼吸リハビリ", chosen: 38, drugs: "—", price: "保険適用", side: "—", outcome: "肺機能維持", note: "術前後・治療中継続" }
+      ]}
+    ]
+  },
+  stomach: {
+    name: "胃がん", totalPatients: 124000,
+    stageDist: { I: 49600, II: 24800, III: 24800, IV: 24800 },
+    survival: { I: 96, II: 71, III: 49, IV: 9 },
+    categories: [
+      { id: "surgery", name: "手術", chosen: 80, treatments: [
+        { id: "esd", name: "内視鏡治療(ESD)", chosen: 32, drugs: "—", price: "保険(3割で約8万円)", side: "出血・穿孔", outcome: "早期がんで根治", note: "粘膜内がん・分化型" },
+        { id: "lap-stomach", name: "腹腔鏡下胃切除", chosen: 38, drugs: "—", price: "保険適用", side: "ダンピング・体重減少", outcome: "傷が小さく回復早い", note: "早期〜中期" },
+        { id: "open-stomach", name: "開腹胃切除(全摘・部分)", chosen: 25, drugs: "—", price: "保険適用", side: "ダンピング・貧血", outcome: "進行例に", note: "全摘・幽門側切除等" }
+      ]},
+      { id: "drug", name: "薬物療法", chosen: 55, treatments: [
+        { id: "s1-cddp", name: "S-1+シスプラチン", chosen: 38, drugs: "S-1 経口+CDDP点滴", price: "高額療養費対象", side: "腎機能低下・吐き気", outcome: "進行胃がん標準", note: "1次治療" },
+        { id: "capeox", name: "カペシタビン+オキサリプラチン", chosen: 22, drugs: "ゼローダ+エルプラット", price: "高額療養費対象", side: "末梢神経障害", outcome: "S-1+CDDP同等", note: "外来通院しやすい" },
+        { id: "trastuzumab-g", name: "トラスツズマブ(胃)", chosen: 12, drugs: "ハーセプチン", price: "高額療養費対象", side: "心毒性", outcome: "HER2陽性で生存延長", note: "HER2検査必須" },
+        { id: "nivolumab", name: "ニボルマブ(オプジーボ)", chosen: 20, drugs: "240mg 2週毎", price: "高額療養費対象", side: "irAE", outcome: "三次治療以降で生存延長", note: "MSI-Hで第一選択も" }
+      ]},
+      { id: "radiation", name: "放射線治療", chosen: 8, treatments: [
+        { id: "rt-stomach", name: "緩和的放射線", chosen: 6, drugs: "—", price: "保険適用", side: "倦怠感", outcome: "症状緩和", note: "出血・骨転移" }
+      ]},
+      { id: "support", name: "支援・補完", chosen: 88, treatments: [
+        { id: "nutrition", name: "栄養指導(胃切除後)", chosen: 65, drugs: "—", price: "保険適用", side: "—", outcome: "ダンピング対策・体重維持", note: "管理栄養士面談必須" },
+        { id: "palliative-stomach", name: "緩和ケア", chosen: 55, drugs: "症状緩和薬", price: "保険適用", side: "—", outcome: "QOL改善", note: "診断時から並行" },
+        { id: "b12", name: "ビタミンB12補充", chosen: 38, drugs: "メチコバール注射", price: "保険適用", side: "—", outcome: "全摘後の貧血予防", note: "生涯継続" }
+      ]}
+    ]
+  },
+  prostate: {
+    name: "前立腺がん", totalPatients: 95000,
+    stageDist: { I: 28500, II: 33250, III: 23750, IV: 9500 },
+    survival: { I: 100, II: 100, III: 95, IV: 64 },
+    categories: [
+      { id: "watch", name: "監視療法・待機", chosen: 28, treatments: [
+        { id: "active-surveillance", name: "PSA監視療法", chosen: 18, drugs: "—", price: "保険適用(PSA定期測定)", side: "—", outcome: "進行リスク低い場合", note: "低リスク群の選択肢" },
+        { id: "watchful", name: "待機療法", chosen: 10, drugs: "—", price: "保険適用", side: "—", outcome: "高齢・予後限定例", note: "症状出現時に介入" }
+      ]},
+      { id: "surgery", name: "手術", chosen: 42, treatments: [
+        { id: "rrp-robot", name: "ロボット支援前立腺全摘", chosen: 32, drugs: "—", price: "保険(3割で約28万円)", side: "尿失禁・性機能低下", outcome: "根治治療", note: "ダヴィンチ手術が主流" },
+        { id: "open-rrp", name: "開腹前立腺全摘", chosen: 8, drugs: "—", price: "保険適用", side: "出血量多め", outcome: "—", note: "従来法" }
+      ]},
+      { id: "radiation", name: "放射線治療", chosen: 40, treatments: [
+        { id: "imrt", name: "強度変調放射線(IMRT)", chosen: 28, drugs: "—", price: "保険適用", side: "排尿・排便症状", outcome: "手術同等成績", note: "外照射主流" },
+        { id: "brachy", name: "小線源治療", chosen: 12, drugs: "I-125 シード", price: "保険適用", side: "排尿症状", outcome: "低〜中リスクに", note: "短期入院で完了" },
+        { id: "proton", name: "陽子線治療", chosen: 5, drugs: "—", price: "先進医療(約300万円)→保険適用拡大", side: "排尿症状軽め", outcome: "周囲線量低減", note: "限局例" }
+      ]},
+      { id: "drug", name: "ホルモン療法", chosen: 55, treatments: [
+        { id: "adt", name: "アンドロゲン除去療法(ADT)", chosen: 45, drugs: "LH-RHアゴニスト/アンタゴニスト 1〜6ヶ月毎", price: "高額療養費対象", side: "ホットフラッシュ・骨密度低下", outcome: "進行例で生存延長", note: "去勢抵抗性出現まで継続" },
+        { id: "enzalutamide", name: "エンザルタミド(イクスタンジ)", chosen: 15, drugs: "160mg/日 経口", price: "高額療養費対象", side: "倦怠感・転倒リスク", outcome: "CRPCで生存延長", note: "新規ホルモン薬" },
+        { id: "abiraterone", name: "アビラテロン", chosen: 12, drugs: "1000mg/日+プレドニン", price: "高額療養費対象", side: "肝機能障害", outcome: "CRPCで生存延長", note: "新規ホルモン薬" }
+      ]},
+      { id: "support", name: "支援・補完", chosen: 70, treatments: [
+        { id: "rehab-pelvic", name: "骨盤底筋リハビリ", chosen: 38, drugs: "—", price: "保険適用", side: "—", outcome: "尿失禁回復", note: "術後必須" },
+        { id: "palliative-prostate", name: "緩和ケア(骨転移)", chosen: 32, drugs: "鎮痛薬・ビスホスホネート", price: "保険適用", side: "—", outcome: "疼痛緩和・骨折予防", note: "骨転移時" }
+      ]}
+    ]
+  },
+  pancreas: {
+    name: "膵がん", totalPatients: 44000,
+    stageDist: { I: 4400, II: 8800, III: 13200, IV: 17600 },
+    survival: { I: 41, II: 17, III: 7, IV: 1 },
+    categories: [
+      { id: "surgery", name: "手術", chosen: 22, treatments: [
+        { id: "pd", name: "膵頭十二指腸切除", chosen: 18, drugs: "—", price: "保険(3割で約35万円)", side: "膵液瘻・糖尿病", outcome: "切除可能例で唯一の根治", note: "高難度・専門施設" },
+        { id: "distal-panc", name: "膵体尾部切除", chosen: 6, drugs: "—", price: "保険適用", side: "膵液瘻", outcome: "膵体尾部腫瘍に", note: "脾臓合併切除も" }
+      ]},
+      { id: "drug", name: "薬物療法", chosen: 85, treatments: [
+        { id: "folfirinox", name: "FOLFIRINOX療法", chosen: 32, drugs: "オキサリプラチン+イリノテカン+5-FU+ロイコボリン", price: "高額療養費対象", side: "好中球減少・神経障害・下痢", outcome: "最強の併用化学療法", note: "PS良好例の標準" },
+        { id: "gem-nabptx", name: "ゲムシタビン+nab-パクリタキセル", chosen: 38, drugs: "GEM+nab-PTX", price: "高額療養費対象", side: "好中球減少・神経障害", outcome: "FOLFIRINOXに次ぐ標準", note: "副作用比較的軽い" },
+        { id: "gem-s1", name: "ゲムシタビン+S-1", chosen: 28, drugs: "GEM+S-1", price: "高額療養費対象", side: "血液毒性", outcome: "日本でよく使われる", note: "GEST試験" },
+        { id: "gem-mono", name: "ゲムシタビン単独", chosen: 18, drugs: "1000mg/m² 週1", price: "高額療養費対象", side: "血液毒性", outcome: "高齢・PS不良例に", note: "歴史的標準" }
+      ]},
+      { id: "radiation", name: "放射線治療", chosen: 30, treatments: [
+        { id: "chemo-rt-panc", name: "化学放射線療法", chosen: 15, drugs: "S-1またはGEM併用", price: "高額療養費対象", side: "消化器症状", outcome: "局所進行例", note: "局所制御目的" },
+        { id: "rt-pain", name: "緩和的放射線", chosen: 12, drugs: "—", price: "保険適用", side: "—", outcome: "疼痛緩和", note: "骨転移・神経浸潤" }
+      ]},
+      { id: "support", name: "支援・補完", chosen: 98, treatments: [
+        { id: "palliative-panc", name: "緩和ケア早期導入", chosen: 92, drugs: "オピオイド・ステロイド等", price: "保険適用", side: "—", outcome: "QOL改善・生存延長", note: "膵がんでは早期導入が最も推奨される" },
+        { id: "pain-block", name: "神経ブロック(腹腔神経叢)", chosen: 25, drugs: "局所麻酔・アルコール", price: "保険適用", side: "下痢・低血圧", outcome: "強い疼痛の緩和", note: "上腹部痛に有効" },
+        { id: "enzyme", name: "膵酵素補充", chosen: 65, drugs: "リパクレオン", price: "保険適用", side: "—", outcome: "消化吸収改善", note: "切除後・進行例とも" },
+        { id: "psy-panc", name: "心理サポート(緩和心理)", chosen: 38, drugs: "—", price: "保険適用", side: "—", outcome: "本人・家族のグリーフケア", note: "公認心理師" }
+      ]}
+    ]
+  }
+};
+
+// ===== URL パラメータ取得(無ければペルソナ設定を引継ぎ:Mさん=breast/II, Kさん=lung/IV) =====
+const urlParams = new URLSearchParams(window.location.search);
+function _ssGet(k){ try { return sessionStorage.getItem(k); } catch(e){ return null; } }
+const VALID_CANCER = ['breast','colon','lung','stomach','prostate','pancreas'];
+const VALID_STAGE = ['I','II','III','IV'];
+let initialCancer = urlParams.get('cancer') || _ssGet('satoi_cancer') || 'breast';
+let initialStage = urlParams.get('stage') || _ssGet('satoi_stage') || 'II';
+if (VALID_CANCER.indexOf(initialCancer) === -1 || !TREATMENT_TREE[initialCancer]) initialCancer = 'breast';
+if (VALID_STAGE.indexOf(initialStage) === -1) initialStage = 'II';
+document.getElementById('cancerSelect').value = initialCancer;
+document.getElementById('stageSelect').value = initialStage;
+
+// ===== マインドマップ描画 =====
+const svg = document.getElementById('mindmap');
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function el(tag, attrs = {}) {
+  const e = document.createElementNS(SVG_NS, tag);
+  Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v));
+  return e;
+}
+
+function renderMap(cancerKey, stageKey) {
+  const data = TREATMENT_TREE[cancerKey];
+  svg.innerHTML = '';
+
+  const W = 1600, H = 1100;
+  const cx = W / 2, cy = H / 2;
+
+  // 中央ノード(あなた)
+  const youGroup = el('g', { class: 'node', 'data-type': 'you' });
+
+  // 中心の glow
+  const glow = el('circle', { cx, cy, r: 90, fill: 'url(#youGrad)', opacity: 0.4 });
+  const youCore = el('circle', { cx, cy, r: 56, fill: 'url(#youGrad)', stroke: '#F0C97A', 'stroke-width': 2 });
+  const youLabel = el('text', { x: cx, y: cy - 6, class: 'node-label', 'text-anchor': 'middle', 'font-size': 17, 'font-weight': 500 });
+  youLabel.textContent = 'あなた';
+  const youSub = el('text', { x: cx, y: cy + 16, class: 'node-label', 'text-anchor': 'middle', 'font-size': 13, fill: '#D4A95E' });
+  youSub.textContent = `${data.name} ${stageKey}期`;
+  const youCohort = el('text', { x: cx, y: cy + 38, class: 'node-count', 'text-anchor': 'middle', 'font-size': 12 });
+  youCohort.textContent = `同状況 ${(data.stageDist[stageKey] || 0).toLocaleString()}人`;
+
+  // defs(グラデ)
+  const defs = el('defs');
+  defs.innerHTML = `
+    <radialGradient id="youGrad" cx="35%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#F0C97A"/>
+      <stop offset="50%" stop-color="#D4A95E"/>
+      <stop offset="100%" stop-color="rgba(212,169,94,0.15)"/>
+    </radialGradient>
+    <radialGradient id="catGrad" cx="35%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#A8C7DC"/>
+      <stop offset="100%" stop-color="#5B85A0"/>
+    </radialGradient>
+    <radialGradient id="stdGrad" cx="35%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#2BA0A5"/>
+      <stop offset="100%" stop-color="#0D7377"/>
+    </radialGradient>
+    <radialGradient id="supportGrad" cx="35%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#E89556"/>
+      <stop offset="100%" stop-color="#D4622A"/>
+    </radialGradient>
+  `;
+  svg.appendChild(defs);
+  svg.appendChild(glow);
+
+  // カテゴリノード配置(放射状)
+  const cats = data.categories;
+  const catRadius = 280;
+  const catAngles = cats.length === 4
+    ? [-Math.PI*0.85, -Math.PI*0.15, Math.PI*0.15, Math.PI*0.85]
+    : cats.length === 5
+      ? [-Math.PI*0.9, -Math.PI*0.3, 0, Math.PI*0.3, Math.PI*0.9]
+      : cats.map((_, i) => (Math.PI*2 / cats.length) * i - Math.PI/2);
+
+  cats.forEach((cat, i) => {
+    const ang = catAngles[i];
+    const catX = cx + Math.cos(ang) * catRadius;
+    const catY = cy + Math.sin(ang) * catRadius;
+
+    // 中央→カテゴリ線
+    const line = el('path', {
+      d: `M${cx},${cy} Q${(cx+catX)/2 + Math.cos(ang+Math.PI/2)*20},${(cy+catY)/2 + Math.sin(ang+Math.PI/2)*20} ${catX},${catY}`,
+      class: 'branch-line'
+    });
+    svg.appendChild(line);
+
+    // カテゴリノード
+    const catGroup = el('g', { class: 'node', 'data-type': 'cat', 'data-cat': cat.id });
+    const catCircle = el('circle', { cx: catX, cy: catY, r: 50, fill: 'url(#catGrad)', stroke: '#7FA8C9', 'stroke-width': 1.5 });
+    const catLabel = el('text', { x: catX, y: catY - 2, class: 'node-label', 'text-anchor': 'middle', 'font-size': 15, 'font-weight': 500 });
+    catLabel.textContent = cat.name;
+    const catCount = el('text', { x: catX, y: catY + 16, class: 'node-count', 'text-anchor': 'middle', 'font-size': 11 });
+    catCount.textContent = `${cat.chosen}%が選択`;
+    catGroup.append(catCircle, catLabel, catCount);
+    catGroup.addEventListener('click', () => showCategoryDetail(cat, data, stageKey));
+    svg.appendChild(catGroup);
+
+    // 治療ノード(カテゴリの外側に放射状)
+    const tCount = cat.treatments.length;
+    const tBaseAng = ang;
+    const tSpread = Math.PI * 0.55;
+    const tStart = tBaseAng - tSpread / 2;
+    const tStep = tCount > 1 ? tSpread / (tCount - 1) : 0;
+    const tRadius = 200;
+
+    cat.treatments.forEach((tr, j) => {
+      const tAng = tCount === 1 ? tBaseAng : tStart + tStep * j;
+      const tX = catX + Math.cos(tAng) * tRadius;
+      const tY = catY + Math.sin(tAng) * tRadius;
+
+      // 線
+      const tLine = el('path', {
+        d: `M${catX},${catY} Q${(catX+tX)/2 + Math.cos(tAng+Math.PI/2)*8},${(catY+tY)/2 + Math.sin(tAng+Math.PI/2)*8} ${tX},${tY}`,
+        class: 'branch-line'
+      });
+      svg.appendChild(tLine);
+
+      // 治療ノード
+      const isSupport = cat.id === 'support';
+      const grad = isSupport ? 'url(#supportGrad)' : 'url(#stdGrad)';
+      const stroke = isSupport ? '#D4622A' : '#0D7377';
+      const tGroup = el('g', { class: 'node', 'data-type': 'treatment', 'data-treatment': tr.id });
+      const tCircle = el('circle', { cx: tX, cy: tY, r: 38, fill: grad, stroke, 'stroke-width': 1.4 });
+
+      // 名前(短く)
+      const shortName = tr.name.length > 9 ? tr.name.slice(0, 8) + '…' : tr.name;
+      const tLabel = el('text', { x: tX, y: tY - 1, class: 'node-label', 'text-anchor': 'middle', 'font-size': 11, 'font-weight': 500 });
+      tLabel.textContent = shortName;
+      const tCount2 = el('text', { x: tX, y: tY + 13, class: 'node-count', 'text-anchor': 'middle', 'font-size': 10 });
+      const cohortNum = Math.round((data.stageDist[stageKey] || 0) * tr.chosen / 100);
+      tCount2.textContent = `${cohortNum.toLocaleString()}人`;
+
+      tGroup.append(tCircle, tLabel, tCount2);
+      tGroup.addEventListener('click', () => showTreatmentDetail(tr, cat, data, stageKey));
+      svg.appendChild(tGroup);
+    });
+  });
+
+  // 最後に「あなた」(z-orderで前面)
+  youGroup.append(youCore, youLabel, youSub, youCohort);
+  svg.appendChild(youGroup);
+
+  // ヘッダー更新
+  document.getElementById('mapTitle').textContent = `${data.name} ステージ${stageKey} 治療マインドマップ`;
+  document.getElementById('mapSub').textContent = `5年生存率 約${data.survival[stageKey]}% / 全国 ${(data.stageDist[stageKey]||0).toLocaleString()}人`;
+  document.getElementById('cohortCount').textContent = (data.stageDist[stageKey]||0).toLocaleString();
+
+  // 中央スクロール
+  setTimeout(() => {
+    const wrap = document.getElementById('canvasWrap');
+    wrap.scrollLeft = (svg.scrollWidth - wrap.clientWidth) / 2;
+    wrap.scrollTop = (svg.scrollHeight - wrap.clientHeight) / 2;
+  }, 50);
+}
+
+// ===== 詳細パネル =====
+function showTreatmentDetail(tr, cat, data, stageKey) {
+  const panel = document.getElementById('detailPanel');
+  const content = document.getElementById('detailContent');
+  const cohortNum = Math.round((data.stageDist[stageKey]||0) * tr.chosen / 100);
+
+  content.innerHTML = `
+    <div class="detail-eyebrow">${cat.name}カテゴリ</div>
+    <div class="detail-title">${tr.name}</div>
+    <div class="detail-meta">${data.name} ステージ${stageKey} の方の <strong style="color:#D4A95E">${tr.chosen}%</strong>(約${cohortNum.toLocaleString()}人)が選択</div>
+
+    <div class="detail-section">
+      <h4>💊 薬剤・用法</h4>
+      <p>${tr.drugs}</p>
+    </div>
+
+    <div class="detail-section">
+      <h4>💰 費用の目安</h4>
+      <p>${tr.price}</p>
+    </div>
+
+    <div class="detail-section">
+      <h4>⚠️ 主な副作用</h4>
+      <p>${tr.side}</p>
+    </div>
+
+    <div class="detail-section">
+      <h4>📈 治療成績・効果</h4>
+      <p>${tr.outcome}</p>
+    </div>
+
+    <div class="detail-section">
+      <h4>📌 ポイント</h4>
+      <p>${tr.note}</p>
+    </div>
+
+    <div class="detail-section">
+      <h4>📊 統計</h4>
+      <div class="stat-row"><span>選択率</span><span class="v">${tr.chosen}%</span></div>
+      <div class="stat-row"><span>同じ治療を受けた方</span><span class="v">${cohortNum.toLocaleString()}人</span></div>
+      <div class="stat-row"><span>5年生存率(ステージ${stageKey})</span><span class="v">${data.survival[stageKey]}%</span></div>
+    </div>
+
+    <button class="detail-cta" onclick="satoiNotify('先生に聞きたいことカードを生成中…\\n\\n・なぜ私にこの治療?\\n・他の選択肢との違いは?\\n・副作用への対処法は?\\n・治療期間は?\\n・セカンドオピニオン紹介状\\n\\n→ PDF/QR/メールで主治医に渡せます\\n(次画面 B6)')">📝 先生に聞きたいことカードを作る</button>
+    <a href="SATOI_Mock_v1_C1_mypage.html" class="detail-cta secondary">🌙 あなたの物語に戻る・続ける</a>
+    <a href="SATOI_Mock_v1_D1_stories.html" class="detail-cta secondary">📖 同じ治療を受けた方の物語</a>
+    <a href="#" class="detail-cta secondary" onclick="satoiNotify('関連文献(PubMed)\\n→ AI翻訳で患者向けに分かりやすく\\n(次画面 B5)'); return false;">📚 関連文献を読む(AI翻訳)</a>
+  `;
+  panel.classList.add('open');
+}
+
+function showCategoryDetail(cat, data, stageKey) {
+  const panel = document.getElementById('detailPanel');
+  const content = document.getElementById('detailContent');
+
+  const trList = cat.treatments.map(t => {
+    const num = Math.round((data.stageDist[stageKey]||0) * t.chosen / 100);
+    return `<div class="stat-row" onclick="satoiNotify('「${t.name}」の詳細を見る → 治療ノードをクリックしてください')" style="cursor:pointer;"><span>${t.name}</span><span class="v">${num.toLocaleString()}人</span></div>`;
+  }).join('');
+
+  content.innerHTML = `
+    <div class="detail-eyebrow">治療カテゴリ</div>
+    <div class="detail-title">${cat.name}</div>
+    <div class="detail-meta">${data.name} ステージ${stageKey} の方の <strong style="color:#D4A95E">${cat.chosen}%</strong>が、このカテゴリの治療を経験</div>
+
+    <div class="detail-section">
+      <h4>選べる治療(${cat.treatments.length}件)</h4>
+      ${trList}
+    </div>
+
+    <div class="detail-section">
+      <h4>📌 このカテゴリの位置づけ</h4>
+      <p>${cat.id === 'surgery' ? 'がんを直接取り除く治療。早期では根治を目指せます。' :
+            cat.id === 'drug' ? '全身に作用する治療。手術と組み合わせ、または進行例で中心的役割。' :
+            cat.id === 'radiation' ? '局所制御に有効。手術困難例にも選択肢。' :
+            cat.id === 'support' ? '主要治療を支える併用治療。早期からのケアがQOLを大きく左右します。' :
+            cat.id === 'watch' ? '即座の治療を行わず、慎重に追跡する選択肢。低リスク群で重要。' :
+            '治療カテゴリ'}</p>
+    </div>
+
+    <button class="detail-cta" onclick="document.getElementById('detailPanel').classList.remove('open')">マップに戻る</button>
+  `;
+  panel.classList.add('open');
+}
+
+// 閉じる
+document.getElementById('detailClose').addEventListener('click', () => {
+  document.getElementById('detailPanel').classList.remove('open');
+});
+
+// セレクト切替
+document.getElementById('cancerSelect').addEventListener('change', (e) => {
+  renderMap(e.target.value, document.getElementById('stageSelect').value);
+});
+document.getElementById('stageSelect').addEventListener('change', (e) => {
+  renderMap(document.getElementById('cancerSelect').value, e.target.value);
+});
+
+// 表示モード
+document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.view-toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const view = btn.dataset.view;
+    if (view === 'focus') alert('フォーカスモード:あなたの現在地を拡大表示\n(ズーム機能・実装簡易版)');
+    else if (view === 'compare') alert('比較モード:同条件で違う選択をした方を並列表示\n(次バージョンで実装)');
+  });
+});
+
+// 星
+(function generateStars() {
+  const layer = document.getElementById('starsLayer');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 1.8 + 0.5;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 4) + 's';
+    s.style.animationDuration = (3 + Math.random() * 3) + 's';
+    layer.appendChild(s);
+  }
+})();
+
+// 初回描画
+renderMap(initialCancer, initialStage);
+</script>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

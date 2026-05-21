@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>世代別の情報(基礎) | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #F1ECD9; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 130px 32px 56px; text-align:center; background: linear-gradient(135deg, rgba(127,168,201,0.08) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: #7FA8C9; padding:6px 18px; border:1px solid rgba(127,168,201,0.4); border-radius:24px; margin-bottom:24px; }
+.hero-title { font-size: clamp(30px, 5vw, 44px); font-weight:300; line-height:1.55; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: #7FA8C9; font-weight:500; }
+.hero-sub { font-size:15px; color: var(--ink-medium); line-height:2; max-width:700px; margin:0 auto; }
+
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 14px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc-item { padding:7px 14px; background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.3); border-radius:18px; color: var(--ink-medium); font-size:11.5px; cursor:pointer; text-decoration:none; }
+.toc-item:hover, .toc-item.active { background: #7FA8C9; color: var(--morning-white); border-color: #7FA8C9; }
+
+.section { padding: 56px 32px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size:11px; letter-spacing:0.36em; color: #7FA8C9; margin-bottom:10px; font-weight:600; }
+.section-title { font-size: clamp(24px, 3.2vw, 30px); font-weight:500; color: var(--ink-deep); margin-bottom:14px; line-height:1.5; }
+.section-sub { font-size:14.5px; color: var(--ink-medium); line-height:1.95; margin-bottom:30px; }
+
+.content-card { background: white; border-radius:18px; padding: 28px 32px; border:1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 20px; }
+.content-card h3 { font-size:18px; font-weight:600; color: var(--ink-deep); margin-bottom: 12px; }
+.content-card h4 { font-size:15px; font-weight:600; color: #7FA8C9; margin: 18px 0 10px; }
+.content-card p { font-size:14px; color: var(--ink-medium); line-height:1.95; margin-bottom: 12px; }
+.content-card ul { padding-left: 22px; margin: 10px 0 14px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.content-card li { margin-bottom: 6px; }
+.content-card strong { color: var(--ink-deep); font-weight: 600; }
+.content-card blockquote { border-left: 3px solid #7FA8C9; padding: 10px 18px; margin: 14px 0; background: rgba(212,169,94,0.06); color: var(--ink-medium); font-size:13px; }
+
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 26px 30px; margin: 26px 0 8px; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 16px; font-weight:600; color: var(--teal); margin-bottom: 8px; }
+.ai-cta p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 14px; }
+.ai-cta-btn { display:inline-block; padding: 12px 24px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
+
+.note-box { background: rgba(212,98,42,0.07); border:1px solid rgba(212,98,42,0.25); border-radius: 14px; padding: 18px 22px; margin: 8px 0 0; font-size: 12.5px; color: var(--ink-medium); line-height:1.9; }
+.note-box strong { color: var(--warm-orange); }
+
+.related-nav { background: var(--morning-cream); padding: 40px 32px; margin-top: 40px; border-top: 1px solid var(--line); }
+.related-nav h4 { font-size:14px; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom: 16px; text-align: center; }
+.related-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; max-width: 980px; margin: 0 auto; }
+.related-card { padding: 14px 18px; background: white; border-radius: 12px; border:1px solid var(--line); cursor:pointer; transition: all 0.2s; }
+.related-card:hover { border-color: #7FA8C9; background: rgba(212,169,94,0.06); }
+.related-card-title { font-size: 13px; font-weight: 500; color: var(--ink-deep); margin-bottom: 3px; }
+.related-card-desc { font-size: 11.5px; color: var(--ink-light); }
+
+@media (max-width: 768px) {
+  .hero { padding: 110px 16px 46px; }
+  .section { padding: 40px 16px; }
+  .content-card { padding: 22px 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_DASHBOARD.html'; })()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">BY GENERATION ・ 世代別の情報(基礎)</div>
+  <h1 class="hero-title">その<strong>年代</strong>ならではの、悩みがあります。</h1>
+  <p class="hero-sub">
+    学校、仕事、子育て、これからの人生設計。<br>
+    がんとの向き合い方は、世代によって違います。あなたに近い情報から、見てみてください。
+  </p>
+</section>
+
+<nav class="toc">
+  <a class="toc-item" href="#s1">世代で違う向き合い方</a>
+  <a class="toc-item" href="#s2">小児がんのご家族へ</a>
+  <a class="toc-item" href="#s3">AYA世代</a>
+  <a class="toc-item" href="#s4">働く・子育て世代</a>
+  <a class="toc-item" href="#s5">高齢の方とご家族へ</a>
+</nav>
+
+<main>
+
+<section class="section" id="s1">
+  <div class="section-eyebrow">OVERVIEW</div>
+  <h2 class="section-title">世代で違う、向き合い方</h2>
+  <p class="section-sub">同じ「がん」でも、抱える悩みは、年代によって大きく変わります。</p>
+  <div class="content-card">
+    <p>がんは、子どもから高齢の方まで、どの世代にも起こります。そして、そのとき直面する悩みは、世代によってずいぶん違います。学業、就職や結婚、子育て、仕事、介護、これからの暮らし——。</p>
+    <p>だからこそ、「自分に近い立場」の情報や支えを見つけることが、安心につながります。ここでは、世代ごとの代表的なテーマと、知っておきたい支えをまとめました。当てはまるところから、ご覧ください。</p>
+    <blockquote>どの世代であっても、共通していること——あなたは、ひとりではありません。同じ年代で、同じ夜を過ごしている人がいます。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>あなたの年代・立場に合わせて、気になることを一緒に整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_gen&topic=overview">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s2">
+  <div class="section-eyebrow">CHILDHOOD</div>
+  <h2 class="section-title">小児がんのご家族へ</h2>
+  <p class="section-sub">お子さんががんと診断されたご家族の、心と暮らしを支えるために。</p>
+  <div class="content-card">
+    <p>小児がんは、大人のがんとは性質も治療も異なり、専門の医療機関で治療が行われます。お子さん本人のケアはもちろん、<strong>付き添うご家族の負担や、きょうだいへの配慮</strong>も大切なテーマです。</p>
+    <h4>知っておきたい支え</h4>
+    <ul>
+      <li><strong>院内学級・教育の継続</strong> ・ 入院中も学びを続けられる仕組みがあります。</li>
+      <li><strong>家族の付き添い・滞在の支援</strong> ・ 病院近くの滞在施設(ファミリーハウスなど)を利用できることがあります。</li>
+      <li><strong>きょうだいへのケア</strong> ・ がんの子に手がかかる中、きょうだいの気持ちにも目を向ける支援があります。</li>
+      <li><strong>長期フォロー</strong> ・ 治療後の成長や、晩期合併症を見守る仕組みがあります。</li>
+    </ul>
+    <p>「親として何ができるのか」と苦しくなることもあります。一人で抱えず、医療チームや相談窓口、同じ立場の家族会に頼ってください。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>お子さんやごきょうだいへの伝え方、ご家族自身のケアを一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_gen&topic=child">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s3">
+  <div class="section-eyebrow">AYA</div>
+  <h2 class="section-title">AYA世代(15〜30代)</h2>
+  <p class="section-sub">進学・就職・結婚・出産——人生の選択が重なる時期だからこその悩み。</p>
+  <div class="content-card">
+    <p><strong>AYA世代</strong>(思春期・若年成人:およそ15〜30代)は、学業や仕事、恋愛や結婚、出産といった人生の大きな選択が重なる時期です。がんの治療が、これらの計画と重なることで、特有の悩みが生まれます。</p>
+    <h4>この世代に多いテーマ</h4>
+    <ul>
+      <li><strong>妊よう性(将来子どもを持つ可能性)</strong> ・ 治療が妊娠・出産に影響することがあります。治療前に選択肢(卵子・精子の保存など)を相談できる場合があるため、<strong>早めに主治医に確認</strong>を。</li>
+      <li><strong>学業・仕事との両立</strong> ・ 休学・復学、就職活動、働き方の相談。</li>
+      <li><strong>同世代とのつながり</strong> ・ 周りに同じ経験の人が少なく、孤独を感じやすい。同世代のコミュニティが支えになります。</li>
+    </ul>
+    <p>「周りは元気に進んでいくのに、自分だけ」と感じることもあります。その気持ちは自然なこと。同じ時間を過ごしている仲間が、必ずいます。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>妊よう性・進路・つながりなど、今いちばん気になることをお話しください。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_gen&topic=aya">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s4">
+  <div class="section-eyebrow">WORKING / PARENTING</div>
+  <h2 class="section-title">働く・子育て世代</h2>
+  <p class="section-sub">仕事も、家計も、子どものことも。背負うものが多い世代の支え。</p>
+  <div class="content-card">
+    <p>働き盛り・子育て世代では、<strong>仕事と治療の両立、家計、子どもへの伝え方</strong>が大きなテーマになります。「自分が倒れるわけにはいかない」という思いが、かえって無理を生むこともあります。</p>
+    <h4>この世代に多いテーマ</h4>
+    <ul>
+      <li><strong>仕事の継続</strong> ・ 両立支援、時短・在宅、休職と復職。慌てて辞めないことが大切(暮らしと仕事のページも)。</li>
+      <li><strong>家計の不安</strong> ・ 高額療養費・傷病手当金などの制度を知っておく(お金と制度のページも)。</li>
+      <li><strong>子どもへの伝え方</strong> ・ 年齢に合わせた言葉で、安心できるように伝える。</li>
+    </ul>
+    <p>頑張り屋の世代だからこそ、「人に頼る」「制度を使う」を、どうか後ろめたく思わないでください。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>仕事・お金・子どものこと、優先順位を一緒に整理しましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_gen&topic=working">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s5">
+  <div class="section-eyebrow">SENIOR</div>
+  <h2 class="section-title">高齢の方とご家族へ</h2>
+  <p class="section-sub">体力や持病、暮らしの支え。年齢を重ねた方ならではの配慮があります。</p>
+  <div class="content-card">
+    <p>高齢の方の治療では、年齢だけでなく、<strong>体力・持病・生活の状況</strong>を含めて、その人に合った方針を考えます。「年だから治療できない」と決めつける必要はなく、逆に「無理のない範囲で、生活の質を保つ」ことを大切にする選択もあります。</p>
+    <h4>知っておきたいこと</h4>
+    <ul>
+      <li><strong>治療の目的を話し合う</strong> ・ 治すことを目指すのか、つらさを抑えて穏やかに過ごすことを重視するのか。ご本人の希望が中心です。</li>
+      <li><strong>在宅療養・介護の支え</strong> ・ 介護保険や訪問診療・訪問看護など、家で過ごすための支えがあります。</li>
+      <li><strong>ご家族の関わり</strong> ・ 意思決定や通院の付き添いで、家族の役割が大きくなります。家族も支援を受けてよいのです。</li>
+    </ul>
+    <p>ご本人が大事にしたいこと(これからをどう過ごしたいか)を、ご家族と医療者で一緒に話していくことが、何より大切です。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>ご本人の希望や、在宅の支え、ご家族の関わり方を一緒に整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_gen&topic=senior">AIと話す →</a>
+  </div>
+
+  <div class="note-box">
+    <strong>この情報について。</strong> ここに書かれているのは、世代ごとの一般的なテーマと支えの紹介です。利用できる制度やサービスは、お住まいの地域や状況によって異なります。具体的なことは、主治医・がん相談支援センター・自治体の窓口などにご相談ください。
+  </div>
+</section>
+
+<div class="related-nav">
+  <h4>もっと知る ・ 関連ページ</h4>
+  <div class="related-grid">
+    <a class="related-card" href="SATOI_Mock_v1_KB_life.html">
+      <div class="related-card-title">暮らしと仕事(基礎)</div>
+      <div class="related-card-desc">両立・食事・外見ケア</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_KB_money.html">
+      <div class="related-card-title">お金と制度(基礎)</div>
+      <div class="related-card-desc">使える支えの全体像</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_FAM_view.html">
+      <div class="related-card-title">家族との共有・伝え方</div>
+      <div class="related-card-desc">子ども・家族と向き合う</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_D1_stories.html">
+      <div class="related-card-title">同じ境遇の方の物語</div>
+      <div class="related-card-desc">近い世代の体験談</div>
+    </a>
+  </div>
+</div>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

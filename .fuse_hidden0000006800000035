@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - 5つの約束 ・ 詳細</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --starlight: #D4A95E;
+  --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0;
+  --morning-cream: #F6EFE3;
+  --teal: #0D7377;
+  --teal-soft: #14A6AB;
+  --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A;
+  --warm-coral: #E08461;
+  --rose: #C76B7F;
+  --ink-deep: #1A2A40;
+  --ink-medium: rgba(26,42,64,0.78);
+  --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+body {
+  font-family: var(--font);
+  color: var(--ink-deep);
+  background: var(--morning-white);
+  line-height: 1.95;
+  font-size: 16px;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); cursor: pointer; }
+
+.header {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(248,246,240,0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(11,23,54,0.06);
+}
+.logo { font-size: 20px; font-weight: 500; letter-spacing: 0.22em; color: var(--ink-deep); display: inline-flex; align-items: center; }
+.logo .dot { width: 8px; height: 8px; background: var(--starlight); border-radius: 50%; margin-right: 10px; box-shadow: 0 0 10px rgba(212,169,94,0.7); }
+.back-btn { padding: 8px 18px; background: transparent; color: var(--ink-medium); border: 1px solid rgba(11,23,54,0.18); border-radius: 20px; font-size: 12px; }
+
+.hero {
+  padding: 130px 32px 60px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--morning-cream) 0%, var(--morning-white) 100%);
+}
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  color: var(--warm-orange);
+  padding: 6px 18px;
+  border: 1px solid rgba(212,98,42,0.4);
+  border-radius: 24px;
+  margin-bottom: 24px;
+}
+.hero-title {
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 300;
+  line-height: 1.55;
+  letter-spacing: 0.06em;
+  margin-bottom: 18px;
+}
+.hero-title strong { color: var(--warm-orange); font-weight: 500; }
+.hero-sub {
+  font-size: 15px;
+  color: var(--ink-medium);
+  line-height: 2;
+}
+
+/* 約束ナビ */
+.promise-nav {
+  position: sticky;
+  top: 64px;
+  background: rgba(255,253,247,0.96);
+  border-bottom: 1px solid var(--line);
+  z-index: 50;
+  padding: 14px 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  backdrop-filter: blur(12px);
+}
+.promise-nav-item {
+  padding: 8px 16px;
+  background: rgba(212,169,94,0.10);
+  border: 1px solid rgba(212,169,94,0.3);
+  border-radius: 18px;
+  color: var(--ink-medium);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.promise-nav-item:hover { background: var(--starlight); color: var(--night-deep); }
+.promise-nav-item.active { background: var(--warm-orange); color: white; border-color: var(--warm-orange); }
+
+/* 約束カード */
+.promise-section {
+  padding: 70px 32px;
+  max-width: 980px;
+  margin: 0 auto;
+  border-bottom: 1px dashed rgba(11,23,54,0.10);
+}
+.promise-header {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 24px;
+  margin-bottom: 30px;
+  align-items: flex-start;
+}
+.promise-num-big {
+  font-size: 64px;
+  font-weight: 100;
+  color: var(--starlight);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.promise-h-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.36em;
+  color: var(--warm-orange);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.promise-h-title {
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 500;
+  color: var(--ink-deep);
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+.promise-h-sub {
+  font-size: 14px;
+  color: var(--ink-medium);
+  line-height: 1.95;
+}
+
+.promise-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 26px;
+}
+.promise-box {
+  padding: 22px 24px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+.promise-box.what {
+  background: rgba(13,115,119,0.06);
+  border-color: rgba(13,115,119,0.25);
+}
+.promise-box.how {
+  background: rgba(212,169,94,0.06);
+  border-color: rgba(212,169,94,0.25);
+}
+.promise-box-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.promise-box.what .promise-box-label { color: var(--teal); }
+.promise-box.how .promise-box-label { color: var(--warm-orange); }
+.promise-box-body {
+  font-size: 13.5px;
+  color: var(--ink-medium);
+  line-height: 1.95;
+}
+.promise-box-body strong { color: var(--ink-deep); font-weight: 500; }
+.promise-box ul { padding-left: 18px; margin-top: 8px; }
+.promise-box li { margin-bottom: 5px; }
+
+.promise-examples {
+  background: var(--morning-cream);
+  border-radius: 14px;
+  padding: 22px 24px;
+}
+.promise-examples-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--ink-light);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.promise-examples-list {
+  font-size: 13px;
+  color: var(--ink-medium);
+  line-height: 1.95;
+}
+.promise-examples-list .ex-quote {
+  font-style: italic;
+  color: var(--ink-deep);
+  display: block;
+  padding: 8px 14px;
+  border-left: 3px solid var(--starlight);
+  background: var(--morning-white);
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.promise-related-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 22px;
+  padding: 10px 20px;
+  background: var(--warm-orange);
+  color: white;
+  border-radius: 22px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .promise-body { grid-template-columns: 1fr; }
+  .promise-header { grid-template-columns: 60px 1fr; gap: 16px; }
+  .promise-num-big { font-size: 44px; }
+  .promise-section { padding: 50px 16px; }
+  .hero { padding: 100px 16px 50px; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+
+/* === SATOI ユニバーサル横断ナビ === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+/* === SATOI 共通モバイル対応 === */
+@media (max-width: 1024px) {
+  .header { padding: 14px 22px !important; }
+}
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  section, .section { padding-left: 14px !important; padding-right: 14px !important; padding-top: 50px !important; padding-bottom: 50px !important; }
+  .grid, .cards { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  input, textarea, select { font-size: 16px !important; }
+}
+@media (max-width: 480px) {
+  .hero { padding: 80px 12px 40px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_I_about.html" class="logo"><span class="dot"></span>SATOI ・ 5つの約束</a>
+  <button class="back-btn" onclick="history.back()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">FIVE PROMISES IN DETAIL</div>
+  <h1 class="hero-title">SATOIから、あなたへの<br><strong>5つの約束</strong></h1>
+  <p class="hero-sub">それぞれの約束について、<strong>何を約束しているか</strong> ・ <strong>どう守るか</strong> ・ <strong>具体例</strong> を、お伝えします。</p>
+</section>
+
+<nav class="promise-nav">
+  <a href="#p01" class="promise-nav-item active">① あなたの物語は、あなたのもの</a>
+  <a href="#p02" class="promise-nav-item">② 数字より、言葉を信じる</a>
+  <a href="#p03" class="promise-nav-item">③ 急がせない</a>
+  <a href="#p04" class="promise-nav-item">④ 標準治療を尊重する</a>
+  <a href="#p05" class="promise-nav-item">⑤ 透明・独立・倫理的</a>
+</nav>
+
+<!-- 約束 01 -->
+<section class="promise-section" id="p01">
+  <div class="promise-header">
+    <div class="promise-num-big">01</div>
+    <div>
+      <div class="promise-h-eyebrow">PROMISE 01 ・ DATA OWNERSHIP</div>
+      <div class="promise-h-title">あなたの物語は、あなたのものです。</div>
+      <div class="promise-h-sub">記録されるすべての情報は、本人同意ベース。共有先はあなたが選び、いつでも撤回できます。</div>
+    </div>
+  </div>
+  <div class="promise-body">
+    <div class="promise-box what">
+      <div class="promise-box-label">▸ 約束していること</div>
+      <div class="promise-box-body">
+        <strong>あなたが書いた言葉・記録・選択は、あなたの所有物です。</strong>
+        <ul>
+          <li>SATOI は預かるだけで、所有しません</li>
+          <li>家族・主治医・保険会社への共有は <strong>都度同意</strong></li>
+          <li>退会時は、全データ完全削除を選択可能</li>
+          <li>第三者への販売・広告利用は永久にしません</li>
+        </ul>
+      </div>
+    </div>
+    <div class="promise-box how">
+      <div class="promise-box-label">▸ どう守るか</div>
+      <div class="promise-box-body">
+        <ul>
+          <li><strong>SOC 2 Type II</strong> 認証取得済(情報セキュリティ国際基準)</li>
+          <li>データは <strong>AWS Tokyo</strong> リージョンで暗号化保管</li>
+          <li>共有同意は <strong>3階層</strong>(自分のみ/家族/主治医/全体)で個別設定</li>
+          <li>同意ログは全て可視化 ・ 撤回履歴も全て残ります</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="promise-examples">
+    <div class="promise-examples-label">▸ 具体例</div>
+    <div class="promise-examples-list">
+      <span class="ex-quote">「副作用の記録は主治医にだけ共有・家族には『辛さの色』だけ伝える」</span>
+      <span class="ex-quote">「告知の夜の日記は、誰にも見せない私だけのもの」</span>
+      家族向け開示同意は <a href="SATOI_Mock_v1_FAM_view.html?from=pro" style="color:var(--warm-orange); text-decoration:underline;">ファミリービュー</a> で詳細設定できます。
+    </div>
+  </div>
+</section>
+
+<!-- 約束 02 -->
+<section class="promise-section" id="p02">
+  <div class="promise-header">
+    <div class="promise-num-big">02</div>
+    <div>
+      <div class="promise-h-eyebrow">PROMISE 02 ・ NARRATIVE MEDICINE</div>
+      <div class="promise-h-title">数字より、言葉を、信じます。</div>
+      <div class="promise-h-sub">NBM(Narrative-Based Medicine)中心。検査値だけでなく、あなたの言葉・揺れ・沈黙を、医療の一部として扱います。</div>
+    </div>
+  </div>
+  <div class="promise-body">
+    <div class="promise-box what">
+      <div class="promise-box-label">▸ 約束していること</div>
+      <div class="promise-box-body">
+        <strong>「検査値が改善しても、あなたが辛ければ、治療は成功ではない」</strong>
+        <ul>
+          <li>あなたの言葉・気持ち・物語を最優先で扱います</li>
+          <li>EMPSe 5軸(身体/活力/共感/精神/社会)で多面評価</li>
+          <li>沈黙(返事しない時間)も、ひとつの返事として尊重</li>
+        </ul>
+      </div>
+    </div>
+    <div class="promise-box how">
+      <div class="promise-box-label">▸ どう守るか</div>
+      <div class="promise-box-body">
+        <ul>
+          <li>AIモデルは <strong>NBM 訓練済み</strong>(DIPEx-Japan 200+ 患者ナラティブで学習)</li>
+          <li>医師向けレポートでも <strong>患者の言葉を最初に</strong> 表示</li>
+          <li>「沈黙のUX」設計 ・ 何も決めない夜が許される</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="promise-examples">
+    <div class="promise-examples-label">▸ 具体例</div>
+    <div class="promise-examples-list">
+      <span class="ex-quote">主治医面談用「あなたが先生に聞きたいこと」カードに、患者の言葉(<strong>「眠れない」「家族に迷惑かけたくない」</strong>等)が、検査値より先に表示されます。</span>
+      <a href="SATOI_Mock_v1_I_about.html#nbm" style="color:var(--warm-orange); text-decoration:underline;">About SATOI ・ NBM 哲学を読む →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 約束 03 -->
+<section class="promise-section" id="p03">
+  <div class="promise-header">
+    <div class="promise-num-big">03</div>
+    <div>
+      <div class="promise-h-eyebrow">PROMISE 03 ・ PACE</div>
+      <div class="promise-h-title">急がせません。</div>
+      <div class="promise-h-sub">沈黙のUX を、すべての画面に。何も決めない夜が、許されています。明日また、続きから始められます。</div>
+    </div>
+  </div>
+  <div class="promise-body">
+    <div class="promise-box what">
+      <div class="promise-box-label">▸ 約束していること</div>
+      <div class="promise-box-body">
+        <ul>
+          <li>強制的に何かを選ばせる導線を作りません</li>
+          <li>進捗の煽り文言・カウントダウン・期限プレッシャー は使いません</li>
+          <li>「決めない・揺れる・戻る」を全て対等に扱います</li>
+          <li>セッションは完全保存 ・ いつでも続きから</li>
+        </ul>
+      </div>
+    </div>
+    <div class="promise-box how">
+      <div class="promise-box-label">▸ どう守るか</div>
+      <div class="promise-box-body">
+        <ul>
+          <li>全UIに「<strong>今日はここまで</strong>」ボタン常設</li>
+          <li>「最初からやり直す」も「続きから」も選べる</li>
+          <li>2回目訪問時には「<strong>おかえりなさい</strong>」で前回続きに即復帰</li>
+          <li>AI からのナッジは穏やか・40秒以上の間隔</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="promise-examples">
+    <div class="promise-examples-label">▸ 具体例</div>
+    <div class="promise-examples-list">
+      <span class="ex-quote">対話のビート末選択肢には「今日はここまで」が常駐(<a href="SATOI_Mock_v1_A2_dialog.html?from=pro" style="color:var(--warm-orange); text-decoration:underline;">体験する</a>)</span>
+      <span class="ex-quote">B1ハブの2回目訪問では「物語の壺に5つの言葉が貯まっています ・ あと2つで次の章へ」とワクワク感を演出</span>
+    </div>
+  </div>
+</section>
+
+<!-- 約束 04 -->
+<section class="promise-section" id="p04">
+  <div class="promise-header">
+    <div class="promise-num-big">04</div>
+    <div>
+      <div class="promise-h-eyebrow">PROMISE 04 ・ STANDARD CARE</div>
+      <div class="promise-h-title">標準治療を、最も尊重します。</div>
+      <div class="promise-h-sub">「自由診療を否定する」のではなく、「標準治療を否定する自由診療を載せない」スタンスです。エビデンスをフェアに、患者の選択肢を狭めず提示します。</div>
+    </div>
+  </div>
+  <div class="promise-body">
+    <div class="promise-box what">
+      <div class="promise-box-label">▸ 約束していること</div>
+      <div class="promise-box-body">
+        <ul>
+          <li>標準治療を <strong>第一推奨</strong> として常に表示</li>
+          <li>自由診療は <strong>エビデンス3段階で色分け</strong> ・ 透明に並べる</li>
+          <li>主治医・標準治療を否定する自由診療はリストから除外</li>
+          <li>SDM(共同意思決定)を全機能で推奨</li>
+        </ul>
+      </div>
+    </div>
+    <div class="promise-box how">
+      <div class="promise-box-label">▸ どう守るか</div>
+      <div class="promise-box-body">
+        <ul>
+          <li>編集委員会(国がん5名+腫瘍内科医10名+患者代表3名)が <strong>採用5基準</strong> で監修</li>
+          <li>RCT・ガイドライン・PMDA承認・患者代表レビューを全て公開</li>
+          <li><a href="SATOI_Mock_v1_ACAD_research.html?from=pro" style="color:var(--warm-orange); text-decoration:underline;">学術ページ</a> でエビデンス系統樹を完全公開</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="promise-examples">
+    <div class="promise-examples-label">▸ 具体例</div>
+    <div class="promise-examples-list">
+      <span class="ex-quote">「先生、自由診療の◯◯を検討しています ・ 標準治療との併用は問題ないでしょうか?」と、主治医に聞くためのSDM質問カードが自動生成されます。</span>
+      <a href="SATOI_Mock_v1_FREE_map.html?from=pro" style="color:var(--warm-orange); text-decoration:underline;">自由診療マップを見る →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 約束 05 -->
+<section class="promise-section" id="p05">
+  <div class="promise-header">
+    <div class="promise-num-big">05</div>
+    <div>
+      <div class="promise-h-eyebrow">PROMISE 05 ・ GOVERNANCE</div>
+      <div class="promise-h-title">透明 ・ 独立 ・ 倫理的。</div>
+      <div class="promise-h-sub">JOInT(非営利諮問委員会)が独立してガバナンス。利益相反・編集方針・データ運用を、第三者レビュー。</div>
+    </div>
+  </div>
+  <div class="promise-body">
+    <div class="promise-box what">
+      <div class="promise-box-label">▸ 約束していること</div>
+      <div class="promise-box-body">
+        <ul>
+          <li>非営利法人 <strong>JOInT</strong> が独立諮問</li>
+          <li>製薬企業・保険会社からの圧力で編集方針を変えない</li>
+          <li>広告掲載なし ・ 個人データの販売なし</li>
+          <li>厚労省 PMDA 連携(本人同意ベース・統計のみ)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="promise-box how">
+      <div class="promise-box-label">▸ どう守るか</div>
+      <div class="promise-box-body">
+        <ul>
+          <li>JOInT メンバー(12名)の利益相反を全公開</li>
+          <li>編集方針変更は四半期ごとに公開ログ</li>
+          <li>セキュリティ侵害が起きた場合は <strong>48時間以内</strong> に当事者通知</li>
+          <li>第三者監査(SOC 2 Type II)を年次実施</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="promise-examples">
+    <div class="promise-examples-label">▸ 具体例</div>
+    <div class="promise-examples-list">
+      <span class="ex-quote">「製薬会社からスポンサー料を受け取って◯◯薬を推奨していませんか?」→ SATOIは <strong>受け取っていません</strong>。スポンサー一覧は <a href="SATOI_Mock_v1_I_about.html#advisors" style="color:var(--warm-orange); text-decoration:underline;">こちら</a>。</span>
+      <a href="SATOI_Mock_v1_I_about.html#governance" style="color:var(--warm-orange); text-decoration:underline;">About SATOI ・ ガバナンス詳細 →</a>
+    </div>
+  </div>
+</section>
+
+<section class="promise-section" style="border-bottom:none; text-align:center;">
+  <div style="font-size:14px; color:var(--ink-medium); margin-bottom:18px;">5つの約束は、SATOI が存在する <strong style="color:var(--warm-orange);">理由そのもの</strong> です。</div>
+  <button onclick="location.href='SATOI_Mock_v1_A2_dialog.html?from=pro'" style="padding:14px 28px; background:var(--warm-orange); color:white; border:none; border-radius:24px; font-size:14px; font-weight:500; cursor:pointer; box-shadow:0 8px 22px rgba(212,98,42,0.3);">対話を、始めてみる →</button>
+</section>
+
+<script>
+
+/* === SATOI 共通トースト + ユニバーサルナビ === */
+(function ensureToastHost(){
+  function inject(){
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host);
+    }
+  }
+  if (document.body) inject(); else document.addEventListener('DOMContentLoaded', inject);
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+window.__origAlert = window.alert;
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div'); nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn'); const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => { b.addEventListener('click', () => {
+      langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active')); b.classList.add('active');
+      const lang = b.dataset.lang;
+      const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+      if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+      document.documentElement.lang = lang; langPop.classList.remove('show');
+    }); });
+  }
+  if (document.body) inject(); else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+
+// スティッキーナビ ・ スクロールで active 切替
+const navItems = document.querySelectorAll('.promise-nav-item');
+const sections = document.querySelectorAll('.promise-section[id]');
+window.addEventListener('scroll', () => {
+  let cur = sections[0].id;
+  sections.forEach(s => {
+    if (window.scrollY + 160 >= s.offsetTop) cur = s.id;
+  });
+  navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + cur));
+});
+</script>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

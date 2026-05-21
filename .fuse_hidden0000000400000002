@@ -1,0 +1,3174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - AIとの対話</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --night-glow: #2A3558;
+  --starlight: #D4A95E;
+  --starlight-soft: #E5C68A;
+  --starlight-strong: #F0C97A;
+  --morning-white: #F8F6F0;
+  --healing-blue: #7FA8C9;
+  --teal: #0D7377;
+  --warm-orange: #D4622A;
+  --text-primary: rgba(248,246,240,0.96);
+  --text-secondary: rgba(248,246,240,0.78);
+  --text-muted: rgba(248,246,240,0.55);
+  --text-data: #D4A95E;
+  --font: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+
+body {
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: linear-gradient(to bottom, var(--night-deep) 0%, var(--night-medium) 50%, var(--night-glow) 100%);
+  position: relative;
+  line-height: 1.75;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+/* === 夜空の星 === */
+.stars-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.star {
+  position: absolute; background: var(--starlight); border-radius: 50%;
+  opacity: 0; animation: twinkle 4s infinite ease-in-out;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.8); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+/* === ヘッダー === */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 18px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(11,23,54,0.92), rgba(11,23,54,0));
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+
+.logo {
+  font-size: 22px; font-weight: 500; letter-spacing: 0.22em; color: var(--text-primary);
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.logo .dot {
+  display: inline-block; width: 8px; height: 8px;
+  background: var(--starlight); border-radius: 50%; margin-right: 10px;
+  box-shadow: 0 0 10px var(--starlight);
+}
+
+/* 進捗バーは廃止(義務感・離脱を防ぐため非表示)。setProgress呼び出しは無害化される。 */
+.progress-wrap { display: none !important; }
+.progress-label {
+  font-size: 12px; color: var(--text-muted); letter-spacing: 0.16em;
+  margin-bottom: 8px; text-align: center;
+}
+.progress-track {
+  height: 4px; background: rgba(248,246,240,0.1); border-radius: 4px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: linear-gradient(to right, var(--starlight-soft), var(--starlight));
+  border-radius: 4px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); width: 12%;
+}
+
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px; background: transparent; color: var(--text-secondary);
+  border: 1px solid rgba(248,246,240,0.25); border-radius: 22px;
+  font-family: var(--font); font-size: 13px; cursor: pointer; text-decoration: none;
+}
+.back-btn:hover { border-color: var(--starlight); color: var(--starlight); }
+
+/* === メイン対話エリア === */
+.dialog-wrap {
+  position: relative; z-index: 1;
+  max-width: 920px; margin: 0 auto;
+  padding: 100px 30px 240px;
+}
+
+/* === メッセージ吹き出し === */
+.message-group { margin-bottom: 28px; opacity: 0; transform: translateY(12px); animation: msgIn 0.5s forwards; }
+@keyframes msgIn { to { opacity: 1; transform: translateY(0); } }
+
+.ai-msg { display: flex; gap: 16px; align-items: flex-start; }
+
+.ai-orb {
+  flex-shrink: 0;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--starlight-strong) 0%, var(--starlight) 50%, rgba(212,169,94,0.3) 100%);
+  box-shadow: 0 0 18px rgba(212,169,94,0.45), 0 0 36px rgba(212,169,94,0.18);
+  animation: orb-pulse 3s ease-in-out infinite;
+  margin-top: 2px;
+}
+@keyframes orb-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.ai-bubble {
+  flex: 1;
+  background: rgba(248,246,240,0.05);
+  border: 1px solid rgba(248,246,240,0.15);
+  border-radius: 4px 18px 18px 18px;
+  padding: 20px 26px;
+  font-size: 18px;
+  line-height: 1.85;
+  color: var(--text-primary);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+
+.ai-bubble .accent { color: var(--starlight); font-weight: 500; }
+.ai-bubble .small { font-size: 14px; color: var(--text-muted); display: block; margin-top: 6px; }
+
+.user-msg { display: flex; justify-content: flex-end; }
+.user-bubble {
+  background: var(--starlight);
+  color: var(--night-deep);
+  border-radius: 18px 4px 18px 18px;
+  padding: 16px 24px;
+  font-size: 17px;
+  font-weight: 500;
+  max-width: 70%;
+}
+
+/* === 選択肢チョイス === */
+.choices {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  margin-top: 18px; margin-left: 60px;
+}
+
+.choice-btn {
+  padding: 14px 24px;
+  background: rgba(212,169,94,0.06);
+  border: 1.5px solid rgba(212,169,94,0.4);
+  border-radius: 28px;
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+.choice-btn:hover {
+  background: var(--starlight);
+  color: var(--night-deep);
+  border-color: var(--starlight);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212,169,94,0.25);
+}
+
+.choice-btn.secondary {
+  background: transparent;
+  border-color: rgba(248,246,240,0.25);
+  color: var(--text-secondary);
+}
+.choice-btn.secondary:hover {
+  background: rgba(127,168,201,0.15);
+  border-color: var(--healing-blue);
+  color: var(--healing-blue);
+}
+
+/* === タイピングインジケーター === */
+.typing-indicator { display: flex; gap: 6px; padding: 4px 0; }
+.typing-indicator span {
+  width: 8px; height: 8px; background: var(--starlight);
+  border-radius: 50%; animation: typing 1.4s infinite;
+}
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* === 統計バナー(フワーン) === */
+.stat-banner {
+  margin: 24px 0 24px 60px;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, rgba(212,169,94,0.08), rgba(127,168,201,0.05));
+  border: 1px solid rgba(212,169,94,0.3);
+  border-radius: 12px;
+  opacity: 0; transform: scale(0.96);
+  animation: statIn 0.7s 0.3s forwards;
+}
+@keyframes statIn { to { opacity: 1; transform: scale(1); } }
+
+.stat-banner-label {
+  font-size: 13px; color: var(--starlight); letter-spacing: 0.18em;
+  margin-bottom: 8px; font-weight: 500;
+}
+
+.stat-banner-main {
+  font-size: 28px; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.stat-banner-main .num { color: var(--starlight); font-size: 36px; }
+
+.stat-banner-sub {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.7;
+}
+
+.stat-dots {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 14px;
+  max-height: 32px; overflow: hidden;
+}
+.stat-dot {
+  width: 6px; height: 6px; background: var(--starlight-soft);
+  border-radius: 50%; opacity: 0;
+  animation: dotIn 0.4s forwards;
+  box-shadow: 0 0 4px rgba(212,169,94,0.5);
+}
+@keyframes dotIn { to { opacity: 0.85; } }
+
+/* === 治療法カード(バーッと表示)=== */
+.treatments-section {
+  margin: 30px 0 30px 60px;
+  opacity: 0; transform: translateY(20px);
+  animation: msgIn 0.7s 0.5s forwards;
+}
+
+.treatments-label {
+  font-size: 14px; color: var(--text-muted); letter-spacing: 0.16em;
+  margin-bottom: 16px;
+}
+
+.treatments-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.treatment-card {
+  padding: 22px 24px;
+  background: rgba(248,246,240,0.05);
+  border: 1px solid rgba(212,169,94,0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  overflow: hidden;
+}
+
+.treatment-card::before {
+  content: ''; position: absolute; left: 0; top: 0;
+  width: 3px; height: 100%; background: var(--starlight);
+  transform: scaleY(0); transform-origin: top;
+  transition: transform 0.4s;
+}
+
+.treatment-card:hover {
+  background: rgba(212,169,94,0.08);
+  border-color: var(--starlight);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+}
+.treatment-card:hover::before { transform: scaleY(1); }
+
+.treatment-card .name {
+  font-size: 17px; font-weight: 500; color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.treatment-card .desc {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+  margin-bottom: 10px;
+}
+.treatment-card .meta {
+  display: flex; gap: 14px; font-size: 12px; color: var(--text-data);
+}
+.treatment-card .meta-item {
+  display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* === 入力エリア(下固定)=== */
+.input-area {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 50;
+  padding: 20px 40px;
+  background: linear-gradient(to top, var(--night-deep) 30%, rgba(11,23,54,0.55) 100%);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(212,169,94,0.18);
+}
+
+.input-wrap {
+  max-width: 920px; margin: 0 auto;
+  display: flex; gap: 14px; align-items: center;
+}
+
+.input-field {
+  flex: 1;
+  background: rgba(248,246,240,0.05);
+  border: 1px solid rgba(248,246,240,0.2);
+  border-radius: 30px;
+  padding: 14px 24px;
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s;
+}
+.input-field::placeholder { color: var(--text-muted); }
+.input-field:focus { border-color: var(--starlight); background: rgba(248,246,240,0.08); }
+
+.mic-btn, .send-btn {
+  width: 50px; height: 50px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(212,169,94,0.4); background: rgba(212,169,94,0.08);
+  cursor: pointer; transition: all 0.3s;
+  flex-shrink: 0;
+}
+.mic-btn:hover, .send-btn:hover {
+  background: var(--starlight); border-color: var(--starlight);
+  transform: scale(1.05);
+}
+.mic-btn svg, .send-btn svg {
+  width: 22px; height: 22px; stroke: var(--starlight); fill: none; stroke-width: 1.8;
+  transition: stroke 0.3s;
+}
+.mic-btn:hover svg, .send-btn:hover svg { stroke: var(--night-deep); }
+
+.mic-btn.listening {
+  background: var(--warm-orange);
+  border-color: var(--warm-orange);
+  animation: mic-pulse-a2 1.4s infinite;
+}
+.mic-btn.listening svg { stroke: var(--morning-white); }
+@keyframes mic-pulse-a2 {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,98,42,0.6); }
+  50% { box-shadow: 0 0 0 14px rgba(212,98,42,0); }
+}
+
+.input-hint {
+  text-align: center; font-size: 11px; color: var(--text-muted);
+  margin-top: 10px; letter-spacing: 0.1em;
+}
+
+/* === 隣の灯 === */
+.companion-lamp {
+  position: fixed; right: 30px; bottom: 130px; z-index: 60;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+}
+.lamp-orb {
+  position: relative; width: 50px; height: 50px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--starlight-strong) 0%, var(--starlight) 40%, rgba(212,169,94,0.4) 70%, rgba(212,169,94,0) 100%);
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(212,169,94,0.5), 0 0 40px rgba(212,169,94,0.2);
+  animation: lamp-float 4s ease-in-out infinite;
+}
+@keyframes lamp-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* === モバイル === */
+@media (max-width: 768px) {
+  body { font-size: 16px; }
+  /* ヘッダーのスカシ(下方向フェード)を廃止→単色で読みやすく。折返さない */
+  .header { padding: 12px 14px !important; background: rgba(11,23,54,0.96) !important; flex-wrap: nowrap; gap: 8px; }
+  .logo { font-size: 17px; }
+  .progress-wrap { display: none !important; }
+  /* 「← 戻る」は「🌙 入口」と行き先が重複するのでスマホでは省く */
+  .back-btn { display: none !important; }
+  /* マイページは隠さず、右端にコンパクトなpillで残す(入口/ホーム/マイページの3点でバランス) */
+  .header a[href*="C1_mypage"] {
+    position: absolute !important; top: 13px !important; right: 12px !important;
+    padding: 6px 12px !important; font-size: 11.5px !important; z-index: 120;
+  }
+  /* スマホ:入力欄を端末下端(セーフエリア)から確保し、隠れないように */
+  .input-area { padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important; }
+
+  .dialog-wrap { padding: 90px 16px 220px; }
+
+  .ai-orb { width: 38px; height: 38px; }
+  .ai-bubble { padding: 16px 18px; font-size: 16px; }
+  .user-bubble { padding: 14px 18px; font-size: 15px; max-width: 85%; }
+
+  .choices { margin-left: 0; }
+  .choice-btn { padding: 12px 18px; font-size: 14px; }
+
+  .stat-banner { margin-left: 0; padding: 18px 20px; }
+  .stat-banner-main { font-size: 22px; }
+  .stat-banner-main .num { font-size: 30px; }
+  .stat-banner-sub { font-size: 13px; }
+
+  .treatments-section { margin-left: 0; }
+  .treatments-grid { grid-template-columns: 1fr; }
+
+  .input-area { padding: 14px 16px; }
+  .input-field { padding: 12px 18px; font-size: 14px; }
+  .mic-btn, .send-btn { width: 44px; height: 44px; }
+  .input-hint { font-size: 10px; }
+
+  .companion-lamp { right: 14px; bottom: 110px; }
+  .lamp-orb { width: 42px; height: 42px; }
+}
+
+:focus-visible { outline: 2px solid var(--starlight); outline-offset: 3px; }
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) {
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+
+
+/* === SATOI 共通モバイル対応(iPad/iPhone)=== */
+@media (max-width: 1024px) {
+  /* iPad 縦 ・ ヘッダー狭め */
+  .header { padding: 14px 22px !important; }
+  .section, .wrap, .container, main, .main { padding-left: 22px !important; padding-right: 22px !important; }
+}
+@media (max-width: 768px) {
+  /* iPhone ・ 主要メトリクスをモバイル最適化 */
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title, .hero-title-l1 { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title, .nbm-title, .mission-line { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  .section, .container, .wrap, main, .main, section { padding-left: 14px !important; padding-right: 14px !important; }
+  section, .section { padding-top: 50px !important; padding-bottom: 50px !important; }
+  /* グリッドを1列に */
+  .grid, .cards, .types-grid, .stories-grid, .forum-grid, .family-grid, .promise-list, .partner-grid, .gov-grid, .numbers-grid, .empse-grid, .pubmed-list, .sources-grid, .criteria-grid, .tx-cat-grid, .map-wrap, .emg-grid, .emg-consent-grid, .emg-contacts, .kids-talk-wrap, .cat-grid, .videos-grid, .cat-cards, .partner-cards, .promise-cards, .principle-cards, .pricing-grid, .pricing-cards, .step-cards, .info-cards, .role-cards, .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* 横スクロールのみ許す要素は残す */
+  .b1-journey-bar, .journey-bar, .types-tabs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  /* ヒーローの padding 圧縮 */
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  /* 大きい見出し */
+  .opener-line { font-size: 24px !important; margin-bottom: 40px !important; }
+  /* タップ領域 44px 最低 */
+  .btn, button, .login-btn, .nav-mini a, .filter-chip, .cat-card, .type-card, .story-card, .forum-card { min-height: 40px; }
+  /* テーブル横スクロール */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* マイチーム ホイール → 縦並びに */
+  .team-wheel-wrap, .team-wheel { width: 100% !important; height: auto !important; min-height: 360px; }
+  /* モーダル系: 画面いっぱいに */
+  .modal, .overlay-modal, [class*='Modal'], [class*='modal'] { max-width: 100vw !important; }
+  /* ナビ縮小 */
+  .nav-mini, .nav { gap: 12px !important; font-size: 12px !important; }
+  /* フォーム入力 */
+  input, textarea, select { font-size: 16px !important; } /* iOSのズーム防止 */
+  /* SVG レーダーチャートの収まり */
+  .empse-chart, .empse-chart-wrap { width: 100% !important; max-width: 320px; height: auto !important; margin: 0 auto !important; }
+  /* B1 7ステップを横スクロールに */
+  .steps-row { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 10px; }
+  .steps-row .step { flex-shrink: 0; min-width: 80px; }
+  /* G2 サイドナビは画面下部固定 or hamburger 想定 */
+  .sidebar, .side-nav, .g2-sidebar { position: relative !important; width: 100% !important; height: auto !important; overflow-x: auto !important; display: flex !important; }
+}
+@media (max-width: 480px) {
+  /* 極小画面 */
+  .hero { padding: 80px 12px 40px !important; }
+  .b1-journey-bar { padding: 8px 10px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+
+/* === SATOI ユニバーサル横断ナビ(戻る/ホーム/言語) === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-univ-btn[title]::after { content: attr(title); position: absolute; right: 54px; background: rgba(11,23,54,0.92); color: #F8F6F0; font-size: 11px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.satoi-univ-btn:hover::after { opacity: 1; }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+</style>
+</head>
+
+<body>
+
+<!-- 星 -->
+<div class="stars-layer" id="starsLayer"></div>
+
+<!-- ヘッダー -->
+<header class="header">
+  <a href="SATOI_Mock_v1_C1_mypage.html" style="position:absolute; top:18px; right:140px; padding: 8px 16px; background: rgba(13,115,119,0.18); color: #6FE0E5; border: 1px solid rgba(20,166,171,0.5); border-radius: 18px; font-size: 12px; text-decoration:none; z-index: 110; font-weight:500;">⭐ マイページ</a>
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <div class="progress-wrap">
+    <div class="progress-label" id="progressLabel">対話中</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="back-btn">← 戻る</a>
+</header>
+
+<!-- 対話エリア -->
+<main class="dialog-wrap" id="dialogWrap">
+  <!-- ここに動的にメッセージが追加される -->
+</main>
+
+<!-- 入力エリア(下固定) -->
+<div class="input-area">
+  <div class="input-wrap">
+    <input type="text" class="input-field" id="inputField" placeholder="自分の言葉で話す…(もしくは上のボタンから選ぶ)">
+    <button class="mic-btn" id="micBtn" aria-label="音声入力">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+    </button>
+    <button class="send-btn" id="sendBtn" aria-label="送信">
+      <svg viewBox="0 0 24 24"><path d="M5 12l14-7-7 14-2-6-5-1z"/></svg>
+    </button>
+  </div>
+  <div class="input-hint">タップで選択 / マイクで話す / キーボードで入力、どれでも</div>
+  <div class="input-hint" style="font-size:10.5px; opacity:0.62; margin-top:3px;">🔒 この会話はセキュアに扱われ、外部AIの学習には使われません。あなたの情報は、ご本人以外に共有されません。</div>
+</div>
+
+<!-- 隣の灯 -->
+<div class="companion-lamp">
+  <div class="lamp-orb" title="同じ夜を過ごしている方"></div>
+</div>
+
+<style>
+/* AI応答の下に出す「関連ショートカット」カード */
+.a2-shortcuts { display: flex; flex-direction: column; gap: 10px; max-width: 520px; margin: 6px 0 4px 52px; }
+.a2-shortcuts-label { font-size: 11.5px; color: var(--text-muted); letter-spacing: 0.04em; margin-bottom: 2px; }
+.a2-shortcut {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: rgba(212,169,94,0.10);
+  border: 1px solid rgba(212,169,94,0.45);
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--text-primary, #F8F6F0);
+  transition: all 0.22s ease;
+}
+.a2-shortcut:hover { background: rgba(212,169,94,0.95); color: #0B1736; border-color: #D4A95E; transform: translateX(3px); }
+.a2-shortcut-ic { font-size: 20px; flex-shrink: 0; }
+.a2-shortcut-tx { flex: 1; font-size: 14px; font-weight: 500; }
+.a2-shortcut-arrow { color: var(--starlight, #D4A95E); font-weight: 700; }
+.a2-shortcut:hover .a2-shortcut-arrow { color: #0B1736; }
+@media (max-width: 768px) { .a2-shortcuts { margin-left: 0; } }
+</style>
+
+<script>
+
+
+/* === A2 resume / beat URLパラメータ対応 ・ 原種スキップ === */
+(function setupResume(){
+  const p = new URLSearchParams(location.search);
+  const resume = p.get('resume') === '1';
+  const beatFromUrl = p.get('beat');
+  if (resume || beatFromUrl) {
+    // sessionStorage に履歴があれば「前回の続き」表示
+    window.__skipIntake = true;
+    window.__resumeBeat = beatFromUrl || 'consider';
+    // 保存名は複数を横断チェック(satoi_cancer / satoi_last_cancer / satoi_intake)
+    var __intake = {}; try { __intake = JSON.parse(localStorage.getItem('satoi_intake') || '{}'); } catch(e){}
+    window.__resumeCancer = sessionStorage.getItem('satoi_cancer') || sessionStorage.getItem('satoi_last_cancer') || __intake.cancer || 'breast';
+    window.__resumeCancerName = sessionStorage.getItem('satoi_last_cancer_name') || '乳がん';
+    window.__resumeStage = sessionStorage.getItem('satoi_stage') || sessionStorage.getItem('satoi_last_stage') || __intake.stage || 'II';
+  }
+  // 通常入力時に保存(原種・がん名・ステージが state に入ったタイミング)。すべての保存先に書く。
+  window.__saveResume = function(cancer, name, stage) {
+    try {
+      if (cancer) { sessionStorage.setItem('satoi_last_cancer', cancer); sessionStorage.setItem('satoi_cancer', cancer); }
+      if (name)   { sessionStorage.setItem('satoi_last_cancer_name', name); }
+      if (stage)  { sessionStorage.setItem('satoi_last_stage', stage); sessionStorage.setItem('satoi_stage', stage); }
+    } catch(e){}
+  };
+})();
+
+/* === SATOI 共通リッチトースト関数 === */
+(function ensureToastHost(){
+  if (document.getElementById('satoi-toast-host')) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div');
+      host.id = 'satoi-toast-host';
+      document.body.appendChild(host);
+    }
+  });
+  if (document.body && !document.getElementById('satoi-toast-host')) {
+    const host = document.createElement('div');
+    host.id = 'satoi-toast-host';
+    document.body.appendChild(host);
+  }
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) {
+    html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  }
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+// 既存の alert を全て satoiNotify にフォールバック(他コードからのalert呼び出しもキャッチ)
+window.__origAlert = window.alert;
+
+/* === SATOI ユニバーサル横断ナビ JS === */
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div');
+    nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る" aria-label="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム" aria-label="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ" aria-label="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語" aria-label="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn');
+    const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const lang = b.dataset.lang;
+        const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+        if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+        document.documentElement.lang = lang;
+        langPop.classList.remove('show');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+
+// ===== 星 =====
+(function generateStars() {
+  const layer = document.getElementById('starsLayer');
+  const count = window.innerWidth < 768 ? 35 : 70;
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 0.7;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 4) + 's';
+    s.style.animationDuration = (3 + Math.random() * 3) + 's';
+    layer.appendChild(s);
+  }
+})();
+
+// ===== 対話エンジン =====
+const dialogWrap = document.getElementById('dialogWrap');
+const progressFill = document.getElementById('progressFill');
+const progressLabel = document.getElementById('progressLabel');
+
+const state = {
+  step: 0,
+  cancer: null,
+  cancerName: null,
+  stage: null,
+  treatment: null
+};
+
+// データ:がん種ごとの治療法
+const TREATMENT_DATA = {
+  breast: {
+    name: "乳がん",
+    patients: 95000,
+    stages: {
+      "I": { count: 28500, name5y: 99 },
+      "II": { count: 23750, name5y: 92 },
+      "III": { count: 19000, name5y: 75 },
+      "IV": { count: 6650, name5y: 38 }
+    },
+    treatments: [
+      { name: "手術(乳房温存)", desc: "がん部分を切除し乳房を残す手術。術後に放射線治療を併用するのが一般的。", chosen: 42, meta: "保険適用" },
+      { name: "手術(乳房全摘)", desc: "乳房全体を切除。再建術と組み合わせる選択も可能。", chosen: 28, meta: "保険適用" },
+      { name: "ホルモン療法", desc: "ホルモン受容体陽性の場合の標準。タモキシフェン・アロマターゼ阻害薬。5〜10年継続。", chosen: 65, meta: "経口薬" },
+      { name: "化学療法(AC→T)", desc: "アドリアマイシン+シクロホスファミド→パクリタキセル。HER2陰性での標準的レジメン。", chosen: 38, meta: "点滴・通院" },
+      { name: "分子標的薬(HER2)", desc: "HER2陽性の場合。トラスツズマブ(ハーセプチン)+ペルツズマブを併用。", chosen: 18, meta: "高額療養費対象" },
+      { name: "放射線治療", desc: "温存術後・局所制御に。25〜30回(5〜6週)が標準。", chosen: 52, meta: "通院・保険適用" }
+    ]
+  },
+  colon: {
+    name: "大腸がん",
+    patients: 147000,
+    stages: {
+      "I": { count: 44100, name5y: 98 },
+      "II": { count: 36750, name5y: 88 },
+      "III": { count: 32340, name5y: 75 },
+      "IV": { count: 26460, name5y: 22 }
+    },
+    treatments: [
+      { name: "手術(腹腔鏡)", desc: "傷が小さく回復が早い。早期〜進行がんまで適応。", chosen: 70, meta: "保険適用" },
+      { name: "FOLFOX療法", desc: "5-FU+ロイコボリン+オキサリプラチンの組み合わせ。術後補助・進行例の標準。", chosen: 45, meta: "点滴・通院" },
+      { name: "FOLFIRI療法", desc: "5-FU+ロイコボリン+イリノテカン。FOLFOX後の二次治療として。", chosen: 22, meta: "点滴・通院" },
+      { name: "ベバシズマブ併用", desc: "アバスチン。血管新生阻害薬として化学療法に追加。", chosen: 30, meta: "高額療養費対象" },
+      { name: "セツキシマブ", desc: "アービタックス。RAS野生型に効果。EGFR標的。", chosen: 18, meta: "遺伝子検査必要" },
+      { name: "放射線治療", desc: "直腸がんの局所制御・術前治療に使用。", chosen: 15, meta: "通院" }
+    ]
+  },
+  lung: {
+    name: "肺がん",
+    patients: 127000,
+    stages: {
+      "I": { count: 38100, name5y: 82 },
+      "II": { count: 25400, name5y: 47 },
+      "III": { count: 30480, name5y: 22 },
+      "IV": { count: 33020, name5y: 7 }
+    },
+    treatments: [
+      { name: "手術(肺葉切除)", desc: "I〜II期の標準。肺葉ごと切除し肺機能を保つ。", chosen: 35, meta: "保険適用" },
+      { name: "プラチナ併用化学療法", desc: "シスプラチン+ペメトレキセドなど。標準的な細胞傷害性化学療法。", chosen: 50, meta: "点滴・通院" },
+      { name: "オシメルチニブ", desc: "タグリッソ。EGFR T790M変異陽性に高効果。経口薬。", chosen: 28, meta: "遺伝子検査必要" },
+      { name: "アレクチニブ", desc: "アレセンサ。ALK融合遺伝子陽性に。経口薬。", chosen: 15, meta: "遺伝子検査必要" },
+      { name: "免疫チェックポイント阻害薬", desc: "ペムブロリズマブ(キイトルーダ)等。PD-L1高発現で第一選択も。", chosen: 38, meta: "高額療養費対象" },
+      { name: "放射線治療(定位)", desc: "早期・手術不可例にSBRT(定位放射線治療)。", chosen: 18, meta: "通院" }
+    ]
+  },
+  stomach: {
+    name: "胃がん",
+    patients: 124000,
+    stages: {
+      "I": { count: 49600, name5y: 96 },
+      "II": { count: 24800, name5y: 71 },
+      "III": { count: 24800, name5y: 49 },
+      "IV": { count: 24800, name5y: 9 }
+    },
+    treatments: [
+      { name: "内視鏡治療(ESD)", desc: "早期がんで適応。お腹を切らずに胃の中から切除。", chosen: 32, meta: "保険適用・早期のみ" },
+      { name: "手術(胃切除)", desc: "幽門側胃切除/全摘。II期以上の標準。", chosen: 55, meta: "保険適用" },
+      { name: "S-1+シスプラチン", desc: "進行胃がん化学療法の標準的レジメン。", chosen: 38, meta: "経口+点滴" },
+      { name: "トラスツズマブ", desc: "HER2陽性胃がんに。化学療法と併用。", chosen: 12, meta: "HER2検査必要" },
+      { name: "ニボルマブ", desc: "オプジーボ。進行胃がんの三次治療以降に。", chosen: 20, meta: "高額療養費対象" },
+      { name: "腹腔鏡手術", desc: "傷が小さく回復が早い。早期〜中期胃がんで適応拡大中。", chosen: 28, meta: "保険適用" }
+    ]
+  },
+  prostate: {
+    name: "前立腺がん",
+    patients: 95000,
+    stages: {
+      "I": { count: 28500, name5y: 100 },
+      "II": { count: 33250, name5y: 100 },
+      "III": { count: 23750, name5y: 95 },
+      "IV": { count: 9500, name5y: 64 }
+    },
+    treatments: [
+      { name: "監視療法", desc: "低リスク早期がんで経過観察。即時治療を行わず慎重に追跡。", chosen: 18, meta: "PSA定期測定" },
+      { name: "手術(全摘)", desc: "ロボット支援手術(ダヴィンチ)が主流。神経温存も可能。", chosen: 32, meta: "保険適用" },
+      { name: "放射線治療(IMRT)", desc: "強度変調放射線治療。外照射の主流。", chosen: 28, meta: "通院・保険適用" },
+      { name: "小線源治療", desc: "前立腺内に放射線源を埋め込む。短期入院。", chosen: 12, meta: "保険適用" },
+      { name: "アンドロゲン除去療法", desc: "ホルモン療法。LH-RHアゴニスト/アンタゴニスト。", chosen: 45, meta: "注射・継続" },
+      { name: "エンザルタミド", desc: "イクスタンジ。CRPCの新規ホルモン薬。", chosen: 15, meta: "経口・高額療養費" }
+    ]
+  },
+  pancreas: {
+    name: "膵がん",
+    patients: 44000,
+    stages: {
+      "I": { count: 4400, name5y: 41 },
+      "II": { count: 8800, name5y: 17 },
+      "III": { count: 13200, name5y: 7 },
+      "IV": { count: 17600, name5y: 1 }
+    },
+    treatments: [
+      { name: "手術(膵頭十二指腸切除)", desc: "切除可能例の根治治療。難度高い大手術。", chosen: 22, meta: "保険適用" },
+      { name: "FOLFIRINOX療法", desc: "オキサリプラチン+イリノテカン+5-FU。最強の併用化学療法。", chosen: 32, meta: "点滴・入院" },
+      { name: "ゲムシタビン+nab-パクリタキセル", desc: "GEM+nab-PTX。FOLFIRINOXに次ぐ標準。副作用が比較的軽い。", chosen: 38, meta: "点滴・通院" },
+      { name: "ゲムシタビン+S-1", desc: "GEM+S-1。日本でよく使われる組み合わせ。", chosen: 28, meta: "点滴+経口" },
+      { name: "化学放射線療法", desc: "局所進行例で化学療法と放射線を組み合わせる。", chosen: 15, meta: "通院" },
+      { name: "緩和ケア早期導入", desc: "症状緩和・QOL維持を治療と並行。膵がんでは早期からの導入が推奨。", chosen: 60, meta: "保険適用・全例" }
+    ]
+  }
+};
+
+// ===== メッセージ追加 =====
+function addAIMessage(html, opts = {}) {
+  const grp = document.createElement('div');
+  grp.className = 'message-group';
+  grp.innerHTML = `
+    <div class="ai-msg">
+      <div class="ai-orb"></div>
+      <div class="ai-bubble">${html}</div>
+    </div>
+  `;
+  dialogWrap.appendChild(grp);
+  scrollGroupToTop(grp);
+}
+
+function addTypingIndicator() {
+  const grp = document.createElement('div');
+  grp.className = 'message-group';
+  grp.id = 'typingIndicator';
+  grp.innerHTML = `
+    <div class="ai-msg">
+      <div class="ai-orb"></div>
+      <div class="ai-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>
+    </div>
+  `;
+  dialogWrap.appendChild(grp);
+  scrollToBottom();
+}
+
+function removeTypingIndicator() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function addUserMessage(text) {
+  const grp = document.createElement('div');
+  grp.className = 'message-group';
+  grp.innerHTML = `<div class="user-msg"><div class="user-bubble">${text}</div></div>`;
+  dialogWrap.appendChild(grp);
+  scrollToBottom();
+}
+
+function addChoices(choices) {
+  const grp = document.createElement('div');
+  grp.className = 'message-group';
+  grp.innerHTML = `
+    <div class="choices" id="currentChoices">
+      ${choices.map(c => {
+        const extras = [];
+        if (c.jumpUrl) extras.push(`data-jump-url="${c.jumpUrl.replace(/"/g,'&quot;')}"`);
+        if (c.actionStr) extras.push(`data-action-str="${c.actionStr.replace(/"/g,'&quot;')}"`);
+        return `<button class="choice-btn ${c.secondary ? 'secondary' : ''}" data-value="${c.value}" ${extras.join(' ')}>${c.label}</button>`;
+      }).join('')}
+    </div>
+  `;
+  dialogWrap.appendChild(grp);
+
+  grp.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.dataset.value;
+      const lbl = btn.textContent;
+      // jumpUrl / actionStr を維持するため属性付き隠し要素を残す
+      if (btn.dataset.jumpUrl || btn.dataset.actionStr) {
+        const holder = document.createElement('button');
+        holder.className = 'choice-btn';
+        holder.style.display = 'none';
+        holder.dataset.value = val;
+        if (btn.dataset.jumpUrl) holder.dataset.jumpUrl = btn.dataset.jumpUrl;
+        if (btn.dataset.actionStr) holder.dataset.actionStr = btn.dataset.actionStr;
+        document.body.appendChild(holder);
+        setTimeout(() => { try { holder.remove(); } catch(e){} }, 5000);
+      }
+      grp.remove();
+      onChoice(val, lbl);
+    });
+  });
+  scrollToBottom();
+}
+
+/* ===== AIが判断した関連ショートカットをカードで表示 ===== */
+const A2_SHORTCUTS = {
+  money:     { icon:'💰', label:'使えるお金・制度を見る',        url:'SATOI_Mock_v1_E1_money.html' },
+  treatment: { icon:'💊', label:'治療法の詳しい説明を見る',      url:'SATOI_Mock_v1_B3_treatment_detail.html' },
+  side:      { icon:'🩹', label:'副作用を記録・確認する',        url:'SATOI_Mock_v1_F4_side_effects.html' },
+  family:    { icon:'💛', label:'家族への伝え方・共有',          url:'SATOI_Mock_v1_FAM_view.html' },
+  stories:   { icon:'📖', label:'同じ境遇の方の物語を読む',      url:'SATOI_Mock_v1_D1_stories.html' },
+  concierge: { icon:'💬', label:'コンシェルジュに相談(無料)',   url:'SATOI_Mock_v1_CON_concierge.html' },
+  sdm:       { icon:'📝', label:'先生に聞きたいことカードを作る', url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' }
+};
+
+function addShortcutCards(keys) {
+  const uniq = [...new Set((keys || []).map(k => String(k).trim()).filter(k => A2_SHORTCUTS[k]))].slice(0, 2);
+  if (!uniq.length) return;
+  // 状況(がん種・ステージ)を引き継ぐ
+  const ctx = [];
+  if (state.cancer && state.cancer !== 'unknown') ctx.push('cancer=' + encodeURIComponent(state.cancer));
+  if (state.stage && state.stage !== 'unknown') ctx.push('stage=' + encodeURIComponent(state.stage));
+  const q = ctx.length ? ('?' + ctx.join('&')) : '';
+  const grp = document.createElement('div');
+  grp.className = 'message-group';
+  grp.innerHTML = `
+    <div class="a2-shortcuts">
+      <div class="a2-shortcuts-label">▸ 関連する場所(タップで開けます。足りなければ、また戻って聞いてください)</div>
+      ${uniq.map(k => {
+        const s = A2_SHORTCUTS[k];
+        // アンカー(#)がある場合はクエリを # の前に入れる
+        const parts = s.url.split('#');
+        const href = parts[0] + q + (parts[1] ? ('#' + parts[1]) : '');
+        return `<a class="a2-shortcut" href="${href}"><span class="a2-shortcut-ic">${s.icon}</span><span class="a2-shortcut-tx">${s.label}</span><span class="a2-shortcut-arrow">→</span></a>`;
+      }).join('')}
+    </div>`;
+  dialogWrap.appendChild(grp);
+  scrollToBottom();
+}
+
+/* 次ビート用ラベル */
+function nextBeatLabel() {
+  const idx = state.beatIdx;
+  if (!state.beats || idx >= state.beats.length - 1) return '物語を、終える';
+  const next = state.beats[idx + 1];
+  return `次:${next.chip} の話へ →`;
+}
+
+function addStatBanner(opts) {
+  const grp = document.createElement('div');
+  grp.className = 'message-group';
+
+  // 人型ドット生成
+  const dotCount = Math.min(80, Math.floor(opts.count / Math.max(1, opts.count / 80)));
+  const dots = Array.from({ length: 60 }).map((_, i) =>
+    `<span class="stat-dot" style="animation-delay: ${0.4 + i * 0.012}s"></span>`
+  ).join('');
+
+  grp.innerHTML = `
+    <div class="stat-banner">
+      <div class="stat-banner-label">${opts.label || 'あなたと同じ状況の方'}</div>
+      <div class="stat-banner-main">日本に <span class="num">${opts.count.toLocaleString()}</span> 人</div>
+      <div class="stat-banner-sub">${opts.sub || ''}</div>
+      <div class="stat-dots">${dots}</div>
+    </div>
+  `;
+  dialogWrap.appendChild(grp);
+  scrollToBottom();
+}
+
+function addTreatments(treatments, cancerName) {
+  const grp = document.createElement('div');
+  grp.className = 'message-group';
+  const cards = treatments.map(t => `
+    <div class="treatment-card" data-treatment="${t.name}">
+      <div class="name">${t.name}</div>
+      <div class="desc">${t.desc}</div>
+      <div class="meta">
+        <span class="meta-item">👤 ${t.chosen}%が選択</span>
+        <span class="meta-item">📋 ${t.meta}</span>
+      </div>
+    </div>
+  `).join('');
+
+  grp.innerHTML = `
+    <div class="treatments-section">
+      <div class="treatments-label">${cancerName}の標準治療オプション(あなたに合うものが、ここから始まります)</div>
+      <div class="treatments-grid">${cards}</div>
+    </div>
+  `;
+  dialogWrap.appendChild(grp);
+
+  grp.querySelectorAll('.treatment-card').forEach(card => {
+    card.addEventListener('click', () => {
+      onTreatmentClick(card.dataset.treatment);
+    });
+  });
+  scrollToBottom();
+}
+
+function scrollGroupToTop(grp) {
+  if (!grp) return;
+  requestAnimationFrame(function(){
+    var offset = 80; // 固定ヘッダー分の余白
+    var top = window.pageYOffset + grp.getBoundingClientRect().top - offset;
+    if (top < 0) top = 0;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  });
+}
+function scrollToBottom() {
+  setTimeout(() => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }, 100);
+}
+
+function setProgress(pct, label) {
+  progressFill.style.width = pct + '%';
+  progressLabel.textContent = label || '対話中';
+}
+
+// ===== 対話の進行 =====
+async function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function aiSay(html, opts = {}) {
+  addTypingIndicator();
+  await delay(opts.thinkMs || 1100);
+  removeTypingIndicator();
+  addAIMessage(html, opts);
+  await delay(400);
+}
+
+async function onChoice(value, label) {
+  addUserMessage(label);
+  await delay(500);
+
+  // ===== resume(続きから)モード後の自由対話 =====
+  if (value.startsWith('q-') || value.startsWith('rsm-')) {
+    await handleResumeChoice(value, label);
+    return;
+  }
+
+  // ===== 悩み起点(self)→ 自由対話モードへ。AIがやさしく応答し、必要なら自然に状況を尋ねる =====
+  if (value.startsWith('sw-')) {
+    const seeds = {
+      'sw-treat':  'これからの治療や、治療の選択肢について知りたいです。',
+      'sw-side':   '副作用や、治療中の体調のことが気になっています。',
+      'sw-feel':   '気持ちが不安で、落ち着かないです。少し話を聞いてほしいです。',
+      'sw-family': '家族に、どう伝えればいいか悩んでいます。',
+      'sw-money':  '治療のお金や、使える制度のことを知りたいです。',
+      'sw-open':   'うまく言葉にできないのですが、今の気持ちを聞いてほしいです。'
+    };
+    state.step = 'free';
+    await a2AskAI(seeds[value] || label);
+    const inp = document.getElementById('inputField');
+    if (inp) setTimeout(() => inp.focus(), 600);
+    return;
+  }
+
+  // ===== ナラティブ・ジャーニー =====
+  if (state.step === 'journey') {
+    if (value === 'jrn-next') {
+      if (state.beatIdx < state.beats.length - 1) {
+        await renderBeat(state.beatIdx + 1);
+      } else {
+        await aiSay(`ここまで、本当に、よく、ついてきてくださいました。<br><br>これがあなたの「物語の地図」です。<br>必要なときに、いつでも、ここに戻ってきてください。`, { thinkMs: 1400 });
+        await delay(1400);
+        await aiSay(`次は、何をしましょうか?`);
+        addChoices([
+          { value: 'story', label: '同じ境遇の方の物語を聞く' },
+          { value: 'sdm', label: '先生に聞きたいことカードを作る' },
+          { value: 'mindmap', label: '治療と先輩の物語のページへ' },
+          { value: 'pause', label: '今日はここまで、また明日', secondary: true }
+        ]);
+        state.step = 4;
+      }
+      return;
+    }
+    // 「もっと詳しく」 → サブ選択を出す(漠然から具体へ)
+    if (value === 'jrn-deeper') {
+      await aiSay(`何を、もう少し詳しく聞きたいですか?<br><span class="small">あなたが「いま、いちばん知りたいこと」から、お話します。</span>`, { thinkMs: 1100 });
+      await delay(400);
+      addChoices([
+        { value: 'jrn-d-treat',  label: '治療法のこと' },
+        { value: 'jrn-d-side',   label: '副作用のこと' },
+        { value: 'jrn-d-money',  label: 'お金・制度のこと' },
+        { value: 'jrn-d-family', label: '家族・伝え方のこと' },
+        { value: 'jrn-d-work',   label: '仕事・生活のこと' },
+        { value: 'jrn-d-general',label: 'このビート全体を、もう少し', secondary: true }
+      ]);
+      return;
+    }
+    // サブ選択の各ハンドラ
+    if (value.startsWith('jrn-d-')) {
+      const b = state.beats[state.beatIdx];
+      const cn = state.cancerName || 'がん';
+      const sg = state.stage || '?';
+      const sub = value.replace('jrn-d-', '');
+      const RESP = {
+        treat:  { text: `${cn} ステージ${sg} で選べる治療法は、いま「治療マインドマップ」で全部見られます。<br>標準治療・自由診療・セカンドオピニオン、それぞれの道がどう続くか、人数付きで見えます。<br><span class="small">マインドマップに移ると、対話の続きは「物語の壺」に保存されます。</span>`, jump: 'b1' },
+        side:   { text: `${cn} の治療の副作用は、治療によってタイミングが違います。<br>「治療詳細」では、各レジメンの副作用タイムライン(Day別)・対処法・主治医に伝えるサインを、深掘りできます。`, jump: 'b3' },
+        money:  { text: `${cn} ステージ${sg} の治療費の目安・使える制度・申請書類アシスタント・社労士/FP相談 が「制度・お金ハブ」にまとまっています。<br>「年間200万円以上助かった」事例もそこから読めます。`, jump: 'e1' },
+        family: { text: `家族にどう伝えるか、何を共有するか、家族会員シェア、親戚への説明シート作成 — 全部、SATOI のマイチーム/家族連携 で整えられます。`, jump: 'c1-family' },
+        work:   { text: `${cn} 治療と仕事の両立については、傷病手当金・休職・時短勤務・診断書 等、すべて「制度・お金ハブ」内で整理されています。<br>先輩の両立事例も「物語ライブラリ」から読めます。`, jump: 'e1-work' },
+        general:{ text: b.deeper, jump: null }
+      };
+      const r = RESP[sub] || RESP.general;
+      await aiSay(r.text, { thinkMs: 1400 });
+      await delay(700);
+      if (r.jump) {
+        const JMP = {
+          'b1':       { label: '治療マインドマップを開く', url: `SATOI_Mock_v1_B1_hub.html?cancer=${state.cancer}&stage=${sg}` },
+          'b3':       { label: '治療詳細を開く', url: `SATOI_Mock_v1_B3_treatment_detail.html?cancer=${encodeURIComponent(cn)}&stage=${sg}` },
+          'e1':       { label: '制度・お金ハブを開く', url: 'SATOI_Mock_v1_E1_money.html' },
+          'e1-work':  { label: '制度・お金ハブを開く', url: 'SATOI_Mock_v1_E1_money.html' },
+          'c1-family':{ label: 'マイページ・家族連携を見る', url: 'SATOI_Mock_v1_C1_mypage.html' }
+        };
+        const j = JMP[r.jump];
+        addChoices([
+          { value: 'jrn-jump', label: `${j.label} →`, jumpUrl: j.url },
+          { value: 'jrn-next', label: nextBeatLabel() },
+          { value: 'jrn-pause', label: '今日はここまで', secondary: true }
+        ]);
+      } else {
+        addChoices([
+          { value: 'jrn-next', label: nextBeatLabel() },
+          { value: 'jrn-anxiety', label: 'いま、不安がある' },
+          { value: 'jrn-pause', label: '今日はここまで', secondary: true }
+        ]);
+      }
+      return;
+    }
+    if (value === 'jrn-jump') {
+      // 直近に表示した jump 用ラベルから URL を取り出して遷移
+      const lastBtn = Array.from(document.querySelectorAll('.choice-btn')).find(b => b.dataset.value === 'jrn-jump');
+      if (lastBtn && lastBtn.dataset.jumpUrl) {
+        window.location.href = lastBtn.dataset.jumpUrl;
+      } else {
+        await aiSay(`遷移先が見つかりませんでした。マイページにお戻りします。`);
+        await delay(1200);
+        window.location.href = 'SATOI_Mock_v1_C1_mypage.html';
+      }
+      return;
+    }
+
+    // 「いま、不安がある」 → 不安の中身をサブ選択
+    if (value === 'jrn-anxiety') {
+      await aiSay(`お話を聞かせてくださって、ありがとうございます。<br>今、いちばん不安なのは、どんなことですか?<br><span class="small">どれを選んでもらっても、否定しません。</span>`, { thinkMs: 1400 });
+      await delay(500);
+      addChoices([
+        { value: 'jrn-a-future',   label: 'これから、どうなるか分からない' },
+        { value: 'jrn-a-death',    label: '死んでしまうのが、こわい' },
+        { value: 'jrn-a-family',   label: '家族に、どう伝えたらいいか' },
+        { value: 'jrn-a-cost',     label: 'お金のこと' },
+        { value: 'jrn-a-work',     label: '仕事のこと' },
+        { value: 'jrn-a-pain',     label: '痛みや副作用が、こわい' },
+        { value: 'jrn-a-words',    label: 'うまく、言葉にできない', secondary: true }
+      ]);
+      return;
+    }
+    if (value.startsWith('jrn-a-')) {
+      const sub = value.replace('jrn-a-', '');
+      const cn = state.cancerName || 'がん';
+      const ANX = {
+        future: { text:`「これから、どうなるか分からない」——それが、いちばんつらいですね。<br>でも、SATOIには「あなたと近い場所を歩いた」先輩が、たくさんいます。<br>同じステージから始まって、5年・10年と歩いてきた方の物語が、あなたの「これから」の景色を、少しだけ広げてくれます。`, jump:{label:'先輩の物語を読む', url:'SATOI_Mock_v1_D1_stories.html'} },
+        death:  { text:`それを、言葉にしてくださって、ありがとうございます。<br>そう感じない方が、難しいです。<br>「死」のことを話せる場所が、SATOIにはあります。緩和ケアチーム・SATOIコーディネーター(人間の伴走者)が、急がず、お話を聞きます。<br><span class="small">SATOI は、その問いから逃げません。</span>`, jump:{label:'コーディネーターに相談(プレースホルダ)', url:null, action:'alert:SATOIコーディネーター相談予約画面へ(プレースホルダ)\n\n人間の伴走者が、お話を、ゆっくり聞きます。'} },
+        family: { text:`「家族にどう伝えるか」は、本当に難しい問いです。<br>SATOI には、同じ立場の先輩の物語(子どもへの伝え方・配偶者への伝え方)と、AIが整える「家族向け文面下書き」があります。<br>「ぜんぶ言わなくていいけど、嘘もつかない」と話していた先輩が多いです。`, jump:{label:'家族・伝え方の物語へ', url:'SATOI_Mock_v1_D1_stories.html'} },
+        cost:   { text:`お金の不安は、治療をあきらめさせる最大の原因のひとつです。<br>でも、使える制度は本当にたくさんあって、「知らないと使えない」だけです。<br>${cn} の場合、高額療養費・医療費控除・がん保険給付・自治体補助・傷病手当金 — 平均で年間 180万円以上 が助かっています。`, jump:{label:'制度・お金ハブを開く', url:'SATOI_Mock_v1_E1_money.html'} },
+        work:   { text:`「仕事を続けられるか」も、よくお聞きします。<br>${cn} の治療と仕事の両立は、最近の治療では十分可能なケースが多いです。<br>傷病手当金・休職・時短勤務 の制度と、両立した先輩の物語があります。`, jump:{label:'制度・お金ハブで両立を整える', url:'SATOI_Mock_v1_E1_money.html'} },
+        pain:   { text:`痛み・副作用が「こわい」は、患者さんのほぼ全員が感じます。<br>でも、最近の治療では副作用の「予測」と「対処」が大きく進歩しています。<br>SATOI の F4 副作用報告フローは、あなたの体調を主治医・看護師チームと自然に共有し、つらいときには先回りで対処を提案します。`, jump:{label:'副作用報告を見る', url:'SATOI_Mock_v1_F4_side_effects.html'} },
+        words:  { text:`言葉にならない時、それは、自然なことです。<br>SATOIは、言葉を求めません。<br>ここにいるだけで、充分です。何もしなくていい時間が、許されています。<br><span class="small">同じ夜を、過ごしている方が、ここにいます。</span>`, jump:null }
+      };
+      const r = ANX[sub] || ANX.words;
+      await aiSay(r.text, { thinkMs: 1800 });
+      await delay(700);
+      const opts = [];
+      if (r.jump) {
+        if (r.jump.url) {
+          opts.push({ value: 'jrn-jump', label: r.jump.label + ' →', jumpUrl: r.jump.url });
+        } else if (r.jump.action) {
+          opts.push({ value: 'jrn-anx-action', label: r.jump.label, actionStr: r.jump.action });
+        }
+      }
+      opts.push({ value: 'jrn-anxiety', label: '他の不安も、聞いてもらいたい' });
+      opts.push({ value: 'jrn-next',    label: nextBeatLabel() });
+      opts.push({ value: 'jrn-pause',   label: '今日はここまで', secondary: true });
+      addChoices(opts);
+      return;
+    }
+    if (value === 'jrn-anx-action') {
+      const lastBtn = Array.from(document.querySelectorAll('.choice-btn')).find(b => b.dataset.value === 'jrn-anx-action');
+      if (lastBtn && lastBtn.dataset.actionStr) {
+        const a = lastBtn.dataset.actionStr;
+        if (a.startsWith('alert:')) alert(a.substring(6));
+      }
+      addChoices([
+        { value: 'jrn-next',  label: nextBeatLabel() },
+        { value: 'jrn-anxiety', label: '他の不安も、聞いてもらいたい' },
+        { value: 'jrn-pause', label: '今日はここまで', secondary: true }
+      ]);
+      return;
+    }
+
+    if (value === 'jrn-pause') {
+      await aiSay(`今日はここまで、ゆっくり休んでください。<br><br>今日のお話は、<span class="accent">マイページ</span>に大切にしまっておきました。<br>明日また、続きから、お話しできます。<br><br><span class="small">同じ夜を過ごしている方が、ここにいます。<br>おやすみなさい。</span>`);
+      setProgress(100, '完了');
+      await delay(2400);
+      window.location.href = 'SATOI_Mock_v1_C1_mypage.html';
+      return;
+    }
+  }
+
+  // ===== 家族ルートのステップ =====
+  if (state.step === 'fam-1') {
+    state.familyRel = label;
+    await aiSay(`<span class="accent">${label}</span> のことで、ですね。<br>教えていただいて、ありがとうございます。`);
+    await aiSay(`その方は、いま、どのような <span class="accent">段階</span> にいらっしゃいますか?<br><span class="small">わからない・聞きづらいことも、ここでは大丈夫です。</span>`);
+    addChoices([
+      { value: 'fam-just-diag', label: '告知されたばかり' },
+      { value: 'fam-treating', label: '治療中' },
+      { value: 'fam-survivor', label: 'サバイバー・経過観察中' },
+      { value: 'fam-palliative', label: '緩和ケアの段階' },
+      { value: 'fam-unknown', label: 'まだ、よく分からない', secondary: true }
+    ]);
+    state.step = 'fam-2';
+    return;
+  }
+  if (state.step === 'fam-2') {
+    state.familyStage = label;
+    setProgress(50, '家族の方として');
+    await aiSay(`そうですか。教えてくださって、ありがとうございます。`);
+    await aiSay(`<span class="small">同じように、ご家族として向き合っていらっしゃる方が、日本にたくさんいます。</span>`);
+    addStatBanner({
+      label: 'ご家族としてSATOIに来られた方',
+      count: 1200000,
+      sub: '毎年100万人を超える方が、家族として、大切な人のがんと向き合っています。'
+    });
+    await delay(1800);
+    await aiSay(`次に、<span class="accent">あなた自身</span> のことを、教えていただけますか?<br>いま、いちばん近いお気持ちは、どれでしょう。`);
+    addChoices([
+      { value: 'shock', label: 'まだ、頭が整理できない' },
+      { value: 'support', label: 'できる限り、支えたい' },
+      { value: 'how-tell', label: 'どう伝えたら良いか分からない' },
+      { value: 'tired', label: '正直、疲れている' },
+      { value: 'no-words', label: '言葉にならない' },
+      { value: 'fam-other', label: 'その他', secondary: true }
+    ]);
+    state.step = 'fam-3';
+    return;
+  }
+  if (state.step === 'fam-3') {
+    state.familyFeeling = label;
+    setProgress(75, 'ナビゲーション');
+    await aiSay(`「${label}」、教えてくださって、ありがとうございます。<br>あなたが、ここに来てくださっただけで、もう、大切な人のためになっています。`);
+    await delay(1400);
+    await aiSay(`SATOIには、<span class="accent">ご家族のための場所</span> も、用意されています。<br><br>・大切な方への <span class="accent">伝え方ガイド</span>(同じ立場の方の事例)<br>・<span class="accent">家族自身のメンタルケア</span>(介護うつ・共倒れ予防)<br>・<span class="accent">他のご家族の物語</span>(同じ関係性の方の声)<br>・<span class="accent">SATOIコーディネーター</span> への相談(人間の伴走者)`);
+    await delay(800);
+    await aiSay(`どこから、見てみましょうか?`);
+    addChoices([
+      { value: 'fam-how-tell', label: '伝え方ガイドを見る' },
+      { value: 'fam-care', label: '家族自身のケアの場所へ' },
+      { value: 'fam-stories', label: '同じご家族の物語を聞く' },
+      { value: 'fam-coord', label: 'コーディネーターに相談したい' },
+      { value: 'fam-pause', label: '今日はここまで', secondary: true }
+    ]);
+    state.step = 'fam-4';
+    return;
+  }
+  if (state.step === 'fam-4') {
+    if (value === 'fam-pause') {
+      await aiSay(`今日は、ここまでで、いいですね。<br>あなた自身のことも、忘れずに。<br><br><span class="small">大切な方のことを、また話したくなったら、いつでも戻ってきてください。</span>`);
+      setProgress(100, '完了');
+      await delay(2400);
+      window.location.href = 'SATOI_Mock_v1_C1_mypage.html?route=family';
+      return;
+    }
+    const targets = {
+      'fam-how-tell': '伝え方ガイド',
+      'fam-care': '家族自身のケア',
+      'fam-stories': '同じご家族の物語',
+      'fam-coord': 'SATOIコーディネーター相談'
+    };
+    await aiSay(`「${targets[value]}」のページに、ご案内します。<br><span class="small">(D6・家族向けモジュール / 本Mockではマイページの家族モードに遷移します)</span>`);
+    setProgress(100, '完了');
+    await delay(2400);
+    window.location.href = 'SATOI_Mock_v1_C1_mypage.html?route=family&topic=' + encodeURIComponent(value);
+    return;
+  }
+
+  // ===== 緩和ケアルートのステップ =====
+  if (state.step === 'pal-1') {
+    state.pallTarget = label;
+    await aiSay(`そうですか。<br>${label}のことで、いらしてくださったのですね。`, { thinkMs: 1800 });
+    await delay(1400);
+    await aiSay(`もし良ければ、その方のお名前を、こころの中で、そっと思い浮かべてみてください。`, { thinkMs: 2200 });
+    await delay(2000);
+    await aiSay(`いま、お話ししたいことを、選んでいただいても、構いません。<br><span class="small">何も話さなくても、もちろん、いいです。</span>`, { thinkMs: 1800 });
+    addChoices([
+      { value: 'pal-life', label: 'これまでの人生を、ふりかえりたい' },
+      { value: 'pal-talk', label: '伝えたいこと・残したい言葉がある' },
+      { value: 'pal-others', label: '同じ時期を過ごした方の物語を、聞きたい' },
+      { value: 'pal-coord', label: '人と、話したい' },
+      { value: 'pal-silent', label: 'いまは、何も話さない', secondary: true }
+    ]);
+    state.step = 'pal-2';
+    return;
+  }
+  if (state.step === 'pal-2') {
+    if (value === 'pal-silent') {
+      await aiSay(`はい。ここに、いてくださるだけで、いいです。<br><br><span class="small">何時間でも、何分でも、何秒でも、いてください。<br>同じ夜を、過ごしている方が、ここにいます。</span>`, { thinkMs: 2400 });
+      setProgress(100, '静かな時間');
+      return;
+    }
+    const targets = {
+      'pal-life': '人生軌跡動画(ACP)',
+      'pal-talk': '残したい言葉を、書く・話す',
+      'pal-others': '同じ時期を過ごした方の物語',
+      'pal-coord': '緩和ケアコーディネーター'
+    };
+    await aiSay(`「${targets[value]}」のページに、ご案内します。<br><span class="small">(F系・緩和ケアモジュール / 本Mockではマイページに、静かに遷移します)</span>`, { thinkMs: 2000 });
+    setProgress(100, 'お見送り');
+    await delay(2800);
+    window.location.href = 'SATOI_Mock_v1_C1_mypage.html?route=palliative&topic=' + encodeURIComponent(value);
+    return;
+  }
+
+  if (state.step === 1) {
+    // がん種選択 → ステージへ
+    state.cancer = value;
+    state.cancerName = TREATMENT_DATA[value]?.name || value;
+    setProgress(35, 'ステップ 2 / 4');
+
+    await aiSay(`<span class="accent">${state.cancerName}</span>ですね。お話しいただいてありがとうございます。<br><br>あなたと同じく、がんと診断された方が日本にいらっしゃいます。`);
+
+    const data = TREATMENT_DATA[value];
+    addStatBanner({
+      label: `${state.cancerName}と診断される方`,
+      count: data ? data.patients : 50000,
+      sub: `1年間で${state.cancerName}と新たに診断される方の数です。あなたは ひとりではありません。`
+    });
+
+    await delay(1800);
+    await aiSay(`もう一つ、教えていただけますか?<br><br><span class="small">ステージ(病期)は、お医者さんから聞いていますか?<br>「わからない」「まだ聞いていない」も、選択肢として大丈夫です。</span>`);
+
+    addChoices([
+      { value: 'I', label: 'ステージ I' },
+      { value: 'II', label: 'ステージ II' },
+      { value: 'III', label: 'ステージ III' },
+      { value: 'IV', label: 'ステージ IV' },
+      { value: 'unknown', label: 'わからない', secondary: true }
+    ]);
+    state.step = 2;
+  }
+  else if (state.step === 2) {
+    state.stage = value;
+    setProgress(70, 'ステップ 3 / 4');
+
+    if (value === 'unknown') {
+      await aiSay(`大丈夫です。<br>主治医の先生に確認するときの<span class="accent">「質問カード」</span>を、後ほどお渡しします。<br><br>まずは、<span class="accent">${state.cancerName}</span>の治療法を一通り見てみましょうか?`);
+      addChoices([
+        { value: 'show', label: '見てみる' },
+        { value: 'later', label: '今は心の話だけしたい', secondary: true }
+      ]);
+      state.step = 3;
+    } else {
+      // ===== ナラティブ・患者ジャーニーへ =====
+      await aiSay(`<span class="accent">${state.cancerName} ステージ${value}</span> ですね。教えてくださって、ありがとうございます。`);
+      await delay(900);
+      await startJourney();
+    }
+  }
+  else if (state.step === 3) {
+    if (value === 'show') {
+      const data = TREATMENT_DATA[state.cancer];
+      if (data) {
+        await aiSay(`<span class="accent">${state.cancerName}</span>の標準治療を、ご覧ください。`);
+        await delay(500);
+        addTreatments(data.treatments, state.cancerName);
+        state.step = 4;
+      }
+    } else if (value === 'later') {
+      await aiSay(`大丈夫です。<br>うまく言葉にならないとき、それは自然なことです。<br><br><span class="small">同じ夜を過ごしている方が、いまここに 3,247 人いらっしゃいます。<br>あなたは ひとりではありません。</span>`);
+      setProgress(100, '完了');
+      await delay(800);
+      addChoices([
+        { value: 'later-mypage', label: 'マイページへ' },
+        { value: 'later-pause', label: '今日はここまで', secondary: true },
+        { value: 'later-continue', label: 'もう少し話したい' }
+      ]);
+      state.step = 'later-choice';
+    }
+  }
+  else if (state.step === 'later-choice') {
+    if (value === 'later-mypage') {
+      await aiSay(`マイページに、ご案内します。<br><span class="small">今日のお話は、大切にしまっておきました。</span>`);
+      await delay(1400);
+      window.location.href = 'SATOI_Mock_v1_C1_mypage.html';
+      return;
+    } else if (value === 'later-pause') {
+      await aiSay(`今日はここまで、ゆっくり休んでください。<br><br>今日のお話は、<span class="accent">マイページ</span>に大切にしまっておきました。<br>明日また、続きからお話しできます。<br><br><span class="small">同じ夜を過ごしている方が、ここにいます。<br>おやすみなさい。</span>`);
+      await delay(2200);
+      window.location.href = 'SATOI_Mock_v1_C1_mypage.html';
+      return;
+    } else if (value === 'later-continue') {
+      await aiSay(`もう少し、お話を聞かせてください。<br><span class="small">続きから、ゆっくり進みましょう。</span>`);
+      await delay(800);
+      // 再度ステップ3の選択肢を提示
+      addChoices([
+        { value: 'show', label: '治療法を見てみる' },
+        { value: 'later', label: 'やっぱり今日はここまで', secondary: true }
+      ]);
+      state.step = 3;
+    }
+  }
+  else if (state.step === 4) {
+    if (value === 'story') {
+      await aiSay(`<span class="accent">${state.cancerName} ステージ${state.stage || 'II'}</span>を経験された3名の方の物語が、ここに用意されています。<br><br><span class="small">(次画面 D1 で物語が再生されます。物語の最後で、あなたへの言葉が届きます。)</span>`);
+    } else if (value === 'sdm') {
+      await aiSay(`<span class="accent">${state.cancerName} ステージ${state.stage || 'II'}</span> のあなたのための「先生に聞きたいことカード」を、ご用意しました。<br><br><span class="small">これまでの対話と、同じ状況の方の質問データから、AIが11問を準備しています。<br>必要なものだけチェックして、診察室に持っていけます。</span>`);
+      await delay(900);
+      openSdmModal();
+    } else if (value === 'mindmap') {
+      await aiSay(`<span class="accent">${state.cancerName} ステージ${state.stage || 'II'}</span>の治療マインドマップを開きます。<br><span class="small">あなたの現在地から、選べる治療の道がすべて見えます。</span>`);
+      await delay(1600);
+      window.location.href = `SATOI_Mock_v1_B1_hub.html?cancer=${state.cancer}&stage=${state.stage || 'II'}`;
+      return;
+    } else if (value === 'pause') {
+      await aiSay(`今日はここまで、ゆっくり休んでください。<br><br>今日のお話は、<span class="accent">マイページ</span>に大切にしまっておきました。<br>明日また、続きからお話しできます。<br><br><span class="small">同じ夜を過ごしている方が、ここにいます。<br>おやすみなさい。</span>`);
+      setProgress(100, '完了');
+      await delay(2200);
+      window.location.href = 'SATOI_Mock_v1_C1_mypage.html';
+    }
+    state.step = 99;
+  }
+}
+
+function onTreatmentClick(name) {
+  // 治療カード→B3 詳細セクションへの完全マッピング(2026-05-20拡張・全がん種38治療法)
+  const keyMap = [
+    // 乳がん
+    { match: /乳房温存/, key: 'SURGERY_BREAST_PARTIAL' },
+    { match: /乳房全摘|全摘/, key: 'SURGERY_BREAST_TOTAL' },
+    { match: /ホルモン療法/, key: 'HORMONE' },
+    { match: /AC[→\-]T|TC療法|TC$/, key: 'TC' },
+    { match: /HER2|トラスツズマブ.*乳|ハーセプチン/, key: 'HER2_TARGETED' },
+    { match: /CDK4|パルボシクリブ/, key: 'CDK46' },
+    // 大腸がん
+    { match: /腹腔鏡.*大腸|大腸.*腹腔鏡|手術.*腹腔鏡/, key: 'SURGERY_LAPAROSCOPIC' },
+    { match: /FOLFOX/, key: 'FOLFOX' },
+    { match: /FOLFIRI/, key: 'FOLFIRI' },
+    { match: /ベバシズマブ|アバスチン/, key: 'BEVACIZUMAB' },
+    { match: /セツキシマブ|アービタックス/, key: 'CETUXIMAB' },
+    // 肺がん
+    { match: /肺葉切除/, key: 'SURGERY_LOBECTOMY' },
+    { match: /プラチナ併用|シスプラチン.*ペメトレキセド/, key: 'PLATINUM_DOUBLET' },
+    { match: /オシメルチニブ|タグリッソ/, key: 'OSIMERTINIB' },
+    { match: /アレクチニブ|アレセンサ/, key: 'ALECTINIB' },
+    { match: /免疫チェックポイント|ペムブロリズマブ|キイトルーダ/, key: 'ICI' },
+    { match: /定位放射線|SBRT/, key: 'SBRT' },
+    // 胃がん
+    { match: /内視鏡治療|ESD/, key: 'ESD' },
+    { match: /胃切除|手術.*胃|胃.*手術/, key: 'SURGERY_GASTRECTOMY' },
+    { match: /S-1.*シスプラチン|SP療法/, key: 'SP' },
+    { match: /トラスツズマブ.*胃/, key: 'TRASTUZUMAB_GASTRIC' },
+    { match: /ニボルマブ|オプジーボ/, key: 'NIVOLUMAB' },
+    // 前立腺がん
+    { match: /監視療法/, key: 'ACTIVE_SURVEILLANCE' },
+    { match: /手術.*全摘|ダヴィンチ/, key: 'PROSTATECTOMY' },
+    { match: /IMRT|強度変調/, key: 'IMRT' },
+    { match: /小線源/, key: 'BRACHYTHERAPY' },
+    { match: /アンドロゲン除去|LH-RH|ADT/, key: 'ADT' },
+    { match: /エンザルタミド|イクスタンジ/, key: 'ENZALUTAMIDE' },
+    // 膵がん
+    { match: /膵頭十二指腸/, key: 'WHIPPLE' },
+    { match: /FOLFIRINOX/, key: 'FOLFIRINOX' },
+    { match: /ゲムシタビン.*nab|GEM.*nab/, key: 'GEM_NAB' },
+    { match: /ゲムシタビン.*S-1|GEM.*S-1/, key: 'GEM_S1' },
+    { match: /化学放射線/, key: 'CRT' },
+    { match: /緩和ケア.*早期|早期.*緩和/, key: 'EARLY_PC' },
+    // 汎用フォールバック
+    { match: /手術/, key: 'SURGERY_GENERAL' },
+    { match: /化学療法/, key: 'CHEMO_GENERAL' },
+    { match: /放射線/, key: 'RADIATION_GENERAL' },
+    { match: /分子標的/, key: 'TARGETED_GENERAL' },
+    { match: /免疫/, key: 'IMMUNO_GENERAL' }
+  ];
+  let key = '';
+  for (const entry of keyMap) {
+    if (entry.match.test(name)) { key = entry.key; break; }
+  }
+  if (!key) key = 'GENERIC';
+  const url = `SATOI_Mock_v1_B3_treatment_detail.html?treatment=${key}&cancer=${encodeURIComponent(state.cancerName||'がん')}&stage=${state.stage||'II'}&treatmentName=${encodeURIComponent(name)}`;
+  window.location.href = url;
+}
+
+// ===== 入力欄処理 =====
+const inputField = document.getElementById('inputField');
+const sendBtn = document.getElementById('sendBtn');
+const micBtn = document.getElementById('micBtn');
+
+sendBtn.addEventListener('click', handleSend);
+inputField.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
+
+// 自由入力→Claude API(satoi_chat_api.js経由) リアル応答
+const a2ChatHistory = []; // セッション内対話履歴
+
+async function handleSend() {
+  const v = inputField.value.trim();
+  if (!v) return;
+  addUserMessage(v);
+  inputField.value = '';
+  await a2AskAI(v);
+}
+
+// 任意のテキストをAIに送って応答を表示する(自由対話の共通処理)。
+// userMessage は履歴に user として積む。画面への user 吹き出し表示は呼び出し側の責任。
+async function a2AskAI(userMessage) {
+  addTypingIndicator();
+  try {
+    const context = {
+      cancerName: state.cancerName || '未入力',
+      stage: state.stage || '未入力',
+      mode: document.body.classList.contains('family-mode') ? 'family' : (document.body.classList.contains('palliative-mode') ? 'palliative' : 'self'),
+      step: state.step
+    };
+
+    if (!window.satoiChatApi) {
+      throw new Error('satoiChatApi が読み込まれていません');
+    }
+
+    a2ChatHistory.push({ role: 'user', content: userMessage });
+
+    const result = await window.satoiChatApi.askClaude(a2ChatHistory.slice(-10), {
+      context: context,
+      max_tokens: 800
+    });
+
+    a2ChatHistory.push({ role: 'assistant', content: result.reply });
+
+    removeTypingIndicator();
+
+    // AIが付けた隠しタグ [[LINKS: key1, key2]] を取り出し、本文からは除去する
+    let replyText = result.reply;
+    let linkKeys = [];
+    const m = replyText.match(/\[\[\s*LINKS\s*:([^\]]*)\]\]/i);
+    if (m) {
+      linkKeys = m[1].split(',').map(s => s.trim()).filter(Boolean);
+      replyText = replyText.replace(m[0], '').trim();
+    }
+
+    // Claude応答を画面に出す(マークダウンを整形表示。なければ改行を<br>に)
+    const html = (typeof window.satoiMarkdown === 'function')
+      ? window.satoiMarkdown(replyText)
+      : replyText.replace(/\n/g, '<br>');
+    await aiSay(html, { thinkMs: 200 });
+
+    // 関連ショートカットカードを表示(AIが判断したものだけ)
+    if (linkKeys.length) {
+      await delay(250);
+      addShortcutCards(linkKeys);
+    }
+  } catch (err) {
+    removeTypingIndicator();
+    await aiSay(`申し訳ありません、AI応答の取得に失敗しました。<br><span class="small">${(err && err.message) ? err.message : 'エラー'}<br>選択肢からの進行は引き続きご利用いただけます。</span>`, { thinkMs: 200 });
+    console.error('[A2 askClaude error]', err);
+  }
+}
+
+// ===== Web Speech API による音声入力 =====
+let a2Recognition = null;
+
+micBtn.addEventListener('click', () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    alert('お使いのブラウザは音声入力に対応していません。\n\nChrome/Edge をお試しください。');
+    return;
+  }
+
+  // 既に聞いている場合は停止
+  if (micBtn.classList.contains('listening')) {
+    try { a2Recognition && a2Recognition.stop(); } catch(e){}
+    micBtn.classList.remove('listening');
+    return;
+  }
+
+  a2Recognition = new SR();
+  a2Recognition.lang = 'ja-JP';
+  a2Recognition.interimResults = true;
+  a2Recognition.continuous = false;
+
+  micBtn.classList.add('listening');
+  inputField.placeholder = '聞いています。お話しください…';
+
+  a2Recognition.onresult = (e) => {
+    let txt = '';
+    for (let i = 0; i < e.results.length; i++) {
+      txt += e.results[i][0].transcript;
+    }
+    inputField.value = txt;
+    if (e.results[e.results.length-1].isFinal) {
+      setTimeout(() => {
+        if (inputField.value.trim()) {
+          handleSend();
+        }
+      }, 600);
+    }
+  };
+
+  a2Recognition.onerror = () => {
+    micBtn.classList.remove('listening');
+    inputField.placeholder = '聞き取れませんでした。もう一度お試しください';
+  };
+
+  a2Recognition.onend = () => {
+    micBtn.classList.remove('listening');
+    inputField.placeholder = '自分の言葉で話す…';
+  };
+
+  try { a2Recognition.start(); } catch(e){ /* already started */ }
+});
+
+// ===== 初期メッセージ(route で 3分岐 + slow モード)=====
+async function start() {
+  const params = new URLSearchParams(window.location.search);
+  const worry = params.get('worry');
+  const route = params.get('route') || 'self';
+  const mode = params.get('mode') || '';
+  state.route = route;
+  state.mode = mode;
+
+  if (mode === 'slow') document.body.classList.add('slow-pace');
+
+  // ===== 文脈つき深掘り(章ページ・基礎ページの「AIと話す」から来た場合)=====
+  // seed があれば見出し単位で深掘り。無くても from=kb_*/chp_* ならページ単位で深掘りする
+  // (seed は satoi_common.js が付与するが、キャッシュ等で付かなくても from だけで動くようにする)
+  const seedParam = params.get('seed');
+  const fromParam0 = params.get('from') || '';
+  if (seedParam) {
+    await startSeededDeepDive(seedParam, params);
+    return;
+  }
+  if (/^(kb_|chp_)/.test(fromParam0)) {
+    const t = a2OriginTopic(fromParam0);
+    if (t) { await startSeededDeepDive(t, params); return; }
+  }
+
+  // ===== ★ RESUME MODE ・ 原種スキップ =====
+  // 2026-05-20: ダッシュボード(=入口1問入力)からの遷移は質問を畳みかけない「自由対話モード」に直行
+  const fromDashboard = params.get('from') === 'dashboard';
+  if (fromDashboard) {
+    await startFreeMode(params);
+    return;
+  }
+
+  // 「大切な人のために(家族)」ルートは、過去の保存がん種に引っ張られず、必ず家族フローへ。
+  if (route === 'family' || route === 'palliative') {
+    await startFamily();
+    return;
+  }
+
+  // ?resume=1 / ?cancer=xxx / ?from=mypage / sessionStorage 履歴(保存名は複数を横断チェック)
+  const urlResume = params.get('resume') === '1' || params.get('cancer') || params.get('from') || params.get('topic') || params.get('beat');
+  const sessCancer = readStoredContext('cancer');
+  if (urlResume || sessCancer) {
+    await resumeMode(params);
+    return;
+  }
+
+  if (route === 'family' || route === 'palliative') {
+    // 2026-05-20: 3カード→2カード統合により palliative ルートも family に統合。
+    // family の fam-1 → fam-2(段階)選択肢内に「緩和ケアの段階」が既存。
+    await startFamily();
+  } else {
+    await startSelf();
+  }
+}
+
+/* ===== 保存名の統一(二重質問を防ぐ)=====
+   がん種・ステージを、複数の保存先(satoi_cancer / satoi_last_cancer / satoi_intake)から横断的に読む。 */
+function readStoredContext(kind){
+  try {
+    var intake = {};
+    try { intake = JSON.parse(localStorage.getItem('satoi_intake') || '{}'); } catch(e){}
+    if (kind === 'cancer') {
+      return sessionStorage.getItem('satoi_cancer') || sessionStorage.getItem('satoi_last_cancer') || intake.cancer || '';
+    }
+    if (kind === 'cancerName') {
+      return sessionStorage.getItem('satoi_last_cancer_name') || '';
+    }
+    if (kind === 'stage') {
+      return sessionStorage.getItem('satoi_stage') || sessionStorage.getItem('satoi_last_stage') || intake.stage || '';
+    }
+  } catch(e){}
+  return '';
+}
+/* すべての保存先に書き込む(どこから来ても引き継げるように) */
+function saveAllContext(cancer, name, stage){
+  try {
+    if (cancer) { sessionStorage.setItem('satoi_cancer', cancer); sessionStorage.setItem('satoi_last_cancer', cancer); }
+    if (name)   { sessionStorage.setItem('satoi_last_cancer_name', name); }
+    if (stage)  { sessionStorage.setItem('satoi_stage', stage); sessionStorage.setItem('satoi_last_stage', stage); }
+  } catch(e){}
+}
+
+/* ===== from(来たページ)から話題名を引く。seedが無くても深掘りできるようにするための保険 ===== */
+function a2OriginTopic(from){
+  const M = {
+    kb_about:'がんの基礎知識(がんとは・ステージ・検査のこと)',
+    kb_treatment:'がんの治療の基本(手術・薬物療法・放射線・緩和ケア)',
+    kb_sideeffects:'治療の副作用と、その対処のこと', kb_side:'治療の副作用と、その対処のこと',
+    kb_money:'治療のお金と、使える制度のこと',
+    kb_life:'治療中の暮らしと仕事のこと',
+    kb_generation:'世代ごとの、がんとの向き合い方', kb_gen:'世代ごとの、がんとの向き合い方',
+    chp_chp_diagnosis:'診断・告知のときのこと', chp_diagnosis:'診断・告知のときのこと',
+    chp_chp_exam:'検査のこと', chp_exam:'検査のこと',
+    chp_chp_consider:'治療を考えること', chp_consider:'治療を考えること',
+    chp_chp_treatment:'治療のこと', chp_treatment:'治療のこと',
+    chp_chp_living:'治療中の暮らしのこと', chp_living:'治療中の暮らしのこと',
+    chp_chp_follow:'治療後・経過観察のこと', chp_follow:'治療後・経過観察のこと',
+    chp_chp_money:'お金のこと', chp_money:'お金のこと',
+    chp_chp_palliative:'緩和ケアのこと', chp_palliative:'緩和ケアのこと'
+  };
+  return M[from] || '';
+}
+
+/* ===== 文脈つき深掘り:章ページ等の項目内容を受け取り、AIが先にリードする ===== */
+const A2_CANCER_LABEL = { lung:'肺がん', stomach:'胃がん', breast:'乳がん', colon:'大腸がん', prostate:'前立腺がん', pancreas:'膵がん', other:'がん', unknown:'がん' };
+async function startSeededDeepDive(seed, params){
+  // 患者の状況を復元(あらゆる保存先から)→ 二重質問しない
+  const cancerKey = params.get('cancer') || readStoredContext('cancer');
+  const stage = params.get('stage') || readStoredContext('stage');
+  if (cancerKey) {
+    state.cancer = cancerKey;
+    state.cancerName = A2_CANCER_LABEL[cancerKey] || readStoredContext('cancerName') || state.cancerName || '';
+  }
+  if (stage) state.stage = stage;
+  state.step = 'free';
+  saveAllContext(state.cancer, state.cancerName, state.stage);
+
+  await delay(450);
+  await aiSay(`はい。いま読んでくださっていた内容について、ご一緒に、もう少し深掘りしましょう。`, { thinkMs: 700 });
+  await delay(300);
+
+  // AIに項目の文脈を渡してリードさせる(seed には 見出し+カテゴリ+本文の要約 が入っている)
+  const ask = `今、SATOIの中で「${seed}」という内容を読みました。これについて、私の状況に合わせて、もう少し詳しく・やさしく教えてください。そのうえで、次の一歩も提案してください。`;
+  await a2AskAI(ask);
+
+  const inp = document.getElementById('inputField');
+  if (inp) setTimeout(() => inp.focus(), 600);
+}
+
+/* ===== 自由対話モード(2026-05-20 新規:質問畳みかけ廃止)=====
+   入口で「がん腫+ステージ+治療フェーズ」を一括入力済みの前提。
+   AIは要約挨拶 → 質問は一切提示せず、自由入力を受ける。 */
+async function startFreeMode(params) {
+  setProgress(20, '自由対話');
+  let intake = {};
+  try { intake = JSON.parse(localStorage.getItem('satoi_intake') || '{}'); } catch(e){}
+  const cancerKey = params.get('cancer') || intake.cancer || 'unknown';
+  const stage = params.get('stage') || intake.stage || 'unknown';
+  const phase = params.get('phase') || intake.phase || 'consider';
+
+  const cancerLabel = {lung:'肺がん',stomach:'胃がん',breast:'乳がん',colon:'大腸がん',prostate:'前立腺がん',pancreas:'膵がん',other:'がん',unknown:'がん'}[cancerKey] || 'がん';
+  const stageLabel = (stage === 'unknown') ? '' : ('・ステージ' + stage);
+  const phaseLabel = {'just-diag':'告知されたばかり','consider':'治療法を考えている','decided':'治療法は決まっている','treating':'治療中','post':'治療を終えた','family-pall':'緩和ケア期'}[phase] || '';
+
+  state.cancer = cancerKey;
+  state.cancerName = cancerLabel;
+  state.stage = stage;
+
+  await delay(500);
+  await aiSay(`おかえりなさい。<br><span class="accent">${cancerLabel}${stageLabel}${phaseLabel ? '・' + phaseLabel : ''}</span> の方ですね。`);
+  await delay(400);
+  await aiSay(`ここでは、質問を、畳みかけません。<br>気になっていること、聞いてみたいことを、自由に書いていただいて、いいです。<br><span class="small">「治療法について詳しく」「副作用が心配」「家族にどう伝えればいいか」など、なんでも。<br>言葉にならなくても、大丈夫です。</span>`);
+  setProgress(100, '自由対話');
+  state.step = 'free';
+  const inputField = document.getElementById('inputField');
+  if (inputField) setTimeout(() => inputField.focus(), 800);
+}
+
+/* ===== resume モード ・ intake を完全スキップ ===== */
+/* ===== resume後 自由対話シナリオエンジン ===== */
+const resumeScenarios = {
+  'q-tx': {
+    intro: '<strong>治療の続き</strong>、ご一緒に整理しましょう。<br>まず、いま気になっているのは、どんなことですか?',
+    choices: [
+      { value: 'rsm-tx-side', label: '治療スケジュールと副作用のタイミング' },
+      { value: 'rsm-tx-second', label: 'セカンドオピニオンを検討したい' },
+      { value: 'rsm-tx-sdm', label: '主治医の先生に聞きたいことを整理' },
+      { value: 'rsm-tx-stop', label: '治療を一旦休むか迷っている', secondary: true }
+    ]
+  },
+  'q-side': {
+    intro: '<strong>副作用や体調</strong>のこと、お聞かせください。<br>いま、いちばん気になる症状はどれですか?',
+    choices: [
+      { value: 'rsm-side-record', label: '症状を記録して主治医に伝えたい' },
+      { value: 'rsm-side-nausea', label: '吐き気・食欲のこと' },
+      { value: 'rsm-side-fatigue', label: 'だるさ・疲れやすさ' },
+      { value: 'rsm-side-mental', label: '気持ちの落ち込み・不安', secondary: true }
+    ]
+  },
+  'q-family': {
+    intro: '<strong>家族に伝えること</strong>、難しいですよね。<br>どこから整理しましょうか?',
+    choices: [
+      { value: 'rsm-fam-spouse', label: '配偶者に、もう少し率直に伝えたい' },
+      { value: 'rsm-fam-kids', label: '子どもへの伝え方を考えたい' },
+      { value: 'rsm-fam-parent', label: '親(高齢)への伝え方を迷っている' },
+      { value: 'rsm-fam-script', label: '伝え方の下書きをAIに作ってほしい', secondary: true }
+    ]
+  },
+  'q-pause': {
+    intro: '今日は、急がなくて大丈夫です。<br>無理に話さなくていい時間も、大切です。<br><br><span class="small">何もしない・ただ画面を見ている、それで十分。<br>気が向いたら、また続きから話せます。</span>',
+    choices: [
+      { value: 'rsm-pause-music', label: '音楽コミュニティを開く' },
+      { value: 'rsm-pause-story', label: '同じ夜を過ごす方の物語を読む' },
+      { value: 'rsm-pause-end', label: '今日はここで休む(またね)', secondary: true }
+    ]
+  },
+
+  // ===== 治療詳細分岐 =====
+  'rsm-tx-side': {
+    intro: '治療スケジュールと副作用のタイミングを、整理します。<br>主な治療法の副作用は <strong>治療開始から数日〜2週間</strong>に集中することが多いです。<br><br>あなたの治療レジメンに合わせた副作用カレンダーを、SATOI の F4 副作用記録で確認できます。',
+    choices: [
+      { value: 'rsm-jump-f4', label: 'F4 副作用記録を開く', jumpUrl: 'SATOI_Mock_v1_F4_side_effects.html' },
+      { value: 'rsm-jump-b3', label: '治療詳細(各レジメン)を開く', jumpUrl: 'SATOI_Mock_v1_B3_treatment_detail.html' },
+      { value: 'q-tx', label: '別の治療の話に戻る' },
+      { value: 'q-pause', label: '今日はここまで', secondary: true }
+    ]
+  },
+  'rsm-tx-second': {
+    intro: 'セカンドオピニオン、迷う方が多いです。<br>「主治医の先生に失礼かも」と感じる方も多いですが、<strong>標準的な権利</strong>として制度化されています。<br>SATOI では、セカンドオピニオンを取りやすい先生・施設のマップ、紹介状作成サポート、聞きたいこと整理シートまで揃えています。',
+    choices: [
+      { value: 'rsm-jump-sdm', label: 'SDM質問カードを作る', jumpUrl: 'SATOI_Mock_v1_A2_dialog.html?from=resume&sdm=1' },
+      { value: 'rsm-jump-acad', label: '学術エビデンスを確認する', jumpUrl: 'SATOI_Mock_v1_ACAD_research.html' },
+      { value: 'q-tx', label: '別の治療の話に戻る' },
+      { value: 'q-pause', label: '今日はここまで', secondary: true }
+    ]
+  },
+  'rsm-tx-sdm': {
+    intro: '聞きたいこと整理、ご一緒に作りましょう。<br>SATOI のSDM質問カードは、あなたの原疾患・治療法・気持ちに応じて、<strong>7つの質問</strong>を自動生成します。<br>PDF/QR で診察室に持参でき、主治医の先生との対話を支えます。',
+    choices: [
+      { value: 'rsm-jump-sdm', label: 'SDM質問カードを開く', jumpUrl: 'SATOI_Mock_v1_B1_hub.html#sdm' },
+      { value: 'q-tx', label: '別の治療の話に戻る' },
+      { value: 'q-pause', label: '今日はここまで', secondary: true }
+    ]
+  },
+  'rsm-tx-stop': {
+    intro: '治療を休む選択、それも一つの大事な選択です。<br>SATOI は <strong>「続ける」「休む」「止める」のどれも否定しません</strong>。あなたの価値観に沿った判断を、主治医の先生と一緒に整理するのが大切です。<br>休む選択をした先輩の物語もあります。',
+    choices: [
+      { value: 'rsm-jump-stories', label: '同じ選択をした先輩の物語', jumpUrl: 'SATOI_Mock_v1_D1_stories.html' },
+      { value: 'rsm-jump-con', label: 'コンシェルジュに相談する', jumpUrl: 'SATOI_Mock_v1_CON_concierge.html' },
+      { value: 'q-pause', label: '今日はゆっくり話したい', secondary: true }
+    ]
+  },
+
+  // ===== 副作用分岐 =====
+  'rsm-side-record': {
+    intro: 'F4 副作用記録は、毎日の症状を <strong>EMPSe 5軸</strong>と連動させて記録できます。<br>記録した内容は、主治医の先生・看護師チームと、あなたの同意ベースで共有できます。',
+    choices: [
+      { value: 'rsm-jump-f4', label: 'F4 副作用記録を開く', jumpUrl: 'SATOI_Mock_v1_F4_side_effects.html' },
+      { value: 'q-side', label: '別の症状に戻る' },
+      { value: 'q-pause', label: '今日はここまで', secondary: true }
+    ]
+  },
+  'rsm-side-nausea': {
+    intro: '吐き気・食欲のこと、辛いですよね。<br><strong>制吐剤の調整・食事タイミング・水分摂取</strong> など、対処法があります。<br>副作用記録で記録 → 主治医にデータ共有 → 制吐剤の追加 という流れで、楽になった方が多いです。',
+    choices: [
+      { value: 'rsm-jump-f4', label: '副作用記録で今の症状を記録', jumpUrl: 'SATOI_Mock_v1_F4_side_effects.html' },
+      { value: 'q-side', label: '別の症状に戻る' },
+      { value: 'q-pause', label: '今日はここまで', secondary: true }
+    ]
+  },
+  'rsm-side-fatigue': {
+    intro: 'だるさ・疲れやすさは、化学療法後 3〜10日 がピークの方が多いです。<br>「動けない自分」を責めないでください。<strong>休むのも治療の一部</strong> です。',
+    choices: [
+      { value: 'rsm-jump-f4', label: 'F4 で記録(EMPSe 連動)', jumpUrl: 'SATOI_Mock_v1_F4_side_effects.html' },
+      { value: 'rsm-jump-mus', label: '休む時の音楽コミュニティへ', jumpUrl: 'SATOI_Mock_v1_MUS_community.html' },
+      { value: 'q-pause', label: '今日はゆっくり話したい', secondary: true }
+    ]
+  },
+  'rsm-side-mental': {
+    intro: '気持ちの落ち込み・不安は、副作用のひとつとして扱われます。<br>「精神的なもの」ではなく、治療と関係のある身体反応です。<br>EMPSe レーダーで「気力」「心理」が下がっているとき、SATOI は <strong>無理に元気にならなくていい</strong> と提案します。',
+    choices: [
+      { value: 'rsm-jump-c1', label: 'マイページで気持ちの軌跡を見る', jumpUrl: 'SATOI_Mock_v1_C1_mypage.html' },
+      { value: 'rsm-jump-con', label: 'コンシェルジュに相談', jumpUrl: 'SATOI_Mock_v1_CON_concierge.html' },
+      { value: 'q-pause', label: '今日はここで休む', secondary: true }
+    ]
+  },
+
+  // ===== 家族分岐 =====
+  'rsm-fam-spouse': {
+    intro: '配偶者への伝え方、難しい問いですね。<br>「全部を共有する」より、<strong>「ここまでは話せる、ここからは時間がほしい」</strong>と明確に伝える方が、お互い楽になることが多いです。<br>SATOI のファミリービューでは、共有範囲をあなたが選べます。',
+    choices: [
+      { value: 'rsm-jump-fam', label: 'ファミリービューを開く', jumpUrl: 'SATOI_Mock_v1_FAM_view.html' },
+      { value: 'q-family', label: '別の家族の話に戻る' },
+      { value: 'q-pause', label: '今日はゆっくり話したい', secondary: true }
+    ]
+  },
+  'rsm-fam-kids': {
+    intro: 'お子さんへの伝え方は、年齢で大きく違います。<br>SATOI には、<strong>幼児・小学生・中学生以上</strong>それぞれの「伝え方の言葉サンプル」と、先輩の経験があります。<br>「全部言わなくていい、でも嘘もつかない」と話していた先輩が多いです。',
+    choices: [
+      { value: 'rsm-jump-stories', label: '先輩の物語(子どもへの伝え方)', jumpUrl: 'SATOI_Mock_v1_D1_stories.html' },
+      { value: 'q-family', label: '別の家族の話に戻る' },
+      { value: 'q-pause', label: '今日はここまで', secondary: true }
+    ]
+  },
+  'rsm-fam-parent': {
+    intro: '高齢のご家族への伝え方、心配される方が多いです。<br>「自分のことよりも親が心配する顔を見るのが辛い」と話す方が、本当に多いです。<br>SATOI コンシェルジュには、家族間コミュニケーションを支援した実例があります。',
+    choices: [
+      { value: 'rsm-jump-con', label: 'コンシェルジュに相談', jumpUrl: 'SATOI_Mock_v1_CON_concierge.html' },
+      { value: 'q-family', label: '別の家族の話に戻る' },
+      { value: 'q-pause', label: '今日はここまで', secondary: true }
+    ]
+  },
+  'rsm-fam-script': {
+    intro: 'はい、AIが下書きを作ります。<br>「今日、診察で◯◯と言われました。これからは◯◯になります」という形で、<strong>事実+気持ち+お願いしたいこと</strong>を分けて整えます。<br>下書きはあなたが自由に編集できます。',
+    choices: [
+      { value: 'rsm-jump-fam', label: 'ファミリービューで下書き作成', jumpUrl: 'SATOI_Mock_v1_FAM_view.html' },
+      { value: 'q-family', label: '別の家族の話に戻る' },
+      { value: 'q-pause', label: '今日はここまで', secondary: true }
+    ]
+  },
+
+  // ===== 休む =====
+  'rsm-pause-music': {
+    intro: 'はい、音楽コミュニティでは、がんを経験した方々のプレイリストを <strong>Spotify / Apple Music / YouTube</strong> で聴けます。<br>「夜眠れない時の伴走」「治療日の朝に聴く曲」など、シーン別に並んでいます。',
+    choices: [
+      { value: 'rsm-jump-mus', label: '音楽コミュニティを開く', jumpUrl: 'SATOI_Mock_v1_MUS_community.html' },
+      { value: 'q-pause', label: '別の休み方を見る' }
+    ]
+  },
+  'rsm-pause-story': {
+    intro: 'はい、同じ夜を過ごしている方の物語があります。<br>動画・テキスト・音声、お好きな形式で聞けます。<br>「自分だけじゃない」を、ことばを使わずに感じる場所です。',
+    choices: [
+      { value: 'rsm-jump-stories', label: '先輩の物語を開く', jumpUrl: 'SATOI_Mock_v1_D1_stories.html' },
+      { value: 'q-pause', label: '別の休み方を見る' }
+    ]
+  },
+  'rsm-pause-end': {
+    intro: '今日はここまで、ゆっくり休んでください。<br>今日のお話は <strong>マイページ</strong>に大切にしまっておきました。<br>明日また、続きから話せます。<br><br><span class="small">同じ夜を過ごしている方が、ここにいます。<br>おやすみなさい。</span>',
+    choices: [
+      { value: 'rsm-jump-c1', label: 'マイページへ', jumpUrl: 'SATOI_Mock_v1_C1_mypage.html' },
+      { value: 'rsm-jump-b1', label: 'ハブへ戻る', jumpUrl: 'SATOI_Mock_v1_B1_hub.html' }
+    ]
+  }
+};
+
+async function handleResumeChoice(value, label) {
+  // ジャンプ先がある場合(rsm-jump-*)は遷移
+  if (value.startsWith('rsm-jump-')) {
+    const lastBtn = Array.from(document.querySelectorAll('.choice-btn')).find(b => b.dataset.value === value);
+    if (lastBtn && lastBtn.dataset.jumpUrl) {
+      window.location.href = lastBtn.dataset.jumpUrl;
+      return;
+    }
+  }
+
+  const scenario = resumeScenarios[value];
+  if (!scenario) {
+    // 未定義の選択肢でも、止まらないようにフォールバック
+    await aiSay(`「${label}」について、もう少しお話しできます。<br>SATOI に蓄積された他の方の経験から、選択肢をお出ししますね。`, { thinkMs: 1200 });
+    await delay(500);
+    addChoices([
+      { value: 'q-tx',     label: '治療のことに戻る' },
+      { value: 'q-side',   label: '副作用や体調のこと' },
+      { value: 'q-family', label: '家族のこと' },
+      { value: 'q-pause',  label: 'ゆっくり話したい', secondary: true }
+    ]);
+    return;
+  }
+
+  await aiSay(scenario.intro, { thinkMs: 1300 });
+  await delay(500);
+  addChoices(scenario.choices);
+}
+
+async function resumeMode(params) {
+  // 復元 ・ URL > 各保存先(satoi_cancer / satoi_last_cancer / satoi_intake) > デフォルト乳がんII期
+  const cancerKey = params.get('cancer') || readStoredContext('cancer') || 'breast';
+  const cancerNames = {
+    breast: '乳がん', colon: '大腸がん', lung: '肺がん',
+    stomach: '胃がん', prostate: '前立腺がん', pancreas: '膵がん'
+  };
+  const cancerName = readStoredContext('cancerName') || cancerNames[cancerKey] || '乳がん';
+  const stage = params.get('stage') || readStoredContext('stage') || 'II';
+
+  state.cancer = cancerKey;
+  state.cancerName = cancerName;
+  state.stage = stage;
+  state.persona = sessionStorage.getItem('satoi_persona') || 'Mさん';
+
+  // 入口別の最初の一言を出し分け
+  const topic = params.get('topic') || '';
+  const beat = params.get('beat') || '';
+  const fromPage = params.get('from') || '';
+
+  let openingMsg = '';
+  const personaName = state.persona;
+  // 「おかえり」基本
+  openingMsg = `おかえりなさい、<strong style="color:var(--starlight-strong);">${personaName}</strong>。<br>${cancerName} ${stage}期 ・ 前回までの記録は、すべて残っています。<br><br><span class="small">原種(${cancerName})はすでに記録済みです。同じ質問は繰り返しません。</span>`;
+
+  // 入口別の二の句
+  let secondMsg = '';
+  if (beat === 'consider' || topic === 'consider' || /CHP_consider/.test(fromPage)) {
+    secondMsg = `今日は <strong>治療法について</strong>、整理してみますか?<br>前回、TC療法と AC→T療法 で迷っているとおっしゃっていましたね。`;
+  } else if (beat === 'exam' || topic === 'exam' || /CHP_exam/.test(fromPage)) {
+    secondMsg = `<strong>検査</strong>について、整理しますか?<br>結果待ちの時間が一番不安、と前回もおっしゃっていました。`;
+  } else if (beat === 'diagnosis' || topic === 'diagnosis' || /CHP_diagnosis/.test(fromPage)) {
+    secondMsg = `<strong>診断結果</strong>について、もう少し整理しますか?<br>家族にどう伝えるか、お子さんへの伝え方、まだ整理中でしたね。`;
+  } else if (beat === 'treatment' || topic === 'treatment' || /CHP_treatment/.test(fromPage)) {
+    secondMsg = `<strong>治療中の副作用</strong>のこと、聞かせていただけますか?<br>副作用記録は、今週も毎日ちゃんとつけていらっしゃいますね。`;
+  } else if (beat === 'living' || topic === 'living' || /CHP_living/.test(fromPage)) {
+    secondMsg = `<strong>治療と仕事の両立</strong>、進んでいますか?<br>会社への伝え方、社労士相談の予約、どこまで進めましょうか。`;
+  } else if (beat === 'follow' || topic === 'follow' || /CHP_follow/.test(fromPage)) {
+    secondMsg = `<strong>治療後</strong>の経過観察スケジュール、見直しますか?<br>「再発が怖い」と前回もおっしゃっていましたね。揺れていい時期です。`;
+  } else if (beat === 'money' || topic === 'money' || /CHP_money/.test(fromPage)) {
+    secondMsg = `<strong>お金・制度</strong>のこと、整理しますか?<br>高額療養費・傷病手当金、まだ申請されていない制度がありそうです。`;
+  } else if (beat === 'palliative' || topic === 'palliative' || /CHP_palliative/.test(fromPage)) {
+    secondMsg = `<strong>もしもの時</strong>のこと、ACP(人生会議)について、ご家族と話してみますか?`;
+  } else if (/mypage|c1/i.test(fromPage)) {
+    secondMsg = `<strong>マイページ</strong>から来てくれましたね。<br>前回は治療法について話していましたね。今日は、どこから話しましょうか?`;
+  } else {
+    secondMsg = `気になっていること、聞いてみたいことを、自由に話してください。<br><span class="small">下の例から選んでも、ご自分の言葉で書いても、マイクで話しても、大丈夫です。</span>`;
+  }
+
+  // メッセージを表示
+  await aiSay(openingMsg, { thinkMs: 1100 });
+  await delay(900);
+  await aiSay(secondMsg, { thinkMs: 1300 });
+  await delay(600);
+
+  // ジャーニーバー(現在ビート)を描画
+  const beats = getBeats(state.cancer, state.stage, state.cancerName);
+  state.beats = beats;
+  const targetBeat = beat || topic || 'consider';
+  const idx = Math.max(0, beats.findIndex(b => b.id === targetBeat));
+  state.beatIdx = idx;
+  renderJourneyBar(beats, idx);
+
+  // フリー入力欄を表示(原種選択肢ではなく)
+  await delay(400);
+  showFreeInputMode();
+}
+
+/* フリー入力モード(固い選択ではなく、悩み起点の自由対話)*/
+function showFreeInputMode() {
+  state.step = 'free';
+  // 悩み起点のチップ(押すとAIが自由対話でリード。固いシナリオ分岐は使わない)
+  addChoices([
+    { value: 'sw-treat',  label: 'これからの治療・選択肢のこと' },
+    { value: 'sw-side',   label: '副作用・体調のこと' },
+    { value: 'sw-feel',   label: '気持ち・不安なこと' },
+    { value: 'sw-family', label: '家族に伝えること' },
+    { value: 'sw-money',  label: 'お金・制度のこと' },
+    { value: 'sw-open',   label: 'まだ言葉にならない / とにかく聞いてほしい', secondary: true }
+  ]);
+  const inp = document.getElementById('inputField');
+  if (inp) setTimeout(() => inp.focus(), 500);
+}
+
+// ===== ご本人ルート =====
+async function startSelf() {
+  await delay(state.mode === 'slow' ? 1400 : 600);
+
+  if (state.mode === 'slow') {
+    await aiSay(`ようこそ、SATOIへ。<br>急ぎません。今日は、ゆっくり、いきましょう。`, { thinkMs: 1800 });
+    await delay(900);
+    await aiSay(`今、ここに来てくださっただけで、充分です。<br><br><span class="small">話したくない時は、画面を閉じても、大丈夫です。<br>明日、また続きから、始められます。</span>`, { thinkMs: 1800 });
+    await delay(900);
+  } else {
+    await aiSay(`ようこそ、SATOIへ。<br>今、ここに来てくれてありがとうございます。`);
+  }
+
+  // 悩み起点:まず「今いちばん気になっていること」から入る(がん種から聞かない)
+  await aiSay(`今、いちばん気になっていること、聞いてみたいことは、どんなことですか?<br><span class="small">あてはまるものを選んでも、下の欄にご自分の言葉で書いても、マイクで話しても、大丈夫です。</span>`);
+
+  addChoices([
+    { value: 'sw-treat',  label: 'これからの治療・選択肢のこと' },
+    { value: 'sw-side',   label: '副作用・体調のこと' },
+    { value: 'sw-feel',   label: '気持ち・不安なこと' },
+    { value: 'sw-family', label: '家族にどう伝えるか' },
+    { value: 'sw-money',  label: 'お金・制度のこと' },
+    { value: 'sw-open',   label: 'まだ言葉にならない / とにかく聞いてほしい', secondary: true }
+  ]);
+  state.step = 'self-worry';
+}
+
+// ===== ご家族・大切な人ルート =====
+async function startFamily() {
+  setProgress(15, '家族の方として');
+  document.body.classList.add('family-mode');
+  await delay(800);
+  await aiSay(`ようこそ、SATOIへ。<br>大切な方のために、ここに来てくださって、ありがとうございます。`);
+  await aiSay(`<span class="small">支える側にも、支えが必要です。<br>あなたご自身のための時間も、ここでは大切にされます。</span>`);
+  await aiSay(`まず、その大切な方との <span class="accent">関係</span> を教えていただけますか?`);
+  addChoices([
+    { value: 'spouse', label: 'パートナー・配偶者' },
+    { value: 'parent', label: '親' },
+    { value: 'child', label: '子ども' },
+    { value: 'sibling', label: '兄弟・姉妹' },
+    { value: 'friend', label: '友人・大切な方' },
+    { value: 'other-fam', label: 'その他', secondary: true }
+  ]);
+  state.step = 'fam-1';
+}
+
+// ===== お別れの時間・緩和ケアルート =====
+async function startPalliative() {
+  setProgress(20, '静かな時間');
+  document.body.classList.add('palliative-mode');
+  await delay(1800);
+  await aiSay(`ここに、来てくださって、ありがとうございます。`, { thinkMs: 2000 });
+  await delay(1400);
+  await aiSay(`急ぎません。<br>何も、決めなくて、選ばなくて、いいです。`, { thinkMs: 2000 });
+  await delay(1600);
+  await aiSay(`もし、お話を聞かせていただけるなら、<br>いま、<span class="accent">どなたのこと</span> でいらっしゃいましたか?`, { thinkMs: 2000 });
+  addChoices([
+    { value: 'self-pall', label: '自分自身のために' },
+    { value: 'spouse-pall', label: 'パートナー・配偶者' },
+    { value: 'parent-pall', label: '親' },
+    { value: 'child-pall', label: '子ども' },
+    { value: 'other-pall', label: 'その他の大切な方', secondary: true }
+  ]);
+  state.step = 'pal-1';
+}
+
+// ===== ナラティブ・患者ジャーニー データ =====
+const JOURNEY_EXAMS = {
+  breast: [
+    { name: '組織診の追加病理', desc: 'HER2・ホルモン受容体・Ki-67(増殖能)を確定。あなたの乳がんの「タイプ」が、ここで分かります。' },
+    { name: 'MRI・乳房超音波', desc: 'がんの広がり・反対側の乳房・しこりの形を、立体的に確認します。' },
+    { name: 'PET-CT', desc: '遠隔転移の有無を全身で1度にチェック。検査後すぐに帰宅できます。' },
+    { name: 'リンパ節評価', desc: '腋窩(わきの下)リンパ節への転移を、超音波と針生検で確認します。' }
+  ],
+  colon: [
+    { name: '大腸内視鏡(精査)', desc: 'がんの位置・大きさ・形を再確認。組織を採取して詳しく病理検査します。' },
+    { name: 'CT・MRI(骨盤・腹部)', desc: '腸壁の深さ・リンパ節転移・肝臓への転移有無を立体的に確認。' },
+    { name: 'PET-CT', desc: '全身の転移有無を1回の検査で評価します。' },
+    { name: '腫瘍マーカー(CEA・CA19-9)', desc: '血液で「がんの活動性」を確認。治療効果のモニタリングにも使います。' }
+  ],
+  lung: [
+    { name: 'CT(高分解能・造影)', desc: 'がんの位置・大きさ・周辺の血管・リンパ節をミリ単位で確認します。' },
+    { name: '気管支鏡・生検', desc: '組織を採取してがんのタイプを病理学的に確定します。' },
+    { name: 'PET-CT', desc: '遠隔転移の有無を全身で評価。' },
+    { name: '呼吸機能検査', desc: '手術が可能か、化学療法に耐えられる体力かを評価します。' }
+  ],
+  stomach: [
+    { name: '胃内視鏡(精査)・生検追加', desc: '正確な範囲・深達度・組織型を再確認します。' },
+    { name: 'CT・MRI(腹部・骨盤)', desc: 'リンパ節転移・腹膜転移・肝転移の有無を確認。' },
+    { name: '審査腹腔鏡(該当例のみ)', desc: '腹膜転移の有無を直接観察(進行例で実施)。' },
+    { name: '腫瘍マーカー(CEA・CA19-9)', desc: '治療反応性のベースラインを取得します。' }
+  ],
+  prostate: [
+    { name: 'MRI(多パラメトリック)', desc: '前立腺内の位置・被膜外浸潤の有無を高精度で評価。' },
+    { name: '前立腺生検(系統的・標的)', desc: 'グリソンスコア(悪性度)を確定します。' },
+    { name: '骨シンチグラフィ', desc: '骨転移の有無を評価(前立腺がん特有の検査)。' },
+    { name: 'PSA再測定・推移確認', desc: '治療前後の比較のためベースラインを取ります。' }
+  ],
+  pancreas: [
+    { name: 'CT(造影・多時相)', desc: 'がんの位置・血管浸潤・切除可能性を評価します。' },
+    { name: 'MRI / MRCP', desc: '胆管・膵管の状態を非侵襲的に評価。' },
+    { name: 'EUS(超音波内視鏡)・生検', desc: '近接した位置から精密に組織採取します。' },
+    { name: '腫瘍マーカー(CA19-9・CEA)', desc: '膵がんで重要。治療経過のモニタリング指標です。' }
+  ],
+  other: [
+    { name: 'がん種に応じた精密検査', desc: 'CT・MRI・PET-CT・生検など。主治医と相談しながら必要な検査を進めます。' }
+  ]
+};
+
+const JOURNEY_COMPANIONS = {
+  breast: [
+    { test: 'HER2タンパク質', meaning: '陽性ならトラスツズマブ(ハーセプチン)など分子標的薬が、大きな武器になります。' },
+    { test: 'ホルモン受容体(ER/PgR)', meaning: '陽性ならホルモン療法が5〜10年の長期治療として効きます。手術後の再発予防の柱です。' },
+    { test: 'Ki-67(増殖能)', meaning: '高ければ化学療法の追加を検討。低ければホルモン療法だけで十分なケースも。' },
+    { test: 'BRCA1/2遺伝子', meaning: '遺伝性の判定。PARP阻害薬(オラパリブ等)の適応にもなります。家族の検診相談にも繋がります。' }
+  ],
+  colon: [
+    { test: 'RAS遺伝子(KRAS/NRAS)', meaning: '野生型ならセツキシマブ(アービタックス)・パニツムマブが使えます。変異型では別の戦略に。' },
+    { test: 'BRAF遺伝子', meaning: 'V600E変異があると治療方針が大きく変わります。専用の併用療法が選択肢に。' },
+    { test: 'MSI(マイクロサテライト不安定性)', meaning: '高頻度(MSI-H)ならニボルマブ・ペムブロリズマブ(免疫療法)が劇的に効くことがあります。' },
+    { test: 'HER2', meaning: '陽性なら大腸がんでも新しい治療選択肢が広がります(近年承認・保険適用)。' }
+  ],
+  lung: [
+    { test: 'EGFR遺伝子', meaning: '変異あり(特にアジア人非喫煙女性に多い)ならオシメルチニブ等の経口分子標的薬が第一選択。' },
+    { test: 'ALK融合遺伝子', meaning: '陽性ならアレクチニブ等の分子標的薬が劇的に効きます。' },
+    { test: 'PD-L1発現', meaning: '高発現なら免疫チェックポイント阻害薬(ペムブロリズマブ等)が第一選択になります。' },
+    { test: 'ROS1・BRAF・KRAS・MET・RET・NTRK', meaning: '各々に専用の分子標的薬が存在(時に劇的奏効)。包括的ゲノム検査で同時評価できます。' }
+  ],
+  stomach: [
+    { test: 'HER2', meaning: '陽性ならトラスツズマブを化学療法に追加します。' },
+    { test: 'MSI', meaning: '高頻度なら免疫療法の適応に。' },
+    { test: 'PD-L1(CPS)', meaning: '一定スコア以上で免疫療法の併用が選択肢に。' },
+    { test: 'Claudin18.2', meaning: '陽性で新しい分子標的薬(ゾルベツキシマブ)の適応(近年承認)。' }
+  ],
+  prostate: [
+    { test: 'PSA・PSA倍加時間', meaning: '進行度評価・治療反応性のベースライン指標です。' },
+    { test: 'BRCA1/2・HRR遺伝子', meaning: '変異ありならPARP阻害薬(オラパリブ等)の適応。家族の検診にも関わります。' },
+    { test: 'AR(アンドロゲン受容体)', meaning: 'ホルモン療法・新規アンドロゲン受容体阻害薬の選択に影響します。' }
+  ],
+  pancreas: [
+    { test: 'BRCA1/2遺伝子', meaning: '変異ありなら、白金製剤化学療法・PARP阻害薬の選択肢が広がります。' },
+    { test: 'MSI', meaning: '高頻度なら免疫療法の選択肢に。' },
+    { test: 'KRAS変異(特にG12C)', meaning: '近年ソトラシブ等の分子標的薬が開発中・臨床試験対象です。' }
+  ],
+  other: [
+    { test: '包括的ゲノムプロファイリング検査', meaning: '主治医と相談し、保険適用の遺伝子検査(F1検査等)で複数の遺伝子を同時評価できます。' }
+  ]
+};
+
+function stageDesc(stage) {
+  return {
+    'I':  '比較的早期で、局所にとどまっている',
+    'II': 'がんが少し進行しているが、まだ局所にとどまる',
+    'III':'リンパ節等への広がりが認められる',
+    'IV': '遠隔転移を含む進行段階'
+  }[stage] || 'まだ詳しく評価していく';
+}
+
+function getJourneyFlow(cancer) {
+  const treatSummary = {
+    breast:  '手術・ホルモン療法・化学療法・分子標的薬・放射線療法 を組み合わせ',
+    colon:   '手術(腹腔鏡)・化学療法(FOLFOX/FOLFIRI)・分子標的薬・放射線療法 を組み合わせ',
+    lung:    '手術 / 化学療法 / 分子標的薬 / 免疫療法 / 放射線 を、遺伝子検査結果に応じて選択',
+    stomach: '内視鏡治療 / 手術 / 化学療法 / 分子標的薬 / 免疫療法',
+    prostate:'監視療法 / 手術 / 放射線 / ホルモン療法 を、リスク分類に応じて選択',
+    pancreas:'手術 / 化学療法(FOLFIRINOX/GnP) / 放射線 / 緩和ケア早期導入',
+    other:   'がん種に応じた標準治療'
+  };
+  return [
+    { step: '①', label: '精密検査(2〜4週)', desc: 'がんの広がりとタイプを確定', href: 'SATOI_Mock_v1_CHP_exam.html' },
+    { step: '②', label: 'コンパニオン診断・遺伝子検査', desc: '分子標的薬・免疫療法の適応を判定', href: 'SATOI_Mock_v1_CHP_exam.html#precision' },
+    { step: '③', label: '治療方針の決定', desc: 'キャンサーボード(多職種カンファレンス)で最適解を', href: 'SATOI_Mock_v1_CHP_consider.html' },
+    { step: '④', label: '治療開始', desc: treatSummary[cancer] || treatSummary.other, href: 'SATOI_Mock_v1_CHP_treatment.html' },
+    { step: '⑤', label: '副作用ケア・サポート', desc: 'つらさは記録・厚労省連携・チームと共有', href: 'SATOI_Mock_v1_F4_side_effects.html' },
+    { step: '⑥', label: '治療後の経過観察', desc: '通常 5年〜10年。検査で再発を早期発見', href: 'SATOI_Mock_v1_CHP_follow.html' }
+  ];
+}
+
+function getBeats(cancer, stage, cancerName) {
+  const data = TREATMENT_DATA[cancer];
+  const stageInfo = data?.stages?.[stage];
+  const sameStage = stageInfo?.count || 5000;
+  const surv = stageInfo?.name5y;
+  const flow = getJourneyFlow(cancer);
+  const exams = JOURNEY_EXAMS[cancer] || JOURNEY_EXAMS.other;
+  const comps = JOURNEY_COMPANIONS[cancer] || JOURNEY_COMPANIONS.other;
+
+  return [
+    {
+      id: 'now', chip: 'いま', stepNum: 1,
+      title: 'いま、あなたに起きていること',
+      narrative: `<span class="accent">${cancerName} ステージ${stage}</span> と診断された——その言葉を受け止めるだけで、本当に、たいへんなことだと思います。<br><br>からだの中で何が起きているかというと、${cancerName} の ${stage} は、<strong>${stageDesc(stage)}</strong> という段階です。<br>「今すぐ」ではなく、これから数か月かけて、検査と治療と経過観察を、ゆっくり進めていく長いお付き合いになります。`,
+      stat: { label: `同じ ${cancerName} ステージ${stage} の方`, count: sameStage, sub: '同じ場所から、同じように歩き始めた方が、これだけいらっしゃいます。一人ではありません。' },
+      deeper: `${cancerName} は日本で年間 <strong>${(data?.patients || 50000).toLocaleString()}人</strong> が新たに診断される、決して珍しくないがんです。<br>ステージ${stage} の5年生存率は <strong style="color:var(--starlight)">${surv || '個別'}%</strong> と報告されています(国立がん研究センター・2025)。<br><br>ただし、これは「過去の平均」です。<br>あなたの治療結果はあなただけのもの。最新治療が加わるたびに、数字は上がっています。`,
+      anxiety: `「これから、どうなるんだろう」「死んでしまうのかな」——告知のあと、誰もが、その問いに立ち止まります。<br>急がなくて、いいです。<br>今は、「全体の流れを知る」だけで充分。<br>次のビートで、これから何が起きるのかを、順番にお見せします。`
+    },
+    {
+      id: 'flow', chip: '全体の流れ', stepNum: 2,
+      title: 'これから、どんな順番で進むのか',
+      narrative: `不安の正体は、「次に何が来るか分からない」こと。<br>${cancerName} の場合、だいたい、こんな順番で進んでいきます。`,
+      visual: { type: 'flow', items: flow },
+      deeper: `${cancerName} の場合、治療開始まで通常 <strong>2〜4週間</strong> かかります。<br>これは「遅い」のではなく、「あなたに合った治療を、ちゃんと見極める時間」です。<br>その間にも、SATOI には <strong>${sameStage.toLocaleString()}人</strong> の同じ段階の方が、一緒に歩いています。`,
+      anxiety: `「治療まで2〜4週間も待つの?」と不安になる方が多いです。<br>がんは、数日で大きく変わるものではありません。<br>慎重に検査をして、あなたに合った治療を選ぶ方が、結果として、最善の道に進みます。`
+    },
+    {
+      id: 'exam', chip: '次の検査', stepNum: 3,
+      title: '次に、どんな検査をするのか',
+      narrative: `次の2〜4週間で、こんな検査が予定されていきます。<br>「言われるがまま」ではなく、「何を調べているか」を知っているだけで、ぐっと、不安が減ります。`,
+      visual: { type: 'list', items: exams, lead: 'name', desc: 'desc' },
+      deeper: `${cancerName} の精密検査は、痛みを伴うものは少なく、ほとんどが画像検査や血液検査です。<br>PET-CTは少し時間がかかり、放射性薬剤を注射しますが、検査後すぐに帰宅できます。<br>1日の検査時間は、おおむね 2〜3時間 です。`,
+      anxiety: `「検査が怖い」「結果が怖い」——両方、あって、当然です。<br>結果を聞く日には、あなたを支える人を、一緒に連れて行くこともできます。<br>主治医に「家族の同席を希望します」と伝える文章を、SATOIで生成できますよ。`
+    },
+    {
+      id: 'comp', chip: '検査(精密)', stepNum: 4,
+      title: 'コンパニオン診断・遺伝子検査の話',
+      narrative: `${cancerName} は、近年、大きく治療法が広がりました。<br>その鍵が「コンパニオン診断」と「遺伝子検査」です。<br>あなたの がんのタイプ を分子レベルで調べて、<strong>最も効く治療</strong> を見つけるためのものです。`,
+      visual: { type: 'genes', items: comps },
+      deeper: `コンパニオン診断は、保険適用のものが多く、結果が出るまで通常 1〜3週間。<br>これは「あなた専用の治療地図」を作るための時間です。<br>結果次第で、選べる治療の選択肢が <strong>3倍</strong> くらいに増えることもあります。`,
+      anxiety: `「遺伝子検査って、怖い」「家族にも影響あるの?」——BRCAなど遺伝性のものは、家族にも影響する可能性があります。<br>でも、検査結果は、あなたの同意なしには誰にも共有されません。<br>家族と話すタイミングも、あなたが決めて、いいんです。`
+    },
+    {
+      id: 'team', chip: '治療法を考える', stepNum: 5,
+      title: 'あなたの治療を、決めるのは「チーム」',
+      narrative: `${cancerName} の治療方針は、主治医ひとりで決めるものではありません。<br>「キャンサーボード」と呼ばれる多職種カンファレンスで、外科医・腫瘍内科医・放射線科医・病理医・看護師・薬剤師・緩和ケアチームが、一緒に、あなたのケースを検討します。`,
+      visual: { type: 'team-circle' },
+      deeper: `SATOI には、あなた専属のコーディネーターがつきます(C会員サブスク・無料体験あり)。<br>主治医に聞きづらいこと、セカンドオピニオンの相談、家族との会話の練習——人間の伴走者が、いつでも応えてくれます。`,
+      anxiety: `「ちゃんと診てもらえているのか、不安」と思う方が多いです。<br>キャンサーボードでどんな話がされたか、主治医に「カンファレンスでの議論内容を、教えてください」と聞いていいんです。<br>SATOIで、聞きやすい文面を準備できます。`
+    },
+    {
+      id: 'treat', chip: '治療の選択肢', stepNum: 6,
+      title: '治療を選ぶ段階に来たら、何があるのか',
+      narrative: `ここからは、「治療の選択肢」のお話です。<br><br>大事なのは、「いま選ぶ」ことではありません。<br>「どんな選択肢があるか、知っておく」だけで、検査結果を聞きに行く日に、ぐっと話がしやすくなります。`,
+      visual: { type: 'treatments', items: data?.treatments || [] },
+      deeper: `${cancerName} ステージ${stage} では、複数の治療法を組み合わせる「集学的治療」が標準です。<br>1つを選ぶ、というよりも「何を、どの順番で」というのが、治療設計です。<br>主治医とあなたとで、納得しながら決めていきます(共同意思決定・SDM)。`,
+      anxiety: `「どれを選んでも、後悔しそう」——揺れて、いいです。<br>選んだ後も、状況に応じて切り替えられます。<br>「決めたら、もう戻れない」治療は、実は、ほとんどありません。`
+    },
+    {
+      id: 'side', chip: '治療中の生活', stepNum: 7,
+      title: '治療が始まったら、生活はどうなるのか',
+      narrative: `治療によって副作用は異なりますが、共通して言えることがあります。<br>「つらい時に、つらい」と言える場所があるかどうかが、治療を <strong>続けられるか</strong> の分かれ目です。`,
+      visual: { type: 'side-items' },
+      deeper: `副作用は治療によって出るタイミングが違います。<br>${cancerName} でよくあるのは、化学療法の場合 治療後 3〜5日目あたりが体調のボトム、その後 7〜10日 で回復、というリズムです。<br>このリズムを知っているだけで、「いま我慢する時期」「いま動ける時期」が、見えてきます。`,
+      anxiety: `「仕事を辞めないと続けられないかも」——多くの方が、最初に、そう思います。<br>でも、最近の治療は、通院で受けられるものが増えています。<br>SATOIには、治療と仕事を両立した先輩の物語が、たくさんあります。`
+    },
+    {
+      id: 'follow', chip: '治療後・経過観察', stepNum: 8,
+      title: '治療が終わった後、その後の話',
+      narrative: `治療が終わっても、SATOI は、あなたのそばにいます。<br>${cancerName} の場合、治療後 <strong>5年〜10年</strong> の経過観察が標準です。<br>「もう大丈夫」と「再発が怖い」のあいだで、揺れる時期です。`,
+      visual: { type: 'follow-timeline' },
+      deeper: `経過観察の検査は、最初は3か月ごと、徐々に6か月ごと、1年ごと、と間隔が空いていきます。<br>定期的にCT・MRI・腫瘍マーカー・診察があり、再発の早期発見ができます。<br>たとえ再発しても、早期に分かれば、選べる治療があります。`,
+      anxiety: `「いつまた再発するか、怖い」——治療後の最大の不安です。<br>SATOIは、検査の予定・結果・心の動きまで、すべて、一緒に記録していきます。<br>「あなただけが不安なんじゃない」を、毎日、見える形で。`
+    }
+  ];
+}
+
+function renderJourneyBar(beats, currentIdx) {
+  let bar = document.getElementById('journeyBar');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'journeyBar';
+    bar.className = 'journey-bar';
+    const header = document.querySelector('.header');
+    if (header && header.nextSibling) {
+      header.parentNode.insertBefore(bar, header.nextSibling);
+    } else {
+      document.body.insertBefore(bar, document.querySelector('.dialog-wrap'));
+    }
+    document.body.classList.add('with-journey-bar');
+  }
+  bar.style.display = 'block';
+  bar.innerHTML = '<div class="journey-bar-inner">' +
+    '<span class="journey-bar-hint" title="各ステップはAIと深掘りできます。タップでそのテーマへ移動します。" style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; margin-right:10px; border-radius:14px; background:rgba(212,169,94,0.16); border:1px dashed rgba(212,169,94,0.55); color:#F0C97A; font-size:11px; font-weight:600; white-space:nowrap; flex-shrink:0;">🤖 AIと深掘り <span style="opacity:0.72; font-weight:400;">タップで移動</span></span>' +
+    beats.map((b, i) =>
+      `<div class="journey-chip ${i === currentIdx ? 'current' : (i < currentIdx ? 'done' : '')}" data-i="${i}" title="クリックでこのステージへジャンプ">
+         <span class="journey-chip-num">${b.stepNum}</span>
+         <span class="journey-chip-label">${b.chip}</span>
+       </div>` + (i < beats.length - 1 ? '<div class="journey-arrow">›</div>' : '')
+    ).join('') +
+  '</div>';
+  // チップにクリックジャンプ機能を付与
+  bar.querySelectorAll('.journey-chip').forEach(chip => {
+    chip.style.cursor = 'pointer';
+    chip.addEventListener('click', async () => {
+      const targetIdx = parseInt(chip.dataset.i, 10);
+      if (isNaN(targetIdx)) return;
+      // 既に表示中なら何もしない
+      if (targetIdx === state.beatIdx) return;
+      // 進行中の選択肢を削除して、ジャンプ
+      const oldChoices = document.getElementById('currentChoices');
+      if (oldChoices) oldChoices.parentElement.remove();
+      // ジャンプメッセージ
+      const grp = document.createElement('div');
+      grp.className = 'message-group';
+      grp.innerHTML = '<div class="ai-msg"><div class="ai-orb"></div><div class="ai-bubble"><div style="font-size:13px; color:var(--text-secondary);">→ <strong style="color:var(--starlight-strong);">' + state.beats[targetIdx].chip + '</strong> へジャンプします</div></div></div>';
+      dialogWrap.appendChild(grp);
+      await new Promise(r => setTimeout(r, 700));
+      await renderBeat(targetIdx);
+    });
+  });
+  // current chip にスクロール
+  const cur = bar.querySelector('.journey-chip.current');
+  if (cur) cur.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+async function startJourney() {
+  // resume: 原種選択をスキップして直接該当ビートから開始
+  if (window.__skipIntake) {
+    state.cancer = window.__resumeCancer || 'breast';
+    state.cancerName = window.__resumeCancerName || '乳がん';
+    state.stage = window.__resumeStage || 'II';
+  if (window.__saveResume) window.__saveResume(state.cancer, state.cancerName, state.stage);
+    const beats = getBeats(state.cancer, state.stage, state.cancerName);
+    state.beats = beats;
+    const tIdx = beats.findIndex(b => b.id === window.__resumeBeat);
+    const idx = tIdx >= 0 ? tIdx : 0;
+    state.beatIdx = idx;
+    await aiSay('おかえりなさい。前回の続き ・ <strong style="color:var(--starlight-strong);">' + beats[idx].chip + '</strong> からご一緒します。<br><br><span class="small">原種(' + state.cancerName + ')はすでに記録済みです。同じ質問は繰り返しません。</span>', { thinkMs: 1200 });
+    await delay(900);
+    renderJourneyBar(beats, idx);
+    await delay(400);
+    await renderBeat(idx);
+    return;
+  }
+
+  const beats = getBeats(state.cancer, state.stage, state.cancerName);
+  state.beats = beats;
+  state.beatIdx = 0;
+  await aiSay(`これから、<strong style="color:var(--starlight)">「診断 → 検査 → 治療法を考える → 治療 → 治療中の暮らし → 治療後 → 制度・お金」</strong> を、一緒に、<strong>物語のように</strong> 見ていきましょう。<br><br><span class="small">急ぎません。途中で「不安」「もっと知りたい」と、いつでも、声をかけてください。</span>`, { thinkMs: 1400 });
+  await delay(1400);
+  renderJourneyBar(beats, 0);
+  await delay(400);
+  await renderBeat(0);
+}
+
+async function renderBeat(idx) {
+  state.beatIdx = idx;
+  const b = state.beats[idx];
+  setProgress(15 + (idx / state.beats.length) * 80, `${b.stepNum}/${state.beats.length} ・ ${b.chip}`);
+  renderJourneyBar(state.beats, idx);
+
+  await aiSay(`<strong style="color:var(--starlight-strong); font-size:1.04em; letter-spacing:0.04em;">【 ${b.title} 】</strong>`, { thinkMs: 900 });
+  await delay(600);
+  await aiSay(b.narrative, { thinkMs: 1500 });
+
+  if (b.stat) {
+    addStatBanner(b.stat);
+    await delay(2000);
+  }
+  if (b.visual) {
+    await delay(800);
+    renderBeatVisual(b.visual);
+    await delay(1400);
+  }
+
+  await delay(600);
+  addChoices([
+    { value: 'jrn-next',    label: nextBeatLabel() },
+    { value: 'jrn-deeper',  label: 'もっと詳しく聞きたい' },
+    { value: 'jrn-anxiety', label: 'いま、不安がある' },
+    { value: 'jrn-pause',   label: '今日はここまで', secondary: true }
+  ]);
+  state.step = 'journey';
+}
+
+function renderBeatVisual(visual) {
+  const grp = document.createElement('div');
+  grp.className = 'message-group';
+
+  if (visual.type === 'flow') {
+    grp.innerHTML = '<div class="journey-flow">' +
+      visual.items.map(it =>
+        `<div class="journey-flow-item" ${it.href ? `data-href="${it.href}" role="button" tabindex="0"` : ''}><span class="journey-flow-step">${it.step}</span><div class="journey-flow-text"><div class="journey-flow-label">${it.label}</div><div class="journey-flow-desc">${it.desc}</div></div></div>`
+      ).join('') + '</div>';
+  }
+  else if (visual.type === 'list') {
+    grp.innerHTML = '<div class="journey-list">' +
+      visual.items.map(it =>
+        `<div class="journey-list-item"><div class="journey-list-head">${it[visual.lead] || ''}</div><div class="journey-list-desc">${it[visual.desc] || ''}</div></div>`
+      ).join('') + '</div>';
+  }
+  else if (visual.type === 'genes') {
+    var ghtml = '<div class="journey-genes">';
+    visual.items.forEach(function(it){
+      var gene = (it.test || '').replace(/[（(].*$/, '').replace(/(遺伝子|融合|発現|検査|タンパク質|プロファイリング|受容体).*$/, '').trim();
+      if (!gene) gene = 'cancer';
+      var pubmed = 'https://pubmed.ncbi.nlm.nih.gov/?term=' + encodeURIComponent(gene + ' cancer treatment');
+      var anchor = /BRCA|HRR/.test(it.test || '') ? '#family' : '#driver';
+      var testEsc = (it.test || '').replace(/"/g, '');
+      ghtml += '<div class="gene-card">'
+        + '<button class="gene-head" type="button" aria-expanded="false"><span class="gene-name">' + (it.test || '') + '</span><span class="gene-chev">＋ タップで詳しく</span></button>'
+        + '<div class="gene-body"><div class="gene-meaning">' + (it.meaning || '') + '</div><div class="gene-actions">'
+        + '<a class="gene-act" href="SATOI_Mock_v1_KB_genome.html' + anchor + '">📖 もっと知る</a>'
+        + '<a class="gene-act" href="' + pubmed + '" target="_blank" rel="noopener">🔍 PubMedで調べる</a>'
+        + '<button class="gene-act gene-sdm" type="button" data-test="' + testEsc + '" data-url="' + pubmed + '">📎 SDMに追加</button>'
+        + '</div></div></div>';
+    });
+    ghtml += '</div>';
+    grp.innerHTML = ghtml;
+    setTimeout(function(){
+      grp.querySelectorAll('.gene-head').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var card = btn.closest('.gene-card');
+          var open = card.classList.toggle('open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          var chev = btn.querySelector('.gene-chev');
+          if (chev) chev.textContent = open ? '− 閉じる' : '＋ タップで詳しく';
+        });
+      });
+      grp.querySelectorAll('.gene-sdm').forEach(function(b){
+        b.addEventListener('click', function(e){ e.stopPropagation(); addGeneToSdm(b.getAttribute('data-test'), b.getAttribute('data-url')); });
+      });
+    }, 30);
+  }
+  else if (visual.type === 'team-circle') {
+    const roles = [
+      { name:'外科医',         icon:'🔪', sup:'がんを取り除く手術を担当。手術可能性・術式・術後の見通しをあなたと共有します。' },
+      { name:'腫瘍内科医',     icon:'💊', sup:'化学療法・分子標的薬・免疫療法など薬による治療をリード。あなたに合うレジメンを選定します。' },
+      { name:'放射線科医',     icon:'⚡', sup:'放射線治療の適応・線量・スケジュールを設計。副作用を最小限に抑えながら最大の効果を狙います。' },
+      { name:'病理医',         icon:'🔬', sus:'', sup:'がんのタイプ・グレード・遺伝子変異を顕微鏡で確定。あなたの治療方針の土台を作ります。' },
+      { name:'看護師',         icon:'👩‍⚕️', sup:'日常のつらさ・困りごとの最初の相談相手。副作用ケア・生活サポートを担当します。' },
+      { name:'薬剤師',         icon:'💊', sup:'薬の飲み合わせ・副作用予防策・服薬指導。「この薬って大丈夫?」を解決します。' },
+      { name:'緩和ケアチーム', icon:'🌿', sup:'痛み・つらさ・気持ちのケアを早期から伴走。「最後のため」ではなく「今を生きるため」のチームです。' },
+      { name:'SATOIコーディネーター', icon:'🤝', sup:'医療の外の伴走者。家族との会話、伝え方の練習、揺れている気持ちを、急がず聞きます。' }
+    ];
+    const total = roles.length;
+    grp.innerHTML = `<div class="journey-team-wrap"><div class="journey-team">
+      <div class="journey-team-center">あなた</div>
+      ${roles.map((r,i) => {
+        const angle = (i * (360/total));
+        return `<button class="journey-team-role btn-style" data-role-i="${i}" style="transform: translate(-50%, -50%) rotate(${angle}deg) translate(0, -150px) rotate(-${angle}deg);">
+          <div class="journey-team-node"><span class="journey-team-icon">${r.icon}</span></div>
+          <span class="journey-team-name">${r.name}</span>
+        </button>`;
+      }).join('')}
+    </div></div>
+    <div class="journey-team-detail" id="teamDetail">
+      <div class="team-detail-eyebrow">タップすると、その人があなたをどう支えるかが見えます</div>
+    </div>`;
+    // データを window に渡してクリックで詳細表示
+    setTimeout(() => {
+      const detailEl = document.getElementById('teamDetail');
+      grp.querySelectorAll('.journey-team-role').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const i = parseInt(btn.dataset.roleI, 10);
+          const r = roles[i];
+          if (detailEl) {
+            detailEl.innerHTML = `<div class="team-detail-icon">${r.icon}</div>
+              <div class="team-detail-body">
+                <div class="team-detail-name">${r.name}</div>
+                <div class="team-detail-sup">${r.sup}</div>
+              </div>`;
+          }
+        });
+      });
+    }, 30);
+  }
+  else if (visual.type === 'treatments') {
+    if (visual.items && visual.items.length > 0) {
+      addTreatments(visual.items, state.cancerName);
+      return;
+    }
+    grp.innerHTML = '<div class="journey-list"><div class="journey-list-item"><div class="journey-list-desc">治療法の詳細は、検査結果が出てから一緒に確認していきます。</div></div></div>';
+  }
+  else if (visual.type === 'side-items') {
+    const items = [
+      { title: '副作用の記録', desc: 'SATOIで毎日の体調・気持ちを記録 → 主治医・看護師と共有 → 厚労省にも連携(同意ベース)' },
+      { title: '仕事との両立', desc: '傷病手当金・休職・時短勤務の相談。会社との伝え方も支援します' },
+      { title: 'お金のこと', desc: '高額療養費・医療費控除・がん保険給付の手続きをチームでサポート' },
+      { title: '家族のこと', desc: '子ども・親への伝え方ガイド。家族自身のメンタルケアも、用意しています' }
+    ];
+    grp.innerHTML = '<div class="journey-list">' +
+      items.map(it => `<div class="journey-list-item"><div class="journey-list-head">${it.title}</div><div class="journey-list-desc">${it.desc}</div></div>`).join('') + '</div>';
+  }
+  else if (visual.type === 'follow-timeline') {
+    grp.innerHTML = `<div class="journey-follow">
+      <div class="follow-item"><div class="follow-month">~ 半年</div><div class="follow-desc">3か月ごとの検査・診察</div></div>
+      <div class="follow-item"><div class="follow-month">~ 3年</div><div class="follow-desc">3〜6か月ごとの検査</div></div>
+      <div class="follow-item"><div class="follow-month">~ 5年</div><div class="follow-desc">6か月〜1年ごとの検査</div></div>
+      <div class="follow-item"><div class="follow-month">~ 10年</div><div class="follow-desc">1年ごとの検査(再発リスクが下がる)</div></div>
+    </div>`;
+  }
+
+  dialogWrap.appendChild(grp);
+  scrollToBottom();
+}
+
+start();
+
+// ===== SDM「先生に聞きたいことカード」モーダル =====
+function openSdmModal() {
+  const overlay = document.getElementById('sdmOverlay');
+  if (!overlay) return;
+  // パーソナライズ:state.cancer / state.stage から差し込み
+  const cn = state.cancerName || 'がん';
+  const sg = state.stage || '?';
+  const titleEl = document.getElementById('sdmTitle');
+  if (titleEl) titleEl.textContent = `${cn} ステージ${sg} のあなたのための質問`;
+  const subEl = document.getElementById('sdmSubtitle');
+  if (subEl) subEl.textContent = `AIがこれまでの対話・同じ状況の方の頻出質問から、11問を準備しました。`;
+  overlay.classList.add('show');
+}
+function closeSdmModal() {
+  document.getElementById('sdmOverlay').classList.remove('show');
+}
+function addCustomSdmQ() {
+  const inp = document.getElementById('sdmCustomInput');
+  if (!inp || !inp.value.trim()) return;
+  const list = document.getElementById('sdmCustomList');
+  const li = document.createElement('div');
+  li.className = 'sdm-q checked';
+  li.innerHTML = `<span class="sdm-check"></span><span>${inp.value.replace(/</g,'&lt;')}</span><button class="sdm-remove" onclick="this.parentElement.remove()">×</button>`;
+  list.appendChild(li);
+  inp.value = '';
+  updateSdmCount();
+}
+function toggleSdmQ(el) {
+  el.classList.toggle('checked');
+  updateSdmCount();
+}
+function addGeneToSdm(test, url) {
+  var list = document.getElementById('sdmCustomList');
+  if (list) {
+    var li = document.createElement('div');
+    li.className = 'sdm-q checked';
+    var q = '「' + test + '」は、私のがんではどうですか?(先生に確認)';
+    li.innerHTML = '<span class="sdm-check"></span><span>' + q.replace(/</g, '&lt;')
+      + ' <a href="' + url + '" target="_blank" rel="noopener" style="color:#6FE0E5;text-decoration:underline;font-size:11.5px;">▸ 論文</a></span>'
+      + '<button class="sdm-remove" onclick="this.parentElement.remove()">×</button>';
+    list.appendChild(li);
+    if (typeof updateSdmCount === 'function') updateSdmCount();
+  }
+  if (typeof satoiNotify === 'function') satoiNotify('SDM質問カードに追加しました。先生に「' + test + '」を確認できます。');
+  if (typeof openSdmModal === 'function') openSdmModal();
+}
+function updateSdmCount() {
+  const n = document.querySelectorAll('#sdmOverlay .sdm-q.checked').length;
+  const el = document.getElementById('sdmCount');
+  if (el) el.textContent = n;
+}
+function sdmExport(type) {
+  const n = document.querySelectorAll('#sdmOverlay .sdm-q.checked').length;
+  const map = {
+    pdf:  `✓ PDF 出力(${n}問)\n\nA4一枚に整形して印刷できます。診察室にお持ちください。`,
+    qr:   `✓ QRコード生成(${n}問)\n\n診察室で先生のスマホに飛ばせます。読み取りで質問一覧が開きます。`,
+    mail: `✓ メール送信(${n}問)\n\n主治医・登録済みご家族に送信できます。`,
+    save: `✓ 物語の壺に記録(${n}問)\n\nマイページの「対話の足跡」に保存されました。`
+  };
+  alert(map[type] || '出力します');
+}
+
+// ===== Esc でモーダル閉じる =====
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.sdm-overlay.show').forEach(o => o.classList.remove('show'));
+  }
+});
+
+/* === A2 検査ビート ・ 検査項目クリックで B3 精密検査へ遷移 === */
+document.addEventListener('click', function(e) {
+  // 全体の流れフローアイテム(data-href 直結)
+  const flowItem = e.target.closest('.journey-flow-item[data-href]');
+  if (flowItem) {
+    const href = flowItem.getAttribute('data-href');
+    if (href) { location.href = href; return; }
+  }
+
+  // 検査リスト(従来のパターンマッチ式)
+  const t = e.target.closest('.journey-list-item, .journey-list-head');
+  if (!t) return;
+  const text = t.textContent || '';
+  let target = '';
+  if (/細胞診|組織診|病理|生検/.test(text)) target = 'histo';
+  else if (/CT|MRI|PET|超音波|画像/.test(text)) target = 'imaging';
+  else if (/遺伝子|コンパニオン|分子|BRCA|EGFR|HER2/.test(text)) target = 'genetic';
+  else if (/腫瘍マーカー|CEA|PSA|CA1[59]|CA125/.test(text)) target = 'marker';
+  if (target) {
+    location.href = 'SATOI_Mock_v1_CHP_exam.html?from=a2_exam#precision';
+  }
+});
+
+</script>
+
+<!-- ===== SDM 質問カード モーダル ===== -->
+<style>
+.sdm-overlay {
+  position: fixed; inset: 0;
+  background: rgba(11,23,54,0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 600;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 18px;
+}
+.sdm-overlay.show { display: flex; }
+.sdm-modal {
+  background: #F8F6F0;
+  color: #1A2A40;
+  border-radius: 22px;
+  max-width: 720px;
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  position: relative;
+  font-family: var(--font);
+}
+.sdm-modal-inner { padding: 40px 38px; }
+.sdm-close {
+  position: absolute; top: 14px; right: 18px;
+  background: transparent; border: none; font-size: 24px;
+  color: rgba(26,42,64,0.55); cursor: pointer;
+}
+.sdm-modal-header {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 22px;
+}
+.sdm-icon-big {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #D4622A; color: #F8F6F0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.sdm-title {
+  font-size: 22px; font-weight: 500; color: #1A2A40; line-height: 1.4;
+  margin-bottom: 4px;
+}
+.sdm-subtitle {
+  font-size: 13px; color: rgba(26,42,64,0.65); line-height: 1.8;
+}
+.sdm-summary-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 18px; background: rgba(212,98,42,0.10);
+  border-radius: 14px; margin-bottom: 22px;
+  font-size: 13px; color: #1A2A40;
+}
+.sdm-summary-bar strong { color: #D4622A; }
+.sdm-section-label {
+  font-size: 11px; letter-spacing: 0.24em;
+  color: #D4622A; text-transform: uppercase;
+  margin: 22px 0 10px;
+}
+.sdm-q-list {
+  display: grid; gap: 8px;
+}
+.sdm-q {
+  background: rgba(255,255,255,0.7);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  color: #1A2A40;
+  display: flex; align-items: center; gap: 12px;
+  line-height: 1.7;
+  cursor: pointer;
+  border: 1px solid rgba(26,42,64,0.06);
+  transition: all 0.18s;
+}
+.sdm-q:hover { border-color: rgba(212,98,42,0.4); }
+.sdm-check {
+  width: 18px; height: 18px;
+  border: 2px solid #D4622A; border-radius: 4px;
+  flex: 0 0 18px;
+  position: relative;
+}
+.sdm-q.checked { background: rgba(212,98,42,0.10); border-color: rgba(212,98,42,0.3); }
+.sdm-q.checked .sdm-check { background: #D4622A; }
+.sdm-q.checked .sdm-check::after {
+  content: '✓'; position: absolute;
+  left: 50%; top: 50%; transform: translate(-50%, -50%);
+  color: #F8F6F0; font-size: 13px;
+}
+.sdm-remove {
+  background: transparent; border: none;
+  color: rgba(26,42,64,0.4); cursor: pointer;
+  margin-left: auto; font-size: 16px;
+}
+.sdm-add-row {
+  margin-top: 18px; display: flex; gap: 8px;
+}
+.sdm-add-row input {
+  flex: 1; padding: 12px 16px;
+  border: 1px solid rgba(26,42,64,0.15);
+  border-radius: 14px; font-family: var(--font); font-size: 13px;
+  background: #fff; color: #1A2A40;
+}
+.sdm-add-row input:focus { outline: none; border-color: #D4622A; }
+.sdm-add-btn {
+  padding: 12px 18px; background: #1A2A40; color: #F8F6F0;
+  border: none; border-radius: 14px; font-family: var(--font);
+  font-size: 13px; cursor: pointer;
+}
+.sdm-actions {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-top: 26px; padding-top: 22px;
+  border-top: 1px solid rgba(26,42,64,0.08);
+}
+.sdm-action {
+  background: #F8F6F0; color: #D4622A;
+  border: 1px solid #D4622A;
+  padding: 10px 16px; border-radius: 20px;
+  font-family: var(--font); font-size: 13px;
+  cursor: pointer; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.sdm-action:hover { background: #D4622A; color: #F8F6F0; }
+.sdm-modal-foot {
+  margin-top: 18px; font-size: 11px; color: rgba(26,42,64,0.45); text-align: center;
+}
+
+/* ===== family-mode / palliative-mode / slow-pace ===== */
+body.family-mode {
+  background: linear-gradient(to bottom, #1A2548 0%, #2A3558 50%, #3A4570 100%);
+}
+body.family-mode .ai-orb {
+  background: radial-gradient(circle at 35% 35%, #E9D7C7 0%, #D4A95E 60%, rgba(212,169,94,0.3) 100%);
+}
+body.palliative-mode {
+  background: linear-gradient(to bottom, #1A1F35 0%, #232A4A 60%, #2E3552 100%);
+}
+body.palliative-mode .ai-orb {
+  animation-duration: 6s;
+  background: radial-gradient(circle at 35% 35%, #B5C7DD 0%, #7FA8C9 60%, rgba(127,168,201,0.3) 100%);
+  box-shadow: 0 0 18px rgba(127,168,201,0.45), 0 0 36px rgba(127,168,201,0.22);
+}
+body.palliative-mode .star { animation-duration: 7s; }
+body.slow-pace .ai-orb { animation-duration: 6s; }
+body.slow-pace .ai-bubble { line-height: 2.1; }
+body.slow-pace .star { animation-duration: 8s; }
+
+/* ===== ナラティブ・ジャーニー ===== */
+.journey-bar {
+  position: fixed;
+  top: 76px; left: 0; right: 0;
+  z-index: 90;
+  padding: 12px 24px;
+  background: rgba(11,23,54,0.78);
+  border-bottom: 1px solid rgba(248,246,240,0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow-x: auto;
+  white-space: nowrap;
+  display: none;
+}
+.journey-bar::-webkit-scrollbar { height: 4px; }
+.journey-bar::-webkit-scrollbar-thumb { background: rgba(212,169,94,0.3); border-radius: 2px; }
+.journey-bar-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+.journey-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 18px;
+  background: rgba(248,246,240,0.04);
+  border: 1px solid rgba(248,246,240,0.10);
+  color: rgba(248,246,240,0.55);
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: all 0.4s;
+}
+.journey-chip.done {
+  background: rgba(13,115,119,0.18);
+  border-color: rgba(13,115,119,0.45);
+  color: rgba(248,246,240,0.78);
+}
+.journey-chip.current {
+  background: rgba(212,169,94,0.22);
+  border-color: var(--starlight);
+  color: var(--starlight-strong);
+  font-weight: 500;
+  box-shadow: 0 0 14px rgba(212,169,94,0.25);
+}
+.journey-chip-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(248,246,240,0.08);
+  font-size: 10.5px;
+  flex-shrink: 0;
+}
+.journey-chip.done .journey-chip-num { background: var(--teal); color: var(--morning-white); }
+.journey-chip.current .journey-chip-num { background: var(--starlight); color: #0B1736; }
+.journey-arrow {
+  color: rgba(248,246,240,0.25);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+body.with-journey-bar .dialog-wrap {
+  padding-top: 138px !important;
+}
+
+/* journey-flow */
+.journey-flow {
+  display: grid;
+  gap: 10px;
+  max-width: 720px;
+  margin: 12px 0 4px;
+}
+.journey-flow-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: rgba(248,246,240,0.04);
+  border: 1px solid rgba(248,246,240,0.08);
+  border-radius: 12px;
+  padding: 14px 18px;
+  transition: all 0.2s;
+}
+.journey-flow-item[data-href] { cursor: pointer; }
+.journey-flow-item[data-href]:hover { background: rgba(248,246,240,0.08); transform: translateX(2px); }
+.journey-flow-item:hover {
+  border-color: rgba(212,169,94,0.35);
+  background: rgba(212,169,94,0.05);
+}
+.journey-flow-step {
+  flex-shrink: 0;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(212,169,94,0.15);
+  border: 1px solid var(--starlight);
+  color: var(--starlight-strong);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 500;
+}
+.journey-flow-text { flex: 1; }
+.journey-flow-label {
+  font-size: 14px; color: var(--text-primary);
+  margin-bottom: 4px; font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.journey-flow-desc {
+  font-size: 12.5px; color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+/* journey-list */
+.journey-list {
+  display: grid; gap: 8px;
+  max-width: 720px; margin: 8px 0;
+}
+.journey-list-item {
+  background: rgba(248,246,240,0.035);
+  border-left: 3px solid var(--teal);
+  border-radius: 8px;
+  padding: 12px 16px;
+  transition: all 0.2s;
+}
+.journey-list-item:hover {
+  background: rgba(13,115,119,0.10);
+  border-left-color: var(--starlight);
+}
+.journey-list-head {
+  font-size: 13.5px;
+  color: var(--starlight-soft);
+  margin-bottom: 4px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.journey-list-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+
+/* 遺伝子カード(開閉式・深掘り) */
+.journey-genes { display:grid; gap:10px; max-width:760px; margin:8px 0; }
+.gene-card { background: rgba(13,115,119,0.10); border:1px solid rgba(13,115,119,0.38); border-radius:12px; overflow:hidden; transition: background .25s, border-color .25s; }
+.gene-card.open { background: rgba(13,115,119,0.16); border-color: rgba(212,169,94,0.6); }
+.gene-head { width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; background:transparent; border:none; padding:14px 18px; text-align:left; color:#F0C97A; }
+.gene-name { font-size:15px; font-weight:600; letter-spacing:0.02em; }
+.gene-chev { font-size:11.5px; color:#9FC0DC; white-space:nowrap; }
+.gene-body { max-height:0; overflow:hidden; transition:max-height .3s ease; padding:0 18px; }
+.gene-card.open .gene-body { max-height:600px; padding:0 18px 16px; }
+.gene-meaning { font-size:13.5px; color:rgba(248,246,240,0.85); line-height:1.95; margin-bottom:14px; }
+.gene-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.gene-act { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:500; padding:8px 14px; border-radius:18px; border:1px solid rgba(212,169,94,0.5); color:#F0C97A; background:rgba(11,23,54,0.4); text-decoration:none; font-family:inherit; cursor:pointer; }
+.gene-act:hover { background:#D4A95E; color:#0B1736; border-color:#D4A95E; }
+
+/* journey-team(キャンサーボード輪・改修版) */
+.journey-team-wrap {
+  display: flex; justify-content: center;
+  flex-direction: column; align-items: center;
+  margin: 24px 0 8px;
+}
+.journey-team {
+  position: relative;
+  width: 420px; height: 420px;
+  margin: 0 auto 16px;
+}
+.journey-team::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 320px; height: 320px;
+  transform: translate(-50%, -50%);
+  border: 1px dashed rgba(212,169,94,0.30);
+  border-radius: 50%;
+}
+.journey-team-center {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 108px; height: 108px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--starlight), var(--warm-orange));
+  color: #0B1736;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  box-shadow: 0 0 36px rgba(212,169,94,0.45), 0 0 72px rgba(212,169,94,0.22);
+  z-index: 3;
+}
+.journey-team-role {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 110px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-primary);
+  line-height: 1.4;
+  background: none; border: none; padding: 0; cursor: pointer;
+  font-family: var(--font);
+  z-index: 2;
+  transition: transform 0.25s;
+}
+.journey-team-role:hover {
+  z-index: 5;
+}
+.journey-team-role:hover .journey-team-node {
+  transform: scale(1.12);
+  border-color: var(--starlight);
+}
+.journey-team-node {
+  width: 64px; height: 64px;
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  background: rgba(248,246,240,0.10);
+  border: 2px solid var(--teal);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 18px rgba(10,22,40,0.16);
+  transition: transform 0.25s, border-color 0.25s;
+}
+.journey-team-icon {
+  font-size: 28px;
+}
+.journey-team-name {
+  display: inline-block;
+  padding: 4px 10px;
+  background: rgba(248,246,240,0.05);
+  border-radius: 12px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  border: 1px solid rgba(248,246,240,0.10);
+}
+
+.journey-team-detail {
+  max-width: 520px;
+  background: rgba(248,246,240,0.05);
+  border: 1px solid rgba(248,246,240,0.12);
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex; gap: 16px;
+  align-items: flex-start;
+  min-height: 80px;
+}
+.team-detail-eyebrow {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-align: center; width: 100%;
+}
+.team-detail-icon {
+  font-size: 28px; flex-shrink: 0;
+  background: rgba(212,169,94,0.15);
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.team-detail-body { flex: 1; }
+.team-detail-name {
+  font-size: 14px; font-weight: 500;
+  color: var(--starlight-strong);
+  margin-bottom: 6px;
+}
+.team-detail-sup {
+  font-size: 12.5px;
+  color: var(--text-on-dark);
+  line-height: 1.85;
+}
+
+/* 旧 dot は残しておく(下位互換) */
+.journey-team-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--teal);
+  margin: 0 auto 4px;
+  box-shadow: 0 0 10px rgba(13,115,119,0.55);
+}
+
+/* journey-follow */
+.journey-follow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  max-width: 720px;
+  margin: 12px 0 4px;
+}
+.follow-item {
+  background: rgba(248,246,240,0.04);
+  border: 1px solid rgba(248,246,240,0.08);
+  border-radius: 10px;
+  padding: 14px 14px;
+  text-align: center;
+}
+.follow-month {
+  color: var(--starlight);
+  font-size: 13px;
+  margin-bottom: 6px;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+.follow-desc {
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  line-height: 1.6;
+}
+
+@media (max-width: 720px) {
+  .journey-bar { top: 64px; padding: 10px 14px; }
+  body.with-journey-bar .dialog-wrap { padding-top: 130px !important; }
+  .journey-team { width: 280px; height: 280px; }
+  .journey-team-role { transform-origin: center !important; }
+  .journey-team-role { width: 70px; font-size: 10px; }
+}
+</style>
+
+<div class="sdm-overlay" id="sdmOverlay">
+  <div class="sdm-modal">
+    <div class="sdm-modal-inner">
+      <button class="sdm-close" onclick="closeSdmModal()">×</button>
+
+      <div class="sdm-modal-header">
+        <div class="sdm-icon-big">📋</div>
+        <div>
+          <div class="sdm-title" id="sdmTitle">先生に、聞きたいことカード</div>
+          <div class="sdm-subtitle" id="sdmSubtitle">AIがこれまでの対話と、同じ状況の方の頻出質問から、11問を準備しました。</div>
+        </div>
+      </div>
+
+      <div class="sdm-summary-bar">
+        <span>準備中の質問:<strong id="sdmCount">11</strong> 問 ・ 次回診察:<strong>3日後</strong></span>
+        <span style="font-size:11px; opacity:0.7;">不要なものはチェックを外して、必要なものを追加できます</span>
+      </div>
+
+      <div class="sdm-section-label">優先度・高(治療の本質)</div>
+      <div class="sdm-q-list">
+        <div class="sdm-q checked" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span>提案された治療の <strong>目的</strong> は、完治・延命・症状緩和のどれを目指しますか?</span></div>
+        <div class="sdm-q checked" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span>なぜ、私のステージで、この治療が <strong>第一選択</strong> なのですか?</span></div>
+        <div class="sdm-q checked" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span>この治療を <strong>受けない場合</strong>、何が起こりますか?</span></div>
+        <div class="sdm-q checked" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span><strong>セカンドオピニオン</strong> を受けたいです、紹介状をいただけますか?</span></div>
+      </div>
+
+      <div class="sdm-section-label">優先度・中(生活・副作用)</div>
+      <div class="sdm-q-list">
+        <div class="sdm-q checked" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span>副作用の中で、特に注意すべきものは何ですか?</span></div>
+        <div class="sdm-q" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span>治療を <strong>続けながら仕事</strong> を続けることは、可能ですか?</span></div>
+        <div class="sdm-q" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span>副作用がつらすぎたら、どのタイミングで相談すべきですか?</span></div>
+      </div>
+
+      <div class="sdm-section-label">家族・お金</div>
+      <div class="sdm-q-list">
+        <div class="sdm-q checked" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span>家族(子ども・親)に、<strong>どう伝えれば</strong> よいでしょうか?</span></div>
+        <div class="sdm-q checked" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span>治療費の見通しと、<strong>高額療養費</strong> の申請について教えてください</span></div>
+        <div class="sdm-q" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span><strong>傷病手当金</strong> や 医療費控除 は、私の場合適用されますか?</span></div>
+        <div class="sdm-q" onclick="toggleSdmQ(this)"><span class="sdm-check"></span><span>仕事のスケジュール調整は、どのくらい必要ですか?</span></div>
+      </div>
+
+      <div class="sdm-section-label">あなたの質問を、追加(AIが整える)</div>
+      <div id="sdmCustomList" class="sdm-q-list"></div>
+      <div class="sdm-add-row">
+        <input id="sdmCustomInput" type="text" placeholder="例:このままだと再発リスクはどのくらい? と、AIに整えてもらう" onkeydown="if(event.key==='Enter'){addCustomSdmQ();}">
+        <button class="sdm-add-btn" onclick="addCustomSdmQ()">+ 追加</button>
+      </div>
+
+      <div class="sdm-actions">
+        <button class="sdm-action" onclick="sdmExport('pdf')">📄 PDFで印刷</button>
+        <button class="sdm-action" onclick="sdmExport('qr')">📱 QRで先生に共有</button>
+        <button class="sdm-action" onclick="sdmExport('mail')">✉️ メール送信(主治医・家族)</button>
+        <button class="sdm-action" onclick="sdmExport('save')">💎 物語の壺に記録</button>
+      </div>
+
+      <div class="sdm-modal-foot">
+        質問データは、あなたの同意なしに、誰にも共有されません。<br>
+        厚労省・保険会社・家族 への共有は、すべて あなたが選んだ時だけ 行われます。
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="satoi_common.js"></script>
+<script src="satoi_chat_api.js"></script>
+</body>
+</html>

@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - 緊急QR ・ 救急現場での開示</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --emergency-red: #B85450;
+  --emergency-red-glow: #D86560;
+  --warm-orange: #D4622A;
+  --warm-coral: #E08461;
+  --starlight: #D4A95E;
+  --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0;
+  --morning-cream: #F6EFE3;
+  --teal: #0D7377;
+  --teal-soft: #14A6AB;
+  --healing-blue: #7FA8C9;
+  --ink-deep: #1A2A40;
+  --ink-medium: rgba(26,42,64,0.75);
+  --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+body {
+  font-family: var(--font);
+  color: var(--ink-deep);
+  background: linear-gradient(135deg, #0B1736 0%, #1A2548 100%);
+  line-height: 1.8;
+  font-size: 16px;
+  min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); cursor: pointer; }
+
+/* === ヘッダー === */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 16px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(11,23,54,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(248,246,240,0.08);
+}
+.logo {
+  font-size: 20px; font-weight: 500; letter-spacing: 0.22em;
+  color: var(--morning-white);
+  display: inline-flex; align-items: center;
+}
+.logo .dot {
+  width: 8px; height: 8px;
+  background: var(--emergency-red-glow);
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 0 12px var(--emergency-red-glow);
+  animation: emergencyPulse 1.4s infinite;
+}
+@keyframes emergencyPulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.18); }
+}
+.back-btn {
+  padding: 8px 18px;
+  background: rgba(248,246,240,0.08);
+  color: var(--morning-white);
+  border: 1px solid rgba(248,246,240,0.22);
+  border-radius: 20px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+.back-btn:hover { background: rgba(248,246,240,0.15); border-color: var(--starlight); }
+
+/* === メイン === */
+.emg-wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 110px 28px 80px;
+}
+
+/* === 緊急ヒーローバナー === */
+.emg-banner {
+  background: linear-gradient(135deg, #B85450 0%, #D4622A 100%);
+  border-radius: 24px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 28px;
+  box-shadow: 0 16px 50px rgba(184,84,80,0.4);
+  position: relative;
+  overflow: hidden;
+}
+.emg-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(248,246,240,0.18), transparent 60%);
+  pointer-events: none;
+}
+.emg-icon {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: rgba(248,246,240,0.18);
+  border: 2px solid rgba(248,246,240,0.42);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  flex-shrink: 0;
+  animation: emergencyPulse 1.6s infinite;
+}
+.emg-banner-text {
+  color: white;
+  flex: 1;
+}
+.emg-banner-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  margin-bottom: 6px;
+  opacity: 0.92;
+}
+.emg-banner-title {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+.emg-banner-sub {
+  font-size: 13px;
+  opacity: 0.88;
+  line-height: 1.7;
+}
+
+/* === グリッド: QR + 開示内容 === */
+.emg-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 28px;
+  margin-bottom: 28px;
+}
+.emg-qr-card {
+  background: var(--morning-white);
+  border-radius: 22px;
+  padding: 28px 24px 24px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+  text-align: center;
+}
+.emg-qr-title {
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  color: var(--emergency-red);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.emg-qr {
+  width: 240px; height: 240px;
+  margin: 0 auto 16px;
+  background: white;
+  border: 3px solid var(--ink-deep);
+  border-radius: 14px;
+  padding: 12px;
+  display: block;
+}
+.emg-qr svg { width: 100%; height: 100%; }
+.emg-qr-id {
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--ink-light);
+  letter-spacing: 0.18em;
+  margin-bottom: 6px;
+}
+.emg-qr-time {
+  font-size: 12px;
+  color: var(--ink-medium);
+  margin-bottom: 14px;
+}
+.emg-qr-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--emergency-red);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.emg-qr-btn:hover { background: var(--emergency-red-glow); }
+.emg-qr-btn.secondary { background: var(--ink-deep); }
+.emg-qr-btn.secondary:hover { background: var(--night-medium); }
+.emg-qr-note {
+  font-size: 10.5px;
+  color: var(--ink-light);
+  margin-top: 10px;
+  line-height: 1.7;
+}
+
+/* 開示内容パネル */
+.emg-content {
+  background: var(--morning-white);
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+}
+.emg-content-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+.emg-tab {
+  padding: 12px 18px;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  color: var(--ink-medium);
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  font-family: var(--font);
+  transition: color 0.2s;
+}
+.emg-tab.active {
+  color: var(--emergency-red);
+  font-weight: 600;
+}
+.emg-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 18px; right: 18px;
+  height: 2.5px;
+  background: var(--emergency-red);
+  border-radius: 2px;
+}
+.emg-tab-pane { display: none; }
+.emg-tab-pane.active { display: block; animation: tabFade 0.4s ease; }
+@keyframes tabFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.emg-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 18px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 13.5px;
+}
+.emg-row:last-child { border-bottom: none; }
+.emg-row-label {
+  color: var(--ink-light);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  padding-top: 2px;
+}
+.emg-row-value {
+  color: var(--ink-deep);
+  line-height: 1.75;
+}
+.emg-row-value strong { color: var(--emergency-red); }
+
+.emg-warn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(184,84,80,0.10);
+  color: var(--emergency-red);
+  border: 1px solid rgba(184,84,80,0.3);
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 6px;
+  margin-bottom: 4px;
+}
+.emg-chip {
+  display: inline-flex;
+  padding: 3px 9px;
+  background: rgba(212,169,94,0.18);
+  color: #8B5A1F;
+  border-radius: 10px;
+  font-size: 11px;
+  margin-right: 4px;
+  margin-bottom: 3px;
+}
+
+/* === 開示同意 === */
+.emg-consent {
+  background: rgba(255,253,247,0.96);
+  border-radius: 18px;
+  padding: 22px 26px;
+  margin-bottom: 22px;
+  border-left: 4px solid var(--starlight);
+}
+.emg-consent-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-deep);
+  margin-bottom: 8px;
+}
+.emg-consent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.emg-consent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.emg-consent-row input { cursor: pointer; }
+.emg-consent-row.locked {
+  background: rgba(212,169,94,0.10);
+  border-color: rgba(212,169,94,0.4);
+  cursor: not-allowed;
+}
+
+/* === 連絡先 === */
+.emg-contacts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+.emg-contact-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(13,115,119,0.06);
+  border: 1px solid rgba(13,115,119,0.18);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.emg-contact-card:hover {
+  background: rgba(13,115,119,0.12);
+  border-color: var(--teal);
+  transform: translateY(-2px);
+}
+.emg-contact-role {
+  font-size: 11px;
+  color: var(--teal);
+  margin-bottom: 2px;
+}
+.emg-contact-name {
+  font-size: 13.5px;
+  color: var(--ink-deep);
+  font-weight: 500;
+}
+.emg-contact-num {
+  font-size: 12px;
+  color: var(--ink-light);
+  font-family: monospace;
+}
+.emg-contact-call {
+  margin-left: auto;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* === ACP === */
+.emg-acp {
+  background: linear-gradient(135deg, rgba(127,168,201,0.10), rgba(212,169,94,0.10));
+  border-radius: 16px;
+  padding: 20px 24px;
+  border: 1px solid rgba(127,168,201,0.3);
+  font-size: 13px;
+  line-height: 1.95;
+  color: var(--ink-medium);
+}
+.emg-acp strong { color: var(--ink-deep); }
+
+/* === フッターアクション === */
+.emg-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+.emg-foot-btn {
+  padding: 14px 26px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.emg-foot-btn-primary {
+  background: var(--morning-white);
+  color: var(--emergency-red);
+}
+.emg-foot-btn-primary:hover { background: var(--starlight-strong); color: var(--ink-deep); }
+.emg-foot-btn-ghost {
+  background: transparent;
+  color: var(--morning-white);
+  border: 1px solid rgba(248,246,240,0.42);
+}
+.emg-foot-btn-ghost:hover { background: rgba(248,246,240,0.10); }
+
+@media (max-width: 768px) {
+  .emg-grid { grid-template-columns: 1fr; }
+  .emg-banner { flex-direction: column; text-align: center; padding: 22px; }
+  .emg-qr { width: 200px; height: 200px; }
+  .header { padding: 12px 16px; }
+  .emg-wrap { padding: 96px 16px 60px; }
+}
+
+/* === SATOI 共通リッチトースト(alert置換)=== */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: "Noto Sans JP", "Meiryo UI", sans-serif; font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast.warn { border-left-color: #D4622A; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast.warn .satoi-toast-icon { background: rgba(212,98,42,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+.satoi-toast-close:hover { color: #F0C97A; }
+.satoi-toast-cta { margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(212,169,94,0.20); color: #F0C97A; border: 1px solid rgba(212,169,94,0.5); border-radius: 14px; font-size: 11.5px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.satoi-toast-cta:hover { background: #D4A95E; color: #0B1736; }
+@media (max-width: 768px) {
+  #satoi-toast-host { bottom: 14px; }
+  .satoi-toast { min-width: auto; width: calc(100vw - 28px); padding: 14px 16px; font-size: 12.5px; }
+}
+
+
+/* === SATOI 共通モバイル対応(iPad/iPhone)=== */
+@media (max-width: 1024px) {
+  /* iPad 縦 ・ ヘッダー狭め */
+  .header { padding: 14px 22px !important; }
+  .section, .wrap, .container, main, .main { padding-left: 22px !important; padding-right: 22px !important; }
+}
+@media (max-width: 768px) {
+  /* iPhone ・ 主要メトリクスをモバイル最適化 */
+  html { font-size: 15px; }
+  body { font-size: 15px; line-height: 1.75; }
+  .header { padding: 12px 14px !important; }
+  h1, .hero-title, .hero-title-l1 { font-size: clamp(24px, 6vw, 32px) !important; line-height: 1.5 !important; }
+  h2, .section-title, .nbm-title, .mission-line { font-size: clamp(20px, 5vw, 28px) !important; line-height: 1.55 !important; }
+  h3 { font-size: 17px !important; }
+  .section, .container, .wrap, main, .main, section { padding-left: 14px !important; padding-right: 14px !important; }
+  section, .section { padding-top: 50px !important; padding-bottom: 50px !important; }
+  /* グリッドを1列に */
+  .grid, .cards, .types-grid, .stories-grid, .forum-grid, .family-grid, .promise-list, .partner-grid, .gov-grid, .numbers-grid, .empse-grid, .pubmed-list, .sources-grid, .criteria-grid, .tx-cat-grid, .map-wrap, .emg-grid, .emg-consent-grid, .emg-contacts, .kids-talk-wrap, .cat-grid, .videos-grid, .cat-cards, .partner-cards, .promise-cards, .principle-cards, .pricing-grid, .pricing-cards, .step-cards, .info-cards, .role-cards, .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  /* 横スクロールのみ許す要素は残す */
+  .b1-journey-bar, .journey-bar, .types-tabs { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  /* ヒーローの padding 圧縮 */
+  .hero { padding: 90px 14px 50px !important; min-height: auto !important; }
+  /* 大きい見出し */
+  .opener-line { font-size: 24px !important; margin-bottom: 40px !important; }
+  /* タップ領域 44px 最低 */
+  .btn, button, .login-btn, .nav-mini a, .filter-chip, .cat-card, .type-card, .story-card, .forum-card { min-height: 40px; }
+  /* テーブル横スクロール */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* マイチーム ホイール → 縦並びに */
+  .team-wheel-wrap, .team-wheel { width: 100% !important; height: auto !important; min-height: 360px; }
+  /* モーダル系: 画面いっぱいに */
+  .modal, .overlay-modal, [class*='Modal'], [class*='modal'] { max-width: 100vw !important; }
+  /* ナビ縮小 */
+  .nav-mini, .nav { gap: 12px !important; font-size: 12px !important; }
+  /* フォーム入力 */
+  input, textarea, select { font-size: 16px !important; } /* iOSのズーム防止 */
+  /* SVG レーダーチャートの収まり */
+  .empse-chart, .empse-chart-wrap { width: 100% !important; max-width: 320px; height: auto !important; margin: 0 auto !important; }
+  /* B1 7ステップを横スクロールに */
+  .steps-row { overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 10px; }
+  .steps-row .step { flex-shrink: 0; min-width: 80px; }
+  /* G2 サイドナビは画面下部固定 or hamburger 想定 */
+  .sidebar, .side-nav, .g2-sidebar { position: relative !important; width: 100% !important; height: auto !important; overflow-x: auto !important; display: flex !important; }
+}
+@media (max-width: 480px) {
+  /* 極小画面 */
+  .hero { padding: 80px 12px 40px !important; }
+  .b1-journey-bar { padding: 8px 10px !important; }
+  .satoi-toast { font-size: 12px; padding: 12px 14px; }
+}
+
+
+/* === SATOI ユニバーサル横断ナビ(戻る/ホーム/言語) === */
+#satoi-univ-nav { position: fixed; top: 50%; right: 14px; transform: translateY(-50%); z-index: 9998; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.satoi-univ-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(11,23,54,0.85); color: #F0C97A; border: 1px solid rgba(212,169,94,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s; box-shadow: 0 6px 18px rgba(11,23,54,0.25); font-family: inherit; }
+.satoi-univ-btn:hover { background: #D4A95E; color: #0B1736; transform: scale(1.1); }
+.satoi-univ-btn[title]::after { content: attr(title); position: absolute; right: 54px; background: rgba(11,23,54,0.92); color: #F8F6F0; font-size: 11px; padding: 4px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.satoi-univ-btn:hover::after { opacity: 1; }
+.satoi-lang-pop { position: absolute; right: 54px; top: 0; background: rgba(11,23,54,0.94); border: 1px solid rgba(212,169,94,0.4); border-radius: 12px; padding: 6px; min-width: 130px; display: none; flex-direction: column; gap: 2px; box-shadow: 0 14px 30px rgba(0,0,0,0.4); }
+.satoi-lang-pop.show { display: flex; }
+.satoi-lang-opt { padding: 8px 14px; border-radius: 8px; color: #F8F6F0; font-size: 12px; cursor: pointer; text-align: left; background: transparent; border: none; font-family: inherit; }
+.satoi-lang-opt:hover { background: rgba(212,169,94,0.18); color: #F0C97A; }
+.satoi-lang-opt.active { background: rgba(212,169,94,0.25); color: #F0C97A; font-weight: 600; }
+@media (max-width: 768px) { #satoi-univ-nav { right: 8px; bottom: 80px; top: auto; transform: none; } .satoi-univ-btn { width: 40px; height: 40px; font-size: 14px; } }
+
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_F4_side_effects.html" class="logo"><span class="dot"></span>SATOI ・ 緊急開示</a>
+  <button class="back-btn" onclick="history.back()">← 戻る</button>
+</header>
+
+<main class="emg-wrap">
+
+  <!-- 緊急バナー -->
+  <div class="emg-banner">
+    <div class="emg-icon">🚨</div>
+    <div class="emg-banner-text">
+      <div class="emg-banner-eyebrow">EMERGENCY ACCESS</div>
+      <div class="emg-banner-title">救急現場での、SATOI 緊急QR</div>
+      <div class="emg-banner-sub">救急隊員・当直医に、現病歴・服薬・副作用・連絡先・ACP を即時開示します。<br>QRをスキャンするだけで、紙のお薬手帳・診療情報提供書の代わりになります。</div>
+    </div>
+  </div>
+
+  <!-- QR + 開示内容 -->
+  <div class="emg-grid">
+    <!-- QRカード -->
+    <div class="emg-qr-card">
+      <div class="emg-qr-title">SATOI EMERGENCY QR</div>
+      <div class="emg-qr" style="position:relative;">
+        <div id="emgQrCanvas" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:white; padding:10px; box-sizing:border-box;"></div>
+        <div style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); background:white; padding:6px 10px; border:2px solid #B85450; border-radius:4px; font-size:13px; font-weight:700; color:#B85450; font-family:'Noto Sans JP',sans-serif; pointer-events:none;">SATOI</div>
+        <!-- 旧:簡易QR風 SVG(redoQr()でリアルQR生成に置き換え。下記は印刷フォールバック用に残置) -->
+        <svg style="display:none;" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="0" width="200" height="200" fill="white"/>
+          <!-- ファインダーパターン x3 -->
+          <g fill="#1A2A40">
+            <rect x="10" y="10" width="50" height="50"/>
+            <rect x="20" y="20" width="30" height="30" fill="white"/>
+            <rect x="25" y="25" width="20" height="20"/>
+            <rect x="140" y="10" width="50" height="50"/>
+            <rect x="150" y="20" width="30" height="30" fill="white"/>
+            <rect x="155" y="25" width="20" height="20"/>
+            <rect x="10" y="140" width="50" height="50"/>
+            <rect x="20" y="150" width="30" height="30" fill="white"/>
+            <rect x="25" y="155" width="20" height="20"/>
+          </g>
+          <!-- データセル(疑似ランダムだが規則性) -->
+          <g fill="#1A2A40">
+            <rect x="70" y="10" width="8" height="8"/>
+            <rect x="86" y="10" width="8" height="8"/>
+            <rect x="110" y="10" width="8" height="8"/>
+            <rect x="126" y="10" width="8" height="8"/>
+            <rect x="70" y="26" width="8" height="8"/>
+            <rect x="94" y="26" width="8" height="8"/>
+            <rect x="118" y="26" width="8" height="8"/>
+            <rect x="70" y="42" width="8" height="8"/>
+            <rect x="86" y="42" width="8" height="8"/>
+            <rect x="102" y="42" width="8" height="8"/>
+            <rect x="126" y="42" width="8" height="8"/>
+            <rect x="70" y="58" width="8" height="8"/>
+            <rect x="94" y="58" width="8" height="8"/>
+            <rect x="110" y="58" width="8" height="8"/>
+            <rect x="10" y="70" width="8" height="8"/>
+            <rect x="26" y="70" width="8" height="8"/>
+            <rect x="42" y="70" width="8" height="8"/>
+            <rect x="58" y="70" width="8" height="8"/>
+            <rect x="74" y="70" width="8" height="8"/>
+            <rect x="90" y="70" width="8" height="8"/>
+            <rect x="106" y="70" width="8" height="8"/>
+            <rect x="122" y="70" width="8" height="8"/>
+            <rect x="138" y="70" width="8" height="8"/>
+            <rect x="154" y="70" width="8" height="8"/>
+            <rect x="170" y="70" width="8" height="8"/>
+            <rect x="186" y="70" width="8" height="8"/>
+            <rect x="18" y="86" width="8" height="8"/>
+            <rect x="34" y="86" width="8" height="8"/>
+            <rect x="50" y="86" width="8" height="8"/>
+            <rect x="66" y="86" width="8" height="8"/>
+            <rect x="82" y="86" width="8" height="8"/>
+            <rect x="98" y="86" width="8" height="8"/>
+            <rect x="114" y="86" width="8" height="8"/>
+            <rect x="130" y="86" width="8" height="8"/>
+            <rect x="146" y="86" width="8" height="8"/>
+            <rect x="162" y="86" width="8" height="8"/>
+            <rect x="178" y="86" width="8" height="8"/>
+            <rect x="10" y="102" width="8" height="8"/>
+            <rect x="42" y="102" width="8" height="8"/>
+            <rect x="58" y="102" width="8" height="8"/>
+            <rect x="90" y="102" width="8" height="8"/>
+            <rect x="106" y="102" width="8" height="8"/>
+            <rect x="138" y="102" width="8" height="8"/>
+            <rect x="170" y="102" width="8" height="8"/>
+            <rect x="186" y="102" width="8" height="8"/>
+            <rect x="26" y="118" width="8" height="8"/>
+            <rect x="50" y="118" width="8" height="8"/>
+            <rect x="74" y="118" width="8" height="8"/>
+            <rect x="98" y="118" width="8" height="8"/>
+            <rect x="122" y="118" width="8" height="8"/>
+            <rect x="146" y="118" width="8" height="8"/>
+            <rect x="170" y="118" width="8" height="8"/>
+            <rect x="10" y="134" width="8" height="8"/>
+            <rect x="42" y="134" width="8" height="8"/>
+            <rect x="66" y="134" width="8" height="8"/>
+            <rect x="90" y="134" width="8" height="8"/>
+            <rect x="114" y="134" width="8" height="8"/>
+            <rect x="138" y="134" width="8" height="8"/>
+            <rect x="162" y="134" width="8" height="8"/>
+            <rect x="186" y="134" width="8" height="8"/>
+            <rect x="74" y="150" width="8" height="8"/>
+            <rect x="90" y="150" width="8" height="8"/>
+            <rect x="106" y="150" width="8" height="8"/>
+            <rect x="138" y="150" width="8" height="8"/>
+            <rect x="154" y="150" width="8" height="8"/>
+            <rect x="178" y="150" width="8" height="8"/>
+            <rect x="70" y="166" width="8" height="8"/>
+            <rect x="94" y="166" width="8" height="8"/>
+            <rect x="118" y="166" width="8" height="8"/>
+            <rect x="146" y="166" width="8" height="8"/>
+            <rect x="170" y="166" width="8" height="8"/>
+            <rect x="86" y="182" width="8" height="8"/>
+            <rect x="110" y="182" width="8" height="8"/>
+            <rect x="134" y="182" width="8" height="8"/>
+            <rect x="158" y="182" width="8" height="8"/>
+            <rect x="182" y="182" width="8" height="8"/>
+          </g>
+          <!-- 中央のSATOIロゴ -->
+          <rect x="78" y="78" width="44" height="44" fill="white" stroke="#B85450" stroke-width="2"/>
+          <text x="100" y="106" text-anchor="middle" font-size="11" font-weight="700" fill="#B85450" font-family="Noto Sans JP">SATOI</text>
+        </svg>
+      </div>
+      <div class="emg-qr-id" id="qrId">ID: SATOI-EMG-7842-26519</div>
+      <div class="emg-qr-time" id="qrTime">発行: 2026-05-19 19:42 ・ 15分有効</div>
+      <button class="emg-qr-btn" onclick="redoQr()">🔄 QR を再発行(15分)</button>
+      <button class="emg-qr-btn secondary" onclick="satoiNotify('救急隊・当直医が手元のスマホでスキャンできます。\\n\\n通信圏外でも、SATOIアプリ起動中ならBluetooth/NFCで直接転送できます(R3で実装)')">📡 オフライン転送</button>
+      <div class="emg-qr-note">
+        ※ QRは15分間のみ有効・スキャン履歴は本人のC1に記録 ・ 救急隊・医療機関の閲覧は1回限り
+      </div>
+    </div>
+
+    <!-- 開示内容 -->
+    <div class="emg-content">
+      <div class="emg-content-tabs">
+        <button class="emg-tab active" data-tab="medical">医療情報</button>
+        <button class="emg-tab" data-tab="meds">服薬・副作用</button>
+        <button class="emg-tab" data-tab="contacts">連絡先</button>
+        <button class="emg-tab" data-tab="acp">ACP・意思表示</button>
+        <button class="emg-tab" data-tab="insurance">保険・支払</button>
+        <button class="emg-tab" data-tab="ai-report">🤖 AI搬送アドバイス</button>
+      </div>
+
+      <!-- 医療情報 -->
+      <div class="emg-tab-pane active" id="tab-medical">
+        <div class="emg-row">
+          <div class="emg-row-label">氏名</div>
+          <div class="emg-row-value">M. K. さん(58歳 ・ 女性)<br><span style="font-size:11.5px; color:var(--ink-light);">SATOI ID: 0000-7842</span></div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">血液型</div>
+          <div class="emg-row-value">O型 RH+</div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">主疾患</div>
+          <div class="emg-row-value"><strong>乳がん StageII (Luminal A)</strong> ・ 2026-04-08 告知 ・ 現在 TC療法 3クール目</div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">治療歴</div>
+          <div class="emg-row-value">
+            乳房温存手術 (2026-04-22)<br>
+            放射線療法 25回 完了 (2026-05-05)<br>
+            化学療法 TC (ドセタキセル+シクロホスファミド) 開始 2026-05-12
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">アレルギー</div>
+          <div class="emg-row-value">
+            <span class="emg-warn-chip">⚠ ペニシリン系</span>
+            <span class="emg-warn-chip">⚠ 造影剤(イオパミドール)</span>
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">既往歴</div>
+          <div class="emg-row-value">
+            <span class="emg-chip">高血圧 (内服中)</span>
+            <span class="emg-chip">脂質異常症</span>
+            <span class="emg-chip">帝王切開 (2008)</span>
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">最終診察</div>
+          <div class="emg-row-value">2026-05-15 ・ 主治医面談 ・ CT予定 2026-05-22</div>
+        </div>
+      </div>
+
+      <!-- 服薬・副作用 -->
+      <div class="emg-tab-pane" id="tab-meds">
+        <div class="emg-row">
+          <div class="emg-row-label">現在の<br>抗がん剤</div>
+          <div class="emg-row-value">
+            <strong>ドセタキセル 60mg/m² + シクロホスファミド 600mg/m²</strong><br>
+            3週間隔 ・ 次回 2026-05-26<br>
+            <span style="color:var(--ink-light); font-size:12px;">前投薬: デキサメタゾン・グラニセトロン</span>
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">支持療法</div>
+          <div class="emg-row-value">
+            プレドニン 5mg/日 ・ オランザピン 2.5mg(吐き気時) ・ アムロジピン 5mg(高血圧)
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">直近24h<br>副作用</div>
+          <div class="emg-row-value">
+            <span class="emg-warn-chip">吐き気 7/10</span>
+            <span class="emg-warn-chip">強い疲労 8/10</span>
+            <span class="emg-chip">食欲低下 5/10</span>
+            <span class="emg-chip">しびれ 3/10</span><br>
+            <span style="font-size:11.5px; color:var(--ink-light); display:block; margin-top:6px;">副作用記録より自動連携(直近: 2026-05-19 18:30)</span>
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">禁忌</div>
+          <div class="emg-row-value">
+            <span class="emg-warn-chip">⚠ NSAIDs(出血リスク)</span>
+            <span class="emg-warn-chip">⚠ 生ワクチン</span>
+            <span class="emg-warn-chip">⚠ グレープフルーツ</span>
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">直近の<br>検査値</div>
+          <div class="emg-row-value">
+            白血球 2,800 (<strong style="color:var(--emergency-red);">低値</strong>) ・ 好中球 1,420 ・ ヘモグロビン 10.2 ・ 血小板 18.5万<br>
+            <span style="font-size:11.5px; color:var(--ink-light);">2026-05-15 ・ 拠点病院 採血</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 連絡先 -->
+      <div class="emg-tab-pane" id="tab-contacts">
+        <div style="font-size:13px; color:var(--ink-medium); margin-bottom:14px;">
+          救急隊・当直医がすぐに連絡できる窓口です。タップで発信。
+        </div>
+        <div class="emg-contacts">
+          <a class="emg-contact-card" href="tel:0312345678">
+            <div>
+              <div class="emg-contact-role">主治医(腫瘍内科)</div>
+              <div class="emg-contact-name">拠点病院 24時間オンコール</div>
+              <div class="emg-contact-num">03-XXXX-XXXX</div>
+            </div>
+            <span class="emg-contact-call">☎</span>
+          </a>
+          <a class="emg-contact-card" href="tel:0987654321">
+            <div>
+              <div class="emg-contact-role">登録済みのご家族(配偶者)</div>
+              <div class="emg-contact-name">同居家族</div>
+              <div class="emg-contact-num">090-XXXX-XXXX</div>
+            </div>
+            <span class="emg-contact-call">☎</span>
+          </a>
+          <a class="emg-contact-card" href="tel:0312349999">
+            <div>
+              <div class="emg-contact-role">SATOI コーディネーター</div>
+              <div class="emg-contact-name">24時間夜間サポート</div>
+              <div class="emg-contact-num">03-YYYY-YYYY</div>
+            </div>
+            <span class="emg-contact-call">☎</span>
+          </a>
+          <a class="emg-contact-card" href="tel:0312341234">
+            <div>
+              <div class="emg-contact-role">かかりつけ薬局</div>
+              <div class="emg-contact-name">調剤薬局(処方歴あり)</div>
+              <div class="emg-contact-num">03-ZZZZ-ZZZZ</div>
+            </div>
+            <span class="emg-contact-call">☎</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ACP -->
+      <div class="emg-tab-pane" id="tab-acp">
+        <div class="emg-acp">
+          <strong>📜 ACP(人生会議)・本人の意思表示</strong><br><br>
+          ・ <strong>蘇生処置:</strong> 心停止時のCPR — <strong>希望する</strong>(2026-05-10 意思確認済)<br>
+          ・ <strong>挿管・人工呼吸:</strong> 短期的な使用 — <strong>希望する</strong> / 長期 — <strong>本人と家族で再相談</strong><br>
+          ・ <strong>輸血:</strong> 制限なし<br>
+          ・ <strong>意識不明時の代理意思決定者:</strong> 配偶者(一次) / 成人の子供(二次)<br>
+          ・ <strong>宗教上の制約:</strong> なし<br>
+          ・ <strong>その他:</strong> 痛みは積極的に緩和してほしい・家族と話す時間を確保してほしい
+          <br><br>
+          <span style="font-size:11.5px; color:var(--ink-light);">最終更新: 2026-05-10 ・ SATOI ACP ワークシート より</span>
+        </div>
+      </div>
+
+      <!-- 保険・支払 -->
+      <div class="emg-tab-pane" id="tab-insurance">
+        <div class="emg-row">
+          <div class="emg-row-label">公的保険</div>
+          <div class="emg-row-value">
+            <strong>健康保険(被保険者本人)</strong> ・ 自己負担 3割<br>
+            <span class="emg-chip">高額療養費制度 適用中</span>
+            <span class="emg-chip">限度額認定証 申請済(2026-04)</span><br>
+            <span style="font-size:11.5px; color:var(--ink-light);">月額自己負担上限: ¥80,100 + (医療費-¥267,000) × 1%</span>
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">がん保険(主契約)</div>
+          <div class="emg-row-value">
+            <strong>第一生命 がん終身保険</strong> ・ 契約者本人<br>
+            診断給付金: <strong>¥3,000,000</strong>(既受領 2026-04-12)<br>
+            入院給付金: ¥15,000/日 ・ 通院給付金: ¥10,000/日<br>
+            手術給付金: ¥600,000(乳房温存術)既受領<br>
+            <span style="font-size:11.5px; color:var(--ink-light);">証券番号: 12345-67890-A ・ 連絡先: 0120-XXX-XXX</span>
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">医療保険(副契約)</div>
+          <div class="emg-row-value">
+            日本生命 医療終身保険 ・ 入院日額 ¥10,000<br>
+            <span style="font-size:11.5px; color:var(--ink-light);">証券番号: NIS-9876543 ・ 連絡先: 0120-YYY-YYY</span>
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">傷病手当金</div>
+          <div class="emg-row-value">
+            申請済 ・ 受給中(2026-04-22〜)<br>
+            <span style="font-size:11.5px; color:var(--ink-light);">標準報酬月額の 2/3 ・ 最長1年6ヶ月</span>
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">🌐 海外旅行<br>傷害保険</div>
+          <div class="emg-row-value">
+            <strong>東京海上日動 海外旅行保険(包括契約)</strong><br>
+            治療費補償: 無制限 ・ キャッシュレスメディカル対応<br>
+            緊急搬送費: 上限 ¥10,000,000<br>
+            <span class="emg-chip">英語対応 24h ホットライン</span>
+            <span class="emg-chip">Cashless at partner hospitals</span><br>
+            <span style="font-size:11.5px; color:var(--ink-light);">Policy No: TM-OVR-2026-78421 ・ +81-3-XXXX-XXXX</span>
+          </div>
+        </div>
+        <div class="emg-row">
+          <div class="emg-row-label">支払予定<br>(今月)</div>
+          <div class="emg-row-value">
+            化学療法 TC 3クール目: ¥267,800(高額療養費後)<br>
+            造影CT(2026-05-22 予定): ¥18,500<br>
+            <strong style="color:var(--emergency-red);">概算自己負担: ¥80,100(月額上限到達済)</strong>
+          </div>
+        </div>
+        <div class="emg-row" style="background:rgba(184,84,80,0.08);">
+          <div class="emg-row-label" style="color:var(--emergency-red);">🌐 For Overseas Medical Staff</div>
+          <div class="emg-row-value" style="font-size:13px;">
+            <strong>EN:</strong> Patient has comprehensive Japanese national health insurance + overseas travel insurance (cashless eligible). Contact Tokio Marine 24/7 English Hotline before billing.<br>
+            <strong>中文:</strong> 患者持有日本国民健康保险 + 海外旅行综合保险(可现金免付)。请在结账前联系东京海上 24 小时中文热线。
+          </div>
+        </div>
+      </div>
+
+      <!-- AI搬送アドバイス(#21で実装、現状はプレースホルダ) -->
+      <div class="emg-tab-pane" id="tab-ai-report">
+        <div id="aiReportContent">
+          <div style="padding:24px; background:linear-gradient(135deg, rgba(184,84,80,0.06), rgba(212,98,42,0.06)); border:1px solid rgba(184,84,80,0.2); border-radius:14px;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+              <div style="width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg, #B85450, #D4622A); color:white; display:flex; align-items:center; justify-content:center; font-size:20px;">🤖</div>
+              <div>
+                <div style="font-weight:700; color:var(--ink-deep); font-size:15px;">SATOI AI 搬送アドバイス</div>
+                <div style="font-size:11.5px; color:var(--ink-light);">直近マイページ更新・治療履歴を踏まえた、救急隊・搬送先向けのスクリーニング</div>
+              </div>
+            </div>
+            <button id="genAiReportBtn" onclick="generateAiTransportReport()" style="width:100%; padding:14px; background:var(--emergency-red); color:white; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; letter-spacing:0.04em;">🔄 AIにレポートを生成させる</button>
+            <div id="aiReportResult" style="margin-top:16px; display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 開示同意 -->
+  <div class="emg-consent">
+    <div class="emg-consent-title">🔒 開示する項目(本人事前同意)</div>
+    <div style="font-size:12px; color:var(--ink-light);">救急時 ・ 当直医 ・ 救急隊員 のみアクセス可。スキャン1回限り。<br><a href="SATOI_Mock_v1_CONSENT.html" style="color:#F0C97A; text-decoration:underline;">→ すべての同意・プライバシー設定をまとめて見る</a></div>
+    <div class="emg-consent-grid">
+      <label class="emg-consent-row locked"><input type="checkbox" checked disabled> 主疾患・治療歴(必須)</label>
+      <label class="emg-consent-row locked"><input type="checkbox" checked disabled> アレルギー(必須)</label>
+      <label class="emg-consent-row locked"><input type="checkbox" checked disabled> 服薬情報(必須)</label>
+      <label class="emg-consent-row"><input type="checkbox" checked> 直近の副作用記録</label>
+      <label class="emg-consent-row"><input type="checkbox" checked> 検査値</label>
+      <label class="emg-consent-row"><input type="checkbox" checked> 家族連絡先</label>
+      <label class="emg-consent-row"><input type="checkbox" checked> ACP・蘇生希望</label>
+      <label class="emg-consent-row"><input type="checkbox"> 物語の壺(任意の体験文)</label>
+    </div>
+  </div>
+
+  <!-- フッターアクション -->
+  <div class="emg-footer">
+    <button class="emg-foot-btn emg-foot-btn-primary" onclick="window.print()">🖨 印刷して財布に</button>
+    <button class="emg-foot-btn emg-foot-btn-ghost" onclick="location.href='SATOI_Mock_v1_F4_side_effects.html?from=emergency'">📊 副作用記録へ</button>
+    <button class="emg-foot-btn emg-foot-btn-ghost" onclick="location.href='SATOI_Mock_v1_C1_mypage.html?from=emergency'">🏠 マイページ</button>
+    <button class="emg-foot-btn emg-foot-btn-ghost" onclick="location.href='SATOI_Mock_v1_FAM_view.html?from=emergency'">👨‍👩‍👧 家族にも通知</button>
+  </div>
+
+</main>
+
+<script>
+
+/* === SATOI 共通リッチトースト関数 === */
+(function ensureToastHost(){
+  if (document.getElementById('satoi-toast-host')) return;
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('satoi-toast-host')) {
+      const host = document.createElement('div');
+      host.id = 'satoi-toast-host';
+      document.body.appendChild(host);
+    }
+  });
+  if (document.body && !document.getElementById('satoi-toast-host')) {
+    const host = document.createElement('div');
+    host.id = 'satoi-toast-host';
+    document.body.appendChild(host);
+  }
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  let host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  const t = document.createElement('div');
+  const kind = opts.kind || (msg.indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  const icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  const body = msg.replace(/\\n/g, '\n').replace(/\n/g, '<br>');
+  let html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) {
+    html = html.replace('</div>', '<a class="satoi-toast-cta" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  }
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const dur = opts.duration || 4200;
+  const closer = () => { t.classList.remove('show'); setTimeout(()=>t.remove(), 450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, dur);
+  return t;
+}
+// 既存の alert を全て satoiNotify にフォールバック(他コードからのalert呼び出しもキャッチ)
+window.__origAlert = window.alert;
+
+/* === SATOI ユニバーサル横断ナビ JS === */
+(function setupUnivNav(){
+  function inject(){
+    if (document.getElementById('satoi-univ-nav')) return;
+    const nav = document.createElement('div');
+    nav.id = 'satoi-univ-nav';
+    nav.innerHTML = '<button class="satoi-univ-btn" id="satoi-back-btn" title="戻る" aria-label="戻る">←</button>'
+      + '<button class="satoi-univ-btn" id="satoi-home-btn" title="夜空ホーム" aria-label="夜空ホーム">⌂</button>'
+      + '<button class="satoi-univ-btn" id="satoi-hub-btn" title="全体マップ" aria-label="全体マップ">◎</button>'
+      + '<div style="position:relative;"><button class="satoi-univ-btn" id="satoi-lang-btn" title="言語" aria-label="言語">🌐</button>'
+      + '<div class="satoi-lang-pop" id="satoi-lang-pop"><button class="satoi-lang-opt active" data-lang="ja">日本語</button><button class="satoi-lang-opt" data-lang="en">English</button><button class="satoi-lang-opt" data-lang="zh">中文</button><button class="satoi-lang-opt" data-lang="ko">한국어</button></div></div>';
+    document.body.appendChild(nav);
+    document.getElementById('satoi-back-btn').addEventListener('click', () => { if (history.length > 1) history.back(); else location.href='SATOI_Mock_v1_A1_entrance.html'; });
+    document.getElementById('satoi-home-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_A1_entrance.html');
+    document.getElementById('satoi-hub-btn').addEventListener('click', () => location.href='SATOI_Mock_v1_B1_hub.html');
+    const conBtn = document.getElementById('satoi-con-btn'); if (conBtn) conBtn.addEventListener('click', () => location.href='SATOI_Mock_v1_CON_concierge.html');
+    const langBtn = document.getElementById('satoi-lang-btn');
+    const langPop = document.getElementById('satoi-lang-pop');
+    langBtn.addEventListener('click', (e) => { e.stopPropagation(); langPop.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!langPop.contains(e.target) && e.target !== langBtn) langPop.classList.remove('show'); });
+    langPop.querySelectorAll('.satoi-lang-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        langPop.querySelectorAll('.satoi-lang-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const lang = b.dataset.lang;
+        const labels = { ja: '日本語に切り替えました', en: 'Switched to English (translation coming soon)', zh: '已切换到中文(翻译即将推出)', ko: '한국어로 전환되었습니다 (번역 준비 중)' };
+        if (typeof satoiNotify === 'function') satoiNotify(labels[lang] || labels.ja, { kind: 'info', duration: 3000 });
+        document.documentElement.lang = lang;
+        langPop.classList.remove('show');
+      });
+    });
+  }
+  if (document.body) inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+})();
+
+window.alert = function(msg){ try { satoiNotify(String(msg)); } catch(e){ window.__origAlert(msg); } };
+
+/* タブ切替 */
+document.querySelectorAll('.emg-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.emg-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.emg-tab-pane').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* QR生成・再発行 */
+let emgQrInstance = null;
+function generateQr(payload) {
+  const canvas = document.getElementById('emgQrCanvas');
+  if (!canvas) return;
+  canvas.innerHTML = '';
+  if (typeof QRCode === 'undefined') {
+    canvas.innerHTML = '<div style="color:#B85450; font-size:12px;">QRライブラリ読込中</div>';
+    return;
+  }
+  emgQrInstance = new QRCode(canvas, {
+    text: payload,
+    width: 220, height: 220,
+    colorDark: '#1A2A40',
+    colorLight: '#FFFFFF',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+}
+
+function redoQr() {
+  const now = new Date();
+  const id = 'SATOI-EMG-' + Math.floor(Math.random()*9000+1000) + '-' + (now.getMonth()+1).toString().padStart(2,'0') + now.getDate().toString().padStart(2,'0') + now.getHours().toString().padStart(2,'0');
+  document.getElementById('qrId').textContent = 'ID: ' + id;
+  const time = now.toISOString().slice(0,16).replace('T',' ');
+  document.getElementById('qrTime').textContent = '発行: ' + time + ' ・ 15分有効';
+  // QR を本当に再生成(中身にID・有効期限・SATOI URL を含む)
+  const payload = JSON.stringify({
+    id: id,
+    issued: now.toISOString(),
+    expires: new Date(now.getTime() + 15*60*1000).toISOString(),
+    url: 'https://vocal-sprinkles-2ec59a.netlify.app/emergency?id=' + id
+  });
+  generateQr(payload);
+  satoiNotify('✓ QR を再発行しました\n\nID: ' + id + '\n15分間有効です。');
+}
+
+/* ===== AI 搬送レポート生成(救急隊向けスクリーニング) =====
+   患者の最新マイページ更新・治療履歴・直近副作用・服薬情報を
+   Claude API に送って、5〜8行の搬送レポートを生成する。  */
+async function generateAiTransportReport() {
+  const btn = document.getElementById('genAiReportBtn');
+  const result = document.getElementById('aiReportResult');
+  if (!btn || !result) return;
+
+  // 患者の最新コンテキスト(本来はC1マイページ・F4から動的に取得。Mockではここに集約)
+  const patientContext = {
+    name: 'M.K.さん',
+    age: 58,
+    gender: '女性',
+    blood_type: 'O型 RH+',
+    primary_disease: '乳がん StageII (Luminal A) ・ 2026-04-08 告知',
+    current_treatment: 'TC療法 3クール目(ドセタキセル60mg/m² + シクロホスファミド600mg/m²)',
+    treatment_history: [
+      '乳房温存手術 (2026-04-22)',
+      '放射線療法 25回 完了 (2026-05-05)',
+      '化学療法 TC 開始 2026-05-12'
+    ],
+    allergies: ['ペニシリン系', '造影剤(イオパミドール)'],
+    contraindications: ['NSAIDs(出血リスク)', '生ワクチン', 'グレープフルーツ'],
+    comorbidities: ['高血圧(内服中)', '脂質異常症', '帝王切開既往(2008)'],
+    recent_labs_2026_05_15: {
+      white_blood_cells: 2800,
+      neutrophils: 1420,
+      hemoglobin: 10.2,
+      platelets: 185000,
+      note: '白血球低値・好中球減少・易感染性'
+    },
+    recent_side_effects_last_24h: {
+      nausea: '7/10',
+      fatigue: '8/10',
+      appetite_loss: '5/10',
+      numbness: '3/10',
+      last_record: '2026-05-19 18:30'
+    },
+    supportive_meds: ['プレドニン 5mg/日', 'オランザピン 2.5mg(吐き気時)', 'アムロジピン 5mg(高血圧)'],
+    last_consultation: '2026-05-15 主治医面談・次回CT 2026-05-22',
+    primary_contact: '拠点病院 腫瘍内科 24時間オンコール'
+  };
+
+  btn.disabled = true;
+  btn.textContent = '🔄 AI生成中…';
+  result.style.display = 'block';
+  result.innerHTML = '<div style="padding:14px; background:white; border-radius:10px; color:var(--ink-medium); font-size:13px;">Claude AI に問い合わせ中です…<br><span style="font-size:11.5px; color:var(--ink-light);">最新マイページ更新と治療履歴を分析しています。15〜30秒お待ちください。</span></div>';
+
+  try {
+    if (!window.satoiChatApi) throw new Error('satoi_chat_api.js が読み込まれていません');
+    const report = await window.satoiChatApi.generateTransportReport(patientContext);
+    const now = new Date().toISOString().slice(0,16).replace('T',' ');
+    result.innerHTML = `
+      <div style="padding:18px; background:white; border-radius:10px; border:1px solid rgba(184,84,80,0.2);">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+          <div style="font-weight:700; color:var(--emergency-red); font-size:14px;">📋 AI 搬送スクリーニング・レポート</div>
+          <div style="font-size:11px; color:var(--ink-light); margin-left:auto;">生成: ${now}</div>
+        </div>
+        <div style="font-size:13.5px; color:var(--ink-deep); line-height:1.8; white-space:pre-wrap;">${escapeHtml(report)}</div>
+        <div style="margin-top:14px; padding-top:12px; border-top:1px dashed rgba(11,23,54,0.15); font-size:11px; color:var(--ink-light);">
+          ※ このレポートはAIによる参考情報です。最終判断は搬送先医師の臨床評価に従ってください。
+        </div>
+      </div>`;
+    btn.textContent = '🔄 AI再生成';
+    btn.disabled = false;
+  } catch (err) {
+    result.innerHTML = `<div style="padding:14px; background:#FFF0F0; border-radius:10px; color:var(--emergency-red); font-size:13px;">AI レポート生成に失敗しました。<br><span style="font-size:11.5px;">${escapeHtml(err.message || String(err))}</span></div>`;
+    btn.textContent = '🔄 もう一度試す';
+    btn.disabled = false;
+  }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+/* 初期QR生成(ページロード時) */
+window.addEventListener('DOMContentLoaded', () => {
+  const initialId = document.getElementById('qrId').textContent.replace('ID: ', '');
+  const now = new Date();
+  const payload = JSON.stringify({
+    id: initialId,
+    issued: now.toISOString(),
+    expires: new Date(now.getTime() + 15*60*1000).toISOString(),
+    url: 'https://vocal-sprinkles-2ec59a.netlify.app/emergency?id=' + initialId
+  });
+  generateQr(payload);
+});
+
+/* URLパラメータからのコンテキスト */
+(function ctx() {
+  const params = new URLSearchParams(window.location.search);
+  const from = params.get('from');
+  const symptoms = params.get('symptoms');
+  if (from === 'f4' && symptoms) {
+    // F4から来たことを示すバナー
+    const tabMeds = document.querySelector('.emg-tab[data-tab="meds"]');
+    if (tabMeds) {
+      setTimeout(() => tabMeds.click(), 600);
+    }
+  }
+})();
+</script>
+<script src="satoi_common.js"></script>
+<script src="satoi_chat_api.js"></script>
+</body>
+</html>

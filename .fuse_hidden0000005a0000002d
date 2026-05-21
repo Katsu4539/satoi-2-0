@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>がんの治療(基本) | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #F1ECD9; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 130px 32px 56px; text-align:center; background: linear-gradient(135deg, rgba(127,168,201,0.08) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: #7FA8C9; padding:6px 18px; border:1px solid rgba(127,168,201,0.4); border-radius:24px; margin-bottom:24px; }
+.hero-title { font-size: clamp(30px, 5vw, 44px); font-weight:300; line-height:1.55; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: #7FA8C9; font-weight:500; }
+.hero-sub { font-size:15px; color: var(--ink-medium); line-height:2; max-width:700px; margin:0 auto; }
+
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 14px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc-item { padding:7px 14px; background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.3); border-radius:18px; color: var(--ink-medium); font-size:11.5px; cursor:pointer; text-decoration:none; }
+.toc-item:hover, .toc-item.active { background: #7FA8C9; color: var(--morning-white); border-color: #7FA8C9; }
+
+.section { padding: 56px 32px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size:11px; letter-spacing:0.36em; color: #7FA8C9; margin-bottom:10px; font-weight:600; }
+.section-title { font-size: clamp(24px, 3.2vw, 30px); font-weight:500; color: var(--ink-deep); margin-bottom:14px; line-height:1.5; }
+.section-sub { font-size:14.5px; color: var(--ink-medium); line-height:1.95; margin-bottom:30px; }
+
+.content-card { background: white; border-radius:18px; padding: 28px 32px; border:1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 20px; }
+.content-card h3 { font-size:18px; font-weight:600; color: var(--ink-deep); margin-bottom: 12px; }
+.content-card h4 { font-size:15px; font-weight:600; color: #7FA8C9; margin: 18px 0 10px; }
+.content-card p { font-size:14px; color: var(--ink-medium); line-height:1.95; margin-bottom: 12px; }
+.content-card ul { padding-left: 22px; margin: 10px 0 14px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.content-card li { margin-bottom: 6px; }
+.content-card strong { color: var(--ink-deep); font-weight: 600; }
+.content-card blockquote { border-left: 3px solid #7FA8C9; padding: 10px 18px; margin: 14px 0; background: rgba(212,169,94,0.06); color: var(--ink-medium); font-size:13px; }
+
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 26px 30px; margin: 26px 0 8px; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 16px; font-weight:600; color: var(--teal); margin-bottom: 8px; }
+.ai-cta p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 14px; }
+.ai-cta-btn { display:inline-block; padding: 12px 24px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
+
+.note-box { background: rgba(212,98,42,0.07); border:1px solid rgba(212,98,42,0.25); border-radius: 14px; padding: 18px 22px; margin: 8px 0 0; font-size: 12.5px; color: var(--ink-medium); line-height:1.9; }
+.note-box strong { color: var(--warm-orange); }
+
+.related-nav { background: var(--morning-cream); padding: 40px 32px; margin-top: 40px; border-top: 1px solid var(--line); }
+.related-nav h4 { font-size:14px; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom: 16px; text-align: center; }
+.related-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; max-width: 980px; margin: 0 auto; }
+.related-card { padding: 14px 18px; background: white; border-radius: 12px; border:1px solid var(--line); cursor:pointer; transition: all 0.2s; }
+.related-card:hover { border-color: #7FA8C9; background: rgba(212,169,94,0.06); }
+.related-card-title { font-size: 13px; font-weight: 500; color: var(--ink-deep); margin-bottom: 3px; }
+.related-card-desc { font-size: 11.5px; color: var(--ink-light); }
+
+@media (max-width: 768px) {
+  .hero { padding: 110px 16px 46px; }
+  .section { padding: 40px 16px; }
+  .content-card { padding: 22px 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_DASHBOARD.html'; })()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">CANCER TREATMENT ・ がんの治療(基本)</div>
+  <h1 class="hero-title">がんの治療を、<strong>大きな地図</strong>で見る。</h1>
+  <p class="hero-sub">
+    治療の名前や種類は、たくさんあって、難しく感じます。<br>
+    でも大きく分けると、その柱はいくつかだけです。まずは全体像を、ゆっくり掴みましょう。
+  </p>
+</section>
+
+<nav class="toc">
+  <a class="toc-item" href="#s1">治療の全体像</a>
+  <a class="toc-item" href="#s2">手術</a>
+  <a class="toc-item" href="#s3">薬物療法</a>
+  <a class="toc-item" href="#s4">放射線治療</a>
+  <a class="toc-item" href="#s5">緩和ケア</a>
+  <a class="toc-item" href="#s6">組み合わせる(集学的治療)</a>
+  <a class="toc-item" href="#s7">臨床試験・治験</a>
+  <a class="toc-item" href="#s8">治療を決めるとき</a>
+</nav>
+
+<main>
+
+<section class="section" id="s1">
+  <div class="section-eyebrow">OVERVIEW</div>
+  <h2 class="section-title">治療の全体像 ・ 「標準治療」が出発点</h2>
+  <p class="section-sub">難しい言葉を、まず一つだけ。「標準治療」は“平均的”という意味ではありません。</p>
+  <div class="content-card">
+    <p><strong>標準治療</strong>とは、これまでの多くの研究と実際の経験から、「今いちばん良い結果が期待できる」と確かめられた治療のことです。「ふつう」「並」という意味ではなく、<strong>その時点での最善</strong>として推奨されている治療、という意味です。</p>
+    <p>がんの治療は、大きく分けると次の柱でできています。多くの場合、これらを一つだけでなく、状況に合わせて組み合わせて使います。</p>
+    <ul>
+      <li><strong>手術(外科治療)</strong> ・ がんを取り除く</li>
+      <li><strong>薬物療法</strong> ・ 薬でがんを抑える、小さくする(抗がん剤・分子標的薬・免疫療法・ホルモン療法など)</li>
+      <li><strong>放射線治療</strong> ・ 放射線でがんをたたく</li>
+      <li><strong>緩和ケア</strong> ・ つらさを和らげ、生活を支える(治療の最初から一緒に行えます)</li>
+    </ul>
+    <p>どの治療が向いているかは、<strong>がんの種類・場所・広がり(ステージ)・タイプ(性質)、そしてご本人の体の状態や希望</strong>によって変わります。だから「同じがん」でも、人によって治療が違うのは、自然なことです。</p>
+    <blockquote>治療法を「自分で選ぶ」必要はありません。まずは主治医がすすめる王道を理解し、納得してから進む——それで十分です。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>「標準治療ってよく聞くけど、自分の場合は何?」——あなたの状況に合わせて、やさしく整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_treatment&topic=overview">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s2">
+  <div class="section-eyebrow">SURGERY</div>
+  <h2 class="section-title">手術(外科治療) ・ がんを取り除く</h2>
+  <p class="section-sub">がんとその周りを取り除く、いちばん歴史のある治療です。</p>
+  <div class="content-card">
+    <p><strong>手術</strong>は、がんのかたまりと、その周りの少しの正常な組織、必要に応じて近くのリンパ節を取り除く治療です。がんが一か所にとどまっている段階では、最も期待できる治療の一つです。</p>
+    <h4>最近の手術の特徴</h4>
+    <ul>
+      <li><strong>体への負担を減らす工夫</strong> ・ 小さな傷で行う腹腔鏡(ふくくうきょう)手術や、ロボット支援手術が広がっています。</li>
+      <li><strong>機能を残す工夫</strong> ・ できるだけ臓器や働きを残し、治療後の生活の質を保つことが重視されています。</li>
+      <li><strong>手術の前後に薬や放射線</strong> ・ 手術の前に小さくしたり(術前治療)、手術の後に再発を抑えたり(術後治療)します。</li>
+    </ul>
+    <p>「手術できる/できない」は、がんの広がりや体の状態で決まります。今すぐ手術ができない場合でも、薬や放射線で小さくしてから手術を目指すこともあります。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>手術のこと、入院や回復のこと、不安なところを一緒に整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_treatment&topic=surgery">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s3">
+  <div class="section-eyebrow">DRUG THERAPY</div>
+  <h2 class="section-title">薬物療法 ・ 薬でがんを抑える</h2>
+  <p class="section-sub">「抗がん剤」とひとくくりにされがちですが、実は性格の違う薬がいくつもあります。</p>
+  <div class="content-card">
+    <p>薬物療法は、薬を使ってがん細胞を攻撃したり、増えるのを抑えたりする治療です。点滴や飲み薬で全身に行きわたるため、目に見えないがん細胞にも働きかけられます。大きく4つのタイプがあります。</p>
+
+    <h4>① 化学療法(いわゆる抗がん剤)</h4>
+    <p>細胞が分裂・増殖する仕組みに作用して、増えるスピードの速いがん細胞をたたきます。髪の毛や粘膜など、正常でも分裂が速い細胞も影響を受けるため、脱毛や吐き気などの副作用が出ることがあります。</p>
+
+    <h4>② 分子標的薬</h4>
+    <p>がん細胞が持つ「特定の目印(分子)」をねらい撃ちする薬です。事前の検査(コンパニオン診断)でその目印があると分かった人に効果が期待できます。正常な細胞への影響を抑えやすい一方、薬ごとに特有の副作用があります。</p>
+
+    <h4>③ 免疫療法(免疫チェックポイント阻害薬)</h4>
+    <p>がんがかけている「免疫のブレーキ」を外して、体本来の免疫の力でがんを攻撃できるようにする薬です。効く人には長く効くことがありますが、免疫が働きすぎて起こる副作用(免疫関連有害事象)に注意が必要です。なお、効果が証明されていない自由診療の「免疫療法」とは別物です。</p>
+
+    <h4>④ ホルモン療法(内分泌療法)</h4>
+    <p>乳がんや前立腺がんなど、ホルモンを栄養にして増えるタイプのがんに対し、そのホルモンの働きを抑える治療です。比較的長く、飲み薬や注射で続けることが多い治療です。</p>
+
+    <blockquote>どの薬を、どの順番で、どのくらい使うか(レジメン)は、がんのタイプ検査の結果で決まります。だから「正しく調べること」が、治療の入口になります。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>「自分の薬はどのタイプ?」「副作用はどう備える?」——あなたの状況に合わせてお話しします。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_treatment&topic=drug">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s4">
+  <div class="section-eyebrow">RADIATION</div>
+  <h2 class="section-title">放射線治療 ・ 切らずに、ねらってたたく</h2>
+  <p class="section-sub">体を切らずに、がんのある場所に放射線を当てる治療です。</p>
+  <div class="content-card">
+    <p><strong>放射線治療</strong>は、がん細胞のDNAを傷つけて、増えられなくする治療です。多くは外から当てる方法で、1回数分・平日に通って数週間、というスケジュールが一般的です(がんや目的により異なります)。</p>
+    <h4>こんな目的で使われます</h4>
+    <ul>
+      <li><strong>治すことを目指して</strong> ・ 手術の代わり、または手術と組み合わせて。</li>
+      <li><strong>再発を抑えるために</strong> ・ 手術や薬物療法と一緒に。</li>
+      <li><strong>つらさを和らげるために</strong> ・ 骨に転移した痛みなどを、やわらげる目的でも使われます。</li>
+    </ul>
+    <p>近年は、正常な組織を避けて、がんにねらいを定めて当てる技術(強度変調放射線治療や定位放射線治療など)が進み、副作用を抑えやすくなっています。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>通院のリズムや、当てる場所の副作用など、気になることを一緒に。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_treatment&topic=radiation">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s5">
+  <div class="section-eyebrow">PALLIATIVE CARE</div>
+  <h2 class="section-title">緩和ケア ・ つらさを和らげ、生活を支える</h2>
+  <p class="section-sub">「最期のための医療」ではありません。診断されたその時から、一緒に受けられます。</p>
+  <div class="content-card">
+    <p><strong>緩和ケア</strong>は、痛みや吐き気などの体のつらさ、不安や落ち込みといった心のつらさを和らげ、その人らしい生活を支えるケアです。よくある誤解ですが、緩和ケアは終末期だけのものではなく、<strong>がんと分かった早い段階から、治療と並行して</strong>受けられます。</p>
+    <p>痛みは「我慢するもの」ではありません。つらさを伝えることは、治療を前に進めるためにも大切です。緩和ケアによって体調が整うと、本来の治療を続けやすくなることもあります。</p>
+    <ul>
+      <li>体のつらさ(痛み・吐き気・だるさ・息苦しさ など)をやわらげる</li>
+      <li>気持ちのつらさ・眠れなさを支える</li>
+      <li>これからのこと・暮らし・家族のことの相談にのる</li>
+    </ul>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>つらさを言葉にするのは難しいもの。少しずつ、一緒に整理しましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_treatment&topic=palliative">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s6">
+  <div class="section-eyebrow">MULTIDISCIPLINARY</div>
+  <h2 class="section-title">組み合わせる ・ 集学的治療という考え方</h2>
+  <p class="section-sub">一つの治療だけでなく、いくつかを組み合わせて、最善を目指します。</p>
+  <div class="content-card">
+    <p>多くのがんでは、手術・薬物療法・放射線治療などを、状況に合わせて組み合わせます。これを<strong>集学的治療</strong>と呼びます。それぞれの専門家(外科・腫瘍内科・放射線科・病理・看護・薬剤・緩和など)がチームで方針を話し合い(キャンサーボード)、一人ひとりに合った計画を立てます。</p>
+    <h4>よくある組み合わせの例</h4>
+    <ul>
+      <li>手術の<strong>前</strong>に薬で小さくしてから取り除く(術前薬物療法)</li>
+      <li>手術の<strong>後</strong>に薬や放射線で再発を抑える(術後補助療法)</li>
+      <li>放射線と薬を<strong>同時に</strong>行って効果を高める(化学放射線療法)</li>
+    </ul>
+    <p>「いろいろな科の先生が出てくる」と戸惑うかもしれませんが、それは<strong>あなたのために多くの専門家が関わっている</strong>、ということでもあります。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>自分の治療計画の「順番」や「目的」を、図のように整理してみましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_treatment&topic=combo">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s7">
+  <div class="section-eyebrow">CLINICAL TRIALS</div>
+  <h2 class="section-title">臨床試験・治験 ・ 新しい治療の選択肢</h2>
+  <p class="section-sub">標準治療のほかに、研究段階の新しい治療を受けられる場合があります。</p>
+  <div class="content-card">
+    <p><strong>臨床試験</strong>は、新しい薬や治療法が「本当に安全で効果があるか」を、確かめるために行われる研究です。そのうち、国の承認を目指して企業などが行うものを<strong>治験</strong>と呼びます。条件に合えば、まだ一般には使えない新しい治療を受けられる可能性があります。</p>
+    <h4>知っておきたいこと</h4>
+    <ul>
+      <li>参加には<strong>条件(対象となるがんの種類・状態など)</strong>があります。</li>
+      <li>参加するかどうかは<strong>自由</strong>で、途中でやめることもできます。</li>
+      <li>新しい治療には<strong>未知の部分</strong>もあるため、説明をよく聞き、納得して決めることが大切です。</li>
+    </ul>
+    <p>「標準治療が終わった後」だけでなく、早い段階で選択肢になることもあります。気になる場合は、主治医やがん相談支援センターに聞いてみましょう。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>臨床試験の探し方や、主治医への聞き方を一緒に整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_treatment&topic=trial">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s8">
+  <div class="section-eyebrow">DECISION</div>
+  <h2 class="section-title">治療を決めるとき ・ 一緒に決める、納得して進む</h2>
+  <p class="section-sub">大事な決断を、一人で抱え込まないために。</p>
+  <div class="content-card">
+    <p>治療方針は、主治医と患者さんが情報を共有しながら<strong>一緒に決めていく</strong>のが基本です(共同意思決定)。分からないこと、不安なことは、遠慮なく聞いて大丈夫です。</p>
+    <h4>納得して進むための3つの味方</h4>
+    <ul>
+      <li><strong>聞きたいことカード</strong> ・ 診察室で「言いたかったことが言えなかった」をなくすために、聞きたいことを事前に整理しておく。</li>
+      <li><strong>セカンドオピニオン</strong> ・ 別の医師の意見を聞くこと。主治医に失礼ではなく、<strong>患者さんの正当な権利</strong>として制度化されています。</li>
+      <li><strong>がん相談支援センター</strong> ・ 全国の拠点病院にある無料の相談窓口。その病院にかかっていなくても相談できます。</li>
+    </ul>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 先生に聞きたいことを、AIと整理する</div>
+    <p>あなたの状況から、診察で聞いておくとよいことを、一緒にカードにまとめます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_treatment&topic=decision">AIと話す →</a>
+  </div>
+
+  <div class="note-box">
+    <strong>この情報について。</strong> ここに書かれているのは、がんの治療を理解するための一般的な説明です。実際の診断や治療方針は、お一人ずつの状態によって異なります。最終的な判断は、必ず主治医とご相談ください。SATOI は、あなたが主治医とよく話し合えるように、情報をやさしく整理してお手伝いします。
+  </div>
+</section>
+
+<div class="related-nav">
+  <h4>もっと知る ・ 関連ページ</h4>
+  <div class="related-grid">
+    <a class="related-card" href="SATOI_Mock_v1_KB_about.html">
+      <div class="related-card-title">がんとは?(基礎知識)</div>
+      <div class="related-card-desc">がん・ステージ・検査の基本</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_B3_treatment_detail.html">
+      <div class="related-card-title">治療法の詳しい説明</div>
+      <div class="related-card-desc">レジメン・副作用・SDM質問</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_F4_side_effects.html">
+      <div class="related-card-title">副作用の記録・対処</div>
+      <div class="related-card-desc">タイミングと備え方</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_E1_money.html">
+      <div class="related-card-title">お金・制度ハブ</div>
+      <div class="related-card-desc">高額療養費・使える制度</div>
+    </a>
+  </div>
+</div>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>

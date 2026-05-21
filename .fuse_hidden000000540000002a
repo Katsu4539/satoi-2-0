@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>暮らしと仕事(基礎) | SATOI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736; --night-medium: #1A2548;
+  --starlight: #D4A95E; --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0; --morning-cream: #F6EFE3;
+  --teal: #0D7377; --teal-soft: #14A6AB; --healing-blue: #7FA8C9;
+  --warm-orange: #D4622A; --warm-coral: #E08461; --rose: #C76B7F;
+  --ink-deep: #1A2A40; --ink-medium: rgba(26,42,64,0.78); --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width:100%; min-height:100vh; overflow-x:hidden; font-family: var(--font); }
+body { color: var(--ink-deep); background: #F1ECD9; line-height:1.9; font-size:16px; }
+a { color: inherit; text-decoration:none; }
+button { font-family: var(--font); cursor:pointer; }
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; background: rgba(248,246,240,0.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.logo { font-size:20px; font-weight:500; letter-spacing:0.22em; color: var(--ink-deep); display:inline-flex; align-items:center; }
+.logo .dot { width:8px; height:8px; background: var(--starlight); border-radius:50%; margin-right:10px; box-shadow:0 0 12px rgba(212,169,94,0.6); }
+.back-btn { padding:8px 18px; background:transparent; color: var(--ink-medium); border:1px solid rgba(11,23,54,0.18); border-radius:20px; font-size:12px; }
+.back-btn:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+.hero { padding: 130px 32px 56px; text-align:center; background: linear-gradient(135deg, rgba(127,168,201,0.08) 0%, var(--morning-white) 100%); position:relative; }
+.hero-eyebrow { display:inline-block; font-size:12px; letter-spacing:0.42em; color: #7FA8C9; padding:6px 18px; border:1px solid rgba(127,168,201,0.4); border-radius:24px; margin-bottom:24px; }
+.hero-title { font-size: clamp(30px, 5vw, 44px); font-weight:300; line-height:1.55; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom:18px; }
+.hero-title strong { color: #7FA8C9; font-weight:500; }
+.hero-sub { font-size:15px; color: var(--ink-medium); line-height:2; max-width:700px; margin:0 auto; }
+
+.toc { position: sticky; top:64px; z-index:50; background: rgba(255,253,247,0.95); border-bottom: 1px solid var(--line); padding: 14px 22px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; backdrop-filter: blur(10px); }
+.toc-item { padding:7px 14px; background: rgba(212,169,94,0.10); border:1px solid rgba(212,169,94,0.3); border-radius:18px; color: var(--ink-medium); font-size:11.5px; cursor:pointer; text-decoration:none; }
+.toc-item:hover, .toc-item.active { background: #7FA8C9; color: var(--morning-white); border-color: #7FA8C9; }
+
+.section { padding: 56px 32px; max-width: 1100px; margin: 0 auto; }
+.section-eyebrow { font-size:11px; letter-spacing:0.36em; color: #7FA8C9; margin-bottom:10px; font-weight:600; }
+.section-title { font-size: clamp(24px, 3.2vw, 30px); font-weight:500; color: var(--ink-deep); margin-bottom:14px; line-height:1.5; }
+.section-sub { font-size:14.5px; color: var(--ink-medium); line-height:1.95; margin-bottom:30px; }
+
+.content-card { background: white; border-radius:18px; padding: 28px 32px; border:1px solid var(--line); box-shadow: 0 6px 22px rgba(11,23,54,0.04); margin-bottom: 20px; }
+.content-card h3 { font-size:18px; font-weight:600; color: var(--ink-deep); margin-bottom: 12px; }
+.content-card h4 { font-size:15px; font-weight:600; color: #7FA8C9; margin: 18px 0 10px; }
+.content-card p { font-size:14px; color: var(--ink-medium); line-height:1.95; margin-bottom: 12px; }
+.content-card ul { padding-left: 22px; margin: 10px 0 14px; color: var(--ink-medium); font-size:13.5px; line-height:1.95; }
+.content-card li { margin-bottom: 6px; }
+.content-card strong { color: var(--ink-deep); font-weight: 600; }
+.content-card blockquote { border-left: 3px solid #7FA8C9; padding: 10px 18px; margin: 14px 0; background: rgba(212,169,94,0.06); color: var(--ink-medium); font-size:13px; }
+
+.ai-cta { background: linear-gradient(135deg, rgba(13,115,119,0.10), rgba(20,166,171,0.06)); border-radius: 18px; padding: 26px 30px; margin: 26px 0 8px; border-left: 4px solid var(--teal); }
+.ai-cta-title { font-size: 16px; font-weight:600; color: var(--teal); margin-bottom: 8px; }
+.ai-cta p { font-size: 13.5px; color: var(--ink-medium); line-height: 1.95; margin-bottom: 14px; }
+.ai-cta-btn { display:inline-block; padding: 12px 24px; background: var(--teal); color: white; border-radius: 22px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.ai-cta-btn:hover { background: var(--teal-soft); }
+
+.note-box { background: rgba(212,98,42,0.07); border:1px solid rgba(212,98,42,0.25); border-radius: 14px; padding: 18px 22px; margin: 8px 0 0; font-size: 12.5px; color: var(--ink-medium); line-height:1.9; }
+.note-box strong { color: var(--warm-orange); }
+
+.related-nav { background: var(--morning-cream); padding: 40px 32px; margin-top: 40px; border-top: 1px solid var(--line); }
+.related-nav h4 { font-size:14px; letter-spacing:0.06em; color: var(--ink-deep); margin-bottom: 16px; text-align: center; }
+.related-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; max-width: 980px; margin: 0 auto; }
+.related-card { padding: 14px 18px; background: white; border-radius: 12px; border:1px solid var(--line); cursor:pointer; transition: all 0.2s; }
+.related-card:hover { border-color: #7FA8C9; background: rgba(212,169,94,0.06); }
+.related-card-title { font-size: 13px; font-weight: 500; color: var(--ink-deep); margin-bottom: 3px; }
+.related-card-desc { font-size: 11.5px; color: var(--ink-light); }
+
+@media (max-width: 768px) {
+  .hero { padding: 110px 16px 46px; }
+  .section { padding: 40px 16px; }
+  .content-card { padding: 22px 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="(function(){ if(document.referrer && document.referrer.includes('SATOI_Mock_v1_')) history.back(); else location.href='SATOI_Mock_v1_DASHBOARD.html'; })()">← 戻る</button>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">DAILY LIFE &amp; WORK ・ 暮らしと仕事(基礎)</div>
+  <h1 class="hero-title">治療の<strong>その人らしい</strong>暮らしを、続ける。</h1>
+  <p class="hero-sub">
+    がんになっても、生活は続きます。仕事も、食事も、毎日のリズムも。<br>
+    無理せず、上手に付き合うためのヒントを、やさしくまとめました。
+  </p>
+</section>
+
+<nav class="toc">
+  <a class="toc-item" href="#s1">暮らしのリズム</a>
+  <a class="toc-item" href="#s2">食事のこと</a>
+  <a class="toc-item" href="#s3">体を動かす</a>
+  <a class="toc-item" href="#s4">外見のケア</a>
+  <a class="toc-item" href="#s5">仕事との両立</a>
+  <a class="toc-item" href="#s6">家族との暮らし</a>
+</nav>
+
+<main>
+
+<section class="section" id="s1">
+  <div class="section-eyebrow">RHYTHM</div>
+  <h2 class="section-title">暮らしのリズム ・ 「いつも通り」を目指さない</h2>
+  <p class="section-sub">完璧を手放すことが、治療と暮らしを両立させるコツです。</p>
+  <div class="content-card">
+    <p>治療が始まると、体調には波が出ます。「前と同じように」と頑張りすぎると、かえって疲れてしまいます。大切なのは、<strong>新しいリズムを見つける</strong>ことです。</p>
+    <ul>
+      <li>体調の良い日に少し動き、つらい日はしっかり休む——その<strong>メリハリ</strong>を意識する。</li>
+      <li>家事や用事は「やらない」「人に頼る」「後回しにする」を、罪悪感なく選ぶ。</li>
+      <li>自分の体調の波(治療何日目がつらいか)を知ると、予定を立てやすくなる。</li>
+    </ul>
+    <blockquote>休むことは、サボりではありません。回復のための、立派な「仕事」です。</blockquote>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>あなたの体調の波に合わせた、無理のない過ごし方を一緒に考えます。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_life&topic=rhythm">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s2">
+  <div class="section-eyebrow">FOOD</div>
+  <h2 class="section-title">食事のこと ・ 「食べられるもの」でいい</h2>
+  <p class="section-sub">特別な食事療法より、まずは「食べられるものを、食べられる時に」。</p>
+  <div class="content-card">
+    <p>治療中は、味覚の変化や吐き気で食べにくくなることがあります。栄養バランスを気にしすぎず、まずは<strong>食べられるものを、少しずつ</strong>で大丈夫です。</p>
+    <h4>食べやすくする工夫</h4>
+    <ul>
+      <li>冷ました料理や、においの少ないものが食べやすいことが多い。</li>
+      <li>一度にたくさんより、少量をこまめに。水分はこまめにとる。</li>
+      <li>味覚が変わったら、酸味(レモン・梅干し)やだしを利かせると食べやすいことも。</li>
+    </ul>
+    <p>「がんに効く食品」「これを食べてはいけない」といった極端な情報には注意しましょう。<strong>科学的根拠のない食事制限は、かえって体力を奪う</strong>ことがあります。迷ったら、管理栄養士や主治医に相談を。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>今の症状に合わせた、食べやすいメニューのヒントをお話しします。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_life&topic=food">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s3">
+  <div class="section-eyebrow">MOVEMENT</div>
+  <h2 class="section-title">体を動かす ・ できる範囲で、少しずつ</h2>
+  <p class="section-sub">安静にしすぎると、かえって体力が落ちることがあります。</p>
+  <div class="content-card">
+    <p>かつては「がんの治療中は安静に」と言われましたが、近年は<strong>無理のない範囲で体を動かすこと</strong>が、だるさの軽減や気分の安定に役立つと考えられています。</p>
+    <ul>
+      <li>散歩やストレッチなど、軽いものから。「気持ちいい」と感じる程度で十分。</li>
+      <li>体調の悪い日や、血液の数値が下がっている時期は無理をしない。</li>
+      <li>どのくらい動いてよいかは、治療の段階や体の状態によります。<strong>始める前に主治医に確認</strong>を。</li>
+    </ul>
+    <p>「運動しなきゃ」と義務にしないこと。少し外の空気を吸うだけでも、心の助けになります。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>今の体調でできる、無理のない動き方を一緒に見つけましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_life&topic=move">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s4">
+  <div class="section-eyebrow">APPEARANCE</div>
+  <h2 class="section-title">外見のケア ・ 自分らしさを保つ</h2>
+  <p class="section-sub">脱毛や肌の変化は、心にも影響します。ケアの方法があります。</p>
+  <div class="content-card">
+    <p>治療による脱毛、肌や爪の変化、むくみなどは、外見の変化として現れ、気持ちにも影響します。これを支えるケアは<strong>アピアランスケア</strong>と呼ばれ、専門の相談窓口を持つ病院も増えています。</p>
+    <h4>知っておきたいこと</h4>
+    <ul>
+      <li><strong>ウィッグ・帽子・スカーフ</strong> ・ 抜け始める前に短くしておくと心の準備がしやすい。自治体の助成制度があることも。</li>
+      <li><strong>肌・爪のケア</strong> ・ 保湿を中心に、刺激の少ないケアを。気になる症状は皮膚科や主治医へ。</li>
+      <li><strong>眉やまつ毛・メイク</strong> ・ 描き方やケアのコツを教えてくれる講座や情報があります。</li>
+    </ul>
+    <p>「見た目のことなんて」と我慢しなくて大丈夫。自分らしくいられることは、治療を続ける力になります。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>外見の変化への備えや、相談できる窓口を一緒に探します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_life&topic=appearance">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s5">
+  <div class="section-eyebrow">WORK</div>
+  <h2 class="section-title">仕事との両立 ・ すぐ辞めない、一人で決めない</h2>
+  <p class="section-sub">診断直後に、勢いで仕事を辞めてしまわないことが大切です。</p>
+  <div class="content-card">
+    <p>がんと診断されると、「仕事を続けられるだろうか」と不安になります。でも、<strong>慌てて退職を決めないこと</strong>が大切です。多くの人が、治療をしながら働き続けています。</p>
+    <h4>使える支え</h4>
+    <ul>
+      <li><strong>治療と仕事の両立支援</strong> ・ 会社の産業医や両立支援コーディネーター、主治医が連携して、働き方を調整する仕組みがあります。</li>
+      <li><strong>働き方の調整</strong> ・ 時短勤務・在宅勤務・休職と復職など、選べる場合があります。</li>
+      <li><strong>傷病手当金</strong> ・ 休んでいる間の収入を支える制度(お金と制度のページもご覧ください)。</li>
+    </ul>
+    <p>会社にどう伝えるか、何を相談するか——一人で抱えず、病院の相談員(MSW)やがん相談支援センターに相談できます。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>職場への伝え方や、働き方の調整を、あなたの状況に合わせて整理します。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_life&topic=work">AIと話す →</a>
+  </div>
+</section>
+
+<section class="section" id="s6">
+  <div class="section-eyebrow">FAMILY</div>
+  <h2 class="section-title">家族との暮らし ・ 支え合うために</h2>
+  <p class="section-sub">家族もまた、一緒に向き合う「第二の患者」と言われます。</p>
+  <div class="content-card">
+    <p>がんは、本人だけでなく家族にも大きな影響があります。どう伝えるか、どこまで頼るか、子どもにどう話すか——正解はありませんが、抱え込まないことが大切です。</p>
+    <ul>
+      <li><strong>伝え方</strong> ・ すべてを一度に話す必要はありません。少しずつ、伝えられる範囲で。</li>
+      <li><strong>子どもへ</strong> ・ 年齢に合わせた言葉で、「あなたのせいではない」「隠し事ではない」と伝えることが安心につながります。</li>
+      <li><strong>家族のケア</strong> ・ 支える側も疲れます。家族自身も相談先を持ってよいのです。</li>
+    </ul>
+    <p>SATOI には、家族との共有や、伝え方を一緒に考える機能があります。</p>
+  </div>
+  <div class="ai-cta">
+    <div class="ai-cta-title">💬 この話、AIと深掘りする</div>
+    <p>家族への伝え方や、支え合い方を、一緒に言葉にしていきましょう。</p>
+    <a class="ai-cta-btn" href="SATOI_Mock_v1_A2_dialog.html?from=kb_life&topic=family">AIと話す →</a>
+  </div>
+
+  <div class="note-box">
+    <strong>この情報について。</strong> ここに書かれているのは、治療中の暮らしを支えるための一般的なヒントです。食事・運動・働き方は、お一人ずつの状態によって適したものが異なります。具体的なことは、主治医・看護師・管理栄養士・相談員などにご相談ください。
+  </div>
+</section>
+
+<div class="related-nav">
+  <h4>もっと知る ・ 関連ページ</h4>
+  <div class="related-grid">
+    <a class="related-card" href="SATOI_Mock_v1_KB_money.html">
+      <div class="related-card-title">お金と制度(基礎)</div>
+      <div class="related-card-desc">傷病手当金・両立支援</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_KB_sideeffects.html">
+      <div class="related-card-title">副作用と対処(基礎)</div>
+      <div class="related-card-desc">体調の波と備え方</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_FAM_view.html">
+      <div class="related-card-title">家族との共有・伝え方</div>
+      <div class="related-card-desc">家族と一緒に向き合う</div>
+    </a>
+    <a class="related-card" href="SATOI_Mock_v1_MUS_community.html">
+      <div class="related-card-title">音楽コミュニティ</div>
+      <div class="related-card-desc">同じ夜を過ごす仲間と</div>
+    </a>
+  </div>
+</div>
+
+<script src="satoi_common.js"></script>
+</body>
+</html>
