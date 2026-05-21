@@ -405,6 +405,8 @@
     s.textContent = `
       /* ===== 右側の浮遊オーブ(companion-lamp)を全ページで非表示(Katsuさん指示・2026-05-21)===== */
       .companion-lamp { display: none !important; }
+      /* ===== 読みやすさ:ベースフォントを少し大きく(PCで小さい・Katsuさん指示・2026-05-21)===== */
+      body { font-size: 17px; line-height: 1.85; }
       /* ===== 上部の朝靄を弱め、ステップバー(AI入口)とテロップを見えるように(Katsuさん指示・2026-05-21)===== */
       .header { backdrop-filter: blur(3px) !important; -webkit-backdrop-filter: blur(3px) !important; }
       .satoi-jbar { background: rgba(255,253,247,0.985) !important; backdrop-filter: blur(2px) !important; }
