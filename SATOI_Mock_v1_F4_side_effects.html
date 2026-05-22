@@ -1735,12 +1735,10 @@ function submitRecord() {
   const e = window.__currentEmpse || { P:60, E:45, Em:75, M:55, S:65 };
   const params = `?from=f4&empse=P${e.P},E${e.E},Em${e.Em},M${e.M},S${e.S}&record=1`;
   const total = Math.round((e.P + e.E + e.Em + e.M + e.S) / 5);
-  alert(`✓ 今日の体調記録を、保存しました。\n\n共有先:${shared + 1}箇所(物語の壺+選択)\n物語の壺に、光の粒が1個増えました ✨\n\nEMPSe 総合: ${total} → マイページのレーダーに反映されます。`);
-  setTimeout(() => {
-    if (confirm('マイページで EMPSe の変化を見ますか?')) {
-      location.href = 'SATOI_Mock_v1_C1_mypage.html' + params;
-    }
-  }, 300);
+  satoiNotify(
+    `✓ 今日の体調記録を、保存しました。\n共有先:${shared + 1}箇所(物語の壺+選択)\n物語の壺に、光の粒が1個増えました ✨\nEMPSe 総合: ${total} → マイページのレーダーに反映されます。`,
+    { kind: 'success', duration: 6000, cta: 'マイページで変化を見る', href: 'SATOI_Mock_v1_C1_mypage.html' + params }
+  );
 }
 
 /* === 星 === */

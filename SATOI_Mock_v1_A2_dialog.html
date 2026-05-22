@@ -912,7 +912,8 @@ const A2_SHORTCUTS = {
   family:    { icon:'💛', label:'家族への伝え方・共有',          url:'SATOI_Mock_v1_FAM_view.html' },
   stories:   { icon:'📖', label:'同じ境遇の方の物語を読む',      url:'SATOI_Mock_v1_D1_stories.html' },
   concierge: { icon:'💬', label:'コンシェルジュに相談(無料)',   url:'SATOI_Mock_v1_CON_concierge.html' },
-  sdm:       { icon:'📝', label:'先生に聞きたいことカードを作る', url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' }
+  sdm:       { icon:'📝', label:'先生に聞きたいことカードを作る', url:'SATOI_Mock_v1_C1_mypage.html#sdm-section' },
+  secondopinion: { icon:'🔍', label:'セカンドオピニオンを模索する', url:'SATOI_Mock_v1_SO_second_opinion.html' }
 };
 
 function addShortcutCards(keys) {
@@ -1659,6 +1660,13 @@ async function start() {
     return;
   }
 
+  // SO_second_opinion.html の「AIに相談する」から戻ったとき(?topic=secondopinion)は、
+  // 汎用resumeではなくセカンドオピニオン焦点モードへ。
+  if (params.get('topic') === 'secondopinion') {
+    await startSecondOpinionMode(params);
+    return;
+  }
+
   // ?resume=1 / ?cancer=xxx / ?from=mypage / sessionStorage 履歴(保存名は複数を横断チェック)
   const urlResume = params.get('resume') === '1' || params.get('cancer') || params.get('from') || params.get('topic') || params.get('beat');
   const sessCancer = readStoredContext('cancer');
@@ -1779,6 +1787,35 @@ async function startFreeMode(params) {
   if (inputField) setTimeout(() => inputField.focus(), 800);
 }
 
+/* ===== セカンドオピニオン焦点モード(2026-05-22 新規)=====
+   SO_second_opinion.html の「AIに相談する」(?topic=secondopinion)から戻ったとき、
+   汎用対話ではなくセカンドオピニオンに焦点を当てた導入で対話を始める。
+   トーン:正当な権利・主治医を否定しない・標準治療と主治医相談を一番に勧める姿勢は崩さない。 */
+async function startSecondOpinionMode(params) {
+  setProgress(20, '自由対話');
+  const cancerKey = params.get('cancer') || readStoredContext('cancer');
+  const stage = params.get('stage') || readStoredContext('stage');
+  if (cancerKey) {
+    state.cancer = cancerKey;
+    state.cancerName = A2_CANCER_LABEL[cancerKey] || readStoredContext('cancerName') || state.cancerName || '';
+  }
+  if (stage) state.stage = stage;
+  state.step = 'free';
+  saveAllContext(state.cancer, state.cancerName, state.stage);
+
+  await delay(500);
+  await aiSay(`セカンドオピニオンのこと、ご一緒に考えましょう。<br>「主治医の先生に失礼かも」と感じる方も多いですが、別の専門医に意見を聞くことは、<strong>患者さんの正当な権利</strong>です。主治医の先生を否定するものではありません。`, { thinkMs: 600 });
+  await delay(400);
+  await aiSay(`SATOI は最後まで、標準治療と、いまの主治医の先生への相談を一番に大切にします。そのうえで、納得して進むための材料を一緒に揃えましょう。<br><span class="small">「何を聞けばいいか整理したい」「紹介状のこと」「どこの施設に相談できるか」——どこからでも、どうぞ。</span>`);
+  setProgress(100, '自由対話');
+
+  await delay(250);
+  addShortcutCards(['secondopinion', 'sdm']);
+
+  const inputField = document.getElementById('inputField');
+  if (inputField) setTimeout(() => inputField.focus(), 800);
+}
+
 /* ===== resume モード ・ intake を完全スキップ ===== */
 /* ===== resume後 自由対話シナリオエンジン ===== */
 const resumeScenarios = {
@@ -1831,9 +1868,9 @@ const resumeScenarios = {
   'rsm-tx-second': {
     intro: 'セカンドオピニオン、迷う方が多いです。<br>「主治医の先生に失礼かも」と感じる方も多いですが、<strong>標準的な権利</strong>として制度化されています。<br>SATOI では、セカンドオピニオンを取りやすい先生・施設のマップ、紹介状作成サポート、聞きたいこと整理シートまで揃えています。',
     choices: [
+      { value: 'rsm-jump-so', label: 'セカンドオピニオンを模索する', jumpUrl: 'SATOI_Mock_v1_SO_second_opinion.html?from=a2_resume' },
       { value: 'rsm-jump-sdm', label: 'SDM質問カードを作る', jumpUrl: 'SATOI_Mock_v1_A2_dialog.html?from=resume&sdm=1' },
       { value: 'rsm-jump-acad', label: '学術エビデンスを確認する', jumpUrl: 'SATOI_Mock_v1_ACAD_research.html' },
-      { value: 'q-tx', label: '別の治療の話に戻る' },
       { value: 'q-pause', label: '今日はここまで', secondary: true }
     ]
   },

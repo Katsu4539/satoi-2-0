@@ -569,6 +569,38 @@ button { font-family: var(--font); cursor: pointer; }
   </div>
 </section>
 
+<!-- ライトクリニック(SATOI提携) -->
+<section class="section" style="max-width:940px;">
+  <div style="background:var(--morning-white); border-radius:22px; padding:40px 40px; box-shadow:0 22px 50px rgba(11,23,54,0.10); border-left:4px solid var(--teal);">
+    <div style="font-size:11px; letter-spacing:0.3em; color:var(--teal); font-weight:600; margin-bottom:10px;">PARTNER CLINIC</div>
+    <h2 style="font-size:22px; font-weight:600; color:var(--ink-deep); margin-bottom:14px; line-height:1.5;">自分で探したい方の、相談先のひとつ ・ ライトクリニック(SATOI提携)</h2>
+    <p style="font-size:14px; color:var(--ink-medium); line-height:1.95; margin-bottom:16px;">
+      標準治療を一通り終えた方や、自由診療を自分で調べたい方のために、相談先の<strong>選択肢のひとつ</strong>として、SATOI提携のライトクリニックをご案内できます。ここでも前提は変わりません——<strong>標準治療と、いまの主治医への相談が一番</strong>です。提携クリニックは、エビデンスを正直に伝え、主治医との連携・報告書発行を行う方針の施設のみです。
+    </p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:18px;">
+      <div style="background:var(--morning-cream); border-radius:12px; padding:16px 18px;">
+        <div style="font-size:13px; font-weight:600; color:var(--ink-deep); margin-bottom:4px;">① まず話を聞く(無料)</div>
+        <div style="font-size:12px; color:var(--ink-light); line-height:1.7;">何を検討しているか、AIと整理してから。勧誘はしません。</div>
+      </div>
+      <div style="background:var(--morning-cream); border-radius:12px; padding:16px 18px;">
+        <div style="font-size:13px; font-weight:600; color:var(--ink-deep); margin-bottom:4px;">② エビデンスを正直に</div>
+        <div style="font-size:12px; color:var(--ink-light); line-height:1.7;">効果が確立していないものは「未確立」と明示します。</div>
+      </div>
+      <div style="background:var(--morning-cream); border-radius:12px; padding:16px 18px;">
+        <div style="font-size:13px; font-weight:600; color:var(--ink-deep); margin-bottom:4px;">③ 主治医と連携</div>
+        <div style="font-size:12px; color:var(--ink-light); line-height:1.7;">報告書を発行し、標準治療を中断させません。</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px;">
+      <button style="padding:12px 22px; border-radius:24px; font-size:13px; border:1px solid var(--teal); background:transparent; color:var(--teal); font-weight:500;" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?from=freemap&topic=lightclinic'">まずAIと整理する →</button>
+      <button style="padding:12px 22px; border-radius:24px; font-size:13px; border:none; background:var(--teal); color:#fff; font-weight:500;" onclick="satoiNotify('ライトクリニック(銀座・提携)へのご相談予約(デモ)。\n標準治療+主治医への相談を前提に、選択肢を一緒に整理します。勧誘は行いません。',{kind:'info', duration:6000, cta:'主治医に聞くカードを作る', href:'SATOI_Mock_v1_A2_dialog.html?from=freemap&sdm=1&topic=alternative'})">ライトクリニックに相談(提携)</button>
+    </div>
+    <div style="font-size:11.5px; color:var(--ink-light); background:rgba(13,115,119,0.06); border:1px dashed rgba(13,115,119,0.3); border-radius:10px; padding:12px 14px; line-height:1.75;">
+      <strong style="color:var(--teal);">大切なお知らせ:</strong> このご案内は、ご自身で探された方への情報提供です(勧誘ではありません)。自由診療は公的保険の対象外で、効果が確立していないものも含みます。判断は必ず主治医にご相談ください。
+    </div>
+  </div>
+</section>
+
 <!-- 質問カード -->
 <section class="section">
   <div class="ask-cta">
@@ -578,6 +610,14 @@ button { font-family: var(--font); cursor: pointer; }
       標準治療との併用は問題ないでしょうか?副作用や相互作用が気になります。」
     </p>
     <button class="ask-cta-btn" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?from=freemap&sdm=1&topic=alternative'">SDM質問カードを作る →</button>
+  </div>
+</section>
+
+<!-- 医療広告ガイドライン コンプラ注記(公開前ゲート) -->
+<section class="section" style="max-width:940px; padding-top:0;">
+  <div style="background:rgba(199,107,127,0.06); border:1px dashed rgba(199,107,127,0.34); border-radius:14px; padding:22px 24px; font-size:12px; color:var(--ink-light); line-height:1.85;">
+    <div style="font-size:12.5px; font-weight:600; color:var(--rose); margin-bottom:8px;">医療広告ガイドラインについて(公開前に確認します)</div>
+    このページの自由診療・提携クリニックの情報は、患者さんご自身が能動的に探した場合の情報提供であり、特定の施設・治療への勧誘や効果の保証ではありません。掲載する施設名・施術内容・費用・エビデンス区分は、公開版では医療法および「医業若しくは歯科医業又は病院若しくは診療所に関する広告等に関する指針(医療広告ガイドライン)」に沿って、限定解除要件・体験談の扱い・ビフォーアフター表現・費用表示などを精査のうえ提供します。本モックの数値・施設は<strong style="color:var(--ink-medium);">デモ用</strong>です。治療の判断は必ず主治医にご相談ください。
   </div>
 </section>
 
@@ -675,7 +715,11 @@ const CLINIC_DETAIL = {
 function openClinic(id) {
   const c = CLINIC_DETAIL[id];
   if (!c) return;
-  alert(`【${c.name}】\n\nエビデンス: ${c.evidence}\n施術内容: ${c.treatments}\nスタンス: ${c.stance}\n費用: ${c.cost}\n\n主治医に相談してから、検討されることを推奨します。\nSDM質問カードを作成しますか?`);
+  const kind = c.evidence === '高' ? 'success' : (c.evidence === '低' ? 'warn' : 'info');
+  satoiNotify(
+    `【${c.name}】\nエビデンス: ${c.evidence}\n施術内容: ${c.treatments}\nスタンス: ${c.stance}\n費用: ${c.cost}\n\n標準治療+主治医への相談を前提に、ご検討ください。`,
+    { kind: kind, duration: 8000, cta: '主治医に聞くカードを作る', href: 'SATOI_Mock_v1_A2_dialog.html?from=freemap&sdm=1&topic=alternative' }
+  );
 }
 
 const CAT_DETAIL = {
@@ -687,13 +731,10 @@ const CAT_DETAIL = {
   'acupuncture': '鍼灸はWHOで化学療法副作用への有効性を認定。吐き気・しびれの軽減に効果。',
 };
 function openCat(k) {
-  alert(CAT_DETAIL[k] + '\n\n詳細を学術ページで見ますか?');
-  // 学術ページへ
-  setTimeout(() => {
-    if (confirm('学術ページで PubMed 検索しますか?')) {
-      location.href = 'SATOI_Mock_v1_ACAD_research.html?topic=' + k;
-    }
-  }, 200);
+  satoiNotify(
+    CAT_DETAIL[k],
+    { kind: 'info', duration: 7000, cta: '学術ページで根拠を見る', href: 'SATOI_Mock_v1_ACAD_research.html?topic=' + k }
+  );
 }
 
 /* ピンクリック → リストの該当カードへ */
