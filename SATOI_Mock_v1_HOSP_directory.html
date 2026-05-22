@@ -59,6 +59,11 @@ button { font-family:var(--font); cursor:pointer; }
 .hosp-badge { font-size:10.5px; font-weight:700; padding:3px 10px; border-radius:11px; background:rgba(13,115,119,0.12); color:var(--teal); }
 .hosp-badge.satoi { background:rgba(212,169,94,0.18); color:#9A7322; }
 .hosp-badge.area { background:rgba(127,168,201,0.16); color:#3F6E96; }
+.hosp-badge.pal-ward { background:rgba(199,107,127,0.16); color:#9A3A52; }
+.hosp-badge.pal-out { background:rgba(13,115,119,0.12); color:#0A5A5D; }
+.hosp-card.pal { border-left-color:var(--rose); }
+.hosp-info { font-size:12.5px; color:var(--ink-light); margin:4px 0 12px; line-height:1.6; }
+.hosp-info .tel { color:var(--teal); }
 .hosp-name { font-size:17px; font-weight:700; color:var(--ink-deep); line-height:1.5; }
 .hosp-loc { font-size:12.5px; color:var(--ink-light); margin:4px 0 12px; }
 .hosp-actions { display:flex; gap:8px; flex-wrap:wrap; }
@@ -131,6 +136,14 @@ footer { text-align:center; padding:40px 22px; color:var(--ink-light); font-size
         <button class="chip" data-f="type" data-v="satoi">SATOI提携</button>
       </div>
     </div>
+    <div class="filter-line">
+      <div class="fl-label">緩和ケア（在宅・緩和の連携先さがし）</div>
+      <div class="chips" id="palChips">
+        <button class="chip active" data-f="pal" data-v="all">指定なし</button>
+        <button class="chip" data-f="pal" data-v="ward">緩和ケア病棟あり</button>
+        <button class="chip" data-f="pal" data-v="out">緩和ケア外来あり</button>
+      </div>
+    </div>
   </div>
 
   <div class="count" id="hCount"></div>
@@ -163,17 +176,17 @@ function satoiNotify(msg, opts){
 window.alert=function(m){ try{ satoiNotify(String(m)); }catch(e){} };
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s); return d.innerHTML; }
 var GANJOHO = 'https://hospdb.ganjoho.jp/';
-function gmap(name){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(name); }
+function gmap(h){ var q = (typeof h === 'string') ? h : (((h.pref||'')+(h.addr||'')+' ')+h.n); return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q); }
 
-/* 全国のがん診療連携拠点病院 等(出典:厚労省/国がん 令和8年4月1日現在)＋SATOI提携。データは satoi_hospitals_data.js */
-var HOSP = (window.SATOI_HOSP_DATA || []).map(function(h){ return { n:h.n, area:h.a, pref:h.p, type:h.t, note:h.note, satoi:(h.t==='satoi') }; });
+/* がん診療連携拠点病院等 施設別データ(出典:厚労省/国がん「現況報告書」令和5年)＋SATOI提携。データは satoi_hospitals_data.js */
+var HOSP = (window.SATOI_HOSP_DATA || []).map(function(h){ return { n:h.n, area:h.a, pref:h.p, type:h.t, note:h.note, addr:h.addr, tel:h.tel, po:h.po, pw:h.pw, pb:h.pb, satoi:(h.t==='satoi') }; });
 var TYPE_LABEL = { ncc:'国立がん研究センター', pref:'都道府県がん診療連携拠点病院', local:'地域がん診療連携拠点病院', regional:'地域がん診療病院', special:'特定領域がん診療連携拠点病院', satoi:'SATOI提携クリニック' };
 var AREA_LABEL = { hokkaido:'北海道・東北', kanto:'関東', chubu:'中部', kinki:'近畿', chugoku:'中国・四国', kyushu:'九州・沖縄' };
 var PREFS = ['北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県','滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'];
 var RENDER_CAP = 90;
 
-var filters = { area:'all', type:'all', pref:'all', q:'' };
-function isDefaultView(){ return filters.area==='all' && filters.type==='all' && filters.pref==='all' && !filters.q; }
+var filters = { area:'all', type:'all', pref:'all', pal:'all', q:'' };
+function isDefaultView(){ return filters.area==='all' && filters.type==='all' && filters.pref==='all' && filters.pal==='all' && !filters.q; }
 
 function render(){
   var box = document.getElementById('hospGrid');
@@ -183,7 +196,9 @@ function render(){
     if (filters.area !== 'all' && h.area !== filters.area) return false;
     if (filters.pref !== 'all' && h.pref !== filters.pref) return false;
     if (filters.type !== 'all' && h.type !== filters.type) return false;
-    if (filters.q){ var t=(h.n+' '+(h.pref||'')+' '+(AREA_LABEL[h.area]||'')).toLowerCase(); if (t.indexOf(filters.q)===-1) return false; }
+    if (filters.pal === 'ward' && !h.pw) return false;
+    if (filters.pal === 'out' && !h.po) return false;
+    if (filters.q){ var t=(h.n+' '+(h.pref||'')+' '+(h.addr||'')+' '+(AREA_LABEL[h.area]||'')).toLowerCase(); if (t.indexOf(filters.q)===-1) return false; }
     return true;
   });
   var head = '<strong>'+rows.length+'</strong> 件';
@@ -192,18 +207,23 @@ function render(){
   if (!rows.length){ box.innerHTML = '<div class="empty">条件に合う病院が見つかりませんでした。条件をひろげるか、公式の<a href="'+GANJOHO+'" target="_blank" rel="noopener" style="color:var(--teal);text-decoration:underline;">病院検索</a>もご利用ください。</div>'; return; }
   var capped = rows.length > RENDER_CAP ? rows.slice(0, RENDER_CAP) : rows;
   var html = capped.map(function(h){
-    var cls = h.satoi ? 'satoi' : (h.type==='ncc' ? 'ncc' : '');
+    var cls = h.satoi ? 'satoi' : (h.pw ? 'pal' : (h.type==='ncc' ? 'ncc' : ''));
     var actions = h.satoi
       ? '<button class="h-btn satoi" onclick="satoiNotify(\'✓ Light Clinic Ginza に相談・予約\\n\\n銀座本院。セカンドオピニオン／治療の伴走相談に対応。SATOI会員はオンライン予約できます。\', {kind:\'success\'})">予約・相談</button>'
-        + '<a class="h-btn" href="'+gmap(h.n)+'" target="_blank" rel="noopener">Googleマップ</a>'
+        + '<a class="h-btn" href="'+gmap(h)+'" target="_blank" rel="noopener">Googleマップ</a>'
         + '<a class="h-btn" href="SATOI_Mock_v1_CON_concierge.html">相談する</a>'
-      : '<a class="h-btn primary" href="'+gmap(h.n)+'" target="_blank" rel="noopener">📍 Googleマップで開く</a>'
+      : '<a class="h-btn primary" href="'+gmap(h)+'" target="_blank" rel="noopener">📍 Googleマップで開く</a>'
         + '<a class="h-btn" href="'+GANJOHO+'" target="_blank" rel="noopener">公式情報</a>'
         + '<a class="h-btn" href="SATOI_Mock_v1_CON_concierge.html">相談する</a>';
+    var palBadges = (h.pw ? '<span class="hosp-badge pal-ward">緩和ケア病棟'+(h.pb?(' '+h.pb+'床'):'')+'</span>' : '')
+      + (h.po ? '<span class="hosp-badge pal-out">緩和ケア外来</span>' : '');
+    var infoLine = h.satoi
+      ? (h.note ? '<div class="hosp-info">'+esc(h.note)+'</div>' : '')
+      : (((h.addr||'') || (h.tel||'')) ? '<div class="hosp-info">'+(h.addr?esc(h.addr):'')+(h.tel?(' <span class="tel">TEL '+esc(h.tel)+'</span>'):'')+'</div>' : '');
     return '<div class="hosp-card '+cls+'">'
-      + '<div class="hosp-badges"><span class="hosp-badge'+(h.satoi?' satoi':'')+'">'+esc(TYPE_LABEL[h.type]||'')+'</span><span class="hosp-badge area">'+esc(h.pref||AREA_LABEL[h.area]||'')+'</span></div>'
+      + '<div class="hosp-badges"><span class="hosp-badge'+(h.satoi?' satoi':'')+'">'+esc(TYPE_LABEL[h.type]||'')+'</span><span class="hosp-badge area">'+esc(h.pref||AREA_LABEL[h.area]||'')+'</span>'+palBadges+'</div>'
       + '<div class="hosp-name">'+esc(h.n)+'</div>'
-      + (h.note?('<div class="hosp-loc">'+esc(h.note)+'</div>'):'')
+      + infoLine
       + '<div class="hosp-actions">'+actions+'</div>'
       + '</div>';
   }).join('');
@@ -229,11 +249,14 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   bindChips('areaChips','area');
   bindChips('typeChips','type');
+  bindChips('palChips','pal');
   document.getElementById('hSearch').addEventListener('input', function(){ filters.q = (this.value||'').trim().toLowerCase(); render(); });
   try {
     var p = new URLSearchParams(location.search);
     if (p.get('type')){ var tc=document.querySelector('#typeChips .chip[data-v="'+p.get('type')+'"]'); if (tc){ document.querySelectorAll('#typeChips .chip').forEach(function(x){x.classList.remove('active');}); tc.classList.add('active'); filters.type=p.get('type'); } }
+    if (p.get('palliative')){ var pv = (p.get('palliative')==='out') ? 'out' : 'ward'; var pc=document.querySelector('#palChips .chip[data-v="'+pv+'"]'); if (pc){ document.querySelectorAll('#palChips .chip').forEach(function(x){x.classList.remove('active');}); pc.classList.add('active'); filters.pal=pv; } satoiNotify('緩和ケア'+(pv==='ward'?'病棟':'外来')+'のある病院でしぼっています。\n「自宅の近くで、どんなケアを受けたいか」を起点に、在宅・緩和の連携先を探せます。', {kind:'info', duration:5200}); }
     if (p.get('from') === 'insurance') satoiNotify('ご加入の保険から来られました。受診先の病院は、全国どこでも自由に選べます。', {kind:'info', duration:4600});
+    if (p.get('from') === 'hospital') satoiNotify('病院連携ダッシュボードから来られました。患者さん発の希望を起点に、連携先を探せます。', {kind:'info', duration:4600});
   } catch(e){}
   render();
 });

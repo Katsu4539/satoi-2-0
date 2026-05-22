@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATOI - セカンドオピニオン(別の先生の意見を聞く)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night-deep: #0B1736;
+  --night-medium: #1A2548;
+  --starlight: #D4A95E;
+  --starlight-strong: #F0C97A;
+  --morning-white: #FBF7F0;
+  --morning-cream: #F6EFE3;
+  --teal: #0D7377;
+  --teal-soft: #14A6AB;
+  --healing-blue: #7FA8C9;
+  --healing-blue-deep: #4F7AA0;
+  --warm-orange: #D4622A;
+  --warm-coral: #E08461;
+  --rose: #C76B7F;
+  --ink-deep: #1A2A40;
+  --ink-medium: rgba(26,42,64,0.78);
+  --ink-light: rgba(26,42,64,0.55);
+  --line: rgba(10,22,40,0.10);
+  --font: "Noto Sans JP", "Meiryo UI", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
+body {
+  font-family: var(--font);
+  color: var(--ink-deep);
+  background: linear-gradient(180deg, #0B1736 0%, #1A2548 26%, #2E3A5C 52%, #D8A98A 78%, #F6EFE3 90%, #FBF7F0 100%);
+  background-attachment: fixed;
+  line-height: 1.85;
+  font-size: 16px;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font); cursor: pointer; }
+
+.header { position: fixed; top:0; left:0; right:0; z-index:100; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; background: linear-gradient(to bottom, rgba(11,23,54,0.7), rgba(11,23,54,0)); backdrop-filter: blur(10px); }
+.logo { font-size: 20px; font-weight: 500; letter-spacing: 0.22em; color: var(--morning-white); display: inline-flex; align-items: center; }
+.logo .dot { width: 8px; height: 8px; background: var(--starlight); border-radius: 50%; margin-right: 10px; box-shadow: 0 0 12px var(--starlight); }
+.back-btn { padding: 8px 18px; background: rgba(248,246,240,0.10); color: var(--morning-white); border: 1px solid rgba(248,246,240,0.30); border-radius: 20px; font-size: 12px; }
+
+/* ヒーロー */
+.hero { padding: 130px 32px 56px; text-align: center; color: var(--morning-white); }
+.hero-eyebrow { display: inline-block; font-size: 12px; letter-spacing: 0.42em; color: var(--starlight); padding: 6px 18px; border: 1px solid rgba(212,169,94,0.4); border-radius: 24px; margin-bottom: 24px; }
+.hero-title { font-size: clamp(27px, 5vw, 42px); font-weight: 300; line-height: 1.55; letter-spacing: 0.05em; margin-bottom: 20px; }
+.hero-title strong { color: var(--starlight-strong); font-weight: 500; }
+.hero-sub { font-size: 15px; color: rgba(248,246,240,0.85); line-height: 2; max-width: 700px; margin: 0 auto; }
+
+/* 共通セクション */
+.section { padding: 64px 32px; max-width: 1080px; margin: 0 auto; }
+.section.light-card-wrap { max-width: 940px; }
+.sec-eyebrow { font-size: 11px; letter-spacing: 0.4em; color: var(--starlight); margin-bottom: 12px; font-weight: 500; text-align:center; }
+.sec-title { font-size: clamp(22px, 3vw, 30px); font-weight: 400; margin-bottom: 14px; line-height: 1.55; text-align:center; color: var(--morning-white); }
+.sec-sub { font-size: 14px; color: rgba(248,246,240,0.72); max-width: 680px; margin: 0 auto 36px; text-align:center; }
+
+/* 「セカンドオピニオンって?」白カード */
+.intro-card { background: var(--morning-white); border-radius: 22px; padding: 44px 42px; box-shadow: 0 22px 50px rgba(0,0,0,0.12); border-left: 4px solid var(--healing-blue); }
+.intro-eyebrow { font-size: 11px; letter-spacing: 0.3em; color: var(--healing-blue-deep); font-weight: 600; margin-bottom: 10px; }
+.intro-title { font-size: 23px; font-weight: 500; color: var(--ink-deep); margin-bottom: 18px; line-height: 1.5; }
+.intro-title strong { color: var(--healing-blue-deep); }
+.intro-body { font-size: 14.5px; color: var(--ink-medium); line-height: 2; }
+.intro-points { display: grid; gap: 12px; margin-top: 22px; }
+.intro-point { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: flex-start; font-size: 13.5px; color: var(--ink-medium); line-height: 1.8; }
+.intro-point-i { width: 22px; height: 22px; border-radius: 50%; background: rgba(20,166,171,0.16); color: var(--teal); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin-top: 3px; }
+.intro-point strong { color: var(--ink-deep); font-weight: 600; }
+.ai-note { margin-top: 24px; padding: 16px 18px; background: rgba(13,115,119,0.07); border: 1px dashed rgba(13,115,119,0.32); border-radius: 12px; font-size: 13px; color: var(--ink-medium); line-height: 1.8; }
+.ai-note strong { color: var(--teal); }
+
+/* 4ステップ */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.step-card { background: rgba(248,246,240,0.06); border: 1px solid rgba(212,169,94,0.25); border-radius: 18px; padding: 26px 24px; color: var(--morning-white); cursor: pointer; transition: all 0.3s; }
+.step-card:hover { background: rgba(212,169,94,0.12); border-color: var(--starlight); transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0,0,0,0.3); }
+.step-num { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background: rgba(212,169,94,0.18); color: var(--starlight-strong); font-size:15px; font-weight:600; margin-bottom: 14px; }
+.step-title { font-size: 16.5px; font-weight: 500; margin-bottom: 10px; }
+.step-desc { font-size: 13px; color: rgba(248,246,240,0.78); line-height: 1.9; margin-bottom: 14px; }
+.step-cta { font-size: 11.5px; color: var(--starlight-strong); border-bottom: 1px solid rgba(212,169,94,0.4); padding-bottom: 2px; }
+
+/* 進捗トラッカー(鏡の原則) */
+.tracker-card { background: var(--morning-white); border-radius: 22px; padding: 40px 40px 36px; box-shadow: 0 22px 50px rgba(0,0,0,0.12); }
+.tracker-head { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom: 8px; }
+.tracker-title { font-size: 19px; font-weight: 500; color: var(--ink-deep); }
+.mirror-chip { display:inline-flex; align-items:center; gap:6px; font-size:11px; padding:4px 12px; border-radius:12px; background:rgba(127,168,201,0.16); color:var(--healing-blue-deep); font-weight:500; }
+.tracker-mirror-note { font-size:12.5px; color:var(--ink-light); margin-bottom: 26px; line-height:1.7; }
+.track-flow { display:flex; align-items:flex-start; gap:0; margin-bottom: 30px; flex-wrap:wrap; }
+.track-step { flex:1; min-width: 110px; text-align:center; position:relative; }
+.track-step::after { content:''; position:absolute; top:15px; left:50%; width:100%; height:2px; background: var(--line); z-index:0; }
+.track-step:last-child::after { display:none; }
+.track-dot { position:relative; z-index:1; width:32px; height:32px; border-radius:50%; background:var(--morning-cream); border:2px solid var(--line); display:inline-flex; align-items:center; justify-content:center; font-size:13px; color:var(--ink-light); margin-bottom:8px; }
+.track-step.done .track-dot { background: var(--teal); border-color: var(--teal); color:#fff; }
+.track-step.active .track-dot { background: var(--warm-orange); border-color: var(--warm-orange); color:#fff; box-shadow:0 0 0 5px rgba(212,98,42,0.16); }
+.track-label { font-size: 12.5px; color: var(--ink-medium); line-height:1.5; }
+.track-step.active .track-label { color: var(--warm-orange); font-weight:600; }
+.doc-block-title { font-size: 13px; font-weight:600; color:var(--ink-deep); margin: 6px 0 14px; }
+.doc-list { display:grid; gap:10px; }
+.doc-item { display:flex; align-items:center; gap:14px; padding:14px 16px; border:1px solid var(--line); border-radius:12px; font-size:13.5px; background:var(--morning-cream); }
+.doc-item .doc-name { flex:1; color:var(--ink-deep); }
+.doc-item .doc-sub { font-size:11.5px; color:var(--ink-light); margin-top:2px; }
+.doc-chk { font-size:11px; padding:4px 11px; border-radius:10px; font-weight:600; white-space:nowrap; }
+.doc-chk.ok { background:rgba(20,166,171,0.16); color:#0A5A5D; }
+.doc-chk.wait { background:rgba(212,98,42,0.14); color:#95421c; cursor:pointer; }
+.doc-chk.na { background:rgba(26,42,64,0.07); color:var(--ink-light); }
+
+/* AI相談フック */
+.ai-hook { background: linear-gradient(135deg, rgba(13,115,119,0.92), rgba(20,166,171,0.9)); border-radius:22px; padding: 44px 40px; color:#fff; text-align:center; box-shadow:0 22px 50px rgba(13,115,119,0.25); }
+.ai-hook h3 { font-size: 22px; font-weight:500; margin-bottom: 12px; letter-spacing:0.03em; }
+.ai-hook p { font-size:14px; opacity:0.92; line-height:1.9; max-width:560px; margin:0 auto 24px; }
+.ai-hook-btn { padding:15px 30px; background:#fff; color:var(--teal); border:none; border-radius:28px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.3s; box-shadow:0 8px 20px rgba(0,0,0,0.18); }
+.ai-hook-btn:hover { transform:translateY(-2px); }
+
+/* 標準治療の先(フェーズ2・控えめ) */
+.beyond-card { background: var(--morning-white); border-radius:22px; padding: 40px 40px; box-shadow:0 22px 50px rgba(0,0,0,0.10); border-left:4px solid var(--rose); }
+.beyond-eyebrow { font-size:11px; letter-spacing:0.3em; color:var(--rose); font-weight:600; margin-bottom:10px; }
+.beyond-title { font-size:21px; font-weight:500; color:var(--ink-deep); margin-bottom:14px; line-height:1.5; }
+.beyond-body { font-size:14px; color:var(--ink-medium); line-height:1.95; margin-bottom:18px; }
+.beyond-body strong { color:var(--ink-deep); }
+.beyond-actions { display:flex; gap:12px; flex-wrap:wrap; margin-bottom: 18px; }
+.beyond-btn { padding:12px 22px; border-radius:24px; font-size:13px; border:1px solid var(--rose); background:transparent; color:var(--rose); font-weight:500; }
+.beyond-btn:hover { background:rgba(199,107,127,0.08); }
+.beyond-btn.fill { background:var(--rose); color:#fff; }
+.compliance-note { font-size:11.5px; color:var(--ink-light); background:rgba(199,107,127,0.07); border:1px dashed rgba(199,107,127,0.3); border-radius:10px; padding:12px 14px; line-height:1.7; }
+.compliance-note strong { color:var(--rose); }
+
+/* 始める */
+.start-section { padding: 90px 32px 110px; max-width: 880px; margin: 0 auto; text-align: center; }
+.start-title { font-size: 22px; font-weight: 400; color: var(--ink-deep); margin-bottom: 14px; }
+.start-sub { font-size: 14px; color: var(--ink-medium); margin-bottom: 30px; }
+.start-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.start-btn { padding: 16px 30px; background: var(--warm-orange); color: white; border: none; border-radius: 28px; font-size: 14px; font-weight: 500; cursor: pointer; box-shadow: 0 8px 22px rgba(212,98,42,0.32); transition: all 0.3s; }
+.start-btn:hover { background: var(--warm-coral); transform: translateY(-2px); }
+.start-btn.outline { background: transparent; color: var(--ink-deep); border: 1px solid var(--ink-light); box-shadow: none; }
+.start-btn.outline:hover { border-color: var(--warm-orange); color: var(--warm-orange); }
+
+@media (max-width: 768px) {
+  .hero { padding: 100px 16px 44px; }
+  .section { padding: 44px 16px; }
+  .intro-card, .tracker-card, .ai-hook, .beyond-card { padding: 30px 22px; }
+  .track-step { min-width: 88px; }
+  input, textarea, select { font-size: 16px !important; }
+}
+
+/* トースト */
+#satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
+.satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-family: var(--font); font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity 0.4s, transform 0.4s; border-left: 3px solid #D4A95E; }
+.satoi-toast.show { opacity: 1; transform: translateY(0); }
+.satoi-toast.success { border-left-color: #14A6AB; }
+.satoi-toast.info { border-left-color: #D4A95E; }
+.satoi-toast-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(212,169,94,0.18); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+.satoi-toast.success .satoi-toast-icon { background: rgba(20,166,171,0.20); }
+.satoi-toast-body { flex: 1; white-space: pre-line; }
+.satoi-toast-body strong { color: #F0C97A; font-weight: 600; }
+.satoi-toast-close { background: transparent; border: none; color: rgba(248,246,240,0.5); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 4px; }
+@media (max-width: 768px) { #satoi-toast-host { bottom: 14px; } .satoi-toast { min-width: auto; width: calc(100vw - 28px); } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="SATOI_Mock_v1_A1_entrance.html" class="logo"><span class="dot"></span>SATOI</a>
+  <button class="back-btn" onclick="history.back()">← 戻る</button>
+</header>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <div class="hero-eyebrow">SECOND OPINION</div>
+  <h1 class="hero-title">もう一人の先生にも、<br><strong>聞いてみる</strong>という選択。</h1>
+  <p class="hero-sub">
+    今の主治医を変えることではありません。<br>
+    別の専門医の意見も聞いて、納得して進むための仕組みです。SATOIが、申し込みから準備まで、そばで支えます。
+  </p>
+</section>
+
+<!-- セカンドオピニオンって? -->
+<section class="section light-card-wrap">
+  <div class="intro-card">
+    <div class="intro-eyebrow">WHAT IS A SECOND OPINION</div>
+    <h2 class="intro-title">セカンドオピニオンは、<strong>「裏切り」ではありません</strong>。</h2>
+    <p class="intro-body">
+      診断や治療方針について、今の主治医とは別の専門医の意見を聞くこと——それがセカンドオピニオンです。多くの主治医は、患者さんが納得して治療を選ぶことを望んでいて、診療情報提供書も用意してくれます。「言い出しにくい」という気持ちごと、SATOIが受け止めて、進め方をご案内します。
+    </p>
+    <div class="intro-points">
+      <div class="intro-point"><span class="intro-point-i">✓</span><div><strong>主治医を変える手続きではありません。</strong>意見を聞いたうえで、今の病院で治療を続ける方がほとんどです。</div></div>
+      <div class="intro-point"><span class="intro-point-i">✓</span><div><strong>必要なのは主に「診療情報提供書・画像・病理結果」。</strong>準備の仕方はSATOIが順番にご案内します。</div></div>
+      <div class="intro-point"><span class="intro-point-i">✓</span><div><strong>費用や予約方法は病院ごとに違います。</strong>選んだ病院の公式ページへご案内します。</div></div>
+    </div>
+    <div class="ai-note">
+      <strong>SATOIのAIが先に説明します:</strong> 「セカンドオピニオンって何?」「主治医にどう切り出す?」という不安から、必要書類の集め方まで、あなたのペースで一つずつ。準備が整った状態で、病院の地域連携室に届きます。
+    </div>
+  </div>
+</section>
+
+<!-- 4ステップ -->
+<section class="section">
+  <div class="sec-eyebrow">HOW IT WORKS</div>
+  <h2 class="sec-title">4つのステップで、進められます</h2>
+  <p class="sec-sub">それぞれのステップで、AIがあなたをサポートします。タップすると、その場所へ進みます。</p>
+  <div class="steps">
+    <div class="step-card" onclick="location.href='SATOI_Mock_v1_HOSP_directory.html?from=so'">
+      <div class="step-num">1</div>
+      <div class="step-title">どこで聞くか、選ぶ</div>
+      <div class="step-desc">全国の拠点病院から、聞いてみたい病院を探します。緩和ケアや在宅の連携先も、ここから選べます。</div>
+      <span class="step-cta">病院をさがす →</span>
+    </div>
+    <div class="step-card" onclick="location.href='SATOI_Mock_v1_SDM_box.html?from=so'">
+      <div class="step-num">2</div>
+      <div class="step-title">聞きたいことを、整理する</div>
+      <div class="step-desc">「何を聞けばいいか分からない」も大丈夫。AIと一緒に、聞きたいことを言葉にして準備します。</div>
+      <span class="step-cta">聞きたいことボックス →</span>
+    </div>
+    <div class="step-card" onclick="scrollToTracker()">
+      <div class="step-num">3</div>
+      <div class="step-title">必要な書類を、準備する</div>
+      <div class="step-desc">診療情報提供書・画像・病理結果。主治医へのお願いの仕方も、AIが文面までご用意します。</div>
+      <span class="step-cta">準備状況を見る →</span>
+    </div>
+    <div class="step-card" onclick="applySO()">
+      <div class="step-num">4</div>
+      <div class="step-title">申し込む</div>
+      <div class="step-desc">準備ができたら申込。病院の地域連携室に届き、あとは進捗をこの画面で追えます。</div>
+      <span class="step-cta">申し込んでみる →</span>
+    </div>
+  </div>
+</section>
+
+<!-- 進捗トラッカー(鏡の原則) -->
+<section class="section light-card-wrap" id="trackerSection">
+  <div class="tracker-card">
+    <div class="tracker-head">
+      <div>
+        <div class="tracker-title">あなたのセカンドオピニオン進捗</div>
+        <div class="tracker-mirror-note">この進捗は、申込先の病院の<strong>地域連携室が見る画面と同じ</strong>ものです。あなたに見えない情報は、病院側にもありません。</div>
+      </div>
+      <span class="mirror-chip"><span style="font-size:9px;">●</span> 鏡の原則</span>
+    </div>
+
+    <div class="track-flow">
+      <div class="track-step done"><div class="track-dot">✓</div><div class="track-label">申込<br>受付</div></div>
+      <div class="track-step active"><div class="track-dot">3</div><div class="track-label">書類<br>準備中</div></div>
+      <div class="track-step"><div class="track-dot">4</div><div class="track-label">日程<br>調整</div></div>
+      <div class="track-step"><div class="track-dot">5</div><div class="track-label">外来<br>実施</div></div>
+    </div>
+
+    <div class="doc-block-title">必要書類の準備状況(2/3 準備中)</div>
+    <div class="doc-list">
+      <div class="doc-item">
+        <span class="doc-name">診療情報提供書(主治医より)<div class="doc-sub">来週の外来でお願いする予定です</div></span>
+        <span class="doc-chk wait" onclick="askDoc()">お願い文を作る</span>
+      </div>
+      <div class="doc-item">
+        <span class="doc-name">画像データ(CD-R / PACS)<div class="doc-sub">アプリ経由で連携室に共有済み</div></span>
+        <span class="doc-chk ok">準備OK</span>
+      </div>
+      <div class="doc-item">
+        <span class="doc-name">病理結果<div class="doc-sub">共有済み</div></span>
+        <span class="doc-chk ok">準備OK</span>
+      </div>
+    </div>
+    <div class="ai-note" style="margin-top:22px;">
+      <strong>連携室からのメッセージ:</strong> 「画像と病理は届いています。診療情報提供書が揃い次第、外来の候補日をご案内します。」<br>
+      <span style="color:var(--ink-light); font-size:12px;">— やり取りはこのアプリ内で完結します。同じ画面を連携室も見ています。</span>
+    </div>
+  </div>
+</section>
+
+<!-- AI相談フック -->
+<section class="section">
+  <div class="ai-hook">
+    <h3>迷っていますか?</h3>
+    <p>「このまま今の治療でいいのかな」——そんな揺れも、まずAIに話してみてください。必要なら、セカンドオピニオンの準備まで一緒に進めます。</p>
+    <button class="ai-hook-btn" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?from=so&topic=secondopinion'">AIに相談する ・ セカンドオピニオンを模索してみる →</button>
+  </div>
+</section>
+
+<!-- 標準治療の先(フェーズ2・控えめ) -->
+<section class="section light-card-wrap">
+  <div class="beyond-card">
+    <div class="beyond-eyebrow">BEYOND STANDARD TREATMENT</div>
+    <h2 class="beyond-title">標準治療の先を、自分で考えたいとき</h2>
+    <p class="beyond-body">
+      標準治療を一通り終えた方や、別の選択肢を自分で調べたい方もいます。SATOIは、自由診療(自費の治療)を<strong>エビデンスの強さで色分けして並べる</strong>だけで、勧めることはしません。<strong>SATOIの推奨は、いつも「標準治療+主治医に相談」</strong>です。そのうえで、ご自身で探したい方には、相談先の一つとしてSATOI提携のライトクリニックもご案内できます。
+    </p>
+    <div class="beyond-actions">
+      <button class="beyond-btn" onclick="location.href='SATOI_Mock_v1_FREE_map.html?from=so'">自由診療をエビデンスで見る →</button>
+      <button class="beyond-btn fill" onclick="satoiNotify('SATOI提携 ライト クリニック(銀座)へのご相談(デモ)。\n標準治療+主治医への相談を前提に、選択肢を一緒に整理します。',{kind:'info'})">ライトクリニックに相談(提携)</button>
+    </div>
+    <div class="compliance-note">
+      <strong>大切なお知らせ:</strong> このご案内は、ご自身で探された方にだけ表示される情報提供です(勧誘ではありません)。自由診療は公的保険の対象外で、効果が確立していないものも含みます。公開版では医療広告ガイドラインに沿って提供します。判断は必ず主治医にご相談ください。
+    </div>
+  </div>
+</section>
+
+<!-- 始める -->
+<section class="start-section">
+  <h2 class="start-title">あなたのペースで、進めましょう。</h2>
+  <p class="start-sub">今すぐ決めなくて大丈夫。まずは病院を眺めるだけ、AIに話すだけでもいいです。</p>
+  <div class="start-actions">
+    <button class="start-btn" onclick="location.href='SATOI_Mock_v1_HOSP_directory.html?from=so'">病院をさがす →</button>
+    <button class="start-btn outline" onclick="location.href='SATOI_Mock_v1_A2_dialog.html?from=so&topic=secondopinion'">AIに相談する</button>
+    <button class="start-btn outline" onclick="location.href='SATOI_Mock_v1_C1_mypage.html?from=so'">マイページで進捗を見る</button>
+  </div>
+</section>
+
+<script>
+/* === トースト === */
+(function ensureToastHost(){
+  function inject(){ if (!document.getElementById('satoi-toast-host')) { var h=document.createElement('div'); h.id='satoi-toast-host'; document.body.appendChild(h); } }
+  if (document.body) inject(); else document.addEventListener('DOMContentLoaded', inject);
+})();
+function satoiNotify(msg, opts) {
+  opts = opts || {};
+  var host = document.getElementById('satoi-toast-host');
+  if (!host) { host = document.createElement('div'); host.id = 'satoi-toast-host'; document.body.appendChild(host); }
+  var t = document.createElement('div');
+  var kind = opts.kind || (String(msg).indexOf('✓')===0 ? 'success' : 'info');
+  t.className = 'satoi-toast ' + kind;
+  var icon = opts.icon || (kind === 'success' ? '✓' : (kind === 'warn' ? '!' : '●'));
+  var body = String(msg).replace(/\n/g,'<br>');
+  var html = '<span class="satoi-toast-icon">'+icon+'</span><div class="satoi-toast-body">'+body+'</div>';
+  if (opts.cta && opts.href) html = html.replace('</div>', '<a class="satoi-toast-cta" style="display:inline-block;margin-top:8px;padding:6px 14px;background:rgba(212,169,94,0.20);color:#F0C97A;border:1px solid rgba(212,169,94,0.5);border-radius:14px;font-size:11.5px;text-decoration:none;" href="'+opts.href+'">'+opts.cta+' →</a></div>');
+  html += '<button class="satoi-toast-close" aria-label="close">×</button>';
+  t.innerHTML = html;
+  host.appendChild(t);
+  requestAnimationFrame(function(){ t.classList.add('show'); });
+  var closer=function(){ t.classList.remove('show'); setTimeout(function(){t.remove();},450); };
+  t.querySelector('.satoi-toast-close').addEventListener('click', closer);
+  setTimeout(closer, opts.duration||4600);
+  return t;
+}
+window.alert = function(m){ try { satoiNotify(String(m)); } catch(e){} };
+
+function scrollToTracker(){ var el = document.getElementById('trackerSection'); if (el) el.scrollIntoView({behavior:'smooth', block:'start'}); }
+function askDoc(){ satoiNotify('✓ 主治医への「診療情報提供書のお願い文」を作成しました(デモ)。\nそのまま外来でお見せいただけます。AIが文面を整えました。', {kind:'success', duration:5200}); }
+function applySO(){ satoiNotify('✓ セカンドオピニオンを申し込みました(デモ)。\n選んだ病院の地域連携室に届きました。進捗はこの画面とマイページで追えます。', {kind:'success', duration:5200, cta:'マイページで見る', href:'SATOI_Mock_v1_C1_mypage.html?from=so'});
+  setTimeout(scrollToTracker, 600); }
+</script>
+<script src="satoi_common.js"></script>
+</body>
+</html>

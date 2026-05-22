@@ -271,6 +271,30 @@ tbody td { padding: 14px 16px; vertical-align: middle; }
 .svc-btn.ghost { background:var(--morning-white); color:var(--ink-medium); border:1px solid var(--border); }
 .svc-btn:hover { opacity:0.9; }
 
+/* === セカンドオピニオン窓口 === */
+.so-status { display:inline-flex; align-items:center; gap:6px; font-size:11px; padding:3px 11px; border-radius:11px; font-weight:500; }
+.so-status.new { background:rgba(212,98,42,0.14); color:#95421c; }
+.so-status.docs { background:rgba(194,143,42,0.16); color:#76561a; }
+.so-status.sched { background:rgba(127,168,201,0.18); color:#305878; }
+.so-status.done { background:rgba(46,139,87,0.14); color:#1d6841; }
+.doc-list { list-style:none; }
+.doc-item { display:flex; align-items:center; gap:12px; padding:11px 14px; border:1px solid var(--border); border-radius:9px; margin-bottom:8px; font-size:13px; background:var(--morning-white); }
+.doc-item .doc-name { flex:1; color:var(--ink-deep); }
+.doc-chk { font-size:11px; padding:3px 10px; border-radius:9px; font-weight:500; }
+.doc-chk.ok { background:rgba(46,139,87,0.14); color:#1d6841; }
+.doc-chk.wait { background:rgba(194,143,42,0.16); color:#76561a; }
+.doc-chk.na { background:var(--morning-warm); color:var(--ink-light); }
+.so-thread { display:flex; flex-direction:column; gap:10px; }
+.so-msg { max-width:82%; padding:11px 15px; border-radius:14px; font-size:13px; line-height:1.7; }
+.so-msg .who { font-size:10px; letter-spacing:0.06em; margin-bottom:4px; opacity:0.75; }
+.so-msg.patient { align-self:flex-start; background:rgba(212,169,94,0.14); border:1px solid rgba(212,169,94,0.3); }
+.so-msg.staff { align-self:flex-end; background:rgba(127,168,201,0.14); border:1px solid rgba(127,168,201,0.3); }
+.so-msg.ai { align-self:flex-start; background:rgba(13,115,119,0.10); border:1px dashed rgba(13,115,119,0.35); }
+.so-compose { display:flex; gap:10px; margin-top:14px; }
+.so-compose input { flex:1; border:1px solid var(--border); border-radius:22px; padding:11px 16px; font-family:var(--font); font-size:13px; outline:none; }
+.so-compose input:focus { border-color:var(--healing-blue); }
+.so-compose button { padding:11px 20px; border:none; border-radius:22px; background:var(--night-deep); color:var(--morning-white); font-family:var(--font); font-size:13px; cursor:pointer; }
+
 /* === トースト === */
 #satoi-toast-host { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: 92vw; }
 .satoi-toast { pointer-events: auto; min-width: 280px; max-width: 480px; background: linear-gradient(135deg, rgba(11,23,54,0.96), rgba(26,37,72,0.96)); color: #F8F6F0; padding: 16px 22px 16px 18px; border-radius: 16px; box-shadow: 0 16px 40px rgba(11,23,54,0.35), 0 0 0 1px rgba(212,169,94,0.30); font-size: 13.5px; line-height: 1.75; backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: all 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 3px solid #D4A95E; }
@@ -333,6 +357,10 @@ tbody td { padding: 14px 16px; vertical-align: middle; }
     <li><button data-tab="evidence">
       <span class="side-nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12 L11 15 L16 9"/></svg></span>
       効果とエビデンス
+    </button></li>
+    <li><button data-tab="secondopinion">
+      <span class="side-nav-icon"><svg viewBox="0 0 24 24"><path d="M4 5 h16 v11 h-9 l-4 4 v-4 H4 Z"/><path d="M8 9 h8 M8 12 h5"/></svg></span>
+      セカンドオピニオン窓口
     </button></li>
     <li><button data-tab="services">
       <span class="side-nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2 V5 M12 19 V22 M2 12 H5 M19 12 H22 M5 5 L7 7 M17 17 L19 19 M5 19 L7 17 M17 7 L19 5"/></svg></span>
@@ -739,6 +767,67 @@ tbody td { padding: 14px 16px; vertical-align: middle; }
     </div>
   </div>
 
+  <!-- ===== タブ7: セカンドオピニオン窓口 ===== -->
+  <div class="tab-panel" data-panel="secondopinion">
+    <h1 class="page-title">セカンドオピニオン窓口</h1>
+    <p class="page-sub">患者さんがSATOIから申し込んだセカンドオピニオン外来を、地域医療連携室が受け取り・準備・やり取りまで一元管理します。「何が必要か」はSATOIが先に患者さんへ説明済みです。</p>
+
+    <div class="card" style="padding:14px 20px; background:rgba(212,169,94,0.07); border-color:rgba(212,169,94,0.25);">
+      <div style="font-size:13px; color:var(--ink-medium);"><span class="consent-badge" style="background:rgba(212,98,42,0.12); color:#95421c;"><span class="d">●</span>すべて患者さん発</span> 申込は患者さん(またはご家族)がSATOIから発信したものです。連携室が受け取り、必要書類の準備状況・やり取りは患者さんもマイページで同じものを見られます(鏡の原則)。</div>
+    </div>
+
+    <div class="consult-stats">
+      <div class="roi-card"><div class="roi-num">17</div><div class="roi-label">今月のセカンドオピニオン申込</div></div>
+      <div class="roi-card"><div class="roi-num" style="color:var(--warm-orange)">−43%</div><div class="roi-label">受付〜日程調整のリードタイム</div></div>
+      <div class="roi-card"><div class="roi-num" style="color:var(--success)">−61%</div><div class="roi-label">書類不備による差し戻し</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-head">
+        <div class="table-title">申込キュー(患者発)</div>
+        <div class="table-filters">
+          <span class="filter-chip active" data-sofilter="all">全て</span>
+          <span class="filter-chip" data-sofilter="new">新規申込</span>
+          <span class="filter-chip" data-sofilter="docs">書類待ち</span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>申込者</th><th>聞きたいこと(患者の言葉)</th><th>必要書類</th><th>ステータス</th><th>受付</th><th></th></tr></thead>
+        <tbody id="soBody">
+          <tr data-sorow="docs" onclick="openSO('M')">
+            <td><div class="cell-name">患者M</div><div class="cell-sub">乳がんII期・40代</div></td>
+            <td style="font-size:12.5px; color:var(--ink-medium);">術後の治療方針について、別の先生の意見も聞きたい</td>
+            <td><span class="so-status docs">2/3 準備中</span></td>
+            <td><span class="so-status docs">書類待ち</span></td>
+            <td class="cell-sub">5/20</td>
+            <td><span class="alert-go">›</span></td>
+          </tr>
+          <tr data-sorow="new" onclick="openSO('K')">
+            <td><div class="cell-name">患者K</div><div class="cell-sub">肺がんIV期・60代</div></td>
+            <td style="font-size:12.5px; color:var(--ink-medium);">今の治療を続けるか、緩和を中心にするか相談したい(家族と)</td>
+            <td><span class="so-status new">準備案内済</span></td>
+            <td><span class="so-status new">新規申込</span></td>
+            <td class="cell-sub">5/22</td>
+            <td><span class="alert-go">›</span></td>
+          </tr>
+          <tr data-sorow="docs" onclick="openSO('S')">
+            <td><div class="cell-name">患者S</div><div class="cell-sub">大腸がんIII期・50代</div></td>
+            <td style="font-size:12.5px; color:var(--ink-medium);">手術後の再発予防の選択肢を、専門の先生に確認したい</td>
+            <td><span class="so-status done">3/3 完了</span></td>
+            <td><span class="so-status sched">日程調整中</span></td>
+            <td class="cell-sub">5/18</td>
+            <td><span class="alert-go">›</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:22px;">
+      <div class="card-title" style="margin-bottom:12px;"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.2 9 a3 3 0 1 1 4 2.8 c-1 .4 -1.2 1 -1.2 2 M12 17 h.01"/></svg></span>SATOIが連携室の手間を肩代わりすること</div>
+      <p style="font-size:13px; color:var(--ink-medium); line-height:1.95;">①「セカンドオピニオンとは何か」「診療情報提供書はどう用意するか」を、患者さんの理解度に合わせて<strong style="color:var(--warm-orange);">AIが先に説明</strong>。②必要書類のチェックリストと準備状況を可視化し、不備のまま受付に来ることを防ぐ。③病院ごとに違うセカンドオピニオン外来の詳細は、各病院の公式ページへ案内。④患者さんが病院を選べば、AIがその病院に寄せて事前準備をサポート。連携室は「揃った状態」で受け取れます。</p>
+    </div>
+  </div>
+
   <!-- ===== タブ6: 連携サービス ===== -->
   <div class="tab-panel" data-panel="services">
     <h1 class="page-title">連携サービス</h1>
@@ -760,8 +849,8 @@ tbody td { padding: 14px 16px; vertical-align: middle; }
       <div class="svc-card">
         <div class="svc-badge">在宅・緩和ケア連携</div>
         <div class="svc-title">在宅・緩和ケアへの橋渡し</div>
-        <p class="svc-desc">PSが下がってきた患者さんが「自宅の近くで、どんなケアを受けたいか」を起点に、拠点病院ディレクトリ・在宅医・緩和ケアと連携。患者さん発の希望に病院が応える形でつなぎます。</p>
-        <button class="svc-btn" onclick="location.href='SATOI_Mock_v1_HOSP_directory.html'">拠点病院ディレクトリを開く →</button>
+        <p class="svc-desc">PSが下がってきた患者さんが「自宅の近くで、どんなケアを受けたいか」を起点に、緩和ケア病棟のある病院・在宅医・緩和ケアと連携。患者さん発の希望に病院が応える形でつなぎます。</p>
+        <button class="svc-btn" onclick="location.href='SATOI_Mock_v1_HOSP_directory.html?palliative=ward&from=hospital'">緩和ケア病棟のある病院をさがす →</button>
       </div>
       <div class="svc-card">
         <div class="svc-badge">家族連携</div>
@@ -811,6 +900,49 @@ tbody td { padding: 14px 16px; vertical-align: middle; }
   </div>
 </div>
 
+<!-- ===== セカンドオピニオン申込 モーダル ===== -->
+<div class="modal-overlay" id="soModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="soTitle">セカンドオピニオン申込</div>
+        <div class="modal-sub" id="soSub">患者さん発の申込・本人同意済み</div>
+      </div>
+      <button class="modal-close" onclick="closeSO()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="section-block">
+        <div class="section-block-head">患者さんが聞きたいこと(本人の言葉)</div>
+        <p id="soWish" style="font-size:13px; color:var(--ink-medium); line-height:1.85; padding:14px 16px; background:var(--morning-cream); border-radius:10px; border-left:3px solid var(--starlight);"></p>
+      </div>
+
+      <div class="section-block">
+        <div class="section-block-head">必要書類チェックリスト(アプリ内の準備状況)</div>
+        <ul class="doc-list" id="soDocs"></ul>
+        <div class="mirror-note"><strong>病院ごとに詳細が異なります:</strong> セカンドオピニオン外来の費用・所要時間・予約方法は病院により違うため、各病院の公式ページをご案内します。<button class="card-link" style="margin-left:6px;" onclick="satoiNotify('当院のセカンドオピニオン外来の公式ページ(デモ)を患者さんへ案内しました。',{kind:'info'})">公式ページを案内 →</button></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-block-head">AIが患者さんに行った事前説明</div>
+        <div class="so-thread" id="soAi"></div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-block-head">患者さん ⇄ 連携室 のやり取り(鏡の原則・患者も同じ画面)</div>
+        <div class="so-thread" id="soThread"></div>
+        <div class="so-compose">
+          <input type="text" id="soInput" placeholder="連携室から患者さんへメッセージ(デモ)">
+          <button onclick="soSend()">送信</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-cta-row">
+      <button class="cta-primary" id="soAccept">この申込を受け付ける(日程調整へ)</button>
+      <button class="cta-secondary" onclick="closeSO()">閉じる</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* === トースト === */
 function satoiNotify(msg, opts) {
@@ -839,6 +971,7 @@ const crumbsLabel = {
   consult: '相談一次受け履歴',
   acp: 'ACP・意思決定支援',
   evidence: '効果とエビデンス',
+  secondopinion: 'セカンドオピニオン窓口',
   services: '連携サービス'
 };
 function goTab(tab){
@@ -983,7 +1116,106 @@ function closePatient(){
 document.getElementById('patientModal').addEventListener('click', function(e){
   if (e.target === this) closePatient();
 });
-document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closePatient(); });
+
+/* === セカンドオピニオン窓口 === */
+document.querySelectorAll('[data-sofilter]').forEach(function(chip){
+  chip.addEventListener('click', function(){
+    document.querySelectorAll('[data-sofilter]').forEach(function(c){ c.classList.remove('active'); });
+    chip.classList.add('active');
+    var f = chip.dataset.sofilter;
+    document.querySelectorAll('#soBody tr').forEach(function(tr){
+      tr.style.display = (f === 'all' || tr.dataset.sorow === f) ? '' : 'none';
+    });
+  });
+});
+
+var SO = {
+  M: {
+    title: 'セカンドオピニオン申込:患者M', sub: '乳がんII期・40代 / 患者さん発・本人同意済み(2026-05-20)',
+    wish: '「術後の治療方針について、通っている病院とは別の先生の意見も聞いてみたいです。子育てと両立できる選択肢かどうかも相談したい。」',
+    docs: [['診療情報提供書(主治医より)','wait','準備中:主治医へ依頼済'],['画像データ(CD-R/PACS)','ok','アプリ経由で連携室に共有済'],['病理結果','ok','共有済']],
+    ai: [
+      ['SATOI AI','セカンドオピニオンは「今の主治医を変えること」ではなく、別の専門医の意見を聞いて納得して選ぶための仕組みです、とご説明しました。'],
+      ['SATOI AI','必要な書類(診療情報提供書・画像・病理)と、主治医への依頼の仕方を順番にご案内しました。']
+    ],
+    thread: [
+      ['patient','患者M','診療情報提供書は来週の外来でお願いする予定です。'],
+      ['staff','連携室','承知しました。画像と病理は届いています。書類が揃い次第、日程をご案内します。']
+    ],
+    docsLabel: '2/3 準備中'
+  },
+  K: {
+    title: 'セカンドオピニオン申込:患者K', sub: '肺がんIV期・60代 / 本人＋ご家族発・本人同意済み(2026-05-22)',
+    wish: '「今の治療を続けるか、緩和を中心にするか、家族と一緒に専門の先生の意見を聞いて決めたい。痛みと息苦しさを和らげることを大切にしたい。」(一部ご家族の代弁)',
+    docs: [['診療情報提供書(主治医より)','wait','案内済:依頼準備中'],['画像データ','wait','案内済'],['病理結果','na','本件では任意']],
+    ai: [
+      ['SATOI AI','緩和ケアを「治療をやめること」と誤解されないよう、つらさを和らげながら治療と並行できることをご説明しました。'],
+      ['SATOI AI','ご家族も一緒に相談できること、AI代弁でご本人の希望を整理してお渡しできることをご案内しました。']
+    ],
+    thread: [
+      ['patient','患者K(家族代弁)','家族としても、本人の痛みのことを一緒に相談したいです。'],
+      ['ai','SATOI AI','ご本人とご家族の希望を整理して、連携室にお渡ししました。']
+    ],
+    docsLabel: '準備案内済'
+  },
+  S: {
+    title: 'セカンドオピニオン申込:患者S', sub: '大腸がんIII期・50代 / 患者さん発・本人同意済み(2026-05-18)',
+    wish: '「手術後の再発予防について、どんな選択肢があるのか、専門の先生に確認したいです。在宅で過ごしながら続けられる方法を知りたい。」',
+    docs: [['診療情報提供書(主治医より)','ok','共有済'],['画像データ','ok','共有済'],['病理結果','ok','共有済']],
+    ai: [
+      ['SATOI AI','再発予防の選択肢を整理し、何を質問すると有意義かを一緒に準備しました。'],
+      ['SATOI AI','書類がすべて揃ったので、連携室での受付に進めることをご案内しました。']
+    ],
+    thread: [
+      ['staff','連携室','書類が揃いました。セカンドオピニオン外来の候補日を3つご提案します。'],
+      ['patient','患者S','ありがとうございます。来週でお願いできれば助かります。']
+    ],
+    docsLabel: '3/3 完了'
+  }
+};
+
+var soCurrent = null;
+function openSO(key){
+  var s = SO[key];
+  if (!s) return;
+  soCurrent = key;
+  document.getElementById('soTitle').textContent = s.title;
+  document.getElementById('soSub').textContent = s.sub;
+  document.getElementById('soWish').textContent = s.wish;
+  document.getElementById('soDocs').innerHTML = s.docs.map(function(d){
+    var cls = d[1], label = (cls==='ok'?'準備OK':(cls==='wait'?'準備中':'任意'));
+    return '<li class="doc-item"><span class="doc-name">'+d[0]+'<div class="cell-sub">'+d[2]+'</div></span><span class="doc-chk '+cls+'">'+label+'</span></li>';
+  }).join('');
+  document.getElementById('soAi').innerHTML = s.ai.map(function(m){
+    return '<div class="so-msg ai"><div class="who">'+m[0]+'</div>'+m[1]+'</div>';
+  }).join('');
+  renderSOThread();
+  document.getElementById('soAccept').onclick = function(){
+    closeSO();
+    satoiNotify('✓ '+key+' の申込を受け付けました(デモ)。患者さんへ日程調整のご案内を送りました。鏡の原則で患者さんも同じ進捗を見られます。', { kind:'success' });
+  };
+  document.getElementById('soModal').classList.add('open');
+}
+function renderSOThread(){
+  var s = SO[soCurrent]; if (!s) return;
+  document.getElementById('soThread').innerHTML = s.thread.map(function(m){
+    return '<div class="so-msg '+m[0]+'"><div class="who">'+m[1]+'</div>'+m[2]+'</div>';
+  }).join('');
+}
+function soSend(){
+  var inp = document.getElementById('soInput');
+  var v = (inp.value||'').trim();
+  if (!v || !soCurrent) return;
+  SO[soCurrent].thread.push(['staff','連携室',v]);
+  inp.value = '';
+  renderSOThread();
+  var t = document.getElementById('soThread');
+  t.scrollTop = t.scrollHeight;
+}
+document.getElementById('soInput') && document.getElementById('soInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') soSend(); });
+function closeSO(){ document.getElementById('soModal').classList.remove('open'); }
+document.getElementById('soModal').addEventListener('click', function(e){ if (e.target === this) closeSO(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') { closePatient(); closeSO(); } });
 </script>
 
 <script src="satoi_common.js"></script>
