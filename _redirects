@@ -7,5 +7,5 @@
 /insurance        /SATOI_Mock_v1_G3_insurance_mypage.html 200
 /corporate        /SATOI_Mock_v1_G2_corporate_dashboard.html 200
 
-# 404 → A1 入口
-/*                /SATOI_Mock_v1_A1_entrance.html         404
+# 404 → SATOI 2.0 本体
+/*                /SATOI_2.0_prototype.html               404

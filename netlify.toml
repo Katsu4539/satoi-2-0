@@ -48,10 +48,10 @@
   to = "/SATOI_Mock_v1_G2_corporate_dashboard.html"
   status = 200
 
-# 404 フォールバック → A1 入口へ
+# 404 フォールバック → SATOI 2.0 本体へ
 [[redirects]]
   from = "/*"
-  to = "/SATOI_Mock_v1_A1_entrance.html"
+  to = "/SATOI_2.0_prototype.html"
   status = 404
 
 # セキュリティヘッダー
