@@ -91,7 +91,7 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
     <button class="brand" aria-label="SATOI ホーム" onclick="go('home')"></button>
   </div>
   <div style="display:flex;align-items:center;gap:8px">
-    <button class="hbtn" onclick="go('search')" aria-label="さがす"><i class="ti ti-search"></i></button><button class="hbtn" onclick="go('home')" aria-label="ホーム"><i class="ti ti-home"></i></button>
+    <button class="hbtn" onclick="go('search')" aria-label="さがす"><i class="ti ti-search"></i></button>
     <button class="mypage" onclick="go('mypage')"><i class="ti ti-user"></i>マイページ</button>
   </div>
 </div>
@@ -196,6 +196,11 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <div style="flex:1"><div style="font-size:16px;font-weight:600">わたしのページ</div><div class="note" id="myStatus">仮会員 ・ いつでも本登録できます</div></div>
       <button id="myReg" class="btn btn-teal" style="width:auto;padding:8px 14px;font-size:13px;flex-shrink:0" onclick="go('onboarding')"><i class="ti ti-user-plus" style="vertical-align:-2px"></i> 本登録</button>
     </div>
+    <button class="card" style="width:100%;text-align:left;margin-top:14px;background:var(--teal-bg);border:1px solid var(--teal);display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('search')">
+      <span class="ic ic46" style="background:#fff;flex-shrink:0"><i class="ti ti-search" style="font-size:23px;color:var(--teal)"></i></span>
+      <span style="flex:1"><span style="font-size:15px;font-weight:600;color:var(--teal-d)">気になることを調べる<span style="display:inline-block;font-size:10px;font-weight:600;color:#fff;background:var(--teal);border-radius:8px;padding:1px 7px;margin-left:6px;vertical-align:1px">無料</span></span><span class="note" style="display:block;color:var(--teal-d);opacity:.85;margin-top:2px">がん種・治療・お金・暮らし、何でも</span></span>
+      <i class="ti ti-chevron-right" style="color:var(--teal-d)"></i>
+    </button>
     <div class="card" style="margin-top:14px;background:var(--amber-bg);border:none;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('story')">
       <span class="ic ic46" style="background:#fff"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B5701B" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12.5" cy="4.2" r="2.2" fill="#B5701B" stroke="none"/><path d="M12.5 7 L11.5 13"/><path d="M11.5 13 L9 19"/><path d="M11.5 13 L15 17.5"/><path d="M12.2 9 L8.5 11"/><path d="M12.2 9 L16 8.2"/></svg></span>
       <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--amber-t)">物語を続ける</div><div style="font-size:12px;color:var(--amber)">今ここを歩いています ・ 12のかけら</div></div>
