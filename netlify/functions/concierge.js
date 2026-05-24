@@ -93,24 +93,56 @@ SATOIは、がんと向き合う方とご家族の「気持ち・治療・お金
 背景（記録・状況・壺の要約）が与えられたら、それをふまえて“その人に”話す。`;
 
 // @@CHIPS のidを、表示するボタンのラベルへ。フロントは [label, screenId] を go(screenId) でタップ遷移にする。
-const CHIP_LABELS = {
-  precision:'遺伝子の検査（プレシジョン）', precfac:'検査できる施設', sdmstart:'相談カードで整理',
-  bccare:'乳がんを知る', cancer:'がんを知る', survival:'あなたの段階を知る（次どうなる）',
-  treatment:'治療を知る', flow:'治療の流れ', drugs:'お薬を調べる',
-  money:'お金と暮らし', pubsys:'公的制度ガイド', benefitcat:'使える制度',
-  family:'家族と支え合う', support:'つらい時の相談先', voicerec:'声で残す',
-  recipes:'食べられたレシピ', body:'からだの記録', empse:'いまの、わたし（EMPSe）',
-  acp:'これからの希望（人生会議）', match:'同じ道を歩く人たち', sopinion:'セカンドオピニオン',
-  glossary:'用語をやさしく', hospital:'病院をさがす'
+// 言語ごとにラベルを用意（英・中の時はボタンも各言語で表示）。
+const CHIP_LABELS_BY_LANG = {
+  ja: {
+    precision:'遺伝子の検査（プレシジョン）', precfac:'検査できる施設', sdmstart:'相談カードで整理',
+    bccare:'乳がんを知る', cancer:'がんを知る', survival:'あなたの段階を知る（次どうなる）',
+    treatment:'治療を知る', flow:'治療の流れ', drugs:'お薬を調べる',
+    money:'お金と暮らし', pubsys:'公的制度ガイド', benefitcat:'使える制度',
+    family:'家族と支え合う', support:'つらい時の相談先', voicerec:'声で残す',
+    recipes:'食べられたレシピ', body:'からだの記録', empse:'いまの、わたし（EMPSe）',
+    acp:'これからの希望（人生会議）', match:'同じ道を歩く人たち', sopinion:'セカンドオピニオン',
+    glossary:'用語をやさしく', hospital:'病院をさがす'
+  },
+  en: {
+    precision:'Genomic testing (Precision)', precfac:'Where to get tested', sdmstart:'Organize with a consultation card',
+    bccare:'Understand breast cancer', cancer:'Understand cancer', survival:'Know your stage (what comes next)',
+    treatment:'Learn about treatment', flow:'The treatment journey', drugs:'Look up medications',
+    money:'Money & daily life', pubsys:'Public support guide', benefitcat:'Programs you can use',
+    family:'Support each other as a family', support:'Support lines for hard times', voicerec:'Keep it by voice',
+    recipes:'Recipes others could eat', body:'Body records', empse:'How I am now (EMPSe)',
+    acp:'Hopes for what’s ahead (ACP)', match:'People on the same path', sopinion:'Second opinion',
+    glossary:'Terms made simple', hospital:'Find a hospital'
+  },
+  zh: {
+    precision:'基因检测（精准医疗）', precfac:'可检测的机构', sdmstart:'用咨询卡整理',
+    bccare:'了解乳腺癌', cancer:'认识癌症', survival:'了解你的分期（接下来会怎样）',
+    treatment:'了解治疗', flow:'治疗流程', drugs:'查询药物',
+    money:'费用与生活', pubsys:'公共制度指南', benefitcat:'你能使用的制度',
+    family:'与家人相互扶持', support:'难熬时的咨询窗口', voicerec:'用声音留下',
+    recipes:'能吃下的食谱', body:'身体记录', empse:'此刻的我（EMPSe）',
+    acp:'对未来的期望（人生会议）', match:'同路人', sopinion:'第二意见',
+    glossary:'用浅显方式解释术语', hospital:'查找医院'
+  }
 };
-function parseChips(text){
+function parseChips(text, lang){
+  const labels = CHIP_LABELS_BY_LANG[lang] || CHIP_LABELS_BY_LANG.ja;
   const m = text.match(/@@CHIPS:\s*([^\n\r]+)/);
   if(!m) return { reply: text.trim(), chips: [] };
   const chips = m[1].split(',').map(s=>s.trim()).filter(Boolean).slice(0,3)
-    .map(id=>[CHIP_LABELS[id], id]).filter(c=>c[0]);
+    .map(id=>[labels[id], id]).filter(c=>c[0]);
   const reply = text.replace(/@@CHIPS:[^\n\r]*/,'').trim();
   return { reply, chips };
 }
+
+// 言語ごとのフォールバック文言
+const FALLBACK = {
+  ja: { nokey:'（AI未接続：環境変数 ANTHROPIC_API_KEY を設定してください）', noparse:'（うまく聞き取れませんでした。もう一度お願いできますか）', err:'（いま一時的にAIへつながりませんでした。少し待って、もう一度お試しください）' },
+  en: { nokey:'(AI not connected: please set the ANTHROPIC_API_KEY environment variable)', noparse:'(I couldn’t quite catch that. Could you say it once more?)', err:'(I couldn’t reach the AI just now. Please wait a moment and try again.)' },
+  zh: { nokey:'（AI 未连接：请设置环境变量 ANTHROPIC_API_KEY）', noparse:'（没能听清楚，能再说一次吗？）', err:'（暂时无法连接到 AI。请稍候片刻再试一次。）' }
+};
+const LANG_NAMES = { en:'English', zh:'Simplified Chinese (简体中文)' };
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -121,12 +153,15 @@ exports.handler = async (event) => {
   const message = (payload.message || '').toString().slice(0, 4000);
   const context = (payload.context || '').toString().slice(0, 4000); // 患者さんの背景（壺の要約など）
   const dialect = (payload.dialect || '').toString().slice(0, 40); // 話し方（方言）の希望
+  let lang = (payload.lang || 'ja').toString().slice(0, 5); // 表示言語（ja / en / zh）
+  if (lang !== 'en' && lang !== 'zh') lang = 'ja';
+  const fb = FALLBACK[lang] || FALLBACK.ja;
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const model = process.env.CLAUDE_MODEL || 'claude-haiku-4-5-20251001';
 
   if (!apiKey) {
-    return json(200, { reply: '（AI未接続：環境変数 ANTHROPIC_API_KEY を設定してください）', src: '', chips: [] });
+    return json(200, { reply: fb.nokey, src: '', chips: [] });
   }
 
   // 会話履歴（ターンの絶対ルールを効かせるため、過去のやり取りを渡す）
@@ -153,9 +188,12 @@ exports.handler = async (event) => {
     }
   }
 
-  // 話し方（方言）：相手の安心のため、選ばれた方言でやわらかく。医療の事実・出典・安全・機能名は正確に保つ（方言で意味を崩さない）。
   let sys = SYSTEM_PROMPT;
-  if (dialect && dialect !== '標準語') {
+  // 表示言語が英・中のときは、その言語で応答（SATOIの声・ターン規律・安全・@@CHIPSはそのまま）。
+  if (lang === 'en' || lang === 'zh') {
+    sys += '\n\n# Output language (MANDATORY)\nThe user has set the interface to ' + LANG_NAMES[lang] + '. Respond ONLY in ' + LANG_NAMES[lang] + '. Keep exactly the same gentle SATOI voice, the pacing/turn rules, the safety rules, the brevity (2–4 sentences), and the @@CHIPS line. Render page and feature names naturally in ' + LANG_NAMES[lang] + ' in your prose, but the screen IDs on the @@CHIPS line MUST stay unchanged (e.g. precision, sdmstart). Use medical terminology standard for ' + LANG_NAMES[lang] + ' readers, and keep sources (e.g. National Cancer Center Japan) accurate.';
+  } else if (dialect && dialect !== '標準語') {
+    // 話し方（方言・日本語時のみ）：相手の安心のため、選ばれた方言でやわらかく。医療の事実・出典・安全・機能名は正確に保つ。
     sys += '\n\n# 話し方（方言）\n相手の安心のため、できるだけ「' + dialect + '」のやわらかい話し方で応じてください。ふるさとの言葉は、そばにいる安心になります。ただし、医療の事実・出典・安全配慮・SATOIの機能名は正確に保ち、方言で意味が崩れないように。不自然になりそうな時は、無理せず自然な範囲で。';
   }
 
@@ -180,11 +218,11 @@ exports.handler = async (event) => {
     const data = await r.json();
     const blocks = data && data.content;
     const raw = (Array.isArray(blocks) ? blocks.map(b => (b && b.text) || '').join('') : '').trim()
-      || '（うまく聞き取れませんでした。もう一度お願いできますか）';
-    const parsed = parseChips(raw);
+      || fb.noparse;
+    const parsed = parseChips(raw, lang);
     return json(200, { reply: parsed.reply, src: '', chips: parsed.chips });
   } catch (e) {
-    return json(200, { reply: '（いま一時的にAIへつながりませんでした。少し待って、もう一度お試しください）', src: '', chips: [] });
+    return json(200, { reply: fb.err, src: '', chips: [] });
   }
 };
 

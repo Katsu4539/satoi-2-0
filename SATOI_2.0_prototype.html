@@ -187,6 +187,7 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
   </div>
   <div style="display:flex;align-items:center;gap:8px">
     <button class="hbtn emgdot" onclick="go('emergency')" aria-label="緊急QR・救急時カード" title="緊急QR"><i class="ti ti-urgent"></i></button>
+    <button id="langDot" class="hbtn" onclick="cycleLang()" aria-label="言語切替 / Language / 语言" title="言語 / Language / 语言" data-noi18n style="font-size:13px;font-weight:700;letter-spacing:0">あ</button>
     <button class="hbtn" onclick="go('search')" aria-label="さがす"><i class="ti ti-search"></i></button>
     <button id="hdrPts" onclick="go('points')" aria-label="ポイント" style="display:none;align-items:center;gap:4px;height:34px;padding:0 11px;border-radius:999px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:var(--amber-t);cursor:pointer;font:inherit"><i class="ti ti-gift" style="font-size:15px"></i><span id="hdrPtsNum" style="font-size:13px;font-weight:600">0</span><span style="font-size:11px">pt</span></button>
   </div>
@@ -221,6 +222,15 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
   <div class="pad">
     <div class="newstk" onclick="go('news')"><span class="nt-badge"><i class="ti ti-bell" style="vertical-align:-1px"></i> 新着</span><span class="nt-win"><span class="nt-track">子宮頸がんとHPVワクチン：検診の考え方をやさしく更新　・　免疫チェックポイント阻害薬とは？仕組みをやさしく解説　・　高額療養費制度の上限額、知っておきたい基本　・　がんゲノム医療（パネル検査）は保険で受けられる？</span></span><i class="ti ti-chevron-right" style="color:var(--amber);flex-shrink:0"></i></div>
     <button class="card" style="width:100%;text-align:left;display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:14px" onclick="go('search')"><i class="ti ti-search" style="font-size:20px;color:var(--teal)"></i><span style="font-size:14px;color:var(--mute)">がん種・用語・機能をさがす…</span></button>
+    <button class="card" id="prmovieHome" style="width:100%;text-align:left;cursor:pointer;margin-bottom:14px;padding:0;overflow:hidden;display:block;border:.5px solid var(--teal-bg)" onclick="go('prmovie')">
+      <div style="position:relative;height:130px;background:linear-gradient(120deg,#10303a,#0F6E56 58%,#C0892F)">
+        <img data-aoi="hero_prmovie" src="img/aoi_hero_prmovie.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.5))"></div>
+        <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.35)"><i class="ti ti-player-play-filled" style="font-size:26px;color:var(--teal-d);margin-left:3px"></i></span>
+        <span style="position:absolute;right:12px;top:11px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;padding:2px 9px;font-size:10px;font-weight:600">紹介ムービー</span>
+        <div style="position:absolute;left:14px;bottom:11px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.55)"><div style="font-size:16px;font-weight:700">1分でわかる、SATOI</div><div style="font-size:11px;opacity:.92;margin-top:2px">なぜ私たちは、つながって生きるのか</div></div>
+      </div>
+    </button>
     <div style="font-size:15px;font-weight:600;margin-top:8px">今日、できること</div>
     <div class="sub" style="margin-bottom:12px">気になることから、ひらいて進めます</div>
     <div class="row2">
@@ -568,7 +578,7 @@ function cvBubble(role,html){
 function cvReply(text){
   /* === API連携ポイント ===
      本番では下のルールベースを消し、proxy(サーバーレス関数)へ:
-       const r=await fetch('/.netlify/functions/concierge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})});
+       const r=await fetch('/.netlify/functions/concierge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,lang:(window._lang||'ja')})});
        return await r.json();   // 形式 {reply, src, chips:[[label,screenId]...]}
      ※APIキーは関数の環境変数に置き、HTMLには絶対に書かない。 */
   var t=text||'';
@@ -584,7 +594,7 @@ async function cvAnswer(text){
   /* AIゲートウェイ(Netlify Function)があれば本物のAI、無ければローカルのルールベースにフォールバック */
   /* ★会話履歴(window._cvHistory)も渡す：これでAIが「何ターン目か」を把握でき、3ターン目に必ず具体策を返す絶対ルールが効く */
   var d=null;
-  try{var r=await fetch('/.netlify/functions/concierge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,history:(window._cvHistory||[]),dialect:(window._dialect||'')})});if(r.ok){var j=await r.json();if(j&&j.reply)d={reply:j.reply,src:j.src||'',chips:j.chips||[]};}}catch(e){}
+  try{var r=await fetch('/.netlify/functions/concierge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,history:(window._cvHistory||[]),dialect:(window._dialect||''),lang:(window._lang||'ja')})});if(r.ok){var j=await r.json();if(j&&j.reply)d={reply:j.reply,src:j.src||'',chips:j.chips||[]};}}catch(e){}
   if(!d)d=cvReply(text);
   cvRender(d);
   if(d&&d.reply){window._cvHistory=(window._cvHistory||[]);window._cvHistory.push({role:'assistant',content:d.reply});}
@@ -1628,6 +1638,13 @@ function lightUp(b){if(b.getAttribute('data-lit'))return;b.setAttribute('data-li
 function thanksTap(b){if(b.getAttribute('data-sent'))return;b.setAttribute('data-sent','1');b.innerHTML='<i class="ti ti-check"></i> ありがとう、届けました';b.style.background='#0F6E56';}
 function replayMovie(){var s=document.getElementById('mvStage');if(!s)return;s.classList.remove('mvgo');void s.offsetWidth;s.classList.add('mvgo');}
 window._oninit['aboutmovie']=function(){replayMovie();};
+window._oninit['prmovie']=function(){var v=document.getElementById('prmovieVid'),ph=document.getElementById('prmoviePlaceholder');if(!v)return;
+  var showPh=function(){if(ph)ph.style.display='block';};var hidePh=function(){if(ph)ph.style.display='none';};
+  v.onloadeddata=hidePh;v.oncanplay=hidePh;v.onerror=showPh;
+  var s=v.querySelector('source');if(s)s.onerror=showPh;
+  /* 既に読み込めているなら隠す（戻ってきた時） */
+  if(v.readyState>=2)hidePh();else showPh();
+};
 var delCtx={orig:'',soft:''};
 function openDeliver(orig,soft){delCtx={orig:orig,soft:soft};go('deliver');}
 function deliverDone(){window._delivered=1;var f=document.getElementById('delForm'),d=document.getElementById('delDone');if(f)f.style.display='none';if(d)d.style.display='block';}
@@ -5509,6 +5526,34 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
   </div>
 </section>
 
+<!-- ============ 紹介ムービー（PR・実写映像・Geminiで生成して配置） ============ -->
+<section class="scr" id="prmovie">
+  <div class="pad">
+    <div style="display:flex;align-items:center;gap:9px;margin-top:6px"><span class="ic ic34" style="background:var(--teal-bg);flex-shrink:0"><i class="ti ti-movie" style="color:var(--teal)"></i></span><h1 class="h1" style="margin:0">SATOIってなに？</h1></div>
+    <div class="sub" style="margin-top:6px">1分の紹介ムービー。どこで、誰と、何ができるのか。</div>
+
+    <div style="margin-top:14px;border-radius:16px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 8px 26px rgba(38,48,63,.14);background:#000">
+      <video id="prmovieVid" controls playsinline preload="metadata" poster="img/aoi_hero_prmovie.jpg" style="width:100%;display:block;background:#000">
+        <source src="movie/satoi_pr.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div id="prmoviePlaceholder" style="margin-top:10px;border:.5px dashed var(--teal);border-radius:12px;background:var(--teal-bg);padding:13px 14px">
+      <div style="font-size:13px;font-weight:600;color:var(--teal-d)"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> 動画は準備中です</div>
+      <div class="note" style="line-height:1.7;margin-top:5px">Geminiで生成した紹介ムービーを <b>movie/satoi_pr.mp4</b> に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。</div>
+      <button class="btn btn-out" style="margin-top:10px;width:auto;padding:8px 14px" onclick="go('aboutmovie')"><i class="ti ti-player-play" style="vertical-align:-2px"></i> いまは、動くダイジェストを見る</button>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div style="font-size:14px;font-weight:600">この動画で伝えること</div>
+      <div class="note" style="line-height:1.95;margin-top:7px">・がんと言われた、その日から。ひとりにしない場所。<br>・読むのは、だれでも無料。<br>・あなたの「声」が、医師に届く（シェアード・ディシジョン）。<br>・物語（ナラティブ）が、治療を越えて人を支える。<br>・同じ道を歩く人と、医療者と、家族と——つながって、生きよう。</div>
+    </div>
+
+    <button class="btn btn-teal" style="margin-top:14px" onclick="go('onboarding')">無料ではじめる</button>
+    <button class="btn btn-out" style="margin-top:8px" onclick="go('about')">SATOIの物語をもっと読む</button>
+  </div>
+</section>
+
 <!-- ============ SATOIってなに？（動くムービー・Claude在エンジン） ============ -->
 <section class="scr" id="aboutmovie">
   <style>
@@ -6076,7 +6121,7 @@ function render(){
   var focusScr=(id==='ai'||id==='tdetail'||id==='onboarding'||id==='signin'||id==='memberwall'||id==='register'||id==='terms'||id==='consent');
   var fab=document.getElementById('fab');if(fab)fab.style.display=focusScr?'none':'flex';
   var tb=document.getElementById('tabbar');if(tb){tb.style.display=focusScr?'none':'flex';
-    var TM={home:'home',treatment:'treatment',cancer:'treatment',canpage:'treatment',bccare:'treatment',flow:'treatment',learn:'treatment',survival:'treatment',precision:'treatment',money:'treatment',scan:'treatment',benefit:'treatment',pubsys:'treatment',fp:'treatment',empse:'empse',empinput:'empse',empaxis:'empse',emphist:'empse',acp:'empse',body:'empse',match:'empse',peer:'empse',story:'story',write:'story',voicerec:'story',aiweave:'story',reread:'story',hibi:'story',luminaria:'story',recipes:'story',recipe:'story',deliver:'story',records:'story',video:'story',listen:'story',worldstyle:'story',news:'home',offers:'home',mypage:'mypage',account:'mypage',plans:'mypage',family:'mypage',sdmstart:'mypage',sdmbuild:'mypage',emergency:'mypage',dialect:'mypage'};
+    var TM={home:'home',treatment:'treatment',cancer:'treatment',canpage:'treatment',bccare:'treatment',flow:'treatment',learn:'treatment',survival:'treatment',precision:'treatment',money:'treatment',scan:'treatment',benefit:'treatment',pubsys:'treatment',fp:'treatment',empse:'empse',empinput:'empse',empaxis:'empse',emphist:'empse',acp:'empse',body:'empse',match:'empse',peer:'empse',story:'story',write:'story',voicerec:'story',aiweave:'story',reread:'story',hibi:'story',luminaria:'story',recipes:'story',recipe:'story',deliver:'story',records:'story',video:'story',listen:'story',worldstyle:'story',news:'home',offers:'home',prmovie:'home',aboutmovie:'home',about:'home',howto:'home',faq:'home',mypage:'mypage',account:'mypage',plans:'mypage',family:'mypage',sdmstart:'mypage',sdmbuild:'mypage',emergency:'mypage',dialect:'mypage'};
     var tk=TM[id]||'';var bs=tb.querySelectorAll('.tabbtn');for(var i=0;i<bs.length;i++){if(bs[i].getAttribute('data-tab')===tk)bs[i].classList.add('on');else bs[i].classList.remove('on');}}
   var hp=document.getElementById('hdrPts');if(hp){hp.style.display=window._isMember?'inline-flex':'none';var hn=document.getElementById('hdrPtsNum');if(hn&&window._points!=null)hn.textContent=window._points.toLocaleString();}
   var hb=document.getElementById('hback');if(hb)hb.style.visibility=(id==='home'?'hidden':'visible');
@@ -6150,6 +6195,174 @@ function openPeer(k){var p=PEERS[k];if(!p)return;
   var box=document.getElementById('peerVoices');if(box)box.innerHTML=p.voices.map(function(v){return '<div class="card" style="margin-bottom:10px"><div class="note" style="font-size:11px;color:var(--amber-t)"><i class="ti ti-quote"></i> '+v.t+'</div><div style="font-size:14px;line-height:1.85;margin-top:6px">「'+v.v+'」</div><div style="margin-top:10px"><button class="litbtn" onclick="lightUp(this)" style="display:inline-flex;align-items:center;gap:5px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:#B5701B;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:600;font:inherit"><i class="ti ti-flame"></i> エールを送る ・ <span class="lcount">'+v.light+'</span></button></div></div>';}).join('');
   go('peer');}
 window.addEventListener('hashchange',render);
+
+/* ============================================================
+   i18n 辞書（日本語原文 → 英語 / 中文）
+   ・トランスクリエーション（直訳でなく"感情"を訳す）
+   ・SATOI名はそのまま／葵=Aoi・葵／用語は標準的な英中腫瘍学用語
+   ・新しい訳は各言語のセンチネル直前に追記して拡張（EN/ZH の末尾マーカー）
+   ============================================================ */
+window.I18N={ja:{},en:{
+/* --- 共通UI（ヘッダー・タブ・FAB） --- */
+"前の画面に戻る":"Back","SATOI ホーム":"SATOI Home","緊急QR":"Emergency QR","緊急QR・救急時カード":"Emergency QR · Emergency Card","さがす":"Search","ポイント":"Points","ホーム":"Home","治療":"Treatment","物語":"Story","マイページ":"My Page","治療を知る":"Learn about treatment","EMPSe いまの、わたし":"EMPSe — How I am now",
+/* --- ホーム --- */
+"ようこそ、SATOIへ":"Welcome to SATOI","はじめての方も、調べるだけでも大丈夫。":"New here, or just looking around? That's perfectly fine.","あなたのペースで、ゆっくりで。":"At your own pace. Take your time.","無料ではじめる":"Start free","まず調べてみる":"Just look around first","新着":"New","子宮頸がんとHPVワクチン：検診の考え方をやさしく更新　・　免疫チェックポイント阻害薬とは？仕組みをやさしく解説　・　高額療養費制度の上限額、知っておきたい基本　・　がんゲノム医療（パネル検査）は保険で受けられる？":"Cervical cancer and the HPV vaccine: a gentle update on how to think about screening　·　What are immune checkpoint inhibitors? A simple guide to how they work　·　The High-Cost Medical Expense Benefit: the basics worth knowing about the cap　·　Is cancer genomic medicine (panel testing) covered by insurance?","がん種・用語・機能をさがす…":"Search by cancer type, term, or feature…","今日、できること":"What you can do today","気になることから、ひらいて進めます":"Start with whatever's on your mind.","治療のこと":"About treatment","標準治療・がんを知る":"Standard treatment · Understanding cancer","お金・暮らし":"Money & daily life","給付金・公的制度":"Benefits & public support","物語を続ける":"Continue your story","声・記録・あなたの軌跡":"Voice · Records · Your journey","心と家族":"Heart & family","支え合う・伝える":"Support each other · Share","今の気持ちは？　タップで確かめる":"How are you feeling now? Tap to check in.","「がんです」と言われた方へ":"For those who've just been told “it's cancer”","いま何が起きているか、これからの流れを、順番に。あなたのペースで。":"What's happening now, and what comes next — step by step, at your own pace.","AIコンシェルジュに相談する":"Talk to the AI concierge","新着ニュース":"Latest news","すべて見る":"See all","学び":"Learn","子宮頸がんとHPVワクチン：検診の考え方を更新":"Cervical cancer and the HPV vaccine: rethinking screening","お金":"Money","高額療養費制度の上限額、知っておきたい基本":"The High-Cost Medical Expense Benefit: the basics worth knowing about the cap","提供":"Sponsored","学び・お役立ち（スポンサード）を見る":"See learning & resources (sponsored)","はじめての方へ":"For first-time visitors","使い方をみる（動画）":"See how it works (video)","よくある質問（Q&A）":"FAQ (Q&A)","SATOIってなに？":"What is SATOI?","医療情報は、広告でゆがめません":"We never let ads distort medical information","ご協力企業の情報やスポンサード教育は、はっきり区別して（提供／PR）。掲載は":"Partner-company information and sponsored education are clearly marked (Sponsored / PR). Listings are","SATOI・JOiNTの倫理委員会":"the SATOI · JOiNT ethics committee","で審査し、出典つき・専門家監修で。":" reviewed, with sources cited and expert supervision.","ご協力いただいている企業・学会（提供）":"Partner companies & societies (sponsored)","製薬 A":"Pharma A","がんと栄養の学び":"Learning about cancer & nutrition","製薬 B":"Pharma B","副作用の基礎":"Side-effect basics","学会 C":"Society C","臨床試験を知る":"Understanding clinical trials","団体 D":"Organization D","暮らしの支え":"Support for daily life","ロゴをタップで、提供元の学び（JOiNT審査済）へ。":"Tap a logo for the sponsor's learning content (JOiNT-reviewed).","この広告枠ではポイントは付きません。":"No points are earned from this ad space.","学びを見ると、学びのdポイントが少し貯まります。":"Viewing learning content earns you a few learning d POINTs.","信頼と安全について":"About trust & safety","医療情報は出典・専門医監修にもとづき、AIは閉域環境で出典を参照して答えます（推測の断定はしません）。患者さんの声は有害事象として集め、医学的に評価し、必要な所へ橋渡しします。":"Medical information is grounded in cited sources and specialist supervision; the AI answers within a closed environment by referring to those sources (it never states guesses as fact). Patients' voices are gathered as adverse-event signals, evaluated medically, and bridged to where they're needed.","くわしく（出典・AI・副作用・データの扱い）":"Details (sources · AI · side effects · data handling)","全てはがん患者さんのために。":"Everything, for people with cancer.","つながって、生きよう。":"Connect, and live.","あなたの情報は、あなたのもの":"Your information belongs to you",
+"登録しなくても、そのまま無料で使えます。":"You can keep using it free, without signing up.","ログイン":"Log in",
+/* --- 認証ファネル（onboarding / signin / memberwall） --- */
+"はじめる":"Get started","登録は無料。まずはお試しで、すぐ使えます":"Signing up is free. Try it out — you can start right away.","まずは、かんたん登録から。30秒で、あなたの場所ができます。":"Let's start with a quick sign-up. In 30 seconds, you'll have a place of your own.","Google ではじめる":"Continue with Google","Apple ではじめる":"Continue with Apple","LINE ではじめる":"Continue with LINE","メールで無料登録":"Sign up free with email","登録済みの方はログイン":"Already registered? Log in","登録せずに見る":"Look around without signing up","登録は無料・電話番号いりません。お金がかかるのは":"Registration is free — no phone number needed. It only costs anything when you use ","伴走":"Companion","を使うときだけ。":".","会員と伴走について":"About membership & Companion","SATOIのしくみ（よかったら）":"How SATOI works (if you'd like)","調べる・知る・相談":"Explore · Learn · Ask","ずっと無料":"Always free","登録なしでも使えます。がんを知る／治療の流れ／用語をやさしく／病院をさがす／AIコンシェルジュ（無料枠）／つらい時の相談先。":"Available even without signing up: understanding cancer / the treatment journey / plain-language terms / finding hospitals / the AI concierge (free tier) / support lines for hard times.","記録を残す・自分のページ":"Keep records · Your own page","無料登録":"Free sign-up","声・物語・からだの記録／自分のがんに合わせた表示／相談カードをつくる・保存／家族とつながる。続きから使えます。":"Records of your voice, story, and body / a view tailored to your cancer / create & save consultation cards / connect with family. Pick up where you left off.","もっと深く・手配・レポート":"Go deeper · Arrange · Report","伴走（使った分だけ）":"Companion (pay only for what you use)","AIをもっと深く（無料枠の先まで）／自由診療・セカンドオピニオンの手配／レポート出力／医療者向けの最深部。使った分だけの従量です。":"Go deeper with AI (beyond the free tier) / arranging private care & second opinions / report exports / the deepest layer for healthcare professionals. Pay-as-you-go — only for what you use.","なぜ登録するの？":"Why sign up?","あなたの記録（声・物語・からだ）を安全に保存して、次に来た時に":"To safely keep your records (voice, story, body) so that when you return, you can ","続きから":"pick up where you left off","使えるようにするためです。電話番号はいりません。あとから無料登録もかんたん。":". No phone number needed. Signing up free later is easy too.","いつでも退会・データ削除ができます。":"You can cancel your account and delete your data at any time.","データの扱いは？":"How is my data handled?","続けると":"By continuing, you agree to the ","利用規約":"Terms of Service","と":" and ","プライバシー":"Privacy","に同意したことになります。":" Policy.","無料登録が完了しました":"Your free sign-up is complete","メール":"Email","で登録しました。これで記録の保存・パーソナライズ・専門モードが使えます。":" sign-up complete. You can now save your records, enjoy personalization, and use Expert mode.","いま、あなたはここ":"You are here, now","記録・自分のページ":"Records · Your page","いま、ここ":"You're here now","次に進みたくなったら、③伴走（使った分だけ）。いまは、使わなくて大丈夫です。":"When you feel ready for more, there's ③ Companion (pay only for what you use). For now, there's no need.","マイページへ":"Go to My Page","Google・Apple・LINE の実ログイン認証は、各社OAuthとの接続で有効化されます。":"Real Google / Apple / LINE login is enabled by connecting to each provider's OAuth.",
+"おかえりなさい":"Welcome back","ログインして、続きから。":"Log in and pick up where you left off.","あなたの記録・壺が、待っています。":"Your records and your vessel are waiting.","Google でログイン":"Log in with Google","Apple でログイン":"Log in with Apple","LINE でログイン":"Log in with LINE","メールでログイン":"Log in with email","はじめての方は、かんたん登録":"New here? Quick sign-up","実ログイン認証は各社OAuthとの接続で有効化されます。":"Real login is enabled by connecting to each provider's OAuth.","デモ用ショートカット（本番では外します）":"Demo shortcut (removed in production)","このまま葵さんで入る":"Enter as Aoi (demo)",
+"戻る":"Back","ここからは、あなただけの場所です":"From here on, it's a place just for you","マイページ・記録・壺・ポイントは、":"My Page, your records, your vessel, and points are ","かんたん登録（無料）":"a quick (free) sign-up","で使えます。":" away.","あなたの声や記録が、続きからたまっていきます。":"Your voice and records keep building, right where you left off.","かんたん登録ではじめる（無料・30秒）":"Start with a quick sign-up (free · 30 sec)","登録済みの方は、ログイン":"Already registered? Log in","いまは登録せずに戻る":"Go back without signing up for now","登録は無料・電話番号いりません。お金がかかるのは伴走を使うときだけ。いつでも退会・データ削除ができます。":"Registration is free — no phone number needed. It only costs anything when you use Companion. You can cancel and delete your data anytime.","あなたが見るものは、私たちも同じだけ（鏡の原則）。":"We see only what you see — no more (the mirror principle).",
+/* --- 治療タブ（treatment） --- */
+"確かめられた治療を、やさしく整理しました":"We've gently organized treatments backed by evidence.","あなたのがん：":"Your cancer: ","子宮頸がん":"Cervical cancer","をくわしく":" in detail","病期・治療・お金まで、あなた用に":"From stage to treatment to costs — tailored to you","ほかのがん種から調べる":"Browse by other cancer types","乳がん・肺がん…どのがんも、やさしく詳しく読めます":"Breast, lung… every cancer, explained gently and in depth.","調べるのは登録なしで自由にできます。登録（無料）すると、自分用に記録・保存できます。":"You can explore freely without signing up. Sign up (free) to record and save things for yourself.","標準治療の4つの柱":"The four pillars of standard treatment","薬物療法":"Drug therapy","抗がん剤・分子標的薬 等":"Chemotherapy, molecular-targeted drugs, etc.","手術":"Surgery","病巣を取り除く":"Removing the tumor","放射線治療":"Radiation therapy","照射でがんを叩く":"Targeting cancer with radiation","緩和ケア":"Palliative care","つらさをやわらげる":"Easing what's hard","出典：国立がん研究センター がん情報サービス。詳しい適応は主治医にご確認ください。":"Source: National Cancer Center Japan, Cancer Information Service. Please confirm specific indications with your doctor.","抗がん剤の薬剤一覧":"List of chemotherapy drugs","プレシジョンメディシン":"Precision medicine","標準治療の、その先の選択肢。遺伝子から効く薬を（保険でも）。":"Options beyond standard treatment: drugs matched to your genes (covered by insurance, too).","がんを知る":"Understand cancer","治療の流れ":"The treatment journey","学び・研究":"Learning & research","自由診療をさがす":"Find private-care options","病院をさがす":"Find a hospital","別の先生にも聞きたい（セカンドオピニオン）":"Ask another doctor (second opinion)","聞きたいことを整理する":"Organize what you want to ask",
+/* --- EMPSe タブ --- */
+"いまの、わたし":"How I am now","EMPSe — 5つの面から、今のあなたを見つめます。スコアは競うものではなく、あなたと支える人が変化に気づくための地図です。":"EMPSe looks at how you are now across five dimensions. The score isn't something to compete over — it's a map that helps you and those supporting you notice change.","葵さんの、いまの5軸":"Aoi's five axes, right now","この2週間の総合EMPSe":"Overall EMPSe for the past two weeks","くわしく":"Details","EMPSeが7日平均より":"When your EMPSe falls ","20点":"20 points","下がると、担当の看護師さんにそっと届きます。":" below your 7-day average, a gentle note quietly reaches your nurse.","本質はスコアより\"人への接続\"":"What matters most isn't the score, but \"connecting to a person\"","。つらい時、ひとりにしません。":". When things are hard, you won't be left alone.","これからの希望を話しておく（人生会議・ACP）":"Talk about your hopes for what's ahead (Advance Care Planning · ACP)","急がず、書ける時に少しずつ":"No rush — a little at a time, whenever you can","同じ道を歩く人たちの、いま":"How others walking the same path are doing now","似た状況の人の声を読む・エールを送る（恩送り）":"Read voices from people in similar situations · send encouragement (paying it forward)","携帯から、今日のからだを取り込む":"Import today's body data from your phone","ボタンひとつで歩数・活動・睡眠が入り、身体の軸に反映＝ポイントも":"One tap brings in steps, activity, and sleep — reflected in your Body axis, and you earn points, too","今日のEMPSeを入力する":"Enter today's EMPSe","各軸をタップすると、何から測っているか（歩数・睡眠・ePRO 等）と推移が見られます。出典つき・公開時に専門医監修。記録は「物語」にも残ります。":"Tap each axis to see what it measures (steps, sleep, ePRO, etc.) and its trend over time. Sources cited; specialist-reviewed on release. Your entries are also kept in your Story.",
+/* --- 物語タブ（story） --- */
+"Geminiが描く・":"Drawn by Gemini · ","朝の光（写真風）":"Morning light (photographic)","あなたの物語":"Your story","いまは「今ここ」の光。来るたび、すこし変わります。":"Right now, it's the light of “here and now.” It shifts a little each time you visit.","あなたの世界を選ぶ（光のスタイル）":"Choose your world (style of light)","ここに話したことは、そっと残ります。":"What you share here is kept, gently.","先生に伝えたい時は相談カードに、家族に届けたい時は——SATOIが、あなたの言葉で運びます。":"When you want to tell your doctor, it becomes a consultation card; when you want it to reach your family — SATOI carries it, in your own words.","何でも、気軽に。":"Anything at all — feel free.","今朝、あなたへ":"This morning, for you","退院から2週間。子どもたちと囲む食卓が、すこしずつ戻ってきました。告知の日、あなたは「子どもがまだ小さいのに、なぜ私が」と書いていましたね。それでも毎日、あなたはちゃんと、子どもたちのそばに居続けています。":"Two weeks since discharge. The table you share with your children is slowly coming back. On the day of your diagnosis, you wrote, “My children are still so small — why me?” And yet, every single day, you have kept on being right there beside them.","つづきをつむぐ":"Weave the next part","自分の声を聞き返す":"Listen back to your own voice","SATOIが、あなたの記録からそっとつむぎました":"SATOI gently wove this from your records","これまでの物語":"Your story so far","光が、育っていく":"The light keeps growing","たった今 ・ いまの光":"Just now · the light of now","今日のことを、残した":"You kept a note of today","壺に残って、あなたの物語に加わりました。光がまた少し、進みました。":"It's kept in your vessel and added to your story. The light has moved forward, just a little more.","タップで、残した言葉を読み返す":"Tap to reread what you kept","たった今 ・ 家族へ":"Just now · to family","気持ちを、家族に届けた":"You sent your feelings to your family","家族":"Family","SATOIが、あなたの言葉をやさしく整えて、家族の輪にそっと届けました。":"SATOI gently shaped your words and quietly delivered them to your family circle.","お母さんに届きました":"Delivered to Mom","今日 ・ いまの光":"Today · the light of now","子どもと、また笑えた":"I laughed with my children again","読み返す":"Reread","下の子と、折り紙をした。髪が抜けはじめたことも、あの子は気にしない。ただ、笑ってくれた。":"I folded origami with my younger one. They don't mind that my hair has started to fall out. They just smiled for me.","灯りをともす ・":"Light a luminaria · ","家族に届ける":"Deliver to family","入院していたころ ・ 空が白みはじめる光":"When I was hospitalized · the light of a sky beginning to pale","夫と、両親に甘えた日々":"The days I leaned on my husband and parents","「入院のあいだ、夫と両親が子どもを見てくれました。ありがたいのに、“母親なのにそばにいられない”という申し訳なさで、眠れない夜もありました。」":"“While I was in the hospital, my husband and parents looked after the children. I was so grateful — and yet the guilt of ‘being their mother, but unable to be by their side’ kept me awake some nights.”","相談カードに入れる":"Add to a consultation card","はじまりの日 ・ 夜明け前の藍":"The day it began · the indigo before dawn","「なぜ私が」と思った、あの日":"The day I thought, “why me?”","子宮頸がんと言われた日。子どもはまだ小さいのに——頭が真っ白になった。その夜、子どもにどう伝えればいいのか分からなくて、ここに最初のひとことを残した。":"The day I was told it was cervical cancer. My children are still so small — my mind went blank. That night, not knowing how to tell them, I left my very first words here.","母":"Mother","看":"Nurse","仲":"Peer","あなたの輪が、そっと見守っています":"Your circle is quietly watching over you","同意した人だけ。数は競いません。":"Only those who've consented. We don't compete over numbers.","いま、残す":"Keep it now","ひとことでも、ひと呼吸でも。急がなくて大丈夫。":"A single word, or a single breath. There's no need to hurry.","声で残す":"Keep it by voice","話すだけ。聞き返せます":"Just speak. You can listen back.","書いて残す":"Keep it in writing","ひとことでも":"Even just a word","AIとつづきをつむぐ":"Weave on with AI","みんなの灯り（レシピ・小さな一歩）":"Everyone's luminaria (recipes · small steps)","やさしい動画にして、大切な人へ":"Turn it into a gentle video for someone you love","ほかの人の声を読む（声の物語）":"Read others' voices (Voice Stories)",
+/* --- マイページ --- */
+"葵":"Aoi","おかえりなさい、葵さん":"Welcome back, Aoi","会員 ・ 子宮頸がんと、あなたのペースで":"Member · living with cervical cancer, at your own pace","設定":"Settings","気になることを調べる":"Look into what's on your mind","無料":"Free","がん種・治療・お金・暮らし、何でも":"Cancer types, treatment, money, daily life — anything","今ここを歩いています ・ 12のかけら":"Walking the here and now · 12 fragments","つながる":"Connect","同じ道を歩く人の声・エール（恩送り）":"Voices of people on the same path · encouragement (paying it forward)","壺（わたしの記録）":"Vessel (my records)","残した声・言葉が、光になってたまる場所":"Where the voices and words you keep gather as light","あなた用の治療情報を見る":"See treatment info tailored to you","変更":"Change","今できること":"What you can do now","気になっていることから、ひらいてください":"Start with whatever's on your mind.","別の先生にも聞きたい 等":"Asking another doctor, and more","使える制度を知る":"Learn which support programs you can use","からだの記録":"Body records","今日の調子を残す":"Note how you feel today","支え合う":"Support each other","いまの、わたしを確かめる":"Check in on how I am now","AIコンシェルジュに相談":"Talk to the AI concierge","相談したいこと（相談カード）":"What I want to discuss (consultation card)","みんなの広場（声・音楽）":"The commons (voices · music)","緊急時カード":"Emergency card","会員と伴走について（料金）":"About membership & Companion (pricing)","データの扱い・同意":"Data handling & consent","SATOIについて":"About SATOI",
+/* --- AIコンシェルジュ画面 --- */
+"SATOIコンシェルジュ":"SATOI Concierge","何も決めない夜も、そばにいます":"Even on nights when you decide nothing, I'm here beside you","ここでは、どんなことでも話して大丈夫。あなたのことを大切に、いっしょに考えます。":"Here, you can talk about anything. I'll hold what matters to you with care, and think it through together with you.","子どもにどう伝えよう":"How do I tell my children?","親や家族にどう伝えよう":"How do I tell my parents or family?","お金のことが心配":"I'm worried about money","この治療でいいのか不安":"I'm anxious about whether this treatment is right","眠れない":"I can't sleep","目安です。最終判断は主治医と。つらい時は":"This is for guidance. Final decisions are made with your doctor. When things are hard, reach out to ","相談先":"support lines","へ":".","話す・書く…":"Speak or type…",
+/* --- 動的・共通（JSが差し込む文言） --- */
+"あなたのペースで、ゆっくりで大丈夫。":"At your own pace. It's okay to take it slow.","今日も、そばにいます。":"Today too, I'm here with you.","物語のつづき":"Continue the story","登録ずみ":"Registered","無料登録は完了しています":"Your free registration is complete","あなたと同じ道を歩く人の声":"Voices of people walking the same path as you","「同じ気持ちの夜を越えた人がいます。あなたは、ひとりじゃない。」":"“There are people who've made it through nights that felt just like yours. You are not alone.”","似た状況の方の声を読む・エールを送る（恩送り）":"Read voices from people in similar situations · send encouragement (paying it forward)","本会員 ・ 伴走（従量）利用中 ・ デポジット残 ¥{n}":"Full member · using Companion (pay-as-you-go) · deposit balance ¥{n}","EMPSe ・ いまの、わたし":"EMPSe · How I am now","タップして、今日のわたしを入力・くわしく見る":"Tap to log how I am today · see details","こんばんは。SATOIコンシェルジュです。気になっていること、なんでも話してください。うまく言葉にできなくても大丈夫ですよ。":"Good evening. I'm the SATOI Concierge. Tell me anything that's on your mind — it's okay even if you can't quite put it into words.",
+/* --- 紹介ムービー（prmovie） --- */
+"1分でわかる、SATOI":"SATOI in one minute","なぜ私たちは、つながって生きるのか":"Why we connect, and live","紹介ムービー":"Intro film","1分の紹介ムービー。どこで、誰と、何ができるのか。":"A one-minute intro: where, with whom, and what you can do.","動画は準備中です":"The video is coming soon","Geminiで生成した紹介ムービーを movie/satoi_pr.mp4 に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":"Once you place the Gemini-generated intro film at movie/satoi_pr.mp4, it will play here. The script, storyboard, and generation prompts are gathered in “SATOI_紹介ムービー_ブリーフ.md.”","いまは、動くダイジェストを見る":"For now, watch the animated digest","この動画で伝えること":"What this video conveys","・がんと言われた、その日から。ひとりにしない場所。":"· From the day you're told it's cancer — a place that won't leave you alone.","・読むのは、だれでも無料。":"· Reading is free, for everyone.","・あなたの「声」が、医師に届く（シェアード・ディシジョン）。":"· Your “voice” reaches your doctor (shared decision-making).","・物語（ナラティブ）が、治療を越えて人を支える。":"· Story (narrative) supports people, beyond treatment.","・同じ道を歩く人と、医療者と、家族と——つながって、生きよう。":"· With others on the same path, with caregivers, and with family — connect, and live.","SATOIの物語をもっと読む":"Read more of SATOI's story","Geminiで生成した紹介ムービーを":"Place the Gemini-generated intro film at ","に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":" and it will play here. The script, storyboard, and generation prompts are gathered in “SATOI_紹介ムービー_ブリーフ.md.”"
+/*@@EN*/
+},zh:{
+/* --- 共通UI（ヘッダー・タブ・FAB） --- */
+"前の画面に戻る":"返回","SATOI ホーム":"SATOI 首页","緊急QR":"紧急二维码","緊急QR・救急時カード":"紧急二维码 · 急救卡","さがす":"搜索","ポイント":"积分","ホーム":"首页","治療":"治疗","物語":"故事","マイページ":"我的","治療を知る":"了解治疗","EMPSe いまの、わたし":"EMPSe 此刻的我",
+/* --- ホーム --- */
+"ようこそ、SATOIへ":"欢迎来到 SATOI","はじめての方も、調べるだけでも大丈夫。":"无论是初次来访，还是只想了解一下，都没关系。","あなたのペースで、ゆっくりで。":"按你自己的节奏，慢慢来。","無料ではじめる":"免费开始","まず調べてみる":"先随便看看","新着":"最新","子宮頸がんとHPVワクチン：検診の考え方をやさしく更新　・　免疫チェックポイント阻害薬とは？仕組みをやさしく解説　・　高額療養費制度の上限額、知っておきたい基本　・　がんゲノム医療（パネル検査）は保険で受けられる？":"宫颈癌与HPV疫苗：用温和的方式重新认识筛查　·　什么是免疫检查点抑制剂？简单讲解其原理　·　高额疗养费制度的上限额，值得了解的基础知识　·　癌症基因组医疗（基因检测）能用医保吗？","がん種・用語・機能をさがす…":"搜索癌症种类・术语・功能…","今日、できること":"今天能做的事","気になることから、ひらいて進めます":"从你在意的事情开始，慢慢展开。","治療のこと":"关于治疗","標準治療・がんを知る":"标准治疗・认识癌症","お金・暮らし":"费用与生活","給付金・公的制度":"补助金・公共制度","物語を続ける":"继续你的故事","声・記録・あなたの軌跡":"声音・记录・你的轨迹","心と家族":"心与家人","支え合う・伝える":"相互扶持・传达","今の気持ちは？　タップで確かめる":"现在的心情如何？　点一下确认","「がんです」と言われた方へ":"致刚被告知“患了癌症”的你","いま何が起きているか、これからの流れを、順番に。あなたのペースで。":"现在发生了什么、接下来会怎样，一步一步来。按你自己的节奏。","AIコンシェルジュに相談する":"向 AI 管家咨询","新着ニュース":"最新消息","すべて見る":"查看全部","学び":"学习","子宮頸がんとHPVワクチン：検診の考え方を更新":"宫颈癌与HPV疫苗：重新认识筛查","お金":"费用","高額療養費制度の上限額、知っておきたい基本":"高额疗养费制度的上限额，值得了解的基础知识","提供":"提供","学び・お役立ち（スポンサード）を見る":"查看学习・实用信息（赞助）","はじめての方へ":"致初次来访者","使い方をみる（動画）":"观看使用方法（视频）","よくある質問（Q&A）":"常见问题（Q&A）","SATOIってなに？":"SATOI 是什么？","医療情報は、広告でゆがめません":"医疗信息，绝不因广告而扭曲","ご協力企業の情報やスポンサード教育は、はっきり区別して（提供／PR）。掲載は":"合作企业的信息与赞助教育会明确标注（提供／PR）。刊登内容由","SATOI・JOiNTの倫理委員会":"SATOI・JOiNT 伦理委员会","で審査し、出典つき・専門家監修で。":"审查，附出处・并由专家监修。","ご協力いただいている企業・学会（提供）":"合作企业・学会（提供）","製薬 A":"制药 A","がんと栄養の学び":"癌症与营养的学习","製薬 B":"制药 B","副作用の基礎":"副作用基础","学会 C":"学会 C","臨床試験を知る":"了解临床试验","団体 D":"团体 D","暮らしの支え":"生活的支持","ロゴをタップで、提供元の学び（JOiNT審査済）へ。":"点击logo，前往提供方的学习内容（已通过JOiNT审查）。","この広告枠ではポイントは付きません。":"此广告位不累积积分。","学びを見ると、学びのdポイントが少し貯まります。":"查看学习内容，可累积少量学习d积分。","信頼と安全について":"关于信任与安全","医療情報は出典・専門医監修にもとづき、AIは閉域環境で出典を参照して答えます（推測の断定はしません）。患者さんの声は有害事象として集め、医学的に評価し、必要な所へ橋渡しします。":"医疗信息以出处与专科医生监修为依据，AI在封闭环境中参照出处作答（不会把推测当作定论）。患者的声音将作为不良事件收集、进行医学评估，并转介到需要的地方。","くわしく（出典・AI・副作用・データの扱い）":"详情（出处・AI・副作用・数据处理）","全てはがん患者さんのために。":"一切，为了癌症患者。","つながって、生きよう。":"连接彼此，好好活着。","あなたの情報は、あなたのもの":"你的信息，属于你自己",
+"登録しなくても、そのまま無料で使えます。":"无需注册，也能继续免费使用。","ログイン":"登录",
+/* --- 認証ファネル（onboarding / signin / memberwall） --- */
+"はじめる":"开始","登録は無料。まずはお試しで、すぐ使えます":"注册免费。先试用，立即就能使用。","まずは、かんたん登録から。30秒で、あなたの場所ができます。":"先从简单注册开始。30秒，就能拥有属于你的空间。","Google ではじめる":"用 Google 开始","Apple ではじめる":"用 Apple 开始","LINE ではじめる":"用 LINE 开始","メールで無料登録":"用邮箱免费注册","登録済みの方はログイン":"已注册？登录","登録せずに見る":"不注册，先看看","登録は無料・電話番号いりません。お金がかかるのは":"注册免费・无需电话号码。只有使用","伴走":"陪伴","を使うときだけ。":"时才会产生费用。","会員と伴走について":"关于会员与陪伴","SATOIのしくみ（よかったら）":"SATOI 的运作方式（若有兴趣）","調べる・知る・相談":"查询・了解・咨询","ずっと無料":"永久免费","登録なしでも使えます。がんを知る／治療の流れ／用語をやさしく／病院をさがす／AIコンシェルジュ（無料枠）／つらい時の相談先。":"无需注册也能使用：认识癌症／治疗流程／用浅显的方式解释术语／查找医院／AI管家（免费额度）／难熬时的咨询窗口。","記録を残す・自分のページ":"留下记录・你的专属页面","無料登録":"免费注册","声・物語・からだの記録／自分のがんに合わせた表示／相談カードをつくる・保存／家族とつながる。続きから使えます。":"记录声音・故事・身体状况／根据你的癌症定制显示／创建并保存咨询卡／与家人连接。可从上次的进度继续。","もっと深く・手配・レポート":"更深入・安排・报告","伴走（使った分だけ）":"陪伴（用多少付多少）","AIをもっと深く（無料枠の先まで）／自由診療・セカンドオピニオンの手配／レポート出力／医療者向けの最深部。使った分だけの従量です。":"更深入地使用AI（超出免费额度）／安排自费诊疗・第二意见／导出报告／面向医疗人员的最深层功能。按使用量计费，用多少付多少。","なぜ登録するの？":"为什么要注册？","あなたの記録（声・物語・からだ）を安全に保存して、次に来た時に":"为了安全地保存你的记录（声音・故事・身体），让你下次再来时，能","続きから":"从上次继续","使えるようにするためです。電話番号はいりません。あとから無料登録もかんたん。":"。无需电话号码。之后再免费注册也很简单。","いつでも退会・データ削除ができます。":"你可以随时退出并删除数据。","データの扱いは？":"数据如何处理？","続けると":"继续即表示你同意","利用規約":"使用条款","と":"与","プライバシー":"隐私","に同意したことになります。":"政策。","無料登録が完了しました":"免费注册已完成","メール":"邮箱","で登録しました。これで記録の保存・パーソナライズ・専門モードが使えます。":"注册完成。现在你可以保存记录・享受个性化・使用专业模式。","いま、あなたはここ":"现在，你在这里","記録・自分のページ":"记录・你的页面","いま、ここ":"此刻，这里","次に進みたくなったら、③伴走（使った分だけ）。いまは、使わなくて大丈夫です。":"当你想更进一步时，还有③陪伴（用多少付多少）。现在，不用也没关系。","マイページへ":"前往我的页面","Google・Apple・LINE の実ログイン認証は、各社OAuthとの接続で有効化されます。":"Google・Apple・LINE 的真实登录验证，将通过与各家 OAuth 的连接来启用。",
+"おかえりなさい":"欢迎回来","ログインして、続きから。":"登录后，从上次继续。","あなたの記録・壺が、待っています。":"你的记录与心壶，正在等你。","Google でログイン":"用 Google 登录","Apple でログイン":"用 Apple 登录","LINE でログイン":"用 LINE 登录","メールでログイン":"用邮箱登录","はじめての方は、かんたん登録":"初次来访？简单注册","実ログイン認証は各社OAuthとの接続で有効化されます。":"真实登录验证将通过与各家 OAuth 的连接来启用。","デモ用ショートカット（本番では外します）":"演示用快捷方式（正式版将移除）","このまま葵さんで入る":"以葵的身份进入（演示）",
+"戻る":"返回","ここからは、あなただけの場所です":"从这里开始，是只属于你的空间","マイページ・記録・壺・ポイントは、":"我的页面・记录・心壶・积分，","かんたん登録（無料）":"只需简单注册（免费）","で使えます。":"即可使用。","あなたの声や記録が、続きからたまっていきます。":"你的声音与记录，会从上次继续积累。","かんたん登録ではじめる（無料・30秒）":"通过简单注册开始（免费・30秒）","登録済みの方は、ログイン":"已注册？登录","いまは登録せずに戻る":"暂不注册，先返回","登録は無料・電話番号いりません。お金がかかるのは伴走を使うときだけ。いつでも退会・データ削除ができます。":"注册免费・无需电话号码。只有使用陪伴时才会产生费用。你可以随时退出并删除数据。","あなたが見るものは、私たちも同じだけ（鏡の原則）。":"你能看到的，我们也只能看到同样多（镜子原则）。",
+/* --- 治療タブ（treatment） --- */
+"確かめられた治療を、やさしく整理しました":"我们将经过验证的治疗，温和地整理好了。","あなたのがん：":"你的癌症：","子宮頸がん":"宫颈癌","をくわしく":"的详细信息","病期・治療・お金まで、あなた用に":"从分期・治疗到费用，为你量身整理","ほかのがん種から調べる":"从其他癌症种类查询","乳がん・肺がん…どのがんも、やさしく詳しく読めます":"乳腺癌・肺癌…无论哪种癌症，都能读到温和而详尽的解说。","調べるのは登録なしで自由にできます。登録（無料）すると、自分用に記録・保存できます。":"无需注册即可自由查询。注册（免费）后，便能为自己记录・保存。","標準治療の4つの柱":"标准治疗的四大支柱","薬物療法":"药物治疗","抗がん剤・分子標的薬 等":"化疗药・分子靶向药 等","手術":"手术","病巣を取り除く":"切除病灶","放射線治療":"放射治疗","照射でがんを叩く":"用放射线打击癌细胞","緩和ケア":"缓和医疗","つらさをやわらげる":"减轻痛苦","出典：国立がん研究センター がん情報サービス。詳しい適応は主治医にご確認ください。":"出处：日本国立癌症研究中心 癌症信息服务。具体适应症请与主治医生确认。","抗がん剤の薬剤一覧":"化疗药物一览","プレシジョンメディシン":"精准医疗","標準治療の、その先の選択肢。遺伝子から効く薬を（保険でも）。":"标准治疗之外的选择：根据基因匹配有效药物（也可用医保）。","がんを知る":"认识癌症","治療の流れ":"治疗流程","学び・研究":"学习・研究","自由診療をさがす":"查找自费诊疗","病院をさがす":"查找医院","別の先生にも聞きたい（セカンドオピニオン）":"也想听听别的医生（第二意见）","聞きたいことを整理する":"整理你想问的问题",
+/* --- EMPSe タブ --- */
+"いまの、わたし":"此刻的我","EMPSe — 5つの面から、今のあなたを見つめます。スコアは競うものではなく、あなたと支える人が変化に気づくための地図です。":"EMPSe 从五个层面观察此刻的你。分数不是用来比较的，而是帮助你和支持你的人察觉变化的一张地图。","葵さんの、いまの5軸":"葵此刻的五个维度","この2週間の総合EMPSe":"过去两周的综合 EMPSe","くわしく":"详情","EMPSeが7日平均より":"当 EMPSe 比7日平均低","20点":"20分","下がると、担当の看護師さんにそっと届きます。":"时，会悄悄通知负责的护士。","本質はスコアより\"人への接続\"":"本质不在于分数，而在于\"与人的连接\"","。つらい時、ひとりにしません。":"。难熬时，不会让你独自一人。","これからの希望を話しておく（人生会議・ACP）":"提前谈谈对未来的期望（人生会议・ACP）","急がず、書ける時に少しずつ":"不急，能写的时候，一点一点来","同じ道を歩く人たちの、いま":"走在同一条路上的人，此刻的状态","似た状況の人の声を読む・エールを送る（恩送り）":"阅读处境相似者的声音・送上鼓励（恩传递）","携帯から、今日のからだを取り込む":"从手机导入今天的身体数据","ボタンひとつで歩数・活動・睡眠が入り、身体の軸に反映＝ポイントも":"一键导入步数・活动・睡眠，反映到身体维度＝还能获得积分","今日のEMPSeを入力する":"输入今天的 EMPSe","各軸をタップすると、何から測っているか（歩数・睡眠・ePRO 等）と推移が見られます。出典つき・公開時に専門医監修。記録は「物語」にも残ります。":"点击每个维度，可查看它测量的内容（步数・睡眠・ePRO 等）及变化趋势。附出处・发布时由专科医生监修。记录也会保留在「故事」中。",
+/* --- 物語タブ（story） --- */
+"Geminiが描く・":"由 Gemini 绘制・","朝の光（写真風）":"晨光（写实风）","あなたの物語":"你的故事","いまは「今ここ」の光。来るたび、すこし変わります。":"现在，是「此时此地」的光。每次来访，都会稍有变化。","あなたの世界を選ぶ（光のスタイル）":"选择你的世界（光的风格）","ここに話したことは、そっと残ります。":"你在这里诉说的，会被轻轻地留存。","先生に伝えたい時は相談カードに、家族に届けたい時は——SATOIが、あなたの言葉で運びます。":"想告诉医生时，化作咨询卡；想传达给家人时——SATOI 会用你自己的话语，把它送达。","何でも、気軽に。":"什么都可以，别拘束。","今朝、あなたへ":"今天早晨，致你","退院から2週間。子どもたちと囲む食卓が、すこしずつ戻ってきました。告知の日、あなたは「子どもがまだ小さいのに、なぜ私が」と書いていましたね。それでも毎日、あなたはちゃんと、子どもたちのそばに居続けています。":"出院已两周。和孩子们围坐的餐桌，正一点点回到从前。被告知的那天，你写下「孩子还这么小，为什么是我」。可即便如此，每一天，你都始终好好地，陪在孩子身边。","つづきをつむぐ":"续写下去","自分の声を聞き返す":"回放自己的声音","SATOIが、あなたの記録からそっとつむぎました":"SATOI 从你的记录中，轻轻编织而成","これまでの物語":"至今为止的故事","光が、育っていく":"光，在慢慢长大","たった今 ・ いまの光":"刚刚 ・ 此刻的光","今日のことを、残した":"记下了今天","壺に残って、あなたの物語に加わりました。光がまた少し、進みました。":"它留在了你的心壶里，加入了你的故事。光，又前进了一点。","タップで、残した言葉を読み返す":"点击，重读你留下的话语","たった今 ・ 家族へ":"刚刚 ・ 致家人","気持ちを、家族に届けた":"把心情，传达给了家人","家族":"家人","SATOIが、あなたの言葉をやさしく整えて、家族の輪にそっと届けました。":"SATOI 温和地梳理了你的话语，轻轻送到家人的圈子里。","お母さんに届きました":"已送达给妈妈","今日 ・ いまの光":"今天 ・ 此刻的光","子どもと、また笑えた":"又和孩子一起笑了","読み返す":"重读","下の子と、折り紙をした。髪が抜けはじめたことも、あの子は気にしない。ただ、笑ってくれた。":"和小的那个一起折了纸。头发开始掉了，那孩子也毫不在意。只是，对我笑了。","灯りをともす ・":"点一盏灯 ・ ","家族に届ける":"传达给家人","入院していたころ ・ 空が白みはじめる光":"住院的那段日子 ・ 天空泛白的光","夫と、両親に甘えた日々":"依赖丈夫与父母的那些日子","「入院のあいだ、夫と両親が子どもを見てくれました。ありがたいのに、“母親なのにそばにいられない”という申し訳なさで、眠れない夜もありました。」":"「住院期间，丈夫和父母照顾着孩子。我满心感激，却也因『身为母亲却无法陪在身边』的愧疚，有些夜晚难以入眠。」","相談カードに入れる":"加入咨询卡","はじまりの日 ・ 夜明け前の藍":"开始的那天 ・ 黎明前的靛蓝","「なぜ私が」と思った、あの日":"那个想着「为什么是我」的日子","子宮頸がんと言われた日。子どもはまだ小さいのに——頭が真っ白になった。その夜、子どもにどう伝えればいいのか分からなくて、ここに最初のひとことを残した。":"被告知是宫颈癌的那天。孩子还那么小——脑海一片空白。那天夜里，不知该如何告诉孩子，我在这里留下了最初的一句话。","母":"母","看":"护","仲":"友","あなたの輪が、そっと見守っています":"你的圈子，正静静守护着你","同意した人だけ。数は競いません。":"仅限同意的人。我们不比较数量。","いま、残す":"现在，留下","ひとことでも、ひと呼吸でも。急がなくて大丈夫。":"哪怕一句话，哪怕一次呼吸。不用着急。","声で残す":"用声音留下","話すだけ。聞き返せます":"只管说。可以回放。","書いて残す":"写下来留存","ひとことでも":"哪怕只有一句","AIとつづきをつむぐ":"与 AI 一起续写","みんなの灯り（レシピ・小さな一歩）":"大家的灯（食谱・小小的一步）","やさしい動画にして、大切な人へ":"做成温柔的视频，送给重要的人","ほかの人の声を読む（声の物語）":"阅读他人的声音（声音的故事）",
+/* --- マイページ --- */
+"葵":"葵","おかえりなさい、葵さん":"欢迎回来，葵","会員 ・ 子宮頸がんと、あなたのペースで":"会员 ・ 与宫颈癌共处，按你的节奏","設定":"设置","気になることを調べる":"查询你在意的事","無料":"免费","がん種・治療・お金・暮らし、何でも":"癌症种类・治疗・费用・生活，什么都行","今ここを歩いています ・ 12のかけら":"正走在此时此地 ・ 12 片碎片","つながる":"连接","同じ道を歩く人の声・エール（恩送り）":"同路人的声音・鼓励（恩传递）","壺（わたしの記録）":"心壶（我的记录）","残した声・言葉が、光になってたまる場所":"你留下的声音与话语，化作光、汇聚之处","あなた用の治療情報を見る":"查看为你定制的治疗信息","変更":"更改","今できること":"现在能做的事","気になっていることから、ひらいてください":"请从你在意的事情开始。","別の先生にも聞きたい 等":"也想问问别的医生 等","使える制度を知る":"了解你能使用的制度","からだの記録":"身体记录","今日の調子を残す":"记下今天的状态","支え合う":"相互扶持","いまの、わたしを確かめる":"确认此刻的我","AIコンシェルジュに相談":"向 AI 管家咨询","相談したいこと（相談カード）":"想咨询的事（咨询卡）","みんなの広場（声・音楽）":"大家的广场（声音・音乐）","緊急時カード":"急救卡","会員と伴走について（料金）":"关于会员与陪伴（费用）","データの扱い・同意":"数据处理・同意","SATOIについて":"关于 SATOI",
+/* --- AIコンシェルジュ画面 --- */
+"SATOIコンシェルジュ":"SATOI 管家","何も決めない夜も、そばにいます":"即使在什么都决定不了的夜晚，我也陪在你身边","ここでは、どんなことでも話して大丈夫。あなたのことを大切に、いっしょに考えます。":"在这里，什么都可以说。我会珍视你的一切，与你一起思考。","子どもにどう伝えよう":"该怎么告诉孩子？","親や家族にどう伝えよう":"该怎么告诉父母或家人？","お金のことが心配":"我担心钱的问题","この治療でいいのか不安":"我不安，不知这个治疗是否合适","眠れない":"睡不着","目安です。最終判断は主治医と。つらい時は":"仅供参考。最终判断请与主治医生一起做。难熬时，请前往","相談先":"咨询窗口","へ":"。","話す・書く…":"说出来・写下来…",
+/* --- 動的・共通（JSが差し込む文言） --- */
+"あなたのペースで、ゆっくりで大丈夫。":"按你自己的节奏，慢慢来也没关系。","今日も、そばにいます。":"今天，我也在你身边。","物語のつづき":"故事的续篇","登録ずみ":"已注册","無料登録は完了しています":"免费注册已完成","あなたと同じ道を歩く人の声":"与你走在同一条路上的人的声音","「同じ気持ちの夜を越えた人がいます。あなたは、ひとりじゃない。」":"「有人曾熬过和你一样心情的夜晚。你，并不孤单。」","似た状況の方の声を読む・エールを送る（恩送り）":"阅读处境相似者的声音・送上鼓励（恩传递）","本会員 ・ 伴走（従量）利用中 ・ デポジット残 ¥{n}":"正式会员 ・ 使用陪伴（按量计费） ・ 押金余额 ¥{n}","EMPSe ・ いまの、わたし":"EMPSe ・ 此刻的我","タップして、今日のわたしを入力・くわしく見る":"点击，输入今天的我・查看详情","こんばんは。SATOIコンシェルジュです。気になっていること、なんでも話してください。うまく言葉にできなくても大丈夫ですよ。":"晚上好。我是 SATOI 管家。心里在意的事，什么都可以告诉我。即使无法很好地用言语表达，也没关系。",
+/* --- 紹介ムービー（prmovie） --- */
+"1分でわかる、SATOI":"一分钟，了解 SATOI","なぜ私たちは、つながって生きるのか":"我们为何连接彼此，好好活着","紹介ムービー":"介绍短片","1分の紹介ムービー。どこで、誰と、何ができるのか。":"一分钟的介绍短片：在哪里、与谁、能做什么。","動画は準備中です":"视频正在准备中","Geminiで生成した紹介ムービーを movie/satoi_pr.mp4 に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":"将用 Gemini 生成的介绍短片放到 movie/satoi_pr.mp4，即可在此播放。脚本・分镜・生成提示词都整理在「SATOI_紹介ムービー_ブリーフ.md」中。","いまは、動くダイジェストを見る":"现在，先看动态摘要","この動画で伝えること":"这段视频要传达的","・がんと言われた、その日から。ひとりにしない場所。":"・从被告知患癌的那天起——一个不会让你独自一人的地方。","・読むのは、だれでも無料。":"・阅读，对所有人都免费。","・あなたの「声」が、医師に届く（シェアード・ディシジョン）。":"・你的「声音」，传达给医生（共享决策）。","・物語（ナラティブ）が、治療を越えて人を支える。":"・故事（叙事），超越治疗，支撑着人。","・同じ道を歩く人と、医療者と、家族と——つながって、生きよう。":"・与同路人、与医疗者、与家人——连接彼此，好好活着。","SATOIの物語をもっと読む":"阅读更多 SATOI 的故事","Geminiで生成した紹介ムービーを":"将用 Gemini 生成的介绍短片放到 ","に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":" 即可在此播放。脚本・分镜・生成提示词都整理在「SATOI_紹介ムービー_ブリーフ.md」中。"
+/*@@ZH*/
+}};
+
+/* ============================================================
+   i18n エンジン（DOM走査＋辞書＋言語ポッチ）
+   ・既存92画面/JSには手を入れず、表示中DOMを走査して日本語→英/中へ差し替え
+   ・原文はWeakMapで保持＝言語往復が完全に可逆（ja/en/zh）
+   ・数値テンプレ {n} 対応／render()フック＋MutationObserverで動的内容も追従
+   ・辞書は window.I18N（別ブロックで定義・段階的に拡張）
+   ============================================================ */
+(function(){
+  var LANGS=['ja','en','zh'];
+  var I18N=window.I18N||(window.I18N={ja:{},en:{},zh:{}});
+  if(!I18N.en)I18N.en={};if(!I18N.zh)I18N.zh={};
+  function lsGet(){try{return localStorage.getItem('satoi_lang');}catch(e){return null;}}
+  function lsSet(l){try{localStorage.setItem('satoi_lang',l);}catch(e){}}
+  window._lang=lsGet()||window._lang||'ja';
+  if(LANGS.indexOf(window._lang)<0)window._lang='ja';
+
+  var ORIG=new WeakMap();   /* textNode -> 原文 */
+  var ALANG=new WeakMap();  /* textNode -> 適用済み言語 */
+  var AORIG=new WeakMap();  /* element -> {attr:原文} */
+  var AALANG=new WeakMap(); /* element -> {attr:適用済み言語} */
+
+  /* 数値を{n}に正規化して辞書引き→戻す（「今日 123 点」等の動的文に対応） */
+  function lookup(dict,s){
+    if(dict[s]!=null)return dict[s];
+    var nums=[];
+    var key=s.replace(/[0-9０-９][0-9０-９,，\.]*/g,function(m){nums.push(m);return '{n}';});
+    if(key!==s&&dict[key]!=null){var i=0;return dict[key].replace(/\{n\}/g,function(){var v=nums[i];i++;return v!=null?v:'';});}
+    return null;
+  }
+  function translate(s){
+    var lang=window._lang;if(lang==='ja')return null;
+    var dict=I18N[lang];if(!dict)return null;
+    var trimmed=s.trim();if(!trimmed)return null;
+    var lead=s.slice(0,s.length-s.replace(/^\s+/,'').length);
+    var trail=s.slice(s.replace(/\s+$/,'').length);
+    var hit=lookup(dict,trimmed);
+    if(hit==null)return null;
+    return lead+hit+trail;
+  }
+  var SKIP={SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1};
+  function skip(el){while(el){if(el.nodeType===1){if(SKIP[el.tagName])return true;if(el.getAttribute&&el.getAttribute('data-noi18n')!=null)return true;}el=el.parentNode;}return false;}
+  var ATTRS=['placeholder','title','aria-label','alt'];
+
+  function applyText(node){
+    var lang=window._lang;
+    if(!ORIG.has(node))ORIG.set(node,node.nodeValue);
+    if(ALANG.get(node)===lang)return;
+    var orig=ORIG.get(node);
+    if(lang==='ja'){if(node.nodeValue!==orig)node.nodeValue=orig;ALANG.set(node,'ja');return;}
+    var t=translate(orig);
+    var nv=(t!=null)?t:orig;
+    if(node.nodeValue!==nv)node.nodeValue=nv;
+    ALANG.set(node,lang);
+  }
+  function applyAttr(el){
+    var lang=window._lang;
+    for(var i=0;i<ATTRS.length;i++){var a=ATTRS[i];if(!el.hasAttribute(a))continue;
+      var store=AORIG.get(el);if(!store){store={};AORIG.set(el,store);}
+      if(store[a]==null)store[a]=el.getAttribute(a);
+      var ls=AALANG.get(el);if(!ls){ls={};AALANG.set(el,ls);}
+      if(ls[a]===lang)continue;
+      var orig=store[a];
+      if(lang==='ja'){el.setAttribute(a,orig);}
+      else{var t=translate(orig);el.setAttribute(a,t!=null?t:orig);}
+      ls[a]=lang;
+    }
+  }
+  var _busy=false;
+  function applyRoot(root){
+    if(!root||root.nodeType!==1)return;_busy=true;
+    try{
+      if(root.matches&&root.matches('['+ATTRS.join('],[')+']')&&!skip(root))applyAttr(root);
+      var els=root.querySelectorAll('['+ATTRS.join('],[')+']');
+      for(var i=0;i<els.length;i++){if(!skip(els[i]))applyAttr(els[i]);}
+      var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null,false);
+      var arr=[],n;while(n=w.nextNode()){arr.push(n);}
+      for(var j=0;j<arr.length;j++){if(!skip(arr[j].parentNode))applyText(arr[j]);}
+    }finally{_busy=false;}
+  }
+  function applyActive(){
+    applyRoot(document.querySelector('.hdr'));
+    var tb=document.getElementById('tabbar');if(tb)applyRoot(tb);
+    var fab=document.getElementById('fab');if(fab)applyRoot(fab);
+    var act=document.querySelector('.scr.active');if(act)applyRoot(act);
+    var io=document.getElementById('introOv');if(io)applyRoot(io);
+    label();
+    try{document.documentElement.setAttribute('lang',window._lang==='zh'?'zh-Hans':window._lang);}catch(e){}
+  }
+  window.i18nApply=applyActive;
+
+  /* render() フック（既存renderの末尾で翻訳パス） */
+  if(typeof render==='function'){var _r=render;render=function(){var x=_r.apply(this,arguments);try{applyActive();}catch(e){}return x;};window.render=render;}
+
+  /* 動的innerHTML変更（openRecipe/msResult/コンシェルジュ等）をMutationObserverで追従 */
+  var pend=false;
+  function schedule(){if(pend)return;pend=true;(window.requestAnimationFrame||setTimeout)(function(){pend=false;if(window._lang!=='ja'){try{applyActive();}catch(e){}}},16);}
+  function startMO(){var app=document.getElementById('app')||document.body;if(!app||!window.MutationObserver)return;
+    new MutationObserver(function(){if(_busy)return;if(window._lang==='ja')return;schedule();}).observe(app,{childList:true,subtree:true,characterData:true});}
+
+  function label(){var b=document.getElementById('langDot');if(b)b.textContent=(window._lang==='ja'?'あ':(window._lang==='en'?'A':'中'));}
+  function setLang(l){if(LANGS.indexOf(l)<0)l='ja';window._lang=l;lsSet(l);applyActive();
+    if(typeof toast==='function')toast(l==='ja'?'日本語に切り替えました':(l==='en'?'Switched to English':'已切换为中文'));}
+  window.setLang=setLang;
+  window.cycleLang=function(){var i=LANGS.indexOf(window._lang);setLang(LANGS[(i+1)%LANGS.length]);};
+
+  function init(){startMO();label();if(window._lang!=='ja'){applyActive();}}
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+})();
+
 /* 初回着地は"いつものホーム"。登録は強制せず、ホームの「無料ではじめる／ログイン」から自分で。 */
 render();
 </script>
