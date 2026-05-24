@@ -184,7 +184,7 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
   </div>
   <div style="display:flex;align-items:center;gap:8px">
     <button class="hbtn" onclick="go('search')" aria-label="さがす"><i class="ti ti-search"></i></button>
-    <button id="hdrPts" onclick="go('mypage')" aria-label="ポイント" style="display:none;align-items:center;gap:4px;height:34px;padding:0 11px;border-radius:999px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:var(--amber-t);cursor:pointer;font:inherit"><i class="ti ti-gift" style="font-size:15px"></i><span id="hdrPtsNum" style="font-size:13px;font-weight:600">0</span><span style="font-size:11px">pt</span></button>
+    <button id="hdrPts" onclick="go('points')" aria-label="ポイント" style="display:none;align-items:center;gap:4px;height:34px;padding:0 11px;border-radius:999px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:var(--amber-t);cursor:pointer;font:inherit"><i class="ti ti-gift" style="font-size:15px"></i><span id="hdrPtsNum" style="font-size:13px;font-weight:600">0</span><span style="font-size:11px">pt</span></button>
   </div>
 </div>
 
@@ -992,7 +992,7 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
       <div style="font-size:13px;line-height:1.95;margin-top:7px;color:#3a3326">退院から2週間。子どもたちと囲む食卓が、すこしずつ戻ってきました。告知の日、あなたは「子どもがまだ小さいのに、なぜ私が」と書いていましたね。それでも毎日、あなたはちゃんと、子どもたちのそばに居続けています。</div>
       <div style="display:flex;align-items:center;gap:8px;margin-top:11px">
         <button class="btn btn-teal" style="flex:1;padding:9px;font-size:12px;border-radius:11px" onclick="go('aiweave')"><i class="ti ti-feather" style="vertical-align:-2px"></i> つづきをつむぐ</button>
-        <button class="btn btn-out" style="width:auto;padding:9px 13px;font-size:12px;border-radius:11px" onclick="go('listen')"><i class="ti ti-player-play" style="vertical-align:-2px"></i> 声を聴く</button>
+        <button class="btn btn-out" style="width:auto;padding:9px 13px;font-size:12px;border-radius:11px" onclick="openReread('amae')"><i class="ti ti-player-play" style="vertical-align:-2px"></i> 自分の声を聞き返す</button>
       </div>
       <div class="note" style="margin-top:8px;font-size:10px"><i class="ti ti-sparkles" style="vertical-align:-1px"></i> SATOIが、あなたの記録からそっとつむぎました</div>
     </div>
@@ -1530,41 +1530,40 @@ window.toast=toast;
   <div class="pad">
     <button class="back" onclick="go('story')"><i class="ti ti-arrow-left"></i> 物語を続ける</button>
     <h1 class="h1" style="margin-top:10px">声の物語</h1>
-    <div class="sub">同じ夜を過ごす誰かの声。無理に聴かなくて大丈夫です</div>
-    <button class="card" style="margin-top:14px;width:100%;text-align:left;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('listen')">
-      <span class="ic" style="width:40px;height:40px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-player-play" style="font-size:20px;color:var(--amber)"></i></span>
-      <span style="flex:1"><span style="font-size:14px;font-weight:600;display:block">眠れない夜のこと</span><span class="note">40代・乳がん・治療中 ・ 0:48</span></span>
+    <div class="sub">同じ夜を過ごす誰かの言葉。無理に読まなくて大丈夫です</div>
+    <div class="note" style="margin-top:10px;line-height:1.7;background:var(--amber-bg2);border-radius:12px;padding:10px 13px"><i class="ti ti-info-circle" style="vertical-align:-2px;color:var(--amber)"></i> ここに届くのは、ご本人が話した声を<b>SATOIが言葉にして、ご本人がOKしたテキスト</b>です。生の声は届きません。だから「聴く」でなく、そっと「<b>読む</b>」。</div>
+    <button class="card" style="margin-top:12px;width:100%;text-align:left;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('listen')">
+      <span class="ic" style="width:40px;height:40px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-quote" style="font-size:20px;color:var(--amber)"></i></span>
+      <span style="flex:1"><span style="font-size:14px;font-weight:600;display:block">眠れない夜のこと</span><span class="note">40代・乳がん・治療中 ・ 読む</span></span>
+      <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
     </button>
     <button class="card" style="margin-top:10px;width:100%;text-align:left;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('listen')">
-      <span class="ic" style="width:40px;height:40px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-player-play" style="font-size:20px;color:var(--amber)"></i></span>
-      <span style="flex:1"><span style="font-size:14px;font-weight:600;display:block">はじめての抗がん剤の前夜</span><span class="note">50代・治療中 ・ 1:12</span></span>
+      <span class="ic" style="width:40px;height:40px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-quote" style="font-size:20px;color:var(--amber)"></i></span>
+      <span style="flex:1"><span style="font-size:14px;font-weight:600;display:block">はじめての抗がん剤の前夜</span><span class="note">50代・治療中 ・ 読む</span></span>
+      <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
     </button>
-    <button class="btn btn-out" style="margin-top:14px" onclick="go('voicerec')"><i class="ti ti-microphone" style="vertical-align:-2px;color:var(--amber)"></i> あなたの声も残す</button>
-    <div class="lock"><i class="ti ti-lock"></i>声は本人の同意のもとで届けられています</div>
+    <button class="btn btn-out" style="margin-top:14px" onclick="go('voicerec')"><i class="ti ti-microphone" style="vertical-align:-2px;color:var(--amber)"></i> あなたの声も残す（言葉にして届ける）</button>
+    <div class="lock"><i class="ti ti-lock"></i>声は本人の同意のもとで、言葉にして届けられています</div>
   </div>
 </section>
 
-<!-- ============ 声を聴く ============ -->
+<!-- ============ 声の物語を読む（テキスト・生の声は届かない） ============ -->
 <section class="scr" id="listen">
   <div class="pad">
     <button class="back" onclick="go('stories')"><i class="ti ti-arrow-left"></i> 声の物語</button>
     <div style="margin-top:14px;background:var(--amber-bg);border-radius:16px;padding:16px">
       <span style="font-size:11px;color:var(--amber);background:var(--amber-bg2);padding:3px 9px;border-radius:999px">40代・乳がん・治療中</span>
       <div style="font-size:16px;font-weight:600;color:var(--amber-t);margin-top:10px">眠れない夜のこと</div>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:14px">
-        <button class="ic" style="width:52px;height:52px;background:var(--teal);border:none;flex-shrink:0;cursor:pointer" onclick="lToggle()"><i id="lIcon" class="ti ti-player-play" style="font-size:26px;color:#fff"></i></button>
-        <div style="flex:1;height:6px;background:#E9D6B0;border-radius:3px;overflow:hidden"><div id="lBar" style="width:0;height:100%;background:#B5701B"></div></div>
-        <span id="lTime" style="font-size:12px;color:var(--amber-t);font-variant-numeric:tabular-nums">0:48</span>
-      </div>
-      <div class="note" style="text-align:center;margin-top:10px">無理に聴かなくて大丈夫。途中でやめてもいいですよ。</div>
+      <div style="font-size:14.5px;line-height:2;margin-top:12px;color:#3a3326"><i class="ti ti-quote" style="color:var(--amber);vertical-align:-2px"></i> 眠れない夜が続いて、誰にも言えませんでした。でも、ここに気持ちをそっと置けたら、ほんの少し軽くなった。同じ夜を過ごしているあなたへ——朝は、ちゃんと来ます。あせらず、あなたのペースで。</div>
+      <div class="note" style="margin-top:12px;font-size:11px;line-height:1.7;border-top:.5px solid var(--amber-line);padding-top:10px"><i class="ti ti-sparkles" style="vertical-align:-1px;color:var(--amber)"></i> ご本人が話した声を、SATOIが言葉にしました。ご本人がOKした言葉だけが、ここに届いています。<b>生の声は届きません</b>（聴き返せるのは、ご本人だけ）。だから、安心して読めます。</div>
     </div>
     <div style="display:flex;gap:10px;margin-top:14px">
       <button class="litbtn" onclick="lightUp(this)" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:#B5701B;border-radius:14px;padding:12px;font-size:14px;font-weight:600;font:inherit"><i class="ti ti-flame"></i> 灯りをともす ・ <span class="lcount">128</span></button>
       <button onclick="thanksTap(this)" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;background:var(--teal);color:#fff;border-radius:14px;padding:12px;font-size:14px;font-weight:600;font:inherit"><i class="ti ti-heart"></i> ありがとう</button>
     </div>
-    <div class="note" style="text-align:center;margin-top:8px;line-height:1.6">そっと、あたたかい気持ちだけが届きます。<br>安全のため、声やメッセージは送れません。</div>
-    <div class="info" style="margin-top:16px"><i class="ti ti-lifebuoy" style="font-size:18px;color:var(--blue)"></i><div>聴いてつらくなったら、ひとりで抱えないで。<a class="link" style="color:var(--blue)" onclick="go('support')">相談先を見る</a></div></div>
-    <div class="lock"><i class="ti ti-lock"></i>声は本人の同意のもとで届けられています</div>
+    <div class="note" style="text-align:center;margin-top:8px;line-height:1.6">送れるのは<b>エール（あたたかい気持ち）</b>だけ。<br>安全のため、声やメッセージ・連絡先は送れません。</div>
+    <div class="info" style="margin-top:16px"><i class="ti ti-lifebuoy" style="font-size:18px;color:var(--blue)"></i><div>読んでつらくなったら、ひとりで抱えないで。<a class="link" style="color:var(--blue)" onclick="go('support')">相談先を見る</a></div></div>
+    <div class="lock"><i class="ti ti-lock"></i>声は本人の同意のもとで、言葉にして届けられています</div>
   </div>
 </section>
 
@@ -1642,7 +1641,7 @@ function addHint(p){var t=document.getElementById('wText');var v=t.value.trim();
 /* listen player */
 var lp=0,liv=null,lplay=false;
 function lToggle(){lplay=!lplay;document.getElementById('lIcon').className=lplay?'ti ti-player-pause':'ti ti-player-play';if(lplay){liv=setInterval(function(){lp+=2;if(lp>=100){lp=100;}document.getElementById('lBar').style.width=lp+'%';document.getElementById('lTime').textContent=vfmt(Math.round(48*(1-lp/100)));if(lp>=100){clearInterval(liv);lplay=false;document.getElementById('lIcon').className='ti ti-player-play';lp=0;}},120);}else{if(liv)clearInterval(liv);}}
-window._oninit['listen']=function(){lp=0;lplay=false;if(liv)clearInterval(liv);document.getElementById('lBar').style.width='0';document.getElementById('lTime').textContent='0:48';document.getElementById('lIcon').className='ti ti-player-play';};
+/* listenは「読む」画面に変更（生の声は届かない設計）。旧オーディオ初期化は撤去。 */
 </script>
 
 <!-- ============ 病院をさがす ============ -->
@@ -2394,17 +2393,32 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 </section>
 
 <!-- ============ 記録の一覧（履歴） ============ -->
+<style>
+@keyframes tsuboGlow{0%,100%{opacity:.5;transform:translateX(-50%) scale(1)}50%{opacity:.95;transform:translateX(-50%) scale(1.12)}}
+@keyframes tsuboCore{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes tsuboMote{0%{opacity:0;transform:translateY(6px) scale(.5)}25%{opacity:.95}100%{opacity:0;transform:translateY(-78px) scale(1.1)}}
+#tsuboCard .tsuboGlow{position:absolute;left:50%;bottom:-34px;width:200px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,224,160,.95) 0%,rgba(232,162,78,.55) 38%,rgba(232,162,78,0) 70%);filter:blur(7px);animation:tsuboGlow 3.6s ease-in-out infinite;pointer-events:none}
+#tsuboCard .tsuboCore{position:absolute;left:50%;bottom:-6px;width:70px;height:70px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,243,214,.95),rgba(251,214,143,.5) 55%,transparent 72%);filter:blur(2px);animation:tsuboCore 2.8s ease-in-out infinite;pointer-events:none}
+#tsuboCard .tsuboMote{position:absolute;bottom:26px;width:5px;height:5px;border-radius:50%;background:#FCE3A8;box-shadow:0 0 9px 2px rgba(251,214,143,.85);animation:tsuboMote 4.6s ease-in-out infinite;pointer-events:none}
+</style>
 <section class="scr" id="records">
   <div class="pad">
     <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
     <h1 class="h1" style="margin-top:10px">わたしの記録</h1>
     <div class="sub">残してきた声・言葉・からだの記録を、見返せます</div>
-    <div style="margin-top:14px;border-radius:18px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 6px 20px rgba(38,48,63,.1)">
-      <div style="height:148px;position:relative;background:radial-gradient(95% 85% at 50% 105%, #FBD68F 0%, #E0A45E 24%, #B5662A 40%, #5A3A4E 66%, #1C2748 100%)">
+    <div id="tsuboCard" style="margin-top:14px;border-radius:18px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 6px 20px rgba(38,48,63,.1)">
+      <div style="height:148px;position:relative;background:radial-gradient(95% 85% at 50% 105%, #FBD68F 0%, #E0A45E 24%, #B5662A 40%, #5A3A4E 66%, #1C2748 100%);overflow:hidden">
         <img data-aoi="tsubo" src="img/aoi_tsubo.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        <div class="tsuboGlow"></div>
+        <div class="tsuboCore"></div>
+        <span class="tsuboMote" style="left:42%;animation-delay:0s"></span>
+        <span class="tsuboMote" style="left:50%;animation-delay:1.1s"></span>
+        <span class="tsuboMote" style="left:58%;animation-delay:2.2s"></span>
+        <span class="tsuboMote" style="left:46%;animation-delay:3.1s"></span>
+        <span class="tsuboMote" style="left:54%;animation-delay:1.7s"></span>
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,38,0) 50%,rgba(11,16,38,.4))"></div>
         <div style="position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.82);border-radius:999px;padding:4px 10px;font-size:10px;color:var(--teal-d);font-weight:600"><i class="ti ti-sparkles"></i> Geminiが描く・あなたの壺</div>
-        <div style="position:absolute;left:14px;bottom:13px;color:#fff"><div style="font-size:18px;font-weight:700;text-shadow:0 2px 12px rgba(0,0,0,.5)">あなたの壺</div><div style="font-size:11px;margin-top:3px;opacity:.95;text-shadow:0 1px 8px rgba(0,0,0,.5)">残した一つひとつが、光になってたまっています</div></div>
+        <div style="position:absolute;left:14px;bottom:13px;color:#fff"><div style="font-size:18px;font-weight:700;text-shadow:0 2px 12px rgba(0,0,0,.5)">あなたの壺 <span style="font-size:11px;font-weight:400;opacity:.92">・ 灯り 12</span></div><div style="font-size:11px;margin-top:3px;opacity:.95;text-shadow:0 1px 8px rgba(0,0,0,.5)">残した一つひとつが、光になってたまっています</div></div>
       </div>
     </div>
     <div id="recSaved" style="display:none;margin-top:14px;background:var(--teal-bg);border-radius:14px;padding:13px 14px">
@@ -2424,7 +2438,8 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
       <div style="aspect-ratio:1/1;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(135deg,#F7E6EC,#F4C0D1 70%,#FBEEDE)"><i class="ti ti-camera" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:20px;color:rgba(255,255,255,.9)"></i><img data-aoi="kodomo_e" src="img/aoi_kodomo_e.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:0;right:0;bottom:0;padding:4px 6px;font-size:9px;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.5))">子どもの絵</span></div>
       <div style="aspect-ratio:1/1;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(135deg,#EAF0F6,#FBEEDE 70%,#F4C0D1)"><i class="ti ti-camera" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:20px;color:rgba(255,255,255,.9)"></i><img data-aoi="kami" src="img/aoi_kami.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:0;right:0;bottom:0;padding:4px 6px;font-size:9px;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.5))">髪のこと</span></div>
     </div>
-    <div class="note" style="margin-top:8px;line-height:1.6">その時々に残した、葵さんの写真です。タップで大きく見られます。</div>
+    <div class="note" style="margin-top:8px;line-height:1.7">その時々に残した、葵さんの写真です。まだ写真が入っていない枠は、<b>画像スタジオ</b>でGeminiが描き、保存（img/にcommit）すると、ここに入ります。</div>
+    <button class="btn btn-out" style="margin-top:10px;padding:10px;font-size:13px" onclick="go('imgstudio')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> 写真をつくる・入れる（画像スタジオ）</button>
     <div style="font-size:13px;font-weight:600;margin:18px 0 8px">相談カードの履歴</div>
     <button class="card" style="width:100%;text-align:left;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('sdm')"><span class="ic" style="width:38px;height:38px;background:var(--teal-bg);flex-shrink:0"><i class="ti ti-clipboard-heart" style="font-size:19px;color:var(--teal)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">相談カード <span style="display:inline-block;font-size:10px;font-weight:600;color:#fff;background:var(--teal);border-radius:8px;padding:1px 7px;vertical-align:1px">見せた</span></b><span class="note" style="display:block">2026年5月22日 ・ 先生に見せました</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('sdmbuild')"><span class="ic" style="width:38px;height:38px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-clipboard" style="font-size:19px;color:var(--amber)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">相談カード（下書き） <span style="display:inline-block;font-size:10px;font-weight:600;color:var(--amber-t);background:var(--amber-bg);border:.5px solid var(--amber);border-radius:8px;padding:1px 7px;vertical-align:1px">下書き</span></b><span class="note" style="display:block">2026年4月10日 ・ 作成のとちゅう（つづきから）</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
@@ -2567,6 +2582,9 @@ var EMP_ORDER=['P','M','S','e','E'];
 var EMP={
  P:{label:'身体',full:'Physical',color:'#D76B5E',weight:0.30,
     l1:'今日の体調はどうですか？',
+    q:'今日のからだは、どんな具合ですか？',
+    cue:'痛み・だるさ・動きやすさを、ぜんぶ含めて。良い／悪いの正解はありません。今日の実感のところに、すっとずらしてください。',
+    lo:'動くのもつらい',hi:'軽やかに動ける',scale:'活力VAS（0–100）',
     l2:[['とても辛い',20],['だるい',40],['普通',60],['元気',80],['とても元気',100]],
     l3:'身体的幸福感。運動耐容能やADLなど、心臓リハ・がんリハ双方で標準の指標で見ます。',
     src:[['ti-run','運動耐容能','6分間歩行（6MWD）・心拍回復を、リハ職が観察して記録。'],['ti-walk','歩数・活動量（自動）','HealthKit・Google Fitから自動で。負担ゼロ。'],['ti-clipboard-check','ADL（日常生活動作）','Barthel Index／Katz Index をコメディカルが入力。']],
@@ -2575,6 +2593,9 @@ var EMP={
     ai:'過去30日の身体スコアは安定。先週から睡眠の質が改善しています。回復期として良好です。'},
  M:{label:'精神',full:'Mental',color:'#5C9A7E',weight:0.25,
     l1:'今日の気持ちはどうですか？',
+    q:'今日の心は、どんな感じですか？',
+    cue:'気分の浮き沈み、不安、治療への気持ち——つらいままでも大丈夫。いまの心のところに、そっと置いてください。',
+    lo:'沈んでいる・つらい',hi:'穏やか・前向き',scale:'WHO-5（主観的幸福感）',
     l2:[['とても辛い',20],['辛い',40],['普通',60],['穏やか',80],['前向き',100]],
     l3:'主観的幸福感。WHO-5など国際標準の尺度で、心の安定と治療への納得を見ます。',
     src:[['ti-clipboard-text','ePROアンケート','WHO-5（5問・1分以内）をスマホ/タブレットで。'],['ti-mood-heart','不安・抑うつ','HADS（14問）をePRO、必要に応じて看護師が支援。'],['ti-microphone','対話のログ','診察やコンシェルジュの会話から、前向き／つらいの表現を汲み取り。']],
@@ -2583,6 +2604,9 @@ var EMP={
     ai:'精神スコアは、つらい夜もありつつ、子どもとの時間で持ち直しています。波があるのは自然なことです。'},
  S:{label:'社会',full:'Social',color:'#C97840',weight:0.15,
     l1:'今日、自分の役割を感じられましたか？',
+    q:'今日、誰かや何かと「つながっている」と感じましたか？',
+    cue:'家族・仲間・役割・居場所。会話ひとつ、子どもの声ひとつでも。今日の実感のところへ。',
+    lo:'ひとりに感じた',hi:'居場所を感じた',scale:'LSNS-6（社会的つながり）',
     l2:[['全く感じなかった',20],['あまり',40],['少し',60],['十分',90]],
     l3:'社会的処方・つながり。孤立を防ぎ、役割や社会参加を支えます。',
     src:[['ti-users','社会的孤立','Lubben Social Network Scale（LSNS-6・6問）をePROで。'],['ti-calendar','社会的参加','週の活動回数・地域活動を、コメディカル／ソーシャルワーカーが聞き取り。'],['ti-microphone','つながりの語り','言語化しにくい"つながり感"を、ナラティブ（音声→AI解析）で抽出。']],
@@ -2591,6 +2615,9 @@ var EMP={
     ai:'社会スコアは中ほど。母としての時間が支えに。地域や仲間とのつながりも力になります。'},
  e:{label:'活力',full:'energy',color:'#5D9A80',weight:0.15,
     l1:'やってみたいことは、ありましたか？',
+    q:'今日、「やってみたい」という気持ちは、どれくらい？',
+    cue:'食べたい・出かけたい・話したい——小さな芽でも、立派な活力です。今日の感じのところへ。',
+    lo:'何もする気がしない',hi:'いろいろやってみたい',scale:'活力VAS／FACIT-F',
     l2:[['何もない',20],['少しある',50],['いくつかある',75],['たくさんある',100]],
     l3:'生活エネルギー・活力度。疲労・睡眠・自律神経から、治療を続ける力を見ます。',
     src:[['ti-mood-smile','活力・疲労','Cancer Fatigue Scale／FACIT-F・活力VASをePROで。'],['ti-device-watch','睡眠・活動量（自動）','ウェアラブル／アクチグラフィで睡眠・活動量を自動計測。'],['ti-activity','自律神経','HRV（心拍変動）・心拍回復などの簡易バイタル。']],
@@ -2599,6 +2626,9 @@ var EMP={
     ai:'活力スコアはゆるやかに回復中。小さな「やってみたい」が増えてきています。'},
  E:{label:'共感',full:'Empathy / Economy',color:'#C97840',weight:0.15,
     l1:'今日、誰かと心が通った瞬間はありましたか？',
+    q:'今日、心が通った・支えられていると感じましたか？',
+    cue:'人とのつながりの実感も、お金や暮らしの安心も含めて。今日のところに、すっと。',
+    lo:'孤立・不安だった',hi:'支えられている実感',scale:'共感NLP＋生活安定度',
     l2:[['全くなかった',20],['少しあった',50],['何度かあった',75],['たくさんあった',100]],
     l3:'共感・つながり、そして経済の安定。孤立や経済不安は、生きるチカラを大きく左右します。',
     src:[['ti-microphone','共感・つながり感','音声ログのNLP解析で、感情・共感語の出現頻度を抽出（エンパシー特有の指標）。'],['ti-coin','経済的安定感','生活安定度スコア（EQ-5Dの経済項目／独自3–5問）をePROで。'],['ti-receipt','医療費・通院負担','医師／ケースワーカーが入力し、経済性を補足。']],
@@ -2655,7 +2685,7 @@ function openEmpAxis(k){var m=EMP[k];if(!m)return;var sc=empScores[k]||0;
   document.getElementById('empAxBody').innerHTML=body;var sp=document.getElementById('empAxSpark');if(sp)sp.innerHTML=empSparkSVG(empTrend);window._empAxKey=k;go('empaxis');}
 window._oninit['empaxis']=function(){var s=document.getElementById('empAxSpark');if(s&&!s.innerHTML)s.innerHTML=empSparkSVG(empTrend);};
 var empInIdx=0,empInTmp={};
-function empInStart(){empInIdx=0;empInTmp={};empInRender();}
+function empInStart(){empInIdx=0;empInTmp={};window._empPimported=false;empInRender();}
 function empInRender(){
   var prog=document.getElementById('empInProg');if(prog){var ph='';EMP_ORDER.forEach(function(k,i){ph+='<span style="flex:1;height:4px;border-radius:999px;background:'+(i<=empInIdx?EMP[k].color:'var(--line)')+';opacity:'+(i<=empInIdx?1:0.5)+'"></span>';});prog.innerHTML=ph;}
   var f=document.getElementById('empInForm');if(!f)return;
@@ -2663,12 +2693,17 @@ function empInRender(){
     f.innerHTML='<div style="text-align:center;padding-top:10px"><div class="ic" style="width:60px;height:60px;background:var(--teal-bg);margin:0 auto"><i class="ti ti-circle-check" style="font-size:30px;color:var(--teal-d)"></i></div><div style="font-size:17px;font-weight:600;margin-top:12px">今日の、わたしを残しました</div><div style="font-size:40px;font-weight:700;color:var(--teal-d);margin-top:8px;line-height:1.1">'+tot+'<span style="font-size:16px;color:var(--mute)"> 点</span></div><div class="sub" style="margin-top:6px">この記録は物語にも残り、診察やコンシェルジュにも活かせます。</div></div><div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:12px;line-height:1.75;color:var(--teal-d)"><i class="ti ti-heart-handshake" style="vertical-align:-2px"></i> もし大きく下がった日は、担当の看護師さんにそっと届きます。ひとりで抱えなくて大丈夫。</div><button class="btn btn-teal" style="margin-top:14px" onclick="go(\'empse\')"><i class="ti ti-arrow-left" style="vertical-align:-2px"></i> いまの、わたしへ戻る</button>';return;}
   var ck=EMP_ORDER[empInIdx],m=EMP[ck];
   var h='<div style="display:flex;align-items:center;gap:8px"><span class="ic" style="width:32px;height:32px;background:'+m.color+'22"><i class="ti ti-circle-dot" style="font-size:16px;color:'+m.color+'"></i></span><span style="font-size:13px;color:var(--mute)">'+m.label+' ・ '+(empInIdx+1)+'/5</span></div>';
-  h+='<div style="font-size:17px;font-weight:600;margin-top:12px;line-height:1.5">'+m.l1+'</div>';
-  if(ck==='P'){h+='<button class="btn btn-out" style="margin-top:14px;border-color:var(--teal);color:var(--teal-d);display:flex;align-items:center;justify-content:center;gap:7px" onclick="empHealthSync()"><i class="ti ti-device-mobile"></i> ヘルスケアから自動で取り込む</button><div class="note" style="margin-top:6px;font-size:11px;line-height:1.5"><i class="ti ti-plug-connected" style="vertical-align:-1px"></i> Apple ヘルスケア／Google Fit と連携済み。ボタンひとつで、今日の歩数・活動が入ります。</div><div style="text-align:center;font-size:11px;color:var(--mute);margin:12px 0 0">または、手で選ぶ</div>';}
-  h+='<div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">';
-  m.l2.forEach(function(o){h+='<button class="btn btn-out" style="padding:13px;justify-content:flex-start;text-align:left" onclick="empInPick('+o[1]+')">'+o[0]+'</button>';});
-  h+='</div><details class="card" style="margin-top:12px"><summary style="cursor:pointer;font-size:12px;color:var(--sub)"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> なぜこの軸を見るの？（医学的背景）</summary><div class="note" style="margin-top:8px;line-height:1.75">'+m.l3+'</div></details>';
-  h+='<button class="btn btn-out" style="margin-top:12px;color:var(--mute)" onclick="empInPick(null)">この軸はスキップ</button>';
+  h+='<div style="font-size:17px;font-weight:600;margin-top:12px;line-height:1.55">'+m.q+'</div>';
+  h+='<div class="note" style="margin-top:7px;line-height:1.7;font-size:12px">'+m.cue+'</div>';
+  if(ck==='P'){h+='<div id="empPhealthBox" style="margin-top:13px"><button class="btn btn-out" style="border-color:var(--teal);color:var(--teal-d);display:flex;align-items:center;justify-content:center;gap:7px;padding:11px" onclick="empHealthSync()"><i class="ti ti-device-mobile"></i> ヘルスケアから取り込む（歩数・活動・睡眠）</button><div class="note" style="margin-top:6px;font-size:11px;line-height:1.5"><i class="ti ti-plug-connected" style="vertical-align:-1px"></i> Apple ヘルスケア／Google Fit と連携済み。<b>身体の軸だけ</b>、ボタンひとつで下の目盛りに反映できます。</div></div>';}
+  var cur=(empInTmp[ck]!=null?empInTmp[ck]:50);
+  h+='<div style="text-align:center;margin:18px 0 2px"><span id="empVasNum" style="font-size:38px;font-weight:700;color:'+m.color+';line-height:1">'+cur+'</span><span style="font-size:13px;color:var(--mute)"> / 100</span></div>';
+  h+='<input id="empVas" type="range" min="0" max="100" step="1" value="'+cur+'" oninput="empVasMove(this.value)" style="width:100%;height:34px;accent-color:'+m.color+';cursor:pointer">';
+  h+='<div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--mute);margin-top:-2px"><span><i class="ti ti-chevron-left" style="vertical-align:-1px"></i> '+m.lo+'</span><span>'+m.hi+' <i class="ti ti-chevron-right" style="vertical-align:-1px"></i></span></div>';
+  h+='<div class="note" style="text-align:center;margin-top:10px;font-size:11px"><i class="ti ti-hand-finger" style="vertical-align:-2px"></i> つまみを、今日の実感のところまで、すっとずらしてください</div>';
+  h+='<button class="btn btn-teal" style="margin-top:14px" onclick="empInSet()"><i class="ti ti-check" style="vertical-align:-2px"></i> この感じで記録 → 次へ</button>';
+  h+='<details class="card" style="margin-top:12px"><summary style="cursor:pointer;font-size:12px;color:var(--sub)"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> なぜこの軸を見るの？（医学的背景・尺度）</summary><div class="note" style="margin-top:8px;line-height:1.75">'+m.l3+'<br><span style="color:var(--teal-d);font-size:11px">参考にする尺度：'+m.scale+'</span></div></details>';
+  h+='<button class="btn btn-out" style="margin-top:10px;color:var(--mute)" onclick="empInSkip()">この軸は、今日はスキップ</button>';
   f.innerHTML=h;}
 function empAward(pt){
   if(window._points==null)window._points=0;
@@ -2679,17 +2714,20 @@ function empAward(pt){
   setTimeout(function(){if(b.parentNode)b.parentNode.removeChild(b);},760);
   setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},1200);
 }
-function empInPick(score){var k=EMP_ORDER[empInIdx];if(score!=null){empInTmp[k]=score;empAward(0.5);}empInIdx++;empInRender();}
+function empVasMove(v){var n=document.getElementById('empVasNum');if(n)n.textContent=v;}
+function empInSet(){var k=EMP_ORDER[empInIdx];var vas=document.getElementById('empVas');var v=vas?parseInt(vas.value):50;empInTmp[k]=v;empAward(0.5);empInIdx++;empInRender();}
+function empInSkip(){empInIdx++;empInRender();}
+// 身体の軸のみ：ヘルスケアからスライダーに反映（取り込み済み表示・他軸には出さない）
 function empHealthSync(){
+  if(window._empPimported)return;window._empPimported=true;
   var steps=6240,mins=35,sleep='6時間20分',score=70;
-  empInTmp['P']=score;empAward(1.5);
-  var f=document.getElementById('empInForm');if(!f)return;
-  f.innerHTML='<div style="display:flex;align-items:center;gap:8px"><span class="ic" style="width:32px;height:32px;background:#D76B5E22"><i class="ti ti-device-mobile" style="font-size:16px;color:#D76B5E"></i></span><span style="font-size:13px;color:var(--mute)">身体 ・ ヘルスケア連携</span></div>'
-   +'<div class="card" style="margin-top:14px;background:var(--teal-bg);border:none"><div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--teal-d);font-weight:600"><i class="ti ti-circle-check"></i> 今日のデータが入りました（自動）</div><div style="display:flex;gap:8px;margin-top:12px;text-align:center"><div style="flex:1"><div style="font-size:23px;font-weight:700;color:var(--teal-d);line-height:1">'+steps.toLocaleString()+'</div><div class="note" style="font-size:10px;margin-top:2px">歩</div></div><div style="flex:1"><div style="font-size:23px;font-weight:700;color:var(--teal-d);line-height:1">'+mins+'</div><div class="note" style="font-size:10px;margin-top:2px">活動(分)</div></div><div style="flex:1"><div style="font-size:23px;font-weight:700;color:var(--teal-d);line-height:1">'+score+'</div><div class="note" style="font-size:10px;margin-top:2px">身体スコア</div></div></div><div class="note" style="margin-top:8px;font-size:10px;text-align:center">睡眠 '+sleep+' ・ Apple ヘルスケアより</div></div>'
-   +'<div class="card" style="margin-top:10px;background:var(--amber-bg2);border:.5px solid var(--amber-line);display:flex;align-items:center;gap:9px"><i class="ti ti-coin" style="color:var(--amber);font-size:22px"></i><div style="font-size:13px;color:#5b4a2e">活動量で <b>+1.5pt</b>！　今日の歩みが、そのままポイントになりました。</div></div>'
-   +'<div class="note" style="margin-top:10px;line-height:1.75"><i class="ti ti-bulb" style="vertical-align:-2px;color:var(--amber)"></i> あと約 1,800歩（15分ほどの散歩）で、からだも気持ちも軽くなる目安です。無理のない範囲で、あなたのペースで。</div>'
-   +'<button class="btn btn-out" style="margin-top:12px" onclick="go(\'hibi\')"><i class="ti ti-flame" style="vertical-align:-2px;color:var(--amber)"></i> 心地よかったら、みんなに分け合う</button>'
-   +'<button class="btn btn-teal" style="margin-top:10px" onclick="empInIdx++;empInRender();"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> 次へ</button>';
+  var vas=document.getElementById('empVas');if(vas){vas.value=score;empVasMove(score);}
+  empAward(1.5);
+  var box=document.getElementById('empPhealthBox');if(!box)return;
+  box.innerHTML='<div class="card" style="background:var(--teal-bg);border:none;padding:12px 13px">'
+   +'<div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--teal-d);font-weight:600"><i class="ti ti-circle-check"></i> 取り込みました（自動・Apple ヘルスケア）</div>'
+   +'<div style="display:flex;gap:8px;margin-top:10px;text-align:center"><div style="flex:1"><div style="font-size:20px;font-weight:700;color:var(--teal-d);line-height:1">'+steps.toLocaleString()+'</div><div class="note" style="font-size:9px;margin-top:2px">歩</div></div><div style="flex:1"><div style="font-size:20px;font-weight:700;color:var(--teal-d);line-height:1">'+mins+'</div><div class="note" style="font-size:9px;margin-top:2px">活動(分)</div></div><div style="flex:1"><div style="font-size:20px;font-weight:700;color:var(--teal-d);line-height:1">'+sleep+'</div><div class="note" style="font-size:9px;margin-top:2px">睡眠</div></div></div>'
+   +'<div class="note" style="margin-top:8px;font-size:10.5px;line-height:1.6">下の目盛りに <b>'+score+'</b> として反映しました。実感とちがえば、つまみで微調整して記録できます。 <b>+1.5pt</b></div></div>';
 }
 // EMPSeトップから一発で：携帯のヘルスケア→身体の軸へ即反映＋ポイント
 function empHealthSyncHome(){
@@ -3019,12 +3057,18 @@ window._oninit['emergency']=function(){emgTab('medical');emgQR();};
   <div class="pad">
     <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">さがす</h1>
-    <div class="sub">入力すると検索、空のままだと“ぜんぶ”をツリーで表示します</div>
-    <div style="position:relative;margin-top:12px">
+    <div class="sub">まず、どこから知りたいですか？　もちろん、直接入力してもさがせます</div>
+    <!-- まず3つの入口（がん種・用語・機能）から、やさしく道案内 -->
+    <div id="searchQuick" style="display:flex;gap:8px;margin-top:14px">
+      <button class="tile" style="flex:1;text-align:center;padding:14px 8px" onclick="searchByGroup('がん種')"><i class="ti ti-stethoscope" style="font-size:24px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:7px">がん種から</div><div class="note" style="font-size:10.5px">乳がん・肺がん…</div></button>
+      <button class="tile" style="flex:1;text-align:center;padding:14px 8px" onclick="searchByGroup('用語')"><i class="ti ti-vocabulary" style="font-size:24px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:7px">用語から</div><div class="note" style="font-size:10.5px">PSA・生検…</div></button>
+      <button class="tile" style="flex:1;text-align:center;padding:14px 8px" onclick="searchByGroup('機能')"><i class="ti ti-apps" style="font-size:24px;color:var(--amber)"></i><div style="font-size:13px;font-weight:600;margin-top:7px">機能・支え</div><div class="note" style="font-size:10.5px">お金・家族…</div></button>
+    </div>
+    <div style="position:relative;margin-top:14px">
       <i class="ti ti-search" style="position:absolute;left:12px;top:12px;color:var(--mute)"></i>
       <input id="searchInput" type="search" placeholder="例：MRI、乳がん、給付金、病院、PSA…" oninput="searchRender(this.value)" style="padding-left:36px">
     </div>
-    <div class="note" id="searchHint" style="margin-top:8px"><i class="ti ti-list-tree" style="vertical-align:-2px;color:var(--teal)"></i> 下は“ぜんぶ”の一覧（ツリー）。気になる所をひらいて移動できます。</div>
+    <div class="note" id="searchHint" style="margin-top:8px"><i class="ti ti-list-tree" style="vertical-align:-2px;color:var(--teal)"></i> 上の3つから選ぶ・直接入力する・下の“ぜんぶ”の一覧から開く——どれでもどうぞ。</div>
     <div id="searchResults" style="margin-top:10px"></div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -3167,7 +3211,95 @@ function searchRender(q){
   var rows=list.map(function(x){return '<button class="navrow" onclick="'+x.a+'"><span><i class="ti '+x.i+'" style="color:'+(GCOL[x.g]||'var(--teal)')+'"></i> '+x.t+' <span class="note" style="margin-left:4px">'+x.g+'</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>';}).join('');
   res.innerHTML='<div style="border:.5px solid var(--line2);border-radius:14px;overflow:hidden">'+rows+'</div>';
 }
-window._oninit['search']=function(){var i=document.getElementById('searchInput');if(i){i.value='';if(i.focus)try{i.focus();}catch(e){}}searchRender('');};
+// 3つの入口（がん種／用語／機能・支え）から、その種類だけをやさしく一覧
+function searchByGroup(g){
+  var GROUPS={'がん種':['がん種'],'用語':['用語'],'機能':['機能','治療','その他']};
+  var gs=GROUPS[g]||[g];
+  var inp=document.getElementById('searchInput');if(inp)inp.value='';
+  var hint=document.getElementById('searchHint');if(hint)hint.style.display='none';
+  var res=document.getElementById('searchResults');if(!res)return;
+  var GCOL={'がん種':'var(--teal)','治療':'var(--teal)','機能':'var(--amber)','用語':'var(--blue)','その他':'var(--mute)'};
+  var LABEL={'がん種':'がん種からさがす','用語':'用語からさがす（やさしく解説）','機能':'機能・支えからさがす'};
+  var list=SX.filter(function(x){return gs.indexOf(x.g)>=0;});
+  var rows=list.map(function(x){return '<button class="navrow" onclick="'+x.a+'"><span><i class="ti '+x.i+'" style="color:'+(GCOL[x.g]||'var(--teal)')+'"></i> '+x.t+' <span class="note" style="margin-left:4px">'+x.g+'</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>';}).join('');
+  res.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;margin:4px 2px 8px"><span style="font-size:13px;font-weight:600">'+(LABEL[g]||g)+'（'+list.length+'）</span><button class="link" style="font-size:12px;background:none;border:none;cursor:pointer;color:var(--teal-d)" onclick="searchRender(\'\')">ぜんぶの一覧へ</button></div><div style="border:.5px solid var(--line2);border-radius:14px;overflow:hidden">'+rows+'</div>';
+}
+window._oninit['search']=function(){var i=document.getElementById('searchInput');if(i){i.value='';if(i.focus)try{i.focus();}catch(e){}}var q=document.getElementById('searchQuick');if(q)q.style.display='flex';searchRender('');};
+</script>
+
+<!-- ============ ポイント（概要・運用・dポイント） ============ -->
+<section class="scr" id="points">
+  <div class="pad">
+    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <h1 class="h1" style="margin-top:10px">SATOIポイント</h1>
+    <div class="sub">あなたのがんばりと、恩送りのつながりから、そっとたまる灯り</div>
+
+    <!-- 残高 -->
+    <div class="card" style="margin-top:14px;background:linear-gradient(135deg,#FFF7EC,#FBEEDE);border:.5px solid var(--amber-line)">
+      <div style="display:flex;align-items:center;gap:8px"><i class="ti ti-gift" style="font-size:18px;color:var(--amber)"></i><span style="font-size:12px;color:var(--amber-t);font-weight:600">いまのポイント</span></div>
+      <div style="margin-top:6px;line-height:1"><span id="ptBalance" style="font-size:44px;font-weight:700;color:var(--amber-t)">1,250</span><span style="font-size:15px;color:var(--amber-t)"> pt</span></div>
+      <div style="font-size:12px;color:var(--amber-t);margin-top:4px"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> dポイントに交換すると <b>約1,250円分</b>の目安（1pt＝1円）</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn btn-teal" style="flex:1;padding:10px;font-size:13px" onclick="alert('dポイントへの交換は、連携の準備ができ次第ご利用いただけます。')"><i class="ti ti-transfer" style="vertical-align:-2px"></i> dポイントに交換</button>
+        <button class="btn btn-out" style="flex:1;padding:10px;font-size:13px" onclick="go('match')"><i class="ti ti-heart-handshake" style="vertical-align:-2px;color:var(--rose)"></i> 恩送りで贈る</button>
+      </div>
+    </div>
+
+    <!-- dポイント連携 -->
+    <div class="card" style="margin-top:12px;display:flex;gap:11px;align-items:flex-start">
+      <span class="ic ic34" style="background:#FBEEDE;color:var(--amber-t);font-weight:700;flex-shrink:0;font-size:13px">d</span>
+      <div style="flex:1"><div style="display:flex;align-items:center;gap:7px"><b style="font-size:14px">dポイントとして使えます</b><span style="font-size:10px;color:var(--amber-t);background:var(--amber-bg);border:.5px solid var(--amber-line);border-radius:999px;padding:2px 8px">連携予定</span></div><div class="note" style="line-height:1.75;margin-top:4px">SATOIポイントは、貯めて<b>dポイント</b>に交換できるようにする予定です。お買い物・お薬・通信など、ふだんの暮らしでそのまま使えます。<br><span style="font-size:11px">※ dポイント連携は準備中。交換レート・条件は連携時に確定します。</span></div></div>
+    </div>
+
+    <!-- たまる -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-seeding"></i> どうやって、たまる？</div>
+    <div class="card" style="margin-top:10px;padding:2px 14px">
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:9px"><i class="ti ti-pencil-plus" style="color:var(--teal)"></i> 今日のEMPSeを記録する</span><b style="color:var(--amber-t)">＋0.5pt</b></div>
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:9px"><i class="ti ti-device-mobile" style="color:var(--teal)"></i> ヘルスケアから活動を取り込む</span><b style="color:var(--amber-t)">＋1.5pt</b></div>
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:9px"><i class="ti ti-bulb" style="color:var(--teal)"></i> 学び・お役立ちを読む</span><b style="color:var(--amber-t)">＋少し</b></div>
+      <div class="opt"><span style="display:flex;align-items:center;gap:9px"><i class="ti ti-heart-handshake" style="color:var(--rose)"></i> 恩送りのエールを受け取る</span><b style="color:var(--amber-t)">＋灯り</b></div>
+    </div>
+    <div class="note" style="margin-top:8px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> ポイントの芯は「<b>恩送り</b>」。数を競うためのものではありません。無理なく、あなたのペースで。</div>
+
+    <!-- つかう -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-wallet"></i> どうやって、つかう？</div>
+    <div class="card" style="margin-top:10px;padding:2px 14px">
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:9px"><i class="ti ti-transfer" style="color:var(--amber)"></i> dポイントに交換（暮らしで使う）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></div>
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:9px"><i class="ti ti-gift" style="color:var(--rose)"></i> 同じ道の仲間に贈る（恩送り）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></div>
+      <div class="opt"><span style="display:flex;align-items:center;gap:9px"><i class="ti ti-rocket" style="color:var(--blue)"></i> 伴走（使った分だけ）の支払いにあてる</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></div>
+    </div>
+
+    <!-- 有効期限・運用ルール -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-clock"></i> 有効期限と、運用のルール</div>
+    <div class="card" style="margin-top:10px">
+      <div style="font-size:13px;line-height:2">
+        <div><b>有効期限：</b>最後にポイントを「ためた」または「使った」日から<b>1年間</b>。動きがあるたびに延長されます。<br><span style="font-size:11px;color:var(--mute)">いまの残高の期限：2027年5月末まで（直近の獲得：2026年5月）</span></div>
+        <div style="border-top:.5px solid var(--line);margin-top:9px;padding-top:9px"><b>退会したとき：</b>退会後あらたな付与は止まりますが、<b>残ったポイントは一定期間ご利用いただけます</b>（dポイント交換含む）。</div>
+        <div style="border-top:.5px solid var(--line);margin-top:9px;padding-top:9px"><b>現金には換金しません。</b>dポイント交換・恩送り・伴走の支払いに使えます。</div>
+      </div>
+    </div>
+
+    <!-- 広告とポイントの線引き -->
+    <div class="card" style="margin-top:12px;background:var(--teal-bg);border:none;display:flex;gap:10px;align-items:flex-start">
+      <i class="ti ti-shield-check" style="font-size:18px;color:var(--teal-d);margin-top:1px"></i>
+      <div style="font-size:12px;line-height:1.8;color:var(--teal-d)">ポイントは、<b>学び・あなたの行動</b>に対してお渡しします。広告の単なるクリックには付けません。医療情報を広告でゆがめないために、掲載は<b>SATOI・JOiNTの倫理委員会</b>が審査し、出典つき・専門家監修で。</div>
+    </div>
+
+    <!-- 履歴 -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-history"></i> 最近の記録</div>
+    <div class="card" style="margin-top:10px;padding:2px 14px">
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span><span class="note" style="font-size:11px">5/25</span><br>ヘルスケアから活動を取り込み</span><b style="color:#1D9E75">＋1.5</b></div>
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span><span class="note" style="font-size:11px">5/25</span><br>今日のEMPSeを記録</span><b style="color:#1D9E75">＋0.5</b></div>
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span><span class="note" style="font-size:11px">5/24</span><br>「学び・お役立ち」を読んだ</span><b style="color:#1D9E75">＋1.0</b></div>
+      <div class="opt"><span><span class="note" style="font-size:11px">5/20</span><br>同じ道の仲間へ、恩送り</span><b style="color:var(--mute)">－50</b></div>
+    </div>
+
+    <div class="note" style="margin-top:14px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> ポイントの内容・交換レート・有効期限・dポイント連携の条件は、サービスの正式提供時に確定します（現在は準備中の目安です）。</div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+<script>
+window._oninit['points']=function(){var b=document.getElementById('ptBalance');if(b&&window._points!=null)b.textContent=Number(window._points).toLocaleString();};
 </script>
 
 <!-- ============ 会員と伴走について ============ -->
@@ -5470,7 +5602,7 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
       </div>
     </div>
 
-    <div class="card" style="margin-top:14px;background:var(--amber-bg2);border:.5px solid var(--amber-line)"><div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--amber-t);font-weight:600"><i class="ti ti-heart-handshake"></i> あなたの声も、誰かの灯りに（恩送り）</div><div class="note" style="margin-top:5px;line-height:1.7">あなたが残した声は、同じ道を歩く人の支えになります。出す相手と範囲は、いつもあなたが選べます。一方向でも大丈夫。</div><button class="btn btn-teal" style="margin-top:10px;padding:10px" onclick="go('voicerec')"><i class="ti ti-microphone" style="vertical-align:-2px"></i> 声で、エールを残す</button></div>
+    <div class="card" style="margin-top:14px;background:var(--amber-bg2);border:.5px solid var(--amber-line)"><div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--amber-t);font-weight:600"><i class="ti ti-heart-handshake"></i> あなたの言葉も、誰かの灯りに（恩送り）</div><div class="note" style="margin-top:5px;line-height:1.7">あなたが残した声は、<b>SATOIが言葉（テキスト）にして、あなたがOKした分だけ</b>、同じ道を歩く人が読めます。生の声は届きません。公開する範囲は、いつもあなたが選べます。</div><button class="btn btn-teal" style="margin-top:10px;padding:10px" onclick="go('voicerec')"><i class="ti ti-microphone" style="vertical-align:-2px"></i> 声を残す（言葉にして届ける）</button></div>
 
     <div class="card" style="margin-top:12px;background:#f6f7f5;border:none"><div style="font-size:12px;font-weight:600"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> これから、一緒に作っていくこと</div><div class="note" style="margin-top:5px;line-height:1.7">同意した人どうしの1対1の対話（編集部・モニタ付きで安全に）。誰かを傷つけない・特定の人をカリスマにしない・コールドコンタクトは作らない——やさしい場所を、みんなで守ります。</div></div>
 
@@ -5492,7 +5624,8 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
     <div id="peerNote" class="card" style="margin-top:10px;font-size:13px;line-height:1.85;color:var(--sub)"></div>
     <div style="font-size:14px;font-weight:600;margin:18px 0 10px">この人が、分け合った声</div>
     <div id="peerVoices"></div>
-    <button class="btn btn-teal" style="margin-top:6px" onclick="go('voicerec')"><i class="ti ti-microphone" style="vertical-align:-2px"></i> この方へ、声でエールを残す</button>
+    <button class="litbtn btn" style="margin-top:6px;background:var(--amber-bg2);border:.5px solid var(--amber-line);color:#B5701B" onclick="lightUp(this)"><i class="ti ti-flame" style="vertical-align:-2px"></i> この方へ、エールを送る（灯り） ・ <span class="lcount">7</span></button>
+    <div class="note" style="margin-top:8px;line-height:1.6;text-align:center"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 送れるのはエール（あたたかい気持ち）だけ。声・メッセージ・連絡先は送れません。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
