@@ -14,75 +14,11 @@
 <meta property="og:site_name" content="SATOI">
 <meta name="twitter:card" content="summary_large_image">
 
-<!-- 即リダイレクト(JSが無効でも動く) -->
+<!-- 入口は本体へ即リダイレクト（演出はSATOI_2.0_prototype.html側のオープニングで行う） -->
 <meta http-equiv="refresh" content="0; url=SATOI_2.0_prototype.html">
 <link rel="canonical" href="SATOI_2.0_prototype.html">
-
-<style>
-  body {
-    margin: 0;
-    background: linear-gradient(180deg, #0B1736 0%, #1A2548 50%, #2A3558 100%);
-    color: #F8F6F0;
-    font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 24px;
-  }
-  .logo {
-    font-size: 32px;
-    letter-spacing: 0.32em;
-    font-weight: 500;
-    margin-bottom: 24px;
-    display: inline-flex;
-    align-items: center;
-  }
-  .logo .dot {
-    display: inline-block;
-    width: 12px; height: 12px;
-    background: #D4A95E;
-    border-radius: 50%;
-    margin-right: 12px;
-    box-shadow: 0 0 18px #D4A95E;
-    animation: pulse 1.6s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(1.2); }
-  }
-  .loading {
-    font-size: 13px;
-    letter-spacing: 0.2em;
-    color: rgba(248,246,240,0.6);
-    margin-top: 12px;
-  }
-  .manual {
-    margin-top: 36px;
-    padding: 12px 26px;
-    background: rgba(212,169,94,0.16);
-    border: 1px solid #D4A95E;
-    border-radius: 22px;
-    color: #F0C97A;
-    text-decoration: none;
-    font-size: 13px;
-    letter-spacing: 0.08em;
-    transition: all 0.3s;
-  }
-  .manual:hover {
-    background: rgba(212,169,94,0.32);
-  }
-</style>
+<script>location.replace('SATOI_2.0_prototype.html');</script>
+<style>html,body{margin:0;height:100%;background:#EAF0F6;}</style>
 </head>
-<body>
-  <div class="logo"><span class="dot"></span>SATOI</div>
-  <div class="loading">読み込み中...</div>
-  <a class="manual" href="SATOI_2.0_prototype.html">こちらをクリック →</a>
-<script>
-  // JSが有効なら即遷移(meta refresh より早い)
-  location.replace('SATOI_2.0_prototype.html');
-</script>
-</body>
+<body></body>
 </html>

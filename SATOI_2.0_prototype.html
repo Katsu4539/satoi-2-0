@@ -90,6 +90,62 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
 <script src="satoi_hospitals_data.js"></script>
 </head>
 <body>
+<div id="introOv" onclick="window.skipIntro&&window.skipIntro()" aria-hidden="true">
+  <div id="introNight"></div>
+  <div id="introGlow"></div>
+  <div id="introSun"></div>
+  <div id="introA" class="ip"><img class="brandlogo" src="data:image/png;base64,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" alt="SATOI"><div class="big">全てはがん患者さんのために。</div><div class="sm">みんなで、つながって、生きよう。</div></div>
+  <div id="introB" class="ip"><div class="bwrap"><div class="plat">SATOI PLATFORM</div><div class="logo">YH2.0</div><div class="ver">あなたの伴走者</div></div></div>
+  <div id="introC" class="ip"><div class="welc">ようこそ、SATOIへ</div></div>
+  <div id="introBloom"></div>
+  <div class="iskip">Skip</div>
+</div>
+<style>
+#introOv{position:fixed;inset:0;z-index:99999;overflow:hidden;background:linear-gradient(180deg,#EAF0F6 0%,#FBEEDE 55%,#F5DDBE 100%);font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;transition:opacity .9s ease,transform 1s cubic-bezier(.3,.55,.2,1);}
+#introOv.go{opacity:0;transform:scale(1.18);}
+#introNight{position:absolute;inset:0;background:linear-gradient(180deg,#000308 0%,#070C22 52%,#140F2E 100%);opacity:1;transition:opacity 1.9s ease;}
+#introNight.lift{opacity:0;}
+#introGlow{position:absolute;left:50%;top:57%;width:62%;height:210px;transform:translate(-50%,-50%);background:radial-gradient(ellipse at center,rgba(246,199,122,.55),rgba(246,199,122,0) 70%);opacity:0;animation:introGlow 4.7s ease forwards;}
+#introSun{position:absolute;top:50%;left:50%;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle at 50% 45%,#FFEAB6,#F6C77A 72%);box-shadow:0 0 70px 22px rgba(246,199,122,.45);transform:translate(-50%,180px) scale(.6);opacity:0;animation:introSunRise 4.7s cubic-bezier(.16,.84,.3,1) forwards;}
+#introOv .ip{position:absolute;top:42%;left:0;right:0;transform:translateY(calc(-50% + 14px));text-align:center;padding:0 28px;opacity:0;transition:opacity 1.1s ease,transform .9s cubic-bezier(.16,.84,.3,1);color:#FBFAF6;text-shadow:0 1px 18px rgba(0,0,0,.5);}
+#introOv .ip.on{opacity:1;transform:translateY(-50%);}
+#introOv .big{font-size:28px;font-weight:700;letter-spacing:.06em;line-height:1.8;text-shadow:0 2px 22px rgba(0,0,0,.6),0 0 32px rgba(246,199,122,.22);}
+#introOv .sm{font-size:17px;font-weight:600;margin-top:16px;letter-spacing:.14em;color:#FAD9A6;text-shadow:0 1px 16px rgba(0,0,0,.55);}
+#introOv .brandlogo{display:block;height:56px;width:auto;margin:0 auto 28px;filter:drop-shadow(0 2px 18px rgba(0,0,0,.5)) drop-shadow(0 0 34px rgba(246,199,122,.4));}
+#introOv .plat{font-size:33px;font-weight:700;letter-spacing:.12em;padding-left:.12em;color:#FBFAF6;margin-bottom:14px;text-shadow:0 2px 22px rgba(0,0,0,.6),0 0 44px rgba(246,199,122,.55);}
+#introOv .logo{font-size:34px;font-weight:700;letter-spacing:.2em;padding-left:.2em;color:#FAD9A6;text-shadow:0 2px 18px rgba(0,0,0,.55),0 0 30px rgba(246,199,122,.5);}
+#introOv .ver{font-size:19px;font-weight:600;margin-top:18px;letter-spacing:.24em;padding-left:.24em;color:#FBFAF6;text-shadow:0 1px 16px rgba(0,0,0,.55);}
+#introB .bwrap{display:inline-block;transform:scale(.4);transition:transform 1.7s cubic-bezier(.2,.72,.2,1);}
+#introB.on .bwrap{transform:scale(1);}
+
+
+#introOv .iskip{position:absolute;bottom:24px;right:22px;font-size:11px;letter-spacing:.18em;color:rgba(251,250,246,.45);}
+#introOv .welc{font-size:30px;font-weight:700;letter-spacing:.06em;color:#26303F;text-shadow:none;transform:scale(.6);transition:transform .9s cubic-bezier(.34,1.56,.64,1),opacity .5s ease;}
+#introC.on .welc{transform:scale(1);}
+#introBloom{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#FFFFFF,rgba(255,255,255,0) 65%);opacity:0;transition:opacity .5s ease;pointer-events:none;}
+@keyframes introNightLift{0%{opacity:1}55%{opacity:.92}82%{opacity:.35}100%{opacity:0}}
+@keyframes introGlow{0%{opacity:0}30%{opacity:.5}70%{opacity:.9}100%{opacity:0}}
+@keyframes introSunRise{0%{transform:translate(-50%,180px) scale(.6);opacity:0}45%{opacity:.95}100%{transform:translate(-50%,-10px) scale(1);opacity:1}}
+</style>
+<script>
+(function(){
+  var ov=document.getElementById('introOv');if(!ov)return;
+  var a=document.getElementById('introA'),b=document.getElementById('introB'),bloom=document.getElementById('introBloom'),night=document.getElementById('introNight'),c=document.getElementById('introC');
+  var done=false;
+  function enterApp(){
+    if(done)return;done=true;
+    ov.style.transition='opacity 1.3s ease';
+    ov.style.opacity='0';
+    setTimeout(function(){ov.style.display='none';},1350);
+  }
+  window.skipIntro=enterApp;
+  setTimeout(function(){if(a)a.className='ip on';},250);
+  setTimeout(function(){if(a)a.className='ip';},1900);
+  setTimeout(function(){if(b)b.className='ip on';if(night)night.className='lift';},2350);
+  setTimeout(function(){if(b)b.className='ip';},3900);
+  setTimeout(enterApp,4400);
+})();
+</script>
 <script>window._oninit=window._oninit||{};</script>
 <div class="app" id="app">
 
