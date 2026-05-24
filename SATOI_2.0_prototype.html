@@ -6054,8 +6054,8 @@ window._oninit['home']=function(){
     if(c)c.innerHTML='<button class="btn btn-teal" style="width:auto;padding:10px 16px" onclick="go(\'mypage\')">マイページへ</button><button class="btn btn-out" style="width:auto;padding:10px 16px;background:rgba(255,255,255,.65)" onclick="go(\'story\')">物語のつづき</button>';
   }else{
     if(g)g.textContent='ようこそ、SATOIへ';
-    if(s)s.innerHTML='はじめての方も、調べるだけでも大丈夫。<br>あなたのペースで、ゆっくりで。';
-    if(c)c.innerHTML='<button class="btn btn-teal" style="width:auto;padding:10px 16px" onclick="go(\'onboarding\')">無料ではじめる</button><button class="btn btn-out" style="width:auto;padding:10px 16px;background:rgba(255,255,255,.65)" onclick="go(\'treatment\')">まず調べてみる</button>';
+    if(s)s.innerHTML='登録しなくても、そのまま無料で使えます。<br>あなたのペースで、ゆっくりで。';
+    if(c)c.innerHTML='<button class="btn btn-teal" style="width:auto;padding:10px 16px" onclick="go(\'onboarding\')">無料ではじめる</button><button class="btn btn-out" style="width:auto;padding:10px 16px;background:rgba(255,255,255,.65)" onclick="go(\'signin\')">ログイン</button>';
   }
 };
 </script>
@@ -6150,8 +6150,7 @@ function openPeer(k){var p=PEERS[k];if(!p)return;
   var box=document.getElementById('peerVoices');if(box)box.innerHTML=p.voices.map(function(v){return '<div class="card" style="margin-bottom:10px"><div class="note" style="font-size:11px;color:var(--amber-t)"><i class="ti ti-quote"></i> '+v.t+'</div><div style="font-size:14px;line-height:1.85;margin-top:6px">「'+v.v+'」</div><div style="margin-top:10px"><button class="litbtn" onclick="lightUp(this)" style="display:inline-flex;align-items:center;gap:5px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:#B5701B;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:600;font:inherit"><i class="ti ti-flame"></i> エールを送る ・ <span class="lcount">'+v.light+'</span></button></div></div>';}).join('');
   go('peer');}
 window.addEventListener('hashchange',render);
-/* 初回着地：未登録なら、まず"かんたん登録"へ持っていく（オープニング後にこの画面が見える） */
-if((!location.hash||location.hash==='#'||location.hash==='#home')&&!window._isMember){location.hash='#onboarding';}
+/* 初回着地は"いつものホーム"。登録は強制せず、ホームの「無料ではじめる／ログイン」から自分で。 */
 render();
 </script>
 </body>
