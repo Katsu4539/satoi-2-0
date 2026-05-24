@@ -1791,6 +1791,10 @@ function lToggle(){lplay=!lplay;document.getElementById('lIcon').className=lplay
     <button class="btn btn-teal" style="margin-top:12px" onclick="go('sdmshow')"><i class="ti ti-qrcode" style="vertical-align:-2px"></i> QRで見せる・印刷する</button>
     <div class="note" style="text-align:center;margin-top:8px;line-height:1.6">主治医にも、看護師さんにも、ご家族にも。<br>見せる相手は、その場であなたが選べます。</div>
     <div class="note" style="margin-top:12px;background:#f6f7f5;border-radius:8px;padding:10px 12px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> これは、あなたが対面で見せたり渡したりするための1枚です。病院へ自動では送られません。</div>
+    <div style="margin-top:16px;border-top:.5px dashed var(--line2);padding-top:14px">
+      <div style="font-size:11px;color:var(--mute);margin-bottom:8px"><i class="ti ti-eye" style="vertical-align:-2px"></i> 参考：このカードを見せると、受け取る側（看護師・医師）にはこう届きます</div>
+      <button class="btn btn-out" style="border-color:var(--teal);color:var(--teal-d)" onclick="go('prorecv')"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> 受け取る側のデモ画面（石川さんが受け取る）</button>
+    </div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -5629,6 +5633,131 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
+
+<!-- ============ 医療者の受け取り側デモ（石川さん・コメディカル/医師）============ -->
+<section class="scr" id="prorecv">
+  <div class="pad">
+    <button class="back" onclick="go('sdm')"><i class="ti ti-arrow-left"></i> 相談カードに戻る</button>
+    <div style="margin-top:10px;border-radius:16px;padding:14px 16px;background:linear-gradient(135deg,#0A5A5D,#14A6AB);color:#fff">
+      <div style="font-size:10px;letter-spacing:.28em;opacity:.9">SATOI ・ 受け取る側（デモ）</div>
+      <div style="font-size:16px;font-weight:600;margin-top:3px">患者さんの相談カードが届きました</div>
+      <div style="font-size:11.5px;opacity:.92;line-height:1.6;margin-top:3px">QRを読み取った時点で、あなた（医療者）の画面に表示されます</div>
+    </div>
+
+    <!-- 受け取り手＝石川さん -->
+    <div class="card" style="margin-top:12px;display:flex;align-items:center;gap:11px">
+      <span class="ic" style="width:42px;height:42px;background:var(--teal-bg);color:var(--teal-d);font-weight:600;flex-shrink:0">石</span>
+      <div style="flex:1"><b style="font-size:14px">石川 さん</b><div class="note" style="font-size:11px">がん看護専門看護師 ・ 受け取り手</div></div>
+      <span style="font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:999px;padding:3px 9px;flex-shrink:0">登録開始</span>
+    </div>
+
+    <!-- 鏡の原則＋同意 -->
+    <div class="card" style="margin-top:10px;background:var(--teal-bg);border:none"><div style="font-size:12px;line-height:1.85;color:var(--teal-d)"><i class="ti ti-shield-heart" style="vertical-align:-2px"></i> <b>患者さんが「読んでください」とQRを見せたこと＝同意</b>です（2026-05-25 14:20）。メール送信や一括ダウンロードはできません。見えるのは、患者さんが開示した範囲だけ。<b>あなたが見るものは、患者さんも同じだけ見られます（鏡の原則）。</b></div></div>
+
+    <!-- ① 届いた相談カード -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-clipboard-heart"></i> ① 届いた相談カード（葵さん・40代・子宮頸がん）</div>
+    <div class="card" style="margin-top:10px">
+      <div style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:5px"><i class="ti ti-quote"></i> ご本人の言葉（SATOIが整え・本人確認済み）</div>
+      <div style="font-size:13px;line-height:1.85;color:#1f3a57;background:#E6F1FB;border-radius:10px;padding:10px 12px">「子どもがまだ小さいので、できるだけそばにいられる形で治療を進めたい。これからのことを一緒に考えたくて来ました。」</div>
+      <div style="font-size:12px;color:var(--amber-t);font-weight:600;margin:12px 0 4px"><i class="ti ti-heart"></i> 大事にしたいこと</div>
+      <div style="font-size:13px;line-height:1.7">・子どもと過ごす時間を、できるだけ守りたい<br>・将来、妊娠の可能性（妊孕性）も相談したい</div>
+      <div style="font-size:12px;color:var(--blue);font-weight:600;margin:12px 0 4px"><i class="ti ti-message-question"></i> 聞きたいこと</div>
+      <div style="font-size:13px;line-height:1.7">・今の治療以外の選択肢／それぞれの利点と負担<br>・妊孕性は残せるか</div>
+    </div>
+
+    <!-- ② いまの状態＝EMPSe＋インサイト -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-activity-heartbeat"></i> ② いま、患者さんがどう感じているか（EMPSe）</div>
+    <div class="card" style="margin-top:10px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div id="proRadar" style="width:120px;flex-shrink:0"></div>
+        <div style="flex:1">
+          <div style="font-size:12px;color:var(--sub)">総合EMPSe（本人記録・直近）</div>
+          <div><span id="proEmpTotal" style="font-size:30px;font-weight:700;color:var(--teal-d)">–</span><span style="font-size:12px;color:var(--mute)"> / 100</span></div>
+          <div class="note" style="font-size:11px;line-height:1.6;margin-top:3px">7日平均より大きな低下はなし。穏やかに見守り中。</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;background:var(--rose-bg);border-radius:10px;padding:11px 13px;font-size:12.5px;line-height:1.85;color:#7a3b2c"><i class="ti ti-bulb" style="vertical-align:-2px;color:var(--rose)"></i> <b>インサイト要約（AI）：</b>意思決定への意欲は高いが、母親役割と妊孕性への不安が背景。痛みは積極的緩和を希望。「申し訳なさで眠れない夜」が散発——精神・社会面のフォローが鍵。</div>
+    </div>
+
+    <!-- ③ 経過・声・からだ -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-history"></i> ③ これまでの経過（同意範囲）</div>
+    <div class="card" style="margin-top:10px;padding:2px 14px">
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:8px"><i class="ti ti-quote" style="color:var(--amber)"></i> 声の物語「夫と、両親に甘えた日々」<span class="note" style="font-size:10px">（テキスト）</span></span></div>
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:8px"><i class="ti ti-heartbeat" style="color:var(--teal)"></i> からだの記録：吐き気・倦怠感が中等度</span></div>
+      <div class="opt"><span style="display:flex;align-items:center;gap:8px"><i class="ti ti-timeline-event" style="color:var(--teal)"></i> 治療経過：CCRT中 ・ 次回外来 5/29</span></div>
+    </div>
+    <div class="note" style="margin-top:8px;font-size:11px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 生の声は届きません（本人がOKした言葉のみ）。連絡先・住所は共有されません。</div>
+
+    <!-- 看護業務に役立てる -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-briefcase"></i> 看護業務に役立てる</div>
+    <button class="btn btn-teal" style="margin-top:10px" onclick="go('procase')"><i class="ti ti-clipboard-text" style="vertical-align:-2px"></i> 看護記録・ケースレポートに書き出す</button>
+    <div class="card" style="margin-top:10px;padding:2px 14px">
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:8px"><i class="ti ti-checkbox" style="color:var(--teal)"></i> 意思決定支援（SDM）の観点で確認</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></div>
+      <div class="opt" style="border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:8px"><i class="ti ti-mood-sad" style="color:var(--rose)"></i> 苦痛・気がかりスクリーニング（生活のしやすさ）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></div>
+      <div class="opt"><span style="display:flex;align-items:center;gap:8px"><i class="ti ti-home-heart" style="color:var(--amber)"></i> 退院支援・治療と仕事/育児の両立支援につなぐ</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></div>
+    </div>
+    <button class="btn btn-out" style="margin-top:10px" onclick="alert('院内チームへの申し送り（デモ）。実装時は院内の権限・記録に沿って共有します。')"><i class="ti ti-send" style="vertical-align:-2px;color:var(--teal)"></i> 院内チームに申し送り（デモ）</button>
+
+    <!-- 医師・ePRO構想（検討中） -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-bulb"></i> 構想：医師・チーム向け（検討中）</div>
+    <div class="card" style="margin-top:10px;background:var(--amber-bg2);border:.5px solid var(--amber-line)">
+      <div style="display:flex;align-items:center;gap:7px"><b style="font-size:13.5px;color:var(--amber-t)">ePROとして集積 → インサイト解析 → マインドマップ</b><span style="font-size:10px;color:var(--amber-t);background:#fff;border:.5px solid var(--amber-line);border-radius:999px;padding:2px 8px;margin-left:auto;flex-shrink:0">検討中</span></div>
+      <div class="note" style="margin-top:6px;line-height:1.8;color:#5b4a2e">患者さんがふだん残す声・EMPSe・記録を<b>ePRO（患者報告アウトカム）として匿名で集積</b>。AIが共通の気がかりや傾向を解析し、外来や病棟会、ケースレポート・研究に使える<b>マインドマップ</b>として見える化——という構想です。</div>
+      <div id="proMindmap" style="margin-top:10px"></div>
+      <div class="note" style="margin-top:8px;font-size:10.5px"><i class="ti ti-shield-check" style="vertical-align:-1px"></i> 要配慮個人情報のため、同意・匿名加工・倫理審査が前提（JOiNT倫理委員会／法務確認）。ここはアイデア段階です。</div>
+    </div>
+
+    <div class="note" style="margin-top:14px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> これは「受け取る側」のデモです。同じ土台（SATOI）の上に、患者ビューと医療者ビューを役割で出し分けています。</div>
+    <div class="lock"><i class="ti ti-lock"></i>患者さんの同意の範囲で表示しています</div>
+  </div>
+</section>
+<script>
+function proMindmapSVG(){
+  return '<svg viewBox="0 0 300 140" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">'
+   +'<line x1="150" y1="70" x2="60" y2="32" stroke="#E2B877" stroke-width="1.5"/><line x1="150" y1="70" x2="60" y2="108" stroke="#E2B877" stroke-width="1.5"/><line x1="150" y1="70" x2="245" y2="30" stroke="#E2B877" stroke-width="1.5"/><line x1="150" y1="70" x2="248" y2="78" stroke="#E2B877" stroke-width="1.5"/><line x1="150" y1="70" x2="240" y2="118" stroke="#E2B877" stroke-width="1.5"/>'
+   +'<circle cx="150" cy="70" r="26" fill="#0A5A5D"/><text x="150" y="68" text-anchor="middle" font-size="9" fill="#fff">患者の</text><text x="150" y="79" text-anchor="middle" font-size="9" fill="#fff">気がかり</text>'
+   +nodeMM(60,32,'子どもとの時間','#C97840')+nodeMM(60,108,'妊孕性の不安','#993556')+nodeMM(248,30,'治療の選択','#0D7377')+nodeMM(250,78,'痛みの緩和','#5C9A7E')+nodeMM(242,118,'眠れない夜','#235a8c')
+   +'</svg>';
+}
+function nodeMM(x,y,t,c){return '<g><rect x="'+(x-38)+'" y="'+(y-11)+'" width="76" height="22" rx="11" fill="'+c+'22" stroke="'+c+'" stroke-width="1"/><text x="'+x+'" y="'+(y+3)+'" text-anchor="middle" font-size="8.5" fill="'+c+'">'+t+'</text></g>';}
+window._oninit['prorecv']=function(){
+  var r=document.getElementById('proRadar');if(r&&typeof empRadarSVG==='function')r.innerHTML=empRadarSVG();
+  var t=document.getElementById('proEmpTotal');if(t&&typeof empTotal==='function')t.textContent=empTotal(empScores);
+  var mm=document.getElementById('proMindmap');if(mm)mm.innerHTML=proMindmapSVG();
+};
+</script>
+
+<!-- ============ 看護記録・ケースレポート下書き（医療者デモ）============ -->
+<section class="scr" id="procase">
+  <div class="pad">
+    <button class="back" onclick="go('prorecv')"><i class="ti ti-arrow-left"></i> 受け取り画面に戻る</button>
+    <h1 class="h1" style="margin-top:10px">看護記録・ケースレポート</h1>
+    <div class="sub">届いた情報から、記録の下書きをAIが整えます（石川さん用・デモ）</div>
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:12px;line-height:1.8;color:var(--teal-d)"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> 患者さんが同意・開示した相談カード／EMPSe／経過をもとに、要点を自動でまとめました。加筆して、院内のカルテ・看護記録にお使いください。</div>
+    <textarea id="proCaseText" rows="16" style="width:100%;margin-top:12px;line-height:1.7;font-size:13px;border:.5px solid var(--line2);border-radius:12px;padding:12px;font-family:inherit;box-sizing:border-box"></textarea>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn btn-teal" style="flex:1" onclick="alert('コピーしました（デモ）。院内のカルテ・看護記録に貼り付けてお使いください。')"><i class="ti ti-copy" style="vertical-align:-2px"></i> コピー</button>
+      <button class="btn btn-out" style="flex:1" onclick="document.getElementById('proCaseText').value=proCaseDraft();"><i class="ti ti-refresh" style="vertical-align:-2px"></i> 下書きを作り直す</button>
+    </div>
+    <div class="note" style="margin-top:12px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 下書きはAIによる参考です。最終的な記録・判断は、医療者ご自身と各施設の様式に従ってください。患者同意の範囲で扱います。</div>
+    <div class="lock"><i class="ti ti-lock"></i>患者さんの同意の範囲で表示しています</div>
+  </div>
+</section>
+<script>
+function proCaseDraft(){
+  var tot=(typeof empTotal==='function')?empTotal(empScores):'—';
+  return '【ケースレポート／看護記録（下書き・SATOI連携）】\n'
+   +'日付：2026/05/25　受け取り：石川（がん看護専門看護師）\n'
+   +'情報源：患者本人が同意・開示した相談カード／EMPSe／経過（SATOI・QR）\n\n'
+   +'■ 患者：葵さん（40代・女性）／子宮頸がん・同時化学放射線療法（CCRT）中\n'
+   +'■ 本人の意向（SDM）：子どもと過ごす時間を最優先。妊孕性の温存も相談したい。治療の選択肢と各負担を知りたい。\n'
+   +'■ 心理・社会（EMPSe 総合 '+tot+'/100）：意思決定意欲は高いが、母親役割・妊孕性への不安が背景。痛みは積極的緩和を希望。「申し訳なさで眠れない夜」が散発。\n'
+   +'■ 身体：吐き気・倦怠感は中等度（本人記録）。\n'
+   +'■ 看護の視点：①意思決定支援（SDM）＝妊孕性・治療選択を主治医に確認できるよう同席/整理。②精神・社会面のフォロー（不眠・申し訳なさ）。③育児との両立・退院支援につなぐ。\n'
+   +'■ 申し送り：次回外来5/29。妊孕性温存の時期に留意（治療前の相談が必要）。\n';
+}
+window._oninit['procase']=function(){var t=document.getElementById('proCaseText');if(t&&!t.value)t.value=proCaseDraft();};
+</script>
 
 <!-- ============ よくある質問（Q&A） ============ -->
 <section class="scr" id="faq">
