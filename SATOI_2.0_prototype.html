@@ -36,13 +36,13 @@ html,body{margin:0;padding:0;background:#cfd6df;font-family:-apple-system,BlinkM
 .sub{font-size:12px;color:var(--sub);margin:3px 0 0;line-height:1.6}
 .muted{color:var(--mute)} .hint{color:var(--hint)}
 .btn{font:inherit;cursor:pointer;border:none;border-radius:14px;padding:13px;font-size:14px;font-weight:600;width:100%}
-.btn-teal{background:var(--teal);color:#fff}
+.btn-teal{background:var(--teal);color:#fff;box-shadow:0 4px 14px rgba(13,115,119,.26)}
 .btn-out{background:transparent;border:.5px solid var(--line2);color:var(--ink)}
-.card{background:#fff;border:.5px solid var(--line2);border-radius:16px;padding:14px}
+.card{background:#fff;border:.5px solid var(--line2);border-radius:16px;padding:14px;box-shadow:0 3px 12px rgba(38,48,63,.06)}
 .chip{font-size:12px;border-radius:999px;padding:7px 12px;border:.5px solid var(--line2);background:transparent;color:var(--sub);cursor:pointer}
 .chip.amber{background:var(--amber-bg);color:var(--amber-t);border-color:transparent}
 .row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.tile{text-align:left;background:#fff;border:.5px solid var(--line2);border-radius:16px;padding:14px 12px;cursor:pointer;font:inherit}
+.tile{text-align:left;background:#fff;border:.5px solid var(--line2);border-radius:16px;padding:14px 12px;cursor:pointer;font:inherit;box-shadow:0 3px 12px rgba(38,48,63,.06)}
 .ic{display:inline-flex;align-items:center;justify-content:center;border-radius:50%}
 .ic46{width:46px;height:46px} .ic34{width:34px;height:34px}
 .lock{display:flex;align-items:center;gap:6px;justify-content:center;margin-top:16px;font-size:11px;color:var(--mute)}
@@ -164,10 +164,16 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
 <section class="scr active" id="home">
   <div class="dawn" style="height:162px">
     <svg viewBox="0 0 390 162" width="100%" height="162" preserveAspectRatio="xMidYMid slice" style="display:block">
-      <defs><linearGradient id="d1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset=".6" stop-color="#FBEEDE"/><stop offset="1" stop-color="#F5DDBE"/></linearGradient></defs>
-      <rect width="390" height="162" fill="url(#d1)"/><circle cx="320" cy="48" r="20" fill="#F6C77A" opacity=".9"/>
-      <path d="M0 132 Q100 110 220 126 T390 118 V162 H0 Z" fill="#F2D9B0" opacity=".7"/>
-      <path d="M0 144 Q120 128 250 140 T390 138 V162 H0 Z" fill="#E9C896" opacity=".8"/>
+      <defs>
+        <linearGradient id="d1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E7EEF6"/><stop offset=".42" stop-color="#FBEEDE"/><stop offset=".74" stop-color="#F7DFBE"/><stop offset="1" stop-color="#F1D2A6"/></linearGradient>
+        <radialGradient id="dglow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFE6B0" stop-opacity=".9"/><stop offset="55%" stop-color="#FBD68F" stop-opacity=".35"/><stop offset="100%" stop-color="#FBD68F" stop-opacity="0"/></radialGradient>
+        <radialGradient id="dsun" cx="50%" cy="42%" r="60%"><stop offset="0" stop-color="#FFF1CF"/><stop offset="70%" stop-color="#F6C77A"/><stop offset="100%" stop-color="#F2B860"/></radialGradient>
+      </defs>
+      <rect width="390" height="162" fill="url(#d1)"/>
+      <circle cx="322" cy="50" r="76" fill="url(#dglow)"/><circle cx="322" cy="50" r="20" fill="url(#dsun)"/>
+      <path d="M0 126 Q95 106 215 120 T390 112 V162 H0 Z" fill="#F2D9B0" opacity=".55"/>
+      <path d="M0 138 Q115 122 250 134 T390 130 V162 H0 Z" fill="#E9C896" opacity=".7"/>
+      <path d="M0 150 Q135 138 260 146 T390 144 V162 H0 Z" fill="#E0BA82" opacity=".8"/>
     </svg>
     <div class="t" style="top:34px">
       <div id="homeGreet" style="font-size:23px;font-weight:600;line-height:1.35;color:#26303F">ようこそ、SATOIへ</div>
@@ -185,7 +191,7 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
     <div class="row2">
       <button class="tile" onclick="go('treatment')"><span class="ic ic46" style="background:var(--teal-bg)"><i class="ti ti-stethoscope" style="font-size:26px;color:var(--teal)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">治療のこと</div><div class="note">標準治療・がんを知る</div></button>
       <button class="tile" onclick="go('money')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-coin" style="font-size:26px;color:var(--amber)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">お金・暮らし</div><div class="note">給付金・公的制度</div></button>
-      <button class="tile" onclick="go('story')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-book" style="font-size:26px;color:var(--amber)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">物語を続ける</div><div class="note">声・記録・あなたの軌跡</div></button>
+      <button class="tile" onclick="go('story')"><span class="ic ic46" style="background:var(--amber-bg2)"><i class="ti ti-book" style="font-size:26px;color:#C0892F"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">物語を続ける</div><div class="note">声・記録・あなたの軌跡</div></button>
       <button class="tile" onclick="go('family')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-users" style="font-size:26px;color:var(--rose)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">心と家族</div><div class="note">支え合う・伝える</div></button>
     </div>
 
@@ -214,7 +220,8 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <button class="btn btn-out" style="margin-top:10px;padding:10px" onclick="go('trust')">くわしく（出典・AI・副作用・データの扱い）</button>
     </div>
 
-    <div style="text-align:center;margin:26px 0 2px;font-size:13px;color:var(--sub);letter-spacing:.03em">全てはがん患者さんのために。</div>
+    <div style="display:flex;align-items:center;gap:10px;margin:26px 0 8px"><span style="flex:1;height:.5px;background:linear-gradient(90deg,rgba(226,184,119,0),#E2B877)"></span><i class="ti ti-sun-high" style="color:#E2B877;font-size:15px"></i><span style="flex:1;height:.5px;background:linear-gradient(90deg,#E2B877,rgba(226,184,119,0))"></span></div>
+    <div style="text-align:center;margin:0 0 2px;font-size:13px;color:var(--sub);letter-spacing:.03em">全てはがん患者さんのために。</div>
     <div style="text-align:center;margin:0 0 4px;font-size:15px;color:var(--teal-d);font-weight:600;letter-spacing:.04em">つながって、生きよう。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -224,8 +231,8 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
 <section class="scr" id="onboarding">
   <div class="dawn">
     <svg viewBox="0 0 390 104" width="100%" height="104" preserveAspectRatio="xMidYMid slice" style="display:block">
-      <rect width="390" height="104" fill="url(#d1)"/><circle cx="312" cy="56" r="18" fill="#F6C77A" opacity=".9"/>
-      <path d="M0 84 Q100 64 220 80 T390 72 V104 H0 Z" fill="#F2D9B0" opacity=".7"/>
+      <rect width="390" height="104" fill="url(#d1)"/><circle cx="312" cy="54" r="50" fill="#FBD68F" opacity=".26"/><circle cx="312" cy="54" r="18" fill="#F6C77A" opacity=".92"/>
+      <path d="M0 80 Q100 62 220 76 T390 70 V104 H0 Z" fill="#F2D9B0" opacity=".55"/><path d="M0 90 Q120 76 240 86 T390 84 V104 H0 Z" fill="#E9C896" opacity=".7"/>
     </svg>
     <div class="t"><div id="obTitle" style="font-size:20px;font-weight:600">はじめる</div><div id="obSub" class="sub">登録は無料。まずはお試しで、すぐ使えます</div></div>
   </div>
@@ -293,6 +300,11 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--amber-t)">物語を続ける</div><div style="font-size:12px;color:var(--amber)">今ここを歩いています ・ 12のかけら</div></div>
       <i class="ti ti-chevron-right" style="color:var(--amber)"></i>
     </div>
+    <button class="card" style="width:100%;text-align:left;margin-top:10px;background:var(--teal-bg);border:none;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('records')">
+      <span class="ic ic46" style="background:#fff"><i class="ti ti-archive" style="font-size:24px;color:var(--teal)"></i></span>
+      <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--teal-d)">壺（わたしの記録）</div><div style="font-size:12px;color:var(--teal-d)">残した声・言葉が、光になってたまる場所</div></div>
+      <i class="ti ti-chevron-right" style="color:var(--teal)"></i>
+    </button>
     <button class="card" style="width:100%;text-align:left;margin-top:12px;background:var(--teal-bg);border:none;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('bccare')">
       <span class="ic ic46" style="background:#fff"><i class="ti ti-heartbeat" style="font-size:24px;color:var(--teal)"></i></span>
       <span style="flex:1"><b style="font-weight:600;color:var(--teal-d)">あなたのがん：乳がん</b><span class="note" style="display:block;color:var(--teal-d)">あなた用の治療情報を見る</span></span>
@@ -310,7 +322,6 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
     <button class="btn btn-teal" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> AIコンシェルジュに相談</button>
     <button class="btn btn-out" style="margin-top:10px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 相談したいこと（相談カード）</button>
     <div style="margin-top:16px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
-      <button class="navrow" onclick="go('records')"><span><i class="ti ti-history" style="color:var(--amber)"></i> わたしの記録</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('community')"><span><i class="ti ti-headphones" style="color:var(--amber)"></i> みんなの広場（声・音楽）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('emergency')"><span><i class="ti ti-urgent" style="color:var(--red)"></i> 緊急時カード</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('plans')"><span><i class="ti ti-wallet" style="color:var(--teal)"></i> 会員と伴走について（料金）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
@@ -657,63 +668,208 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
   </div>
 </section>
 
-<!-- ============ 物語を続ける（軌跡） ============ -->
+<!-- ============ 物語を続ける（あなたの育つ世界） ============ -->
 <section class="scr" id="story">
-  <div class="pad" style="padding-bottom:4px">
+  <div style="padding:14px 16px 2px">
     <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
-    <h1 class="h1" style="margin-top:10px">物語を続ける</h1>
-    <div class="sub">夜明けに向かって、あなたのペースで歩く</div>
   </div>
-  <div id="trail" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch">
-    <svg viewBox="0 0 700 116" width="700" height="116" style="display:block">
-      <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset=".6" stop-color="#FBEEDE"/><stop offset="1" stop-color="#F5DDBE"/></linearGradient></defs>
-      <rect width="700" height="116" fill="url(#sky)"/><circle cx="650" cy="34" r="17" fill="#F6C77A" opacity=".9"/>
-      <path d="M0 84 Q120 66 260 80 T520 76 T700 72 V116 H0 Z" fill="#F2D9B0" opacity=".65"/>
-      <path d="M20 90 C 150 70, 230 104, 360 86 S 560 70, 680 80" fill="none" stroke="#E2B877" stroke-width="9" stroke-linecap="round" opacity=".55"/>
-      <path d="M20 90 C 150 70, 230 104, 360 86 S 560 70, 680 80" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="2 9" stroke-linecap="round" opacity=".9"/>
-      <g onclick="pickTrail(0)" style="cursor:pointer"><circle cx="70" cy="84" r="16" fill="transparent"/><circle id="tr0" cx="70" cy="84" r="11" fill="none" stroke="transparent" stroke-width="2"/><circle cx="70" cy="84" r="6" fill="#B5701B"/><text x="70" y="110" text-anchor="middle" font-size="11" fill="#6B7280">はじまり</text></g>
-      <g onclick="pickTrail(1)" style="cursor:pointer"><circle cx="210" cy="92" r="16" fill="transparent"/><circle id="tr1" cx="210" cy="92" r="11" fill="none" stroke="transparent" stroke-width="2"/><circle cx="210" cy="92" r="6" fill="#B5701B"/><text x="210" y="112" text-anchor="middle" font-size="11" fill="#6B7280">声</text></g>
-      <g onclick="pickTrail(2)" style="cursor:pointer"><circle cx="360" cy="86" r="16" fill="transparent"/><circle id="tr2" cx="360" cy="86" r="11" fill="none" stroke="transparent" stroke-width="2"/><circle cx="360" cy="86" r="6" fill="#B5701B"/><text x="360" y="110" text-anchor="middle" font-size="11" fill="#6B7280">気持ち</text></g>
-      <g onclick="pickTrail(3)" style="cursor:pointer"><circle cx="510" cy="80" r="16" fill="transparent"/><circle id="tr3" cx="510" cy="80" r="11" fill="none" stroke="transparent" stroke-width="2"/><circle cx="510" cy="80" r="6" fill="#B5701B"/><text x="510" y="106" text-anchor="middle" font-size="11" fill="#6B7280">記録</text></g>
-      <g onclick="pickTrail(4)" style="cursor:pointer"><circle cx="660" cy="80" r="18" fill="transparent"/><circle id="tr4" cx="660" cy="80" r="13" fill="none" stroke="#0D7377" stroke-width="2"/><g transform="translate(660,68)" stroke="#0D7377" stroke-width="2.4" stroke-linecap="round" fill="none"><circle cx="0" cy="-4" r="3" fill="#0D7377" stroke="none"/><path d="M0 0 L0 7"/><path d="M0 7 L-4 13"/><path d="M0 7 L4 12"/><path d="M0 3 L-5 5"/><path d="M0 3 L5 1"/></g><text x="660" y="106" text-anchor="middle" font-size="11" fill="#0D7377" font-weight="500">今ここ</text></g>
-    </svg>
-  </div>
-  <div class="pad" style="padding-top:0">
-    <div class="hint" style="text-align:right;font-size:11px;margin-top:4px"><i class="ti ti-arrow-left"></i> なぞって、これまでを振り返る</div>
-    <div id="trailDetail" style="margin-top:8px;background:var(--amber-bg);border-radius:14px;padding:12px 14px;min-height:54px"></div>
-    <div style="margin-top:14px;background:var(--rose-bg);border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.85;color:#7a3b2c"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--rose)"></i> この2週間、眠れない夜が続いたけれど、食べられる日も増えています。あなたは、ちゃんと前に進んでいます。<div class="note" style="margin-top:5px;color:#9a6a55">SATOIが、あなたの記録からそっと汲みとりました</div></div>
-    <div style="font-size:13px;font-weight:600;margin:16px 0 10px">これまで、残してきたこと</div>
-    <div style="position:relative;padding-left:26px">
-      <div style="position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line2)"></div>
-      <div style="position:relative;margin-bottom:14px">
-        <span style="position:absolute;left:-26px;top:1px;width:16px;height:16px;border-radius:50%;background:var(--teal-bg);display:flex;align-items:center;justify-content:center"><i class="ti ti-heartbeat" style="font-size:10px;color:var(--teal-d)"></i></span>
-        <div class="note">今日</div>
-        <div style="font-size:13px;margin-top:1px">からだの記録：だるさ・眠れない</div>
-      </div>
-      <div style="position:relative;margin-bottom:14px">
-        <span style="position:absolute;left:-26px;top:1px;width:16px;height:16px;border-radius:50%;background:var(--rose-bg);display:flex;align-items:center;justify-content:center"><i class="ti ti-microphone" style="font-size:10px;color:var(--rose)"></i></span>
-        <div class="note">3日前 ・ 0:48</div>
-        <div style="font-size:13px;margin-top:1px">声「眠れない夜のこと」</div>
-        <span style="display:inline-block;margin-top:5px;font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:7px;padding:2px 8px"><i class="ti ti-check" style="font-size:11px;vertical-align:-1px"></i> 相談カードで先生に見せた</span>
-      </div>
-      <div style="position:relative;margin-bottom:14px">
-        <span style="position:absolute;left:-26px;top:1px;width:16px;height:16px;border-radius:50%;background:var(--blue-bg,#E6F1FB);display:flex;align-items:center;justify-content:center"><i class="ti ti-message-2" style="font-size:10px;color:var(--blue)"></i></span>
-        <div class="note">先週</div>
-        <div style="font-size:13px;margin-top:1px">コンシェルジュに相談「治療の選択肢」</div>
-      </div>
-      <div style="position:relative">
-        <span style="position:absolute;left:-26px;top:1px;width:16px;height:16px;border-radius:50%;background:var(--amber-bg);display:flex;align-items:center;justify-content:center"><i class="ti ti-pencil" style="font-size:10px;color:var(--amber)"></i></span>
-        <div class="note">2週間前</div>
-        <div style="font-size:13px;margin-top:1px">書いた記録「少し、ごはんが食べられた」</div>
+  <div style="margin:6px 16px 0;border-radius:20px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 8px 24px rgba(38,48,63,.12)">
+    <div id="storyCover" style="height:172px;position:relative;background:radial-gradient(120% 95% at 78% 100%, #FFE9C0 0%, #F3C892 22%, #E0A45E 42%, #C98B6E 64%, #EAEFF4 100%)">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,38,0) 45%,rgba(11,16,38,.5))"></div>
+      <div style="position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.85);border-radius:999px;padding:4px 10px;font-size:10px;color:var(--teal-d);font-weight:600"><i class="ti ti-sparkles"></i> Geminiが描く・<span id="storyWorldLabel">朝の光（写真風）</span></div>
+      <div style="position:absolute;left:16px;bottom:15px;color:#fff">
+        <div style="font-size:24px;font-weight:700;text-shadow:0 2px 14px rgba(0,0,0,.5)">あなたの物語</div>
+        <div style="font-size:12px;margin-top:3px;opacity:.95;text-shadow:0 1px 8px rgba(0,0,0,.5)">いまは「今ここ」の光。来るたび、すこし変わります。</div>
       </div>
     </div>
-    <div class="row2" style="margin-top:16px">
+    <button class="navrow" style="border-bottom:none" onclick="go('worldstyle')"><span><i class="ti ti-palette" style="color:var(--teal)"></i> あなたの世界を選ぶ（光のスタイル）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+  </div>
+  <div class="pad" style="padding-top:0">
+    <div style="margin-top:14px;background:var(--teal-bg);border-radius:14px;padding:12px 14px;display:flex;gap:9px;align-items:flex-start"><i class="ti ti-heart-handshake" style="color:var(--teal-d);font-size:18px;margin-top:1px"></i><div style="font-size:12px;line-height:1.8;color:var(--teal-d)">ここに話したことは、そっと残ります。<b>先生に伝えたい時は相談カードに、家族に届けたい時は——SATOIが、あなたの言葉で運びます。</b>何でも、気軽に。</div></div>
+    <div class="card" style="margin-top:12px;background:var(--amber-bg2);border:.5px solid var(--amber-line)">
+      <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--amber-t);font-weight:600"><i class="ti ti-sun-high" style="color:var(--amber)"></i> 今朝、あなたへ</div>
+      <div style="font-size:13px;line-height:1.95;margin-top:7px;color:#3a3326">この2週間、眠れない夜が続いたけれど、食べられる日も少しずつ増えています。3日前、あなたは声でこう残していました——「子どもたちのそばで、自分らしく」。その願いは、ちゃんと前へ進んでいます。</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:11px">
+        <button class="btn btn-teal" style="flex:1;padding:9px;font-size:12px;border-radius:11px" onclick="go('aiweave')"><i class="ti ti-feather" style="vertical-align:-2px"></i> つづきをつむぐ</button>
+        <button class="btn btn-out" style="width:auto;padding:9px 13px;font-size:12px;border-radius:11px" onclick="go('listen')"><i class="ti ti-player-play" style="vertical-align:-2px"></i> 声を聴く</button>
+      </div>
+      <div class="note" style="margin-top:8px;font-size:10px"><i class="ti ti-sparkles" style="vertical-align:-1px"></i> SATOIが、あなたの記録からそっとつむぎました</div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:8px;margin:20px 0 12px">
+      <span style="font-size:15px;font-weight:600">これまでの物語</span>
+      <span style="flex:1;height:.5px;background:var(--line)"></span>
+      <span style="font-size:11px;color:var(--hint)">光が、育っていく</span>
+    </div>
+
+    <div id="freshChapter" class="card" style="display:none;padding:0;overflow:hidden;margin-bottom:13px">
+      <div style="height:84px;position:relative;background:linear-gradient(120deg,#F6C77A,#FBEEDE 55%,#EAF0F6)">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,38,0) 45%,rgba(11,16,38,.38))"></div>
+        <div style="position:absolute;left:12px;bottom:9px;color:#fff"><div style="font-size:11px;opacity:.92">たった今 ・ いまの光</div><div id="freshTitle" style="font-size:15px;font-weight:600">今日のことを、残した</div></div>
+        <div style="position:absolute;top:9px;right:9px;font-size:9px;color:#fff;background:rgba(0,0,0,.28);border-radius:999px;padding:3px 8px"><i class="ti ti-sparkles"></i> Gemini</div>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="font-size:13px;line-height:1.85;color:#3a3a3a">壺に残って、あなたの物語に加わりました。光がまた少し、進みました。</div>
+        <div class="note" style="margin-top:6px;font-size:11px"><i class="ti ti-flame" style="vertical-align:-1px;color:var(--amber)"></i> 灯りをともす　・　<i class="ti ti-heart" style="vertical-align:-1px;color:var(--rose)"></i> 家族に届ける　から、次の一歩へ</div>
+      </div>
+    </div>
+    <div id="deliveredChapter" class="card" style="display:none;padding:0;overflow:hidden;margin-bottom:13px">
+      <div style="height:84px;position:relative;background:linear-gradient(120deg,#F7E6EC,#FBEEDE 60%,#FFF7EC)">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,38,0) 45%,rgba(122,59,44,.3))"></div>
+        <div style="position:absolute;left:12px;bottom:9px;color:#fff"><div style="font-size:11px;opacity:.92">たった今 ・ 家族へ</div><div style="font-size:15px;font-weight:600">気持ちを、家族に届けた</div></div>
+        <div style="position:absolute;top:9px;right:9px;font-size:9px;color:#fff;background:rgba(122,59,44,.5);border-radius:999px;padding:3px 8px"><i class="ti ti-heart"></i> 家族</div>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="font-size:13px;line-height:1.85;color:#3a3a3a">SATOIが、あなたの言葉をやさしく整えて、家族の輪にそっと届けました。</div>
+        <div class="note" style="margin-top:6px;font-size:11px"><i class="ti ti-check" style="vertical-align:-1px;color:var(--teal)"></i> お母さんに届きました</div>
+      </div>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:13px">
+      <div style="height:104px;position:relative;background:linear-gradient(120deg,#F6C77A,#FBEEDE 55%,#EAF0F6)">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,38,0) 45%,rgba(11,16,38,.4))"></div>
+        <div style="position:absolute;left:12px;bottom:9px;color:#fff"><div style="font-size:11px;opacity:.92">今日 ・ いまの光</div><div style="font-size:15px;font-weight:600">窓の外が、明るかった</div></div>
+        <div style="position:absolute;top:9px;right:9px;font-size:9px;color:#fff;background:rgba(0,0,0,.28);border-radius:999px;padding:3px 8px"><i class="ti ti-sparkles"></i> Gemini</div>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="font-size:13px;line-height:1.85;color:#3a3a3a">少しごはんが食べられた。窓の外が明るくて、ふっと肩の力が抜けた。</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:11px;padding-top:10px;border-top:.5px solid var(--line);flex-wrap:wrap">
+          <button class="litbtn" onclick="lightUp(this)" style="display:inline-flex;align-items:center;gap:5px;border:.5px solid var(--line2);background:#fff;color:#B5701B;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:600;font:inherit"><i class="ti ti-flame"></i> 灯りをともす ・ <span class="lcount">12</span></button>
+          <button class="chip" onclick="openDeliver('少しごはんが食べられた。窓の外が明るかった。','「少しごはんが食べられた。窓の外が明るくて、ほっとした」——その小さなうれしさを、ご家族にもそっとお伝えします。')" style="display:inline-flex;align-items:center;gap:5px;color:var(--rose);border-color:#F2C9D6"><i class="ti ti-heart"></i> 家族に届ける</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:13px">
+      <div style="height:104px;position:relative;background:linear-gradient(120deg,#1C2748,#5A3A4E 55%,#9a6a55)">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,38,0) 40%,rgba(11,16,38,.45))"></div>
+        <div style="position:absolute;left:12px;bottom:9px;color:#fff"><div style="font-size:11px;opacity:.92">3日前 ・ 空が白みはじめる光</div><div style="font-size:15px;font-weight:600">眠れない夜のこと</div></div>
+        <div style="position:absolute;top:9px;right:9px;font-size:9px;color:#fff;background:rgba(0,0,0,.28);border-radius:999px;padding:3px 8px"><i class="ti ti-sparkles"></i> Gemini</div>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="display:flex;align-items:center;gap:9px;background:var(--blue-bg);border-radius:10px;padding:8px 11px"><span class="ic" style="width:28px;height:28px;background:var(--blue);color:#fff"><i class="ti ti-player-play" style="font-size:14px"></i></span><span style="display:flex;align-items:flex-end;gap:2px;height:18px;flex:1"><span style="flex:1;height:40%;background:#85B7EB;border-radius:1px"></span><span style="flex:1;height:70%;background:#85B7EB;border-radius:1px"></span><span style="flex:1;height:55%;background:#85B7EB;border-radius:1px"></span><span style="flex:1;height:90%;background:#85B7EB;border-radius:1px"></span><span style="flex:1;height:45%;background:#85B7EB;border-radius:1px"></span><span style="flex:1;height:65%;background:#85B7EB;border-radius:1px"></span><span style="flex:1;height:50%;background:#85B7EB;border-radius:1px"></span></span><span style="font-size:11px;color:var(--blue-d)">0:48</span></div>
+        <div style="font-size:13px;line-height:1.85;margin-top:9px;color:#3a3a3a">「本当は、不安で眠れない夜もあります。でも、子どもたちのそばで、できるだけ自分らしく治療を続けたい。」</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:11px;padding-top:10px;border-top:.5px solid var(--line);flex-wrap:wrap">
+          <button class="litbtn" onclick="lightUp(this)" style="display:inline-flex;align-items:center;gap:5px;border:.5px solid var(--line2);background:#fff;color:#B5701B;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:600;font:inherit"><i class="ti ti-flame"></i> 灯りをともす ・ <span class="lcount">3</span></button>
+          <button class="chip" onclick="go('sdmbuild')" style="display:inline-flex;align-items:center;gap:5px;color:var(--blue-d);border-color:#CFE0F2"><i class="ti ti-clipboard-heart"></i> 相談カードに入れる</button>
+          <button class="chip" onclick="openDeliver('本当は、不安で眠れない夜もあります。でも、子どもたちのそばで、自分らしく治療を続けたい。','あなたが残したこの気持ち——不安な夜があること、それでも子どもたちのそばで自分らしくいたいという願いを、ご家族にやさしく伝わる言葉でお届けします。')" style="display:inline-flex;align-items:center;gap:5px;color:var(--rose);border-color:#F2C9D6"><i class="ti ti-heart"></i> 家族に届ける</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:6px">
+      <div style="height:104px;position:relative;background:linear-gradient(120deg,#0B1026,#1C2748 60%,#3a3550)">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,38,0) 35%,rgba(11,16,38,.5))"></div>
+        <div style="position:absolute;left:12px;bottom:9px;color:#fff"><div style="font-size:11px;opacity:.92">はじまりの日 ・ 夜明け前の藍</div><div style="font-size:15px;font-weight:600">ここから、記録をはじめた</div></div>
+        <div style="position:absolute;top:9px;right:9px;font-size:9px;color:#fff;background:rgba(0,0,0,.28);border-radius:999px;padding:3px 8px"><i class="ti ti-sparkles"></i> Gemini</div>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="font-size:13px;line-height:1.85;color:#3a3a3a">診断を受けた日。何も手につかなかったけれど、ここで最初のひとことを残した。</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:11px;padding-top:10px;border-top:.5px solid var(--line)">
+          <button class="litbtn" onclick="lightUp(this)" style="display:inline-flex;align-items:center;gap:5px;border:.5px solid var(--line2);background:#fff;color:#B5701B;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:600;font:inherit"><i class="ti ti-flame"></i> 灯りをともす ・ <span class="lcount">8</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;background:var(--teal-bg);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+      <span style="display:flex"><span class="ic" style="width:26px;height:26px;background:var(--rose-bg);color:var(--rose);border:1.5px solid #fff;font-size:10px">母</span><span class="ic" style="width:26px;height:26px;background:#fff;color:var(--teal-d);border:1.5px solid #fff;margin-left:-8px;font-size:10px">看</span><span class="ic" style="width:26px;height:26px;background:var(--amber-bg);color:var(--amber-t);border:1.5px solid #fff;margin-left:-8px;font-size:10px">仲</span></span>
+      <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--teal-d)">あなたの輪が、そっと見守っています</div><div class="note" style="font-size:10px">同意した人だけ。数は競いません。</div></div>
+    </div>
+
+    <div style="font-size:14px;font-weight:600;margin:20px 0 4px">いま、残す</div>
+    <div class="note" style="margin-bottom:10px">ひとことでも、ひと呼吸でも。急がなくて大丈夫。</div>
+    <div class="row2">
       <button class="tile" onclick="go('voicerec')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-microphone" style="font-size:24px;color:var(--amber)"></i></span><div style="font-size:14px;font-weight:600;margin-top:9px">声で残す</div><div class="note">話すだけ。聞き返せます</div></button>
       <button class="tile" onclick="go('write')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-pencil" style="font-size:24px;color:var(--amber)"></i></span><div style="font-size:14px;font-weight:600;margin-top:9px">書いて残す</div><div class="note">ひとことでも</div></button>
     </div>
-    <button class="btn btn-teal" style="margin-top:10px" onclick="go('aiweave')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> AIと続きを紡ぐ</button>
-    <button class="btn btn-out" style="margin-top:10px" onclick="go('video')"><i class="ti ti-movie" style="vertical-align:-2px;color:var(--amber)"></i> やさしい動画にして伝える</button>
+    <button class="btn btn-teal" style="margin-top:10px" onclick="go('aiweave')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> AIとつづきをつむぐ</button>
+    <button class="btn btn-out" style="margin-top:10px" onclick="go('hibi')"><i class="ti ti-flame" style="vertical-align:-2px;color:var(--amber)"></i> みんなの灯り（レシピ・小さな一歩）</button>
+    <button class="btn btn-out" style="margin-top:10px" onclick="go('video')"><i class="ti ti-movie" style="vertical-align:-2px;color:var(--amber)"></i> やさしい動画にして、大切な人へ</button>
     <button class="btn btn-out" style="margin-top:10px" onclick="go('stories')"><i class="ti ti-headphones" style="vertical-align:-2px;color:var(--amber)"></i> ほかの人の声を聴く（声の物語）</button>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ あなたの世界を選ぶ（光のスタイル） ============ -->
+<section class="scr" id="worldstyle">
+  <div class="pad">
+    <button class="back" onclick="go('story')"><i class="ti ti-arrow-left"></i> 物語へ戻る</button>
+    <h1 class="h1" style="margin-top:10px">あなたの世界を選ぶ</h1>
+    <div class="sub">あなたの物語を、どんな光で映す? いつでも変えられます。</div>
+    <div class="row2" style="margin-top:16px">
+      <button class="tile" data-world="morning" style="padding:0;overflow:hidden" onclick="setWorld('morning')"><div style="height:56px;background:linear-gradient(120deg,#EAF0F6,#FBEEDE 55%,#F5DDBE)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">朝の光（写真風）</div><div class="note" style="font-size:10px">やわらかい実写の夜明け</div></div></button>
+      <button class="tile" data-world="water" style="padding:0;overflow:hidden" onclick="setWorld('water')"><div style="height:56px;background:linear-gradient(120deg,#E1F5EE,#F7E6EC 55%,#FBEEDE)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">やわらかい水彩</div><div class="note" style="font-size:10px">にじむ、やさしい色</div></div></button>
+      <button class="tile" data-world="ghibli" style="padding:0;overflow:hidden" onclick="setWorld('ghibli')"><div style="height:56px;background:linear-gradient(120deg,#CFE7D8,#EAF3DE 50%,#FBEEDE)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">ジブリのような</div><div class="note" style="font-size:10px">あたたかい自然の風景</div></div></button>
+      <button class="tile" data-world="anime" style="padding:0;overflow:hidden" onclick="setWorld('anime')"><div style="height:56px;background:linear-gradient(120deg,#BFE0F4,#E7F0FA 50%,#FAE3C2)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">アニメ</div><div class="note" style="font-size:10px">澄んだ空と光</div></div></button>
+      <button class="tile" data-world="cinema" style="padding:0;overflow:hidden" onclick="setWorld('cinema')"><div style="height:56px;background:linear-gradient(120deg,#1C2748,#5A3A4E 55%,#E8A24E)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">シネマティック</div><div class="note" style="font-size:10px">映画のような夜明け</div></div></button>
+      <button class="tile" data-world="ehon" style="padding:0;overflow:hidden" onclick="setWorld('ehon')"><div style="height:56px;background:linear-gradient(120deg,#FBEEDE,#FAD9A6 55%,#F4C0D1)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">夜明けの絵本</div><div class="note" style="font-size:10px">物語のような手ざわり</div></div></button>
+    </div>
+    <div class="info" style="margin-top:14px"><i class="ti ti-shield-heart" style="font-size:17px;color:var(--teal)"></i><div>どの世界を選んでも、SATOIの軸（夜明け・あたたかさ・急かさない・灯り）は変わりません。スタイルは“衣”。情景の光は、あなたの気持ちと物語に寄り添って変わります。</div></div>
+    <div class="note" style="text-align:center;margin-top:14px;line-height:1.7">選ぶと、表紙と物語の情景が<br>その世界で描かれます（Gemini）。</div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ みんなの灯り（共有） ============ -->
+<section class="scr" id="hibi">
+  <div class="pad">
+    <button class="back" onclick="go('story')"><i class="ti ti-arrow-left"></i> 物語へ戻る</button>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:10px"><i class="ti ti-flame" style="color:var(--amber);font-size:20px"></i><h1 class="h1">みんなの灯り</h1></div>
+    <div class="sub">同じ道を歩く人と、そっと分け合う。食べられた一皿も、小さな一歩も。</div>
+
+    <div class="card" style="margin-top:16px;padding:0;overflow:hidden">
+      <div style="height:118px;position:relative;background:linear-gradient(135deg,#FBEEDE,#F7E6EC 60%,#E1F5EE);display:flex;align-items:center;justify-content:center;color:#b09a7a;font-size:11px"><span style="display:flex;flex-direction:column;align-items:center;gap:4px"><i class="ti ti-bowl" style="font-size:26px"></i>料理の写真（投稿・Gemini）</span><span style="position:absolute;left:11px;top:11px;background:rgba(255,255,255,.85);border-radius:999px;padding:3px 10px;font-size:10px;color:var(--amber-t);font-weight:600"><i class="ti ti-soup" style="vertical-align:-1px"></i> 食べられたレシピ</span></div>
+      <div style="padding:13px 14px">
+        <div style="font-size:15px;font-weight:600">やわらかい茶碗蒸し</div>
+        <div style="font-size:12px;line-height:1.8;color:var(--sub);margin-top:4px">抗がん剤で食欲がない日でも、これなら喉を通った。だしを少し濃いめにするのがコツ。</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:9px"><span class="ic" style="width:22px;height:22px;background:var(--teal-bg);color:var(--teal-d);font-size:9px">仲</span><span class="note" style="font-size:11px">同じ病の仲間さん</span></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:11px;padding-top:11px;border-top:.5px solid var(--line)">
+          <button class="litbtn" onclick="lightUp(this)" style="display:inline-flex;align-items:center;gap:5px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:#B5701B;border-radius:999px;padding:7px 13px;font-size:12px;font-weight:600;font:inherit"><i class="ti ti-flame"></i> 灯り ・ <span class="lcount">24</span></button>
+          <button class="chip" onclick="go('records')" style="display:inline-flex;align-items:center;gap:5px"><i class="ti ti-bookmark"></i> 保存</button>
+          <span style="margin-left:auto;font-size:11px;color:var(--teal-d);font-weight:600"><i class="ti ti-check" style="vertical-align:-1px"></i> 8人が作った</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:13px">
+      <div style="display:flex;align-items:center;gap:7px"><span class="ic" style="width:24px;height:24px;background:var(--rose-bg);color:var(--rose);font-size:9px">仲</span><span class="note" style="font-size:11px">同じ病の仲間さん ・ 今日</span></div>
+      <div style="font-size:14px;line-height:1.85;margin-top:8px">「今日は、5分だけ外を歩けた。空がきれいだった。」</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:11px">
+        <button class="litbtn" onclick="lightUp(this)" style="display:inline-flex;align-items:center;gap:5px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:#B5701B;border-radius:999px;padding:7px 13px;font-size:12px;font-weight:600;font:inherit"><i class="ti ti-flame"></i> 灯り ・ <span class="lcount">41</span></button>
+        <span style="margin-left:auto;font-size:11px;color:var(--hint)">そっと見守る人 18</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;text-align:center">
+      <div style="font-size:13px;font-weight:600;color:var(--teal-d)">あなたの“食べられた一皿”や、小さな一歩も</div>
+      <div class="note" style="margin-top:3px;line-height:1.6">誰かの今日を、そっと照らすかもしれません。出す相手はいつもあなたが選べます。</div>
+      <button class="btn btn-teal" style="margin-top:11px" onclick="go('write')"><i class="ti ti-plus" style="vertical-align:-2px"></i> 灯りを分ける（レシピ・写真・ひとこと）</button>
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ 家族に、そっと届ける（ワンクッション） ============ -->
+<section class="scr" id="deliver">
+  <div class="pad">
+    <button class="back" onclick="go('story')"><i class="ti ti-arrow-left"></i> 物語へ戻る</button>
+    <div id="delForm">
+      <div style="display:flex;align-items:center;gap:8px;margin-top:10px"><i class="ti ti-heart-handshake" style="color:var(--rose);font-size:20px"></i><h1 class="h1">家族に、そっと届ける</h1></div>
+      <div class="sub">あなたの言葉を、SATOIが家族にやさしく伝わる形に整えました。これでよければ、お届けします。</div>
+      <div style="margin-top:16px;font-size:12px;color:var(--mute);font-weight:600">あなたが残した言葉</div>
+      <div id="delOrig" style="margin-top:6px;background:#f6f7f5;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.8;color:var(--sub)"></div>
+      <div style="margin-top:14px;font-size:12px;color:var(--teal-d);font-weight:600"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> SATOIが整えた、届ける言葉</div>
+      <div id="delSoft" class="card" style="margin-top:6px;background:var(--teal-bg);border:none;font-size:13px;line-height:1.95;color:var(--teal-d)"></div>
+      <div class="info" style="margin-top:12px"><i class="ti ti-users" style="font-size:17px;color:var(--teal)"></i><div>届け先は、あなたが同意した<b>家族の輪</b>です。生のままではなく、整えた言葉でそっと届きます。</div></div>
+      <button class="btn btn-out" style="margin-top:14px" onclick="go('write')"><i class="ti ti-edit" style="vertical-align:-2px"></i> 自分で手を入れる</button>
+      <button class="btn btn-teal" style="margin-top:10px" onclick="deliverDone()"><i class="ti ti-send" style="vertical-align:-2px"></i> この言葉で、家族に届ける</button>
+      <div class="note" style="text-align:center;margin-top:8px">届けたことは、物語の章としても残ります。</div>
+    </div>
+    <div id="delDone" style="display:none;text-align:center;padding-top:28px">
+      <div class="ic" style="width:64px;height:64px;background:var(--teal-bg);margin:0 auto"><i class="ti ti-heart" style="font-size:32px;color:var(--teal-d)"></i></div>
+      <div style="font-size:17px;font-weight:600;margin-top:14px">そっと、届きました</div>
+      <div class="sub" style="margin-top:6px;line-height:1.85">お母さんに届きました。受け取り方は、お母さんにゆだねられます。<br>この気持ちは、あなたの物語の章にもなりました。</div>
+      <button class="btn btn-teal" style="margin-top:20px" onclick="go('story')"><i class="ti ti-arrow-left" style="vertical-align:-2px"></i> 物語へ戻る</button>
+    </div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -756,12 +912,19 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
         <span id="vrDur" style="font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums">0:05</span>
       </div>
       <div class="note" style="text-align:center;margin-top:6px">出す前に、何度でも聞き返せます</div>
-      <div class="card" style="margin-top:14px;background:#f6f7f5;border:none">
+      <div class="card" style="margin-top:12px">
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--teal-d)"><i class="ti ti-sparkles"></i> SATOIが聞き取った言葉</div>
+        <div style="font-size:13px;line-height:1.85;margin-top:7px;color:var(--ink)">「眠れない夜もあるけれど、子どもたちのそばで、自分らしく過ごしたい。」</div>
+        <div class="note" style="margin-top:6px;font-size:11px">合っていれば、このまま残せます。違うところは直せます。</div>
+        <button class="btn btn-out" style="margin-top:10px;padding:9px;font-size:13px" onclick="go('write')"><i class="ti ti-edit" style="vertical-align:-2px"></i> 少し直す</button>
+      </div>
+      <div class="card" style="margin-top:12px;background:#f6f7f5;border:none">
         <div style="font-size:12px;font-weight:600;margin-bottom:6px">この声は、どこに残しますか？</div>
         <label class="opt"><span style="display:flex;align-items:center;gap:7px"><i class="ti ti-lock" style="color:var(--sub)"></i>自分の物語の壺だけに残す</span><input type="radio" name="vd" checked style="width:auto"></label>
         <label class="opt" style="border-top:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:7px"><i class="ti ti-heart-handshake" style="color:var(--sub)"></i>匿名で「声の物語」にも届ける</span><input type="radio" name="vd" style="width:auto"></label>
       </div>
-      <button class="btn btn-teal" style="margin-top:12px" onclick="go('story')">この声を残す</button>
+      <div class="note" style="margin-top:10px;line-height:1.6"><i class="ti ti-bulb" style="vertical-align:-2px;color:var(--amber)"></i> 「家族に伝えたい」など、声の中で言ってくれれば、SATOIが汲み取って運びます。</div>
+      <button class="btn btn-teal" style="margin-top:10px" onclick="saved('声を、壺に残しました')">この声を残す</button>
       <button class="btn btn-out" style="margin-top:8px" onclick="vrReset()">もう一度、話す</button>
     </div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
@@ -785,18 +948,18 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
     </div>
     <textarea id="wText" rows="5" placeholder="ここに、思ったままで大丈夫です。&#10;うまく書こうとしなくていいですよ。" style="margin-top:12px;line-height:1.6"></textarea>
     <label class="opt" style="background:var(--teal-bg);border-radius:10px;padding:10px 12px;margin-top:10px"><span style="display:flex;align-items:center;gap:7px;color:var(--teal-d)"><i class="ti ti-stethoscope"></i>次の診察に持っていく（聞きたいことメモ）</span><input type="checkbox" style="width:auto"></label>
-    <button class="btn btn-teal" style="margin-top:12px" onclick="go('story')">残す</button>
+    <button class="btn btn-teal" style="margin-top:12px" onclick="saved('言葉を、壺に残しました')">残す</button>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
 
-<!-- ============ AIと続きを紡ぐ ============ -->
+<!-- ============ AIとつづきをつむぐ ============ -->
 <section class="scr" id="aiweave">
   <div class="pad">
     <button class="back" onclick="go('story')"><i class="ti ti-arrow-left"></i> 物語を続ける</button>
     <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
       <span class="ic ic34" style="background:var(--teal-bg)"><i class="ti ti-sparkles" style="font-size:18px;color:var(--teal)"></i></span>
-      <div><h1 class="h1">AIと続きを紡ぐ</h1><div class="sub">あなたの言葉を、そっと一緒に振り返ります</div></div>
+      <div><h1 class="h1">AIとつづきをつむぐ</h1><div class="sub">あなたの言葉を、そっと一緒に振り返ります</div></div>
     </div>
     <div style="margin-top:16px;display:flex;gap:8px;align-items:flex-start">
       <span class="ic" style="flex-shrink:0;width:30px;height:30px;background:var(--teal-bg)"><i class="ti ti-sparkles" style="font-size:16px;color:var(--teal)"></i></span>
@@ -814,7 +977,7 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
       <button class="btn btn-out" style="margin-top:12px;color:var(--amber);border-color:var(--amber-line)" onclick="illustrateStory()"><i class="ti ti-photo-heart" style="vertical-align:-2px;color:var(--amber)"></i> この物語に、やさしい絵をそえる</button>
       <div id="weaveArt" style="margin-top:12px"></div>
       <div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn btn-teal" style="padding:10px" onclick="go('story')">壺に残す</button>
+        <button class="btn btn-teal" style="padding:10px" onclick="saved('物語を、壺に残しました')">壺に残す</button>
         <button class="btn btn-out" style="padding:10px;color:var(--amber);border-color:var(--amber-line)" onclick="go('write')">手を入れる</button>
       </div>
     </div>
@@ -887,10 +1050,21 @@ async function illustrateStory(){
 </section>
 
 <script>
-/* story trail */
-var TRAIL=[{ic:'ti-seedling',d:'はじまりの日',t:'診断を受けた日。ここから記録をはじめた。'},{ic:'ti-microphone',d:'2週間前 ・ 声で残した',t:'「眠れない夜のこと」 0:48'},{ic:'ti-mood-smile',d:'先週 ・ 今日の気持ち',t:'少しごはんが食べられた。窓の外が明るかった。'},{ic:'ti-pencil',d:'3日前 ・ 書いて残した',t:'検査の結果を聞いた。思ったより落ち着いていられた。'},{ic:'ti-walk',d:'いま',t:'いま、あなたはここを歩いています。続きは、あなたのペースで。',now:1}];
-function pickTrail(i){var m=TRAIL[i];var col=m.now?'#0D7377':'#B5701B';var bg=m.now?'#E1F5EE':'#FBEEDE';var tc=m.now?'#0F6E56':'#633806';var d=document.getElementById('trailDetail');d.style.background=bg;d.innerHTML='<div style="font-size:12px;color:'+col+';font-weight:600;display:flex;align-items:center;gap:6px"><i class="ti '+m.ic+'"></i>'+m.d+'</div><div style="font-size:13px;color:'+tc+';margin-top:4px;line-height:1.55">'+m.t+'</div>';for(var k=0;k<5;k++){var r=document.getElementById('tr'+k);if(r)r.setAttribute('stroke',k===i?(TRAIL[k].now?'#0D7377':'#B5701B'):(TRAIL[k].now?'#0D7377':'transparent'));}}
-window._oninit['story']=function(){var tr=document.getElementById('trail');if(tr){requestAnimationFrame(function(){tr.scrollLeft=tr.scrollWidth;setTimeout(function(){tr.scrollLeft=tr.scrollWidth;},80);});}pickTrail(4);};
+/* 物語の世界（光のスタイル）＋灯り */
+var WORLDS={morning:{label:'朝の光（写真風）',grad:'radial-gradient(120% 95% at 78% 100%, #FFE9C0 0%, #F3C892 22%, #E0A45E 42%, #C98B6E 64%, #EAEFF4 100%)'},water:{label:'やわらかい水彩',grad:'linear-gradient(120deg,#E1F5EE,#F7E6EC 55%,#FBEEDE)'},ghibli:{label:'ジブリのような',grad:'linear-gradient(120deg,#CFE7D8,#EAF3DE 50%,#FBEEDE)'},anime:{label:'アニメ',grad:'linear-gradient(120deg,#BFE0F4,#E7F0FA 50%,#FAE3C2)'},cinema:{label:'シネマティック',grad:'radial-gradient(120% 90% at 78% 96%, #FBD68F 0%, #E8A24E 16%, #B5662A 33%, #5A3A4E 58%, #1C2748 82%, #0B1026 100%)'},ehon:{label:'夜明けの絵本',grad:'linear-gradient(120deg,#FBEEDE,#FAD9A6 55%,#F4C0D1)'}};
+var curWorld='morning';
+function applyWorld(){var w=WORLDS[curWorld];if(w){var c=document.getElementById('storyCover');if(c)c.style.background=w.grad;var l=document.getElementById('storyWorldLabel');if(l)l.textContent=w.label;}var cl=document.querySelectorAll('[data-world]');for(var i=0;i<cl.length;i++){cl[i].style.border=cl[i].getAttribute('data-world')===curWorld?'2px solid #0D7377':'.5px solid var(--line2)';}}
+function setWorld(k){curWorld=k;applyWorld();go('story');}
+function lightUp(b){if(b.getAttribute('data-lit'))return;b.setAttribute('data-lit','1');var c=b.querySelector('.lcount');if(c)c.textContent=(parseInt(c.textContent,10)||0)+1;b.style.background='#FFF7EC';b.style.borderColor='#E2B877';}
+var delCtx={orig:'',soft:''};
+function openDeliver(orig,soft){delCtx={orig:orig,soft:soft};go('deliver');}
+function deliverDone(){window._delivered=1;var f=document.getElementById('delForm'),d=document.getElementById('delDone');if(f)f.style.display='none';if(d)d.style.display='block';}
+window._oninit['deliver']=function(){var f=document.getElementById('delForm'),d=document.getElementById('delDone');if(f)f.style.display='block';if(d)d.style.display='none';var o=document.getElementById('delOrig'),s=document.getElementById('delSoft');if(o)o.textContent=delCtx.orig||'（あなたが残した言葉が、ここに入ります）';if(s)s.textContent=delCtx.soft||'';};
+window._oninit['story']=function(){applyWorld();if(window._freshTitle){var fc=document.getElementById('freshChapter');if(fc)fc.style.display='block';var ft=document.getElementById('freshTitle');if(ft)ft.textContent=window._freshTitle;}if(window._delivered){var dc=document.getElementById('deliveredChapter');if(dc)dc.style.display='block';}};
+window._oninit['worldstyle']=function(){applyWorld();};
+function saved(label){window._justSaved=label||'壺に、そっと残りました';window._freshTitle='今日のことを、残した';go('records');}
+window._oninit['records']=function(){var s=document.getElementById('recSaved');if(!s)return;if(window._justSaved){s.style.display='block';var l=document.getElementById('recSavedLabel');if(l)l.textContent=window._justSaved;window._justSaved=null;}else{s.style.display='none';}};
+window._oninit['sdmstart']=function(){var e=document.getElementById('sdmExpl');if(!e)return;var seen=false;try{seen=localStorage.getItem('satoi_sdm_seen')==='1';}catch(_){}e.open=!seen;try{localStorage.setItem('satoi_sdm_seen','1');}catch(_){}};
 /* voice rec */
 var vt=0,viv=null,vrun=false;
 function vfmt(s){var m=Math.floor(s/60),r=s%60;return m+':'+(r<10?'0':'')+r;}
@@ -958,29 +1132,33 @@ window._oninit['listen']=function(){lp=0;lplay=false;if(liv)clearInterval(liv);d
     <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
     <h1 class="h1" style="margin-top:10px">相談カードって？</h1>
     <div class="sub">あなたの気持ちと聞きたいことを、相手に伝わる一枚にします</div>
-    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none">
-      <div style="font-size:14px;line-height:1.9;color:var(--teal-d)">診察って、緊張して言いたいことが言えなかったり、聞きたかったことを忘れたり…。<b>相談カード</b>は、あなたが大事にしたいこと・迷い・聞きたいことを、先生に伝わる形でまとめた一枚。声で話すだけでも、SATOIがあなたの言葉のまま整えます。</div>
-    </div>
-    <div class="note" style="margin-top:10px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 「SDM（シェアード・ディシジョン）」＝先生と一緒に治療を決める、という考え方。相談カードは、その手助けです。</div>
-    <div style="font-size:13px;font-weight:600;margin:18px 0 8px">こんなことができます</div>
-    <div style="display:flex;flex-direction:column;gap:9px">
-      <div style="display:flex;gap:9px;align-items:flex-start"><i class="ti ti-microphone" style="color:var(--blue);margin-top:2px"></i><div style="font-size:13px;line-height:1.7">声で話すだけで、あなたの言葉のまま整います</div></div>
-      <div style="display:flex;gap:9px;align-items:flex-start"><i class="ti ti-users" style="color:var(--blue);margin-top:2px"></i><div style="font-size:13px;line-height:1.7">先生・看護師さん・ご家族、見せる相手を選べます</div></div>
-      <div style="display:flex;gap:9px;align-items:flex-start"><i class="ti ti-qrcode" style="color:var(--blue);margin-top:2px"></i><div style="font-size:13px;line-height:1.7">QRや印刷で、その場でサッと見せられます</div></div>
-    </div>
-    <div style="font-size:13px;font-weight:600;margin:18px 0 8px">たとえば、こんなカードに</div>
-    <div style="border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
-      <div style="background:var(--teal-bg);padding:8px 12px;font-size:11px;color:var(--teal-d);font-weight:600"><i class="ti ti-clipboard-heart"></i> わたしの相談カード（例）</div>
-      <div style="padding:12px">
-        <div style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:4px"><i class="ti ti-microphone"></i> わたしの声</div>
-        <div style="font-size:12px;line-height:1.8;color:#1f3a57;background:var(--blue-bg,#E6F1FB);border-radius:8px;padding:9px 11px">「子どもたちのそばで、自分らしく治療を続けたい。今日は、これからのことを一緒に考えたくて来ました。」</div>
-        <div style="font-size:12px;color:var(--amber);font-weight:600;margin:10px 0 4px"><i class="ti ti-heart"></i> 大事にしたいこと</div>
-        <div style="font-size:12px;line-height:1.7;color:var(--sub)">・仕事を続けながら治療したい ・家族との時間を大切に</div>
-        <div style="font-size:12px;color:var(--blue);font-weight:600;margin:10px 0 4px"><i class="ti ti-message-question"></i> 聞きたいこと</div>
-        <div style="font-size:12px;line-height:1.7;color:var(--sub)">・他にどんな選択肢が？ ・仕事を続けられますか？</div>
+    <style>#sdmExpl>summary::-webkit-details-marker{display:none}#sdmExpl[open]>summary .dc{transform:rotate(180deg)}</style>
+    <details id="sdmExpl" open style="margin-top:14px">
+      <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600;color:var(--teal-d);background:var(--teal-bg);border-radius:12px;padding:11px 14px"><span><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 相談カードって？（はじめての方へ）</span><i class="ti ti-chevron-down dc" style="transition:transform .2s"></i></summary>
+      <div class="card" style="margin-top:10px;background:var(--teal-bg);border:none">
+        <div style="font-size:14px;line-height:1.9;color:var(--teal-d)">診察って、緊張して言いたいことが言えなかったり、聞きたかったことを忘れたり…。<b>相談カード</b>は、あなたが大事にしたいこと・迷い・聞きたいことを、先生に伝わる形でまとめた一枚。声で話すだけでも、SATOIがあなたの言葉のまま整えます。</div>
       </div>
-    </div>
-    <button class="btn btn-out" style="margin-top:10px;padding:9px;font-size:13px" onclick="go('sdm')"><i class="ti ti-eye" style="vertical-align:-2px"></i> 例を、ぜんぶ見る</button>
+      <div class="note" style="margin-top:10px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 「SDM（シェアード・ディシジョン）」＝先生と一緒に治療を決める、という考え方。相談カードは、その手助けです。</div>
+      <div style="font-size:13px;font-weight:600;margin:18px 0 8px">こんなことができます</div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;gap:9px;align-items:flex-start"><i class="ti ti-microphone" style="color:var(--blue);margin-top:2px"></i><div style="font-size:13px;line-height:1.7">声で話すだけで、あなたの言葉のまま整います</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><i class="ti ti-users" style="color:var(--blue);margin-top:2px"></i><div style="font-size:13px;line-height:1.7">先生・看護師さん・ご家族、見せる相手を選べます</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><i class="ti ti-qrcode" style="color:var(--blue);margin-top:2px"></i><div style="font-size:13px;line-height:1.7">QRや印刷で、その場でサッと見せられます</div></div>
+      </div>
+      <div style="font-size:13px;font-weight:600;margin:18px 0 8px">たとえば、こんなカードに</div>
+      <div style="border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+        <div style="background:var(--teal-bg);padding:8px 12px;font-size:11px;color:var(--teal-d);font-weight:600"><i class="ti ti-clipboard-heart"></i> わたしの相談カード（例）</div>
+        <div style="padding:12px">
+          <div style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:4px"><i class="ti ti-microphone"></i> わたしの声</div>
+          <div style="font-size:12px;line-height:1.8;color:#1f3a57;background:var(--blue-bg,#E6F1FB);border-radius:8px;padding:9px 11px">「子どもたちのそばで、自分らしく治療を続けたい。今日は、これからのことを一緒に考えたくて来ました。」</div>
+          <div style="font-size:12px;color:var(--amber);font-weight:600;margin:10px 0 4px"><i class="ti ti-heart"></i> 大事にしたいこと</div>
+          <div style="font-size:12px;line-height:1.7;color:var(--sub)">・仕事を続けながら治療したい ・家族との時間を大切に</div>
+          <div style="font-size:12px;color:var(--blue);font-weight:600;margin:10px 0 4px"><i class="ti ti-message-question"></i> 聞きたいこと</div>
+          <div style="font-size:12px;line-height:1.7;color:var(--sub)">・他にどんな選択肢が？ ・仕事を続けられますか？</div>
+        </div>
+      </div>
+      <button class="btn btn-out" style="margin-top:10px;padding:9px;font-size:13px" onclick="go('sdm')"><i class="ti ti-eye" style="vertical-align:-2px"></i> 例を、ぜんぶ見る</button>
+    </details>
     <div style="font-size:13px;font-weight:600;margin:18px 0 8px">あなたの相談カードを、つくってみる</div>
     <button class="btn btn-teal" onclick="go('sdmbuild')"><i class="ti ti-microphone" style="vertical-align:-2px"></i> 声で話してつくる</button>
     <button class="btn btn-out" style="margin-top:10px" onclick="go('sdmbuild')"><i class="ti ti-pencil" style="vertical-align:-2px"></i> 文字で書いてつくる</button>
@@ -1032,7 +1210,7 @@ window._oninit['listen']=function(){lp=0;lplay=false;if(liv)clearInterval(liv);d
     <button class="back" onclick="go('sdmstart')"><i class="ti ti-arrow-left"></i> もどる</button>
     <h1 class="h1" style="margin-top:10px">わたしから、つたえたいこと</h1>
     <div class="sub">あなたの言葉のまま、SATOIが整えました（本人が確認済み） <a class="link" style="font-size:12px" onclick="go('glossary')">これは何？</a></div>
-    <div style="margin-top:12px;display:flex;align-items:center;gap:8px"><span class="note">宛先</span><button class="chip on" onclick="alert('宛先を選べます：主治医／看護師／訪問看護／ケアワーカー／セカンドオピニオン先。相手で言葉づかいと項目が少し変わります（デモ）')"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> 主治医の先生へ</button></div>
+    <div style="margin-top:12px;display:flex;align-items:flex-start;gap:9px;background:var(--teal-bg);border-radius:10px;padding:9px 12px"><i class="ti ti-users" style="color:var(--teal-d);margin-top:1px"></i><div style="font-size:12px;line-height:1.6;color:var(--teal-d)">この一枚は、<b>だれに見せても大丈夫</b>。主治医にも、看護師さんにも、ご家族にも。見せる相手は、その場であなたが選べます。</div></div>
     <div style="margin-top:14px;border:.5px solid var(--line2);border-radius:16px;overflow:hidden">
       <div style="background:var(--teal-bg);padding:10px 14px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:12px;color:var(--teal-d);font-weight:600"><i class="ti ti-clipboard-heart"></i> わたしの相談カード</span><span style="font-size:11px;color:var(--teal-d)">2026年5月22日</span></div>
       <div style="padding:14px">
@@ -1308,6 +1486,10 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
     </div>
     <button class="btn btn-teal" style="margin-top:16px" onclick="go('voicerec')"><i class="ti ti-volume" style="vertical-align:-2px"></i> こえで きく</button>
     <div class="note" style="margin-top:14px;line-height:1.65"><i class="ti ti-shield-heart" style="vertical-align:-2px"></i> おうちの人と いっしょに みてね。むずかしいことは、いっしょに かんがえよう。</div>
+    <div class="card" style="margin-top:16px;background:var(--teal-bg);border:none">
+      <div style="font-size:12px;font-weight:600;color:var(--teal-d)"><i class="ti ti-seedling" style="vertical-align:-2px"></i> これからのこと（おうちの方へ）</div>
+      <div style="font-size:12px;line-height:1.9;color:var(--teal-d);margin-top:6px">子どもにとって、がんはとてもセンシティブなことです。SATOIは、<b>小児科・小児精神科の専門家</b>と一緒に、年齢に合わせた“伝わり方”を慎重に設計していきます。<br><br>めざすのは2つ。①<b>お子さんと親がつながれる</b>コミュニケーションのソリューション。②小児がんなど<b>お子さん自身が患者</b>のとき、言いたいことをうまく言えない子のための<b>小児用の相談カード（小児SDM）</b>を、専門家と将来つくること。お子さんが親とつながり、自分の気持ちを伝えられるように。</div>
+    </div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの きもちは、あなたの もの</div>
   </div>
 </section>
@@ -1385,12 +1567,24 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
     <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
     <h1 class="h1" style="margin-top:10px">わたしの記録</h1>
     <div class="sub">残してきた声・言葉・からだの記録を、見返せます</div>
+    <div style="margin-top:14px;border-radius:18px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 6px 20px rgba(38,48,63,.1)">
+      <div style="height:148px;position:relative;background:radial-gradient(95% 85% at 50% 105%, #FBD68F 0%, #E0A45E 24%, #B5662A 40%, #5A3A4E 66%, #1C2748 100%)">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,38,0) 50%,rgba(11,16,38,.4))"></div>
+        <div style="position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.82);border-radius:999px;padding:4px 10px;font-size:10px;color:var(--teal-d);font-weight:600"><i class="ti ti-sparkles"></i> Geminiが描く・あなたの壺</div>
+        <div style="position:absolute;left:14px;bottom:13px;color:#fff"><div style="font-size:18px;font-weight:700;text-shadow:0 2px 12px rgba(0,0,0,.5)">あなたの壺</div><div style="font-size:11px;margin-top:3px;opacity:.95;text-shadow:0 1px 8px rgba(0,0,0,.5)">残した一つひとつが、光になってたまっています</div></div>
+      </div>
+    </div>
+    <div id="recSaved" style="display:none;margin-top:14px;background:var(--teal-bg);border-radius:14px;padding:13px 14px">
+      <div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--teal-d)"><i class="ti ti-circle-check"></i> <span id="recSavedLabel">壺に、そっと残りました</span></div>
+      <div class="note" style="margin-top:5px;line-height:1.65">あなたが残したものは、ここ（壺）にたまっていきます。いつでも見返せて、先生や家族にも、ここから運べます。</div>
+      <button class="btn btn-teal" style="margin-top:10px;padding:10px" onclick="go('story')"><i class="ti ti-arrow-left" style="vertical-align:-2px"></i> 物語へ戻る</button>
+    </div>
     <button class="card" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('listen')"><span class="ic" style="width:38px;height:38px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-microphone" style="font-size:19px;color:var(--amber)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">声「眠れない夜のこと」</b><span class="note" style="display:block">3日前 ・ 0:48</span></span><i class="ti ti-player-play" style="color:var(--amber)"></i></button>
     <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('story')"><span class="ic" style="width:38px;height:38px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-pencil" style="font-size:19px;color:var(--amber)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">書いた記録</b><span class="note" style="display:block">先週 ・ 少しごはんが食べられた</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('body')"><span class="ic" style="width:38px;height:38px;background:var(--teal-bg);flex-shrink:0"><i class="ti ti-heartbeat" style="font-size:19px;color:var(--teal)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">からだの記録</b><span class="note" style="display:block">この1週間の調子</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     <div style="font-size:13px;font-weight:600;margin:18px 0 8px">相談カードの履歴</div>
-    <button class="card" style="width:100%;text-align:left;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('sdm')"><span class="ic" style="width:38px;height:38px;background:var(--teal-bg);flex-shrink:0"><i class="ti ti-clipboard-heart" style="font-size:19px;color:var(--teal)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">主治医の先生へ <span style="display:inline-block;font-size:10px;font-weight:600;color:#fff;background:var(--teal);border-radius:8px;padding:1px 7px;vertical-align:1px">見せた</span></b><span class="note" style="display:block">2026年5月22日</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
-    <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('sdm')"><span class="ic" style="width:38px;height:38px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-clipboard" style="font-size:19px;color:var(--amber)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">訪問看護師さんへ <span style="display:inline-block;font-size:10px;font-weight:600;color:var(--amber-t);background:var(--amber-bg);border:.5px solid var(--amber);border-radius:8px;padding:1px 7px;vertical-align:1px">下書き</span></b><span class="note" style="display:block">2026年4月10日</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    <button class="card" style="width:100%;text-align:left;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('sdm')"><span class="ic" style="width:38px;height:38px;background:var(--teal-bg);flex-shrink:0"><i class="ti ti-clipboard-heart" style="font-size:19px;color:var(--teal)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">相談カード <span style="display:inline-block;font-size:10px;font-weight:600;color:#fff;background:var(--teal);border-radius:8px;padding:1px 7px;vertical-align:1px">見せた</span></b><span class="note" style="display:block">2026年5月22日 ・ 先生に見せました</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('sdmbuild')"><span class="ic" style="width:38px;height:38px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-clipboard" style="font-size:19px;color:var(--amber)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">相談カード（下書き） <span style="display:inline-block;font-size:10px;font-weight:600;color:var(--amber-t);background:var(--amber-bg);border:.5px solid var(--amber);border-radius:8px;padding:1px 7px;vertical-align:1px">下書き</span></b><span class="note" style="display:block">2026年4月10日 ・ 作成のとちゅう（つづきから）</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     <button class="btn btn-out" style="margin-top:14px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 新しい相談カードをつくる</button>
     <button class="btn btn-teal" style="margin-top:10px" onclick="go('story')"><i class="ti ti-walk" style="vertical-align:-2px"></i> 物語（軌跡）で見る</button>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
@@ -1570,7 +1764,7 @@ window._oninit['empse']=function(){empVal={};empBuild();document.getElementById(
 <!-- ============ 3つの姿勢：世界観 ============ -->
 <section class="scr" id="pos_michi">
   <div class="dawn" style="height:120px;position:relative">
-    <svg viewBox="0 0 390 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="pmg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset="1" stop-color="#E1F5EE"/></linearGradient></defs><rect width="390" height="120" fill="url(#pmg1)"/><circle cx="320" cy="44" r="22" fill="#9FE1CB" opacity=".7"/><path d="M0 96 Q120 80 250 92 T390 88 V120 H0 Z" fill="#CDEBE0" opacity=".7"/></svg>
+    <svg viewBox="0 0 390 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="pmg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset=".55" stop-color="#EAF6F1"/><stop offset="1" stop-color="#DCF1E9"/></linearGradient></defs><rect width="390" height="120" fill="url(#pmg1)"/><circle cx="320" cy="44" r="48" fill="#9FE1CB" opacity=".26"/><circle cx="320" cy="44" r="20" fill="#7FD3B6" opacity=".85"/><path d="M0 90 Q110 74 240 86 T390 80 V120 H0 Z" fill="#CDEBE0" opacity=".55"/><path d="M0 100 Q130 86 250 96 T390 94 V120 H0 Z" fill="#B9E2D2" opacity=".7"/></svg>
     <div style="position:absolute;left:16px;top:34px"><div style="font-size:22px;font-weight:600;color:#26303F">みちしるべ</div><div class="sub" style="margin-top:5px">迷う時、次の一歩をそっと照らす</div></div>
   </div>
   <div class="pad">
@@ -1588,7 +1782,7 @@ window._oninit['empse']=function(){empVal={};empBuild();document.getElementById(
 
 <section class="scr" id="pos_tsuna">
   <div class="dawn" style="height:120px;position:relative">
-    <svg viewBox="0 0 390 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="pmg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset="1" stop-color="#FBEEDE"/></linearGradient></defs><rect width="390" height="120" fill="url(#pmg2)"/><circle cx="320" cy="44" r="22" fill="#FAC775" opacity=".7"/><path d="M0 96 Q120 80 250 92 T390 88 V120 H0 Z" fill="#F2D9B0" opacity=".7"/></svg>
+    <svg viewBox="0 0 390 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="pmg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset=".5" stop-color="#FBEEDE"/><stop offset="1" stop-color="#F6DFC0"/></linearGradient></defs><rect width="390" height="120" fill="url(#pmg2)"/><circle cx="320" cy="44" r="48" fill="#FAC775" opacity=".26"/><circle cx="320" cy="44" r="20" fill="#F4B95E" opacity=".85"/><path d="M0 90 Q110 74 240 86 T390 80 V120 H0 Z" fill="#F2D9B0" opacity=".55"/><path d="M0 100 Q130 86 250 96 T390 94 V120 H0 Z" fill="#E9C896" opacity=".7"/></svg>
     <div style="position:absolute;left:16px;top:34px"><div style="font-size:22px;font-weight:600;color:#26303F">つながる</div><div class="sub" style="margin-top:5px">ひとりにしない。同じ夜を歩く人と</div></div>
   </div>
   <div class="pad">
@@ -1606,7 +1800,7 @@ window._oninit['empse']=function(){empVal={};empBuild();document.getElementById(
 
 <section class="scr" id="pos_yori">
   <div class="dawn" style="height:120px;position:relative">
-    <svg viewBox="0 0 390 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="pmg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset="1" stop-color="#F7E6EC"/></linearGradient></defs><rect width="390" height="120" fill="url(#pmg3)"/><circle cx="320" cy="44" r="22" fill="#EFB6C8" opacity=".7"/><path d="M0 96 Q120 80 250 92 T390 88 V120 H0 Z" fill="#EFD3DD" opacity=".7"/></svg>
+    <svg viewBox="0 0 390 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="pmg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset=".5" stop-color="#F7E6EC"/><stop offset="1" stop-color="#F0D6DF"/></linearGradient></defs><rect width="390" height="120" fill="url(#pmg3)"/><circle cx="320" cy="44" r="48" fill="#EFB6C8" opacity=".26"/><circle cx="320" cy="44" r="20" fill="#E79DB4" opacity=".85"/><path d="M0 90 Q110 74 240 86 T390 80 V120 H0 Z" fill="#EFD3DD" opacity=".55"/><path d="M0 100 Q130 86 250 96 T390 94 V120 H0 Z" fill="#E7C2D0" opacity=".7"/></svg>
     <div style="position:absolute;left:16px;top:34px"><div style="font-size:22px;font-weight:600;color:#26303F">よりそう</div><div class="sub" style="margin-top:5px">答えを急がず、気持ちのそばにいる</div></div>
   </div>
   <div class="pad">
@@ -1789,7 +1983,7 @@ window._oninit['search']=function(){var i=document.getElementById('searchInput')
 <!-- ============ 会員と伴走について ============ -->
 <section class="scr" id="plans">
   <div class="dawn" style="height:110px;position:relative">
-    <svg viewBox="0 0 390 110" width="100%" height="110" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="plg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset="1" stop-color="#E1F5EE"/></linearGradient></defs><rect width="390" height="110" fill="url(#plg)"/><circle cx="320" cy="42" r="20" fill="#9FE1CB" opacity=".7"/><path d="M0 88 Q120 72 250 84 T390 80 V110 H0 Z" fill="#CDEBE0" opacity=".7"/></svg>
+    <svg viewBox="0 0 390 110" width="100%" height="110" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="plg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset=".55" stop-color="#EAF6F1"/><stop offset="1" stop-color="#DCF1E9"/></linearGradient></defs><rect width="390" height="110" fill="url(#plg)"/><circle cx="320" cy="42" r="46" fill="#9FE1CB" opacity=".26"/><circle cx="320" cy="42" r="19" fill="#7FD3B6" opacity=".85"/><path d="M0 84 Q110 70 240 80 T390 76 V110 H0 Z" fill="#CDEBE0" opacity=".55"/><path d="M0 94 Q130 82 250 90 T390 88 V110 H0 Z" fill="#B9E2D2" opacity=".7"/></svg>
     <div style="position:absolute;left:16px;top:30px"><div style="font-size:20px;font-weight:600;color:#26303F">会員と伴走について</div><div class="sub" style="margin-top:4px">知ること・助けを受けることは、無料です</div></div>
   </div>
   <div class="pad">
@@ -1815,7 +2009,7 @@ window._oninit['search']=function(){var i=document.getElementById('searchInput')
 <!-- ============ 伴走をはじめる（従量・有料の入口） ============ -->
 <section class="scr" id="bansou_apply">
   <div class="dawn" style="height:110px;position:relative">
-    <svg viewBox="0 0 390 110" width="100%" height="110" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="prg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset="1" stop-color="#E7F0FA"/></linearGradient></defs><rect width="390" height="110" fill="url(#prg)"/><circle cx="320" cy="42" r="20" fill="#85B7EB" opacity=".7"/><path d="M0 88 Q120 72 250 84 T390 80 V110 H0 Z" fill="#CFE0F2" opacity=".7"/></svg>
+    <svg viewBox="0 0 390 110" width="100%" height="110" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="prg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset=".5" stop-color="#E7F0FA"/><stop offset="1" stop-color="#D8E8F7"/></linearGradient></defs><rect width="390" height="110" fill="url(#prg)"/><circle cx="320" cy="42" r="46" fill="#85B7EB" opacity=".24"/><circle cx="320" cy="42" r="19" fill="#6BA6E2" opacity=".82"/><path d="M0 84 Q110 70 240 80 T390 76 V110 H0 Z" fill="#CFE0F2" opacity=".55"/><path d="M0 94 Q130 82 250 90 T390 88 V110 H0 Z" fill="#BBD4EE" opacity=".7"/></svg>
     <div style="position:absolute;left:16px;top:30px"><div style="font-size:20px;font-weight:600;color:#26303F">伴走をはじめる</div><div class="sub" style="margin-top:4px">使った分だけ。知ること・助けは、ずっと無料のまま</div></div>
   </div>
   <div class="pad">
@@ -3852,11 +4046,36 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
   <div class="pad">
     <button class="back" onclick="go('home')"><i class="ti ti-arrow-left"></i> ホーム</button>
     <h1 class="h1" style="margin-top:10px">使い方をみる</h1>
-    <div class="sub">はじめてでも、3つのステップで使えます</div>
-    <div style="position:relative;margin-top:14px;border-radius:14px;overflow:hidden;background:#26303F;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="window.open('https://www.youtube.com/results?search_query=SATOI+%E4%BD%BF%E3%81%84%E6%96%B9','_blank')">
-      <div style="text-align:center;color:#fff"><div class="ic" style="width:54px;height:54px;background:rgba(255,255,255,.18);margin:0 auto"><i class="ti ti-player-play" style="font-size:28px;color:#fff"></i></div><div style="font-size:12px;margin-top:8px;opacity:.85">使い方の動画をみる（YouTube）</div></div>
+    <div class="sub">短い動画で、SATOIの使い方と“いいところ”が見て分かります</div>
+    <div style="margin-top:14px;border-radius:16px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 6px 20px rgba(38,48,63,.1);cursor:pointer" onclick="go('about')">
+      <div style="aspect-ratio:16/9;position:relative;background:radial-gradient(120% 95% at 78% 100%, #FBD68F 0%, #C98B6E 34%, #5A3A4E 64%, #1C2748 100%)">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,38,0) 45%,rgba(11,16,38,.5))"></div>
+        <div style="position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.82);border-radius:999px;padding:4px 10px;font-size:10px;color:var(--teal-d);font-weight:600"><i class="ti ti-sparkles"></i> Geminiが作る動画</div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center"><i class="ti ti-player-play" style="font-size:24px;color:#fff"></i></div>
+        <div style="position:absolute;left:14px;bottom:12px;color:#fff"><div style="font-size:16px;font-weight:700;text-shadow:0 2px 12px rgba(0,0,0,.5)">SATOIってなに？</div><div style="font-size:11px;opacity:.9;margin-top:2px">30秒でわかる ・ はじめての方へ</div></div>
+      </div>
     </div>
-    <div style="margin-top:16px">
+    <div style="font-size:14px;font-weight:600;margin:18px 0 10px">もっと知る（短い動画）</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="card" style="width:100%;text-align:left;padding:0;overflow:hidden;display:flex;align-items:stretch;cursor:pointer" onclick="go('records')">
+        <span style="width:96px;flex-shrink:0;background:linear-gradient(120deg,#5A3A4E,#C98B6E 60%,#FBD68F);display:flex;align-items:center;justify-content:center"><i class="ti ti-player-play" style="font-size:20px;color:#fff"></i></span>
+        <span style="flex:1;padding:11px 13px"><b style="font-weight:600;font-size:14px;display:block">壺 — 記録の残し方</b><span class="note" style="display:block;line-height:1.5">声・言葉が光になってたまる仕組み</span><span style="font-size:10px;color:var(--hint)">▶ 約40秒 ・ Geminiが作る</span></span>
+      </button>
+      <button class="card" style="width:100%;text-align:left;padding:0;overflow:hidden;display:flex;align-items:stretch;cursor:pointer" onclick="go('sdmstart')">
+        <span style="width:96px;flex-shrink:0;background:linear-gradient(120deg,#235a8c,#3a7bbf 60%,#9FE1CB);display:flex;align-items:center;justify-content:center"><i class="ti ti-player-play" style="font-size:20px;color:#fff"></i></span>
+        <span style="flex:1;padding:11px 13px"><b style="font-weight:600;font-size:14px;display:block">相談カード — つくる・見せる</b><span class="note" style="display:block;line-height:1.5">声から1枚に。先生にも家族にも</span><span style="font-size:10px;color:var(--hint)">▶ 約50秒 ・ Geminiが作る</span></span>
+      </button>
+      <button class="card" style="width:100%;text-align:left;padding:0;overflow:hidden;display:flex;align-items:stretch;cursor:pointer" onclick="go('family')">
+        <span style="width:96px;flex-shrink:0;background:linear-gradient(120deg,#993556,#D4537E 60%,#FBEEDE);display:flex;align-items:center;justify-content:center"><i class="ti ti-player-play" style="font-size:20px;color:#fff"></i></span>
+        <span style="flex:1;padding:11px 13px"><b style="font-weight:600;font-size:14px;display:block">家族に、そっと届ける</b><span class="note" style="display:block;line-height:1.5">SATOIが整えて、家族の輪へ</span><span style="font-size:10px;color:var(--hint)">▶ 約40秒 ・ Geminiが作る</span></span>
+      </button>
+      <button class="card" style="width:100%;text-align:left;padding:0;overflow:hidden;display:flex;align-items:stretch;cursor:pointer" onclick="go('plans')">
+        <span style="width:96px;flex-shrink:0;background:linear-gradient(120deg,#0F6E56,#1D9E75 60%,#FAD9A6);display:flex;align-items:center;justify-content:center"><i class="ti ti-player-play" style="font-size:20px;color:#fff"></i></span>
+        <span style="flex:1;padding:11px 13px"><b style="font-weight:600;font-size:14px;display:block">伴走でできること</b><span class="note" style="display:block;line-height:1.5">もっと深く・動くときの支え（使った分だけ）</span><span style="font-size:10px;color:var(--hint)">▶ 約50秒 ・ Geminiが作る</span></span>
+      </button>
+    </div>
+    <div style="font-size:14px;font-weight:600;margin:20px 0 10px">3ステップで、すぐ使えます</div>
+    <div style="margin-top:0">
       <div style="display:flex;gap:11px;margin-bottom:12px"><div class="ic" style="width:28px;height:28px;background:var(--teal);color:#fff;font-weight:600;flex-shrink:0">1</div><div><b style="font-weight:600">気になることをひらく</b><div class="note">ホームの「今日、できること」から、治療・お金・物語・心と家族へ。</div></div></div>
       <div style="display:flex;gap:11px;margin-bottom:12px"><div class="ic" style="width:28px;height:28px;background:var(--teal);color:#fff;font-weight:600;flex-shrink:0">2</div><div><b style="font-weight:600">分からないことは聞く</b><div class="note">どの画面からでも、コンシェルジュ（AI）に話しかけられます。声でも、文字でも。</div></div></div>
       <div style="display:flex;gap:11px"><div class="ic" style="width:28px;height:28px;background:var(--teal);color:#fff;font-weight:600;flex-shrink:0">3</div><div><b style="font-weight:600">残して、持っていく</b><div class="note">気持ちや記録を残し、聞きたいことは「SDMカード」にまとめて診察へ。</div></div></div>
@@ -4098,7 +4317,7 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
         <label class="opt" style="border-top:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:7px"><i class="ti ti-heart-handshake" style="color:var(--sub)"></i>家族に送る</span><input type="radio" name="vidd" onchange="document.getElementById('vidShareNote').style.display='block'"></label>
         <div id="vidShareNote" class="note" style="display:none;line-height:1.6;margin-top:6px">家族に送るには、本人確認のうえ届けます。お顔は出ません。<a class="link" style="font-size:11px" onclick="go('trust')">安全について</a></div>
       </div>
-      <button class="btn btn-teal" style="margin-top:10px" onclick="go('story')">この動画を残す</button>
+      <button class="btn btn-teal" style="margin-top:10px" onclick="saved('動画を、壺に残しました')">この動画を残す</button>
     </div>
 
     <div class="note" style="margin-top:16px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> あなたの言葉が主役です。SATOIは、それが相手に“伝わる”ように整えるお手伝いをします。</div>
