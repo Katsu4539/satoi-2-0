@@ -162,7 +162,7 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
 
 <!-- ============ HOME（スクロール型ランディング） ============ -->
 <section class="scr active" id="home">
-  <div class="dawn" style="height:162px">
+  <div class="dawn" style="height:162px;position:relative;overflow:hidden">
     <svg viewBox="0 0 390 162" width="100%" height="162" preserveAspectRatio="xMidYMid slice" style="display:block">
       <defs>
         <linearGradient id="d1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E7EEF6"/><stop offset=".42" stop-color="#FBEEDE"/><stop offset=".74" stop-color="#F7DFBE"/><stop offset="1" stop-color="#F1D2A6"/></linearGradient>
@@ -175,6 +175,8 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <path d="M0 138 Q115 122 250 134 T390 130 V162 H0 Z" fill="#E9C896" opacity=".7"/>
       <path d="M0 150 Q135 138 260 146 T390 144 V162 H0 Z" fill="#E0BA82" opacity=".8"/>
     </svg>
+    <img data-aoi="hero_home" src="img/aoi_hero_home.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,.3) 48%,rgba(255,255,255,.12))"></div>
     <div class="t" style="top:34px">
       <div id="homeGreet" style="font-size:23px;font-weight:600;line-height:1.35;color:#26303F">ようこそ、SATOIへ</div>
       <div id="homeSub" class="sub" style="margin-top:7px;line-height:1.6">はじめての方も、調べるだけでも大丈夫。<br>あなたのペースで、ゆっくりで。</div>
@@ -214,9 +216,8 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <button class="navrow" style="border-bottom:none" onclick="go('about')"><span><i class="ti ti-info-circle" style="color:var(--sub)"></i> SATOIってなに？</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     </div>
 
-    <div style="margin-top:18px;border:.5px dashed var(--line2);border-radius:12px;padding:12px 14px;background:#f6f7f5">
-      <div style="font-size:10px;color:var(--hint);letter-spacing:1px">PR</div>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:4px"><span class="ic ic34" style="background:#f1efe8"><i class="ti ti-building-store" style="font-size:18px;color:var(--mute)"></i></span><div style="font-size:12px;color:var(--sub);line-height:1.5"><b>提携メーカー・サービス情報</b><br>（ここに製薬・関連サービスのお知らせが入ります）</div></div>
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:12px;padding:12px 14px;background:#f6f7f5">
+      <div style="display:flex;align-items:center;gap:10px"><span class="ic ic34" style="background:var(--teal-bg)"><i class="ti ti-shield-check" style="font-size:18px;color:var(--teal)"></i></span><div style="font-size:12px;color:var(--sub);line-height:1.6"><b style="color:var(--teal-d)">広告で運営していません</b><br>提携機関の情報を載せる場合も、広告とはっきり区別し、出典つき・専門家監修で。あなたの利益を最優先します。</div></div>
     </div>
 
     <div class="card" style="margin-top:22px">
@@ -455,6 +456,7 @@ window._oninit['ai']=function(){
     <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
     <h1 class="h1" style="margin-top:10px">治療を知る</h1>
     <div class="sub">確かめられた治療を、やさしく整理しました</div>
+    <div style="margin-top:12px;border-radius:14px;overflow:hidden;height:92px;position:relative;background:linear-gradient(120deg,#EAF0F6,#E7F1E8 60%,#FBEEDE)"><img data-aoi="hero_treatment" src="img/aoi_hero_treatment.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
     <button class="card" style="width:100%;text-align:left;margin-top:14px;background:var(--teal-bg);border:1px solid var(--teal);display:flex;align-items:center;gap:13px;cursor:pointer;padding:16px" onclick="go('cancer')">
       <span class="ic ic46" style="background:#fff;width:52px;height:52px;flex-shrink:0"><i class="ti ti-books" style="font-size:28px;color:var(--teal)"></i></span>
       <span style="flex:1"><b style="font-weight:600;color:var(--teal-d);font-size:16px">がん種から調べる</b><span class="note" style="display:block;color:var(--teal-d);margin-top:3px;line-height:1.6">乳がん・肺がん…あなたのがんの治療を、やさしく詳しく読めます</span></span>
@@ -802,12 +804,12 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
     <h1 class="h1" style="margin-top:10px">あなたの世界を選ぶ</h1>
     <div class="sub">あなたの物語を、どんな光で映す? いつでも変えられます。</div>
     <div class="row2" style="margin-top:16px">
-      <button class="tile" data-world="morning" style="padding:0;overflow:hidden" onclick="setWorld('morning')"><div style="height:56px;background:linear-gradient(120deg,#EAF0F6,#FBEEDE 55%,#F5DDBE)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">朝の光（写真風）</div><div class="note" style="font-size:10px">やわらかい実写の夜明け</div></div></button>
-      <button class="tile" data-world="water" style="padding:0;overflow:hidden" onclick="setWorld('water')"><div style="height:56px;background:linear-gradient(120deg,#E1F5EE,#F7E6EC 55%,#FBEEDE)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">やわらかい水彩</div><div class="note" style="font-size:10px">にじむ、やさしい色</div></div></button>
-      <button class="tile" data-world="ghibli" style="padding:0;overflow:hidden" onclick="setWorld('ghibli')"><div style="height:56px;background:linear-gradient(120deg,#CFE7D8,#EAF3DE 50%,#FBEEDE)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">ジブリのような</div><div class="note" style="font-size:10px">あたたかい自然の風景</div></div></button>
-      <button class="tile" data-world="anime" style="padding:0;overflow:hidden" onclick="setWorld('anime')"><div style="height:56px;background:linear-gradient(120deg,#BFE0F4,#E7F0FA 50%,#FAE3C2)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">アニメ</div><div class="note" style="font-size:10px">澄んだ空と光</div></div></button>
-      <button class="tile" data-world="cinema" style="padding:0;overflow:hidden" onclick="setWorld('cinema')"><div style="height:56px;background:linear-gradient(120deg,#1C2748,#5A3A4E 55%,#E8A24E)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">シネマティック</div><div class="note" style="font-size:10px">映画のような夜明け</div></div></button>
-      <button class="tile" data-world="ehon" style="padding:0;overflow:hidden" onclick="setWorld('ehon')"><div style="height:56px;background:linear-gradient(120deg,#FBEEDE,#FAD9A6 55%,#F4C0D1)"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">夜明けの絵本</div><div class="note" style="font-size:10px">物語のような手ざわり</div></div></button>
+      <button class="tile" data-world="morning" style="padding:0;overflow:hidden" onclick="setWorld('morning')"><div style="height:56px;position:relative;background:linear-gradient(120deg,#EAF0F6,#FBEEDE 55%,#F5DDBE)"><img data-aoi="world_morning" src="img/aoi_world_morning.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">朝の光（写真風）</div><div class="note" style="font-size:10px">やわらかい実写の夜明け</div></div></button>
+      <button class="tile" data-world="water" style="padding:0;overflow:hidden" onclick="setWorld('water')"><div style="height:56px;position:relative;background:linear-gradient(120deg,#E1F5EE,#F7E6EC 55%,#FBEEDE)"><img data-aoi="world_water" src="img/aoi_world_water.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">やわらかい水彩</div><div class="note" style="font-size:10px">にじむ、やさしい色</div></div></button>
+      <button class="tile" data-world="ghibli" style="padding:0;overflow:hidden" onclick="setWorld('ghibli')"><div style="height:56px;position:relative;background:linear-gradient(120deg,#CFE7D8,#EAF3DE 50%,#FBEEDE)"><img data-aoi="world_ghibli" src="img/aoi_world_ghibli.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">ジブリのような</div><div class="note" style="font-size:10px">あたたかい自然の風景</div></div></button>
+      <button class="tile" data-world="anime" style="padding:0;overflow:hidden" onclick="setWorld('anime')"><div style="height:56px;position:relative;background:linear-gradient(120deg,#BFE0F4,#E7F0FA 50%,#FAE3C2)"><img data-aoi="world_anime" src="img/aoi_world_anime.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">アニメ</div><div class="note" style="font-size:10px">澄んだ空と光</div></div></button>
+      <button class="tile" data-world="cinema" style="padding:0;overflow:hidden" onclick="setWorld('cinema')"><div style="height:56px;position:relative;background:linear-gradient(120deg,#1C2748,#5A3A4E 55%,#E8A24E)"><img data-aoi="world_cinema" src="img/aoi_world_cinema.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">シネマティック</div><div class="note" style="font-size:10px">映画のような夜明け</div></div></button>
+      <button class="tile" data-world="ehon" style="padding:0;overflow:hidden" onclick="setWorld('ehon')"><div style="height:56px;position:relative;background:linear-gradient(120deg,#FBEEDE,#FAD9A6 55%,#F4C0D1)"><img data-aoi="world_ehon" src="img/aoi_world_ehon.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div><div style="padding:9px 11px"><div style="font-size:13px;font-weight:600">夜明けの絵本</div><div class="note" style="font-size:10px">物語のような手ざわり</div></div></button>
     </div>
     <div class="info" style="margin-top:14px"><i class="ti ti-shield-heart" style="font-size:17px;color:var(--teal)"></i><div>どの世界を選んでも、SATOIの軸（夜明け・あたたかさ・急かさない・灯り）は変わりません。スタイルは“衣”。情景の光は、あなたの気持ちと物語に寄り添って変わります。</div></div>
     <div class="note" style="text-align:center;margin-top:14px;line-height:1.7">選ぶと、表紙と物語の情景が<br>その世界で描かれます（Gemini）。</div>
@@ -823,7 +825,7 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
     <div class="sub">同じ道を歩く人と、そっと分け合う。食べられた一皿も、小さな一歩も。</div>
 
     <div class="card" style="margin-top:16px;padding:0;overflow:hidden">
-      <div style="height:118px;position:relative;background:linear-gradient(135deg,#FBEEDE,#F7E6EC 60%,#E1F5EE);display:flex;align-items:center;justify-content:center;color:#b09a7a;font-size:11px"><span style="display:flex;flex-direction:column;align-items:center;gap:4px"><i class="ti ti-bowl" style="font-size:26px"></i>料理の写真（投稿・Gemini）</span><span style="position:absolute;left:11px;top:11px;background:rgba(255,255,255,.85);border-radius:999px;padding:3px 10px;font-size:10px;color:var(--amber-t);font-weight:600"><i class="ti ti-soup" style="vertical-align:-1px"></i> 食べられたレシピ</span></div>
+      <div style="height:118px;position:relative;background:linear-gradient(135deg,#FBEEDE,#F7E6EC 60%,#E1F5EE);display:flex;align-items:center;justify-content:center;color:#b09a7a;font-size:11px"><img data-aoi="hero_hibi" src="img/aoi_hero_hibi.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="display:flex;flex-direction:column;align-items:center;gap:4px;position:relative"><i class="ti ti-bowl" style="font-size:26px"></i>料理の写真（投稿・Gemini）</span><span style="position:absolute;left:11px;top:11px;background:rgba(255,255,255,.85);border-radius:999px;padding:3px 10px;font-size:10px;color:var(--amber-t);font-weight:600;z-index:1"><i class="ti ti-soup" style="vertical-align:-1px"></i> 食べられたレシピ</span></div>
       <div style="padding:13px 14px">
         <div style="font-size:15px;font-weight:600">やわらかい茶碗蒸し</div>
         <div style="font-size:12px;line-height:1.8;color:var(--sub);margin-top:4px">抗がん剤で食欲がない日でも、これなら喉を通った。だしを少し濃いめにするのがコツ。</div>
@@ -1037,21 +1039,74 @@ async function illustrateStory(){
 window._oninit=window._oninit||{};
 window._oninit['aiweave']=function(){artImgs=[];curArt=0;var b=document.getElementById('weaveArt');if(b)b.innerHTML='';};
 
-/* === 葵さんの写真：Geminiで生成→端末に保存→各スロット(data-aoi)へ反映 === */
+/* === SATOIサイト全体の画像システム：Geminiで生成→端末に保存→各スロットへ反映 ===
+   正本は img/aoi_<key>.jpg（commitで全端末に焼き込み）。生成画像はin-memory＋localStorage(容量超過は安全に無視)。
+   カテゴリ：aoi=葵さんの個人アルバム / world=物語の世界 / hero=主要ヒーロー / can=がん種ヘッダー */
+var ART_SAFE='photorealistic, warm natural light, hopeful and calm, gentle film grain, no faces in sharp focus, no people identifiable, no text, no words, no logos, no graphic medical imagery';
 var AOI_SCENES={
-  taiin:{p:'A photoreal candid photo of a mother in her late 30s at home in soft morning light, seen from behind or side, gently with two young children near a breakfast table. Warm cream and amber tones, natural window light, tender and hopeful, gentle film grain, no faces in sharp focus, no text, no medical items, photorealistic.'},
-  origami:{p:'A photoreal close-up of small child hands folding colorful origami on a wooden table in warm afternoon light, an adult hand gently nearby, candid, cozy, quietly joyful, no faces, no text, photorealistic, soft film grain.'},
-  byoshitsu:{p:'A photoreal gentle non-clinical hospital room at morning: soft light through a window, a neatly made bed, a child crayon drawing taped to the wall, a small flower by the bedside, warm hopeful quiet, no people, no medical equipment, no text, photorealistic.'},
-  kokuchi:{p:'A photoreal quiet photo of a woman alone by a window at dusk, soft silhouette, contemplative, muted blue-to-amber light, lonely but not despairing, no face detail, no text, no graphic medical, photorealistic, film grain.'},
-  shokutaku:{p:'A photoreal candid photo of a simple home dinner table set for a family, warm evening light, a few hands reaching for food, cozy and ordinary, no faces in focus, no text, photorealistic.'},
-  kodomo_e:{p:'A photoreal close-up of a child crayon drawing and a small letter on a table in warm light, tender and hopeful, no readable text, no faces, photorealistic.'},
-  kami:{p:'A photoreal gentle still life of a soft headscarf folded on a chair by a sunny window, dignified, calm, hopeful, warm tones, no face, no text, photorealistic.'}
+  /* ① 葵さんの個人アルバム */
+  taiin:{cat:'aoi',label:'退院の朝',p:'A photoreal candid photo of a mother in her late 30s at home in soft morning light, seen from behind or side, gently with two young children near a breakfast table. Warm cream and amber tones, natural window light, tender and hopeful, '+ART_SAFE+', no medical items.'},
+  origami:{cat:'aoi',label:'折り紙の手',p:'A photoreal close-up of small child hands folding colorful origami on a wooden table in warm afternoon light, an adult hand gently nearby, candid, cozy, quietly joyful, '+ART_SAFE+'.'},
+  byoshitsu:{cat:'aoi',label:'病室の窓',p:'A photoreal gentle non-clinical hospital room at morning: soft light through a window, a neatly made bed, a child crayon drawing taped to the wall, a small flower by the bedside, warm hopeful quiet, no people, no medical equipment, '+ART_SAFE+'.'},
+  kokuchi:{cat:'aoi',label:'告知の日',p:'A photoreal quiet photo of a woman alone by a window at dusk, soft silhouette, contemplative, muted blue-to-amber light, lonely but not despairing, '+ART_SAFE+'.'},
+  shokutaku:{cat:'aoi',label:'家族の食卓',p:'A photoreal candid photo of a simple home dinner table set for a family, warm evening light, a few hands reaching for food, cozy and ordinary, '+ART_SAFE+'.'},
+  kodomo_e:{cat:'aoi',label:'子どもの絵',p:'A photoreal close-up of a child crayon drawing and a small letter on a table in warm light, tender and hopeful, '+ART_SAFE+'.'},
+  kami:{cat:'aoi',label:'髪のこと',p:'A photoreal gentle still life of a soft headscarf folded on a chair by a sunny window, dignified, calm, hopeful, warm tones, '+ART_SAFE+'.'},
+  tsubo:{cat:'aoi',label:'壺（記録の器）',p:'A photoreal softly glowing ceramic vessel (a tsubo / urn) on a calm dark surface, warm amber light gathering and glowing softly from within like collected memories, dawn colors of amber and rose against deep blue twilight, floating gentle motes of light, serene, sacred and tender, '+ART_SAFE+', cinematic soft light, shallow depth of field.'},
+  /* ② 物語の世界（表紙背景・気分で切替） */
+  world_morning:{cat:'world',label:'朝の光',p:'A serene dawn landscape, soft sunrise light over gentle hills and a quiet winding path, pale blue, peach and amber sky, hopeful and calm, no people, '+ART_SAFE+'.'},
+  world_water:{cat:'world',label:'やわらかい水彩',p:'A soft watercolor storybook landscape of a gentle dawn over hills with a small path, pale blue, sakura pink and amber washes, dreamy and tender, no people, hand-painted watercolor, no text, no words.'},
+  world_ghibli:{cat:'world',label:'ジブリ風',p:'A hand-painted anime background art landscape, lush gentle nature, soft cel shading, nostalgic warm morning light over green hills and a small path, no people, no text, no words.'},
+  world_anime:{cat:'world',label:'澄んだアニメ',p:'A clean modern anime illustration of a bright clear dawn sky over calm hills with a winding path, soft light bloom, hopeful, no people, no text, no words.'},
+  world_cinema:{cat:'world',label:'シネマ',p:'A cinematic film still of a quiet dawn over misty hills and a path, moody volumetric light, color-graded warm amber and teal, hopeful, no people, '+ART_SAFE+'.'},
+  world_ehon:{cat:'world',label:'絵本',p:'A storybook picture-book illustration of a gentle dawn over rounded hills with a small path and a sprouting plant, warm peach and amber, soft rounded shapes, tender, no people, no text, no words.'},
+  /* ③ 主要ヒーロー */
+  hero_home:{cat:'hero',label:'ホーム',p:'A wide serene dawn sky over a calm horizon, soft sunrise glow in pale blue, peach and amber, a single gentle path leading toward the light, deeply hopeful and reassuring, no people, '+ART_SAFE+'.'},
+  hero_about:{cat:'hero',label:'About',p:'A quiet hopeful dawn over open water reflecting warm sunrise light, calm and contemplative, a sense of new beginning, no people, '+ART_SAFE+'.'},
+  hero_treatment:{cat:'hero',label:'治療を知る',p:'A calm morning path through a quiet forest with soft light filtering through trees, a sense of steady forward steps, hopeful, no people, '+ART_SAFE+'.'},
+  hero_precision:{cat:'hero',label:'プレシジョン',p:'An abstract gentle visualization of soft glowing light particles and delicate connecting lines like a constellation, warm teal and amber on a soft light background, hopeful and scientific but warm, no people, no text, no words, photorealistic soft bokeh.'},
+  hero_family:{cat:'hero',label:'家族',p:'A photoreal warm scene of hands of different generations resting gently near each other by a sunny window, tender connection, soft focus, '+ART_SAFE+'.'},
+  hero_kids:{cat:'hero',label:'こども',p:'A gentle warm illustration-like photo of a sunny window with a small potted plant and a child crayon drawing nearby, soft, safe and reassuring for children, bright hopeful morning light, no people, no text, no words.'},
+  hero_hibi:{cat:'hero',label:'みんなの灯り',p:'A photoreal scene of many small warm candle-like lights glowing softly in a gentle blue twilight, like gathered hope from many people, tender and connected, no faces, no people, '+ART_SAFE+', shallow depth of field.'},
+  hero_hospital:{cat:'hero',label:'病院',p:'A calm welcoming view of soft morning light through large windows of a quiet, gentle, non-clinical space, reassuring and warm, no people, no medical equipment, '+ART_SAFE+'.'},
+  hero_sopinion:{cat:'hero',label:'セカンドオピニオン',p:'A quiet warm still life of two cups of tea by a sunny window suggesting a calm conversation, soft and hopeful, no people, '+ART_SAFE+'.'},
+  /* ④ がん種ヘッダー（象徴的・希望・医療的に生々しくしない） */
+  can_breast:{cat:'can',label:'乳がん',p:'A gentle dawn over a calm field of soft pink and white wildflowers, tender hopeful morning light, no people, '+ART_SAFE+'.'},
+  can_lung:{cat:'can',label:'肺がん',p:'A serene wide sky at dawn with soft clouds and clear fresh air over distant hills, light breeze, hopeful and open, no people, '+ART_SAFE+'.'},
+  can_stomach:{cat:'can',label:'胃がん',p:'A warm quiet morning still life of a simple wooden table by a sunny window with a small bowl and soft light, gentle and nourishing, no people, '+ART_SAFE+'.'},
+  can_colon:{cat:'can',label:'大腸がん',p:'A calm sunrise over a gentle green meadow with a soft winding path, fresh and hopeful, no people, '+ART_SAFE+'.'},
+  can_prostate:{cat:'can',label:'前立腺がん',p:'A tranquil dawn over still calm water with soft amber and blue reflections, steady and reassuring, no people, '+ART_SAFE+'.'},
+  can_pancreas:{cat:'can',label:'すい臓がん',p:'A quiet resilient single tree on a hill at soft dawn, gentle warm light breaking through, hopeful against difficulty, no people, '+ART_SAFE+'.'},
+  can_liver:{cat:'can',label:'肝臓がん',p:'A gentle riverside at dawn with soft mist and warm morning light on calm flowing water, serene, no people, '+ART_SAFE+'.'},
+  can_esophagus:{cat:'can',label:'食道がん',p:'A soft warm still life of a glass of water and gentle morning light on a wooden table by a window, calm and caring, no people, '+ART_SAFE+'.'},
+  can_cervix:{cat:'can',label:'子宮頸がん',p:'A tender dawn over a field of soft teal-blue and white flowers (cervical cancer awareness colors), gentle hopeful morning light, no people, '+ART_SAFE+'.'},
+  can_endometrium:{cat:'can',label:'子宮体がん',p:'A gentle warm morning over a quiet garden with soft peach blossoms and dawn light, tender and hopeful, no people, '+ART_SAFE+'.'},
+  can_ovary:{cat:'can',label:'卵巣がん',p:'A soft dawn over a calm field of teal and white wildflowers, gentle morning light, hopeful, no people, '+ART_SAFE+'.'},
+  can_lymphoma:{cat:'can',label:'悪性リンパ腫',p:'A calm dawn sky with soft lime-green and amber light over gentle hills, fresh and hopeful, no people, '+ART_SAFE+'.'},
+  can_leukemia:{cat:'can',label:'白血病',p:'A serene sunrise over a quiet calm landscape with soft red-orange and amber light, warm and hopeful, no people, '+ART_SAFE+'.'},
+  can_myeloma:{cat:'can',label:'多発性骨髄腫',p:'A steady gentle dawn over distant calm mountains with soft burgundy and amber light, enduring and hopeful, no people, '+ART_SAFE+'.'},
+  can_headneck:{cat:'can',label:'頭頸部がん',p:'A soft warm morning still life of a cup of tea and gentle light by a window, calm and caring, no people, '+ART_SAFE+'.'},
+  can_biliary:{cat:'can',label:'胆道がん',p:'A quiet dawn over a calm misty valley with warm golden light breaking through, hopeful, no people, '+ART_SAFE+'.'},
+  can_kidney:{cat:'can',label:'腎臓がん',p:'A fresh calm dawn over a green hillside with soft orange morning light and dew, hopeful, no people, '+ART_SAFE+'.'},
+  can_bladder:{cat:'can',label:'膀胱がん',p:'A serene dawn over calm clear water with soft yellow-amber light, gentle and hopeful, no people, '+ART_SAFE+'.'},
+  can_brain:{cat:'can',label:'脳腫瘍',p:'A soft abstract dawn sky with gentle grey-to-amber gradient light and a single calm star fading, quiet and hopeful, no people, '+ART_SAFE+'.'},
+  can_thyroid:{cat:'can',label:'甲状腺がん',p:'A gentle calm dawn over a quiet meadow with soft teal and amber morning light, reassuring and hopeful, no people, '+ART_SAFE+'.'},
+  can_melanoma:{cat:'can',label:'皮膚がん',p:'A soft warm morning over a calm landscape with gentle shade and dappled light, protective and hopeful, no people, '+ART_SAFE+'.'},
+  can_cup:{cat:'can',label:'原発不明がん',p:'A quiet dawn over an open calm horizon with a gentle path appearing through soft mist, finding a way forward, hopeful, no people, '+ART_SAFE+'.'}
 };
+var AOI_DATA={}; /* このセッションで生成したdataURL（localStorage容量に依存しない） */
+function lsGet(k){try{return localStorage.getItem('satoi_img_'+k);}catch(e){return null;}}
+function imgSrc(k){return AOI_DATA[k]||lsGet(k)||('img/aoi_'+k+'.jpg');}
 function setAoi(key,src){var els=document.querySelectorAll('[data-aoi="'+key+'"]');for(var i=0;i<els.length;i++){els[i].src=src;els[i].style.display='block';}}
-function applyAoiImages(){for(var k in AOI_SCENES){var s=null;try{s=localStorage.getItem('satoi_img_'+k);}catch(e){}if(s)setAoi(k,s);}}
-async function genAoi(key){var sc=AOI_SCENES[key];if(!sc)return;try{var r=await fetch('/.netlify/functions/illustrate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:sc.p})});var d=await r.json();if(d&&d.ok&&d.image){try{localStorage.setItem('satoi_img_'+key,d.image);}catch(e){}setAoi(key,d.image);}}catch(e){}}
-async function genAoiAll(btn){var ks=Object.keys(AOI_SCENES);if(btn){btn.disabled=true;}for(var i=0;i<ks.length;i++){if(btn)btn.innerHTML='<i class="ti ti-loader" style="vertical-align:-2px"></i> 作っています… ('+(i+1)+'/'+ks.length+')';await genAoi(ks[i]);}if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-refresh" style="vertical-align:-2px;color:var(--teal)"></i> もう一度ぜんぶ作る';}}
+function applyAoiImages(){for(var k in AOI_SCENES){var s=AOI_DATA[k]||lsGet(k);if(s)setAoi(k,s);}}
+async function genAoi(key){var sc=AOI_SCENES[key];if(!sc)return false;try{var r=await fetch('/.netlify/functions/illustrate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:sc.p})});var d=await r.json();if(d&&d.ok&&d.image){AOI_DATA[key]=d.image;try{localStorage.setItem('satoi_img_'+key,d.image);}catch(e){}setAoi(key,d.image);if(typeof refreshDynamicArt==='function')refreshDynamicArt();return true;}}catch(e){}return false;}
+function aoiKeys(cat){return Object.keys(AOI_SCENES).filter(function(k){return !cat||cat==='all'||AOI_SCENES[k].cat===cat;});}
+async function genAoiAll(btn,cat){var ks=aoiKeys(cat);var label=btn?btn.innerHTML:'';if(btn){btn.disabled=true;}var ok=0;for(var i=0;i<ks.length;i++){if(btn)btn.innerHTML='<i class="ti ti-loader"></i> 作っています… ('+(i+1)+'/'+ks.length+')';if(await genAoi(ks[i]))ok++;}if(btn){btn.disabled=false;btn.innerHTML=label;}if(typeof toast==='function')toast(ok+' / '+ks.length+' 枚できました。保存ボタンで端末に残せます');return ok;}
+function downloadAoi(cat){var ks=aoiKeys(cat);var n=0;ks.forEach(function(k){var s=AOI_DATA[k]||lsGet(k);if(!s)return;setTimeout((function(src,key){return function(){var a=document.createElement('a');a.href=src;a.download='aoi_'+key+'.jpg';document.body.appendChild(a);a.click();document.body.removeChild(a);};})(s,k),n*450);n++;});if(typeof toast==='function')toast(n>0?n+' 枚をダウンロードします（img/ に置いてください）':'まだ生成された画像がありません');}
 if(window.addEventListener){window.addEventListener('load',applyAoiImages);}
+/* === やさしいトースト（ブロックしない確認表示。alertの置き換え） === */
+function toast(msg){var t=document.createElement('div');t.textContent=msg;t.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:rgba(38,48,63,.94);color:#fff;padding:11px 18px;border-radius:999px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:84%;text-align:center;opacity:0;transition:opacity .25s';document.body.appendChild(t);requestAnimationFrame(function(){t.style.opacity='1';});setTimeout(function(){t.style.opacity='0';setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},320);},2200);}
+window.toast=toast;
 </script>
 
 <!-- ============ 先輩の物語 ============ -->
@@ -1102,6 +1157,8 @@ if(window.addEventListener){window.addEventListener('load',applyAoiImages);}
 var WORLDS={morning:{label:'朝の光（写真風）',grad:'radial-gradient(120% 95% at 78% 100%, #FFE9C0 0%, #F3C892 22%, #E0A45E 42%, #C98B6E 64%, #EAEFF4 100%)'},water:{label:'やわらかい水彩',grad:'linear-gradient(120deg,#E1F5EE,#F7E6EC 55%,#FBEEDE)'},ghibli:{label:'ジブリのような',grad:'linear-gradient(120deg,#CFE7D8,#EAF3DE 50%,#FBEEDE)'},anime:{label:'アニメ',grad:'linear-gradient(120deg,#BFE0F4,#E7F0FA 50%,#FAE3C2)'},cinema:{label:'シネマティック',grad:'radial-gradient(120% 90% at 78% 96%, #FBD68F 0%, #E8A24E 16%, #B5662A 33%, #5A3A4E 58%, #1C2748 82%, #0B1026 100%)'},ehon:{label:'夜明けの絵本',grad:'linear-gradient(120deg,#FBEEDE,#FAD9A6 55%,#F4C0D1)'}};
 var curWorld='morning';
 function applyWorld(){var w=WORLDS[curWorld];if(w){var c=document.getElementById('storyCover');if(c)c.style.background=w.grad;var l=document.getElementById('storyWorldLabel');if(l)l.textContent=w.label;}var cl=document.querySelectorAll('[data-world]');for(var i=0;i<cl.length;i++){cl[i].style.border=cl[i].getAttribute('data-world')===curWorld?'2px solid #0D7377':'.5px solid var(--line2)';}}
+/* 生成直後・画面遷移時に、動的に差し込む画像（がん種ヘッダー等）を貼り直す */
+function refreshDynamicArt(){if(typeof applyAoiImages==='function')applyAoiImages();var im=document.getElementById('canHeroImg');if(im&&typeof CAN_CUR!=='undefined'&&CAN_CUR&&typeof imgSrc==='function'){im.style.display='block';im.src=imgSrc('can_'+CAN_CUR);}}
 function setWorld(k){curWorld=k;applyWorld();go('story');}
 function lightUp(b){if(b.getAttribute('data-lit'))return;b.setAttribute('data-lit','1');var c=b.querySelector('.lcount');if(c)c.textContent=(parseInt(c.textContent,10)||0)+1;b.style.background='#FFF7EC';b.style.borderColor='#E2B877';}
 function thanksTap(b){if(b.getAttribute('data-sent'))return;b.setAttribute('data-sent','1');b.innerHTML='<i class="ti ti-check"></i> ありがとう、届けました';b.style.background='#0F6E56';}
@@ -1142,6 +1199,7 @@ window._oninit['listen']=function(){lp=0;lplay=false;if(liv)clearInterval(liv);d
     <button class="back" onclick="go('treatment')"><i class="ti ti-arrow-left"></i> 治療を知る</button>
     <h1 class="h1" style="margin-top:10px">病院をさがす</h1>
     <div class="sub">あなたに合う病院を、落ち着いて選べます</div>
+    <div style="margin-top:12px;border-radius:14px;overflow:hidden;height:88px;position:relative;background:linear-gradient(120deg,#EAF0F6,#E6F1FB 60%,#FBEEDE)"><img data-aoi="hero_hospital" src="img/aoi_hero_hospital.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
         <div class="row2" style="margin-top:14px">
       <div><label style="font-size:11px;color:var(--mute);display:block;margin-bottom:4px">がんの種類</label><select id="hospCancer"><option>乳がん</option><option>肺がん</option><option>胃がん</option><option>大腸がん</option><option>前立腺がん</option><option>すい臓がん</option><option>その他・全般</option></select></div>
       <div><label style="font-size:11px;color:var(--mute);display:block;margin-bottom:4px">地域（都道府県）</label><select id="hospPref"></select></div>
@@ -1163,6 +1221,7 @@ window._oninit['listen']=function(){lp=0;lplay=false;if(liv)clearInterval(liv);d
     <button class="back" onclick="go('treatment')"><i class="ti ti-arrow-left"></i> 治療を知る</button>
     <h1 class="h1" style="margin-top:10px">セカンドオピニオンの準備</h1>
     <div class="sub">別の先生に聞く前の準備を、一緒に整えます</div>
+    <div style="margin-top:12px;border-radius:14px;overflow:hidden;height:88px;position:relative;background:linear-gradient(120deg,#EAF0F6,#FBEEDE 60%,#E7F1E8)"><img data-aoi="hero_sopinion" src="img/aoi_hero_sopinion.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
     <div class="info" style="margin-top:14px"><i class="ti ti-heart" style="font-size:17px;color:var(--blue)"></i><div>別の先生に聞くのは、今の主治医への裏切りではありません。納得して進むための、あなたの権利です。</div></div>
     <div style="font-size:12px;color:var(--mute);margin:16px 0 8px">やることは4つだけ</div>
     <div style="display:flex;gap:11px"><div class="ic" style="width:26px;height:26px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;flex-shrink:0">1</div><div style="flex:1;padding-bottom:14px;border-bottom:.5px solid var(--line)"><div style="font-size:14px;font-weight:600">今の病院に資料をお願いする</div><div class="note">紹介状（診療情報提供書）と検査データ。<a class="link" style="font-size:11px" onclick="go('glossary')">これは何？</a></div></div></div>
@@ -1263,27 +1322,86 @@ window._oninit['listen']=function(){lp=0;lplay=false;if(liv)clearInterval(liv);d
     <div class="sub">あなたの言葉のまま、SATOIが整えました（本人が確認済み） <a class="link" style="font-size:12px" onclick="go('glossary')">これは何？</a></div>
     <div style="margin-top:12px;display:flex;align-items:flex-start;gap:9px;background:var(--teal-bg);border-radius:10px;padding:9px 12px"><i class="ti ti-users" style="color:var(--teal-d);margin-top:1px"></i><div style="font-size:12px;line-height:1.6;color:var(--teal-d)">この一枚は、<b>だれに見せても大丈夫</b>。主治医にも、看護師さんにも、ご家族にも。見せる相手は、その場であなたが選べます。</div></div>
     <div style="margin-top:14px;border:.5px solid var(--line2);border-radius:16px;overflow:hidden">
-      <div style="background:var(--teal-bg);padding:10px 14px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:12px;color:var(--teal-d);font-weight:600"><i class="ti ti-clipboard-heart"></i> わたしの相談カード</span><span style="font-size:11px;color:var(--teal-d)">2026年5月22日</span></div>
+      <div style="background:var(--teal-bg);padding:10px 14px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:12px;color:var(--teal-d);font-weight:600"><i class="ti ti-clipboard-heart"></i> わたしの相談カード</span><span id="sdmDate" style="font-size:11px;color:var(--teal-d)">2026年5月22日</span></div>
       <div style="padding:14px">
         <div style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:6px"><i class="ti ti-microphone"></i> わたしの声でのこしました（0:48）</div>
-        <div style="background:var(--blue-bg,#E6F1FB);border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.85;color:#1f3a57">「いつもありがとうございます。子宮頸がんと言われてから、子どもがまだ小さいので、できるだけそばにいられる形で治療を進めたいと思っています。今日は、これからのことを一緒に考えたくて来ました。」</div>
+        <div id="sdmVoice" style="background:var(--blue-bg,#E6F1FB);border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.85;color:#1f3a57">「いつもありがとうございます。子宮頸がんと言われてから、子どもがまだ小さいので、できるだけそばにいられる形で治療を進めたいと思っています。今日は、これからのことを一緒に考えたくて来ました。」</div>
         <div class="note" style="margin-top:6px"><i class="ti ti-sparkles" style="vertical-align:-1px"></i> あなたの言葉のまま、SATOIが短く整えました（本人が確認済み）</div>
         <div style="font-size:12px;color:var(--amber);font-weight:600;margin:14px 0 6px"><i class="ti ti-heart"></i> 大事にしたいこと</div>
-        <div style="font-size:13px;line-height:1.7">・子どもと過ごす時間を、できるだけ守りたい<br>・将来、妊娠の可能性についても相談したい</div>
+        <div id="sdmCherish" style="font-size:13px;line-height:1.7">・子どもと過ごす時間を、できるだけ守りたい<br>・将来、妊娠の可能性についても相談したい</div>
         <div style="font-size:12px;color:var(--blue);font-weight:600;margin:14px 0 6px"><i class="ti ti-message-question"></i> 聞きたいこと</div>
-        <div style="font-size:13px;line-height:1.7">・今の治療以外に、どんな選択肢がありますか？<br>・それぞれの、いいところと負担を知りたいです<br>・妊娠する力（妊孕性）は、残せますか？</div>
+        <div id="sdmAsk" style="font-size:13px;line-height:1.7">・今の治療以外に、どんな選択肢がありますか？<br>・それぞれの、いいところと負担を知りたいです<br>・妊娠する力（妊孕性）は、残せますか？</div>
         <div style="font-size:12px;color:var(--mute);font-weight:600;margin:14px 0 6px"><i class="ti ti-notes"></i> いまの様子</div>
-        <div style="font-size:13px;color:var(--sub);line-height:1.7">入院を終え、子どもとの食卓が戻りつつある。申し訳なさで眠れない夜もあったが、少しずつ落ち着いてきている。</div>
+        <div id="sdmNow" style="font-size:13px;color:var(--sub);line-height:1.7">入院を終え、子どもとの食卓が戻りつつある。申し訳なさで眠れない夜もあったが、少しずつ落ち着いてきている。</div>
         <div style="margin-top:14px;background:var(--rose-bg);border-radius:10px;padding:11px 13px;font-size:12px;line-height:1.75;color:#7a3b2c"><i class="ti ti-hand-love-you" style="vertical-align:-2px;color:var(--rose)"></i> 先生のお考えも、ぜひ聞かせてください。お忙しいなか、ありがとうございます。<b>一緒に決められたら</b>、とても心強いです。</div>
       </div>
     </div>
-    <button class="btn btn-out" style="margin-top:10px" onclick="go('write')"><i class="ti ti-edit" style="vertical-align:-2px"></i> 手を入れる</button>
+    <button class="btn btn-out" style="margin-top:10px" onclick="go('sdmedit')"><i class="ti ti-edit" style="vertical-align:-2px"></i> 手を入れる</button>
     <button class="btn btn-teal" style="margin-top:12px" onclick="go('sdmshow')"><i class="ti ti-qrcode" style="vertical-align:-2px"></i> QRで見せる・印刷する</button>
     <div class="note" style="text-align:center;margin-top:8px;line-height:1.6">主治医にも、看護師さんにも、ご家族にも。<br>見せる相手は、その場であなたが選べます。</div>
     <div class="note" style="margin-top:12px;background:#f6f7f5;border-radius:8px;padding:10px 12px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> これは、あなたが対面で見せたり渡したりするための1枚です。病院へ自動では送られません。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
+
+<!-- ============ 相談カードを編集（本物の編集→反映） ============ -->
+<section class="scr" id="sdmedit">
+  <div class="pad">
+    <button class="back" onclick="go('sdm')"><i class="ti ti-arrow-left"></i> カードに戻る</button>
+    <h1 class="h1" style="margin-top:10px">相談カードに、手を入れる</h1>
+    <div class="sub">あなたの言葉で、自由に直せます。保存すると、カードにそのまま反映されます。</div>
+
+    <div style="font-size:12px;color:var(--blue);font-weight:600;margin:16px 0 6px"><i class="ti ti-microphone"></i> 先生へのひとこと（声でのこした言葉）</div>
+    <textarea id="seVoice" rows="4" style="line-height:1.7" placeholder="例）子どもがまだ小さいので、できるだけそばにいられる形で…"></textarea>
+
+    <div style="font-size:12px;color:var(--amber);font-weight:600;margin:16px 0 6px"><i class="ti ti-heart"></i> 大事にしたいこと（1行に1つ）</div>
+    <textarea id="seCherish" rows="3" style="line-height:1.7" placeholder="子どもと過ごす時間を、できるだけ守りたい&#10;将来、妊娠の可能性についても相談したい"></textarea>
+
+    <div style="font-size:12px;color:var(--blue);font-weight:600;margin:16px 0 6px"><i class="ti ti-message-question"></i> 聞きたいこと（1行に1つ）</div>
+    <textarea id="seAsk" rows="4" style="line-height:1.7" placeholder="今の治療以外に、どんな選択肢がありますか？"></textarea>
+
+    <div style="font-size:12px;color:var(--mute);font-weight:600;margin:16px 0 6px"><i class="ti ti-notes"></i> いまの様子</div>
+    <textarea id="seNow" rows="3" style="line-height:1.7" placeholder="今の体調や、気持ちのこと"></textarea>
+
+    <button class="btn btn-teal" style="margin-top:16px" onclick="saveSdmCard()"><i class="ti ti-check" style="vertical-align:-2px"></i> 保存して、カードに反映する</button>
+    <button class="btn btn-out" style="margin-top:10px" onclick="go('sdm')">やめる</button>
+    <div class="note" style="margin-top:12px;line-height:1.7"><i class="ti ti-shield-heart" style="vertical-align:-2px"></i> 直した内容は、この端末のあなたのカードに保存されます（あなたのものです）。</div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+<script>
+(function(){
+  var DEF={date:'2026年5月22日',voice:'いつもありがとうございます。子宮頸がんと言われてから、子どもがまだ小さいので、できるだけそばにいられる形で治療を進めたいと思っています。今日は、これからのことを一緒に考えたくて来ました。',cherish:['子どもと過ごす時間を、できるだけ守りたい','将来、妊娠の可能性についても相談したい'],ask:['今の治療以外に、どんな選択肢がありますか？','それぞれの、いいところと負担を知りたいです','妊娠する力（妊孕性）は、残せますか？'],now:'入院を終え、子どもとの食卓が戻りつつある。申し訳なさで眠れない夜もあったが、少しずつ落ち着いてきている。'};
+  window.SDM_CARD=null;
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function load(){if(window.SDM_CARD)return window.SDM_CARD;var c=null;try{var raw=localStorage.getItem('satoi_sdm_card');if(raw)c=JSON.parse(raw);}catch(e){}window.SDM_CARD=c||JSON.parse(JSON.stringify(DEF));return window.SDM_CARD;}
+  function bullets(arr){return (arr&&arr.length?arr:['—']).map(function(x){return '・'+esc(x);}).join('<br>');}
+  window.renderSdmCard=function(){var c=load();var el;
+    if(el=document.getElementById('sdmDate'))el.textContent=c.date||'';
+    if(el=document.getElementById('sdmVoice'))el.textContent='「'+(c.voice||'')+'」';
+    if(el=document.getElementById('sdmCherish'))el.innerHTML=bullets(c.cherish);
+    if(el=document.getElementById('sdmAsk'))el.innerHTML=bullets(c.ask);
+    if(el=document.getElementById('sdmNow'))el.textContent=c.now||'';};
+  window.saveSdmCard=function(){var c=load();
+    var v=function(id){var e=document.getElementById(id);return e?e.value:'';};
+    var lines=function(s){return s.split('\n').map(function(x){return x.trim();}).filter(function(x){return x;});};
+    c.voice=v('seVoice').trim()||c.voice;
+    c.cherish=lines(v('seCherish'));if(!c.cherish.length)c.cherish=DEF.cherish.slice();
+    c.ask=lines(v('seAsk'));if(!c.ask.length)c.ask=DEF.ask.slice();
+    c.now=v('seNow').trim();
+    try{var d=new Date();c.date=d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日';}catch(e){}
+    window.SDM_CARD=c;try{localStorage.setItem('satoi_sdm_card',JSON.stringify(c));}catch(e){}
+    renderSdmCard();
+    if(typeof toast==='function')toast('カードに反映しました');
+    go('sdm');};
+  function fillEditor(){var c=load();var set=function(id,val){var e=document.getElementById(id);if(e)e.value=val;};
+    set('seVoice',c.voice||'');set('seCherish',(c.cherish||[]).join('\n'));set('seAsk',(c.ask||[]).join('\n'));set('seNow',c.now||'');}
+  window._oninit=window._oninit||{};
+  window._oninit['sdm']=function(){renderSdmCard();};
+  window._oninit['sdmedit']=fillEditor;
+  if(window.addEventListener)window.addEventListener('load',function(){try{renderSdmCard();}catch(e){}});
+})();
+</script>
 
 <!-- ============ SDMカードを見せる（QR・印刷） ============ -->
 <section class="scr" id="sdmshow">
@@ -1301,7 +1419,7 @@ window._oninit['listen']=function(){lp=0;lplay=false;if(liv)clearInterval(liv);d
       <button class="tile" onclick="go('family')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-users" style="font-size:24px;color:var(--rose)"></i></span><div style="font-size:14px;font-weight:600;margin-top:9px">家族に共有</div></button>
     </div>
     <div class="note" style="margin-top:12px;background:var(--amber-bg);border-radius:10px;padding:10px 12px;color:var(--amber-t)"><i class="ti ti-building-store" style="vertical-align:-2px;color:var(--amber)"></i> 印刷は、ご家庭のプリンターやコンビニでもできます。</div>
-    <button class="btn btn-out" style="margin-top:14px" onclick="alert('「わたしの記録」に保存しました。あとでいつでも見返せます。');go('records')"><i class="ti ti-bookmark" style="vertical-align:-2px"></i> わたしの記録に保存する</button>
+    <button class="btn btn-out" style="margin-top:14px" onclick="toast('「わたしの記録」に保存しました。あとでいつでも見返せます');go('records')"><i class="ti ti-bookmark" style="vertical-align:-2px"></i> わたしの記録に保存する</button>
     <button class="btn btn-out" style="margin-top:10px" onclick="go('docwelcome')"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> 医療者の方へ（受け取り・保存）</button>
     <div class="lock"><i class="ti ti-lock"></i>あなたが見せるまで、誰にも見えません</div>
   </div>
@@ -1349,7 +1467,7 @@ window._oninit['listen']=function(){lp=0;lplay=false;if(liv)clearInterval(liv);d
     <div style="font-size:13px;font-weight:600;margin:14px 0 8px">ログイン用メール</div>
     <input type="email" placeholder="name@hospital.jp">
     <label style="display:flex;align-items:flex-start;gap:9px;margin-top:14px;font-size:12px;line-height:1.7;color:var(--sub)"><input type="checkbox" style="margin-top:3px;width:auto"> 医療者向けの利用規約と、患者さんの情報の取り扱い（同意の範囲だけ閲覧）に同意します</label>
-    <button class="btn btn-teal" style="margin-top:16px;background:var(--blue)" onclick="alert('登録を受け付けました。資格の確認後に有効化されます（確認中もサンプルはご覧いただけます）');go('docinbox')"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> 登録して、はじめる</button>
+    <button class="btn btn-teal" style="margin-top:16px;background:var(--blue)" onclick="toast('登録を受け付けました。資格の確認後に有効化されます');go('docinbox')"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> 登録して、はじめる</button>
     <div class="note" style="text-align:center;margin-top:8px;line-height:1.6">資格の確認後に有効化されます。確認中も、サンプルはご覧いただけます。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -1367,9 +1485,9 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
     <div class="sub">患者さんごとに、束ねています</div>
     <div class="info" style="margin-top:14px;background:var(--teal-bg);color:var(--teal-d)"><i class="ti ti-shield-heart" style="font-size:17px;color:var(--teal)"></i><div>患者さんが<b>渡したものだけ</b>が届きます。こちらから患者さんへ連絡はできません。</div></div>
     <div style="margin-top:14px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
-      <button class="navrow" style="align-items:center" onclick="alert('Hさんの相談カードと、これまでの経過（声・気持ちの流れ）を表示します')"><span style="display:flex;align-items:center;gap:11px"><span class="ic" style="width:36px;height:36px;border-radius:50%;background:var(--rose-bg);color:var(--rose);font-weight:600;font-size:13px">H</span><span><b style="font-weight:600;font-size:14px">Hさん（48）・乳がん</b><span class="note" style="display:block">相談カード 2件 ・ 最新 5/22 <span style="font-size:10px;color:#fff;background:var(--rose);border-radius:6px;padding:1px 6px">新着</span></span></span></span><span style="font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:6px;padding:2px 7px;flex-shrink:0">閲覧 同意</span></button>
-      <button class="navrow" style="align-items:center;border-top:.5px solid var(--line)" onclick="alert('Tさんの相談カードと経過を表示します')"><span style="display:flex;align-items:center;gap:11px"><span class="ic" style="width:36px;height:36px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-weight:600;font-size:13px">T</span><span><b style="font-weight:600;font-size:14px">Tさん（66）・前立腺がん</b><span class="note" style="display:block">相談カード 1件 ・ 5/18</span></span></span><span style="font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:6px;padding:2px 7px;flex-shrink:0">閲覧 同意</span></button>
-      <button class="navrow" style="align-items:center;border-top:.5px solid var(--line);border-bottom:none" onclick="alert('Mさんの相談カードと経過を表示します')"><span style="display:flex;align-items:center;gap:11px"><span class="ic" style="width:36px;height:36px;border-radius:50%;background:var(--teal-bg);color:var(--teal-d);font-weight:600;font-size:13px">M</span><span><b style="font-weight:600;font-size:14px">Mさん（52）・大腸がん</b><span class="note" style="display:block">相談カード 3件 ・ 5/10</span></span></span><span style="font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:6px;padding:2px 7px;flex-shrink:0">閲覧 同意</span></button>
+      <button class="navrow" style="align-items:center" onclick="toast('Hさんの相談カードと経過をひらきます');go('sdm')"><span style="display:flex;align-items:center;gap:11px"><span class="ic" style="width:36px;height:36px;border-radius:50%;background:var(--rose-bg);color:var(--rose);font-weight:600;font-size:13px">H</span><span><b style="font-weight:600;font-size:14px">Hさん（48）・乳がん</b><span class="note" style="display:block">相談カード 2件 ・ 最新 5/22 <span style="font-size:10px;color:#fff;background:var(--rose);border-radius:6px;padding:1px 6px">新着</span></span></span></span><span style="font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:6px;padding:2px 7px;flex-shrink:0">閲覧 同意</span></button>
+      <button class="navrow" style="align-items:center;border-top:.5px solid var(--line)" onclick="toast('Tさんの相談カードと経過をひらきます');go('sdm')"><span style="display:flex;align-items:center;gap:11px"><span class="ic" style="width:36px;height:36px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-weight:600;font-size:13px">T</span><span><b style="font-weight:600;font-size:14px">Tさん（66）・前立腺がん</b><span class="note" style="display:block">相談カード 1件 ・ 5/18</span></span></span><span style="font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:6px;padding:2px 7px;flex-shrink:0">閲覧 同意</span></button>
+      <button class="navrow" style="align-items:center;border-top:.5px solid var(--line);border-bottom:none" onclick="toast('Mさんの相談カードと経過をひらきます');go('sdm')"><span style="display:flex;align-items:center;gap:11px"><span class="ic" style="width:36px;height:36px;border-radius:50%;background:var(--teal-bg);color:var(--teal-d);font-weight:600;font-size:13px">M</span><span><b style="font-weight:600;font-size:14px">Mさん（52）・大腸がん</b><span class="note" style="display:block">相談カード 3件 ・ 5/10</span></span></span><span style="font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:6px;padding:2px 7px;flex-shrink:0">閲覧 同意</span></button>
     </div>
     <div class="card" style="margin-top:14px;background:var(--blue-bg);border:none">
       <div style="font-size:13px;font-weight:600;color:var(--blue-d)">ひらくと、できること</div>
@@ -1379,9 +1497,9 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
     <div id="docSum" style="display:none;margin-top:10px;border:.5px solid var(--line2);border-radius:12px;padding:13px 14px">
       <div style="font-size:13px;font-weight:600;margin-bottom:8px">何のために、まとめますか？</div>
       <div style="display:flex;flex-direction:column;gap:8px">
-        <button class="navrow" style="border:.5px solid var(--line2);border-radius:10px" onclick="alert('自分用の要約をPDFで出力します（理解しやすい形で）')"><span><i class="ti ti-user" style="color:var(--blue)"></i> 自分用（理解のため）</span><i class="ti ti-download" style="color:var(--mute)"></i></button>
-        <button class="navrow" style="border:.5px solid var(--line2);border-radius:10px" onclick="alert('症例検討会用の要約をPDFで出力します（患者さんの同意と匿名化のうえで）')"><span><i class="ti ti-users-group" style="color:var(--blue)"></i> 症例検討会用</span><i class="ti ti-download" style="color:var(--mute)"></i></button>
-        <button class="navrow" style="border:.5px solid var(--line2);border-radius:10px" onclick="alert('発表用の要約をPDFで出力します（患者さんの同意と匿名化のうえで）')"><span><i class="ti ti-presentation" style="color:var(--blue)"></i> 発表用</span><i class="ti ti-download" style="color:var(--mute)"></i></button>
+        <button class="navrow" style="border:.5px solid var(--line2);border-radius:10px" onclick="toast('自分用の要約をPDFで出力します（理解しやすい形で）')"><span><i class="ti ti-user" style="color:var(--blue)"></i> 自分用（理解のため）</span><i class="ti ti-download" style="color:var(--mute)"></i></button>
+        <button class="navrow" style="border:.5px solid var(--line2);border-radius:10px" onclick="toast('症例検討会用の要約をPDFで出力します（同意と匿名化のうえで）')"><span><i class="ti ti-users-group" style="color:var(--blue)"></i> 症例検討会用</span><i class="ti ti-download" style="color:var(--mute)"></i></button>
+        <button class="navrow" style="border:.5px solid var(--line2);border-radius:10px" onclick="toast('発表用の要約をPDFで出力します（同意と匿名化のうえで）')"><span><i class="ti ti-presentation" style="color:var(--blue)"></i> 発表用</span><i class="ti ti-download" style="color:var(--mute)"></i></button>
       </div>
       <div class="note" style="margin-top:10px;line-height:1.7"><i class="ti ti-shield-lock" style="vertical-align:-2px"></i> 自分用以外で外に出すときは、<b>患者さんの同意＋匿名化</b>が必要です。SATOIがその手順もご案内します。</div>
     </div>
@@ -1435,6 +1553,7 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
     <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
     <h1 class="h1" style="margin-top:10px">心と家族</h1>
     <div class="sub">支え合い、伝えることを、やさしくお手伝いします</div>
+    <div style="margin-top:12px;border-radius:14px;overflow:hidden;height:92px;position:relative;background:linear-gradient(120deg,#F7E6EC,#FBEEDE 60%,#E7F1E8)"><img data-aoi="hero_family" src="img/aoi_hero_family.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
     <div class="row2" style="margin-top:14px">
       <button class="tile" onclick="go('sdm')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-message-2-heart" style="font-size:24px;color:var(--rose)"></i></span><div style="font-size:14px;font-weight:600;margin-top:9px">伝え方サポート</div><div class="note">家族にどう話す？</div></button>
       <button class="tile" onclick="go('voicerec')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-microphone" style="font-size:24px;color:var(--rose)"></i></span><div style="font-size:14px;font-weight:600;margin-top:9px">声で気持ちを残す</div><div class="note">家族にも届けられます</div></button>
@@ -1484,7 +1603,7 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
     <div style="background:var(--rose-bg);border-radius:12px;padding:13px 14px;font-size:14px;line-height:1.85;color:#7a2b46">「今日は、よく眠れた。庭の紫陽花が咲きはじめたよ。次の治療、すこし不安だけど、がんばるね。」</div>
     <div class="note" style="margin-top:6px">お母さんが、家族に届けたいと選んだ声です</div>
     <div class="row2" style="margin-top:16px">
-      <button class="tile" onclick="alert('はげましを送りました。お母さんに届きます')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-heart-handshake" style="font-size:24px;color:var(--rose)"></i></span><div style="font-size:14px;font-weight:600;margin-top:9px">はげましを送る</div></button>
+      <button class="tile" onclick="toast('はげましを送りました。お母さんに届きます')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-heart-handshake" style="font-size:24px;color:var(--rose)"></i></span><div style="font-size:14px;font-weight:600;margin-top:9px">はげましを送る</div></button>
       <button class="tile" onclick="go('famsuggest')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-bulb" style="font-size:24px;color:var(--amber)"></i></span><div style="font-size:14px;font-weight:600;margin-top:9px">そっと提案する</div></button>
     </div>
     <div class="note" style="margin-top:14px;background:#f6f7f5;border-radius:8px;padding:10px 12px;line-height:1.7"><i class="ti ti-shield-heart" style="vertical-align:-2px"></i> 無理に毎日見なくて大丈夫。気づいたことは「そっと提案」で。先生へは、お母さんがOKした時だけ届きます。</div>
@@ -1506,8 +1625,8 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
     <div style="background:var(--rose-bg);border-radius:14px;padding:14px 15px;font-size:15px;line-height:1.9;color:#7a2b46">「きょうは よく ねむれたよ。おにわの あじさいが さいたよ。はやく あいたいな。」</div>
     <div style="font-size:13px;color:#6b4424;text-align:center;margin-top:18px">あなたの きもちを、おくろう</div>
     <div style="display:flex;gap:10px;margin-top:12px">
-      <button class="tile" style="flex:1;background:var(--teal);border:none" onclick="alert('えを おくったよ！')"><i class="ti ti-palette" style="font-size:24px;color:#fff"></i><div style="font-size:13px;font-weight:600;margin-top:6px;color:#fff">えを かく</div></button>
-      <button class="tile" style="flex:1" onclick="alert('メッセージを おくったよ！')"><i class="ti ti-pencil-heart" style="font-size:24px;color:#E8842F"></i><div style="font-size:13px;font-weight:600;margin-top:6px">メッセージ</div></button>
+      <button class="tile" style="flex:1;background:var(--teal);border:none" onclick="toast('えを おくったよ！')"><i class="ti ti-palette" style="font-size:24px;color:#fff"></i><div style="font-size:13px;font-weight:600;margin-top:6px;color:#fff">えを かく</div></button>
+      <button class="tile" style="flex:1" onclick="toast('メッセージを おくったよ！')"><i class="ti ti-pencil-heart" style="font-size:24px;color:#E8842F"></i><div style="font-size:13px;font-weight:600;margin-top:6px">メッセージ</div></button>
       <button class="tile" style="flex:1" onclick="go('voicerec')"><i class="ti ti-microphone" style="font-size:24px;color:var(--rose)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">こえで</div></button>
     </div>
     <button class="btn btn-teal" style="margin-top:16px" onclick="go('kidsmode')"><i class="ti ti-book" style="vertical-align:-2px"></i> がんのことを、やさしく しる</button>
@@ -1523,12 +1642,13 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
     <div style="margin-top:6px;font-size:12px;color:#9a7a52;font-weight:600">SATOI ・ こども</div>
     <h1 class="h1" style="margin-top:6px;color:#8a4b1f">がんって、なに？</h1>
     <div class="sub">おうちの人と いっしょに みてね</div>
-    <div style="margin-top:14px;height:120px;border-radius:16px;background:#FFF7EF;border:.5px solid #F3DEC6;display:flex;align-items:center;justify-content:center;gap:12px">
-      <i class="ti ti-cells" style="font-size:36px;color:#9FB89F"></i>
-      <i class="ti ti-arrow-right" style="font-size:20px;color:#C9B79C"></i>
-      <i class="ti ti-shield-heart" style="font-size:36px;color:#E8842F"></i>
+    <div style="margin-top:14px;height:120px;border-radius:16px;overflow:hidden;background:#FFF7EF;border:.5px solid #F3DEC6;position:relative;display:flex;align-items:center;justify-content:center;gap:12px">
+      <img data-aoi="hero_kids" src="img/aoi_hero_kids.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+      <i class="ti ti-cells" style="font-size:36px;color:#9FB89F;position:relative"></i>
+      <i class="ti ti-arrow-right" style="font-size:20px;color:#C9B79C;position:relative"></i>
+      <i class="ti ti-shield-heart" style="font-size:36px;color:#E8842F;position:relative"></i>
     </div>
-    <div class="note" style="text-align:center;margin-top:5px;color:#b39873">（やさしい え が入ります）</div>
+    <div class="note" style="text-align:center;margin-top:5px;color:#b39873">やさしい絵で、つたえます</div>
     <div style="margin-top:14px;font-size:15px;line-height:2;color:#5a4631">からだは、ちいさな つぶ（さいぼう）が たくさん あつまって できているよ。<br>ときどき その つぶの ひとつが、まちがえて ふえすぎちゃうことが あるんだ。それが「がん」。</div>
     <div style="margin-top:12px;background:var(--teal-bg);border-radius:14px;padding:13px 15px;font-size:15px;line-height:2;color:var(--teal-d)">おかあさんの からだは いま、その つぶを やっつける おくすりを がんばっているよ。<br>お医者さんも、たくさんの人も、みんなで たすけているからね。</div>
     <div style="margin-top:14px;display:flex;gap:10px;align-items:center;background:var(--rose-bg);border-radius:14px;padding:13px 15px">
@@ -1553,7 +1673,7 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
     <div class="sub">気づいたことを、お母さんへ。届くのは“提案”で、入れるかはお母さんが決めます。</div>
     <textarea placeholder="例）痛み止めのこと、先生に聞いておこうよ。この前、つらそうだったから。" style="width:100%;min-height:96px;margin-top:14px;border:.5px solid var(--line2);border-radius:12px;padding:11px 13px;font-size:14px;font-family:inherit;box-sizing:border-box"></textarea>
     <div class="note" style="margin-top:10px;background:#f6f7f5;border-radius:8px;padding:10px 12px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> あなたの提案は「家族から（あなた）」と分かる形で届きます。お母さんがOKした時だけ、相談カードに入ります。先生へ勝手に送られることはありません。</div>
-    <button class="btn btn-teal" style="margin-top:14px" onclick="alert('お母さんに、そっと届けました。入れるかどうかは、お母さんが決めます');go('famview')"><i class="ti ti-send" style="vertical-align:-2px"></i> 送る</button>
+    <button class="btn btn-teal" style="margin-top:14px" onclick="toast('お母さんに、そっと届けました。入れるかどうかは、お母さんが決めます');go('famview')"><i class="ti ti-send" style="vertical-align:-2px"></i> 送る</button>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -1620,6 +1740,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
     <div class="sub">残してきた声・言葉・からだの記録を、見返せます</div>
     <div style="margin-top:14px;border-radius:18px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 6px 20px rgba(38,48,63,.1)">
       <div style="height:148px;position:relative;background:radial-gradient(95% 85% at 50% 105%, #FBD68F 0%, #E0A45E 24%, #B5662A 40%, #5A3A4E 66%, #1C2748 100%)">
+        <img data-aoi="tsubo" src="img/aoi_tsubo.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,16,38,0) 50%,rgba(11,16,38,.4))"></div>
         <div style="position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.82);border-radius:999px;padding:4px 10px;font-size:10px;color:var(--teal-d);font-weight:600"><i class="ti ti-sparkles"></i> Geminiが描く・あなたの壺</div>
         <div style="position:absolute;left:14px;bottom:13px;color:#fff"><div style="font-size:18px;font-weight:700;text-shadow:0 2px 12px rgba(0,0,0,.5)">あなたの壺</div><div style="font-size:11px;margin-top:3px;opacity:.95;text-shadow:0 1px 8px rgba(0,0,0,.5)">残した一つひとつが、光になってたまっています</div></div>
@@ -1642,8 +1763,10 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
       <div style="aspect-ratio:1/1;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(135deg,#F7E6EC,#F4C0D1 70%,#FBEEDE)"><i class="ti ti-camera" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:20px;color:rgba(255,255,255,.9)"></i><img data-aoi="kodomo_e" src="img/aoi_kodomo_e.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:0;right:0;bottom:0;padding:4px 6px;font-size:9px;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.5))">子どもの絵</span></div>
       <div style="aspect-ratio:1/1;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(135deg,#EAF0F6,#FBEEDE 70%,#F4C0D1)"><i class="ti ti-camera" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:20px;color:rgba(255,255,255,.9)"></i><img data-aoi="kami" src="img/aoi_kami.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:0;right:0;bottom:0;padding:4px 6px;font-size:9px;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.5))">髪のこと</span></div>
     </div>
-    <button class="btn btn-out" style="margin-top:8px;padding:9px;font-size:13px" onclick="genAoiAll(this)"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> 葵さんの写真をAIで作る（Gemini）</button>
-    <div class="note" style="margin-top:5px;font-size:11px">押すと、Geminiが7枚を順に生成してこの端末に保存します。表紙や物語の章にも反映されます。</div>
+    <button class="btn btn-out" style="margin-top:8px;padding:9px;font-size:13px" onclick="genAoiAll(this,'aoi')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> ① 葵さんの写真をAIで作る（Gemini・8枚）</button>
+    <button class="btn btn-out" style="margin-top:8px;padding:9px;font-size:13px" onclick="downloadAoi('aoi')"><i class="ti ti-download" style="vertical-align:-2px"></i> ② 生成した写真を保存（img/へ・commit用）</button>
+    <button class="btn btn-teal" style="margin-top:8px;padding:9px;font-size:13px" onclick="go('imgstudio')"><i class="ti ti-photo-ai" style="vertical-align:-2px"></i> サイト全体の画像をまとめて作る（画像スタジオ）</button>
+    <div class="note" style="margin-top:5px;font-size:11px">①で生成 → ②でダウンロード → <b>img/ に置いて commit</b> すれば、誰の端末でも恒久表示に。サイト全体（がん種ヘッダー・物語の世界・各ヒーロー）は「画像スタジオ」でまとめて。</div>
     <div style="font-size:13px;font-weight:600;margin:18px 0 8px">相談カードの履歴</div>
     <button class="card" style="width:100%;text-align:left;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('sdm')"><span class="ic" style="width:38px;height:38px;background:var(--teal-bg);flex-shrink:0"><i class="ti ti-clipboard-heart" style="font-size:19px;color:var(--teal)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">相談カード <span style="display:inline-block;font-size:10px;font-weight:600;color:#fff;background:var(--teal);border-radius:8px;padding:1px 7px;vertical-align:1px">見せた</span></b><span class="note" style="display:block">2026年5月22日 ・ 先生に見せました</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('sdmbuild')"><span class="ic" style="width:38px;height:38px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-clipboard" style="font-size:19px;color:var(--amber)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">相談カード（下書き） <span style="display:inline-block;font-size:10px;font-weight:600;color:var(--amber-t);background:var(--amber-bg);border:.5px solid var(--amber);border-radius:8px;padding:1px 7px;vertical-align:1px">下書き</span></b><span class="note" style="display:block">2026年4月10日 ・ 作成のとちゅう（つづきから）</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
@@ -1652,6 +1775,42 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
+
+<!-- ============ 画像スタジオ（運営用：サイト全体の画像をGeminiで生成→DL→img/へcommit） ============ -->
+<section class="scr" id="imgstudio">
+  <div class="pad">
+    <button class="back" onclick="go('records')"><i class="ti ti-arrow-left"></i> わたしの記録</button>
+    <h1 class="h1" style="margin-top:10px">画像スタジオ</h1>
+    <div class="sub">サイト全体のリアルな写真を、Geminiでまとめて作ります（運営用）</div>
+    <div class="card" style="margin-top:12px;background:var(--teal-bg);border:none;font-size:12px;line-height:1.8;color:var(--teal-d)"><b><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 使い方</b><br>① カテゴリごとに「作る」を押す（数分かかります）→ ② 同じカテゴリの「保存」でダウンロード → ③ ダウンロードした <b>aoi_*.jpg を <code>satoi_mock_v2/img/</code> に置いて commit</b>。これで全端末に恒久表示されます（未生成の間は今のグラデのまま・壊れません）。</div>
+
+    <button class="btn btn-teal" style="margin-top:14px" onclick="genAoiAll(this,'all')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> ぜんぶ作る（約45枚・数分）</button>
+    <button class="btn btn-out" style="margin-top:8px" onclick="downloadAoi('all')"><i class="ti ti-download" style="vertical-align:-2px"></i> ぜんぶ保存（img/へ・commit用）</button>
+
+    <div id="studioCats" style="margin-top:8px"></div>
+
+    <div class="note" style="margin-top:12px;line-height:1.7"><i class="ti ti-shield-heart" style="vertical-align:-2px"></i> プロンプトはSATOIのトーン（夜明け・希望・生々しい医療描写なし・顔/文字なし）で設計済み。生成物は著作権フリーで使えます。</div>
+    <div class="lock"><i class="ti ti-lock"></i>運営用の画面です</div>
+  </div>
+</section>
+<script>
+(function(){
+  var CATS=[['aoi','葵さんの個人アルバム','ti-photo'],['world','物語の世界（表紙の気分）','ti-mood-smile'],['hero','主要ヒーロー','ti-layout-dashboard'],['can','がん種ヘッダー','ti-stethoscope']];
+  function render(){var e=document.getElementById('studioCats');if(!e||typeof AOI_SCENES==='undefined')return;var h='';
+    CATS.forEach(function(c){var ks=Object.keys(AOI_SCENES).filter(function(k){return AOI_SCENES[k].cat===c[0];});
+      h+='<div class="card" style="margin-top:12px"><div style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px"><i class="ti '+c[2]+'" style="color:var(--teal)"></i> '+c[1]+'<span class="note" style="margin-left:auto;font-weight:400">'+ks.length+'枚</span></div>';
+      h+='<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-out" style="flex:1;padding:8px;font-size:12px" onclick="genAoiAll(this,\''+c[0]+'\')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> 作る</button><button class="btn btn-out" style="flex:1;padding:8px;font-size:12px" onclick="downloadAoi(\''+c[0]+'\')"><i class="ti ti-download" style="vertical-align:-2px"></i> 保存</button></div>';
+      h+='<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:10px">';
+      ks.forEach(function(k){h+='<div style="aspect-ratio:1/1;border-radius:9px;overflow:hidden;position:relative;background:linear-gradient(135deg,#FBEEDE,#EAF0F6)"><img data-aoi="'+k+'" src="img/aoi_'+k+'.jpg" alt="" onerror="this.style.display=\'none\'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:0;right:0;bottom:0;padding:3px 4px;font-size:8px;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.55))">'+(AOI_SCENES[k].label||k)+'</span></div>';});
+      h+='</div></div>';
+    });
+    e.innerHTML=h;
+    if(typeof applyAoiImages==='function')applyAoiImages();
+  }
+  window._oninit=window._oninit||{};
+  window._oninit['imgstudio']=render;
+})();
+</script>
 
 <!-- ============ がんを知る ============ -->
 <section class="scr" id="cancer">
@@ -1816,6 +1975,7 @@ window._oninit['empse']=function(){empVal={};empBuild();document.getElementById(
     <button class="back" onclick="go('home')"><i class="ti ti-arrow-left"></i> ホーム</button>
     <h1 class="h1" style="margin-top:10px">SATOIについて</h1>
     <div class="sub">何も決めない夜も、そばで支える存在でありたい</div>
+    <div style="margin-top:12px;border-radius:14px;overflow:hidden;height:100px;position:relative;background:linear-gradient(120deg,#EAF0F6,#FBEEDE 60%,#F7DFBE)"><img data-aoi="hero_about" src="img/aoi_hero_about.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
     <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;text-align:center"><div style="font-size:14px;font-weight:600;color:var(--teal-d);line-height:1.8">全てはがん患者さんのために。<br>つながって、生きよう。</div></div>
     <div style="font-size:13px;font-weight:600;margin:16px 0 10px">3つの姿勢</div>
     <button class="card" onclick="go('pos_michi')" style="width:100%;text-align:left;cursor:pointer;display:flex;align-items:center;gap:11px"><span class="ic ic46" style="background:var(--teal-bg)"><i class="ti ti-route" style="font-size:24px;color:var(--teal)"></i></span><div style="flex:1"><b style="font-weight:600">みちしるべ</b><div class="note">迷う時、次の一歩をそっと照らす。</div></div><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
@@ -2172,14 +2332,16 @@ function openPillar(n){var p=PILLARS[n];document.getElementById('tdTitle').textC
 
 <!-- ============ 乳がんの治療（深掘り・国がんベース） ============ -->
 <section class="scr" id="bccare">
-  <div style="position:relative;height:96px">
-    <svg viewBox="0 0 390 96" width="100%" height="96" preserveAspectRatio="xMidYMid slice" style="display:block">
+  <div style="position:relative;height:110px;overflow:hidden">
+    <svg viewBox="0 0 390 110" width="100%" height="110" preserveAspectRatio="xMidYMid slice" style="display:block">
       <defs><linearGradient id="bcsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset=".7" stop-color="#F4ECF6"/><stop offset="1" stop-color="#F7E6EC"/></linearGradient></defs>
-      <rect width="390" height="96" fill="url(#bcsky)"/>
-      <circle cx="320" cy="40" r="40" fill="#fff" opacity=".5"/><circle cx="70" cy="70" r="46" fill="#fff" opacity=".4"/>
-      <path d="M0 78 Q120 60 250 74 T390 70 V96 H0 Z" fill="#EFD3DD" opacity=".6"/>
+      <rect width="390" height="110" fill="url(#bcsky)"/>
+      <circle cx="320" cy="44" r="40" fill="#fff" opacity=".5"/><circle cx="70" cy="84" r="46" fill="#fff" opacity=".4"/>
+      <path d="M0 90 Q120 72 250 86 T390 82 V110 H0 Z" fill="#EFD3DD" opacity=".6"/>
     </svg>
-    <div style="position:absolute;left:16px;top:26px"><div style="font-size:19px;font-weight:600;color:#26303F">乳がんの治療</div><div class="sub">あなたの治療を、落ち着いて理解するために</div></div>
+    <img data-aoi="can_breast" src="img/aoi_can_breast.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(255,255,255,.4) 55%,rgba(255,255,255,.05))"></div>
+    <div style="position:absolute;left:16px;top:30px"><div style="font-size:19px;font-weight:600;color:#26303F">乳がんの治療</div><div class="sub">あなたの治療を、落ち着いて理解するために</div></div>
   </div>
   <div class="pad">
     <button class="back" onclick="go('cancer')"><i class="ti ti-arrow-left"></i> がんを知る</button>
@@ -2483,8 +2645,10 @@ window._oninit['bccare']=function(){BC_PRO_OPEN=false;bccLvl('n');};
 
 <!-- ============ 多がん種ページ（汎用エンジン：肺・胃・大腸・前立腺・すい臓） ============ -->
 <section class="scr" id="canpage">
-  <div id="canHero" style="position:relative;height:90px;background:linear-gradient(#EAF0F6,#E6F1FB)">
-    <div style="position:absolute;left:16px;top:24px"><div id="canTitle" style="font-size:19px;font-weight:600;color:#26303F"></div><div class="sub" id="canSub"></div></div>
+  <div id="canHero" style="position:relative;height:110px;background:linear-gradient(#EAF0F6,#E6F1FB);overflow:hidden">
+    <img id="canHeroImg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none">
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(255,255,255,.4) 55%,rgba(255,255,255,.05))"></div>
+    <div style="position:absolute;left:16px;top:30px"><div id="canTitle" style="font-size:19px;font-weight:600;color:#26303F"></div><div class="sub" id="canSub"></div></div>
   </div>
   <div class="pad">
     <button class="back" onclick="go('cancer')"><i class="ti ti-arrow-left"></i> がんを知る</button>
@@ -2631,7 +2795,7 @@ function canJump(id){var e=document.getElementById(id);if(e)e.scrollIntoView({be
 function openCancer(k){CAN_CUR=k;CAN_PRO_OPEN=false;go('canpage');}
 function openTerm(key){var t=BC_TERMS[key];if(!t)return;var h=(location.hash||'').slice(1);if(h!=='term')window._termBack=(h||'bccare');document.getElementById('termTitle').textContent=t.t;document.getElementById('termBody').innerHTML=t.body;go('term');}
 function termBack(){go(window._termBack||'bccare');}
-window._oninit['canpage']=function(){var c=CAN_DATA[CAN_CUR];if(c){document.getElementById('canTitle').textContent=c.title;document.getElementById('canSub').textContent=c.sub;document.getElementById('canHero').style.background=c.grad;}CAN_PRO_OPEN=false;canLvl('n');};
+window._oninit['canpage']=function(){var c=CAN_DATA[CAN_CUR];if(c){document.getElementById('canTitle').textContent=c.title;document.getElementById('canSub').textContent=c.sub;document.getElementById('canHero').style.background=c.grad;var im=document.getElementById('canHeroImg');if(im&&typeof imgSrc==='function'){im.style.display='block';im.src=imgSrc('can_'+CAN_CUR);}}CAN_PRO_OPEN=false;canLvl('n');};
 </script>
 
 <script>
@@ -3922,9 +4086,11 @@ function drJump(id){var e=document.getElementById(id);if(e)e.scrollIntoView({beh
 
 <!-- ============ プレシジョンメディシン（がんゲノム医療） ============ -->
 <section class="scr" id="precision">
-  <div style="position:relative;height:96px">
-    <svg viewBox="0 0 390 96" width="100%" height="96" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="pmsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset="1" stop-color="#E7F0FA"/></linearGradient></defs><rect width="390" height="96" fill="url(#pmsky)"/><circle cx="320" cy="40" r="38" fill="#fff" opacity=".5"/><path d="M0 78 Q120 60 250 74 T390 70 V96 H0 Z" fill="#CFE0F2" opacity=".6"/></svg>
-    <div style="position:absolute;left:16px;top:24px"><div style="font-size:19px;font-weight:600;color:#26303F">プレシジョンメディシン</div><div class="sub">あなたのがんの“個性”を調べて、効く薬を見つける医療</div></div>
+  <div style="position:relative;height:110px;overflow:hidden">
+    <svg viewBox="0 0 390 110" width="100%" height="110" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="pmsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset="1" stop-color="#E7F0FA"/></linearGradient></defs><rect width="390" height="110" fill="url(#pmsky)"/><circle cx="320" cy="44" r="38" fill="#fff" opacity=".5"/><path d="M0 90 Q120 72 250 86 T390 82 V110 H0 Z" fill="#CFE0F2" opacity=".6"/></svg>
+    <img data-aoi="hero_precision" src="img/aoi_hero_precision.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(255,255,255,.4) 55%,rgba(255,255,255,.05))"></div>
+    <div style="position:absolute;left:16px;top:30px"><div style="font-size:19px;font-weight:600;color:#26303F">プレシジョンメディシン</div><div class="sub">あなたのがんの“個性”を調べて、効く薬を見つける医療</div></div>
   </div>
   <div class="pad">
     <button class="back" onclick="go('treatment')"><i class="ti ti-arrow-left"></i> 治療を知る</button>
@@ -4208,7 +4374,12 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
 </section>
 <script>
 (function(){
-  var SV={breast:{n:'乳がん',p:95000,s:{I:99,II:92,III:75,IV:38}},colon:{n:'大腸がん',p:147000,s:{I:98,II:88,III:75,IV:22}},lung:{n:'肺がん',p:127000,s:{I:82,II:47,III:22,IV:7}},stomach:{n:'胃がん',p:124000,s:{I:96,II:71,III:49,IV:9}},prostate:{n:'前立腺がん',p:95000,s:{I:100,II:100,III:95,IV:64}},pancreas:{n:'膵がん',p:44000,s:{I:41,II:17,III:7,IV:1}}};
+  var SV={breast:{n:'乳がん',p:95000,s:{I:99,II:92,III:75,IV:38}},colon:{n:'大腸がん',p:147000,s:{I:98,II:88,III:75,IV:22}},lung:{n:'肺がん',p:127000,s:{I:82,II:47,III:22,IV:7}},stomach:{n:'胃がん',p:124000,s:{I:96,II:71,III:49,IV:9}},prostate:{n:'前立腺がん',p:95000,s:{I:100,II:100,III:95,IV:64}},pancreas:{n:'すい臓がん',p:44000,s:{I:41,II:17,III:7,IV:1}}};
+  // 全がん種（「がんを知る」一覧と同じ並び）。選ぶと必ず、そのがんの詳細（病期・治療）ページへ紐づく。
+  var SV_LIST=[['breast','乳がん'],['lung','肺がん'],['stomach','胃がん'],['colon','大腸がん'],['prostate','前立腺がん'],['pancreas','すい臓がん'],['liver','肝臓がん'],['esophagus','食道がん'],['cervix','子宮頸がん'],['endometrium','子宮体がん'],['ovary','卵巣がん'],['lymphoma','悪性リンパ腫'],['leukemia','白血病'],['myeloma','多発性骨髄腫'],['headneck','頭頸部がん'],['biliary','胆道がん'],['kidney','腎臓がん'],['bladder','膀胱がん'],['brain','脳腫瘍'],['thyroid','甲状腺がん'],['melanoma','皮膚がん（メラノーマ）'],['cup','原発不明がん']];
+  var NAMES={};SV_LIST.forEach(function(x){NAMES[x[0]]=x[1];});NAMES.other='その他・まだ分からない';
+  function detailCall(k){return k==='breast'?"go('bccare')":"openCancer('"+k+"')";}
+  function detailBtn(k){var nm=NAMES[k]||'このがん';return '<button class="btn btn-out" style="margin-top:12px" onclick="'+detailCall(k)+'"><i class="ti ti-chevron-right" style="vertical-align:-2px"></i> '+nm+'の治療・病期をくわしく</button>';}
   var who='',can='',stg='';
   function chip(t,call){return '<button class="chip amber" style="margin:0 8px 8px 0" onclick="'+call+'">'+t+'</button>';}
   function frame(){return '<div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:13px;line-height:1.9;color:var(--teal-d)"><b>これは“過去の平均”です。</b> あなたの結果は、あなただけのもの。ステージは“余命の番号”ではなく、<b>治療を決める地図</b>です。最新の治療が加わるたび、数字は上がっています。</div><div class="note" style="margin-top:8px;line-height:1.65"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター（病期別5年相対生存率の目安）。※数字は目安で、公開時に最新データ・専門医監修。あなたの見通しは主治医とご確認を。</div>';}
@@ -4218,16 +4389,16 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
       h+='<div style="font-size:15px;font-weight:600;margin:14px 0 8px">どなたのことを、調べますか？</div><div>'+chip('わたし自身のこと',"svW('self')")+chip('身近な人のこと',"svW('near')")+'</div>';
     }else if(!can){
       h+='<button class="back" style="margin-top:10px" onclick="svW(\'\')"><i class="ti ti-arrow-left"></i> 戻る</button>';
-      h+='<div style="font-size:15px;font-weight:600;margin:12px 0 8px">どのがんについて？</div><div>';
-      for(var k in SV){h+=chip(SV[k].n,"svC('"+k+"')");}
-      h+=chip('子宮頸がん',"svC('cervix')")+chip('その他のがん',"svC('other')")+'</div>';
-    }else if(!stg){
+      h+='<div style="font-size:15px;font-weight:600;margin:12px 0 8px">どのがんについて？</div><div class="note" style="margin-bottom:8px;line-height:1.65">どのがんも、選ぶと見通しと、出典つきの詳しい説明へつながります。</div><div>';
+      SV_LIST.forEach(function(x){h+=chip(x[1],"svC('"+x[0]+"')");});
+      h+=chip('その他・まだ分からない',"svC('other')")+'</div>';
+    }else if(SV[can] && !stg){
       h+='<button class="back" style="margin-top:10px" onclick="svC(\'\')"><i class="ti ti-arrow-left"></i> 戻る</button>';
       h+='<div style="font-size:15px;font-weight:600;margin:12px 0 6px">ステージ（広がり）は？</div><div class="note" style="margin-bottom:8px;line-height:1.65">わからなくて大丈夫。検査がそろうと、先生が説明してくれます。</div><div>';
       ['I','II','III','IV'].forEach(function(s){h+=chip('ステージ'+s,"svS('"+s+"')");});
       h+='</div>';
     }else{
-      h+='<button class="back" style="margin-top:10px" onclick="svS(\'\')"><i class="ti ti-arrow-left"></i> 戻る</button>';
+      h+='<button class="back" style="margin-top:10px" onclick="'+(SV[can]?"svS('')":"svC('')")+'"><i class="ti ti-arrow-left"></i> 戻る</button>';
       if(SV[can]){var d=SV[can];var r=d.s[stg];var sd={I:'比較的早期で、局所にとどまっている',II:'少し進んでいるが、まだ局所にとどまる',III:'リンパ節などへの広がりがみられる',IV:'遠隔への広がりを含む段階'}[stg];
         h+='<div class="sechd" style="margin-top:16px"><i class="ti ti-info-circle"></i> いま、あなたに起きていること</div>';
         h+='<div class="card" style="font-size:13px;line-height:1.9">'+d.n+'の<b>ステージ'+stg+'</b>と向き合う——その言葉を受け止めるだけで、本当にたいへんなことだと思います。<br>からだの中では、'+d.n+'が<b>'+sd+'</b>という段階です。「今すぐ」ではなく、これから数か月かけて、検査と治療を、あなたのペースで。</div>';
@@ -4239,10 +4410,14 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
         fl.forEach(function(x,i){h+='<div style="display:flex;gap:10px;align-items:flex-start;padding:9px 0;'+(i?"border-top:.5px solid var(--line)":"")+'"><span class="ic" style="width:22px;height:22px;background:var(--teal-bg);color:var(--teal-d);font-size:11px;font-weight:600;flex-shrink:0">'+(i+1)+'</span><div style="font-size:13px;line-height:1.6">'+x+'</div></div>';});
         h+='</div>';
         h+='<div class="card" style="margin-top:14px;background:var(--rose-bg);border:none;font-size:13px;line-height:1.9;color:#7a3b2c"><i class="ti ti-mood-heart" style="vertical-align:-2px;color:var(--rose)"></i> 「これから、どうなるんだろう」——誰もが、その問いに立ち止まります。急がなくて、いいです。いまは、全体の流れを知るだけで充分。次の一歩は、一緒に。</div>';
-      }else if(can==='cervix'){
-        h+='<div class="card" style="margin-top:16px;background:var(--rose-bg);border:none;font-size:13px;line-height:1.9;color:#7a3b2c">子宮頸がんの病期別の数字は、いま<b>専門医監修で準備中</b>です。あなたの見通しは、ステージや治療で大きく変わります。<b>主治医と一緒に</b>確かめましょう。</div><button class="btn btn-out" style="margin-top:12px" onclick="openCancer(\'cervix\')"><i class="ti ti-chevron-right" style="vertical-align:-2px"></i> 子宮頸がんの治療・病期をくわしく</button>'+frame();
+        h+=detailBtn(can);
+      }else if(can==='other'){
+        h+='<div class="card" style="margin-top:16px;background:#f6f7f5;border:none;font-size:13px;line-height:1.9">数字は、がん種・病期・性質で大きく異なります。がん種が決まったら、もう一度ここから選べます。あなたの場合は、主治医に確認するのがいちばん確かです。</div>';
       }else{
-        h+='<div class="card" style="margin-top:16px;background:#f6f7f5;border:none;font-size:13px;line-height:1.9">数字は、がん種・病期・性質で大きく異なります。あなたの場合は、主治医に確認するのがいちばん確かです。</div>';
+        var nm=NAMES[can]||'このがん';
+        h+='<div class="sechd" style="margin-top:16px"><i class="ti ti-info-circle"></i> '+nm+'と向き合うあなたへ</div>';
+        h+='<div class="card" style="font-size:13px;line-height:1.9">'+nm+'という言葉を受け止めるだけで、本当にたいへんなことだと思います。'+nm+'の見通しは、ステージ・タイプ・治療によって大きく変わります。<br>下の詳しいページに、'+nm+'の<b>病期（ステージ）の考え方と治療の流れ</b>を、出典つきでまとめています。具体的な見通しは、検査結果がそろったうえで<b>主治医と一緒に</b>確かめるのがいちばん確かです。</div>';
+        h+=detailBtn(can)+frame();
       }
       h+=actions();
     }
@@ -4295,163 +4470,10 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
   </div>
 </section>
 
-<!-- ============ 肺がんの治療 ============ -->
-<section class="scr" id="lcare">
-  <div style="position:relative;height:90px"><svg viewBox="0 0 390 90" width="100%" height="90" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="lcsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF0F6"/><stop offset="1" stop-color="#E6F1FB"/></linearGradient></defs><rect width="390" height="90" fill="url(#lcsky)"/><circle cx="320" cy="38" r="34" fill="#fff" opacity=".5"/><path d="M0 74 Q130 60 260 72 T390 68 V90 H0 Z" fill="#CFE2F5" opacity=".6"/></svg><div style="position:absolute;left:16px;top:24px"><div style="font-size:19px;font-weight:600;color:#26303F">肺がんの治療</div><div class="sub">タイプで治療が変わります。落ち着いて理解しましょう</div></div></div>
-  <div class="pad">
-    <button class="back" onclick="go('cancer')"><i class="ti ti-arrow-left"></i> がんを知る</button>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px"><button class="chip" onclick="bccGo('lcc_type')">タイプ</button><button class="chip" onclick="bccGo('lcc_tx')">治療法</button><button class="chip" onclick="bccGo('lcc_stage')">ステージ別</button><button class="chip" onclick="bccGo('lcc_team')">関わる科</button></div>
 
-    <div id="lcc_type" style="font-size:16px;font-weight:600;margin:14px 0 8px">まず、2つのタイプ</div>
-    <div class="card" style="line-height:1.8;font-size:14px">肺がんは大きく <b>非小細胞肺がん</b>（腺がん・扁平上皮がんなど。約8〜9割）と <b>小細胞肺がん</b>（進行が速い）に分かれます。タイプと進み具合（ステージ）、がんの“個性”（遺伝子変異・PD-L1など）を調べて、治療を選びます。</div>
 
-    <div id="lcc_tx" style="font-size:16px;font-weight:600;margin:20px 0 8px">治療法を知る</div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-scalpel" style="vertical-align:-2px;color:var(--teal)"></i> 手術</b><div class="note" style="margin-top:4px;line-height:1.75">早期（I・II期）の非小細胞肺がんは手術が中心。がんのある肺葉を切除します。体への負担を考え、胸腔鏡など体に優しい方法も。</div></div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-radioactive" style="vertical-align:-2px;color:var(--teal)"></i> 放射線治療</b><div class="note" style="margin-top:4px;line-height:1.75">手術が難しい・希望しない早期では、ピンポイントで照射する<b>定位放射線治療</b>が選べます。進行例では薬物と組み合わせることも。</div></div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-pill" style="vertical-align:-2px;color:var(--teal)"></i> 薬物療法</b><div class="note" style="margin-top:4px;line-height:1.75">進行した肺がんの中心。遺伝子変異（EGFR・ALKなど）に合う<b>分子標的薬</b>、<b>免疫チェックポイント阻害薬</b>（PD-L1などを確認）、<b>細胞障害性抗がん薬</b>を、がんの個性に合わせて選びます。</div><details style="margin-top:6px"><summary style="cursor:pointer;color:var(--teal);font-size:13px">バイオマーカー検査って？</summary><div class="note" style="margin-top:6px;line-height:1.7">がんの遺伝子やタンパクを調べ、効くお薬を見極める検査。これにより「あなたのがんに効く薬」を選べます。</div></details></div>
-    <div class="card"><b><i class="ti ti-heart-plus" style="vertical-align:-2px;color:var(--teal)"></i> 緩和ケア</b><div class="note" style="margin-top:4px;line-height:1.75">息苦しさ・痛み・気持ちのつらさを和らげます。診断時から、治療と一緒に。</div></div>
 
-    <button class="btn" style="margin-top:10px;background:var(--teal-bg);color:var(--teal-d)" onclick="askAbout('肺がんの治療')"><i class="ti ti-message-question" style="vertical-align:-2px"></i> この治療で分からないことを、コンシェルジュに聞く</button>
-    <div id="lcc_stage" style="font-size:16px;font-weight:600;margin:20px 0 8px">ステージ別の選択（おおまか）</div>
-    <div class="card" style="font-size:13px;line-height:1.75"><div style="padding:4px 0"><b style="color:var(--teal-d)">非小細胞 I・II期</b>：手術が中心（難しければ定位放射線）。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">非小細胞 III期</b>：手術・放射線・薬物を組み合わせ。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">非小細胞 IV期</b>：薬物が中心（個性に合わせ分子標的/免疫/抗がん薬）＋つらさを和らげる治療。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">小細胞</b>：進行が速く、薬物＋放射線が中心。</div></div>
 
-    <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--teal);font-size:14px;font-weight:600">生活・仕事のこと</summary><div class="note" style="margin-top:8px;line-height:1.8">通院しながら働く方も多くいます。息切れやだるさが出たら無理をせず、医師・産業医・職場と相談を。呼吸が苦しいときは、在宅酸素や呼吸リハビリで楽になることもあります。禁煙は治療の効果や回復に役立ちます。</div></details>
-    <div id="lcc_team" style="font-size:16px;font-weight:600;margin:20px 0 8px">この治療に関わる科（誰が何を）</div>
-    <div class="sub" style="margin-bottom:8px">肺がんは複数の科がチームで診ます。誰がどこを担当するか、知っておくと安心です。</div>
-    <div class="card" style="font-size:13px;line-height:1.8"><div style="display:flex;gap:8px;padding:3px 0"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">呼吸器内科</b><span>診断・薬物療法の中心。窓口になることが多い。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">呼吸器外科</b><span>手術を担当。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">腫瘍内科</b><span>抗がん剤・薬物療法の専門（病院により）。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">放射線科</b><span>放射線治療を担当。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">緩和ケア</b><span>つらさを和らげる（どの段階でも）。</span></div></div>
-    <div class="note" style="margin-top:10px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス「肺がん 治療」。本ページはSATOIがやさしく要約（公開時に専門医監修）。判断は主治医とご相談を。</div>
-    <div style="font-size:14px;font-weight:600;margin:18px 0 10px">次の一歩</div>
-    <div class="row2"><button class="tile" onclick="go('sdm')"><i class="ti ti-clipboard-heart" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">聞きたいことを整理</div></button><button class="tile" onclick="go('ai')"><i class="ti ti-sparkles" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">コンシェルジュに聞く</div></button><button class="tile" onclick="go('sopinion')"><i class="ti ti-messages" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">別の先生にも聞く</div></button><button class="tile" onclick="go('hospital')"><i class="ti ti-building-hospital" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">病院をさがす</div></button></div>
-    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
-  </div>
-</section>
-
-<!-- ============ 胃がんの治療 ============ -->
-<section class="scr" id="gcare">
-  <div style="position:relative;height:90px"><svg viewBox="0 0 390 90" width="100%" height="90" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="gcsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EFF4E9"/><stop offset="1" stop-color="#EAF3DE"/></linearGradient></defs><rect width="390" height="90" fill="url(#gcsky)"/><circle cx="320" cy="38" r="34" fill="#fff" opacity=".5"/><path d="M0 74 Q130 60 260 72 T390 68 V90 H0 Z" fill="#D8E8C0" opacity=".6"/></svg><div style="position:absolute;left:16px;top:24px"><div style="font-size:19px;font-weight:600;color:#26303F">胃がんの治療</div><div class="sub">早期なら体に優しい治療も。順を追って</div></div></div>
-  <div class="pad">
-    <button class="back" onclick="go('cancer')"><i class="ti ti-arrow-left"></i> がんを知る</button>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px"><button class="chip" onclick="bccGo('gcc_flow')">大きな流れ</button><button class="chip" onclick="bccGo('gcc_tx')">治療法</button><button class="chip" onclick="bccGo('gcc_stage')">ステージ別</button><button class="chip" onclick="bccGo('gcc_team')">関わる科</button></div>
-
-    <div id="gcc_flow" style="font-size:16px;font-weight:600;margin:14px 0 8px">大きな流れ</div>
-    <div class="card" style="line-height:1.8;font-size:14px">胃がんは、進み具合（ステージ）で治療が変わります。ごく早期なら<b>内視鏡治療</b>で胃を残せることも。進むと<b>手術</b>、さらに<b>薬物療法</b>を組み合わせます。HER2というタンパクの有無で効く薬が変わるため、検査で調べます。</div>
-
-    <div id="gcc_tx" style="font-size:16px;font-weight:600;margin:20px 0 8px">治療法を知る</div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-microscope" style="vertical-align:-2px;color:var(--teal)"></i> 内視鏡治療（ESDなど）</b><div class="note" style="margin-top:4px;line-height:1.75">ごく早期で転移の心配が少ない場合、口から入れた内視鏡でがんを切除。胃を残せて体の負担が小さい。</div></div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-scalpel" style="vertical-align:-2px;color:var(--teal)"></i> 手術</b><div class="note" style="margin-top:4px;line-height:1.75">胃の一部または全部と、まわりのリンパ節を切除。腹腔鏡など体に優しい方法もあります。術後は食事の工夫が大切。</div></div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-pill" style="vertical-align:-2px;color:var(--teal)"></i> 薬物療法</b><div class="note" style="margin-top:4px;line-height:1.75">再発を抑える（術後）や、進行・再発に対して。HER2陽性なら<b>抗HER2薬</b>、状況により<b>免疫チェックポイント阻害薬</b>や抗がん薬を使います。</div></div>
-    <div class="card"><b><i class="ti ti-heart-plus" style="vertical-align:-2px;color:var(--teal)"></i> 緩和ケア</b><div class="note" style="margin-top:4px;line-height:1.75">痛みや食べづらさ、気持ちのつらさを和らげます。診断時から。</div></div>
-
-    <button class="btn" style="margin-top:10px;background:var(--teal-bg);color:var(--teal-d)" onclick="askAbout('胃がんの治療')"><i class="ti ti-message-question" style="vertical-align:-2px"></i> この治療で分からないことを、コンシェルジュに聞く</button>
-    <div id="gcc_stage" style="font-size:16px;font-weight:600;margin:20px 0 8px">ステージ別の選択（おおまか）</div>
-    <div class="card" style="font-size:13px;line-height:1.75"><div style="padding:4px 0"><b style="color:var(--teal-d)">ごく早期</b>：内視鏡治療で胃を残せることも。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">I〜III期</b>：手術が中心。進み具合により術後（前）に薬物療法。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">IV期</b>：薬物が中心。つらさを和らげる治療も合わせて。</div></div>
-
-    <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--teal);font-size:14px;font-weight:600">手術後の食事のこと</summary><div class="note" style="margin-top:8px;line-height:1.8">胃を切ると、一度にたくさん食べられなくなります。回数を分けて少しずつ、ゆっくりよく噛んで食べましょう。食後に動悸や冷や汗が出る「ダンピング症状」は、食べ方の工夫で和らげられます。体重が減りやすいので、栄養士に相談を。</div></details>
-    <div id="gcc_team" style="font-size:16px;font-weight:600;margin:20px 0 8px">この治療に関わる科（誰が何を）</div>
-    <div class="sub" style="margin-bottom:8px">胃がんは内科・外科・腫瘍内科などがチームで診ます。</div>
-    <div class="card" style="font-size:13px;line-height:1.8"><div style="display:flex;gap:8px;padding:3px 0"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">消化器内科</b><span>診断・内視鏡治療を担当。窓口になることが多い。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">消化器外科</b><span>手術を担当。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">腫瘍内科</b><span>抗がん剤・薬物療法の専門（病院により）。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">緩和ケア</b><span>つらさを和らげる（どの段階でも）。</span></div></div>
-    <div class="note" style="margin-top:10px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス「胃がん 治療」。SATOIがやさしく要約（公開時に専門医監修）。判断は主治医とご相談を。</div>
-    <div style="font-size:14px;font-weight:600;margin:18px 0 10px">次の一歩</div>
-    <div class="row2"><button class="tile" onclick="go('sdm')"><i class="ti ti-clipboard-heart" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">聞きたいことを整理</div></button><button class="tile" onclick="go('ai')"><i class="ti ti-sparkles" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">コンシェルジュに聞く</div></button><button class="tile" onclick="go('sopinion')"><i class="ti ti-messages" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">別の先生にも聞く</div></button><button class="tile" onclick="go('hospital')"><i class="ti ti-building-hospital" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">病院をさがす</div></button></div>
-    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
-  </div>
-</section>
-
-<!-- ============ 大腸がんの治療 ============ -->
-<section class="scr" id="colcare">
-  <div style="position:relative;height:90px"><svg viewBox="0 0 390 90" width="100%" height="90" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="ccsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FAEEDA"/><stop offset="1" stop-color="#FBEEDE"/></linearGradient></defs><rect width="390" height="90" fill="url(#ccsky)"/><circle cx="320" cy="38" r="34" fill="#fff" opacity=".5"/><path d="M0 74 Q130 60 260 72 T390 68 V90 H0 Z" fill="#F2D9B0" opacity=".6"/></svg><div style="position:absolute;left:16px;top:24px"><div style="font-size:19px;font-weight:600;color:#26303F">大腸がんの治療</div><div class="sub">早期は内視鏡で。順を追って理解しましょう</div></div></div>
-  <div class="pad">
-    <button class="back" onclick="go('cancer')"><i class="ti ti-arrow-left"></i> がんを知る</button>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px"><button class="chip" onclick="bccGo('coc_flow')">大きな流れ</button><button class="chip" onclick="bccGo('coc_tx')">治療法</button><button class="chip" onclick="bccGo('coc_stage')">ステージ別</button><button class="chip" onclick="bccGo('coc_team')">関わる科</button></div>
-
-    <div id="coc_flow" style="font-size:16px;font-weight:600;margin:14px 0 8px">大きな流れ</div>
-    <div class="card" style="line-height:1.8;font-size:14px">大腸がん（結腸がん・直腸がん）は、ごく早期なら<b>内視鏡治療</b>で切除できることも。進むと<b>手術</b>、再発を抑える/進行例には<b>薬物療法</b>。直腸がんでは<b>放射線</b>を組み合わせることがあります。RAS・BRAF・MSIなどの遺伝子検査で効く薬を見極めます。</div>
-
-    <div id="coc_tx" style="font-size:16px;font-weight:600;margin:20px 0 8px">治療法を知る</div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-microscope" style="vertical-align:-2px;color:var(--teal)"></i> 内視鏡治療</b><div class="note" style="margin-top:4px;line-height:1.75">ごく早期で転移の心配が少ない場合、内視鏡でがんを切除。体の負担が小さい。</div></div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-scalpel" style="vertical-align:-2px;color:var(--teal)"></i> 手術</b><div class="note" style="margin-top:4px;line-height:1.75">がんのある腸とまわりのリンパ節を切除。腹腔鏡・ロボット支援など体に優しい方法も。直腸では人工肛門（ストーマ）が必要なことがあり、事前によく相談を。</div></div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-pill" style="vertical-align:-2px;color:var(--teal)"></i> 薬物療法</b><div class="note" style="margin-top:4px;line-height:1.75">術後の再発予防や、進行・再発に対して。遺伝子検査の結果で<b>分子標的薬</b>や<b>免疫チェックポイント阻害薬</b>、抗がん薬を選びます。</div></div>
-    <div class="card"><b><i class="ti ti-radioactive" style="vertical-align:-2px;color:var(--teal)"></i> 放射線治療（主に直腸）</b><div class="note" style="margin-top:4px;line-height:1.75">直腸がんで、手術前にがんを小さくしたり再発を防ぐ目的で使うことがあります。</div></div>
-
-    <button class="btn" style="margin-top:10px;background:var(--teal-bg);color:var(--teal-d)" onclick="askAbout('大腸がんの治療')"><i class="ti ti-message-question" style="vertical-align:-2px"></i> この治療で分からないことを、コンシェルジュに聞く</button>
-    <div id="coc_stage" style="font-size:16px;font-weight:600;margin:20px 0 8px">ステージ別の選択（おおまか）</div>
-    <div class="card" style="font-size:13px;line-height:1.75"><div style="padding:4px 0"><b style="color:var(--teal-d)">0・早期</b>：内視鏡治療で切除できることも。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">I〜III期</b>：手術が中心。III期などは術後に薬物療法。直腸では放射線も。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">IV期</b>：薬物が中心。転移巣を手術で取れる場合もあり、状況で判断。</div></div>
-
-    <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--teal);font-size:14px;font-weight:600">ストーマ・排便のこと</summary><div class="note" style="margin-top:8px;line-height:1.8">直腸の手術では、一時的または永久的に人工肛門（ストーマ）が必要になることがあります。専門の看護師（皮膚・排泄ケア認定看護師）が、ケアの方法を一緒に練習してくれます。排便の回数や便通の変化も、時間とともに落ち着いていくことが多いです。事前に十分相談しましょう。</div></details>
-    <div id="coc_team" style="font-size:16px;font-weight:600;margin:20px 0 8px">この治療に関わる科（誰が何を）</div>
-    <div class="card" style="font-size:13px;line-height:1.8"><div style="display:flex;gap:8px;padding:3px 0"><b style="width:96px;flex-shrink:0;color:var(--blue-d)">消化器内科</b><span>診断・内視鏡治療。窓口になることが多い。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:96px;flex-shrink:0;color:var(--blue-d)">消化器・大腸外科</b><span>手術を担当。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:96px;flex-shrink:0;color:var(--blue-d)">腫瘍内科</b><span>薬物療法の専門（病院により）。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:96px;flex-shrink:0;color:var(--blue-d)">放射線科</b><span>放射線治療（主に直腸）。</span></div></div>
-    <div class="note" style="margin-top:10px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス「大腸がん 治療」。SATOIがやさしく要約（公開時に専門医監修）。判断は主治医とご相談を。</div>
-    <div style="font-size:14px;font-weight:600;margin:18px 0 10px">次の一歩</div>
-    <div class="row2"><button class="tile" onclick="go('sdm')"><i class="ti ti-clipboard-heart" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">聞きたいことを整理</div></button><button class="tile" onclick="go('ai')"><i class="ti ti-sparkles" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">コンシェルジュに聞く</div></button><button class="tile" onclick="go('sopinion')"><i class="ti ti-messages" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">別の先生にも聞く</div></button><button class="tile" onclick="go('hospital')"><i class="ti ti-building-hospital" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">病院をさがす</div></button></div>
-    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
-  </div>
-</section>
-
-<!-- ============ 前立腺がんの治療 ============ -->
-<section class="scr" id="prcare">
-  <div style="position:relative;height:90px"><svg viewBox="0 0 390 90" width="100%" height="90" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="prsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EEEDFE"/><stop offset="1" stop-color="#E6F1FB"/></linearGradient></defs><rect width="390" height="90" fill="url(#prsky)"/><circle cx="320" cy="38" r="34" fill="#fff" opacity=".5"/><path d="M0 74 Q130 60 260 72 T390 68 V90 H0 Z" fill="#CFCBF0" opacity=".5"/></svg><div style="position:absolute;left:16px;top:24px"><div style="font-size:19px;font-weight:600;color:#26303F">前立腺がんの治療</div><div class="sub">ゆっくり進むことも。選択肢が多いがんです</div></div></div>
-  <div class="pad">
-    <button class="back" onclick="go('cancer')"><i class="ti ti-arrow-left"></i> がんを知る</button>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px"><button class="chip" onclick="bccGo('prc_flow')">大きな流れ</button><button class="chip" onclick="bccGo('prc_tx')">治療法</button><button class="chip" onclick="bccGo('prc_team')">関わる科</button></div>
-
-    <div id="prc_flow" style="font-size:16px;font-weight:600;margin:14px 0 8px">大きな流れ</div>
-    <div class="card" style="line-height:1.8;font-size:14px">前立腺がんは、PSA検査・MRI・生検で診断します。比較的<b>ゆっくり進むことが多い</b>ため、すぐ治療せず様子を見る<b>監視療法</b>という選択もあります。リスク（PSA値・グリソンスコア・病期）に応じて、手術・放射線・ホルモン療法から選びます。</div>
-
-    <div id="prc_tx" style="font-size:16px;font-weight:600;margin:20px 0 8px">治療法を知る</div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-eye" style="vertical-align:-2px;color:var(--teal)"></i> 監視療法</b><div class="note" style="margin-top:4px;line-height:1.75">低リスクで進行がゆっくりな場合、すぐ治療せずPSA等で定期的に見守り、必要になったら治療を始めます。体への負担を避けられます。</div></div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-scalpel" style="vertical-align:-2px;color:var(--teal)"></i> 手術（前立腺全摘）</b><div class="note" style="margin-top:4px;line-height:1.75">前立腺を取り除きます。ロボット支援手術が広く行われています。尿もれ・性機能への影響について、事前によく相談を。</div></div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-radioactive" style="vertical-align:-2px;color:var(--teal)"></i> 放射線治療</b><div class="note" style="margin-top:4px;line-height:1.75">外から照射する方法や、小さな線源を入れる方法（小線源治療）があります。手術と効果は同等とされ、体の状態や希望で選びます。</div></div>
-    <div class="card"><b><i class="ti ti-pill" style="vertical-align:-2px;color:var(--teal)"></i> ホルモン療法</b><div class="note" style="margin-top:4px;line-height:1.75">前立腺がんは男性ホルモンで増えるため、その働きを抑える治療。進行例や放射線と組み合わせて使います。ほてり等の副作用があります。</div></div>
-
-    <button class="btn" style="margin-top:10px;background:var(--teal-bg);color:var(--teal-d)" onclick="askAbout('前立腺がんの治療')"><i class="ti ti-message-question" style="vertical-align:-2px"></i> この治療で分からないことを、コンシェルジュに聞く</button>
-
-    <div id="prc_stage" style="font-size:16px;font-weight:600;margin:20px 0 8px">リスク・病期別の選択（おおまか）</div>
-    <div class="sub" style="margin-bottom:8px">前立腺がんは、PSA値・グリソンスコア・病期から「リスク」を分けて治療を選びます。</div>
-    <div class="card" style="font-size:13px;line-height:1.75"><div style="padding:4px 0"><b style="color:var(--teal-d)">低リスク</b>：監視療法・手術・放射線から選べます。すぐ治療しない選択も。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">中リスク</b>：手術または放射線（必要に応じホルモン療法を併用）。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">高リスク・局所進行</b>：放射線＋ホルモン療法、または手術。組み合わせることも。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">転移あり</b>：ホルモン療法が中心。新しいホルモン薬や抗がん薬も。つらさを和らげる治療も。</div></div>
-
-    <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--teal);font-size:14px;font-weight:600">生活・後遺症のこと（尿もれ・性機能）</summary><div class="note" style="margin-top:8px;line-height:1.8">手術や放射線のあと、尿もれや性機能の変化が起こることがあります。多くは時間とともに改善しますが、骨盤底筋のリハビリや薬で和らげることもできます。気になることは遠慮なく、泌尿器科の医師・看護師に相談しましょう。</div></details>
-
-    <div id="prc_team" style="font-size:16px;font-weight:600;margin:20px 0 8px">この治療に関わる科（誰が何を）</div>
-    <div class="card" style="font-size:13px;line-height:1.8"><div style="display:flex;gap:8px;padding:3px 0"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">泌尿器科</b><span>診断・手術・ホルモン療法の中心。窓口。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">放射線科</b><span>放射線治療を担当。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:84px;flex-shrink:0;color:var(--blue-d)">腫瘍内科</b><span>進行例の薬物療法（病院により）。</span></div></div>
-    <div class="note" style="margin-top:10px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス「前立腺がん 治療」。SATOIがやさしく要約（公開時に専門医監修）。判断は主治医とご相談を。</div>
-    <div style="font-size:14px;font-weight:600;margin:18px 0 10px">次の一歩</div>
-    <div class="row2"><button class="tile" onclick="go('sdm')"><i class="ti ti-clipboard-heart" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">聞きたいことを整理</div></button><button class="tile" onclick="go('ai')"><i class="ti ti-sparkles" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">コンシェルジュに聞く</div></button><button class="tile" onclick="go('sopinion')"><i class="ti ti-messages" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">別の先生にも聞く</div></button><button class="tile" onclick="go('hospital')"><i class="ti ti-building-hospital" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">病院をさがす</div></button></div>
-    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
-  </div>
-</section>
-
-<!-- ============ すい臓がんの治療 ============ -->
-<section class="scr" id="pancare">
-  <div style="position:relative;height:90px"><svg viewBox="0 0 390 90" width="100%" height="90" preserveAspectRatio="xMidYMid slice" style="display:block"><defs><linearGradient id="pasky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBEAF0"/><stop offset="1" stop-color="#FAECE7"/></linearGradient></defs><rect width="390" height="90" fill="url(#pasky)"/><circle cx="320" cy="38" r="34" fill="#fff" opacity=".5"/><path d="M0 74 Q130 60 260 72 T390 68 V90 H0 Z" fill="#F4D6CC" opacity=".5"/></svg><div style="position:absolute;left:16px;top:24px"><div style="font-size:19px;font-weight:600;color:#26303F">すい臓がんの治療</div><div class="sub">「切除できるか」で道が分かれます</div></div></div>
-  <div class="pad">
-    <button class="back" onclick="go('cancer')"><i class="ti ti-arrow-left"></i> がんを知る</button>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px"><button class="chip" onclick="bccGo('pac_flow')">大きな流れ</button><button class="chip" onclick="bccGo('pac_tx')">治療法</button><button class="chip" onclick="bccGo('pac_team')">関わる科</button></div>
-
-    <div id="pac_flow" style="font-size:16px;font-weight:600;margin:14px 0 8px">大きな流れ</div>
-    <div class="card" style="line-height:1.8;font-size:14px">すい臓がんは、まず<b>手術で切除できるか</b>で道が分かれます。「切除可能」「境界（ぎりぎり）」「切除不能」に分けて考えます。切除できる場合は手術＋薬物療法、境界・切除不能では薬物療法（必要に応じ放射線）でがんを抑え、可能なら手術を目指します。</div>
-
-    <div id="pac_tx" style="font-size:16px;font-weight:600;margin:20px 0 8px">治療法を知る</div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-scalpel" style="vertical-align:-2px;color:var(--teal)"></i> 手術</b><div class="note" style="margin-top:4px;line-height:1.75">切除できる場合に行います。すい臓の場所により切除範囲が変わります。体の負担が大きいので、術前術後の薬物療法と組み合わせるのが一般的。</div></div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-pill" style="vertical-align:-2px;color:var(--teal)"></i> 薬物療法</b><div class="note" style="margin-top:4px;line-height:1.75">治療の中心の一つ。複数の抗がん薬を組み合わせて、再発を抑えたり、進行を抑えたりします。</div></div>
-    <div class="card" style="margin-bottom:8px"><b><i class="ti ti-radioactive" style="vertical-align:-2px;color:var(--teal)"></i> 放射線治療</b><div class="note" style="margin-top:4px;line-height:1.75">遠くに転移がない「局所進行・切除不能」では、薬物療法と組み合わせて行うことがあります。痛みを和らげる目的でも。</div></div>
-    <div class="card"><b><i class="ti ti-heart-plus" style="vertical-align:-2px;color:var(--teal)"></i> 緩和ケア</b><div class="note" style="margin-top:4px;line-height:1.75">痛みや消化の不調、気持ちのつらさを和らげます。早期から積極的に。</div></div>
-
-    <button class="btn" style="margin-top:10px;background:var(--teal-bg);color:var(--teal-d)" onclick="askAbout('すい臓がんの治療')"><i class="ti ti-message-question" style="vertical-align:-2px"></i> この治療で分からないことを、コンシェルジュに聞く</button>
-
-    <div id="pac_stage" style="font-size:16px;font-weight:600;margin:20px 0 8px">「切除できるか」別の選択</div>
-    <div class="sub" style="margin-bottom:8px">すい臓がんは、手術で取りきれるかどうかで治療の道すじが変わります。</div>
-    <div class="card" style="font-size:13px;line-height:1.75"><div style="padding:4px 0"><b style="color:var(--teal-d)">切除可能</b>：手術＋術前・術後の薬物療法。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">境界（ぎりぎり）</b>：まず薬物療法（必要に応じ放射線）でがんを抑え、可能なら手術を目指す。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">局所進行・切除不能</b>：薬物療法が中心。状況により放射線を併用。</div><div style="padding:8px 0;border-top:.5px solid var(--line)"><b style="color:var(--teal-d)">転移あり</b>：薬物療法でがんを抑える。つらさを和らげる治療も合わせて。</div></div>
-
-    <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--teal);font-size:14px;font-weight:600">食事・体重・黄疸のこと</summary><div class="note" style="margin-top:8px;line-height:1.8">すい臓は消化を助ける臓器のため、消化を補う薬（消化酵素）や、食べやすい工夫が役立ちます。体重が減りやすいので、栄養士に相談を。黄疸（皮膚や白目が黄色くなる）が出たときは、胆管にステント（管）を入れて流れをよくする処置をすることがあります。気になる症状は早めに医療者へ。</div></details>
-
-    <div id="pac_team" style="font-size:16px;font-weight:600;margin:20px 0 8px">この治療に関わる科（誰が何を）</div>
-    <div class="card" style="font-size:13px;line-height:1.8"><div style="display:flex;gap:8px;padding:3px 0"><b style="width:88px;flex-shrink:0;color:var(--blue-d)">消化器内科</b><span>診断・薬物療法。窓口になることが多い。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:88px;flex-shrink:0;color:var(--blue-d)">肝胆膵外科</b><span>手術を担当。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:88px;flex-shrink:0;color:var(--blue-d)">腫瘍内科</b><span>薬物療法の専門（病院により）。</span></div><div style="display:flex;gap:8px;padding:3px 0;border-top:.5px solid var(--line)"><b style="width:88px;flex-shrink:0;color:var(--blue-d)">放射線科/緩和</b><span>放射線・つらさの緩和。</span></div></div>
-    <div class="note" style="margin-top:10px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス「膵臓がん 治療」。SATOIがやさしく要約（公開時に専門医監修）。判断は主治医とご相談を。</div>
-    <div style="font-size:14px;font-weight:600;margin:18px 0 10px">次の一歩</div>
-    <div class="row2"><button class="tile" onclick="go('sdm')"><i class="ti ti-clipboard-heart" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">聞きたいことを整理</div></button><button class="tile" onclick="go('ai')"><i class="ti ti-sparkles" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">コンシェルジュに聞く</div></button><button class="tile" onclick="go('sopinion')"><i class="ti ti-messages" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">別の先生にも聞く</div></button><button class="tile" onclick="go('hospital')"><i class="ti ti-building-hospital" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">病院をさがす</div></button></div>
-    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
-  </div>
-</section>
 
 <!-- ============ やさしい動画にする（ナラティブ生成 v1） ============ -->
 <section class="scr" id="video">
