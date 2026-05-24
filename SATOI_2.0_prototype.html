@@ -364,12 +364,13 @@ window._oninit['account']=function(){
       <span class="ic" style="width:38px;height:38px;background:var(--teal-bg)"><i class="ti ti-sparkles" style="font-size:20px;color:var(--teal)"></i></span>
       <div><h1 class="h1">SATOIコンシェルジュ</h1><div class="sub">何も決めない夜も、そばにいます</div></div>
     </div>
-    <div class="note" style="margin-top:8px;font-size:11px;line-height:1.5"><i class="ti ti-shield-check" style="vertical-align:-2px;color:var(--teal)"></i> あなたの記録をふまえ、出典に基づいて答えます（推測で断定しません）。</div>
+    <div class="note" style="margin-top:8px;font-size:11px;line-height:1.5"><i class="ti ti-shield-heart" style="vertical-align:-2px;color:var(--teal)"></i> ここでは、どんなことでも話して大丈夫。あなたのことを大切に、いっしょに考えます。</div>
     <div id="cvLog" style="margin-top:14px;display:flex;flex-direction:column;gap:12px"></div>
     <div id="cvChips" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:14px">
-      <button class="chip amber" onclick="cvSend('この治療でいいのか不安')">この治療でいいのか不安</button>
+      <button class="chip amber" onclick="cvSend('子どもにどう伝えよう')">子どもにどう伝えよう</button>
+      <button class="chip amber" onclick="cvSend('親や家族にどう伝えよう')">親や家族にどう伝えよう</button>
       <button class="chip amber" onclick="cvSend('お金のことが心配')">お金のことが心配</button>
-      <button class="chip amber" onclick="cvSend('家族にどう伝えよう')">家族にどう伝えよう</button>
+      <button class="chip amber" onclick="cvSend('この治療でいいのか不安')">この治療でいいのか不安</button>
       <button class="chip amber" onclick="cvSend('眠れない')">眠れない</button>
     </div>
   </div>
@@ -406,25 +407,27 @@ function cvReply(text){
 function cvRender(d){var html=d.reply;if(d.src)html+='<div class="note" style="margin-top:7px;font-size:11px"><i class="ti ti-file-text"></i> '+d.src+'</div>';if(d.chips&&d.chips.length){html+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">';d.chips.forEach(function(c){html+='<button class="chip" style="font-size:11px" onclick="go(\''+c[1]+'\')">'+c[0]+'</button>';});html+='</div>';}cvBubble('ai',html);}
 async function cvAnswer(text){
   /* AIゲートウェイ(Netlify Function)があれば本物のAI、無ければローカルのルールベースにフォールバック */
+  /* ★会話履歴(window._cvHistory)も渡す：これでAIが「何ターン目か」を把握でき、3ターン目に必ず具体策を返す絶対ルールが効く */
   var d=null;
-  try{var r=await fetch('/.netlify/functions/concierge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})});if(r.ok){var j=await r.json();if(j&&j.reply)d={reply:j.reply,src:j.src||'',chips:j.chips||[]};}}catch(e){}
+  try{var r=await fetch('/.netlify/functions/concierge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,history:(window._cvHistory||[])})});if(r.ok){var j=await r.json();if(j&&j.reply)d={reply:j.reply,src:j.src||'',chips:j.chips||[]};}}catch(e){}
   if(!d)d=cvReply(text);
   cvRender(d);
+  if(d&&d.reply){window._cvHistory=(window._cvHistory||[]);window._cvHistory.push({role:'assistant',content:d.reply});}
 }
-function cvSend(text){if(!text)return;document.getElementById('cvChips').style.display='none';cvBubble('me',text);window._cvCount=(window._cvCount||0)+1;if(window._cvCount>8&&!window._isBansou){setTimeout(cvBansouGate,400);return;}setTimeout(function(){cvAnswer(text);},350);}
+function cvSend(text){if(!text)return;document.getElementById('cvChips').style.display='none';cvBubble('me',text);window._cvHistory=(window._cvHistory||[]);window._cvHistory.push({role:'user',content:text});window._cvCount=(window._cvCount||0)+1;if(window._cvCount>8&&!window._isBansou){setTimeout(cvBansouGate,400);return;}setTimeout(function(){cvAnswer(text);},350);}
 function cvBansouGate(){cvBubble('ai','今日は、無料でここまでお話ししました。もっと続けたい時は、<b>伴走</b>なら使った分だけで続けられます。あなたのペースで大丈夫ですよ。');var c=document.getElementById('cvChips');if(c){c.style.display="flex";c.innerHTML="<button class='chip amber' onclick=\"go('bansou_apply')\">伴走で続ける</button><button class='chip' onclick=\"go('support')\">つらい時の相談先</button>";}}
 function cvSendInput(){var i=document.getElementById('cvInput'),v=i.value.trim();if(!v)return;i.value='';cvSend(v);}
 /* 治療ページ等から「分からないことを聞く」で文脈を渡してコンシェルジュへ（SATOIのAI＝オーケストレーターのワンクッション＝何を読んでいたかを汲んでから応答） */
 function askAbout(topic){window._askTopic=topic;go('ai');}
 function cvSetChips(arr){var c=document.getElementById('cvChips');c.style.display='flex';c.innerHTML='';arr.forEach(function(t){var b=document.createElement('button');b.className='chip amber';b.textContent=t;b.onclick=function(){cvSend(t);};c.appendChild(b);});}
 window._oninit['ai']=function(){
-  var l=document.getElementById('cvLog');l.innerHTML='';window._cvCount=0;
+  var l=document.getElementById('cvLog');l.innerHTML='';window._cvCount=0;window._cvHistory=[];
   if(window._askTopic){
     var topic=window._askTopic;window._askTopic=null;
     cvBubble('ai','「'+topic+'」について、ですね。いま読んでいた内容をふまえて、できるだけやさしくお話しします。<br>どんなことが気になっていますか？　言葉にしづらければ、下から選んでも大丈夫です。');
     cvSetChips([topic+'を、もっとやさしく説明して',topic+'の副作用は？',topic+'にかかるお金は？','先生に聞いておくべきことは？']);
   }else{
-    cvSetChips(['この治療でいいのか不安','お金のことが心配','家族にどう伝えよう','眠れない']);
+    cvSetChips(['子どもにどう伝えよう','親や家族にどう伝えよう','お金のことが心配','この治療でいいのか不安','眠れない']);
     cvBubble('ai','こんばんは。SATOIコンシェルジュです。気になっていること、なんでも話してください。うまく言葉にできなくても大丈夫ですよ。');
   }
 };
