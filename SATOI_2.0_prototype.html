@@ -1006,25 +1006,32 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
 function _escHtml(s){return (s||'').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
 var artStyleSel='water';
 function pickArt(b){var all=document.querySelectorAll('#artStyle .asbtn');for(var i=0;i<all.length;i++){all[i].className='chip asbtn';}b.className='chip amber asbtn';artStyleSel=b.getAttribute('data-st');}
+var artImgs=[],curArt=0;
+function renderArt(){
+  var box=document.getElementById('weaveArt'); if(!box) return;
+  if(!artImgs.length){box.innerHTML='';return;}
+  var t='';
+  for(var i=0;i<artImgs.length;i++){t+='<img src="'+artImgs[i]+'" onclick="artPick('+i+')" style="width:54px;height:54px;object-fit:cover;border-radius:8px;cursor:pointer;border:'+(i===curArt?'2px solid var(--teal)':'2px solid rgba(0,0,0,.12)')+'">';}
+  box.innerHTML='<img src="'+artImgs[curArt]+'" alt="物語の挿絵" style="width:100%;border-radius:12px;display:block">'+
+    '<div class="note" style="margin-top:6px"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--amber)"></i> 気に入った1枚をタップで選んで「壺に残す」（全'+artImgs.length+'枚）</div>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">'+t+'</div>'+
+    '<button class="btn btn-out" style="margin-top:10px;color:var(--amber);border-color:var(--amber-line)" onclick="illustrateStory()"><i class="ti ti-refresh" style="vertical-align:-2px"></i> もう一枚つくる</button>';
+}
+function artPick(i){curArt=i;renderArt();}
 async function illustrateStory(){
   var box=document.getElementById('weaveArt'); if(!box) return;
   var txt=((document.getElementById('weaveText')||{}).textContent||'').trim();
-  box.innerHTML='<div class="note" style="display:flex;align-items:center;gap:8px;color:var(--amber-t)"><i class="ti ti-sparkles" style="color:var(--amber)"></i> SATOIが物語を読んで、絵を思い描いています…</div>';
+  box.innerHTML='<div class="note" style="display:flex;align-items:center;gap:8px;color:var(--amber-t)"><i class="ti ti-sparkles" style="color:var(--amber)"></i> SATOIが絵を思い描いています…（'+(artImgs.length?'もう一枚':'1枚目')+'）</div>';
   var d=null;
   try{var r=await fetch('/.netlify/functions/illustrate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({story:txt,style:artStyleSel})});if(r.ok)d=await r.json();}catch(e){}
-  if(d&&d.ok&&d.image){
-    box.innerHTML='<img src="'+d.image+'" alt="物語の挿絵" style="width:100%;border-radius:12px;display:block">'+
-      '<div class="note" style="margin-top:6px"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--amber)"></i> SATOIがあなたの物語から思い描いた一枚です</div>'+
-      '<button class="btn btn-out" style="margin-top:8px;color:var(--amber);border-color:var(--amber-line)" onclick="illustrateStory()"><i class="ti ti-refresh" style="vertical-align:-2px"></i> 別の絵にする（もう一枚）</button>';
-  }else if(d&&d.prompt){
-    box.innerHTML='<div style="background:#fff;border:.5px dashed #E7C99A;border-radius:12px;padding:12px">'+
-      '<div class="note" style="color:var(--amber-t)"><i class="ti ti-palette" style="vertical-align:-2px;color:var(--amber)"></i> SATOIが、この物語のためにこんな絵を思い描きました：</div>'+
-      '<div style="font-size:12px;color:var(--sub);line-height:1.7;margin-top:6px;font-style:italic">'+_escHtml(d.prompt)+'</div>'+
-      '<div class="note" style="margin-top:6px">※ 絵そのものの生成は、ただいま準備中です。</div></div>';
-  }else{
-    box.innerHTML='<div class="note" style="color:var(--amber-t)">いま絵を用意できませんでした。少し待って、もう一度お試しください。</div>';
-  }
+  if(d&&d.ok&&d.image){ artImgs.push(d.image); curArt=artImgs.length-1; renderArt(); }
+  else if(d&&d.prompt){
+    if(artImgs.length){renderArt();}
+    else{ box.innerHTML='<div style="background:#fff;border:.5px dashed #E7C99A;border-radius:12px;padding:12px"><div class="note" style="color:var(--amber-t)"><i class="ti ti-palette" style="vertical-align:-2px;color:var(--amber)"></i> SATOIが、この物語のためにこんな絵を思い描きました：</div><div style="font-size:12px;color:var(--sub);line-height:1.7;margin-top:6px;font-style:italic">'+_escHtml(d.prompt)+'</div><div class="note" style="margin-top:6px">※ いま画像が用意できませんでした。少し待ってもう一度。</div></div>'; }
+  }else{ if(artImgs.length){renderArt();} else { box.innerHTML='<div class="note" style="color:var(--amber-t)">いま絵を用意できませんでした。少し待って、もう一度お試しください。</div>'; } }
 }
+window._oninit=window._oninit||{};
+window._oninit['aiweave']=function(){artImgs=[];curArt=0;var b=document.getElementById('weaveArt');if(b)b.innerHTML='';};
 </script>
 
 <!-- ============ 先輩の物語 ============ -->
