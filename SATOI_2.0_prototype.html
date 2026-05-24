@@ -1004,8 +1004,8 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
 <script>
 /* === 物語の挿絵（SATOIのワンクッション：Claudeが物語を理解して絵のプロンプトを書く→Geminiが描く） === */
 function _escHtml(s){return (s||'').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
-var artStyleSel='water';
-function pickArt(b){var all=document.querySelectorAll('#artStyle .asbtn');for(var i=0;i<all.length;i++){all[i].className='chip asbtn';}b.className='chip amber asbtn';artStyleSel=b.getAttribute('data-st');}
+var artStyleSel='water', artBusy=false;
+function pickArt(b){if(artBusy)return;var all=document.querySelectorAll('#artStyle .asbtn');for(var i=0;i<all.length;i++){all[i].className='chip asbtn';}b.className='chip amber asbtn';artStyleSel=b.getAttribute('data-st');illustrateStory();}
 var artImgs=[],curArt=0;
 function renderArt(){
   var box=document.getElementById('weaveArt'); if(!box) return;
@@ -1019,11 +1019,15 @@ function renderArt(){
 }
 function artPick(i){curArt=i;renderArt();}
 async function illustrateStory(){
-  var box=document.getElementById('weaveArt'); if(!box) return;
+  var box=document.getElementById('weaveArt'); if(!box||artBusy) return;
   var txt=((document.getElementById('weaveText')||{}).textContent||'').trim();
-  box.innerHTML='<div class="note" style="display:flex;align-items:center;gap:8px;color:var(--amber-t)"><i class="ti ti-sparkles" style="color:var(--amber)"></i> SATOIが絵を思い描いています…（'+(artImgs.length?'もう一枚':'1枚目')+'）</div>';
+  artBusy=true;
+  var sn={water:'やわらかい水彩',real:'実写風',ghibli:'ジブリのような',anime:'アニメ',ehon:'夜明けの絵本',cinema:'シネマティック'}[artStyleSel]||'';
+  box.innerHTML='<div class="card" style="background:#fff;border:.5px solid var(--amber-line);text-align:center;padding:18px"><span class="ic" style="width:40px;height:40px;background:var(--amber-bg);margin:0 auto"><i class="ti ti-sparkles" style="font-size:22px;color:var(--amber)"></i></span><div style="font-size:13px;font-weight:600;color:var(--amber-t);margin-top:10px">SATOIが「'+sn+'」で絵を描いています…</div><div class="note" style="margin-top:4px">10〜20秒ほどお待ちください</div></div>';
+  try{box.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}
   var d=null;
   try{var r=await fetch('/.netlify/functions/illustrate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({story:txt,style:artStyleSel})});if(r.ok)d=await r.json();}catch(e){}
+  artBusy=false;
   if(d&&d.ok&&d.image){ artImgs.push(d.image); curArt=artImgs.length-1; renderArt(); }
   else if(d&&d.prompt){
     if(artImgs.length){renderArt();}
