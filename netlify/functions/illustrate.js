@@ -37,9 +37,10 @@ exports.handler = async (event) => {
   let payload = {};
   try { payload = JSON.parse(event.body || '{}'); } catch (e) {}
   const story = (payload.story || '').toString().slice(0, 3000).trim();
+  const directPrompt = (payload.prompt || '').toString().slice(0, 1500).trim();
 
-  if (!story) {
-    return json(200, { ok: false, reason: '物語が空です' });
+  if (!story && !directPrompt) {
+    return json(200, { ok: false, reason: '物語またはプロンプトが空です' });
   }
 
   const anthropicKey = process.env.ANTHROPIC_API_KEY;
@@ -48,8 +49,9 @@ exports.handler = async (event) => {
   const imageModel = process.env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image';
 
   // ---- ① Claude が「絵のプロンプト」を書く（SATOIのワンクッション） ----
-  let prompt = '';
-  if (anthropicKey) {
+  // 直接プロンプトが渡された場合はそれを使う（Claude/Anthropic鍵が無くてもGeminiだけで動く）
+  let prompt = directPrompt;
+  if (!prompt && anthropicKey) {
     try {
       const r = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
