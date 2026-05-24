@@ -980,7 +980,16 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
     <div id="weaveSum" style="display:none;margin-top:10px;background:var(--amber-bg2);border:.5px solid #F0DBB6;border-radius:14px;padding:14px">
       <div style="font-size:12px;color:var(--amber);font-weight:600;margin-bottom:6px"><i class="ti ti-quote"></i> あなたの物語（下書き）</div>
       <div id="weaveText" style="font-size:13px;color:var(--amber-t);line-height:1.7">眠れない夜が続いたけれど、窓の外の明るさや、あたたかいお茶に、ふと心がほどける瞬間があった。私は、私のペースで歩いている。</div>
-      <button class="btn btn-out" style="margin-top:12px;color:var(--amber);border-color:var(--amber-line)" onclick="illustrateStory()"><i class="ti ti-photo-heart" style="vertical-align:-2px;color:var(--amber)"></i> この物語に、やさしい絵をそえる</button>
+      <div style="font-size:11px;color:var(--amber-t);font-weight:600;margin-top:12px">絵のタイプ</div>
+      <div id="artStyle" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
+        <button class="chip amber asbtn" data-st="water" onclick="pickArt(this)">やわらかい水彩</button>
+        <button class="chip asbtn" data-st="real" onclick="pickArt(this)">実写風</button>
+        <button class="chip asbtn" data-st="ghibli" onclick="pickArt(this)">ジブリのような</button>
+        <button class="chip asbtn" data-st="anime" onclick="pickArt(this)">アニメ</button>
+        <button class="chip asbtn" data-st="ehon" onclick="pickArt(this)">夜明けの絵本</button>
+        <button class="chip asbtn" data-st="cinema" onclick="pickArt(this)">シネマティック</button>
+      </div>
+      <button class="btn btn-out" style="margin-top:10px;color:var(--amber);border-color:var(--amber-line)" onclick="illustrateStory()"><i class="ti ti-photo-heart" style="vertical-align:-2px;color:var(--amber)"></i> この物語を、絵にする</button>
       <div id="weaveArt" style="margin-top:12px"></div>
       <div style="display:flex;gap:8px;margin-top:12px">
         <button class="btn btn-teal" style="padding:10px" onclick="saved('物語を、壺に残しました')">壺に残す</button>
@@ -995,15 +1004,18 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
 <script>
 /* === 物語の挿絵（SATOIのワンクッション：Claudeが物語を理解して絵のプロンプトを書く→Geminiが描く） === */
 function _escHtml(s){return (s||'').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+var artStyleSel='water';
+function pickArt(b){var all=document.querySelectorAll('#artStyle .asbtn');for(var i=0;i<all.length;i++){all[i].className='chip asbtn';}b.className='chip amber asbtn';artStyleSel=b.getAttribute('data-st');}
 async function illustrateStory(){
   var box=document.getElementById('weaveArt'); if(!box) return;
   var txt=((document.getElementById('weaveText')||{}).textContent||'').trim();
-  box.innerHTML='<div class="note" style="display:flex;align-items:center;gap:8px;color:var(--amber-t)"><i class="ti ti-sparkles" style="color:var(--amber)"></i> SATOIが物語を読んで、やさしい絵を思い描いています…</div>';
+  box.innerHTML='<div class="note" style="display:flex;align-items:center;gap:8px;color:var(--amber-t)"><i class="ti ti-sparkles" style="color:var(--amber)"></i> SATOIが物語を読んで、絵を思い描いています…</div>';
   var d=null;
-  try{var r=await fetch('/.netlify/functions/illustrate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({story:txt})});if(r.ok)d=await r.json();}catch(e){}
+  try{var r=await fetch('/.netlify/functions/illustrate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({story:txt,style:artStyleSel})});if(r.ok)d=await r.json();}catch(e){}
   if(d&&d.ok&&d.image){
     box.innerHTML='<img src="'+d.image+'" alt="物語の挿絵" style="width:100%;border-radius:12px;display:block">'+
-      '<div class="note" style="margin-top:6px"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--amber)"></i> SATOIがあなたの物語から思い描いた一枚です</div>';
+      '<div class="note" style="margin-top:6px"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--amber)"></i> SATOIがあなたの物語から思い描いた一枚です</div>'+
+      '<button class="btn btn-out" style="margin-top:8px;color:var(--amber);border-color:var(--amber-line)" onclick="illustrateStory()"><i class="ti ti-refresh" style="vertical-align:-2px"></i> 別の絵にする（もう一枚）</button>';
   }else if(d&&d.prompt){
     box.innerHTML='<div style="background:#fff;border:.5px dashed #E7C99A;border-radius:12px;padding:12px">'+
       '<div class="note" style="color:var(--amber-t)"><i class="ti ti-palette" style="vertical-align:-2px;color:var(--amber)"></i> SATOIが、この物語のためにこんな絵を思い描きました：</div>'+
