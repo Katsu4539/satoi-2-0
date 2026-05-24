@@ -361,6 +361,10 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
     </div>
     <button class="btn btn-out" style="margin-top:14px" onclick="go('onboarding')"><i class="ti ti-refresh" style="vertical-align:-2px"></i> 連携を追加・変更</button>
     <button class="btn btn-out" style="margin-top:10px;color:var(--sub)" onclick="go('consent')"><i class="ti ti-trash" style="vertical-align:-2px"></i> 退会・データの削除</button>
+    <div style="margin-top:22px;border-top:.5px dashed var(--line2);padding-top:12px">
+      <div class="note" style="font-size:11px;color:var(--hint);letter-spacing:.5px">運営メニュー</div>
+      <button class="btn btn-out" style="margin-top:8px;padding:9px;font-size:12px;color:var(--mute)" onclick="go('imgstudio')"><i class="ti ti-photo-ai" style="vertical-align:-2px"></i> 画像スタジオ（サイト画像をGeminiで生成）</button>
+    </div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -1043,6 +1047,7 @@ window._oninit['aiweave']=function(){artImgs=[];curArt=0;var b=document.getEleme
    正本は img/aoi_<key>.jpg（commitで全端末に焼き込み）。生成画像はin-memory＋localStorage(容量超過は安全に無視)。
    カテゴリ：aoi=葵さんの個人アルバム / world=物語の世界 / hero=主要ヒーロー / can=がん種ヘッダー */
 var ART_SAFE='photorealistic, warm natural light, hopeful and calm, gentle film grain, no faces in sharp focus, no people identifiable, no text, no words, no logos, no graphic medical imagery';
+var KID_SAFE='soft hand-drawn childrens picture-book illustration style, gentle rounded shapes, warm pastel colors, cozy and reassuring, age-appropriate for young children, absolutely not scary, no text, no words, no letters, no logos, no realistic medical equipment, no needles, no blood';
 var AOI_SCENES={
   /* ① 葵さんの個人アルバム */
   taiin:{cat:'aoi',label:'退院の朝',p:'A photoreal candid photo of a mother in her late 30s at home in soft morning light, seen from behind or side, gently with two young children near a breakfast table. Warm cream and amber tones, natural window light, tender and hopeful, '+ART_SAFE+', no medical items.'},
@@ -1092,7 +1097,15 @@ var AOI_SCENES={
   can_brain:{cat:'can',label:'脳腫瘍',p:'A soft abstract dawn sky with gentle grey-to-amber gradient light and a single calm star fading, quiet and hopeful, no people, '+ART_SAFE+'.'},
   can_thyroid:{cat:'can',label:'甲状腺がん',p:'A gentle calm dawn over a quiet meadow with soft teal and amber morning light, reassuring and hopeful, no people, '+ART_SAFE+'.'},
   can_melanoma:{cat:'can',label:'皮膚がん',p:'A soft warm morning over a calm landscape with gentle shade and dappled light, protective and hopeful, no people, '+ART_SAFE+'.'},
-  can_cup:{cat:'can',label:'原発不明がん',p:'A quiet dawn over an open calm horizon with a gentle path appearing through soft mist, finding a way forward, hopeful, no people, '+ART_SAFE+'.'}
+  can_cup:{cat:'can',label:'原発不明がん',p:'A quiet dawn over an open calm horizon with a gentle path appearing through soft mist, finding a way forward, hopeful, no people, '+ART_SAFE+'.'},
+  /* ⑤ こども向け（やさしい絵本調イラスト・こわくない・希望・顔や文字なし） */
+  kid_home:{cat:'kids',label:'こどものおうち',p:'A warm gentle childrens picture-book illustration of a sunny cozy room: a windowsill with a small potted plant, colorful crayon drawings taped to the wall, a soft teddy bear and folded paper crane, bright hopeful morning light, soft rounded shapes, pastel cream peach and mint colors, tender and safe, '+KID_SAFE+'.'},
+  kid_mom:{cat:'kids',label:'おかあさんと つながる',p:'A tender childrens picture-book illustration of a small soft heart-shaped light connecting two cupped hands (a big hand and a little hand) reaching toward each other, warm glowing thread of light between them, soft pastel peach and rose, gentle and loving, '+KID_SAFE+'.'},
+  kid_cell:{cat:'kids',label:'からだの ちいさなつぶ',p:'A friendly childrens picture-book illustration of many tiny round soft cells like cute pastel bubbles or dots floating together gently, soft mint and cream, smiling-calm and non-scary, simple rounded shapes, '+KID_SAFE+'.'},
+  kid_grow:{cat:'kids',label:'ふえすぎた つぶ',p:'A gentle non-scary childrens picture-book illustration of one little round dot that has multiplied into a small soft cluster, set apart kindly from the other calm dots, soft muted pastel, explained simply and reassuringly, not frightening, '+KID_SAFE+'.'},
+  kid_medicine:{cat:'kids',label:'がんばる おくすり',p:'A brave hopeful childrens picture-book illustration of friendly little round helper characters with tiny shields gently caring for soft glowing dots, warm teal and amber, courageous and kind, hopeful, '+KID_SAFE+'.'},
+  kid_support:{cat:'kids',label:'みんなで たすける',p:'A warm childrens picture-book illustration of many gentle cupped hands of different sizes gathered softly around a small glowing light, like a family and doctors all helping together, warm amber and cream, safe and surrounded by love, no detailed faces, '+KID_SAFE+'.'},
+  kid_treasure:{cat:'kids',label:'たからもの',p:'A cheerful childrens picture-book illustration of a treasure box overflowing with crayon drawings, photos, paper stars and a small heart, warm and joyful, soft rounded shapes, pastel colors, '+KID_SAFE+'.'}
 };
 var AOI_DATA={}; /* このセッションで生成したdataURL（localStorage容量に依存しない） */
 function lsGet(k){try{return localStorage.getItem('satoi_img_'+k);}catch(e){return null;}}
@@ -1611,29 +1624,69 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
   </div>
 </section>
 
-<!-- ============ こどもビュー（F4・守る設計） ============ -->
+<!-- ============ こどもマイページ（F4・守る設計＋つなぐ・子の“おうち”） ============ -->
 <section class="scr" id="famchild">
   <div class="pad">
     <button class="back" onclick="go('family')"><i class="ti ti-arrow-left"></i> 戻る</button>
-    <div style="margin-top:6px;font-size:12px;color:#9a7a52;font-weight:600">SATOI ・ こども</div>
-    <h1 class="h1" style="margin-top:6px;color:#8a4b1f">おかあさんと、つながってるよ</h1>
-    <div class="card" style="margin-top:14px;background:#FFF7EF;border:.5px solid #F3DEC6;display:flex;gap:13px;align-items:center">
-      <span class="ic ic46" style="background:#FAE7D2;flex-shrink:0"><i class="ti ti-sun" style="font-size:26px;color:#D8842F"></i></span>
-      <div style="font-size:15px;line-height:1.85;color:#6b4424">おかあさんは いま、<b>げんきに なるための おくすりを がんばって いるよ。</b></div>
+
+    <!-- 保護者向けの案内（家族画面から開いたとき。とじられる） -->
+    <div id="kidParentNote" style="margin-top:8px;background:#EAF0F6;border:.5px solid #D4E0EE;border-radius:12px;padding:11px 13px">
+      <div style="display:flex;align-items:flex-start;gap:9px">
+        <i class="ti ti-shield-heart" style="font-size:18px;color:var(--blue);flex-shrink:0;margin-top:1px"></i>
+        <div style="flex:1;font-size:12px;line-height:1.75;color:var(--blue-d)"><b>これは、お子さん・お孫さんに見える画面（プレビュー）です。</b><br>あなたが招待し、承認したあとに、お子さんは自分の端末でこの画面を開けます。<b>見せる内容はあなたが選べます。</b>こわい話や大人の医療の詳細は出ません。課金や手配はできません。</div>
+        <button onclick="this.closest('#kidParentNote').style.display='none'" style="background:none;border:none;color:var(--blue);font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0">とじる</button>
+      </div>
+    </div>
+
+    <div style="margin-top:10px;font-size:12px;color:#9a7a52;font-weight:600">SATOI ・ こども</div>
+
+    <!-- 子の“おうち”ヒーロー（やさしい絵本調・Gemini差込口） -->
+    <div style="margin-top:8px;border-radius:20px;overflow:hidden;position:relative;height:138px;background:linear-gradient(135deg,#FFF1DD 0%,#FBE3C9 45%,#E7F4EC 100%)">
+      <img data-aoi="kid_home" src="img/aoi_kid_home.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+      <div style="position:absolute;inset:0;display:flex;align-items:center;gap:10px;padding:0 18px">
+        <span style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.78);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.08)"><i class="ti ti-mood-kid" style="font-size:30px;color:#E8842F"></i></span>
+        <div><div style="font-size:19px;font-weight:700;color:#8a4b1f;text-shadow:0 1px 6px rgba(255,255,255,.6)">みさきちゃんの おへや</div><div style="font-size:12px;color:#9a6a3c;margin-top:2px">おかあさんと つながって いるよ</div></div>
+      </div>
+      <span style="position:absolute;top:9px;right:9px;display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.82);border-radius:999px;padding:3px 9px;font-size:9px;color:#9a6a3c;font-weight:600"><i class="ti ti-sparkles"></i> やさしい絵で（Gemini）</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;justify-content:center;margin-top:8px;font-size:11px;color:#b39873"><i class="ti ti-circle-check" style="color:var(--teal)"></i> おうちの人が しょうたいして くれた、あなただけの ページ</div>
+
+    <!-- おかあさんと つながる -->
+    <div class="card" style="margin-top:14px;background:#FFF7EF;border:.5px solid #F3DEC6">
+      <div style="display:flex;gap:12px;align-items:center">
+        <span style="width:48px;height:48px;border-radius:14px;overflow:hidden;flex-shrink:0;position:relative;background:linear-gradient(135deg,#F7C9D8,#FBE3C9)"><img data-aoi="kid_mom" src="img/aoi_kid_mom.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><i class="ti ti-heart" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;color:#fff"></i></span>
+        <div style="flex:1;font-size:14px;line-height:1.8;color:#6b4424">おかあさんは いま、<b>げんきに なるための おくすりを がんばって いるよ。</b></div>
+      </div>
     </div>
     <div style="font-size:13px;font-weight:600;color:var(--rose);margin:15px 0 8px"><i class="ti ti-message-2-heart"></i> おかあさんからの ことば</div>
     <div style="background:var(--rose-bg);border-radius:14px;padding:14px 15px;font-size:15px;line-height:1.9;color:#7a2b46">「きょうは よく ねむれたよ。おにわの あじさいが さいたよ。はやく あいたいな。」</div>
-    <div style="font-size:13px;color:#6b4424;text-align:center;margin-top:18px">あなたの きもちを、おくろう</div>
+    <button class="btn btn-out" style="margin-top:10px;padding:10px;color:var(--rose);border-color:#F3DEC6" onclick="go('famview')"><i class="ti ti-eye" style="vertical-align:-2px"></i> おかあさんの ようすを みる</button>
+
+    <!-- わたしの たからもの（子が自分の絵・写真を入れる“自分のページ”） -->
+    <div style="display:flex;align-items:center;gap:7px;margin:18px 0 9px"><i class="ti ti-stars" style="color:#E8842F;font-size:18px"></i><span style="font-size:14px;font-weight:700;color:#8a4b1f">わたしの たからもの</span><span style="margin-left:auto;font-size:11px;color:#b39873">えや しゃしんを いれてね</span></div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+      <button class="kidcell" onclick="toast('えを かいて、たからものに いれよう！')" style="aspect-ratio:1/1;border:none;border-radius:14px;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,#FDE9C8,#F8C8A0)"><i class="ti ti-palette" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;color:#fff"></i><span style="position:absolute;left:0;right:0;bottom:0;padding:3px 6px;font-size:9px;color:#fff;background:linear-gradient(180deg,transparent,rgba(0,0,0,.4))">かいた え</span></button>
+      <button class="kidcell" onclick="toast('おかあさんとの しゃしんだよ')" style="aspect-ratio:1/1;border:none;border-radius:14px;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,#F7E6EC,#FAD9A6)"><img data-aoi="shokutaku" src="img/aoi_shokutaku.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><i class="ti ti-camera" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;color:rgba(255,255,255,.92)"></i><span style="position:absolute;left:0;right:0;bottom:0;padding:3px 6px;font-size:9px;color:#fff;background:linear-gradient(180deg,transparent,rgba(0,0,0,.45))">かぞくの ごはん</span></button>
+      <button class="kidcell" onclick="toast('おかあさんとの しゃしんだよ')" style="aspect-ratio:1/1;border:none;border-radius:14px;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,#E1F5EE,#FBEEDE)"><img data-aoi="taiin" src="img/aoi_taiin.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><i class="ti ti-camera" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;color:rgba(255,255,255,.92)"></i><span style="position:absolute;left:0;right:0;bottom:0;padding:3px 6px;font-size:9px;color:#fff;background:linear-gradient(180deg,transparent,rgba(0,0,0,.45))">おうちの あさ</span></button>
+      <button class="kidcell" onclick="toast('おりがみの しゃしん')" style="aspect-ratio:1/1;border:none;border-radius:14px;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,#EAF0F6,#F7E6EC)"><img data-aoi="origami" src="img/aoi_origami.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><i class="ti ti-camera" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;color:rgba(255,255,255,.92)"></i><span style="position:absolute;left:0;right:0;bottom:0;padding:3px 6px;font-size:9px;color:#fff;background:linear-gradient(180deg,transparent,rgba(0,0,0,.45))">おりがみ</span></button>
+      <button class="kidcell" onclick="toast('おてがみを かこう！')" style="aspect-ratio:1/1;border:none;border-radius:14px;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,#E7F4EC,#CDEFE0)"><i class="ti ti-pencil-heart" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;color:#3FA98C"></i><span style="position:absolute;left:0;right:0;bottom:0;padding:3px 6px;font-size:9px;color:#2e6b58;background:linear-gradient(180deg,transparent,rgba(255,255,255,.5))">おてがみ</span></button>
+      <button class="kidcell" onclick="toast('しゃしんや えを ふやせるよ')" style="aspect-ratio:1/1;border:1.5px dashed #E3C9A6;border-radius:14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#FFFBF4;color:#C99A5E"><i class="ti ti-plus" style="font-size:26px"></i><span style="font-size:10px;font-weight:600;margin-top:3px">ふやす</span></button>
+    </div>
+
+    <!-- きもちを おくる -->
+    <div style="font-size:13px;color:#6b4424;text-align:center;margin-top:20px">あなたの きもちを、おかあさんに おくろう</div>
     <div style="display:flex;gap:10px;margin-top:12px">
-      <button class="tile" style="flex:1;background:var(--teal);border:none" onclick="toast('えを おくったよ！')"><i class="ti ti-palette" style="font-size:24px;color:#fff"></i><div style="font-size:13px;font-weight:600;margin-top:6px;color:#fff">えを かく</div></button>
+      <button class="tile" style="flex:1;background:var(--teal);border:none" onclick="toast('えを おくったよ！おかあさんに とどくよ')"><i class="ti ti-palette" style="font-size:24px;color:#fff"></i><div style="font-size:13px;font-weight:600;margin-top:6px;color:#fff">えを かく</div></button>
       <button class="tile" style="flex:1" onclick="toast('メッセージを おくったよ！')"><i class="ti ti-pencil-heart" style="font-size:24px;color:#E8842F"></i><div style="font-size:13px;font-weight:600;margin-top:6px">メッセージ</div></button>
       <button class="tile" style="flex:1" onclick="go('voicerec')"><i class="ti ti-microphone" style="font-size:24px;color:var(--rose)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">こえで</div></button>
     </div>
+
     <button class="btn btn-teal" style="margin-top:16px" onclick="go('kidsmode')"><i class="ti ti-book" style="vertical-align:-2px"></i> がんのことを、やさしく しる</button>
-    <div class="note" style="margin-top:12px;line-height:1.65"><i class="ti ti-shield-heart" style="vertical-align:-2px"></i> おうちの人が、見せる内容を やさしく えらんでいます。</div>
+    <div class="note" style="margin-top:12px;line-height:1.65"><i class="ti ti-shield-heart" style="vertical-align:-2px"></i> おうちの人が、見せる内容を やさしく えらんでいます。こわいことは でてきません。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの きもちは、あなたの もの</div>
   </div>
 </section>
+<script>window._oninit=window._oninit||{};window._oninit['famchild']=function(){var n=document.getElementById('kidParentNote');if(n)n.style.display='block';};</script>
 
 <!-- ============ こどもモード（中身を子どもにやさしく翻訳・守る設計） ============ -->
 <section class="scr" id="kidsmode">
@@ -1642,16 +1695,34 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
     <div style="margin-top:6px;font-size:12px;color:#9a7a52;font-weight:600">SATOI ・ こども</div>
     <h1 class="h1" style="margin-top:6px;color:#8a4b1f">がんって、なに？</h1>
     <div class="sub">おうちの人と いっしょに みてね</div>
-    <div style="margin-top:14px;height:120px;border-radius:16px;overflow:hidden;background:#FFF7EF;border:.5px solid #F3DEC6;position:relative;display:flex;align-items:center;justify-content:center;gap:12px">
-      <img data-aoi="hero_kids" src="img/aoi_hero_kids.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-      <i class="ti ti-cells" style="font-size:36px;color:#9FB89F;position:relative"></i>
-      <i class="ti ti-arrow-right" style="font-size:20px;color:#C9B79C;position:relative"></i>
-      <i class="ti ti-shield-heart" style="font-size:36px;color:#E8842F;position:relative"></i>
+    <!-- やさしいアニメ（動画）の差込口：Gemini映像が入る。今は再生でじゅんび中の案内 -->
+    <div style="margin-top:14px;border-radius:18px;overflow:hidden;position:relative;height:188px;background:linear-gradient(150deg,#FFEFD6,#FBD9B3 50%,#CDEFE0)">
+      <img data-aoi="kid_home" src="img/aoi_kid_home.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(80,50,20,.32))"></div>
+      <button onclick="toast('やさしいアニメは、いま じゅんびちゅう だよ')" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.9);border:none;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.18)"><i class="ti ti-player-play" style="font-size:28px;color:#E8842F"></i></button>
+      <div style="position:absolute;left:14px;bottom:12px;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.4)"><div style="font-size:15px;font-weight:700">やさしい アニメで みる</div><div style="font-size:11px;opacity:.95">おうちの人と いっしょに</div></div>
+      <span style="position:absolute;top:9px;right:9px;display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.82);border-radius:999px;padding:3px 9px;font-size:9px;color:#9a6a3c;font-weight:600"><i class="ti ti-sparkles"></i> Gemini映像が入ります</span>
     </div>
-    <div class="note" style="text-align:center;margin-top:5px;color:#b39873">やさしい絵で、つたえます</div>
-    <div style="margin-top:14px;font-size:15px;line-height:2;color:#5a4631">からだは、ちいさな つぶ（さいぼう）が たくさん あつまって できているよ。<br>ときどき その つぶの ひとつが、まちがえて ふえすぎちゃうことが あるんだ。それが「がん」。</div>
-    <div style="margin-top:12px;background:var(--teal-bg);border-radius:14px;padding:13px 15px;font-size:15px;line-height:2;color:var(--teal-d)">おかあさんの からだは いま、その つぶを やっつける おくすりを がんばっているよ。<br>お医者さんも、たくさんの人も、みんなで たすけているからね。</div>
-    <div style="margin-top:14px;display:flex;gap:10px;align-items:center;background:var(--rose-bg);border-radius:14px;padding:13px 15px">
+
+    <!-- 絵本のように一場面ずつ（やさしい絵本調イラストの差込口） -->
+    <div style="margin-top:16px;display:flex;gap:12px;align-items:center">
+      <span style="width:64px;height:64px;border-radius:18px;overflow:hidden;flex-shrink:0;position:relative;background:linear-gradient(135deg,#E7F4EC,#CDEFE0)"><img data-aoi="kid_cell" src="img/aoi_kid_cell.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><i class="ti ti-circles" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;color:#7FC9AC"></i></span>
+      <div style="flex:1;font-size:15px;line-height:1.9;color:#5a4631">からだは、ちいさな <b>つぶ（さいぼう）</b>が たくさん あつまって できているよ。</div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;align-items:center">
+      <span style="width:64px;height:64px;border-radius:18px;overflow:hidden;flex-shrink:0;position:relative;background:linear-gradient(135deg,#FBE3C9,#F8C8A0)"><img data-aoi="kid_grow" src="img/aoi_kid_grow.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><i class="ti ti-grain" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;color:#E0A45E"></i></span>
+      <div style="flex:1;font-size:15px;line-height:1.9;color:#5a4631">ときどき その つぶの ひとつが、まちがえて <b>ふえすぎちゃう</b>ことが あるんだ。それが「がん」。</div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;align-items:center;background:var(--teal-bg);border-radius:16px;padding:12px 13px">
+      <span style="width:64px;height:64px;border-radius:18px;overflow:hidden;flex-shrink:0;position:relative;background:linear-gradient(135deg,#CFEFE3,#9FE1CB)"><img data-aoi="kid_medicine" src="img/aoi_kid_medicine.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><i class="ti ti-shield-heart" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;color:#2E9C7E"></i></span>
+      <div style="flex:1;font-size:15px;line-height:1.9;color:var(--teal-d)">おかあさんの からだは いま、その つぶを やっつける <b>おくすりを がんばっている</b>よ。</div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;align-items:center">
+      <span style="width:64px;height:64px;border-radius:18px;overflow:hidden;flex-shrink:0;position:relative;background:linear-gradient(135deg,#FBE9D2,#F7D8B0)"><img data-aoi="kid_support" src="img/aoi_kid_support.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><i class="ti ti-friends" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;color:#D8842F"></i></span>
+      <div style="flex:1;font-size:15px;line-height:1.9;color:#5a4631">お医者さんも、たくさんの人も、<b>みんなで たすけている</b>からね。</div>
+    </div>
+
+    <div style="margin-top:16px;display:flex;gap:10px;align-items:center;background:var(--rose-bg);border-radius:14px;padding:13px 15px">
       <i class="ti ti-mood-heart" style="font-size:24px;color:var(--rose)"></i>
       <div style="font-size:14px;line-height:1.8;color:#7a2b46">こわい きもちに なったら、おうちの人に はなして いいんだよ。</div>
     </div>
@@ -1763,10 +1834,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
       <div style="aspect-ratio:1/1;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(135deg,#F7E6EC,#F4C0D1 70%,#FBEEDE)"><i class="ti ti-camera" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:20px;color:rgba(255,255,255,.9)"></i><img data-aoi="kodomo_e" src="img/aoi_kodomo_e.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:0;right:0;bottom:0;padding:4px 6px;font-size:9px;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.5))">子どもの絵</span></div>
       <div style="aspect-ratio:1/1;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(135deg,#EAF0F6,#FBEEDE 70%,#F4C0D1)"><i class="ti ti-camera" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:20px;color:rgba(255,255,255,.9)"></i><img data-aoi="kami" src="img/aoi_kami.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:0;right:0;bottom:0;padding:4px 6px;font-size:9px;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.5))">髪のこと</span></div>
     </div>
-    <button class="btn btn-out" style="margin-top:8px;padding:9px;font-size:13px" onclick="genAoiAll(this,'aoi')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> ① 葵さんの写真をAIで作る（Gemini・8枚）</button>
-    <button class="btn btn-out" style="margin-top:8px;padding:9px;font-size:13px" onclick="downloadAoi('aoi')"><i class="ti ti-download" style="vertical-align:-2px"></i> ② 生成した写真を保存（img/へ・commit用）</button>
-    <button class="btn btn-teal" style="margin-top:8px;padding:9px;font-size:13px" onclick="go('imgstudio')"><i class="ti ti-photo-ai" style="vertical-align:-2px"></i> サイト全体の画像をまとめて作る（画像スタジオ）</button>
-    <div class="note" style="margin-top:5px;font-size:11px">①で生成 → ②でダウンロード → <b>img/ に置いて commit</b> すれば、誰の端末でも恒久表示に。サイト全体（がん種ヘッダー・物語の世界・各ヒーロー）は「画像スタジオ」でまとめて。</div>
+    <div class="note" style="margin-top:8px;line-height:1.6">その時々に残した、葵さんの写真です。タップで大きく見られます。</div>
     <div style="font-size:13px;font-weight:600;margin:18px 0 8px">相談カードの履歴</div>
     <button class="card" style="width:100%;text-align:left;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('sdm')"><span class="ic" style="width:38px;height:38px;background:var(--teal-bg);flex-shrink:0"><i class="ti ti-clipboard-heart" style="font-size:19px;color:var(--teal)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">相談カード <span style="display:inline-block;font-size:10px;font-weight:600;color:#fff;background:var(--teal);border-radius:8px;padding:1px 7px;vertical-align:1px">見せた</span></b><span class="note" style="display:block">2026年5月22日 ・ 先生に見せました</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('sdmbuild')"><span class="ic" style="width:38px;height:38px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-clipboard" style="font-size:19px;color:var(--amber)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">相談カード（下書き） <span style="display:inline-block;font-size:10px;font-weight:600;color:var(--amber-t);background:var(--amber-bg);border:.5px solid var(--amber);border-radius:8px;padding:1px 7px;vertical-align:1px">下書き</span></b><span class="note" style="display:block">2026年4月10日 ・ 作成のとちゅう（つづきから）</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
@@ -1795,7 +1863,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 </section>
 <script>
 (function(){
-  var CATS=[['aoi','葵さんの個人アルバム','ti-photo'],['world','物語の世界（表紙の気分）','ti-mood-smile'],['hero','主要ヒーロー','ti-layout-dashboard'],['can','がん種ヘッダー','ti-stethoscope']];
+  var CATS=[['aoi','葵さんの個人アルバム','ti-photo'],['world','物語の世界（表紙の気分）','ti-mood-smile'],['hero','主要ヒーロー','ti-layout-dashboard'],['can','がん種ヘッダー','ti-stethoscope'],['kids','こども向け（絵本調）','ti-mood-kid']];
   function render(){var e=document.getElementById('studioCats');if(!e||typeof AOI_SCENES==='undefined')return;var h='';
     CATS.forEach(function(c){var ks=Object.keys(AOI_SCENES).filter(function(k){return AOI_SCENES[k].cat===c[0];});
       h+='<div class="card" style="margin-top:12px"><div style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px"><i class="ti '+c[2]+'" style="color:var(--teal)"></i> '+c[1]+'<span class="note" style="margin-left:auto;font-weight:400">'+ks.length+'枚</span></div>';
