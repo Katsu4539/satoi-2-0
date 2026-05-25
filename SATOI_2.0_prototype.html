@@ -161,10 +161,10 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
 <script>
 (function(){
   var ov=document.getElementById('introOv');if(!ov)return;
-  /* オープニングは初回起動の1回だけ。リロード/再訪では出さない（iPhoneの引っ張って更新で毎回再生されるのを防ぐ） */
-  var seen=false;try{seen=(localStorage.getItem('satoi_seen_intro')==='1');}catch(e){}
+  /* オープニングは「立ち上げ(セッション)ごとに1回だけ」。同セッションのリロード/引っ張って更新では出さない。閉じて開き直せば再び出る＝sessionStorageで判定。 */
+  var seen=false;try{seen=(sessionStorage.getItem('satoi_seen_intro')==='1');}catch(e){}
   if(seen){ ov.style.display='none'; window.skipIntro=function(){}; return; }
-  try{localStorage.setItem('satoi_seen_intro','1');}catch(e){}
+  try{sessionStorage.setItem('satoi_seen_intro','1');}catch(e){}
   var a=document.getElementById('introA'),b=document.getElementById('introB'),bloom=document.getElementById('introBloom'),night=document.getElementById('introNight'),c=document.getElementById('introC');
   var done=false;
   function enterApp(){
