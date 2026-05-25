@@ -1656,7 +1656,7 @@ function prRenderTabs(){var box=document.getElementById('prmovieTabs');if(!box)r
   if(!window.PRMOVIES||window.PRMOVIES.length<2){box.style.display='none';return;}
   box.style.display='flex';
   box.innerHTML=window.PRMOVIES.map(function(m,i){var on=i===window._prmovieIdx;
-    return '<button class="chip" style="'+(on?'border:1.5px solid var(--teal);color:var(--teal-d);background:var(--teal-bg);font-weight:600':'')+'" onclick="prSelectMovie('+i+')">'+m.label+(on?' ✓':'')+'</button>';}).join('');
+    return '<button class="chip" style="'+(on?'border:1.5px solid var(--teal);color:var(--teal-d);background:var(--teal-bg);font-weight:600':'')+'" onclick="prSelectMovie('+i+')">'+m.label+'</button>';}).join('');
 }
 function prSelectMovie(i){if(!window.PRMOVIES[i])return;window._prmovieIdx=i;
   var v=document.getElementById('prmovieVid');if(v){var s=v.querySelector('source');if(s)s.setAttribute('src',window.PRMOVIES[i].src);try{v.pause();}catch(e){}prShowPlaceholder();try{v.load();}catch(e){}}
