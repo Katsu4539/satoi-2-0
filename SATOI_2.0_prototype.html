@@ -1638,12 +1638,14 @@ function lightUp(b){if(b.getAttribute('data-lit'))return;b.setAttribute('data-li
 function thanksTap(b){if(b.getAttribute('data-sent'))return;b.setAttribute('data-sent','1');b.innerHTML='<i class="ti ti-check"></i> ありがとう、届けました';b.style.background='#0F6E56';}
 function replayMovie(){var s=document.getElementById('mvStage');if(!s)return;s.classList.remove('mvgo');void s.offsetWidth;s.classList.add('mvgo');}
 window._oninit['aboutmovie']=function(){replayMovie();};
-window._oninit['prmovie']=function(){var v=document.getElementById('prmovieVid'),ph=document.getElementById('prmoviePlaceholder');if(!v)return;
-  var showPh=function(){if(ph)ph.style.display='block';};var hidePh=function(){if(ph)ph.style.display='none';};
-  v.onloadeddata=hidePh;v.oncanplay=hidePh;v.onerror=showPh;
-  var s=v.querySelector('source');if(s)s.onerror=showPh;
-  /* 既に読み込めているなら隠す（戻ってきた時） */
-  if(v.readyState>=2)hidePh();else showPh();
+window._oninit['prmovie']=function(){var v=document.getElementById('prmovieVid'),ph=document.getElementById('prmoviePlaceholder'),fr=document.getElementById('prmovieFrame');if(!v)return;
+  /* 本編mp4が読めた時だけ実プレーヤーを表示。無い間は黒枠を隠し、ダイジェスト導線＋準備中案内を出す（壊れて見せない） */
+  var showReal=function(){if(fr)fr.style.display='block';if(ph)ph.style.display='none';};
+  var showPlaceholder=function(){if(fr)fr.style.display='none';if(ph)ph.style.display='block';};
+  v.onloadeddata=showReal;v.oncanplay=showReal;
+  v.onerror=showPlaceholder;
+  var s=v.querySelector('source');if(s)s.onerror=showPlaceholder;
+  if(v.readyState>=2){showReal();}else{showPlaceholder();v.load();}
 };
 var delCtx={orig:'',soft:''};
 function openDeliver(orig,soft){delCtx={orig:orig,soft:soft};go('deliver');}
@@ -5532,16 +5534,25 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
     <div style="display:flex;align-items:center;gap:9px;margin-top:6px"><span class="ic ic34" style="background:var(--teal-bg);flex-shrink:0"><i class="ti ti-movie" style="color:var(--teal)"></i></span><h1 class="h1" style="margin:0">SATOIってなに？</h1></div>
     <div class="sub" style="margin-top:6px">1分の紹介ムービー。どこで、誰と、何ができるのか。</div>
 
-    <div style="margin-top:14px;border-radius:16px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 8px 26px rgba(38,48,63,.14);background:#000">
+    <div id="prmovieFrame" style="display:none;margin-top:14px;border-radius:16px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 8px 26px rgba(38,48,63,.14);background:#000">
       <video id="prmovieVid" controls playsinline preload="metadata" poster="img/aoi_hero_prmovie.jpg" style="width:100%;display:block;background:#000">
         <source src="movie/satoi_pr.mp4" type="video/mp4">
       </video>
     </div>
 
-    <div id="prmoviePlaceholder" style="margin-top:10px;border:.5px dashed var(--teal);border-radius:12px;background:var(--teal-bg);padding:13px 14px">
-      <div style="font-size:13px;font-weight:600;color:var(--teal-d)"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> 動画は準備中です</div>
-      <div class="note" style="line-height:1.7;margin-top:5px">Geminiで生成した紹介ムービーを <b>movie/satoi_pr.mp4</b> に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。</div>
-      <button class="btn btn-out" style="margin-top:10px;width:auto;padding:8px 14px" onclick="go('aboutmovie')"><i class="ti ti-player-play" style="vertical-align:-2px"></i> いまは、動くダイジェストを見る</button>
+    <div id="prmoviePlaceholder" style="margin-top:14px">
+      <button onclick="go('aboutmovie')" style="display:block;width:100%;text-align:left;padding:0;cursor:pointer;border:none;background:transparent;border-radius:16px;overflow:hidden">
+        <div style="position:relative;height:178px;border-radius:16px;overflow:hidden;background:linear-gradient(120deg,#10303a,#0F6E56 58%,#C0892F)">
+          <img data-aoi="hero_prmovie" src="img/aoi_hero_prmovie.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.5))"></div>
+          <span style="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.35)"><i class="ti ti-player-play-filled" style="font-size:30px;color:var(--teal-d);margin-left:3px"></i></span>
+          <div style="position:absolute;left:15px;bottom:13px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.55)"><div style="font-size:17px;font-weight:700">いま見られる：動くダイジェスト</div><div style="font-size:11px;opacity:.92;margin-top:2px">タップで再生 ・ SATOIの世界を30秒で</div></div>
+        </div>
+      </button>
+      <div style="margin-top:10px;border:.5px dashed var(--teal);border-radius:12px;background:var(--teal-bg);padding:12px 14px">
+        <div style="font-size:13px;font-weight:600;color:var(--teal-d)"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> 本編（実写PR）は準備中です</div>
+        <div class="note" style="line-height:1.7;margin-top:5px">本編はGeminiで生成します。できあがった動画を <b>movie/satoi_pr.mp4</b> に置くと、自動でここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」に用意しました。</div>
+      </div>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -6225,7 +6236,7 @@ window.I18N={ja:{},en:{
 /* --- 動的・共通（JSが差し込む文言） --- */
 "あなたのペースで、ゆっくりで大丈夫。":"At your own pace. It's okay to take it slow.","今日も、そばにいます。":"Today too, I'm here with you.","物語のつづき":"Continue the story","登録ずみ":"Registered","無料登録は完了しています":"Your free registration is complete","あなたと同じ道を歩く人の声":"Voices of people walking the same path as you","「同じ気持ちの夜を越えた人がいます。あなたは、ひとりじゃない。」":"“There are people who've made it through nights that felt just like yours. You are not alone.”","似た状況の方の声を読む・エールを送る（恩送り）":"Read voices from people in similar situations · send encouragement (paying it forward)","本会員 ・ 伴走（従量）利用中 ・ デポジット残 ¥{n}":"Full member · using Companion (pay-as-you-go) · deposit balance ¥{n}","EMPSe ・ いまの、わたし":"EMPSe · How I am now","タップして、今日のわたしを入力・くわしく見る":"Tap to log how I am today · see details","こんばんは。SATOIコンシェルジュです。気になっていること、なんでも話してください。うまく言葉にできなくても大丈夫ですよ。":"Good evening. I'm the SATOI Concierge. Tell me anything that's on your mind — it's okay even if you can't quite put it into words.",
 /* --- 紹介ムービー（prmovie） --- */
-"1分でわかる、SATOI":"SATOI in one minute","なぜ私たちは、つながって生きるのか":"Why we connect, and live","紹介ムービー":"Intro film","1分の紹介ムービー。どこで、誰と、何ができるのか。":"A one-minute intro: where, with whom, and what you can do.","動画は準備中です":"The video is coming soon","Geminiで生成した紹介ムービーを movie/satoi_pr.mp4 に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":"Once you place the Gemini-generated intro film at movie/satoi_pr.mp4, it will play here. The script, storyboard, and generation prompts are gathered in “SATOI_紹介ムービー_ブリーフ.md.”","いまは、動くダイジェストを見る":"For now, watch the animated digest","この動画で伝えること":"What this video conveys","・がんと言われた、その日から。ひとりにしない場所。":"· From the day you're told it's cancer — a place that won't leave you alone.","・読むのは、だれでも無料。":"· Reading is free, for everyone.","・あなたの「声」が、医師に届く（シェアード・ディシジョン）。":"· Your “voice” reaches your doctor (shared decision-making).","・物語（ナラティブ）が、治療を越えて人を支える。":"· Story (narrative) supports people, beyond treatment.","・同じ道を歩く人と、医療者と、家族と——つながって、生きよう。":"· With others on the same path, with caregivers, and with family — connect, and live.","SATOIの物語をもっと読む":"Read more of SATOI's story","Geminiで生成した紹介ムービーを":"Place the Gemini-generated intro film at ","に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":" and it will play here. The script, storyboard, and generation prompts are gathered in “SATOI_紹介ムービー_ブリーフ.md.”"
+"1分でわかる、SATOI":"SATOI in one minute","なぜ私たちは、つながって生きるのか":"Why we connect, and live","紹介ムービー":"Intro film","1分の紹介ムービー。どこで、誰と、何ができるのか。":"A one-minute intro: where, with whom, and what you can do.","動画は準備中です":"The video is coming soon","Geminiで生成した紹介ムービーを movie/satoi_pr.mp4 に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":"Once you place the Gemini-generated intro film at movie/satoi_pr.mp4, it will play here. The script, storyboard, and generation prompts are gathered in “SATOI_紹介ムービー_ブリーフ.md.”","いまは、動くダイジェストを見る":"For now, watch the animated digest","この動画で伝えること":"What this video conveys","・がんと言われた、その日から。ひとりにしない場所。":"· From the day you're told it's cancer — a place that won't leave you alone.","・読むのは、だれでも無料。":"· Reading is free, for everyone.","・あなたの「声」が、医師に届く（シェアード・ディシジョン）。":"· Your “voice” reaches your doctor (shared decision-making).","・物語（ナラティブ）が、治療を越えて人を支える。":"· Story (narrative) supports people, beyond treatment.","・同じ道を歩く人と、医療者と、家族と——つながって、生きよう。":"· With others on the same path, with caregivers, and with family — connect, and live.","SATOIの物語をもっと読む":"Read more of SATOI's story","Geminiで生成した紹介ムービーを":"Place the Gemini-generated intro film at ","に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":" and it will play here. The script, storyboard, and generation prompts are gathered in “SATOI_紹介ムービー_ブリーフ.md.”","いま見られる：動くダイジェスト":"Watch now: animated digest","タップで再生 ・ SATOIの世界を30秒で":"Tap to play · the world of SATOI in 30 seconds","本編（実写PR）は準備中です":"The full film (live-action PR) is coming soon","本編はGeminiで生成します。できあがった動画を":"The full film is generated with Gemini. Once it's ready, place the video at ","に置くと、自動でここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」に用意しました。":" and it will play here automatically. The script, storyboard, and generation prompts are ready in “SATOI_紹介ムービー_ブリーフ.md.”"
 /*@@EN*/
 },zh:{
 /* --- 共通UI（ヘッダー・タブ・FAB） --- */
