@@ -161,6 +161,10 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
 <script>
 (function(){
   var ov=document.getElementById('introOv');if(!ov)return;
+  /* オープニングは初回起動の1回だけ。リロード/再訪では出さない（iPhoneの引っ張って更新で毎回再生されるのを防ぐ） */
+  var seen=false;try{seen=(localStorage.getItem('satoi_seen_intro')==='1');}catch(e){}
+  if(seen){ ov.style.display='none'; window.skipIntro=function(){}; return; }
+  try{localStorage.setItem('satoi_seen_intro','1');}catch(e){}
   var a=document.getElementById('introA'),b=document.getElementById('introB'),bloom=document.getElementById('introBloom'),night=document.getElementById('introNight'),c=document.getElementById('introC');
   var done=false;
   function enterApp(){
@@ -261,9 +265,10 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
 
     <div style="font-size:15px;font-weight:600;margin:22px 0 8px">はじめての方へ</div>
     <div style="border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <button class="navrow" onclick="go('about')"><span><i class="ti ti-info-circle" style="color:var(--teal)"></i> <span style="text-decoration:underline;text-underline-offset:3px">SATOIってなに？</span> ・ 物語と世界観をくわしく</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('prmovie')"><span><i class="ti ti-player-play" style="color:var(--teal)"></i> 1分でわかる、SATOI（動画で見る）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('howto')"><span><i class="ti ti-brand-youtube" style="color:#c4302b"></i> 使い方をみる（動画）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
-      <button class="navrow" onclick="go('faq')"><span><i class="ti ti-help-circle" style="color:var(--teal)"></i> よくある質問（Q&amp;A）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
-      <button class="navrow" style="border-bottom:none" onclick="go('about')"><span><i class="ti ti-info-circle" style="color:var(--sub)"></i> SATOIってなに？</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('faq')"><span><i class="ti ti-help-circle" style="color:var(--sub)"></i> よくある質問（Q&amp;A）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     </div>
 
     <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:12px;padding:12px 14px;background:#f6f7f5">
@@ -5844,10 +5849,18 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
 </section>
 <script>
 function proMindmapSVG(){
-  return '<svg viewBox="0 0 300 140" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">'
-   +'<line x1="150" y1="70" x2="60" y2="32" stroke="#E2B877" stroke-width="1.5"/><line x1="150" y1="70" x2="60" y2="108" stroke="#E2B877" stroke-width="1.5"/><line x1="150" y1="70" x2="245" y2="30" stroke="#E2B877" stroke-width="1.5"/><line x1="150" y1="70" x2="248" y2="78" stroke="#E2B877" stroke-width="1.5"/><line x1="150" y1="70" x2="240" y2="118" stroke="#E2B877" stroke-width="1.5"/>'
+  var cx=150,cy=70,R=26;
+  var nodes=[[60,34,'子どもとの時間','#C97840'],[62,110,'妊孕性の不安','#993556'],[244,34,'治療の選択','#0D7377'],[250,72,'痛みの緩和','#5C9A7E'],[240,110,'眠れない夜','#235a8c']];
+  /* 線は中心円のふち→各ノードの手前まで（ノード枠を貫通させない＝線かぶり防止） */
+  var lines='';
+  for(var i=0;i<nodes.length;i++){var n=nodes[i];var dx=n[0]-cx,dy=n[1]-cy,L=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/L,uy=dy/L;
+    var x1=(cx+ux*(R+2)).toFixed(1),y1=(cy+uy*(R+2)).toFixed(1),x2=(n[0]-ux*42).toFixed(1),y2=(n[1]-uy*42).toFixed(1);
+    lines+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="#E2B877" stroke-width="1.4"/>';}
+  var ns='';for(var j=0;j<nodes.length;j++){ns+=nodeMM(nodes[j][0],nodes[j][1],nodes[j][2],nodes[j][3]);}
+  return '<svg viewBox="0 0 300 144" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">'
+   +lines
    +'<circle cx="150" cy="70" r="26" fill="#0A5A5D"/><text x="150" y="68" text-anchor="middle" font-size="9" fill="#fff">患者の</text><text x="150" y="79" text-anchor="middle" font-size="9" fill="#fff">気がかり</text>'
-   +nodeMM(60,32,'子どもとの時間','#C97840')+nodeMM(60,108,'妊孕性の不安','#993556')+nodeMM(248,30,'治療の選択','#0D7377')+nodeMM(250,78,'痛みの緩和','#5C9A7E')+nodeMM(242,118,'眠れない夜','#235a8c')
+   +ns
    +'</svg>';
 }
 function nodeMM(x,y,t,c){return '<g><rect x="'+(x-38)+'" y="'+(y-11)+'" width="76" height="22" rx="11" fill="'+c+'22" stroke="'+c+'" stroke-width="1"/><text x="'+x+'" y="'+(y+3)+'" text-anchor="middle" font-size="8.5" fill="'+c+'">'+t+'</text></g>';}
@@ -6236,7 +6249,7 @@ window.I18N={ja:{},en:{
 /* --- 動的・共通（JSが差し込む文言） --- */
 "あなたのペースで、ゆっくりで大丈夫。":"At your own pace. It's okay to take it slow.","今日も、そばにいます。":"Today too, I'm here with you.","物語のつづき":"Continue the story","登録ずみ":"Registered","無料登録は完了しています":"Your free registration is complete","あなたと同じ道を歩く人の声":"Voices of people walking the same path as you","「同じ気持ちの夜を越えた人がいます。あなたは、ひとりじゃない。」":"“There are people who've made it through nights that felt just like yours. You are not alone.”","似た状況の方の声を読む・エールを送る（恩送り）":"Read voices from people in similar situations · send encouragement (paying it forward)","本会員 ・ 伴走（従量）利用中 ・ デポジット残 ¥{n}":"Full member · using Companion (pay-as-you-go) · deposit balance ¥{n}","EMPSe ・ いまの、わたし":"EMPSe · How I am now","タップして、今日のわたしを入力・くわしく見る":"Tap to log how I am today · see details","こんばんは。SATOIコンシェルジュです。気になっていること、なんでも話してください。うまく言葉にできなくても大丈夫ですよ。":"Good evening. I'm the SATOI Concierge. Tell me anything that's on your mind — it's okay even if you can't quite put it into words.",
 /* --- 紹介ムービー（prmovie） --- */
-"1分でわかる、SATOI":"SATOI in one minute","なぜ私たちは、つながって生きるのか":"Why we connect, and live","紹介ムービー":"Intro film","1分の紹介ムービー。どこで、誰と、何ができるのか。":"A one-minute intro: where, with whom, and what you can do.","動画は準備中です":"The video is coming soon","Geminiで生成した紹介ムービーを movie/satoi_pr.mp4 に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":"Once you place the Gemini-generated intro film at movie/satoi_pr.mp4, it will play here. The script, storyboard, and generation prompts are gathered in “SATOI_紹介ムービー_ブリーフ.md.”","いまは、動くダイジェストを見る":"For now, watch the animated digest","この動画で伝えること":"What this video conveys","・がんと言われた、その日から。ひとりにしない場所。":"· From the day you're told it's cancer — a place that won't leave you alone.","・読むのは、だれでも無料。":"· Reading is free, for everyone.","・あなたの「声」が、医師に届く（シェアード・ディシジョン）。":"· Your “voice” reaches your doctor (shared decision-making).","・物語（ナラティブ）が、治療を越えて人を支える。":"· Story (narrative) supports people, beyond treatment.","・同じ道を歩く人と、医療者と、家族と——つながって、生きよう。":"· With others on the same path, with caregivers, and with family — connect, and live.","SATOIの物語をもっと読む":"Read more of SATOI's story","Geminiで生成した紹介ムービーを":"Place the Gemini-generated intro film at ","に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":" and it will play here. The script, storyboard, and generation prompts are gathered in “SATOI_紹介ムービー_ブリーフ.md.”","いま見られる：動くダイジェスト":"Watch now: animated digest","タップで再生 ・ SATOIの世界を30秒で":"Tap to play · the world of SATOI in 30 seconds","本編（実写PR）は準備中です":"The full film (live-action PR) is coming soon","本編はGeminiで生成します。できあがった動画を":"The full film is generated with Gemini. Once it's ready, place the video at ","に置くと、自動でここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」に用意しました。":" and it will play here automatically. The script, storyboard, and generation prompts are ready in “SATOI_紹介ムービー_ブリーフ.md.”"
+"1分でわかる、SATOI":"SATOI in one minute","なぜ私たちは、つながって生きるのか":"Why we connect, and live","紹介ムービー":"Intro film","1分の紹介ムービー。どこで、誰と、何ができるのか。":"A one-minute intro: where, with whom, and what you can do.","動画は準備中です":"The video is coming soon","Geminiで生成した紹介ムービーを movie/satoi_pr.mp4 に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":"Once you place the Gemini-generated intro film at movie/satoi_pr.mp4, it will play here. The script, storyboard, and generation prompts are gathered in “SATOI_紹介ムービー_ブリーフ.md.”","いまは、動くダイジェストを見る":"For now, watch the animated digest","この動画で伝えること":"What this video conveys","・がんと言われた、その日から。ひとりにしない場所。":"· From the day you're told it's cancer — a place that won't leave you alone.","・読むのは、だれでも無料。":"· Reading is free, for everyone.","・あなたの「声」が、医師に届く（シェアード・ディシジョン）。":"· Your “voice” reaches your doctor (shared decision-making).","・物語（ナラティブ）が、治療を越えて人を支える。":"· Story (narrative) supports people, beyond treatment.","・同じ道を歩く人と、医療者と、家族と——つながって、生きよう。":"· With others on the same path, with caregivers, and with family — connect, and live.","SATOIの物語をもっと読む":"Read more of SATOI's story","Geminiで生成した紹介ムービーを":"Place the Gemini-generated intro film at ","に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":" and it will play here. The script, storyboard, and generation prompts are gathered in “SATOI_紹介ムービー_ブリーフ.md.”","・ 物語と世界観をくわしく":" · The story & worldview, in detail","1分でわかる、SATOI（動画で見る）":"SATOI in one minute (watch the video)","いま見られる：動くダイジェスト":"Watch now: animated digest","タップで再生 ・ SATOIの世界を30秒で":"Tap to play · the world of SATOI in 30 seconds","本編（実写PR）は準備中です":"The full film (live-action PR) is coming soon","本編はGeminiで生成します。できあがった動画を":"The full film is generated with Gemini. Once it's ready, place the video at ","に置くと、自動でここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」に用意しました。":" and it will play here automatically. The script, storyboard, and generation prompts are ready in “SATOI_紹介ムービー_ブリーフ.md.”"
 /*@@EN*/
 },zh:{
 /* --- 共通UI（ヘッダー・タブ・FAB） --- */
@@ -6261,7 +6274,7 @@ window.I18N={ja:{},en:{
 /* --- 動的・共通（JSが差し込む文言） --- */
 "あなたのペースで、ゆっくりで大丈夫。":"按你自己的节奏，慢慢来也没关系。","今日も、そばにいます。":"今天，我也在你身边。","物語のつづき":"故事的续篇","登録ずみ":"已注册","無料登録は完了しています":"免费注册已完成","あなたと同じ道を歩く人の声":"与你走在同一条路上的人的声音","「同じ気持ちの夜を越えた人がいます。あなたは、ひとりじゃない。」":"「有人曾熬过和你一样心情的夜晚。你，并不孤单。」","似た状況の方の声を読む・エールを送る（恩送り）":"阅读处境相似者的声音・送上鼓励（恩传递）","本会員 ・ 伴走（従量）利用中 ・ デポジット残 ¥{n}":"正式会员 ・ 使用陪伴（按量计费） ・ 押金余额 ¥{n}","EMPSe ・ いまの、わたし":"EMPSe ・ 此刻的我","タップして、今日のわたしを入力・くわしく見る":"点击，输入今天的我・查看详情","こんばんは。SATOIコンシェルジュです。気になっていること、なんでも話してください。うまく言葉にできなくても大丈夫ですよ。":"晚上好。我是 SATOI 管家。心里在意的事，什么都可以告诉我。即使无法很好地用言语表达，也没关系。",
 /* --- 紹介ムービー（prmovie） --- */
-"1分でわかる、SATOI":"一分钟，了解 SATOI","なぜ私たちは、つながって生きるのか":"我们为何连接彼此，好好活着","紹介ムービー":"介绍短片","1分の紹介ムービー。どこで、誰と、何ができるのか。":"一分钟的介绍短片：在哪里、与谁、能做什么。","動画は準備中です":"视频正在准备中","Geminiで生成した紹介ムービーを movie/satoi_pr.mp4 に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":"将用 Gemini 生成的介绍短片放到 movie/satoi_pr.mp4，即可在此播放。脚本・分镜・生成提示词都整理在「SATOI_紹介ムービー_ブリーフ.md」中。","いまは、動くダイジェストを見る":"现在，先看动态摘要","この動画で伝えること":"这段视频要传达的","・がんと言われた、その日から。ひとりにしない場所。":"・从被告知患癌的那天起——一个不会让你独自一人的地方。","・読むのは、だれでも無料。":"・阅读，对所有人都免费。","・あなたの「声」が、医師に届く（シェアード・ディシジョン）。":"・你的「声音」，传达给医生（共享决策）。","・物語（ナラティブ）が、治療を越えて人を支える。":"・故事（叙事），超越治疗，支撑着人。","・同じ道を歩く人と、医療者と、家族と——つながって、生きよう。":"・与同路人、与医疗者、与家人——连接彼此，好好活着。","SATOIの物語をもっと読む":"阅读更多 SATOI 的故事","Geminiで生成した紹介ムービーを":"将用 Gemini 生成的介绍短片放到 ","に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":" 即可在此播放。脚本・分镜・生成提示词都整理在「SATOI_紹介ムービー_ブリーフ.md」中。"
+"1分でわかる、SATOI":"一分钟，了解 SATOI","なぜ私たちは、つながって生きるのか":"我们为何连接彼此，好好活着","紹介ムービー":"介绍短片","1分の紹介ムービー。どこで、誰と、何ができるのか。":"一分钟的介绍短片：在哪里、与谁、能做什么。","動画は準備中です":"视频正在准备中","Geminiで生成した紹介ムービーを movie/satoi_pr.mp4 に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":"将用 Gemini 生成的介绍短片放到 movie/satoi_pr.mp4，即可在此播放。脚本・分镜・生成提示词都整理在「SATOI_紹介ムービー_ブリーフ.md」中。","・ 物語と世界観をくわしく":" · 详细了解故事与世界观","1分でわかる、SATOI（動画で見る）":"一分钟，了解 SATOI（观看视频）","いまは、動くダイジェストを見る":"现在，先看动态摘要","この動画で伝えること":"这段视频要传达的","・がんと言われた、その日から。ひとりにしない場所。":"・从被告知患癌的那天起——一个不会让你独自一人的地方。","・読むのは、だれでも無料。":"・阅读，对所有人都免费。","・あなたの「声」が、医師に届く（シェアード・ディシジョン）。":"・你的「声音」，传达给医生（共享决策）。","・物語（ナラティブ）が、治療を越えて人を支える。":"・故事（叙事），超越治疗，支撑着人。","・同じ道を歩く人と、医療者と、家族と——つながって、生きよう。":"・与同路人、与医疗者、与家人——连接彼此，好好活着。","SATOIの物語をもっと読む":"阅读更多 SATOI 的故事","Geminiで生成した紹介ムービーを":"将用 Gemini 生成的介绍短片放到 ","に置くと、ここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」にまとめています。":" 即可在此播放。脚本・分镜・生成提示词都整理在「SATOI_紹介ムービー_ブリーフ.md」中。"
 /*@@ZH*/
 }};
 
