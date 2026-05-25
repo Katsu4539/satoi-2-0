@@ -1652,6 +1652,13 @@ window._oninit['prmovie']=function(){var v=document.getElementById('prmovieVid')
   var s=v.querySelector('source');if(s)s.onerror=showPlaceholder;
   if(v.readyState>=2){showReal();}else{showPlaceholder();v.load();}
 };
+/* prmovie画面から離れたら動画を停止（戻るボタン後も音が鳴り続ける問題の対策）。リスナーは一度だけ登録。 */
+if(!window._prmovieStopWired){window._prmovieStopWired=true;
+  window.addEventListener('hashchange',function(){
+    var cur=(location.hash||'').slice(1);
+    if(cur!=='prmovie'){var v=document.getElementById('prmovieVid');if(v){try{v.pause();}catch(e){}}}
+  });
+}
 var delCtx={orig:'',soft:''};
 function openDeliver(orig,soft){delCtx={orig:orig,soft:soft};go('deliver');}
 function deliverDone(){window._delivered=1;var f=document.getElementById('delForm'),d=document.getElementById('delDone');if(f)f.style.display='none';if(d)d.style.display='block';}
