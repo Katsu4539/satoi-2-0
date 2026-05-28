@@ -51,9 +51,23 @@ SATOIは、がんと向き合う方とご家族の「気持ち・治療・お金
 - 気持ちや経過を残したい・声に残したい → 「壺」（自分の物語を少しずつ）／「声の物語」
 - もしものとき・終末期の備え → 「もしもの時の希望」
 - がんのことをちゃんと知りたい → そのがん種のページ／「学び」／「用語」（やさしく開く）
-- 食欲がない・吐き気で食べられない・口内炎で食事がつらい → 「食べられたレシピ」（同じ思いをした患者さんが"これなら食べられた"を分け合う・つらい日でも食べられた一皿）／「からだの記録」／必要に応じて緩和ケア・管理栄養士へ。「無理しなくて大丈夫」をまず添える。
+- 食欲がない・吐き気で食べられない・口内炎で食事がつらい → 「食べられたレシピ」（同じ思いをした患者さんが"これなら食べられた"を分け合う・つらい日でも食べられた一皿）／「食事・栄養」（食欲低下・味覚変化・悪液質をやさしく解説）／「からだの記録」／必要に応じて緩和ケア・管理栄養士へ。「無理しなくて大丈夫」をまず添える。
 - 検査値が気になる・「PSAが高い」など／「次はどうなるの?」「どう調べたらいい?」「がんかも」 → ①そのがん種のページ（例：前立腺がん）②「あなたの段階を知る（次どうなる）」＝病期と“これからの流れ”を順番に③検査・用語の「これは何?」（PSA・生検などをやさしく）④「相談カード」（先生に“何を・どう聞くか”を整える）。この場面で「先生に聞いて」だけで終えず、必ず①〜④のどれかを名指しで手渡す。
 - もっと手厚い伴走がほしい → 「伴走」
+- 15〜39歳の若い世代・進学・就職・恋愛・結婚・将来の子ども → 「AYA世代のあなたへ」（AYA特化の体系）／「妊孕性温存」（将来の妊娠・出産を、いま守る）
+- 「子どもがほしい」「いつか妊娠したい」「将来パパに」「卵子凍結」「精子凍結」「妊孕性」 → 「妊孕性温存」（治療開始前が原則）
+- 髪が抜ける・脱毛・ウィッグ・帽子・眉毛・まつげ・爪が剥がれる・手足症候群・皮膚が黒くなる・むくみ・リンパ浮腫 → 「アピアランスケア」
+- 痛い・痛み止め・モルヒネ・吐き気・しびれ・倦怠感・だるい・口内炎・便秘・下痢・発熱 → 「症状・副作用と向き合う」（痛みは数値で伝える等）／必要なら「緊急時カード」（発熱性好中球減少症など）
+- 不安で眠れない・気分が落ち込む・抑うつ・パニック・死ぬのが怖い・スピリチュアルペイン → 「心のケア」／「声で残す」／重い時は「相談先」
+- 仕事を続けたい・休職・復職・転職・有休・自営業・フリーランス・両立 → 「仕事との両立」／「公的制度（傷病手当金 等）」
+- 高額療養費・限度額認定証・傷病手当金・障害年金・介護保険・自治体助成・生活費が苦しい → 「公的制度の体系」（高額療養費・傷病手当・障害年金・介護保険まで体系で）
+- 拠点病院・病院探し・転院・希少がん・治験を探す・相談支援センター → 「病院・相談先を探す」（病名・地域・小児・相談支援・希少がん・臨床試験）
+- 検診・人間ドック・予防・喫煙・禁煙・飲酒・HPVワクチン・ピロリ菌 → 「予防・検診」（5本柱＋5検診）
+- 「〜って何?」「専門用語が分からない」「TNM分類とは」「PFS・OSとは」「集学的治療とは」「ACPとは」「SDMとは」 → 「用語をやさしく」（用語集ハブ）
+- 健康食品・サプリ・代替医療・自由診療・「がんが消える」と聞いた → 「民間療法・健康食品の注意」（科学的根拠／相互作用／経済的負担）
+- 地震・水害・停電・避難・災害で薬がない → 「災害時のがん療養」（薬と治療情報の備え・感染予防・福祉避難所）
+- 「治療法の種類が分からない」「手術と薬どっちがいい?」「集学的治療って?」「免疫療法ってどんなの?」「造血幹細胞移植?」 → 「治療の種類を知る」（手術／薬物／放射線／免疫／造血幹細胞／ゲノム／治験）
+- 食欲低下・味覚変化・体重減少・痩せた・がん悪液質・サプリは大丈夫? → 「食事・栄養」
 まず気持ちが先、機能は後。でも聴くだけで終えない——インサイトを掴んだら必ず手渡す。
 
 # 相手に合わせた話し方
@@ -86,7 +100,7 @@ SATOIは、がんと向き合う方とご家族の「気持ち・治療・お金
 - 返答の本文のあと、最後に必ず次の形式の行を“1行だけ”付ける（本文に説明を書き、この行は記号とidのみ。ユーザーには表示されず、タップできるボタンになる）：
   @@CHIPS: id1, id2
 - id は SATOI の画面ID。その返答で手渡すべきページを関連の高い順に1〜3個。使えるidの例：
-  precision（プレシジョン/遺伝子検査）, precfac（検査できる施設）, sdmstart（相談カード）, bccare（乳がん）, cancer（がんを知る）, survival（次どうなる/病期）, treatment（治療を知る）, flow（治療の流れ）, drugs（薬剤一覧）, money（お金と暮らし）, pubsys（公的制度）, benefitcat（使える制度）, family（家族）, support（つらい時の相談先）, voicerec（声で残す）, recipes（食べられたレシピ）, body（からだの記録）, empse（いまの私/EMPSe）, acp（人生会議）, match（同じ道の人）, sopinion（セカンドオピニオン）, glossary（用語）, hospital（病院）
+  precision（プレシジョン/遺伝子検査）, precfac（検査できる施設）, sdmstart（相談カード）, bccare（乳がん）, cancer（がんを知る）, survival（次どうなる/病期）, treatment（治療を知る）, flow（治療の流れ）, drugs（薬剤一覧）, money（お金と暮らし）, pubsys（公的制度）, benefitcat（使える制度）, family（家族）, support（つらい時の相談先）, voicerec（声で残す）, recipes（食べられたレシピ）, body（からだの記録）, empse（いまの私/EMPSe）, acp（人生会議）, match（同じ道の人）, sopinion（セカンドオピニオン）, glossary（用語）, hospital（病院）, aya（AYA世代15-39歳）, fertility（妊孕性温存）, appearance（アピアランスケア）, tx_modality（治療の種類）, symptoms（症状管理）, mental_care（心のケア）, work_balance（仕事との両立）, nutrition（食事栄養）, benefits_public（公的制度の体系）, hospital_search（病院・相談先検索）, prevention（予防・検診）, glossary_hub（用語集ハブ）, cam_caution（民間療法注意）, disaster_care（災害時のがん療養）, emergency（緊急時カード）, next_horizon_bridge（標準治療を終えた方へ・つぎの道）
 - 必ず1個以上。該当が薄い時も、最も近いもの（cancer や support 等）を選ぶ。存在しないidは作らない。
 
 # 患者さんの背景
@@ -103,7 +117,15 @@ const CHIP_LABELS_BY_LANG = {
     family:'家族と支え合う', support:'つらい時の相談先', voicerec:'声で残す',
     recipes:'食べられたレシピ', body:'からだの記録', empse:'いまの、わたし（EMPSe）',
     acp:'これからの希望（人生会議）', match:'同じ道を歩く人たち', sopinion:'セカンドオピニオン',
-    glossary:'用語をやさしく', hospital:'病院をさがす'
+    glossary:'用語をやさしく', hospital:'病院をさがす',
+    aya:'AYA世代のあなたへ（15〜39歳）', fertility:'妊孕性温存（将来の妊娠・出産）',
+    appearance:'アピアランスケア（脱毛・爪・皮膚）', tx_modality:'治療の種類を知る',
+    symptoms:'症状・副作用と向き合う', mental_care:'心のケア（不安・抑うつ・眠れない）',
+    work_balance:'仕事との両立', nutrition:'食事・栄養',
+    benefits_public:'公的制度の体系（高額療養費 他）', hospital_search:'病院・相談先を探す',
+    prevention:'予防とがん検診', glossary_hub:'がんに関する用語集',
+    cam_caution:'民間療法・健康食品の注意', disaster_care:'災害時のがん療養',
+    emergency:'緊急時カード', next_horizon_bridge:'標準治療を終えた方へ（つぎの道）'
   },
   en: {
     precision:'Genomic testing (Precision)', precfac:'Where to get tested', sdmstart:'Organize with a consultation card',
@@ -113,7 +135,15 @@ const CHIP_LABELS_BY_LANG = {
     family:'Support each other as a family', support:'Support lines for hard times', voicerec:'Keep it by voice',
     recipes:'Recipes others could eat', body:'Body records', empse:'How I am now (EMPSe)',
     acp:'Hopes for what’s ahead (ACP)', match:'People on the same path', sopinion:'Second opinion',
-    glossary:'Terms made simple', hospital:'Find a hospital'
+    glossary:'Terms made simple', hospital:'Find a hospital',
+    aya:'For AYA (ages 15–39)', fertility:'Fertility preservation',
+    appearance:'Appearance care (hair, nails, skin)', tx_modality:'Types of treatment',
+    symptoms:'Symptoms & side effects', mental_care:'Mental care (anxiety, sleep)',
+    work_balance:'Balancing work & treatment', nutrition:'Food & nutrition',
+    benefits_public:'Public support programs', hospital_search:'Find a hospital / support center',
+    prevention:'Prevention & screening', glossary_hub:'Cancer glossary',
+    cam_caution:'Alternative therapies — what to watch for', disaster_care:'Cancer care in disasters',
+    emergency:'Emergency card', next_horizon_bridge:'After standard treatment — the next path'
   },
   zh: {
     precision:'基因检测（精准医疗）', precfac:'可检测的机构', sdmstart:'用咨询卡整理',
@@ -123,7 +153,15 @@ const CHIP_LABELS_BY_LANG = {
     family:'与家人相互扶持', support:'难熬时的咨询窗口', voicerec:'用声音留下',
     recipes:'能吃下的食谱', body:'身体记录', empse:'此刻的我（EMPSe）',
     acp:'对未来的期望（人生会议）', match:'同路人', sopinion:'第二意见',
-    glossary:'用浅显方式解释术语', hospital:'查找医院'
+    glossary:'用浅显方式解释术语', hospital:'查找医院',
+    aya:'AYA世代（15-39岁）', fertility:'生育力保存',
+    appearance:'外观护理（脱发・指甲・皮肤）', tx_modality:'了解治疗的种类',
+    symptoms:'症状・副作用应对', mental_care:'心理护理（焦虑・抑郁・失眠）',
+    work_balance:'兼顾治疗与工作', nutrition:'饮食与营养',
+    benefits_public:'公共制度（高额疗养费等）', hospital_search:'查找医院与咨询窗口',
+    prevention:'预防与癌症筛查', glossary_hub:'癌症术语集',
+    cam_caution:'民间疗法・保健食品注意', disaster_care:'灾害时的癌症疗养',
+    emergency:'紧急时卡片', next_horizon_bridge:'结束标准治疗后（下一条路）'
   }
 };
 function parseChips(text, lang){

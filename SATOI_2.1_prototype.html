@@ -1428,6 +1428,25 @@ window._oninit['next_horizon_bridge']=function(){
     <button class="btn btn-out" style="margin-top:14px;display:flex;align-items:center;justify-content:center;gap:7px" onclick="go('empse')"><i class="ti ti-mood-heart" style="color:var(--teal)"></i> いまの、わたしを確かめる</button>
     <button class="btn btn-teal" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> AIコンシェルジュに相談</button>
     <button class="btn btn-out" style="margin-top:10px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 相談したいこと（相談カード）</button>
+    <!-- ★Tier1-3 NCC級「学び・備え」ハブ（14セクションへの統合導線・Katsu要望2026-05-29） -->
+    <div style="margin-top:16px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--teal-bg);font-size:12px;font-weight:700;color:var(--teal-d);letter-spacing:.02em"><i class="ti ti-book-2" style="vertical-align:-2px"></i> 学び・備え（公的情報をSATOIが整理）</div>
+      <button class="navrow" onclick="go('aya')"><span><i class="ti ti-user-heart" style="color:var(--rose)"></i> AYA世代（15〜39歳）のあなたへ</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('fertility')"><span><i class="ti ti-flower" style="color:var(--teal)"></i> 妊孕性温存（将来の妊娠・出産）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('appearance')"><span><i class="ti ti-cut" style="color:var(--amber)"></i> アピアランスケア（脱毛・爪・皮膚）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('tx_modality')"><span><i class="ti ti-stethoscope" style="color:var(--teal)"></i> 治療の種類を知る（手術・薬・放射線 他）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('symptoms')"><span><i class="ti ti-bone" style="color:var(--rose)"></i> 症状・副作用と向き合う</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('mental_care')"><span><i class="ti ti-cloud" style="color:var(--blue)"></i> 心のケア（不安・抑うつ・眠れない）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('nutrition')"><span><i class="ti ti-tools-kitchen-2" style="color:var(--teal)"></i> 食事・栄養</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('work_balance')"><span><i class="ti ti-briefcase" style="color:var(--amber-t)"></i> 仕事との両立</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('benefits_public')"><span><i class="ti ti-receipt" style="color:var(--blue)"></i> 公的制度（高額療養費・傷病手当 他）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('hospital_search')"><span><i class="ti ti-search" style="color:var(--teal)"></i> 病院・相談先を探す</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('prevention')"><span><i class="ti ti-shield-check" style="color:var(--teal)"></i> 予防・がん検診</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('glossary_hub')"><span><i class="ti ti-vocabulary" style="color:var(--sub)"></i> がんに関する用語集</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('cam_caution')"><span><i class="ti ti-alert-circle" style="color:var(--amber)"></i> 民間療法・健康食品の注意</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('disaster_care')"><span><i class="ti ti-alert-triangle" style="color:var(--red)"></i> 災害時のがん療養</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <!-- 標準治療を終えた方へ＝つぎの道入口（医療法6条の5配慮：直接表現せず注釈画面で説明） -->
     <button class="card" style="margin-top:16px;width:100%;text-align:left;background:linear-gradient(180deg,#FBEEDE 0%,#F5F1E8 100%);border:.5px solid var(--amber-line);padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px" onclick="go('next_horizon_bridge')">
       <span class="ic" style="width:38px;height:38px;background:#fff;color:var(--amber-t);border:.5px solid var(--amber-line);flex-shrink:0"><i class="ti ti-sun-high"></i></span>
@@ -1560,12 +1579,29 @@ function cvReply(text){
        return await r.json();   // 形式 {reply, src, chips:[[label,screenId]...]}
      ※APIキーは関数の環境変数に置き、HTMLには絶対に書かない。 */
   var t=text||'';
-  if(t.indexOf('お金')>=0||t.indexOf('費用')>=0)return{reply:'お金の心配は、とても大事なことです。高額療養費や給付金など、使える制度がいくつもあります。一緒に確認しましょう。',src:'出典：厚生労働省',chips:[['お金と暮らしを見る','money']]};
+  /* ★Katsu要望2026-05-29：新14セクションへのキーワード誘導を追加 */
+  if(/AYA|aya|若い|十代|二十代|三十代|20代|30代|学生|大学/.test(t))return{reply:'若い世代でのがんは、進学・お仕事・将来のご家族のことまで、いくつもの選択が重なりますね。AYA特化の整理をご覧いただけます。',src:'出典：国立がん研究センター AYAサポートチーム',chips:[['AYA世代のあなたへ','aya'],['妊孕性温存','fertility'],['仕事との両立','work_balance']]};
+  if(/妊孕|にんよう|子ども(が|を)?(欲し|ほし)|妊娠|出産|卵子凍結|精子凍結|不妊/.test(t))return{reply:'将来のご家族のことを今いっしょに考える時間ですね。妊孕性温存は治療開始の前が原則です。選択肢と助成制度を整理しました。',src:'出典：日本がん・生殖医療学会',chips:[['妊孕性温存','fertility'],['相談カードに入れる','sdmstart']]};
+  if(/髪が抜け|脱毛|ウィッグ|帽子|眉毛|爪|皮膚|メイク|リンパ浮腫|むくみ|手足症候群/.test(t))return{reply:'見た目の変化を気にする自分を、責めなくて大丈夫です。準備と相談先を整理しました。',src:'出典：国立がん研究センター アピアランス支援センター',chips:[['アピアランスケア','appearance'],['同じ気持ちの声を読む','stories']]};
+  if(/痛|モルヒネ|鎮痛|しびれ|だる|倦怠|疲れ|発熱|熱が|口内炎|便秘|下痢|吐き気|嘔吐/.test(t))return{reply:'症状はがまんするものではなく、治療と一緒に整えていくものです。SATOIで対処法と医療者への伝え方を整理しました。',src:'出典：日本緩和医療学会／日本がんサポーティブケア学会',chips:[['症状・副作用と向き合う','symptoms'],['からだの記録','body'],['緊急時カード','emergency']]};
+  if(/不安|抑うつ|うつ|落ち込|パニック|死ぬ|怖い|スピリチュアル/.test(t))return{reply:'そのつらさは、体の病気と一緒に起こる自然な反応です。ひとりで抱えなくて大丈夫。心のケアの選択肢を整理しました。',src:'出典：日本サイコオンコロジー学会',chips:[['心のケア','mental_care'],['今の気持ちを声で残す','voicerec'],['つらい時の相談先','support']]};
+  if(/仕事|休職|復職|退職|転職|休む|会社|職場|自営|フリーランス|両立|キャリア/.test(t))return{reply:'仕事を続ける／一時的に離れる／変える——どれを選んでも、支える仕組みがあります。あなたの判断のための情報を整理しました。',src:'出典：厚生労働省 治療と仕事の両立支援ガイドライン2023年改訂',chips:[['仕事との両立','work_balance'],['公的制度の体系','benefits_public']]};
+  if(/高額療養費|傷病手当|障害年金|介護保険|限度額|医療費控除|生活保護|助成|給付/.test(t))return{reply:'使える制度はいくつもあります。一緒に体系で整理しましょう。申請の伴走は相談支援センター（無料）でも可能です。',src:'出典：厚生労働省／全国健康保険協会',chips:[['公的制度の体系','benefits_public'],['お金と暮らし','money'],['相談支援センターを探す','hospital_search']]};
+  if(/病院|拠点病院|相談支援|希少がん|転院|セカンドオピニオン|主治医を変え|治験|臨床試験/.test(t))return{reply:'病院・相談先・治験を、目的別にお探しできます。地域や病名から探せます。',src:'出典：国立がん研究センター／厚生労働省',chips:[['病院・相談先を探す','hospital_search'],['セカンドオピニオン','sopinion']]};
+  if(/検診|人間ドック|予防|禁煙|たばこ|お酒|飲酒|HPV|ピロリ/.test(t))return{reply:'科学的根拠に基づく5本柱と5つの検診で、リスクを下げられることが報告されています。整理してご覧いただけます。',src:'出典：国立がん研究センター 科学的根拠に基づくがん予防',chips:[['予防とがん検診','prevention']]};
+  if(/って何|とは|TNM|PFS|OS|ステージとは|集学的|ACP|SDM|レジメン|奏効率|有害事象|CTCAE/.test(t))return{reply:'診察で出てくる言葉を、やさしく整理しています。気になる言葉から開いてみてください。',src:'出典：国立がん研究センター／日本臨床腫瘍学会 用語集',chips:[['用語をやさしく','glossary_hub'],['治療の種類を知る','tx_modality']]};
+  if(/サプリ|健康食品|代替医療|民間療法|自由診療|免疫が上がる|がんが消える|セントジョーンズ|高用量ビタミン/.test(t))return{reply:'検討中のものがあれば、根拠と相互作用の整理が大切です。標準治療との関係も含めて、冷静に判断する材料を整えました。',src:'出典：国立がん研究センター 健康食品の安全性・有効性情報／eJIM',chips:[['民間療法の注意','cam_caution'],['主治医に伝える相談カードに','sdmstart']]};
+  if(/災害|地震|水害|停電|避難|薬がない|防災/.test(t))return{reply:'平時の備えが、いざという時の安心になります。薬と治療情報、避難先の情報の整え方を整理しました。',src:'出典：日本臨床腫瘍学会 災害時のがん診療継続のための備え',chips:[['災害時のがん療養','disaster_care'],['緊急時カード','emergency']]};
+  if(/治療法.*種類|手術.*薬|集学的|手術|薬物療法|化学療法|放射線|免疫療法|造血幹細胞|ゲノム/.test(t))return{reply:'がん治療は、複数を組み合わせる集学的治療が標準です。それぞれの役割と組み合わせを整理してご案内します。',src:'出典：日本癌治療学会／日本臨床腫瘍学会',chips:[['治療の種類を知る','tx_modality'],['治療を知る','treatment'],['プレシジョン医療','precision']]};
+  if(/食事|食欲|栄養|味覚|体重|痩せ|悪液質/.test(t))return{reply:'食べられない日はつらいですよね。無理しなくて大丈夫。食事の工夫と、同じ思いをした方のレシピを整理しました。',src:'出典：日本臨床腫瘍学会 がん患者の栄養療法ガイドライン',chips:[['食事・栄養','nutrition'],['食べられたレシピ','recipes'],['からだの記録','body']]};
+
+  /* ===== 既存（後方互換のため残す） ===== */
+  if(t.indexOf('お金')>=0||t.indexOf('費用')>=0)return{reply:'お金の心配は、とても大事なことです。高額療養費や給付金など、使える制度がいくつもあります。一緒に確認しましょう。',src:'出典：厚生労働省',chips:[['お金と暮らしを見る','money'],['公的制度の体系','benefits_public']]};
   if(t.indexOf('家族')>=0||t.indexOf('伝え')>=0)return{reply:'伝え方に正解はありません。あなたのペースで大丈夫。言葉にしづらい時は、私が下書きをお手伝いします。',src:'',chips:[['家族と支え合う','family'],['声で残す','voicerec']]};
-  if(t.indexOf('眠れ')>=0||t.indexOf('つら')>=0||t.indexOf('しんど')>=0)return{reply:'眠れない夜は、こころも疲れますね。ひとりで抱えなくて大丈夫です。よかったら、今の気持ちを少し聞かせてください。つらさが強い時は、相談先もご案内します。',src:'',chips:[['今の気持ちを声で残す','voicerec'],['つらい時の相談先','support']]};
-  if(t.indexOf('食べ')>=0||t.indexOf('食事')>=0||t.indexOf('吐き気')>=0||t.indexOf('食欲')>=0||t.indexOf('口内炎')>=0)return{reply:'食べられない日は、つらいですよね。無理しなくて大丈夫。同じ思いをした方が「これなら食べられた」というレシピを分け合っています。よかったら、のぞいてみませんか。',src:'',chips:[['食べられたレシピ','recipes'],['からだの記録','body'],['つらい時の相談先','support']]};
+  if(t.indexOf('眠れ')>=0||t.indexOf('つら')>=0||t.indexOf('しんど')>=0)return{reply:'眠れない夜は、こころも疲れますね。ひとりで抱えなくて大丈夫です。よかったら、今の気持ちを少し聞かせてください。つらさが強い時は、相談先もご案内します。',src:'',chips:[['今の気持ちを声で残す','voicerec'],['心のケア','mental_care'],['つらい時の相談先','support']]};
+  if(t.indexOf('食べ')>=0||t.indexOf('食事')>=0||t.indexOf('吐き気')>=0||t.indexOf('食欲')>=0||t.indexOf('口内炎')>=0)return{reply:'食べられない日は、つらいですよね。無理しなくて大丈夫。同じ思いをした方が「これなら食べられた」というレシピを分け合っています。よかったら、のぞいてみませんか。',src:'',chips:[['食べられたレシピ','recipes'],['食事・栄養','nutrition'],['からだの記録','body']]};
   if(t.indexOf('PSA')>=0||t.indexOf('検査')>=0||t.indexOf('数値')>=0||t.indexOf('どうなる')>=0||t.indexOf('調べ')>=0||t.indexOf('がんかも')>=0||t.indexOf('次は')>=0)return{reply:'「次はどうなるんだろう」——いちばん気になりますよね。一緒に順番に見ていきましょう。検査値だけで決まるものではありません。まずは"次どうなる"の流れと、その検査の意味から、やさしく確かめませんか。',src:'出典：国立がん研究センター がん情報サービス',chips:[['あなたの段階を知る（次どうなる）','survival'],['がんを知る','cancer'],['聞きたいことを整理','sdmstart']]};
-  return{reply:'不安に感じるのは自然なことです。今の治療は「標準治療」と呼ばれ、研究で効果が確かめられた方法です。迷う時は、別の先生に聞くセカンドオピニオンもあります。',src:'出典：国立がん研究センター がん情報サービス',chips:[['治療を知る','treatment'],['あなたの段階を知る（次どうなる）','survival'],['聞きたいことを整理','sdmstart']]};
+  return{reply:'不安に感じるのは自然なことです。今の治療は「標準治療」と呼ばれ、研究で効果が確かめられた方法です。迷う時は、別の先生に聞くセカンドオピニオンもあります。',src:'出典：国立がん研究センター がん情報サービス',chips:[['治療を知る','treatment'],['治療の種類を知る','tx_modality'],['あなたの段階を知る（次どうなる）','survival']]};
 }
 function cvRender(d){var html=d.reply;if(d.src)html+='<div class="note" style="margin-top:7px;font-size:11px"><i class="ti ti-file-text"></i> '+d.src+'</div>';if(d.chips&&d.chips.length){html+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">';d.chips.forEach(function(c){html+='<button class="chip" style="font-size:11px" onclick="go(\''+c[1]+'\')">'+c[0]+'</button>';});html+='</div>';}cvBubble('ai',html);}
 async function cvAnswer(text){
@@ -1637,6 +1673,17 @@ window._oninit['ai']=function(){
     <button class="btn btn-out" onclick="go('hospital')" style="margin-top:4px"><i class="ti ti-building-hospital" style="vertical-align:-2px;color:var(--blue)"></i> 病院をさがす</button>
     <button class="btn btn-out" onclick="go('sopinion')" style="margin-top:10px"><i class="ti ti-messages" style="vertical-align:-2px;color:var(--blue)"></i> 別の先生にも聞きたい（セカンドオピニオン）</button>
     <button class="btn btn-teal" onclick="go('sdm')" style="margin-top:10px"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 聞きたいことを整理する</button>
+
+    <!-- ★Tier4 既存ハブから新コンテンツへの誘導（網羅性完璧化・Katsu要望2026-05-29） -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--teal-bg);font-size:12px;font-weight:700;color:var(--teal-d)"><i class="ti ti-book-2" style="vertical-align:-2px"></i> 治療に関する深掘り</div>
+      <button class="navrow" onclick="go('tx_modality')"><span><i class="ti ti-stethoscope" style="color:var(--teal)"></i> 治療の種類を体系で（手術・薬・放射線・免疫 他）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('symptoms')"><span><i class="ti ti-bone" style="color:var(--rose)"></i> 症状・副作用と向き合う</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('appearance')"><span><i class="ti ti-cut" style="color:var(--amber)"></i> アピアランスケア</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('fertility')"><span><i class="ti ti-flower" style="color:var(--teal)"></i> 妊孕性温存（治療前に検討を）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('cam_caution')"><span><i class="ti ti-alert-circle" style="color:var(--amber)"></i> 民間療法・健康食品の注意</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -1693,6 +1740,14 @@ window._oninit['ai']=function(){
       <div style="font-size:13.5px;line-height:1.8;color:var(--ink);margin-top:4px;font-style:italic">「高額療養費と限度額認定証を先に出しておくだけで、毎月の立て替えがなくなって、ずいぶん楽になりました。知らなかったのが悔しいくらい。」</div>
       <div style="font-size:11px;color:var(--amber-t);font-weight:600;margin-top:8px">もっと読む・エールを送る<i class="ti ti-chevron-right" style="vertical-align:-1px"></i></div>
     </button>
+
+    <!-- ★Tier4 -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--teal-bg);font-size:12px;font-weight:700;color:var(--teal-d)"><i class="ti ti-coin" style="vertical-align:-2px"></i> お金・暮らしの深掘り</div>
+      <button class="navrow" onclick="go('benefits_public')"><span><i class="ti ti-receipt" style="color:var(--blue)"></i> 公的制度の体系（高額療養費・傷病手当 他）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('work_balance')"><span><i class="ti ti-briefcase" style="color:var(--amber-t)"></i> 仕事との両立（休復職・転職・自営業）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('hospital_search')"><span><i class="ti ti-search" style="color:var(--teal)"></i> 相談支援センターを探す（無料相談）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
 
     <div class="note" style="margin-top:14px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：厚生労働省・国税庁・各保険者・各自治体。制度の詳細・条件は窓口でご確認ください。SATOIは特定の金融機関へ誘導しません。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
@@ -2839,6 +2894,14 @@ function lToggle(){lplay=!lplay;document.getElementById('lIcon').className=lplay
     <div id="hospCount" style="font-size:12px;color:var(--mute);margin:14px 0 10px"></div>
     <div id="hospResults"></div>
     <button class="btn btn-out" style="margin-top:12px" onclick="go('precfac')"><i class="ti ti-dna-2" style="vertical-align:-2px;color:var(--blue)"></i> プレシジョンに取り組む医療機関を見る</button>
+
+    <!-- ★Tier4 -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--teal-bg);font-size:12px;font-weight:700;color:var(--teal-d)"><i class="ti ti-search" style="vertical-align:-2px"></i> 病院・相談先の深掘り</div>
+      <button class="navrow" onclick="go('hospital_search')"><span><i class="ti ti-stethoscope" style="color:var(--teal)"></i> 病名／地域／小児／希少がん／治験を検索</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('sopinion')"><span><i class="ti ti-messages" style="color:var(--blue)"></i> セカンドオピニオン</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <div class="note" style="margin-top:12px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス「病院をさがす」。がんゲノム医療は中核拠点・拠点・連携病院で受けられます。最新の対応状況は各病院にご確認ください。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -3175,6 +3238,15 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
       <button class="btn btn-out" style="margin-top:12px;padding:9px;color:var(--teal)" onclick="go('sdm')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> この記録を診察に持っていく（SDMカードへ）</button>
     </div>
     <div class="safe" style="margin-top:14px"><i class="ti ti-urgent" style="font-size:18px"></i><div>高い熱・強い痛み・息苦しさなど、急な変化やつらい症状は我慢せず、すぐ主治医・看護師に。<a class="link" style="color:var(--red);font-weight:600" onclick="go('support')">連絡先を見る</a></div></div>
+
+    <!-- ★Tier4 -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--teal-bg);font-size:12px;font-weight:700;color:var(--teal-d)"><i class="ti ti-bone" style="vertical-align:-2px"></i> 症状別の対処を知る</div>
+      <button class="navrow" onclick="go('symptoms')"><span><i class="ti ti-bone" style="color:var(--rose)"></i> 痛み／吐き気／しびれ／口内炎／FN（発熱）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('nutrition')"><span><i class="ti ti-tools-kitchen-2" style="color:var(--teal)"></i> 食欲・栄養のこと</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('appearance')"><span><i class="ti ti-cut" style="color:var(--amber)"></i> 脱毛・爪・皮膚のケア</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <div class="note" style="margin-top:12px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 記録は体調を伝えるための目安です。判断は主治医とご相談ください。出典：国立がん研究センター。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -3217,6 +3289,15 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
       <span style="flex:1"><b style="font-weight:600;font-size:14px">これからの希望を話しておく（人生会議・ACP）</b><span class="note" style="display:block;line-height:1.6;margin-top:2px">もしもの時に備えて、大切にしたいこと・受けたい医療を、家族や医療者と前もって。急がず、何度でも見直せます。</span></span>
       <i class="ti ti-chevron-right" style="color:var(--mute);align-self:center"></i>
     </button>
+
+    <!-- ★Tier4 -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--teal-bg);font-size:12px;font-weight:700;color:var(--teal-d)"><i class="ti ti-users" style="vertical-align:-2px"></i> 世代別・状況別の支え</div>
+      <button class="navrow" onclick="go('aya')"><span><i class="ti ti-user-heart" style="color:var(--rose)"></i> AYA世代（15〜39歳）— 進学・仕事・将来のご家族</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('mental_care')"><span><i class="ti ti-cloud" style="color:var(--blue)"></i> 心のケア（ご本人・ご家族）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('disaster_care')"><span><i class="ti ti-alert-triangle" style="color:var(--red)"></i> 災害時の家族での備え</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -3449,6 +3530,16 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
       </div>
     </div>
     <div class="safe" style="margin-top:14px"><i class="ti ti-urgent" style="font-size:18px"></i><div>いますぐ命や安全が心配な時は、ためらわず 119、または近くの救急へ。</div></div>
+
+    <!-- ★Tier4 -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--teal-bg);font-size:12px;font-weight:700;color:var(--teal-d)"><i class="ti ti-heart" style="vertical-align:-2px"></i> 体・心・暮らしの体系</div>
+      <button class="navrow" onclick="go('symptoms')"><span><i class="ti ti-bone" style="color:var(--rose)"></i> 症状・副作用と向き合う</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('mental_care')"><span><i class="ti ti-cloud" style="color:var(--blue)"></i> 心のケア（不安・抑うつ・眠れない）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('appearance')"><span><i class="ti ti-cut" style="color:var(--amber)"></i> アピアランスケア</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('nutrition')"><span><i class="ti ti-tools-kitchen-2" style="color:var(--teal)"></i> 食事・栄養</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <div class="note" style="margin-top:12px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス／厚生労働省。窓口の対応時間・連絡先は各公式でご確認ください。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -3690,6 +3781,749 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 })();
 </script>
 
+<!-- ============ Tier1-① AYA世代（15-39歳）特化 ★Katsu要望2026-05-29／NCC「AYA世代の方へ」を踏まえSATOI再構成 ============ -->
+<section class="scr" id="aya">
+  <div class="pad">
+    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <h1 class="h1" style="margin-top:10px">AYA世代のあなたへ</h1>
+    <div class="sub">15歳から39歳。学校・仕事・恋愛・家族——あなたの時間軸で、整える</div>
+
+    <div class="card" style="margin-top:14px;background:var(--rose-bg);border:none;line-height:1.85;font-size:13px;color:#7a3b2c">
+      AYA（Adolescent and Young Adult）は<b>思春期から30代</b>を指します。日本では年間およそ2万人がAYA世代でがんと診断されると報告されています。罹患するがん種の幅が広く、進学・就労・結婚・妊孕性・経済的自立など<b>人生の節目と治療が重なる</b>のが特徴です（出典：国立がん研究センター AYA世代のがん罹患統計／日本臨床腫瘍学会 AYA世代がんガイドブック）。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-school"></i> 学校・進学との両立</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      長期入院や治療スケジュールにより通学が難しくなる場合、<b>院内学級・訪問教育・オンライン授業</b>を組み合わせる方法があります。高校生は<b>傷病による出席認定の特例</b>、大学・専門学校では<b>休学・配慮申請</b>が選択肢に。スクールカウンセラー、病院の<b>医療ソーシャルワーカー（MSW）</b>、教育担当の小児・AYA支援チームが調整役を担います（出典：文部科学省 高等学校等就学支援制度／厚生労働省 小児・AYAがん長期フォローアップガイドライン2022）。
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> 通学・休学のことを、コンシェルジュに整理してもらう</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-briefcase"></i> 就職・仕事との両立</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      若い世代では「内定後の告知」「試用期間中の発症」「フリーランス・契約社員」など、<b>雇用形態と治療を両立させる工夫</b>が必要になります。利用できる制度として、<b>傷病手当金</b>（健康保険被保険者）、<b>就労両立支援</b>（厚労省「事業場における治療と仕事の両立支援のためのガイドライン」2023年改訂）、<b>ハローワーク 長期療養者就職支援事業</b>等があります。職場との情報共有はあなたの判断で。職場開示の文面づくりは、SATOIが一緒に整えます。
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('work_balance')"><i class="ti ti-chevron-right" style="vertical-align:-2px"></i> 就労支援を詳しく見る</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-flower"></i> 妊孕性（にんようせい）への入口</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      抗がん薬・放射線治療・手術により、将来の妊娠・出産に影響が及ぶ可能性があります。治療開始<b>前</b>に検討するのが原則で、<b>精子凍結・卵子凍結・受精卵凍結・卵巣組織凍結</b>などの選択肢があります。多くの自治体で<b>小児・AYA世代がん患者等の妊孕性温存治療助成事業</b>（厚労省／自治体）が利用可能です。
+      <button class="btn btn-teal" style="margin-top:10px" onclick="go('fertility')"><i class="ti ti-chevron-right" style="vertical-align:-2px"></i> 妊孕性温存を詳しく見る</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-users"></i> 居場所——AYA同士で、声を交わす</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      同世代の患者・サバイバーとつながる場として、各拠点病院の<b>AYA外来・AYAサポートチーム</b>、患者会、ピアサポートがあります。SATOIの<b>声の物語</b>には AYA 世代の方々の言葉も届いています。読むのは無理せず、自分のペースで。
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('stories')"><i class="ti ti-quote" style="vertical-align:-2px"></i> 同じ夜を過ごす人の声を読む</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('peer')"><i class="ti ti-message-circle-heart" style="vertical-align:-2px"></i> ピアサポート（匿名でつながる）</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-heart"></i> 大切な人へ、どう伝えるか</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      パートナー・親・きょうだい・親しい友人——いつ・どこまで伝えるかは、あなたが選んでいい領域です。「治療スケジュールだけ伝える」「気持ちは別の機会に」など、<b>段階に分ける</b>方法があります。家族の動揺は普通のことで、専門家（心理士・MSW）への相談も並走可能です。
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('family')"><i class="ti ti-users" style="vertical-align:-2px"></i> 家族モードへ</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 伝えたいことを相談カードに</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-coin"></i> お金のリアル</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      AYA世代は<b>傷病手当金</b>（健保加入者、最長1年6カ月）、<b>高額療養費制度</b>、<b>障害年金（初診から1年6カ月後）</b>、<b>がん保険（個人加入）</b>、<b>自治体助成（妊孕性温存／在宅療養）</b>などが対象となり得ます。学生で被扶養者の方は親の制度も並行検討します。
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('benefits_public')"><i class="ti ti-chevron-right" style="vertical-align:-2px"></i> 公的制度・助成を詳しく</button>
+    </div>
+
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター AYA世代のがん罹患統計／日本臨床腫瘍学会 AYA WG／日本癌治療学会 AYAがんガイドブック／厚生労働省「事業場における治療と仕事の両立支援のためのガイドライン」2023年改訂／厚労省 小児・AYA世代がん患者等の妊孕性温存治療助成事業／日本生殖医学会 ガイドライン2021年版。本ページは公的情報を踏まえSATOIが再構成しました。個別の判断は主治医および各専門家にご相談ください。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier1-② 妊孕性温存（fertility） ============ -->
+<section class="scr" id="fertility">
+  <div class="pad">
+    <button class="back" onclick="go('aya')"><i class="ti ti-arrow-left"></i> AYA世代</button>
+    <h1 class="h1" style="margin-top:10px">妊孕性（にんようせい）温存</h1>
+    <div class="sub">将来の妊娠・出産の可能性を、いま、そっと守るための選択肢</div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
+      抗がん薬・放射線治療・手術により<b>生殖機能に影響が及ぶ可能性</b>があります。「将来子どもがほしいかは、いま分からない」という方も、<b>選択肢を残しておくこと</b>はできます。検討するなら<b>治療開始前</b>が原則。1回の面談だけでも、選択の幅は広がります（出典：日本がん・生殖医療学会 妊孕性温存療法ガイドライン2024年版）。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-male"></i> 男性の選択肢</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>精子凍結保存</b>が一般的で、治療開始前に<b>1日でも可能</b>な方法です。射出困難な場合は<b>精巣内精子採取術（TESE）</b>も検討されます。費用は施設・自治体助成により異なります。思春期前の男児では精巣組織凍結が研究段階で行われます。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-female"></i> 女性の選択肢</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>未受精卵子凍結</b>（パートナー無し・独身可）、<b>受精卵（胚）凍結</b>（パートナー有り）、<b>卵巣組織凍結</b>（思春期前・治療開始まで時間が無い場合）。卵巣刺激に約2週間を要するため、<b>主治医・生殖医療専門医・腫瘍内科のチーム連携</b>が要です。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-coin"></i> 費用と助成</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>小児・AYA世代がん患者等の妊孕性温存療法研究促進事業</b>（厚生労働省）により、各自治体で<b>助成金（採卵・凍結・温存後の生殖補助医療等）</b>が利用可能です。対象年齢・上限額は自治体により異なるため、お住まいの自治体窓口・拠点病院の相談支援センターへの確認をお勧めします。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-message-question"></i> 主治医にどう切り出すか</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      告知直後で「いま聞いていいことなのか」迷うのは普通です。<b>「将来の妊娠の可能性について、相談できる窓口を教えてください」</b>と切り出すだけで、生殖医療専門医・JOFR連携施設につないでもらえます。SDM相談カードに入れておくと、診察で伝えやすくなります。
+      <button class="btn btn-teal" style="margin-top:10px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 相談カードに「妊孕性について聞きたい」を入れる</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> コンシェルジュに整理してもらう</button>
+    </div>
+
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：日本がん・生殖医療学会（JSFP） 妊孕性温存療法ガイドライン2024年版／日本生殖医学会 生殖医療ガイドライン2021年版／厚生労働省 小児・AYA世代がん患者等の妊孕性温存療法研究促進事業実施要綱／日本産科婦人科学会 生殖補助医療実施登録施設一覧（JOFR）。本ページは公的情報を踏まえSATOIが再構成しました。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier1-③ アピアランスケア（appearance） ============ -->
+<section class="scr" id="appearance">
+  <div class="pad">
+    <button class="back" onclick="go('support')"><i class="ti ti-arrow-left"></i> 緩和ケア・こころ</button>
+    <h1 class="h1" style="margin-top:10px">アピアランスケア</h1>
+    <div class="sub">脱毛・爪・皮膚・むくみ——治療と外見の変化と、向き合い方</div>
+
+    <div class="card" style="margin-top:14px;background:var(--amber-bg);border:none;line-height:1.85;font-size:13px;color:var(--amber-t)">
+      アピアランスケアは「治療による外見の変化に対する医学的・心理社会的支援」を指します。見た目の変化は<b>自己肯定感・社会参加・治療継続意欲</b>に影響することが報告されています。<b>「気にする自分」を責めない</b>ことから始めます（出典：日本サイコオンコロジー学会／国立がん研究センター アピアランス支援センター）。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-cut"></i> 脱毛（化学療法・放射線）</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      薬剤と部位により<b>発症時期・回復時期</b>が異なります。多くは治療開始<b>2〜4週後</b>に始まり、治療終了から<b>3〜6カ月で回復</b>することが報告されています。準備として、治療前にショートカット、医療用ウィッグや帽子の試着、頭皮ケア（低刺激シャンプー）を始めると、心の準備にもなります。<b>頭皮冷却装置</b>を導入する施設もあります。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-fingerprint"></i> 爪のケア</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      抗がん薬（特にタキサン系）で<b>爪の変色・剥離・割れ</b>が起きることがあります。<b>保湿（オイル・クリーム）、爪を短く保つ、衝撃を避ける、ジェルネイルで保護する</b>等の対応が紹介されています。痛み・化膿がある時は皮膚科・主治医にご相談ください。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-sun"></i> 皮膚のケア</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>皮膚の乾燥・色素沈着・手足症候群・放射線皮膚炎</b>などが起こり得ます。共通の基本は<b>低刺激の洗浄・十分な保湿・紫外線対策（SPF30以上）</b>。手足症候群が出やすい薬剤では、<b>厚手の靴下・摩擦回避・尿素配合クリーム</b>の使用が一般的です。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-paint"></i> メイク・眉毛・まつげ</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      眉毛・まつげの脱毛時は、<b>眉ティント・パウダー、つけまつげ、ノーズシャドウ</b>などで自然に整える方法があります。各拠点病院の<b>アピアランスケア外来</b>、化粧品メーカー協賛のメイクアップ講習会（無料・予約制）が全国で開催されています。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-droplet"></i> リンパ浮腫（むくみ）</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      手術・放射線治療によりリンパの流れが滞ることでむくみが生じることがあります。<b>セルフケア（圧迫療法・運動・スキンケア・用手的リンパドレナージ）</b>と専門外来の連携が標準です。早めの相談・予防教育が予後に影響することが報告されています。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-heart"></i> 心のサポート</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      「鏡を見るのがつらい」「人と会いたくない」などの気持ちは、多くの方が経験しています。<b>SATOIの物語</b>には同じ気持ちを言葉にした方の声が届いています。声に出すのも、書くのも、聞くだけも、自由です。
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('stories')"><i class="ti ti-quote" style="vertical-align:-2px"></i> 同じ気持ちを書いた声を読む</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> コンシェルジュに聞く</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 副作用ケアを相談カードに</button>
+    </div>
+
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター 中央病院 アピアランス支援センター／日本サイコオンコロジー学会／日本がんサポーティブケア学会／日本リンパ浮腫学会 リンパ浮腫診療ガイドライン2018年版。本ページは公的情報を踏まえSATOIが再構成しました。製品名・サービス名の特定推奨はしておりません。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier1-④ 公的制度の体系（benefits_public） ============ -->
+<section class="scr" id="benefits_public">
+  <div class="pad">
+    <button class="back" onclick="go('money')"><i class="ti ti-arrow-left"></i> お金</button>
+    <h1 class="h1" style="margin-top:10px">公的制度の体系</h1>
+    <div class="sub">高額療養費・傷病手当・障害年金・介護保険——使える制度を、整理する</div>
+
+    <div class="card" style="margin-top:14px;background:var(--blue-bg);border:none;line-height:1.85;font-size:13px;color:var(--blue-d)">
+      がん治療には複数の公的制度が用意されています。「自分が該当するか分からない」という方も、<b>制度の入口</b>を知っておくだけで、必要なときに動けます。<b>がん相談支援センターのソーシャルワーカー（MSW）</b>に相談すれば、申請まで伴走してもらえます（無料）。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-receipt"></i> 高額療養費制度</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      ひと月の医療費が一定額を超えた場合、自己負担額が<b>所得区分に応じた上限</b>になります。<b>事前に「限度額適用認定証」</b>を取得しておくと、窓口で立替えなしになります。<b>多数該当（直近12カ月で3回以上）</b>でさらに上限額が下がる仕組みもあります（出典：厚生労働省 高額療養費制度を利用される皆さまへ／全国健康保険協会）。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-calendar"></i> 傷病手当金</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      健康保険の被保険者が病気・けがで連続する3日間を含み4日以上仕事を休んだ場合、<b>標準報酬日額の3分の2相当</b>が支給されます。支給期間は<b>同一傷病で通算1年6カ月</b>です。退職後も一定要件で継続受給できる場合があります（出典：協会けんぽ 傷病手当金）。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-wallet"></i> 障害年金</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      初診日から<b>1年6カ月経過後</b>、症状や全身状態が一定基準を満たすと、<b>障害基礎年金</b>（国民年金加入者）<b>・障害厚生年金</b>（厚生年金加入者）の対象となり得ます。がんでも対象となる場合があり、申請書類は複雑なため<b>社会保険労務士・MSW</b>への相談が一般的です（出典：日本年金機構 障害年金）。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-elderly"></i> 介護保険</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>40〜64歳</b>の方は、がん（末期）が<b>第2号被保険者の特定疾病</b>に含まれており、要介護認定を受けて在宅サービス・福祉用具レンタル等が利用できます。65歳以上は原因疾病を問わず申請可能です（出典：厚生労働省 介護保険制度）。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-home-heart"></i> 生活費等の助成・給付</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      自治体により<b>がん患者ウィッグ購入費助成、人工乳房・補正下着助成、医療用補整具助成、在宅療養支援、児童扶養手当の特例</b>等があります。「住んでいる自治体名 + がん + 助成」で検索、または<b>がん相談支援センター</b>での確認をお勧めします。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-message-question"></i> どこから相談すればいい？</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>がん診療連携拠点病院のがん相談支援センター</b>では、医療ソーシャルワーカー（MSW）・看護師が<b>無料で・誰でも・電話でも</b>相談に応じます（その病院にかかっていない方もOK）。AYA・小児・希少がんなど特化サポートもあります。
+      <button class="btn btn-teal" style="margin-top:10px" onclick="go('hospital')"><i class="ti ti-search" style="vertical-align:-2px"></i> 相談支援センターを探す</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('fp')"><i class="ti ti-coin" style="vertical-align:-2px"></i> SATOIのFP相談へ</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> あなたが該当する制度をコンシェルジュに整理してもらう</button>
+    </div>
+
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：厚生労働省「高額療養費制度を利用される皆さまへ」／全国健康保険協会 傷病手当金／日本年金機構 障害年金／厚生労働省 介護保険制度／全国がん診療連携拠点病院 がん相談支援センター 相談員研修プログラム。本ページは公的情報を踏まえSATOIが再構成しました。最新の上限額・所得区分は各制度の公式情報をご確認ください。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier1-⑤ 病院検索UI拡張（hospital_search） ============ -->
+<section class="scr" id="hospital_search">
+  <div class="pad">
+    <button class="back" onclick="go('hospital')"><i class="ti ti-arrow-left"></i> 病院</button>
+    <h1 class="h1" style="margin-top:10px">病院・相談先を探す</h1>
+    <div class="sub">がん診療連携拠点病院／小児がん拠点／相談支援センター／希少がんセンター</div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
+      日本の公的ながん診療体制では、<b>がん診療連携拠点病院</b>が全国に456施設、<b>小児がん拠点病院</b>15施設・連携病院、<b>希少がん中央機関</b>等が指定されています（厚生労働省）。地域・病名・特化領域から探せます。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-stethoscope"></i> 病名から病院を探す</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      まず<b>がん種を選ぶ</b>と、その診療経験を持つ施設が表示されます。施設別の<b>院内がん登録症例数・5年生存率</b>は、国立がん研究センターが公開しています（院内がん登録生存率閲覧システム）。
+      <select id="hsCancer" style="margin-top:10px;width:100%;padding:10px;border-radius:10px;border:.5px solid var(--line2);font:inherit;font-size:13px">
+        <option value="">— がん種を選ぶ —</option>
+      </select>
+      <button class="btn btn-teal" style="margin-top:10px" onclick="hsSearchByCancer()"><i class="ti ti-search" style="vertical-align:-2px"></i> このがんの拠点病院を探す</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-map-pin"></i> 地域から病院を探す</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      お住まいの<b>都道府県</b>から、がん診療連携拠点病院・地域がん診療病院の一覧を確認できます。
+      <select id="hsPref" style="margin-top:10px;width:100%;padding:10px;border-radius:10px;border:.5px solid var(--line2);font:inherit;font-size:13px">
+        <option value="">— 都道府県を選ぶ —</option>
+      </select>
+      <button class="btn btn-teal" style="margin-top:10px" onclick="hsSearchByPref()"><i class="ti ti-search" style="vertical-align:-2px"></i> この地域の拠点病院を探す</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-baby-carriage"></i> 小児がんの病院</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      0〜15歳の小児がんは、全国15施設の<b>小児がん拠点病院</b>と連携病院を中心に診療されます。きょうだい・家族の宿泊支援・院内学級・長期フォローアップ外来が整備されています。
+      <button class="btn btn-out" style="margin-top:10px" onclick="hsOpenChildHosp()"><i class="ti ti-external-link" style="vertical-align:-2px"></i> 小児がん拠点病院の検索（公的サイトへ）</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-message-circle-question"></i> 相談支援センターを探す</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>がん相談支援センター</b>では、その病院にかかっていない方も<b>無料・匿名・電話でも</b>相談できます。医療ソーシャルワーカー・看護師が、治療・お金・仕事・家族のことに対応します。
+      <button class="btn btn-out" style="margin-top:10px" onclick="hsOpenSoudan()"><i class="ti ti-external-link" style="vertical-align:-2px"></i> 相談支援センターの検索（公的サイトへ）</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-star"></i> 希少がんセンター</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      年間罹患数が10万人あたり6人未満の希少がんは、<b>国立がん研究センター中央病院 希少がんセンター</b>が中央機関となり、専門医・診療施設の案内・第2意見窓口・電話相談（希少がんホットライン）を行っています。
+      <button class="btn btn-out" style="margin-top:10px" onclick="hsOpenRare()"><i class="ti ti-external-link" style="vertical-align:-2px"></i> 希少がんセンターの情報</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-flask"></i> 臨床試験・治験を探す</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      参加可能な治験は、厚生労働省<b>臨床研究実施計画・研究概要公開システム（jRCT）</b>、国立がん研究センター<b>がん臨床試験を探す</b>等で検索できます。主治医とも相談しながら判断しましょう。
+      <button class="btn btn-out" style="margin-top:10px" onclick="hsOpenTrial()"><i class="ti ti-external-link" style="vertical-align:-2px"></i> 臨床試験検索（公的サイトへ）</button>
+    </div>
+
+    <div class="card" style="margin-top:18px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13.5px;color:var(--teal-d)">
+      <b>「私はどこに行けば？」</b>と迷ったら、コンシェルジュにあなたのがん種・お住まい・状況を伝えて、優先候補を一緒に絞ります。
+      <button class="btn btn-teal" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュと病院候補を絞る</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('sopinion')"><i class="ti ti-second-opinion" style="vertical-align:-2px"></i> セカンドオピニオンを知る</button>
+    </div>
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：厚生労働省 がん診療連携拠点病院等の指定について／国立がん研究センター がん情報サービス 病院を探す／同 院内がん登録生存率閲覧システム／同 希少がんセンター／厚労省 小児がん拠点病院／jRCT。本ページは公的情報を踏まえSATOIが再構成しました。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<script>
+/* ===== 病院検索UI のクライアント側ロジック ===== */
+(function(){
+  var PREFS_JP=['北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県','滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'];
+  window._oninit=window._oninit||{};
+  window._oninit['hospital_search']=function(){
+    var c=document.getElementById('hsCancer');
+    if(c && c.options.length<=1 && window.CANCER_JA){
+      Object.keys(window.CANCER_JA).forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=window.CANCER_JA[k];c.appendChild(o);});
+    }
+    var p=document.getElementById('hsPref');
+    if(p && p.options.length<=1){
+      PREFS_JP.forEach(function(n){var o=document.createElement('option');o.value=n;o.textContent=n;p.appendChild(o);});
+    }
+  };
+  window.hsSearchByCancer=function(){
+    var v=document.getElementById('hsCancer').value;
+    if(!v){if(typeof toast==='function')toast('がん種を選んでください');return;}
+    var nm=(window.CANCER_JA&&window.CANCER_JA[v])||v;
+    if(typeof toast==='function')toast(nm+' の拠点病院をSATOIの病院DBから検索します（本番接続時）');
+    if(typeof go==='function')go('hospital');
+  };
+  window.hsSearchByPref=function(){
+    var v=document.getElementById('hsPref').value;
+    if(!v){if(typeof toast==='function')toast('都道府県を選んでください');return;}
+    if(typeof toast==='function')toast(v+' の拠点病院をSATOIの病院DBから検索します（本番接続時）');
+    if(typeof go==='function')go('hospital');
+  };
+  window.hsOpenChildHosp=function(){window.open('https://hospdb.ganjoho.jp/kyoten/childsearch','_blank');};
+  window.hsOpenSoudan  =function(){window.open('https://hospdb.ganjoho.jp/kyoten/soudansearch','_blank');};
+  window.hsOpenRare    =function(){window.open('https://www.ncc.go.jp/jp/rcc/index.html','_blank');};
+  window.hsOpenTrial   =function(){window.open('https://ganjoho.jp/public/dia_tre/clinical_trial/search2.html','_blank');};
+})();
+</script>
+
+<!-- ============ Tier2-⑥ 治療モダリティ別ハブ（tx_modality） ============ -->
+<section class="scr" id="tx_modality">
+  <div class="pad">
+    <button class="back" onclick="go('treatment')"><i class="ti ti-arrow-left"></i> 治療を知る</button>
+    <h1 class="h1" style="margin-top:10px">治療の種類を知る</h1>
+    <div class="sub">手術／薬物／放射線／免疫／造血幹細胞——それぞれの役割と組み合わせ</div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
+      多くのがん治療では、複数の治療を組み合わせる<b>集学的治療</b>が標準です。「どれが一番か」ではなく、<b>あなたのがん種・病期・全身状態・希望に合わせて、最適な順序で組み合わせる</b>のが基本です（出典：日本癌治療学会／日本臨床腫瘍学会 集学的治療の考え方）。
+    </div>
+
+    <details class="qa" style="margin-top:14px"><summary><i class="ti ti-stethoscope" style="vertical-align:-2px;color:var(--teal)"></i> 手術（外科治療）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">局所のがんを<b>物理的に切除</b>する治療です。早期がんでは<b>根治</b>を目指せる一方、進行例では薬物療法・放射線との<b>組み合わせ（術前・術後）</b>が一般的です。最近は<b>低侵襲手術（腹腔鏡・胸腔鏡・ロボット支援下手術）</b>が普及しています。臓器温存・機能温存・整容性の追求もガイドラインに位置づけられています。〔出典：日本外科学会 外科専門医制度 共通教育／各臓器別学会ガイドライン〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-pill" style="vertical-align:-2px;color:var(--teal)"></i> 薬物療法（化学療法・分子標的薬・ホルモン療法）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">全身に作用する治療で、<b>細胞障害性抗がん薬（殺細胞性）</b>・<b>分子標的薬</b>・<b>ホルモン療法</b>に大別されます。近年は遺伝子変異・タンパク発現の検査結果に基づき<b>あなたのがんに効くと予想される薬</b>を選ぶ<b>プレシジョン医療</b>が広がっています。投与は外来・入院・在宅自己注射等多様化しています。〔出典：日本臨床腫瘍学会 化学療法レジメン参照体系／日本癌治療学会／各臓器別学会ガイドライン〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-radioactive" style="vertical-align:-2px;color:var(--teal)"></i> 放射線治療</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">放射線でがん細胞のDNAを損傷させ増殖を抑える治療です。<b>外照射</b>（リニアック）・<b>定位放射線治療（SBRT）</b>・<b>強度変調放射線治療（IMRT）</b>・<b>粒子線治療（陽子線・重粒子線）</b>・<b>密封小線源治療（前立腺・子宮頸など）</b>があります。早期がんでは手術と同等の根治率を狙える場合もあり、緩和目的（骨転移痛・脳転移など）でも重要な治療です。〔出典：日本放射線腫瘍学会（JASTRO）放射線治療計画ガイドライン〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-shield-check" style="vertical-align:-2px;color:var(--teal)"></i> 免疫療法（免疫チェックポイント阻害薬）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">がん細胞が免疫にかける「ブレーキ」を外し、<b>自分の免疫</b>でがんを攻撃する治療です（抗PD-1抗体・抗PD-L1抗体・抗CTLA-4抗体）。長期奏効例の報告がある一方、<b>免疫関連有害事象（irAE）</b>として甲状腺機能異常・大腸炎・肺臓炎・下垂体炎などが起こることがあるため、症状の早期発見と多診療科連携が重要です。〔出典：日本臨床腫瘍学会 がん免疫療法ガイドライン2023年版〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-droplet" style="vertical-align:-2px;color:var(--teal)"></i> 造血幹細胞移植</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">主に血液がん（白血病・悪性リンパ腫・多発性骨髄腫）の治療で、<b>大量化学療法（±全身放射線）の後に造血幹細胞を再注入</b>します。<b>自家移植</b>（自分の細胞）と<b>同種移植</b>（ドナーの細胞）があり、後者では<b>移植片対宿主病（GVHD）</b>等の合併症管理が必要です。骨髄バンク（日本骨髄バンク）・臍帯血バンクが基盤を支えます。〔出典：日本造血・免疫細胞療法学会 ガイドライン〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-dna" style="vertical-align:-2px;color:var(--teal)"></i> がんゲノム医療</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">がん遺伝子パネル検査により、<b>あなたのがんに合う薬</b>を見つける医療です。標準治療終了後等が保険適用の主な対象です。<b>がんゲノム医療中核拠点・拠点・連携病院</b>が指定されており、<b>C-CAT（がんゲノム情報管理センター）</b>に登録・解析されます。〔出典：日本臨床腫瘍学会 がんゲノム医療ガイダンス第2版／厚生労働省 がんゲノム医療提供体制〕</div>
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('precision')"><i class="ti ti-chevron-right" style="vertical-align:-2px"></i> プレシジョン医療を詳しく</button>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-flask" style="vertical-align:-2px;color:var(--teal)"></i> 研究段階の医療（臨床試験・治験）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">新しい治療法の有効性・安全性を調べる<b>臨床試験</b>、薬の承認を目指す<b>治験</b>があります。参加は<b>あなたが選ぶこと</b>。基準・スケジュール・費用負担を確認のうえ、主治医・治験コーディネーターと検討します。〔出典：厚生労働省 jRCT／国立がん研究センター がん臨床試験を探す〕</div>
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('hospital_search')"><i class="ti ti-search" style="vertical-align:-2px"></i> 臨床試験を探す</button>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-alert-circle" style="vertical-align:-2px;color:var(--amber)"></i> 民間療法・健康食品の注意</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">サプリ・健康食品・伝統的な代替医療には、<b>科学的根拠が十分に示されていないもの</b>が多く含まれ、<b>標準治療と相互作用</b>を起こす可能性があります。「やってはいけない」ではなく、<b>必ず主治医・薬剤師に共有</b>することが大切です。「がんが消える」など断定的な広告は注意が必要です。〔出典：国立がん研究センター 健康食品の安全性・有効性情報／厚生労働省 統合医療情報発信サイト（eJIM）〕</div>
+    </details>
+
+    <div class="card" style="margin-top:18px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13.5px;color:var(--teal-d)">
+      <b>「どの組み合わせが私に合うのか」</b>は、あなたのがん種・病期・体調・希望によって変わります。コンシェルジュにあなたの状況を伝えて、選び方の整理を一緒に。
+      <button class="btn btn-teal" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュに整理してもらう</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 治療方針を相談カードに</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('cancer')"><i class="ti ti-book-2" style="vertical-align:-2px"></i> あなたのがん種ページへ</button>
+    </div>
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：日本癌治療学会／日本臨床腫瘍学会／日本外科学会／日本放射線腫瘍学会（JASTRO）／日本造血・免疫細胞療法学会／厚生労働省 がんゲノム医療提供体制／eJIM 統合医療情報発信サイト／各臓器別学会ガイドライン。本ページは公的情報を踏まえSATOIが再構成しました。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier2-⑦ 症状管理・支持療法（symptoms） ============ -->
+<section class="scr" id="symptoms">
+  <div class="pad">
+    <button class="back" onclick="go('support')"><i class="ti ti-arrow-left"></i> 緩和ケア・こころ</button>
+    <h1 class="h1" style="margin-top:10px">症状・副作用と向き合う</h1>
+    <div class="sub">痛み・吐き気・倦怠感・しびれ・口内炎・発熱・便秘・下痢——記録し、伝え、和らげる</div>
+
+    <div class="card" style="margin-top:14px;background:var(--rose-bg);border:none;line-height:1.85;font-size:13px;color:#7a3b2c">
+      症状は「我慢するもの」ではなく、<b>治療と一緒に整えていくもの</b>です。多くの症状には<b>有効な対処法</b>が示されています。<b>がまんしない・記録する・早めに伝える</b>の3つが基本です（出典：日本緩和医療学会 がん疼痛の薬物療法に関するガイドライン2020年版／日本がんサポーティブケア学会）。
+    </div>
+
+    <details class="qa" style="margin-top:14px"><summary><i class="ti ti-bone" style="vertical-align:-2px;color:var(--rose)"></i> 痛み</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">非オピオイド・<b>弱オピオイド（コデイン等）・強オピオイド（モルヒネ・オキシコドン・フェンタニル等）</b>・鎮痛補助薬を段階的に組み合わせる治療体系が確立しています。<b>「中毒になる・命を縮める」は誤解</b>で、医療用麻薬は適切に使えば安全です。痛みは<b>数値（NRS 0-10）</b>で表すと医療者に伝わりやすくなります。〔出典：日本緩和医療学会 がん疼痛の薬物療法に関するガイドライン2020年版／WHO 疼痛ラダー〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-mood-sick" style="vertical-align:-2px;color:var(--rose)"></i> 吐き気・嘔吐（CINV）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">抗がん薬による吐き気は、<b>5-HT3受容体拮抗薬・NK1受容体拮抗薬・デキサメタゾン・オランザピン</b>等を組み合わせた予防的制吐療法が標準です。<b>食事の工夫</b>（少量・回数を増やす・冷たいもの・香りを抑える）も助けになります。〔出典：日本癌治療学会 制吐薬適正使用ガイドライン2023年版〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-zzz" style="vertical-align:-2px;color:var(--rose)"></i> 倦怠感（だるさ）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">「気合いの問題」ではなく治療の影響として理解されています。<b>適度な運動（30分程度の歩行等）・睡眠衛生・栄養・水分・心理的サポート</b>が組み合わせ的に有効と報告されています。重度の場合は薬物療法も検討されます。〔出典：日本がんサポーティブケア学会 がん関連倦怠感ガイドライン〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-hand-finger" style="vertical-align:-2px;color:var(--rose)"></i> しびれ（末梢神経障害）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">タキサン・プラチナ・ビンカアルカロイド系等で起こることがあります。<b>冷却（手袋・靴下）・保湿・転倒予防・運動療法</b>等が一般的な対処です。重度では薬物減量・休薬が検討されます。〔出典：ASCO・日本がんサポーティブケア学会 末梢神経障害ガイドライン〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-dental" style="vertical-align:-2px;color:var(--rose)"></i> 口内炎</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">化学療法・放射線治療で起こりやすい症状です。<b>うがい（保湿目的）・歯磨き（やわらかいブラシ）・刺激物を避ける・口腔ケア外来との連携</b>が予防の基本です。痛みには局所麻酔薬・鎮痛薬を併用します。<b>歯科受診</b>を治療開始前に行うことが推奨されています。〔出典：日本がん口腔支持療法学会／日本歯科医師会 周術期口腔機能管理〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-temperature" style="vertical-align:-2px;color:var(--rose)"></i> 発熱（発熱性好中球減少症 FN）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">化学療法後の好中球減少時に発熱（37.5℃以上）した場合は<b>速やかに連絡・受診</b>が必要です。<b>緊急時カード</b>（SATOI）に病院連絡先・治療スケジュールをまとめておきます。〔出典：日本臨床腫瘍学会 発熱性好中球減少症（FN）診療ガイドライン〕</div>
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('emergency')"><i class="ti ti-urgent" style="vertical-align:-2px;color:var(--red)"></i> 緊急時カードへ</button>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-toilet-paper" style="vertical-align:-2px;color:var(--rose)"></i> 便秘・下痢</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">オピオイド使用時は<b>予防的下剤</b>が推奨されています。下痢時は脱水予防・電解質補給・止瀉薬の使用、感染性の鑑別が重要です。「いつから・回数・性状」を記録すると診察で役立ちます。〔出典：日本緩和医療学会／日本がんサポーティブケア学会〕</div>
+    </details>
+
+    <div class="card" style="margin-top:18px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13.5px;color:var(--teal-d)">
+      <b>症状の記録は、SATOIの「壺（記録）」と「相談カード」が活きる場面です。</b>毎日のコンディションを残しておくと、診察で「いつから・どんな時に・どのくらい」を正確に伝えられます。
+      <button class="btn btn-teal" style="margin-top:10px" onclick="go('body')"><i class="ti ti-notes" style="vertical-align:-2px"></i> からだの記録へ</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 症状を相談カードに入れる</button>
+    </div>
+
+    <div class="card" style="margin-top:18px;background:var(--rose-bg);border:none;line-height:1.85;font-size:13.5px;color:#7a3b2c">
+      <b>「いま起きているこの症状、どう先生に伝えれば？」</b>と思ったら、症状名・いつから・どのくらいをコンシェルジュに伝えると、診察で使える形に整理します。
+      <button class="btn" style="background:var(--rose);color:#fff;margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> 症状をコンシェルジュに整理してもらう</button>
+    </div>
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：日本緩和医療学会 がん疼痛の薬物療法に関するガイドライン2020年版／日本癌治療学会 制吐薬適正使用ガイドライン2023年版／日本がんサポーティブケア学会／日本臨床腫瘍学会 FN診療ガイドライン／日本がん口腔支持療法学会／WHO 疼痛ラダー。本ページは公的情報を踏まえSATOIが再構成しました。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier2-⑧ 心のケア体系（mental_care） ============ -->
+<section class="scr" id="mental_care">
+  <div class="pad">
+    <button class="back" onclick="go('support')"><i class="ti ti-arrow-left"></i> 緩和ケア・こころ</button>
+    <h1 class="h1" style="margin-top:10px">心のケア</h1>
+    <div class="sub">不安・抑うつ・眠れない・死の不安——気持ちを整えるための選択肢</div>
+
+    <div class="card" style="margin-top:14px;background:var(--blue-bg);border:none;line-height:1.85;font-size:13px;color:var(--blue-d)">
+      がんと診断された人の<b>30〜40%が、何らかの精神的なつらさを経験する</b>と報告されています。これは弱さではなく、<b>体の病気と一緒に起こる、自然な反応</b>です。専門のケアにつながると、多くは軽くなります（出典：日本サイコオンコロジー学会 がん患者の精神症状ガイドライン）。
+    </div>
+
+    <details class="qa" style="margin-top:14px"><summary><i class="ti ti-mood-confuzed" style="vertical-align:-2px;color:var(--blue)"></i> 不安</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">告知直後・治療開始前・再発の不安・検査前など、節目に強くなることが多い症状です。<b>呼吸法・マインドフルネス・運動・睡眠衛生</b>等のセルフケア、<b>カウンセリング</b>、必要に応じて<b>抗不安薬・SSRI</b>等の薬物療法も選択肢です。〔出典：日本サイコオンコロジー学会／日本緩和医療学会〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-mood-sad" style="vertical-align:-2px;color:var(--blue)"></i> 抑うつ</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">「ずっと気分が沈む」「楽しめない」「眠れない・食べられない」が<b>2週間以上続く</b>場合は、うつ状態の可能性があります。精神腫瘍科・心療内科・精神科への相談、<b>抗うつ薬</b>（SSRI/SNRI等）と心理療法の組み合わせが標準です。〔出典：日本サイコオンコロジー学会 抑うつ診療ガイドライン〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-moon" style="vertical-align:-2px;color:var(--blue)"></i> 不眠</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">不眠は、痛み・不安・薬剤の副作用などが原因となります。<b>睡眠衛生（就寝時刻の固定・カフェイン制限・寝室環境）</b>、<b>認知行動療法（CBT-I）</b>、必要に応じて<b>非ベンゾジアゼピン系睡眠薬・メラトニン受容体作動薬</b>等の選択肢があります。〔出典：日本睡眠学会／日本緩和医療学会〕</div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><i class="ti ti-cloud" style="vertical-align:-2px;color:var(--blue)"></i> 死の不安・スピリチュアルペイン</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">「自分の存在の意味」「家族に何を残せるか」など、深い問いとつきあう時間です。<b>臨床心理士・公認心理師・チャプレン・スピリチュアルケアワーカー</b>などの専門職が在籍する施設もあります。「話す相手を選んでいい」「言葉にしなくていい」という選択肢も大切です。〔出典：日本ホスピス緩和ケア協会／日本臨床宗教師会〕</div>
+    </details>
+
+    <div class="card" style="margin-top:18px;background:var(--rose-bg);border:none;line-height:1.85;font-size:13.5px;color:#7a3b2c">
+      <b>SATOIは、診察と診察のあいだを支える「もうひとつの居場所」です。</b>声で話す・文字に残す・誰かの言葉を読む——どれも、あなたのペースで。
+      <button class="btn" style="background:var(--rose);color:#fff;margin-top:10px" onclick="go('voicerec')"><i class="ti ti-microphone" style="vertical-align:-2px"></i> 声で気持ちを残す</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('stories')"><i class="ti ti-quote" style="vertical-align:-2px"></i> ほかの人の声を読む</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('helplines')"><i class="ti ti-phone" style="vertical-align:-2px"></i> 電話・チャット相談先を見る</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> コンシェルジュに気持ちを話す</button>
+    </div>
+
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：日本サイコオンコロジー学会 がん患者の精神症状ガイドライン／日本緩和医療学会 がん患者の精神症状に対する向精神薬適正使用ガイドライン2017年版／日本睡眠学会／日本ホスピス緩和ケア協会／よりそいホットライン／いのちの電話。本ページは公的情報を踏まえSATOIが再構成しました。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier2-⑨ 就労支援・両立支援（work_balance） ============ -->
+<section class="scr" id="work_balance">
+  <div class="pad">
+    <button class="back" onclick="go('money')"><i class="ti ti-arrow-left"></i> お金</button>
+    <h1 class="h1" style="margin-top:10px">仕事との両立</h1>
+    <div class="sub">休職・復職・転職・自営業——働き方を、治療と一緒に整える</div>
+
+    <div class="card" style="margin-top:14px;background:var(--amber-bg);border:none;line-height:1.85;font-size:13px;color:var(--amber-t)">
+      がん患者の<b>3人に1人が就労世代</b>と報告されています。仕事を続ける／一時的に離れる／変える——どれを選んでも、支える仕組みがあります（出典：厚生労働省「事業場における治療と仕事の両立支援のためのガイドライン」2023年改訂）。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-building"></i> 職場との情報共有</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      職場開示は<b>あなたが決めて良い領域</b>です。共有するなら、<b>診断名／治療スケジュール／必要な配慮</b>を文面化しておくと話しやすくなります。職場の<b>産業医・人事</b>、<b>主治医意見書</b>が橋渡し役を担います。<b>両立支援コーディネーター</b>（社労士・看護師等）が無料で支援するモデル事業も全国で展開しています。
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> 職場開示の文面をコンシェルジュと整える</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-calendar-time"></i> 休職・復職</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      就業規則の<b>休職制度</b>を確認し、<b>傷病手当金</b>（健保被保険者）と組み合わせます。復職時は<b>段階的復職（時短勤務・在宅勤務の活用）</b>と<b>主治医意見書／産業医面談</b>が一般的です。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-briefcase-2"></i> 転職・退職を考えるとき</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      退職前に<b>傷病手当金の継続受給要件</b>、<b>健康保険の任意継続</b>、<b>国民健康保険</b>、<b>国民年金保険料免除</b>、<b>ハローワーク 長期療養者就職支援事業</b>を確認します。早まらず、<b>がん相談支援センターのMSW・社労士</b>に1度相談を。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-shopping-bag"></i> 自営業・フリーランス</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      自営業の方は<b>傷病手当金の対象外</b>のことが多いため、<b>所得補償保険（民間）</b>・<b>小規模企業共済</b>・<b>国民年金保険料免除</b>等を組み合わせます。<b>確定申告での医療費控除</b>も活用できます。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-headset"></i> 相談窓口</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>がん相談支援センター</b>、<b>ハローワーク 長期療養者就職支援担当者（がん患者就職支援事業）</b>、<b>都道府県産業保健総合支援センター</b>、<b>労働基準監督署</b>等で無料相談できます。
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('hospital_search')"><i class="ti ti-search" style="vertical-align:-2px"></i> 相談支援センターを探す</button>
+    </div>
+
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：厚生労働省「事業場における治療と仕事の両立支援のためのガイドライン」2023年改訂／同 がん患者・経験者の治療と仕事の両立支援対策事業／全国健康保険協会 傷病手当金／ハローワーク 長期療養者就職支援事業／日本社会保険労務士会連合会。本ページは公的情報を踏まえSATOIが再構成しました。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier2-⑩ 食事・栄養（nutrition） ============ -->
+<section class="scr" id="nutrition">
+  <div class="pad">
+    <button class="back" onclick="go('support')"><i class="ti ti-arrow-left"></i> 緩和ケア・こころ</button>
+    <h1 class="h1" style="margin-top:10px">食事・栄養</h1>
+    <div class="sub">食欲低下・味覚変化・体重減少——治療を支える、毎日のごはん</div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
+      治療中の栄養状態は<b>治療効果・副作用・QOL</b>に影響します。「無理に食べる」ではなく<b>食べられるものを、食べられる時に、食べられる量だけ</b>が基本です。困った時は管理栄養士・看護師に相談を（出典：日本臨床腫瘍学会 がん患者の栄養療法ガイドライン／日本静脈経腸栄養学会）。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-mood-empty"></i> 食欲が湧かないとき</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>少量・回数を増やす</b>、<b>盛り付けを小さく</b>、<b>香りを抑える（冷ます）</b>、<b>好きなものから</b>。たんぱく質源として<b>卵・豆腐・乳製品・魚</b>等を中心に。<b>経口栄養補助食品（ONS）</b>（ゼリー・ドリンク）は薬局で入手可能です。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-mood-tongue"></i> 味覚の変化</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>金属味・苦味の増強・無味</b>などが起こることがあります。<b>レモン・酢・出汁を活用</b>、<b>金属のスプーンを避けて陶器・木製を使う</b>、<b>うがい（重曹水等）で口腔環境を整える</b>などの工夫があります。亜鉛欠乏が関与する場合もあるため、医療者に相談を。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-scale"></i> 体重減少（がん悪液質）</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      がん患者では<b>炎症・代謝異常</b>により体重減少が起こりやすく、進行例では「がん悪液質」と呼ばれます。<b>栄養（特にたんぱく質1.0-1.5g/kg/日）・運動（レジスタンス＋有酸素）・薬物療法（アナモレリン等）</b>の組み合わせが推奨されます。〔出典：日本がんサポーティブケア学会 がん悪液質ガイドライン〕
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-shield"></i> 感染予防のため</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      好中球減少時は<b>生もの（刺身・生肉・生卵）を避け、加熱したものを</b>。<b>カット野菜は十分に洗う</b>、<b>調理後は早めに食べる</b>、<b>食器・調理器具の清潔</b>を保ちます。〔出典：日本造血・免疫細胞療法学会／FN診療ガイドライン〕
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-alert-circle"></i> サプリ・健康食品の注意</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      抗酸化サプリ（高用量ビタミンC・E等）、セントジョーンズワート、グレープフルーツ等は<b>抗がん薬と相互作用</b>を起こすことが報告されています。利用する場合は<b>必ず主治医・薬剤師に共有</b>を。〔出典：国立がん研究センター 健康食品の安全性・有効性情報／eJIM〕
+    </div>
+
+    <div class="card" style="margin-top:18px;background:var(--amber-bg);border:none;line-height:1.85;font-size:13.5px;color:var(--amber-t)">
+      <b>SATOIの「みんなの灯り（レシピ）」</b>には、患者さんの工夫レシピが並びます。「眠れない夜の温かいスープ」「口内炎の日のゼリー」など、リアルな声から。
+      <button class="btn btn-out" style="margin-top:10px;color:var(--amber-t);border-color:var(--amber-line)" onclick="go('recipes')"><i class="ti ti-tools-kitchen" style="vertical-align:-2px"></i> レシピを見る</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> 食事の悩みをコンシェルジュに相談</button>
+    </div>
+
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：日本臨床腫瘍学会 がん患者の栄養療法ガイドライン／日本静脈経腸栄養学会 静脈経腸栄養ガイドライン／日本がんサポーティブケア学会 がん悪液質に対する治療指針／国立がん研究センター 健康食品の安全性・有効性情報／厚生労働省「e-ヘルスネット」。本ページは公的情報を踏まえSATOIが再構成しました。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier3-⑪ 予防・検診（prevention） ============ -->
+<section class="scr" id="prevention">
+  <div class="pad">
+    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <h1 class="h1" style="margin-top:10px">予防と検診</h1>
+    <div class="sub">科学的根拠に基づくがん予防5本の柱と、5つの検診</div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
+      日本人の<b>2人に1人</b>が生涯のうちに何らかのがんに罹ると報告されています。一方、<b>科学的根拠に基づくがん予防5本の柱</b>と<b>定期的ながん検診</b>で、罹患リスクと死亡リスクを下げられることが示されています（出典：国立がん研究センター 科学的根拠に基づくがん予防）。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-shield-check"></i> 科学的根拠に基づく5本の柱</div>
+    <div class="card" style="line-height:1.95;font-size:13.5px">
+      <b>①禁煙</b>：本人の喫煙だけでなく、受動喫煙も避ける。<br>
+      <b>②節酒</b>：飲酒する場合は、純アルコール換算で1日23g程度まで（日本酒1合・ビール大瓶1本・ワイン180mL程度）。<br>
+      <b>③食生活</b>：減塩・野菜と果物・熱すぎる飲食物を控える。<br>
+      <b>④身体活動</b>：歩行と同等以上の身体活動を毎日60分、息がはずみ汗をかく程度の運動を週60分。<br>
+      <b>⑤適正体重の維持</b>：中高年男性 BMI 21〜27、女性 21〜25 を目安に。<br><br>
+      これに<b>感染（HBV/HCV/HPV/ピロリ菌等）への対策</b>を加えた<b>6本</b>として紹介されることもあります。〔出典：国立がん研究センター がん情報サービス／日本人のためのがん予防法（5+1）〕
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-virus"></i> 感染とがんの予防</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>HBV/HCV</b>：肝炎ウイルス検査と適切な治療（核酸アナログ製剤・直接作用型抗ウイルス薬）が肝がんリスクを下げます。<br>
+      <b>HPV</b>：子宮頸がんの主な原因。HPVワクチンと子宮頸がん検診の組み合わせが予防の柱です。<br>
+      <b>ピロリ菌</b>：胃がんリスクと関連が報告されています。除菌治療の保険適用は所定の検査結果に基づきます。<br>
+      〔出典：厚生労働省 肝炎総合対策／日本産科婦人科学会／日本ヘリコバクター学会 H. pylori 感染の診断と治療のガイドライン〕
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-clipboard-check"></i> 国が推奨する5つの検診</div>
+    <details class="qa" style="margin-top:10px"><summary><b>胃がん検診</b>（50歳以上・2年に1回）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">胃内視鏡検査または胃X線検査。当面の間、40歳代でX線検査も可。〔出典：厚生労働省 がん検診実施のための指針／国がん 有効性評価に基づく胃がん検診ガイドライン2014年版〕</div>
+    </details>
+    <details class="qa" style="margin-top:6px"><summary><b>大腸がん検診</b>（40歳以上・1年に1回）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">便潜血検査（免疫法）2日法。陽性なら<b>必ず精密検査（大腸内視鏡検査）</b>を。〔出典：国がん 有効性評価に基づく大腸がん検診ガイドライン2024年改訂版〕</div>
+    </details>
+    <details class="qa" style="margin-top:6px"><summary><b>肺がん検診</b>（40歳以上・1年に1回）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">胸部X線検査＋（高リスク者は）喀痰細胞診。喫煙歴30 pack-year以上は高リスク群とされます。〔出典：国がん 有効性評価に基づく肺がん検診ガイドライン2024年改訂版〕</div>
+    </details>
+    <details class="qa" style="margin-top:6px"><summary><b>乳がん検診</b>（40歳以上・2年に1回）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">マンモグラフィ検査。視触診の併用は地域・施設により異なります。〔出典：国がん 有効性評価に基づく乳がん検診ガイドライン2024年改訂版／日本乳がん検診学会〕</div>
+    </details>
+    <details class="qa" style="margin-top:6px"><summary><b>子宮頸がん検診</b>（20歳以上・2年に1回）</summary>
+      <div class="note" style="line-height:1.9;font-size:13px">細胞診検査。市町村事業として<b>HPV検査単独法</b>の導入も進められています。HPVワクチンとの組み合わせで予防効果が高まることが知られます。〔出典：国がん 有効性評価に基づく子宮頸がん検診ガイドライン2024年改訂版〕</div>
+    </details>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-info-circle"></i> 「検診」と「検査」のちがい</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>検診</b>は症状のない方が定期的に受けるもの、<b>検査</b>は症状がある時や検診で異常がある時に精密に調べるもの。検診で「要精密検査」となった場合は、<b>必ず精密検査</b>を受けることが、検診の効果を引き出します。
+    </div>
+
+    <div class="card" style="margin-top:18px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13.5px;color:var(--teal-d)">
+      <b>「私の場合は何から始めれば？」</b>と思ったら、SATOIコンシェルジュに聞いてみてください。年齢・家族歴・生活習慣を踏まえて、優先順位を一緒に整理します。
+      <button class="btn btn-teal" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュに相談する</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 健診で聞きたいことを相談カードに</button>
+    </div>
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター 科学的根拠に基づくがん予防／日本人のためのがん予防法（5+1）／厚生労働省 がん予防重点健康教育及びがん検診実施のための指針／有効性評価に基づく各がん検診ガイドライン／日本ヘリコバクター学会／厚労省 肝炎総合対策。本ページは公的情報を踏まえSATOIが再構成しました。最新の指針改定状況は各団体公式情報をご確認ください。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier3-⑫ 用語集（glossary_hub） ============ -->
+<section class="scr" id="glossary_hub">
+  <div class="pad">
+    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <h1 class="h1" style="margin-top:10px">がんに関する用語集</h1>
+    <div class="sub">告知・診察・パンフレットで出てくる言葉を、やさしく</div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
+      診察で初めて聞く言葉は、それだけで疲れますよね。よく出てくる用語を、<b>やさしく・正確に</b>整理しています。詳しくは、各がん種ページの「これは何？」も。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-vocabulary"></i> 病期・検査</div>
+    <details class="qa" style="margin-top:8px"><summary><b>ステージ（病期）</b></summary><div class="note" style="line-height:1.9;font-size:13px">がんの広がりを示す分類。多くは<b>TNM分類</b>（T:しこりの大きさ／N:リンパ節転移／M:遠隔転移）でⅠ〜Ⅳに区分されます。<b>予後を確定するものではなく、治療方針を決めるための地図</b>です。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>TNM分類</b></summary><div class="note" style="line-height:1.9;font-size:13px">国際的な病期分類体系。UICC/AJCCが第8版を発行しています。臓器ごとに細かな基準があります。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>組織型・病理</b></summary><div class="note" style="line-height:1.9;font-size:13px">顕微鏡で見たがんのタイプ。腺がん・扁平上皮がん・小細胞がん 等。<b>治療法選択に直結</b>します。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>バイオマーカー</b></summary><div class="note" style="line-height:1.9;font-size:13px">がんの個性を表す指標（遺伝子変異・タンパク発現等）。例：EGFR・ALK・HER2・PD-L1・MSI・TMB。効く薬を選ぶ「鍵」になります。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>コンパニオン診断</b></summary><div class="note" style="line-height:1.9;font-size:13px">特定の薬剤の使用適応を判定するために行う検査。薬と一対で承認されています。</div></details>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-vocabulary"></i> 治療</div>
+    <details class="qa" style="margin-top:8px"><summary><b>標準治療</b></summary><div class="note" style="line-height:1.9;font-size:13px">現時点で<b>科学的根拠（エビデンス）に基づき最善とされる治療</b>。「平均的・最低限」という意味ではありません。診療ガイドラインに記載されます。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>集学的治療</b></summary><div class="note" style="line-height:1.9;font-size:13px">手術・薬物・放射線等を<b>組み合わせる</b>治療。多診療科でチームを組みます（キャンサーボード）。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>術前療法・術後療法（補助療法）</b></summary><div class="note" style="line-height:1.9;font-size:13px">手術の前後に行う薬物・放射線。<b>再発リスクを下げる</b>、<b>手術範囲を狭くする</b>等の目的があります。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>1次治療・2次治療…</b></summary><div class="note" style="line-height:1.9;font-size:13px">同じ病状に対して順番に試す薬の段階。1次治療は最初の標準的な薬の組み合わせ。効果が落ちたら2次・3次治療に進みます。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>奏効率・無増悪生存期間（PFS）・全生存期間（OS）</b></summary><div class="note" style="line-height:1.9;font-size:13px">奏効率＝薬の効いた人の割合。PFS＝進行せずにいられる期間（中央値）。OS＝生存期間（中央値）。「あなた個人の見通し」ではない点に注意。</div></details>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-vocabulary"></i> 副作用・ケア</div>
+    <details class="qa" style="margin-top:8px"><summary><b>有害事象（AE）・CTCAE</b></summary><div class="note" style="line-height:1.9;font-size:13px">治療によって起こる症状の総称。<b>CTCAE</b>はその重症度を世界共通の物差しで5段階（Grade 1〜5）に分ける基準。日本語版はJCOG（日本臨床腫瘍研究グループ）が公開。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>免疫関連有害事象（irAE）</b></summary><div class="note" style="line-height:1.9;font-size:13px">免疫療法に特有の副作用。甲状腺機能異常・大腸炎・肺臓炎等。<b>早期発見</b>が大切。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>QOL（生活の質）</b></summary><div class="note" style="line-height:1.9;font-size:13px">「どれだけ自分らしく過ごせるか」の指標。治療と並んで、ケアの中心軸の一つです。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>支持療法（サポーティブケア）</b></summary><div class="note" style="line-height:1.9;font-size:13px">副作用の予防・症状コントロール・栄養・心のケア等の総称。<b>治療効果を引き出すための土台</b>です。</div></details>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-vocabulary"></i> 制度・連携</div>
+    <details class="qa" style="margin-top:8px"><summary><b>キャンサーボード</b></summary><div class="note" style="line-height:1.9;font-size:13px">多診療科の医師・看護師・薬剤師等が集まり、患者ごとに治療方針を検討する会議。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>セカンドオピニオン</b></summary><div class="note" style="line-height:1.9;font-size:13px">主治医以外の医師の意見を聞くこと。主治医との関係を壊すものではなく、<b>納得して治療を選ぶ</b>ための制度です。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>緩和ケア</b></summary><div class="note" style="line-height:1.9;font-size:13px">「終末期だけ」ではなく、<b>診断時から</b>始まる、心と体のつらさを和らげるケア。標準治療と並行して受けられます。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>ACP（人生会議）</b></summary><div class="note" style="line-height:1.9;font-size:13px">これからの医療・ケアについて、本人・家族・医療者が<b>繰り返し</b>話し合うプロセス。書面に残すこともあります。</div></details>
+    <details class="qa" style="margin-top:6px"><summary><b>SDM（共同意思決定）</b></summary><div class="note" style="line-height:1.9;font-size:13px">医療者の医学的情報と、患者の価値観・希望を持ち寄って、<b>一緒に決める</b>意思決定の枠組み。</div></details>
+
+    <div class="card" style="margin-top:18px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13.5px;color:var(--teal-d)">
+      <b>診察で聞いた言葉が分からない時</b>、コンシェルジュに「〜って何ですか」と聞くと、やさしく説明します。気になる用語を相談カードに残しておくと、次の診察で先生にも確認しやすくなります。
+      <button class="btn btn-teal" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュに用語を聞く</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 気になる言葉を相談カードに</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('cancer')"><i class="ti ti-book-2" style="vertical-align:-2px"></i> がんを知る（22+8グループ）</button>
+    </div>
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス「がんに関する用語集」／日本臨床腫瘍学会 用語集／JCOG CTCAE v5.0 日本語訳JCOG版／UICC TNM分類 第8版／厚労省 ACPガイドライン2018年改訂／日本臨床腫瘍学会 SDM普及プロジェクト。本ページは公的情報を踏まえSATOIが再構成しました。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier3-⑬ 民間療法注意喚起（cam_caution） ============ -->
+<section class="scr" id="cam_caution">
+  <div class="pad">
+    <button class="back" onclick="go('treatment')"><i class="ti ti-arrow-left"></i> 治療を知る</button>
+    <h1 class="h1" style="margin-top:10px">民間療法・健康食品との付き合い方</h1>
+    <div class="sub">サプリ・代替医療・自由診療——「やってもいい」「やめたほうがいい」の見分け方</div>
+
+    <div class="card" style="margin-top:14px;background:var(--amber-bg);border:none;line-height:1.85;font-size:13px;color:var(--amber-t)">
+      民間療法・健康食品・代替医療を「<b>使う・使わない</b>」はあなたが決めること。ただし<b>科学的根拠・標準治療との相互作用・経済的負担</b>の3点を、医療者と共有して判断するのが安全です（出典：厚生労働省 統合医療情報発信サイト eJIM／国立がん研究センター 健康食品の安全性・有効性情報）。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-microscope"></i> 「科学的根拠」をどう見るか</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      「効いた人の感想」「個別の症例報告」は、根拠としては<b>弱い段階</b>です。<b>無作為化比較試験（RCT）</b>や<b>システマティックレビュー（SR）</b>での裏付けがあるかを確認すること。eJIMはサプリ・代替医療の根拠を網羅的に整理しています。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-alert-triangle"></i> 注意したい広告表現</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      「<b>がんが消える</b>」「<b>標準治療をやめても大丈夫</b>」「<b>免疫が上がる</b>」等の<b>断定的・効果保証的</b>な表現は、<b>医薬品医療機器等法（薬機法）・景品表示法</b>に抵触する可能性があります。「個人の感想」「効果には個人差」と小さく書かれている広告は注意。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-flask"></i> 抗がん薬との相互作用</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>セントジョーンズワート（うつ症状に使われるハーブ）</b>、<b>グレープフルーツ</b>、<b>高用量ビタミンC・E</b>、一部のサプリは、<b>抗がん薬の代謝・効果に影響</b>することが報告されています。<b>必ず主治医・薬剤師に申告</b>してください。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-coin"></i> 経済的負担と冷静な判断</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      高額な自由診療・サプリで<b>家計が圧迫される</b>事例が報告されています。「<b>標準治療＋これ</b>」と並行できるか、<b>客観的な根拠</b>はあるかを冷静に検討。<b>がん相談支援センター</b>では、こうした選択についても無料で相談できます。
+    </div>
+
+    <div class="card" style="margin-top:18px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13.5px;color:var(--teal-d)">
+      <b>SATOIは「あなたの判断」を尊重します。</b>一緒にやめさせる・断定する立場ではなく、<b>情報を整理してお渡しする</b>のがSATOIの役目です。
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px;color:var(--teal)"></i> 検討中のサプリ等を、コンシェルジュと整理</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 主治医に伝えたいことを相談カードに</button>
+    </div>
+
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：厚生労働省 統合医療情報発信サイト eJIM／国立がん研究センター 健康食品の安全性・有効性情報／消費者庁 景品表示法／厚労省 医薬品医療機器等法（薬機法）／日本緩和医療学会 補完代替療法に関する記述。本ページは公的情報を踏まえSATOIが再構成しました。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Tier3-⑭ 災害時のがん療養（disaster_care） ============ -->
+<section class="scr" id="disaster_care">
+  <div class="pad">
+    <button class="back" onclick="go('emergency')"><i class="ti ti-arrow-left"></i> 緊急時カード</button>
+    <h1 class="h1" style="margin-top:10px">災害時のがん療養</h1>
+    <div class="sub">地震・水害・停電——治療を続けるために、平時から備える</div>
+
+    <div class="card" style="margin-top:14px;background:var(--rose-bg);border:none;line-height:1.85;font-size:13px;color:#7a3b2c">
+      災害時、がん患者・サバイバーは<b>治療継続・薬剤確保・通院手段・感染予防</b>などで一般の方より困難が大きくなることが報告されています。<b>平時の備えと、災害時の情報入手先</b>を整えておくことが大切です（出典：日本臨床腫瘍学会 災害時の対応／日本がん看護学会 がん患者の災害支援）。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-pill"></i> 薬と治療情報の備え</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>常用薬の3日〜1週間分の予備</b>、<b>お薬手帳（紙＋電子）</b>、<b>主治医・看護師・かかりつけ薬剤師の連絡先</b>、<b>治療計画書のコピー</b>を、避難バッグと枕元に。SATOIの<b>緊急時カード</b>に病院連絡先・治療スケジュール・服薬情報を入れておくと、避難先でも示せます。
+      <button class="btn btn-out" style="margin-top:10px" onclick="go('emergency')"><i class="ti ti-urgent" style="vertical-align:-2px;color:var(--red)"></i> 緊急時カードを準備する</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-shield"></i> 感染・体温・水分・栄養</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      免疫機能が低下している方は<b>避難所での感染リスク</b>が高まります。<b>マスク・手洗い・うがい・なるべく個室</b>、<b>水分補給（脱水予防）</b>、<b>低タンパクにならない食事</b>を心がけます。発熱時は<b>必ず医療機関に連絡</b>を。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-phone"></i> 災害時の情報入手</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      <b>日本災害医療支援機構（DMAT）</b>、<b>日本臨床腫瘍学会 災害時お薬相談</b>、<b>厚労省 災害時の医療情報</b>、<b>NHK 災害ラジオ</b>、<b>自治体の災害アプリ</b>等が情報源となります。<b>透析・在宅酸素・在宅人工呼吸の方</b>は、平時から<b>かかりつけ医・地域の災害時医療支援</b>に登録を。
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-home-heart"></i> 一時避難・通院手段</div>
+    <div class="card" style="line-height:1.85;font-size:13.5px">
+      災害時、<b>がん診療連携拠点病院</b>は通常診療が制限される場合があります。事前に<b>「災害時に治療を継続する場合の連絡先・代替施設」</b>を主治医と共有しておくと安心です。<b>福祉避難所</b>の存在を自治体に確認しておきましょう。
+    </div>
+
+    <div class="card" style="margin-top:18px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13.5px;color:var(--teal-d)">
+      <b>SATOIは、災害時の情報も「あなたの壺」に保管されます。</b>緊急時カード（QR）を周囲に示せば、支援者・救急隊が必要な情報にアクセスできます（同意の範囲内で）。
+      <button class="btn btn-teal" style="margin-top:10px" onclick="go('emergency')"><i class="ti ti-urgent" style="vertical-align:-2px"></i> 緊急時カードを今すぐ整える</button>
+    </div>
+
+    <div class="card" style="margin-top:18px;background:var(--rose-bg);border:none;line-height:1.85;font-size:13.5px;color:#7a3b2c">
+      <b>「私の場合、何を準備すれば？」</b>と思ったら、コンシェルジュにご自身の治療内容を伝えて、備えのリストを一緒に作りましょう。
+      <button class="btn" style="background:var(--rose);color:#fff;margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュと備えを整える</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 主治医に聞きたいことを相談カードに</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('body')"><i class="ti ti-notes" style="vertical-align:-2px"></i> からだの記録（服薬情報を残す）</button>
+    </div>
+    <div class="note" style="margin-top:18px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：日本臨床腫瘍学会「災害時のがん診療継続のための備え」／日本がん看護学会 がん患者の災害支援に関する提言／日本災害医療学会／厚生労働省 災害時の医療情報／日本透析医会 災害時情報ネットワーク／国立がん研究センター 災害時の情報。本ページは公的情報を踏まえSATOIが再構成しました。
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
 <!-- ============ がんを知る ============ -->
 <section class="scr" id="cancer">
   <div class="pad">
@@ -3795,6 +4629,15 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
       <span style="flex:1"><b style="font-weight:600;color:var(--blue-d)">遺伝子から治療を考える（プレシジョンメディシン）</b><span class="note" style="display:block;color:var(--blue-d)">あなたのがんの個性に合った薬を、保険のゲノム医療で</span></span>
       <i class="ti ti-chevron-right" style="color:var(--blue)"></i>
     </button>
+
+    <!-- ★Tier4 -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--teal-bg);font-size:12px;font-weight:700;color:var(--teal-d)"><i class="ti ti-book-2" style="vertical-align:-2px"></i> がんを理解する深掘り</div>
+      <button class="navrow" onclick="go('tx_modality')"><span><i class="ti ti-stethoscope" style="color:var(--teal)"></i> 治療の種類を体系で</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('glossary_hub')"><span><i class="ti ti-vocabulary" style="color:var(--sub)"></i> 用語をやさしく</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('prevention')"><span><i class="ti ti-shield-check" style="color:var(--teal)"></i> 予防・がん検診</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <div class="note" style="margin-top:12px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 各がんの解説・病期・統計は、公開出典（国立がん研究センター／各学会ガイドライン 等）に紐づいています。専門語は「これは何？」でやさしく開きます。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -3820,6 +4663,15 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
       <button class="tile" onclick="go('support')"><i class="ti ti-heart" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">緩和ケア・こころ</div></button>
       <button class="tile" onclick="go('money')"><i class="ti ti-coin" style="font-size:20px;color:var(--amber)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">お金・暮らし</div></button>
     </div>
+
+    <!-- ★Tier4 -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--teal-bg);font-size:12px;font-weight:700;color:var(--teal-d)"><i class="ti ti-stairs" style="vertical-align:-2px"></i> 各ステップで深く知る</div>
+      <button class="navrow" onclick="go('tx_modality')"><span><i class="ti ti-stethoscope" style="color:var(--teal)"></i> 治療の種類（手術・薬・放射線 他）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('symptoms')"><span><i class="ti ti-bone" style="color:var(--rose)"></i> 症状・副作用と向き合う</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('next_horizon_bridge')"><span><i class="ti ti-sun-high" style="color:var(--amber-t)"></i> 標準治療を終えた方へ（つぎの道）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <div class="note" style="margin-top:12px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -4190,6 +5042,14 @@ window._oninit['emphist']=empHistRender;
       <button class="btn btn-out" style="flex:1" onclick="window.print()"><i class="ti ti-printer" style="vertical-align:-2px"></i> 印刷して財布に</button>
       <button class="btn btn-out" style="flex:1" onclick="go('family')"><i class="ti ti-heart-handshake" style="vertical-align:-2px;color:var(--rose)"></i> 家族にも通知</button>
     </div>
+
+    <!-- ★Tier4 -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--rose-bg);font-size:12px;font-weight:700;color:#7a3b2c"><i class="ti ti-shield" style="vertical-align:-2px"></i> 緊急時に備える</div>
+      <button class="navrow" onclick="go('disaster_care')"><span><i class="ti ti-alert-triangle" style="color:var(--red)"></i> 災害時のがん療養（薬・治療情報の備え）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('symptoms')"><span><i class="ti ti-temperature" style="color:var(--rose)"></i> 発熱性好中球減少症（FN）の見極め</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -4738,6 +5598,16 @@ function openPillar(n){var p=PILLARS[n];document.getElementById('tdTitle').textC
       <button class="tile" onclick="go('sopinion')"><i class="ti ti-messages" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">別の先生にも聞く</div></button>
       <button class="tile" onclick="go('hospital')"><i class="ti ti-building-hospital" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">病院をさがす</div></button>
     </div>
+
+    <!-- ★Tier4 乳がん文脈の深掘り -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--rose-bg);font-size:12px;font-weight:700;color:#7a3b2c"><i class="ti ti-heart" style="vertical-align:-2px"></i> 乳がん関連の深掘り</div>
+      <button class="navrow" onclick="openCancer('tnbc')"><span><i class="ti ti-dna" style="color:var(--rose)"></i> トリプルネガティブ乳がん（TNBC）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('fertility')"><span><i class="ti ti-flower" style="color:var(--teal)"></i> 妊孕性温存（治療開始前に検討）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('appearance')"><span><i class="ti ti-cut" style="color:var(--amber)"></i> アピアランスケア（脱毛・リンパ浮腫 他）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('aya')"><span><i class="ti ti-user-heart" style="color:var(--rose)"></i> AYA世代（若い世代の乳がん）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -4813,7 +5683,7 @@ var BC_SEC=[
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：あなたの「しこりの大きさ（横）」と「リンパ節（縦）」が交わるマスが、ステージです。<br>・<b>0期</b>は、がんが乳管の中だけにとどまる「非浸潤がん（DCIS）」。適切に治療すれば転移はほぼなし＝とても早い段階。<br>・<b>Ⅳ期</b>は遠くの臓器に転移がある段階。ここは「取りきる」より「長く・自分らしく」へ目標が変わります。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：実は今は、この“広がり”の番号だけでなく、サブタイプやグレードも合わせた「予後ステージ」で見るのが主流。<b>同じⅡ期でも、性質次第で見通しは大きく変わる</b>——だからステージの数字だけで一喜一憂しすぎないで大丈夫です。</div>
  <details class="qa"><summary>「浸潤」「遠隔転移」って？</summary><div class="note" style="line-height:1.8">浸潤＝がんが最初の場所（乳管・小葉）の壁をこえて周りにしみ出すこと。壁の中だけなら「非浸潤」。遠隔転移＝がんが血液やリンパに乗って、骨・肺・肝臓・脳など離れた臓器に移ること。Ⅳ期＝遠隔転移がある段階を指します。</div></details>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">乳がんは、日本の女性が<b>もっとも多く診断されるがん（年間およそ9〜10万人＝9人に1人が生涯のうちに経験する）</b>。それだけ仲間が多く、治療も世界でいちばん研究が進んでいるがんのひとつです。「5年相対生存率 全体で約9割」という数字があり、これは<b>全体の目安であってあなた個人の見通しではない</b>ものの、乳がんが「早く見つけて適切に治療すれば、その後を長く生きられる」がんであることをよく表しています。<b>早期（しこりが小さくリンパ節転移なし）なら5年生存率はほぼ100%</b>に近いとされます。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">乳がんは、日本の女性が<b>もっとも多く診断されるがん（年間およそ9〜10万人＝9人に1人が生涯のうちに経験する）</b>。それだけ仲間が多く、治療も世界でいちばん研究が進んでいるがんのひとつです。「5年相対生存率 全体で約9割」という数字があり、これは<b>全体の目安であってあなた個人の見通しではない</b>ものの、乳がんが「早く見つけて適切に治療すれば、その後を長く生きられる」がんであることをよく表しています。<b>早期（しこりが小さくリンパ節転移なし）なら5年生存率はほぼ100%</b>に近いとされます。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
  y:`「私のステージはいくつ？」——いちばん気になりますよね。でも覚えておいてください。<b>ステージは“余命の番号”ではなく、“治療を決める地図”</b>です。<br><br>
  決め方は3つの組み合わせ。<b>しこりの大きさ（T）</b>・<b>わきのリンパ節（N）</b>・<b>遠くへの転移（M）</b>。下が早見表です。<br><br>
  <table class="dtbl"><tr><th></th><th>T1<br>≤2cm</th><th>T2<br>2〜5cm</th><th>T3<br>5cm超</th><th>T4<br>皮ふや胸の壁にも</th></tr>
@@ -5043,6 +5913,16 @@ window._oninit['bccare']=function(){BC_PRO_OPEN=false;bccLvl('n');};
       <button class="tile" onclick="go('sopinion')"><i class="ti ti-messages" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">別の先生にも聞く</div></button>
       <button class="tile" onclick="go('hospital')"><i class="ti ti-building-hospital" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">病院をさがす</div></button>
     </div>
+
+    <!-- ★Tier4 乳がん文脈の深掘り -->
+    <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+      <div style="padding:11px 14px;background:var(--rose-bg);font-size:12px;font-weight:700;color:#7a3b2c"><i class="ti ti-heart" style="vertical-align:-2px"></i> 乳がん関連の深掘り</div>
+      <button class="navrow" onclick="openCancer('tnbc')"><span><i class="ti ti-dna" style="color:var(--rose)"></i> トリプルネガティブ乳がん（TNBC）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('fertility')"><span><i class="ti ti-flower" style="color:var(--teal)"></i> 妊孕性温存（治療開始前に検討）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('appearance')"><span><i class="ti ti-cut" style="color:var(--amber)"></i> アピアランスケア（脱毛・リンパ浮腫 他）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none" onclick="go('aya')"><span><i class="ti ti-user-heart" style="color:var(--rose)"></i> AYA世代（若い世代の乳がん）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    </div>
+
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -5075,7 +5955,7 @@ var CAN_DATA={
  <tr><td class="h">M1 別の臓器に転移あり</td><td colspan="4" class="stg">Ⅳ</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：あなたの「しこりの大きさ（横）」と「リンパ節の広がり（縦）」が交わるマスが、おおよそのステージです。<br>・<b>Ⅰ期</b>：肺の中の小さながんで、リンパ節転移なし。<b>手術で治すことを狙える</b>段階。<br>・<b>Ⅱ〜Ⅲ期</b>：少し大きい、またはリンパ節へ。手術・放射線・薬物を組み合わせます。Ⅲ期は「治すことを目指す」治療が今もしっかりあります。<br>・<b>Ⅳ期</b>：別の臓器や反対の肺、胸水などへ。<b>お薬が中心</b>で、長くコントロールしていく段階です。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：肺がんは<b>ステージの数字だけで治療も見通しも決まりません</b>。同じⅣ期でも、効く${tlink('egfr_alk','遺伝子変異')}や${tlink('pdl1','PD-L1')}が見つかれば、合う薬で何年も付き合っていける方がたくさんいます。だから病期と一緒に“個性”を必ず調べます。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本では肺がんと診断される方は<b>年間およそ12〜13万人</b>。決してあなた一人ではありません。よく見る「5年生存率 全体で約35%前後」という数字は、<b>すべての病期・すべての年代・少し前に診断された方までを平均した“全体の目安”</b>で、<b>あなた個人の見通しではありません</b>。早期（Ⅰ期）で見つかれば5年生存率は<b>8割を超える</b>とされ、近年は分子標的薬・免疫療法の登場で、進行した方の見通しも年々良くなっています。数字は地図の一部であって、未来の判決ではありません。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本では肺がんと診断される方は<b>年間およそ12〜13万人</b>。決してあなた一人ではありません。よく見る「5年生存率 全体で約35%前後」という数字は、<b>すべての病期・すべての年代・少し前に診断された方までを平均した“全体の目安”</b>で、<b>あなた個人の見通しではありません</b>。早期（Ⅰ期）で見つかれば5年生存率は<b>8割を超える</b>とされ、近年は分子標的薬・免疫療法の登場で、進行した方の見通しも年々良くなっています。本数値は、過去に診断された患者集団のデータに基づく集計です。免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療など、近年承認された治療の効果は反映されていません。<b>ステージⅣの患者さんに対しても、これらの治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。これはあくまで集団としての目安です。個別の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`「私のステージは？」——いちばん気になりますよね。でも覚えておいてください。<b>ステージは“余命の番号”ではなく、治療を決める地図</b>です。<br><br>決め方は、<b>しこりの大きさ（T）</b>・<b>リンパ節の広がり（N）</b>・<b>別の場所への転移（M）</b>の組み合わせ。下が早見表です。<br><br>
  <table class="dtbl"><tr><th></th><th>T1<br>≤3cm</th><th>T2<br>3〜5cm</th><th>T3<br>5〜7cm</th><th>T4<br>7cm超/大事な部位にも</th></tr>
  <tr><td class="h">N0 リンパ節なし</td><td class="stg">ⅠA</td><td>ⅠB〜ⅡA</td><td>ⅡB</td><td>ⅢA</td></tr>
@@ -5167,6 +6047,146 @@ function canProOpen(){CAN_PRO_OPEN=true;canRender();setTimeout(function(){var e=
 function canProClose(){CAN_PRO_OPEN=false;canRender();setTimeout(function(){var e=document.getElementById('canProMode');if(e)e.scrollIntoView({behavior:'smooth',block:'start'});},60);}
 function canLvl(l){CAN_LVL=l;var bn=document.getElementById('canBn'),by=document.getElementById('canBy');if(bn)bn.classList.toggle('on',l==='n');if(by)by.classList.toggle('on',l==='y');canRender();}
 function canJump(id){var e=document.getElementById(id);if(e)e.scrollIntoView({behavior:'smooth',block:'start'});}
+/* ★Katsu要望2026-05-29：MSD並み追加9種を、医療適正用語でabout/stage/treatment/check 4セクションで実装 */
+(function(){
+  function _outroNote(){return '<br><br>本概要は<b>診療ガイドラインおよび公的統計</b>を踏まえて作成された情報です。集団の目安であり、<b>個別の予後・治療判断は組織型・分子標的の有無・全身状態などにより異なります</b>。最新の治療方針は主治医とご相談ください。';}
+  function _parentBtn(k,nm){return k?'<div style="margin-top:14px"><button class="btn btn-out" onclick="openCancer(\''+k+'\')"><i class="ti ti-chevron-right" style="vertical-align:-2px"></i> '+nm+'のページも合わせて見る</button></div>':'';}
+  function _act(){return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="chip" style="background:var(--teal-bg);color:var(--teal-d);border-color:transparent" onclick="go(\'sdmstart\')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 相談カードをつくる</button><button class="chip" style="background:var(--amber-bg2);color:var(--amber-t);border-color:transparent" onclick="go(\'ai\')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュに聞く</button></div>';}
+  function _full(o){
+    /* o = {title, sub, grad, parentKey, parentName, src, about_n, about_y, stage_n, stage_y, tx_n, tx_y, check_n, check_y, pro_*} */
+    return {
+      title:o.title, sub:o.sub, grad:o.grad,
+      sections:[
+        {id:'about',     nav:'これは何',     icon:'ti-info-circle',  t:'このがんは何か', n:o.about_n+_outroNote()+_act(), y:o.about_y||o.about_n, pro:o.pro_about||''},
+        {id:'stage',     nav:'病期と統計',   icon:'ti-chart-bar',    t:'病期と統計の読み方', n:o.stage_n+_outroNote(),         y:o.stage_y||o.stage_n, pro:o.pro_stage||''},
+        {id:'treatment', nav:'治療選択肢',   icon:'ti-stethoscope',  t:'治療の選択肢',       n:o.tx_n+_act(),                  y:o.tx_y||o.tx_n,       pro:o.pro_tx||''},
+        {id:'check',     nav:'検査・遺伝子', icon:'ti-microscope',   t:'検査・バイオマーカー', n:o.check_n+_parentBtn(o.parentKey,o.parentName), y:o.check_y||o.check_n, pro:o.pro_check||''}
+      ],
+      src: o.src || '出典：国立がん研究センター がん情報サービス／各学会診療ガイドライン。'
+    };
+  }
+  if(typeof CAN_DATA==='object'){
+    Object.assign(CAN_DATA, {
+      tnbc:_full({
+        title:'乳がん（トリプルネガティブ）', sub:'ER・PgR・HER2 がいずれも陰性のサブタイプ。落ち着いて、ひとつずつ。',
+        grad:'linear-gradient(#FCEEEE,#FAE7E7)', parentKey:'breast', parentName:'乳がんの基本ページ',
+        about_n:'トリプルネガティブ乳がん（TNBC）は、エストロゲン受容体（ER）・プロゲステロン受容体（PgR）・HER2 のいずれも陰性のサブタイプで、<b>乳がん全体の約10〜15%</b>を占めます。ホルモン療法・抗HER2療法の適応外となるため、化学療法を中心に治療が組み立てられてきました。近年は<b>免疫チェックポイント阻害薬（ペムブロリズマブ）</b>、<b>PARP阻害薬（オラパリブ：BRCA変異陽性例）</b>、<b>抗体薬物複合体（サシツズマブ ゴビテカン等）</b>の承認により治療選択肢が拡大しています。',
+        stage_n:'病期はTNM分類に基づきⅠ〜Ⅳに区分されます。5年相対生存率は早期で良好な一方、遠隔転移例では低めに報告されています（国立がん研究センター 統計）。<b>本数値は過去の集計であり、近年の新規薬剤の効果は十分には反映されていません</b>。',
+        tx_n:'<b>術前化学療法 → 手術 → 術後療法</b>が基本軸。PD-L1陽性の進行例では一次治療として<b>ペムブロリズマブ＋化学療法</b>が、BRCA1/2 変異陽性例では<b>オラパリブ</b>が、進行/再発例で<b>サシツズマブ ゴビテカン</b>が選択肢となります。',
+        check_n:'治療選択にあたっては<b>ER/PgR/HER2 免疫染色</b>に加え、<b>BRCA1/2 遺伝学的検査（コンパニオン診断）</b>、<b>PD-L1 検査</b>、HER2 低発現の評価が推奨されます。',
+        pro_about:'TNBC は ER/PgR/HER2 すべて陰性のBC全体の10-15%。BRCA1/2 関連例（基底様サブタイプ）が含まれ、若年発症が多い。分子サブタイプとしては Vanderbilt分類（BL1, BL2, M, MSL, LAR, IM）が知られるが臨床応用は未確立。',
+        pro_stage:'AJCC/UICC TNM 第8版。早期 ER/PgR/HER2 陰性は本来予後不良群だが、早期での pCR 達成例（KEYNOTE-522）では DFS 良好。集計データは主に術前 immunotherapy 普及前の集団に基づく。',
+        pro_tx:'KEYNOTE-522：T2N0以上の早期TNBCで術前 pembrolizumab + paclitaxel/carboplatin → AC/EC → 術後 pembrolizumab（pCR率改善、EFS優越）。進行PD-L1 CPS≥10 は KEYNOTE-355 で pembrolizumab + 化学療法 1st line。BRCAm は OlympiAD（オラパリブ）/EMBRACA（タラゾパリブ）。3rd line 以降 sacituzumab govitecan（ASCENT）。HER2低発現は T-DXd（DESTINY-Breast04）。',
+        pro_check:'IHC: ER/PgR (<1% カットオフ), HER2 (ASCO/CAP 2018), Ki-67。BRCA1/2 BRACAnalysis（コンパニオン診断）。PD-L1 22C3 CPS。HER2低発現は IHC 1+/2+ ISH陰性。',
+        src:'出典：日本乳癌学会 乳癌診療ガイドライン2022年版／NCCN Breast Cancer Guidelines／KEYNOTE-355・522/OlympiAD/ASCENT 試験。'
+      }),
+      sclc:_full({
+        title:'肺がん（小細胞 SCLC）', sub:'進行が速い一方、化学療法・放射線療法への感受性が高い組織型。',
+        grad:'linear-gradient(#EAF0F6,#E6F1FB)', parentKey:'lung', parentName:'肺がん（非小細胞）のページ',
+        about_n:'小細胞肺がん（SCLC）は肺がん全体の<b>約10〜15%</b>を占める組織型で、増殖が速い一方、<b>化学療法・放射線療法への感受性が高い</b>ことが特徴です。喫煙との強い関連が知られています。病期は臨床的に<b>限局型（LD）</b>と<b>進展型（ED）</b>に大別されます。',
+        stage_n:'限局型では同時化学放射線療法による根治を目指せます。進展型の予後は限局型に比して低いとされてきましたが、<b>免疫チェックポイント阻害薬（アテゾリズマブ、デュルバルマブ）の併用により、全生存期間の延長が報告されています</b>（IMpower133、CASPIAN試験）。',
+        tx_n:'<b>限局型</b>：シスプラチン＋エトポシド＋胸部放射線療法（同時併用）、PCI（予防的全脳照射）。<b>進展型</b>：プラチナ＋エトポシド＋アテゾリズマブ または デュルバルマブ。再発例ではアムルビシン、ノギテカン、ルルビネクテジン等が用いられます。',
+        check_n:'画像診断（胸部CT、頭部MRI、PET-CT）、気管支鏡下生検による病理組織診断が標準です。バイオマーカー検査は非小細胞肺がんほど確立していませんが、近年、DLL3を標的とする新規治療（タルラタマブ等）の開発も進んでいます。',
+        pro_about:'SCLC は神経内分泌腫瘍の一型で、肺がんの 10-15%。喫煙関連が強い。高度悪性度、ダブリングタイム短、初診時 60-70% が ED。組織学的に純粋型 SCLC と combined SCLC（NSCLC 成分併存）に分類。',
+        pro_stage:'臨床病期は VALG 分類による LD/ED が頻用される。LD は片側胸郭内に限局し1ポートで照射可能、ED はそれを超える。UICC TNM 第8版も適用される（特に手術可能なごく早期例）。',
+        pro_tx:'LD：CDDP/CBDCA + ETP + 同時併用胸部 RT（hyperfraction 45Gy/30回/3週 または 60-70Gy/conventional）。CR/PR 例に PCI（25Gy/10回）。ED：CDDP/CBDCA + ETP + アテゾリズマブ（IMpower133）または デュルバルマブ（CASPIAN）→ ICI 維持。2nd line: アムルビシン、ノギテカン、ルルビネクテジン（PEARLS）。再発・難治：タルラタマブ（DLL3 × CD3 BiTE、DeLLphi-301）が国内承認（2024年）。',
+        pro_check:'胸部造影CT、脳造影MRI、PET-CT、骨シンチ／PET。気管支鏡下生検が標準、ctDNA は研究段階。バイオマーカーとして DLL3 IHC（タルラタマブのコンパニオン診断 不要だが効果予測検討中）、SCLC 分子サブタイプ（ASCL1、NEUROD1、POU2F3、YAP1）。',
+        src:'出典：日本肺癌学会 肺癌診療ガイドライン／NCCN SCLC Guidelines／IMpower133・CASPIAN・DeLLphi-301 試験。'
+      }),
+      mesothelioma:_full({
+        title:'胸膜中皮腫', sub:'アスベスト曝露と関連する胸膜の希少がん。新規治療で選択肢が拡大しています。',
+        grad:'linear-gradient(#EAF0F6,#E6F1FB)', parentKey:'', parentName:'',
+        about_n:'胸膜中皮腫は、胸膜から発生する希少がんで、<b>アスベスト（石綿）曝露との関連</b>が知られています。多くは曝露から30〜40年後に発症します。組織型は上皮型・肉腫型・二相型に分類され、上皮型が比較的予後良好とされます。',
+        stage_n:'病期は<b>UICC TNM 分類</b>でⅠ〜Ⅳに区分されます。本がんは集計対象が限られるため統計値の解釈には注意を要しますが、近年の免疫療法導入により<b>全生存期間の延長が報告されています</b>（CheckMate 743 試験）。',
+        tx_n:'切除可能例では<b>胸膜外肺全摘術（EPP）または胸膜切除/肺剥皮術（P/D）＋化学療法</b>が検討されます。切除不能・進行例では一次治療として<b>ニボルマブ＋イピリムマブ併用療法</b>、または<b>ペメトレキセド＋シスプラチン±ベバシズマブ</b>が標準的選択肢です。',
+        check_n:'胸水細胞診、胸腔鏡下胸膜生検による病理診断が必要です。免疫染色（カルレチニン、WT-1、D2-40 等）で診断を確定します。<b>アスベスト健康被害救済制度</b>の対象となるため、診断後速やかに申請の確認を推奨します。',
+        pro_about:'胸膜中皮腫（MPM）はアスベスト関連の希少がん、潜伏期 30-40年。日本の年間死亡数約1,500人。組織型：epithelioid（最頻、予後比較的良）／sarcomatoid（最不良）／biphasic。BAP1、NF2、CDKN2A 等の欠失が知られる。',
+        pro_stage:'UICC TNM 第8版に準拠。IMIG staging もあわせて用いる。手術適応評価には MRI、PET-CT、胸腔鏡所見が重要。',
+        pro_tx:'切除可能：EPP（胸膜外肺全摘）または P/D（胸膜切除/肺剥皮）+ 化学療法（一部+RT）。切除不能・進行：CheckMate 743 で nivolumab + ipilimumab vs PEM+CDDP の OS 優越（特に sarcomatoid/biphasic）。化学療法は PEM+CDDP±bevacizumab（MAPS）。再発：単剤化学療法、ICI。',
+        pro_check:'胸水細胞診（感度限定）、胸腔鏡下生検が gold standard。IHC：陽性 calretinin/WT-1/CK5/6/D2-40、陰性 BerEP4/MOC31。BAP1 欠損（IHC）は良性中皮腫との鑑別に有用。アスベスト健康被害救済制度（独立行政法人 環境再生保全機構）。',
+        src:'出典：日本肺癌学会 悪性胸膜中皮腫診療ガイドライン／NCCN MPM Guidelines／CheckMate 743 試験／厚生労働省 アスベスト健康被害救済制度。'
+      }),
+      hodgkin:_full({
+        title:'ホジキンリンパ腫', sub:'根治を目指せる悪性リンパ腫。集学的治療で長期寛解を狙います。',
+        grad:'linear-gradient(#F1ECDF,#F5EFE5)', parentKey:'lymphoma', parentName:'非ホジキンリンパ腫のページ',
+        about_n:'ホジキンリンパ腫は悪性リンパ腫の一型で、<b>Reed-Sternberg 細胞</b>を病理学的特徴とします。日本での発症数は非ホジキンリンパ腫より少なく、<b>20〜30代と60代以降に二峰性</b>に発症します。根治を十分に目指せるリンパ腫として知られます。',
+        stage_n:'病期は<b>Lugano 分類（Ann Arbor 改訂）</b>でⅠ〜Ⅳ＋A/B 症状で評価されます。初発例の長期寛解率は高く、特に限局期では良好な予後が報告されています。再発・難治例に対しても、新規薬剤により長期寛解例の報告が増えています。',
+        tx_n:'<b>限局期</b>：ABVD療法＋限局放射線療法（IFRT/ISRT）。<b>進行期</b>：ABVD療法またはBV-AVD療法（ブレンツキシマブ ベドチン併用）。<b>再発・難治例</b>：<b>免疫チェックポイント阻害薬（ペムブロリズマブ、ニボルマブ）</b>、<b>ブレンツキシマブ ベドチン</b>、自家造血幹細胞移植。',
+        check_n:'リンパ節生検による病理組織診断（Reed-Sternberg 細胞、CD15/CD30 陽性）。病期診断には<b>PET-CT</b>が必須。若年者では<b>妊孕性温存</b>（精子凍結・卵子凍結等）、心毒性のモニタリングが大切です。',
+        pro_about:'classical HL（cHL）と nodular lymphocyte predominant HL（NLPHL）に大別。cHL は nodular sclerosis 型が最頻。RS 細胞（CD30+, CD15+, PAX5 dim+, EBV関連約30%）が病理学的特徴。',
+        pro_stage:'Lugano 分類（Ann Arbor 改訂、2014）：Ⅰ-Ⅳ + A/B、X（bulky）。IPS（advanced-stage 用 prognostic score）。',
+        pro_tx:'限局期：ABVD x 2-4 + IFRT/ISRT 20-30Gy（GHSG HD10/11 等）。進行期：ABVD x 6 または escBEACOPP（GHSG HD18）。再発・難治：救援化学療法（ICE/DHAP）+ 自家造血幹細胞移植、ブレンツキシマブ ベドチン（BV：AETHERA で術後 PR）、ペムブロリズマブ（KEYNOTE-204）、ニボルマブ（CheckMate 205）、BV-AVD 一次治療（ECHELON-1）。',
+        pro_check:'リンパ節生検 IHC（CD30+/CD15+/CD20-/CD45-/PAX5dim/EBER ±）。PET-CT は staging/interim/end-of-treatment 評価（Deauville 5-point scale）。妊孕性温存（精子凍結、卵巣組織凍結、GnRHa）、心毒性（doxorubicin）、二次がんの長期 surveillance。',
+        src:'出典：日本血液学会 造血器腫瘍診療ガイドライン2023年版／NCCN HL Guidelines／GHSG・ECHELON-1・KEYNOTE-204 試験。'
+      }),
+      pmbcl:_full({
+        title:'PMBCL（原発性縦隔大細胞型B細胞リンパ腫）', sub:'若年女性に多い、根治を目指せるB細胞リンパ腫。',
+        grad:'linear-gradient(#F1ECDF,#F5EFE5)', parentKey:'lymphoma', parentName:'非ホジキンリンパ腫のページ',
+        about_n:'原発性縦隔大細胞型B細胞リンパ腫（PMBCL）は、<b>胸腺由来B細胞</b>に起源する稀なびまん性大細胞型B細胞リンパ腫（DLBCL）のサブタイプです。<b>20〜30代の女性</b>に発症することが多く、縦隔の巨大腫瘤を呈し、上大静脈症候群を初発症状とすることもあります。',
+        stage_n:'病期はLugano分類に基づきます。多くは限局期（Ⅰ/Ⅱ）で発見されますが、巨大腫瘤を伴う点で他のDLBCLと異なります。集学的治療により、<b>限局例での長期寛解が十分に期待できます</b>。',
+        tx_n:'<b>初発例</b>：R-CHOP±放射線、または<b>DA-EPOCH-R 療法</b>。<b>再発・難治例</b>：救援化学療法＋自家造血幹細胞移植、または<b>ペムブロリズマブ</b>（保険適用）、<b>CAR-T 細胞療法</b>。',
+        check_n:'縦隔腫瘤からの生検（CT/エコーガイド下、または外科的）が必要です。免疫染色でCD20、CD30、CD23、PD-L1 等を評価。若年女性では<b>妊孕性温存</b>、心毒性管理、二次がんリスクの長期フォローが必要です。',
+        pro_about:'PMBCL は DLBCL のサブタイプだが、遺伝子発現プロファイルは cHL に近い（PD-L1/PD-L2 増幅、JAK-STAT pathway 活性化）。CD20+, CD30+/-, CD23+, MAL+。9p24.1 増幅が頻発。',
+        pro_stage:'Lugano 分類。限局期での bulky 病変（>10cm）が多く、IPI/IPI-bulky で層別化。',
+        pro_tx:'NCI 試験で DA-EPOCH-R は R-CHOP より良好な EFS を示した（Dunleavy et al., NEJM 2013）。R-CHOP-21 + IFRT も有効。再発・難治：救援化学療法 + 自家造血幹細胞移植、ペムブロリズマブ（KEYNOTE-170、保険適用）、CAR-T 細胞療法（axicabtagene ciloleucel/tisagenlecleucel）。',
+        pro_check:'生検 IHC（CD20+/CD23+/MAL+/PAX5+）、FISH（9p24.1 増幅）、PD-L1 IHC。PET-CT、心毒性 surveillance、妊孕性温存。',
+        src:'出典：日本血液学会 造血器腫瘍診療ガイドライン／NCCN B-cell Lymphoma Guidelines／Dunleavy 2013 NEJM／KEYNOTE-170。'
+      }),
+      ureter:_full({
+        title:'腎盂・尿管がん', sub:'尿路上皮がんの一型。膀胱がんと共通する生物学的特徴を持ちます。',
+        grad:'linear-gradient(#EAF3DE,#E8F1D7)', parentKey:'kidney', parentName:'腎臓がんの基本ページ',
+        about_n:'腎盂がん・尿管がんは、尿管・腎盂を覆う<b>尿路上皮</b>に発生するがんで、膀胱がんと共通する組織型を持ちます。喫煙、フェナセチン製剤等の薬剤、アリストロキア酸（漢方）が危険因子として知られます。多発する傾向があり、慎重な経過観察が必要です。',
+        stage_n:'病期は<b>UICC TNM 分類</b>でⅠ〜Ⅳ。診断時に筋層浸潤（≥pT2）以上の症例が多いとされます。本数値は過去の集計のため、近年の<b>術前/術後の免疫療法併用による予後改善</b>は十分には反映されていません。',
+        tx_n:'<b>標準治療</b>：腎尿管全摘術＋膀胱部分切除（経尿道的に膀胱口を含む）。低リスク症例では腎温存（尿管部分切除・内視鏡的治療）も選択肢です。<b>術後補助療法</b>：高リスク例で<b>ニボルマブ術後補助療法</b>が承認。<b>進行・転移例</b>：プラチナベース化学療法＋アベルマブ維持療法、ペムブロリズマブ、エンホルツマブ ベドチン等。',
+        check_n:'<b>尿細胞診</b>、CTウログラフィー、逆行性尿管造影、尿管鏡下生検が標準的な検査です。<b>FGFR3 遺伝子変異</b>はエルダフィチニブの適応決定に重要なバイオマーカーです。腎機能（対側腎の状態）の評価が治療方針に影響します。',
+        pro_about:'上部尿路上皮癌（UTUC）は尿路上皮癌の 5-10%。多くが advanced stage で発見。リスク因子：喫煙、芳香族アミン曝露、フェナセチン、アリストロキア酸、Lynch 症候群（hMSH2/hMLH1 変異）。',
+        pro_stage:'UICC TNM 第8版。≥pT2 が多く、5-year DSS は pT2-3 で 50-70%、pT4 では 10-20%。',
+        pro_tx:'根治術：腎尿管全摘 + 膀胱cuff 切除（RNU）。低リスク症例で kidney-sparing（尿管部分切除、URS焼灼）。POUT 試験：≥pT2/N+ 例で術後 gemcitabine+CDDP/CBDCA で DFS 改善。CheckMate 274：≥pT2 で nivolumab adjuvant（保険適用）。進行・転移：gemcitabine+CDDP → アベルマブ維持（JAVELIN Bladder 100）。pembrolizumab（KEYNOTE-045）、enfortumab vedotin（EV-301、Nectin-4 ADC）、erdafitinib（FGFR3/2 alteration、THOR）。',
+        pro_check:'尿細胞診、CTウログラフィー、逆行性腎盂造影、URS 下生検。Lynch 症候群スクリーニング（IHC MMR、MSI）。バイオマーカー：FGFR3 alteration（erdafitinib コンパニオン診断）、PD-L1、HER2、Nectin-4。eGFR 評価（プラチナ適応決定）。',
+        src:'出典：日本泌尿器科学会 腎盂・尿管癌診療ガイドライン2018年版／NCCN Bladder Cancer Guidelines／JAVELIN Bladder 100・CheckMate 274・THOR 試験。'
+      }),
+      msih:_full({
+        title:'MSI-High 固形がん', sub:'臓器横断的なバイオマーカーに基づくがん。免疫療法の適応となります。',
+        grad:'linear-gradient(#E7F0FA,#F2E7F2)', parentKey:'', parentName:'',
+        about_n:'MSI-High（高頻度マイクロサテライト不安定性）は、<b>ミスマッチ修復機構の欠損</b>により生じるDNA異常で、がん細胞に多くの遺伝子変異が蓄積した状態を示します。大腸がん・子宮体がん・胃がん・胆道がん・膵がんなど<b>多くの固形がんで観察される、臓器横断的なバイオマーカー</b>です。',
+        stage_n:'MSI-High は<b>がん種ではなく分子サブタイプ</b>であり、病期は原発がんに準じます。免疫チェックポイント阻害薬の高い奏効率が報告されており、進行例での治療選択を大きく変えるバイオマーカーです。',
+        tx_n:'進行・再発例において、<b>ペムブロリズマブ</b>が臓器横断的に保険適用となっています。一次治療として用いられる場合もあり、組織型・病期に応じて主治医がエキスパートパネルで検討します。',
+        check_n:'<b>MSI 検査（IHC または PCR）</b>、または<b>がん遺伝子パネル検査（C-CAT登録対象）</b>で判定されます。<b>リンチ症候群</b>（遺伝性腫瘍症候群）の可能性があるため、家族歴の聴取と<b>遺伝カウンセリング</b>を推奨します。',
+        pro_about:'dMMR/MSI-H は MLH1/MSH2/MSH6/PMS2 のいずれかの機能欠損で生じる hypermutator phenotype。大腸癌で 15%（うち散発例 12%、Lynch 関連 3%）、子宮体癌で 30%、その他多くの固形がんに分布。Lynch 症候群との関連を常に念頭に置く。',
+        pro_stage:'原発巣の TNM 分類に準じる。dMMR/MSI-H は stage II 大腸癌で予後良好（術後補助化学療法 unfavorable indication）の一方、stage IV では ICI が高度奏効。',
+        pro_tx:'KEYNOTE-177：大腸癌 1st line で pembrolizumab vs 化学療法、PFS 倍以上の延長。KEYNOTE-158：臓器横断的 pembrolizumab（dMMR/MSI-H 全がん腫）でORR 約34%。nivolumab + ipilimumab も大腸癌で承認（CheckMate 142）。',
+        pro_check:'MSI-PCR（NCI Bethesda panel: BAT-25, BAT-26, D2S123, D5S346, D17S250）または MMR IHC（MLH1/MSH2/MSH6/PMS2）。次世代シーケンサーパネル（FoundationOne CDx、OncoGuide NCC オンコパネル）も C-CAT 登録対象。Lynch 関連が疑われれば BRAF V600E、MLH1 promoter methylation の追加、germline 検査と遺伝カウンセリング。',
+        src:'出典：日本臨床腫瘍学会 がんゲノム医療ガイダンス第2版／NCCN Genetic/Familial High-Risk Assessment／KEYNOTE-177・158・CheckMate 142 試験。'
+      }),
+      tmbh:_full({
+        title:'TMB-High 固形がん', sub:'遺伝子変異量に基づくバイオマーカー。免疫療法の効果が期待されます。',
+        grad:'linear-gradient(#E7F0FA,#F2E7F2)', parentKey:'', parentName:'',
+        about_n:'TMB-High（高い腫瘍遺伝子変異量、Tumor Mutational Burden ≥10 mut/Mb）は、がん細胞内の<b>体細胞変異の総量が多い状態</b>を示すバイオマーカーです。変異量が多いほど免疫が認識する新生抗原（ネオアンチゲン）が多く、免疫チェックポイント阻害薬への奏効が期待されます。',
+        stage_n:'TMB-High も<b>臓器横断的な分子サブタイプ</b>であり、病期は原発がんに準じます。代表的にメラノーマ、肺がん（喫煙関連）、膀胱がん等で高頻度に観察されます。',
+        tx_n:'進行・再発例で<b>ペムブロリズマブ</b>が臓器横断的に保険適用となっています（がん遺伝子パネル検査で TMB-High が判定された場合）。MSI-High と同様、エキスパートパネルでの治療方針検討が行われます。',
+        check_n:'<b>がん遺伝子パネル検査</b>（FoundationOne CDx、OncoGuide NCC オンコパネル等）で判定されます。検査は<b>C-CAT</b>に登録され、エキスパートパネルで治療方針が議論されます。',
+        pro_about:'TMB = whole-exome の non-synonymous somatic mutations / Mb（パネル検査では計算アルゴリズムが各社で異なり、cut-off も統一されていない点に注意）。FDA は ≥10 mut/Mb（FoundationOne CDx 換算）を TMB-H と定義。喫煙関連がん（NSCLC、UC、Head & Neck）や紫外線関連メラノーマで高値。',
+        pro_stage:'原発巣の TNM 分類に準ずる。MSI-H と一部重複するが独立した予測因子。',
+        pro_tx:'KEYNOTE-158：FDA は 2020年 TMB-H ≥10 mut/Mb 全がん腫で pembrolizumab を accelerated approval。日本でも臓器横断的に保険適用（C-CAT 登録例）。NSCLC・メラノーマでは TMB-H が ICI 効果予測のひとつ。',
+        pro_check:'FoundationOne CDx、OncoGuide NCC オンコパネル、GenMineTOP（保険適用パネル）で TMB 算出可能。検査結果は C-CAT に登録、エキスパートパネル（中核拠点病院）で適応を判断。MSI-H、HRD、PD-L1 と総合的に評価。',
+        src:'出典：日本臨床腫瘍学会 がんゲノム医療ガイダンス第2版／FDA Pembrolizumab labels／KEYNOTE-158 試験／国立がん研究センター C-CAT。'
+      }),
+      childhood:_full({
+        title:'こどものがん（小児がん）', sub:'年間約2,000〜2,500人。集学的治療で多くは治癒を目指せます。',
+        grad:'linear-gradient(#FAE3C2,#FBEEDE)', parentKey:'', parentName:'',
+        about_n:'小児がんは15歳未満のがんの総称で、年間<b>約2,000〜2,500人</b>が新規に診断されます。<b>急性リンパ性白血病</b>が最も多く、次いで脳腫瘍、神経芽腫、悪性リンパ腫、骨肉腫、ウィルムス腫瘍、横紋筋肉腫等が含まれます。多くは<b>集学的治療により治癒を目指せる</b>領域です。',
+        stage_n:'病期分類は腫瘍ごとに異なります（神経芽腫はINRG、ウィルムス腫瘍はCOG分類等）。集学的治療の確立により、白血病・リンパ腫等を中心に<b>長期生存率の向上が報告されています</b>。一方で、晩期合併症の管理が課題です。',
+        tx_n:'<b>小児がん拠点病院（全国15施設、連携病院）</b>での集学的治療が推奨されます。腫瘍ごとに化学療法、手術、放射線療法、造血幹細胞移植、近年は<b>分子標的薬・CAR-T 細胞療法・免疫療法</b>が標準治療に組み込まれています。',
+        check_n:'病理組織診断、画像診断、遺伝子検査が標準。<b>長期フォローアップ外来</b>（成長・内分泌・心機能・二次がん・妊孕性）の継続が重要です。<b>きょうだい・ご家族のメンタルケア</b>、復学支援、AYA世代への移行支援もSATOIから繋ぎます。',
+        pro_about:'小児がん 0-14歳。年間 約2,000-2,500例。主要腫瘍：ALL（最頻、20-30%）、脳腫瘍（20%）、神経芽腫、悪性リンパ腫、Wilms 腫瘍、横紋筋肉腫、骨肉腫、Ewing 肉腫、肝芽腫。AYA 世代（15-39歳）も近接領域として連続的に扱う。',
+        pro_stage:'腫瘍別に異なる。神経芽腫：INRG/INRGSS、Wilms：COG、骨軟部肉腫：Enneking/AJCC、ALL：NCI-Rome 基準（年齢・WBC）。リスク層別治療が原則。',
+        pro_tx:'小児がん拠点病院（全国15施設）+ 連携病院での集学的治療が基本。ALL：プレドニゾロン感受性に基づくリスク層別、JPLSG ALL-B12 等。神経芽腫：高リスクは強化化学療法 + 自家移植 + 抗GD2抗体（dinutuximab beta）+ 13-cis-retinoic acid。脳腫瘍：手術 + 放射線（年齢配慮）+ 化学療法。再発・難治：CAR-T（tisagenlecleucel：B-ALL）、分子標的薬（larotrectinib：NTRK fusion）、フェーズ I 治験。',
+        pro_check:'病理組織診断、IHC、FISH、骨髄穿刺、髄液検査、画像（CT/MRI/PET/MIBG シンチ等）、遺伝子検査（germline 含む）。Li-Fraumeni、神経線維腫症、Beckwith-Wiedemann、DICER1 など <b>がん素因症候群</b>のスクリーニングと遺伝カウンセリング。LTFU（晩期合併症：内分泌、心毒性、二次がん、妊孕性）。',
+        src:'出典：日本小児血液・がん学会 小児がん診療ガイドライン／JPLSG プロトコル／国立成育医療研究センター 小児がん中央機関／小児がん拠点病院（厚生労働省指定 15施設）。'
+      })
+    });
+  }
+})();
 function openCancer(k){CAN_CUR=k;CAN_PRO_OPEN=false;go('canpage');}
 function openTerm(key){var t=BC_TERMS[key];if(!t)return;var h=(location.hash||'').slice(1);if(h!=='term')window._termBack=(h||'bccare');document.getElementById('termTitle').textContent=t.t;document.getElementById('termBody').innerHTML=t.body;go('term');}
 function termBack(){go(window._termBack||'bccare');}
@@ -5196,7 +6216,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">M1 遠隔転移あり</td><td colspan="4" class="stg">Ⅳ</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：あなたの「がんの深さ（横）」と「リンパ節（縦）」が交わるマスが、おおよそのステージです。<br>・<b>早期（粘膜〜粘膜下層・転移少）</b>：<b>内視鏡で治せる可能性</b>があり、胃を残せます。<br>・<b>Ⅱ〜Ⅲ期</b>：手術が中心＋術後にお薬で再発予防（術前に行うことも）。<br>・<b>Ⅳ期（遠隔転移）</b>：お薬が中心。長くコントロールしながら、つらさも和らげます。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：「深さ」で見通しが大きく変わるからこそ、<b>早期発見＝胃カメラ（内視鏡）が効く</b>んです。胃がんは早く見つけられれば治せる代表的ながん。検診や、ピロリ菌の除菌後の定期チェックが、ここに直結します。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で胃がんと診断される方は<b>年間およそ12〜13万人</b>。とても身近ながんです。「5年生存率 全体で約3分の2（約67%前後）」という数字をよく見かけますが、これは<b>すべての病期を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（胃にとどまる段階）で見つかれば5年生存率は9割を大きく超える</b>とされ、胃がんは「早く見つければ治せる」代表的ながんです。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で胃がんと診断される方は<b>年間およそ12〜13万人</b>。とても身近ながんです。「5年生存率 全体で約3分の2（約67%前後）」という数字をよく見かけますが、これは<b>すべての病期を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（胃にとどまる段階）で見つかれば5年生存率は9割を大きく超える</b>とされ、胃がんは「早く見つければ治せる」代表的ながんです。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`胃がんで大事なのは<b>「深さ」</b>。胃の壁は層になっていて、<b>浅い＝早期、深い＝進行</b>。これにリンパ節や遠くへの転移を合わせてⅠ〜Ⅳ期に分けます。下が早見表です。<br><br>
  <table class="dtbl"><tr><th></th><th>T1<br>浅い（粘膜側）</th><th>T2<br>筋肉の層</th><th>T3<br>外側の層</th><th>T4<br>壁をこえる</th></tr>
  <tr><td class="h">N0 リンパ節なし</td><td class="stg">Ⅰ</td><td>Ⅰ</td><td>ⅡB</td><td>ⅢA</td></tr>
@@ -5246,7 +6266,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">M1 遠隔転移あり</td><td colspan="4" class="stg">Ⅳ</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：あなたの「深さ（横）」と「リンパ節（縦）」が交わるマスが、おおよそのステージです。<br>・<b>0期（粘膜内）</b>：内視鏡で取りきれることが多い段階。<br>・<b>Ⅰ〜Ⅲ期</b>：手術が中心。Ⅲ期（リンパ節転移あり）は術後にお薬で再発予防。<br>・<b>Ⅳ期（肝・肺などへ転移）</b>：お薬が中心ですが、<b>転移巣も含めて手術で取りきれれば、治ることを目指せる</b>場合があります。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：大腸がんは<b>進んでいても“次の一手”がとても多い</b>がんです。Ⅳ期でも転移ごと手術で取りきれる人がいて、薬も遺伝子（${tlink('ras_braf','RAS/BRAF')}）や場所に合わせて選べる時代。「Ⅳ期＝もう打つ手なし」ではありません。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">大腸がんは、日本で<b>診断される人がいちばん多いがん（年間およそ15万人）</b>。それだけ身近で、治療も発達しています。「5年生存率 全体で約7割」という数字をよく見ますが、これは<b>すべての病期を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（腸にとどまる段階）で見つかれば5年生存率は9割を大きく超える</b>とされます。検診（便潜血）や大腸カメラが、この早期発見に直結します。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">大腸がんは、日本で<b>診断される人がいちばん多いがん（年間およそ15万人）</b>。それだけ身近で、治療も発達しています。「5年生存率 全体で約7割」という数字をよく見ますが、これは<b>すべての病期を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（腸にとどまる段階）で見つかれば5年生存率は9割を大きく超える</b>とされます。検診（便潜血）や大腸カメラが、この早期発見に直結します。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`大腸がんも、<b>深さ・リンパ節・遠くへの転移</b>で0〜Ⅳ期に分かれます。下が早見表です。<br><br>
  <table class="dtbl"><tr><th></th><th>Tis〜T1<br>浅い</th><th>T2<br>筋肉の層</th><th>T3<br>外側まで</th><th>T4<br>壁をこえる</th></tr>
  <tr><td class="h">N0 リンパ節なし</td><td class="stg">0〜Ⅰ</td><td>Ⅰ</td><td>ⅡA</td><td>ⅡB〜ⅡC</td></tr>
@@ -5327,7 +6347,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">病期（広がり）</td><td>T1〜T2a</td><td>T2b</td><td>T2c以上</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：3つが<b>すべて低い枠なら「低リスク」</b>。<b>どれか1つでも高い枠に入ると、その分リスクは上がります</b>（いちばん高い項目で判断するのが原則）。<br>・<b>低リスク</b>：すぐ治療せず<b>${tlink('surveillance','監視療法')}</b>で見守る選択も。<br>・<b>中間〜高リスク（限局）</b>：手術または放射線。高リスクは放射線＋${tlink('hormone_pr','ホルモン療法')}を組み合わせることも。<br>・<b>転移あり</b>：ホルモン療法が中心＋必要に応じ薬物。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：前立腺がんは「数字が高い＝即・手術」ではありません。<b>進行がゆっくりなタイプも多く、“あえて今は治療せず見守る”のが正解になることもある</b>——だから、リスクに応じて“どこまでやるか”を一緒に選ぶのが今の診療です。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">前立腺がんは、日本の男性で<b>もっとも多く診断されるがんのひとつ（年間およそ9〜10万人）</b>。そして<b>見通しがとても良いがん</b>として知られています。「5年相対生存率 全体で約99%」という数字があり、これは<b>全体の目安であってあなた個人の見通しではない</b>ものの、前立腺がんが「ゆっくり進み、治療の選択肢も多い」がんであることをよく表しています。早期・限局であればさらに良好です。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">前立腺がんは、日本の男性で<b>もっとも多く診断されるがんのひとつ（年間およそ9〜10万人）</b>。そして<b>見通しがとても良いがん</b>として知られています。「5年相対生存率 全体で約99%」という数字があり、これは<b>全体の目安であってあなた個人の見通しではない</b>ものの、前立腺がんが「ゆっくり進み、治療の選択肢も多い」がんであることをよく表しています。早期・限局であればさらに良好です。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`前立腺がんは、<b>「リスク分類」</b>で治療を決めるのが特徴。3つのものさし——<b>${tlink('psa','PSA')}・${tlink('gleason','グリソン')}・病期</b>——で、低/中間/高リスクに分けます。下が早見表です。<br><br>
  <table class="dtbl"><tr><th>ものさし</th><th>低</th><th>中間</th><th>高</th></tr>
  <tr><td class="h">PSAの値</td><td class="stg">10未満</td><td>10〜20</td><td>20超</td></tr>
@@ -5376,7 +6396,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">切除不能（転移）</td><td>別の臓器へ転移あり</td><td>お薬が中心＋つらさを和らげる</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：同じ「すい臓がん」でも、血管との位置関係で治療の入口が変わります。だから「ステージいくつ？」だけでなく、<b>「いま手術できる状態か？できないなら、できる状態を目指せるか？」</b>を主治医に確認するのがとても大事です。「切除可能境界」は、先にお薬で小さくして<b>手術にたどり着ける（コンバージョン）</b>道があります。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：すい臓がんは「見つかったときの状態」で大きく分かれるぶん、<b>近年は薬物療法（多剤併用）が大きく進歩</b>し、以前は難しかった方が手術にたどり着けるケースも増えています。一度の説明で「無理」と言われても、施設やセカンドオピニオンで道が見つかることがあります。</div>
- <details class="qa"><summary>統計の数字について（読む前に、これだけ読んでください）</summary><div class="note" style="line-height:1.8">すい臓がんは「治りにくいがん」という言葉を見聞きして、強い不安を感じている方が多いと思います。まず大切なことを。<b>世の中でよく見る生存率の数字は、すべての病期・すべての年代・少し前に診断された方までを平均した“全体の目安”であって、あなた個人の未来の数字ではありません。</b><br><br>確かに全体平均は他のがんより低めですが、<b>切除可能な早い段階で見つかり手術ができた方の見通しは、それより大きく良くなります</b>。そして近年は薬物療法の進歩で、平均そのものも少しずつ改善しています。数字は地図の一部であって、判決ではありません。つらい気持ちのときは、この数字を無理に見なくて大丈夫。あなたの状態と“次の一手”は、必ず主治医とSATOIが一緒に考えます。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字について（読む前に、これだけ読んでください）</summary><div class="note" style="line-height:1.8">すい臓がんは「治りにくいがん」という言葉を見聞きして、強い不安を感じている方が多いと思います。まず大切なことを。<b>世の中でよく見る生存率の数字は、すべての病期・すべての年代・少し前に診断された方までを平均した“全体の目安”であって、あなた個人の未来の数字ではありません。</b><br><br>本集団の全体平均は他のがん種より低めですが、<b>切除可能な病期で診断され、根治手術が施行された患者さんの予後は、本数値より良好であることが報告されています</b>。また、<b>近年の薬物療法（FOLFIRINOX、ゲムシタビン＋ナブパクリタキセル等）およびがんゲノム医療の進歩により、平均生存期間の延長が報告されています</b>。本数値は過去の集計であり、最新治療の効果は反映されていません。集団としての目安であり、個別の予後判定ではありません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。気持ちがつらいときは、無理に読まなくて大丈夫です。最新ガイドラインを踏まえた予後評価は主治医にご確認ください。SATOIは、対話の準備と言葉の整理を、そっとお手伝いします。〔出典：国立がん研究センター がん情報サービス／日本膵臓学会 膵癌診療ガイドライン〕</div></details>`,
     y:`すい臓がんで最も大事なのは、<b>「${tlink('resectability','切除可能性')}」</b>。すい臓は太い血管に囲まれているので、<b>がんが血管にどれだけ及んでいるか</b>で手術できるかが決まります。下が早見表です。<br><br>
  <table class="dtbl"><tr><th>区分</th><th>血管との関係</th><th>治療の流れ</th></tr>
  <tr><td class="h stg">切除できる</td><td>血管に及んでいない</td><td>手術＋お薬で<b>根治を目指す</b></td></tr>
@@ -5428,7 +6448,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">D 終末</td><td>進行</td><td>肝臓・体力が弱い</td><td>つらさを和らげる治療を中心に</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：肝臓がんは<b>「がん」「肝臓の体力」「自分の体力」の3つの掛け算</b>で治療が決まります。同じ大きさのがんでも、肝臓が元気なら手術、弱っていれば別の方法、という具合に道が変わるのが特徴です。だから「肝臓を守る」ことが、治療の選択肢を広げることに直結します。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：肝臓がんは<b>早期なら焼灼（ラジオ波）や手術で治すことを狙え、進行しても近年は免疫＋分子標的の薬で大きく見通しが変わった</b>がんです。背景の肝臓病（肝炎の治療など）を続けることが、再発予防にもつながります。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で肝臓がんと診断される方は<b>年間およそ4万人</b>。よく見る「5年相対生存率 全体で約4割前後」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（小さく・肝臓が元気な段階）で見つかれば見通しは大きく良くなり</b>、近年は薬物療法の進歩で進行例の見通しも改善しています。背景の肝臓病を治療している方は早期発見しやすいのが強みです。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で肝臓がんと診断される方は<b>年間およそ4万人</b>。よく見る「5年相対生存率 全体で約4割前後」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（小さく・肝臓が元気な段階）で見つかれば見通しは大きく良くなり</b>、近年は薬物療法の進歩で進行例の見通しも改善しています。背景の肝臓病を治療している方は早期発見しやすいのが強みです。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`肝臓がんのステージは、他のがんと少し違います。<b>「がんの広がり」だけでなく「肝臓の元気さ」「体力」も合わせて</b>決めます（${tlink('bclc','BCLC分類')}）。下が早見表です。<br><br>
  <table class="dtbl"><tr><th>ステージ</th><th>がん</th><th>肝臓・体力</th><th>主な治療</th></tr>
  <tr><td class="h stg">早期</td><td>小さい・少数</td><td>元気</td><td>手術・焼灼で<b>治すことを狙う</b></td></tr>
@@ -5481,7 +6501,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">M1 遠隔転移あり</td><td colspan="4" class="stg">ⅣB</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：あなたの「深さ（横）」と「リンパ節（縦）」が交わるマスが、おおよそのステージです。<br>・<b>0〜Ⅰ期（浅い）</b>：内視鏡治療や、手術・化学放射線で<b>治すことを狙える</b>。<br>・<b>Ⅱ〜Ⅲ期</b>：手術や化学放射線療法を、お薬と組み合わせて。<br>・<b>Ⅳ期</b>：お薬が中心。つらさ（飲み込みにくさ等）を和らげる治療も最初から。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：食道がんは<b>「手術しかない」がんではありません</b>。<b>化学放射線療法（お薬＋放射線）で、食道を残したまま治すことを狙える</b>のが大きな特徴。手術と化学放射線、どちらを選ぶかは、効果・体への負担・暮らし方を一緒に考えて決められます。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で食道がんと診断される方は<b>年間およそ2.6万人</b>。よく見る「5年相対生存率 全体で約4〜5割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（粘膜にとどまる段階）で見つかれば見通しは大きく良くなり</b>、内視鏡だけで治せることもあります。検診や、お酒で顔が赤くなる体質の方の定期チェックが早期発見に直結します。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で食道がんと診断される方は<b>年間およそ2.6万人</b>。よく見る「5年相対生存率 全体で約4〜5割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（粘膜にとどまる段階）で見つかれば見通しは大きく良くなり</b>、内視鏡だけで治せることもあります。検診や、お酒で顔が赤くなる体質の方の定期チェックが早期発見に直結します。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`食道がんも、<b>深さ（T）・リンパ節（N）・遠くへの転移（M）</b>でステージが決まります。下が早見表です。<br><br>
  <table class="dtbl"><tr><th></th><th>T1a<br>ごく浅い</th><th>T1b<br>粘膜下</th><th>T2〜3<br>筋層〜外側</th><th>T4<br>周りの臓器に</th></tr>
  <tr><td class="h">N0 リンパ節なし</td><td class="stg">0〜Ⅰ</td><td>Ⅰ</td><td>Ⅱ</td><td>Ⅲ〜ⅣA</td></tr>
@@ -5534,7 +6554,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">Ⅳ期</td><td>膀胱・直腸・遠隔転移へ</td><td>薬物療法（免疫含む）が中心</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：子宮頸部の中にとどまるほど早期（Ⅰ期）、外へ・遠くへ進むほど数字が上がります。<br>・<b>ごく早期</b>：${tlink('conization','円錐切除')}で子宮を残せ、妊娠の可能性を残せることも。<br>・<b>Ⅰ〜Ⅱ期</b>：手術または${tlink('crt','化学放射線療法')}。どちらも“治すことを狙う”治療。<br>・<b>Ⅲ〜Ⅳ期</b>：化学放射線や薬物が中心。つらさを和らげる治療も最初から。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：子宮頸がんは<b>「妊娠の希望」を治療方針に正面から組み込めるがん</b>です。早期なら、子宮を残す手術（広汎子宮頸部摘出など）という選択肢も。年齢や希望を遠慮なく主治医に伝えてください。それは“わがまま”ではなく、大切な治療情報です。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で子宮頸がんと診断される方は<b>年間およそ1.1万人</b>。よく見る「5年相対生存率 全体で約7〜8割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（子宮頸部にとどまる段階）で見つかれば5年生存率は9割を大きく超える</b>とされます。検診とHPVワクチンで“前がんのうち”に防げる・早く見つけられるのが、このがんの大きな強みです。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で子宮頸がんと診断される方は<b>年間およそ1.1万人</b>。よく見る「5年相対生存率 全体で約7〜8割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（子宮頸部にとどまる段階）で見つかれば5年生存率は9割を大きく超える</b>とされます。検診とHPVワクチンで“前がんのうち”に防げる・早く見つけられるのが、このがんの大きな強みです。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`子宮頸がんの病期は、<b>がんが子宮頸部からどこまで広がったか</b>で決まります。下が早見表です。<br><br>
  <table class="dtbl"><tr><th>進行期</th><th>広がり</th><th>主な治療</th></tr>
  <tr><td class="h stg">Ⅰ期</td><td>頸部にとどまる</td><td>${tlink('conization','円錐切除')}・手術（妊娠温存も）</td></tr>
@@ -5587,7 +6607,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">Ⅳ期</td><td>膀胱・腸・遠隔転移へ</td><td>薬物療法（免疫＋分子標的）が中心</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：子宮の中にとどまるほど早期（Ⅰ期）、外へ・遠くへ進むほど数字が上がります。子宮体がんは<b>Ⅰ期で見つかる方が多い</b>のが特徴です。<br>・<b>Ⅰ〜Ⅱ期</b>：手術が中心。性質やリスクに応じて術後に薬物・放射線。<br>・<b>Ⅲ〜Ⅳ期</b>：手術に薬物・放射線を組み合わせ、進行例では薬物が中心に。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：子宮体がんは<b>「不正出血」というサインのおかげで、多くが早期で見つかる</b>がん。だから全体として予後が良好です。閉経後の出血や、月経以外の出血が続くときは「年のせい」と思わず、早めの受診を——それが命を守る一歩になります。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で子宮体がんと診断される方は<b>年間およそ1.7万人</b>で、近年増えています。よく見る「5年相対生存率 全体で約8割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（子宮にとどまる段階）で見つかれば5年生存率は9割を超える</b>とされ、子宮体がんは早期発見しやすく予後の良いがんの代表です。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で子宮体がんと診断される方は<b>年間およそ1.7万人</b>で、近年増えています。よく見る「5年相対生存率 全体で約8割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（子宮にとどまる段階）で見つかれば5年生存率は9割を超える</b>とされ、子宮体がんは早期発見しやすく予後の良いがんの代表です。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`子宮体がんの病期は、<b>がんが子宮の中だけか、外へ広がったか</b>で決まります。下が早見表です。<br><br>
  <table class="dtbl"><tr><th>進行期</th><th>広がり</th><th>主な治療</th></tr>
  <tr><td class="h stg">Ⅰ期</td><td>子宮体部にとどまる</td><td>手術が中心（若い方は温存も）</td></tr>
@@ -5640,7 +6660,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">Ⅳ期</td><td>肝臓内・肺・遠隔へ</td><td>抗がん薬＋分子標的・${tlink('parp','維持療法')}が中心</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：卵巣にとどまるほど早期（Ⅰ期）、お腹の中や遠くへ進むほど数字が上がります。卵巣がんはⅢ期以降で見つかることも少なくありませんが、<b>手術でできる限り取り、薬で長くおさえる</b>のが基本戦略です。<br>・<b>Ⅰ〜Ⅱ期</b>：手術が中心。性質に応じて抗がん薬。<br>・<b>Ⅲ〜Ⅳ期</b>：手術＋抗がん薬に、${tlink('parp','PARP阻害薬')}などの維持療法を組み合わせます。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：卵巣がんは<b>「進行期で見つかっても、近年の薬の進歩で長く付き合える」</b>がんへ変わりつつあります。とくに${tlink('brca','BRCA')}遺伝子の状態に合わせた${tlink('parp','PARP阻害薬')}の登場は、見通しを大きく変えました。だから進行期と聞いても、どうか希望を手放さないでください。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で卵巣がんと診断される方は<b>年間およそ1.3万人</b>。よく見る「5年相対生存率 全体で約6割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（卵巣にとどまる段階）で見つかれば5年生存率は9割前後</b>とされ、進行期でも近年の薬物療法（${tlink('parp','PARP阻害薬')}など）の進歩で見通しは改善しています。数字は地図の一部であって、未来の判決ではありません。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で卵巣がんと診断される方は<b>年間およそ1.3万人</b>。よく見る「5年相対生存率 全体で約6割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（卵巣にとどまる段階）で見つかれば5年生存率は9割前後</b>とされ、進行期でも近年の薬物療法（${tlink('parp','PARP阻害薬')}など）の進歩で見通しは改善しています。本数値は、過去に診断された患者集団のデータに基づく集計です。免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療など、近年承認された治療の効果は反映されていません。<b>ステージⅣの患者さんに対しても、これらの治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。これはあくまで集団としての目安です。個別の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`卵巣がんの病期は、<b>がんが卵巣にとどまるか、お腹や遠くへ広がったか</b>で決まります。下が早見表です。<br><br>
  <table class="dtbl"><tr><th>進行期</th><th>広がり</th><th>主な治療</th></tr>
  <tr><td class="h stg">Ⅰ期</td><td>卵巣にとどまる</td><td>手術＋必要に応じお薬（早期は温存も）</td></tr>
@@ -5794,7 +6814,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">Ⅲ期</td><td>β2ミクログロブリンが高い</td><td>より積極的な治療を検討</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：血液中の<b>β2ミクログロブリン・アルブミン</b>といった値や、近年は<b>LDHや染色体の異常</b>も加えた「R-ISS」で、病気の勢いとリスクを評価します。これは“余命の番号”ではなく、<b>どのくらいの強さで治療を組むかを決める目安</b>です。<br>骨髄腫は病期に加えて、染色体の異常などの<b>リスク因子</b>も合わせて治療を考えます。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：骨髄腫は<b>「治療開始の前段階（くすぶり型）」で見つかることもあり、その場合は急がず経過観察</b>になることも。逆に骨や腎臓に影響が出ていれば治療を始めます。そして何より、<b>新しい薬の登場で、生きられる期間が大きく延びた</b>がんです。「完治が難しい」と聞いても、それは「長く付き合える」と表裏一体だと知ってください。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で多発性骨髄腫と診断される方は<b>年間およそ7,500人</b>。よく見る「5年相対生存率 全体で約5割前後」という数字は、<b>すべての病期・年代・少し前に診断された方までを平均した“全体の目安”で、あなた個人の見通しではありません</b>。骨髄腫は<b>ここ十数年で新薬が相次ぎ、生存期間が大きく延びている</b>領域で、過去のデータに基づく数字は今の見通しより低めに出がちです。数字は地図の一部であって、未来の判決ではありません。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で多発性骨髄腫と診断される方は<b>年間およそ7,500人</b>。よく見る「5年相対生存率 全体で約5割前後」という数字は、<b>すべての病期・年代・少し前に診断された方までを平均した“全体の目安”で、あなた個人の見通しではありません</b>。骨髄腫は<b>ここ十数年で新薬が相次ぎ、生存期間が大きく延びている</b>領域で、過去のデータに基づく数字は今の見通しより低めに出がちです。本数値は、過去に診断された患者集団のデータに基づく集計です。免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療など、近年承認された治療の効果は反映されていません。<b>ステージⅣの患者さんに対しても、これらの治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。これはあくまで集団としての目安です。個別の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`骨髄腫の病期は、「広がり」ではなく<b>血液検査の値などから全身への影響を評価</b>する${tlink('iss','ISS')}を使います。下が早見表です。<br><br>
  <table class="dtbl"><tr><th>病期</th><th>おおまかな目安</th></tr>
  <tr><td class="h stg">Ⅰ期</td><td>検査値がおだやか</td></tr>
@@ -5896,7 +6916,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">転移あり</td><td>肝・腹膜・遠隔へ</td><td>薬物療法（免疫を含む）が中心</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：胆道がんも「ステージの番号」だけでなく、<b>いま手術で取りきれる状態かどうか</b>が治療の入口を決めます。黄疸がある場合は、まず${tlink('jaundice_stent','ステント')}で胆汁の流れを確保してから治療を進めることが多いです。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：胆道がんは発見が難しいがんですが、<b>近年は化学療法に免疫チェックポイント阻害薬を加える治療や、肝内胆管がんの“効く遺伝子”を狙う分子標的薬</b>が登場し、見通しが少しずつ変わってきています。一度「難しい」と言われても、施設やセカンドオピニオンで道が見つかることがあります。</div>
- <details class="qa"><summary>統計の数字について（読む前に、これだけ読んでください）</summary><div class="note" style="line-height:1.8">胆道がんは「治りにくい」と語られがちで、不安を感じている方が多いと思います。まず大切なことを。<b>世の中でよく見る生存率の数字は、すべての病期・年代を平均した“全体の目安”であって、あなた個人の未来の数字ではありません。</b>確かに全体平均は高くありませんが、<b>切除可能な段階で見つかり手術ができた方の見通しは、それより大きく良くなります</b>。そして近年は薬物療法の進歩で、見通しは少しずつ改善しています。数字は地図の一部であって、判決ではありません。つらいときは無理に見なくて大丈夫です。あなたの“次の一手”は、必ず主治医とSATOIが一緒に考えます。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字について（読む前に、これだけ読んでください）</summary><div class="note" style="line-height:1.8">胆道がんは「治りにくい」と語られがちで、不安を感じている方が多いと思います。まず大切なことを。<b>世の中でよく見る生存率の数字は、すべての病期・年代を平均した“全体の目安”であって、あなた個人の未来の数字ではありません。</b>本集団の全体平均は高くはありませんが、<b>切除可能な病期で診断され、根治手術が施行された患者さんの予後は、本数値より良好であることが報告されています</b>。<b>近年の薬物療法（ゲムシタビン＋シスプラチン併用、デュルバルマブ併用等）の進歩により、生存期間の延長が報告されています</b>。本数値は過去の集計であり、最新治療の効果は十分には反映されていません。集団としての目安であり、個別の予後判定ではありません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。気持ちがつらいときは、無理に読まなくて大丈夫です。最新ガイドラインを踏まえた予後評価は主治医にご確認ください。SATOIは、対話の準備と言葉の整理を、そっとお手伝いします。〔出典：国立がん研究センター がん情報サービス／日本肝胆膵外科学会 胆道癌診療ガイドライン〕</div></details>`,
     y:`胆道がんは<b>深さ・広がり（T）・リンパ節（N）・遠隔転移（M）</b>でⅠ〜Ⅳ期に分けます。すい臓がんと同じく<b>「手術で取りきれるか（${tlink('resectability','切除可能性')}）」</b>がとても重要。下が早見表です。<br><br>
  <table class="dtbl"><tr><th>区分</th><th>状態</th><th>治療の方向</th></tr>
  <tr><td class="h stg">切除できる</td><td>限局し取りきれる</td><td>手術＋お薬で<b>根治を目指す</b></td></tr>
@@ -5948,7 +6968,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">遠隔転移あり（肺・骨など）</td><td colspan="2" class="stg">Ⅳ期</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：腎臓の中にとどまり小さいほど早期（Ⅰ期）、大きい・外へ・遠くへ進むほど数字が上がります。<br>・<b>Ⅰ〜Ⅱ期</b>：手術で<b>治すことを狙える</b>。小さければ腎臓を温存（部分切除）。<br>・<b>Ⅲ期</b>：手術が中心。<br>・<b>Ⅳ期（遠隔転移）</b>：薬物療法（免疫＋分子標的）が中心。状況により転移巣や腎臓の手術を組み合わせることも。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：腎臓がんは<b>かつて薬が効きにくいとされていたのが、免疫チェックポイント阻害薬と分子標的薬の登場で“最も治療が進歩したがんのひとつ”へ</b>変わりました。Ⅳ期でも長くコントロールできる方が増えています。だから転移と聞いても、希望を手放さないでください。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で腎臓がんと診断される方は<b>年間およそ3万人</b>。よく見る「5年相対生存率 全体で約8割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（腎臓にとどまる段階）で見つかれば5年生存率は9割を超える</b>とされ、健診で小さく見つかることが多いのが腎臓がんの強みです。進行例も近年の薬の進歩で見通しが改善しています。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で腎臓がんと診断される方は<b>年間およそ3万人</b>。よく見る「5年相対生存率 全体で約8割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（腎臓にとどまる段階）で見つかれば5年生存率は9割を超える</b>とされ、健診で小さく見つかることが多いのが腎臓がんの強みです。進行例も近年の薬の進歩で見通しが改善しています。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`腎臓がんも<b>大きさ・広がり（T）・リンパ節（N）・遠隔転移（M）</b>でⅠ〜Ⅳ期に分けます。下が早見表です。<br><br>
  <table class="dtbl"><tr><th></th><th>腎臓内にとどまる</th><th>外・周囲へ</th></tr>
  <tr><td class="h">7cm以下</td><td class="stg">Ⅰ期</td><td>Ⅲ期</td></tr>
@@ -6001,7 +7021,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">転移あり</td><td>遠隔転移（M1）</td><td>薬物療法（免疫・抗体薬を含む）が中心</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：膀胱がんは<b>「筋層非浸潤」か「筋層浸潤」か</b>が運命の分かれ道。<br>・<b>筋層非浸潤</b>：膀胱を残せ、命に関わりにくい段階。ただし<b>再発しやすいので、膀胱鏡での定期チェックがとても大切</b>。リスクに応じてBCGなどの膀胱内注入で再発を抑えます。<br>・<b>筋層浸潤</b>：膀胱全摘（＋尿の出口を作り直す${tlink('stoma','尿路変向')}）か、膀胱を残す化学放射線を、暮らし方も含めて選びます。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：膀胱がんの多くは<b>「筋層非浸潤」で見つかり、膀胱を残せます</b>。怖いのは“再発”より“見逃し”——だからこそ、症状がなくても<b>定期的な膀胱鏡</b>が命綱になります。進行例でも、近年は<b>免疫チェックポイント阻害薬や抗体薬物複合体</b>で見通しが変わってきました。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で膀胱がんと診断される方は<b>年間およそ2.3万人</b>。よく見る「5年相対生存率 全体で約7割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。膀胱がんの多くは<b>筋層に達していない段階で見つかり、その場合の見通しは良好で膀胱も残せます</b>。血尿は大切なサイン——見逃さず受診することが早期発見に直結します。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本で膀胱がんと診断される方は<b>年間およそ2.3万人</b>。よく見る「5年相対生存率 全体で約7割」という数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。膀胱がんの多くは<b>筋層に達していない段階で見つかり、その場合の見通しは良好で膀胱も残せます</b>。血尿は大切なサイン——見逃さず受診することが早期発見に直結します。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん統計〕</div></details>`,
     y:`膀胱がんは、まず<b>「筋層に達しているか」で大きく2つに分け</b>ます。下が早見表です。<br><br>
  <table class="dtbl"><tr><th>区分</th><th>深さ</th><th>治療の方向</th></tr>
  <tr><td class="h stg">筋層に達しない（表在性）</td><td>粘膜側</td><td>内視鏡＋膀胱内注入で<b>膀胱温存</b></td></tr>
@@ -6160,7 +7180,7 @@ Object.assign(CAN_DATA,{
  <tr><td class="h">Ⅳ期</td><td>遠隔転移あり</td><td>薬物療法（免疫・分子標的）が中心</td></tr></table>
  <div class="note" style="margin-top:8px;line-height:1.8">表の見かた：薄く・表面にとどまるほど早期（0〜Ⅰ期）で、見通しは良好。厚い・リンパ節・遠くへ進むほど数字が上がります。<br>・<b>0〜Ⅰ期</b>：手術で取りきれれば治る可能性が高い。<br>・<b>Ⅱ〜Ⅲ期</b>：手術に加え、再発を抑える術後薬物療法（免疫・分子標的）を検討。<br>・<b>Ⅳ期</b>：薬物療法が中心。脳など特殊な転移にも対応する手段があります。</div>
  <div class="note" style="margin-top:8px;line-height:1.8">へぇポイント：メラノーマは<b>かつて進行すると治療が難しいとされたのが、免疫チェックポイント阻害薬と分子標的薬（BRAF/MEK阻害薬）の登場で“最も劇的に見通しが変わったがんのひとつ”へ</b>。Ⅳ期でも長期にコントロールできる方が増えました。だから進行と聞いても、希望を手放さないでください。</div>
- <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本でメラノーマと診断される方は欧米より少なく、皮膚がん全体でも比較的まれです。よく見る生存率の数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（薄く・表面にとどまる段階）で見つかれば治る可能性が高く</b>、進行例も近年の免疫・分子標的薬で見通しが大きく改善しています。数字は地図の一部。気持ちがざわつくときは、無理に見なくて大丈夫です。〔出典：国立がん研究センター がん情報サービス〕</div></details>`,
+ <details class="qa"><summary>統計の数字、見てもいい？（読む前にひと呼吸）</summary><div class="note" style="line-height:1.8">日本でメラノーマと診断される方は欧米より少なく、皮膚がん全体でも比較的まれです。よく見る生存率の数字は、<b>すべての病期・年代を平均した“全体の目安”で、あなた個人の見通しではありません</b>。<b>早期（薄く・表面にとどまる段階）で見つかれば治る可能性が高く</b>、進行例も近年の免疫・分子標的薬で見通しが大きく改善しています。本数値は、過去に診断された患者集団のデータに基づく集計です。近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療などの効果は、本データには反映されていません。<b>ステージⅣの患者さんに対しても、治療選択肢の拡大により、生存期間の延長やQOLの維持が報告されています</b>。個々の予後は、組織型・分子標的の有無・全身状態などにより異なります。最新の診療ガイドラインを踏まえ、主治医とご相談ください。気持ちがつらいときは、無理に読まなくて大丈夫です。〔出典：国立がん研究センター がん情報サービス〕</div></details>`,
     y:`メラノーマの病期は、<b>がんの「${tlink('breslow','厚さ（深さ）」</b>')}・リンパ節転移・遠隔転移でⅠ〜Ⅳ期に分けます。<b>厚さが薄いほど見通しが良い</b>のが特徴。下が早見表です。<br><br>
  <table class="dtbl"><tr><th>病期</th><th>状態</th><th>治療の方向</th></tr>
  <tr><td class="h stg">0／Ⅰ期</td><td>ごく薄い・表面に</td><td>手術で<b>治すことを狙う</b></td></tr>
@@ -6789,13 +7809,13 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
 (function(){
   var SV={breast:{n:'乳がん',p:95000,s:{I:99,II:92,III:75,IV:38}},colon:{n:'大腸がん',p:147000,s:{I:98,II:88,III:75,IV:22}},lung:{n:'肺がん',p:127000,s:{I:82,II:47,III:22,IV:7}},stomach:{n:'胃がん',p:124000,s:{I:96,II:71,III:49,IV:9}},prostate:{n:'前立腺がん',p:95000,s:{I:100,II:100,III:95,IV:64}},pancreas:{n:'すい臓がん',p:44000,s:{I:41,II:17,III:7,IV:1}},cervix:{n:'子宮頸がん',p:11000,s:{I:93,II:76,III:62,IV:26}},endometrium:{n:'子宮体がん',p:17000,s:{I:96,II:88,III:66,IV:19}}};
   // 全がん種（「がんを知る」一覧と同じ並び）。選ぶと必ず、そのがんの詳細（病期・治療）ページへ紐づく。
-  var SV_LIST=[['breast','乳がん'],['lung','肺がん'],['stomach','胃がん'],['colon','大腸がん'],['prostate','前立腺がん'],['pancreas','すい臓がん'],['liver','肝臓がん'],['esophagus','食道がん'],['cervix','子宮頸がん'],['endometrium','子宮体がん'],['ovary','卵巣がん'],['lymphoma','悪性リンパ腫'],['leukemia','白血病'],['myeloma','多発性骨髄腫'],['headneck','頭頸部がん'],['biliary','胆道がん'],['kidney','腎臓がん'],['bladder','膀胱がん'],['brain','脳腫瘍'],['thyroid','甲状腺がん'],['melanoma','皮膚がん（メラノーマ）'],['cup','原発不明がん']];
+  var SV_LIST=[['breast','乳がん'],['tnbc','乳がん（トリプルネガティブ）'],['lung','肺がん（非小細胞）'],['sclc','肺がん（小細胞）'],['mesothelioma','胸膜中皮腫'],['stomach','胃がん'],['colon','大腸がん'],['prostate','前立腺がん'],['pancreas','すい臓がん'],['liver','肝臓がん'],['esophagus','食道がん'],['cervix','子宮頸がん'],['endometrium','子宮体がん'],['ovary','卵巣がん'],['lymphoma','非ホジキンリンパ腫'],['hodgkin','ホジキンリンパ腫'],['pmbcl','PMBCL'],['leukemia','白血病'],['myeloma','多発性骨髄腫'],['headneck','頭頸部がん'],['biliary','胆道がん'],['kidney','腎臓がん'],['ureter','腎盂・尿管がん'],['bladder','膀胱がん'],['brain','脳腫瘍'],['thyroid','甲状腺がん'],['melanoma','皮膚がん（メラノーマ）'],['msih','MSI-High 固形がん'],['tmbh','TMB-High 固形がん'],['childhood','こどものがん（小児）'],['cup','原発不明がん']];
   var NAMES={};SV_LIST.forEach(function(x){NAMES[x[0]]=x[1];});NAMES.other='その他・まだ分からない';
   function detailCall(k){return k==='breast'?"go('bccare')":"openCancer('"+k+"')";}
   function detailBtn(k){var nm=NAMES[k]||'このがん';return '<button class="btn btn-out" style="margin-top:12px" onclick="'+detailCall(k)+'"><i class="ti ti-chevron-right" style="vertical-align:-2px"></i> '+nm+'の治療・病期をくわしく</button>';}
   var who='',can='',stg='';
   function chip(t,call){return '<button class="chip amber" style="margin:0 8px 8px 0" onclick="'+call+'">'+t+'</button>';}
-  function frame(){return '<div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:13px;line-height:1.95;color:var(--teal-d)"><b>これは“過去の平均”です。</b> あなたの結果は、あなただけのもの。ステージは“余命の番号”ではなく、<b>これからの治療を一緒に選ぶための地図</b>です。<br><br>新しい薬・治療法・<b>ガイドラインの更新</b>はいま、ものすごい速さで続いています。<b>ステージⅣであっても、いまの治療で見えてくる景色は、この数字の頃よりずっと広がってきています</b>。<br><br>大切なのは、数字にとらわれないこと。<b>まず主治医に相談しながら、あなたに合う道を、一緒に選んでいきましょう。</b>これはあくまで目安——あなたの本当の見通しは、ここではなく、診察室の中にあります。</div><div class="note" style="margin-top:8px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター（病期別5年相対生存率の目安）。このデータは過去の集団の平均で、<b>最新の治療法・薬の効果はまだ反映されていません</b>。あなたの見通しは、最新ガイドラインを踏まえて主治医とご確認ください。</div>';}
+  function frame(){return '<div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:13px;line-height:1.95;color:var(--teal-d)">この5年相対生存率は、<b>過去に診断された患者集団のデータに基づく統計値</b>です。<b>近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療など、新しい治療選択肢の効果は、本データには反映されていません</b>。<br><br>病期（ステージ）は、予後の指標であると同時に、<b>治療方針を決めるための病期分類</b>です。集学的治療の進歩により、<b>ステージⅣの患者さんに対しても治療選択肢が拡大し、生存期間の延長やQOLの維持が報告されています</b>（国立がん研究センター 統計報告 等）。<br><br>本数値はあくまで集団としての目安です。個々の予後は、<b>組織型・分子標的の有無・全身状態・併存疾患</b>により異なります。<b>最新の診療ガイドラインを踏まえ、主治医とご相談ください</b>。SATOIは、その対話の準備と、あなたの言葉の整理を、そっとお手伝いします。</div><div class="note" style="margin-top:8px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス（病期別5年相対生存率）／各学会診療ガイドライン。本データは過去の患者集団の集計であり、最新治療の効果は十分には反映されていません。個別の予後評価は主治医にご確認ください。</div>';}
   function actions(){return '<button class="btn btn-teal" style="margin-top:16px" onclick="go(\'treatment\')"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> 治療を知る</button><button class="btn btn-out" style="margin-top:10px" onclick="go(\'ai\')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュに相談する</button><button class="btn btn-out" style="margin-top:10px" onclick="svReset()"><i class="ti ti-refresh" style="vertical-align:-2px"></i> もう一度しらべる</button>';}
   function R(){var e=document.getElementById('svStep');if(!e)return;var h='';
     if(!who){
