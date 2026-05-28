@@ -389,6 +389,521 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
   </div>
 </section>
 
+<!-- ============ プロフィール初期設定（がん種・ステージ）★Katsu要望2026-05-28 ============ -->
+<section class="scr" id="profilesetup">
+  <style>
+  #profilesetup .ps-step{display:flex;gap:6px;align-items:center;margin-bottom:14px}
+  #profilesetup .ps-step .sd{flex:1;height:3px;border-radius:2px;background:var(--line2)}
+  #profilesetup .ps-step .sd.on{background:var(--teal)}
+  #profilesetup .ps-step .sn{font-size:10px;color:var(--mute);font-weight:600}
+  #profilesetup .ps-cgrp{margin-bottom:11px}
+  #profilesetup .ps-cgrp .gh{font-size:10.5px;color:var(--mute);font-weight:700;margin:0 0 6px;display:flex;align-items:center;gap:6px}
+  #profilesetup .ps-cgrp .gh .gd{flex:1;height:1px;background:var(--line);margin-left:4px}
+  #profilesetup .ps-chips{display:flex;flex-wrap:wrap;gap:5px}
+  #profilesetup .ps-chip{font-size:12px;padding:7px 11px;border:.5px solid var(--line2);border-radius:999px;background:#fff;color:var(--ink);cursor:pointer;line-height:1.2;font:inherit;font-weight:500}
+  #profilesetup .ps-chip.psel{background:var(--teal-bg);border-color:var(--teal);color:var(--teal-d);font-weight:700}
+  #profilesetup .ps-chip.muted{color:var(--mute);font-style:italic}
+  #profilesetup .ps-pos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0 14px}
+  #profilesetup .ps-posbtn{font-size:12px;font-weight:600;padding:13px 6px;border:.5px solid var(--line2);border-radius:13px;background:#fff;color:var(--ink);cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;line-height:1.3;font-family:inherit}
+  #profilesetup .ps-posbtn i{font-size:20px;color:var(--teal)}
+  #profilesetup .ps-posbtn.psel{background:var(--teal-bg);border-color:var(--teal);color:var(--teal-d)}
+  #profilesetup .ps-stages{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0 0}
+  #profilesetup .ps-stagebtn{font-size:14px;font-weight:700;padding:12px 6px;border:.5px solid var(--line2);border-radius:12px;background:#fff;color:var(--ink);cursor:pointer;text-align:center;line-height:1.3;font-family:inherit}
+  #profilesetup .ps-stagebtn .ssub{display:block;font-size:9.5px;color:var(--mute);font-weight:500;margin-top:3px}
+  #profilesetup .ps-stagebtn.psel{background:var(--teal);color:#fff;border-color:var(--teal)}
+  #profilesetup .ps-stagebtn.psel .ssub{color:rgba(255,255,255,.88)}
+  #profilesetup .ps-foot{margin-top:18px;display:flex;flex-direction:column;gap:6px}
+  #profilesetup .ps-skip{text-align:center;font-size:12px;color:var(--mute);background:none;border:none;padding:8px;cursor:pointer;font:inherit}
+  </style>
+  <div class="dawn">
+    <svg viewBox="0 0 390 104" width="100%" height="104" preserveAspectRatio="xMidYMid slice" style="display:block">
+      <rect width="390" height="104" fill="url(#d1)"/>
+      <circle cx="312" cy="54" r="50" fill="#FBD68F" opacity=".26"/>
+      <circle cx="312" cy="54" r="18" fill="#F6C77A" opacity=".92"/>
+      <path d="M0 80 Q100 62 220 76 T390 70 V104 H0 Z" fill="#F2D9B0" opacity=".55"/>
+      <path d="M0 90 Q120 76 240 86 T390 84 V104 H0 Z" fill="#E9C896" opacity=".7"/>
+    </svg>
+    <div class="t"><div style="font-size:20px;font-weight:600">あなたのこと、少しだけ</div><div class="sub">登録ありがとうございます。あなた向けに整えるために</div></div>
+  </div>
+  <div class="pad">
+    <div class="ps-step">
+      <div class="sd on"></div><div class="sd on"></div><div class="sd"></div>
+      <div class="sn">2/3</div>
+    </div>
+
+    <h1 class="h1">いま、どなたのことで？</h1>
+    <p class="sub">教えてもらえると、画面表示・あなたの記録・<b>先生と話すときの支度</b>が、あなた向けに整います。</p>
+    <div class="ps-pos">
+      <button class="ps-posbtn psel" data-pw="self" onclick="selProfileWho('self')"><i class="ti ti-user"></i>自分のこと</button>
+      <button class="ps-posbtn" data-pw="family" onclick="selProfileWho('family')"><i class="ti ti-users"></i>大切な人</button>
+      <button class="ps-posbtn" data-pw="interest" onclick="selProfileWho('interest')"><i class="ti ti-bookmark"></i>関心がある</button>
+    </div>
+
+    <h1 class="h1">がん種</h1>
+    <p class="sub" style="margin-bottom:8px">わかる範囲で1つ。あとで変更できます。</p>
+
+    <div class="ps-cgrp">
+      <div class="gh">頭頸部・胸部<div class="gd"></div></div>
+      <div class="ps-chips">
+        <button class="ps-chip" data-pc="headneck" onclick="selProfileCancer('headneck')">頭頸部</button>
+        <button class="ps-chip" data-pc="lung" onclick="selProfileCancer('lung')">肺</button>
+      </div>
+    </div>
+    <div class="ps-cgrp">
+      <div class="gh">消化器・肝胆膵<div class="gd"></div></div>
+      <div class="ps-chips">
+        <button class="ps-chip" data-pc="esophagus" onclick="selProfileCancer('esophagus')">食道</button>
+        <button class="ps-chip" data-pc="stomach" onclick="selProfileCancer('stomach')">胃</button>
+        <button class="ps-chip" data-pc="colon" onclick="selProfileCancer('colon')">大腸</button>
+        <button class="ps-chip" data-pc="liver" onclick="selProfileCancer('liver')">肝臓</button>
+        <button class="ps-chip" data-pc="biliary" onclick="selProfileCancer('biliary')">胆道</button>
+        <button class="ps-chip" data-pc="pancreas" onclick="selProfileCancer('pancreas')">すい臓</button>
+      </div>
+    </div>
+    <div class="ps-cgrp">
+      <div class="gh">乳腺・婦人科<div class="gd"></div></div>
+      <div class="ps-chips">
+        <button class="ps-chip" data-pc="breast" onclick="selProfileCancer('breast')">乳がん</button>
+        <button class="ps-chip" data-pc="cervix" onclick="selProfileCancer('cervix')">子宮頸</button>
+        <button class="ps-chip" data-pc="endometrium" onclick="selProfileCancer('endometrium')">子宮体</button>
+        <button class="ps-chip" data-pc="ovary" onclick="selProfileCancer('ovary')">卵巣</button>
+      </div>
+    </div>
+    <div class="ps-cgrp">
+      <div class="gh">泌尿器<div class="gd"></div></div>
+      <div class="ps-chips">
+        <button class="ps-chip" data-pc="kidney" onclick="selProfileCancer('kidney')">腎臓</button>
+        <button class="ps-chip" data-pc="bladder" onclick="selProfileCancer('bladder')">膀胱</button>
+        <button class="ps-chip" data-pc="prostate" onclick="selProfileCancer('prostate')">前立腺</button>
+      </div>
+    </div>
+    <div class="ps-cgrp">
+      <div class="gh">皮膚・リンパ<div class="gd"></div></div>
+      <div class="ps-chips">
+        <button class="ps-chip" data-pc="melanoma" onclick="selProfileCancer('melanoma')">皮膚（メラノーマ）</button>
+        <button class="ps-chip" data-pc="lymphoma" onclick="selProfileCancer('lymphoma')">悪性リンパ腫</button>
+      </div>
+    </div>
+    <div class="ps-cgrp">
+      <div class="gh">血液・骨髄<div class="gd"></div></div>
+      <div class="ps-chips">
+        <button class="ps-chip" data-pc="leukemia" onclick="selProfileCancer('leukemia')">白血病</button>
+        <button class="ps-chip" data-pc="myeloma" onclick="selProfileCancer('myeloma')">多発性骨髄腫</button>
+      </div>
+    </div>
+    <div class="ps-cgrp">
+      <div class="gh">脳・内分泌<div class="gd"></div></div>
+      <div class="ps-chips">
+        <button class="ps-chip" data-pc="brain" onclick="selProfileCancer('brain')">脳腫瘍</button>
+        <button class="ps-chip" data-pc="thyroid" onclick="selProfileCancer('thyroid')">甲状腺</button>
+      </div>
+    </div>
+    <div class="ps-cgrp">
+      <div class="gh">その他<div class="gd"></div></div>
+      <div class="ps-chips">
+        <button class="ps-chip" data-pc="cup" onclick="selProfileCancer('cup')">原発不明</button>
+        <button class="ps-chip muted" data-pc="" onclick="selProfileCancer('')">わからない・未確定</button>
+      </div>
+    </div>
+
+    <h1 class="h1" style="margin-top:16px">ステージ</h1>
+    <p class="sub" style="margin-bottom:6px">最後に。先生から聞いた範囲で。</p>
+    <div class="ps-stages">
+      <button class="ps-stagebtn" data-ps="I" onclick="selProfileStage('I')">Ⅰ<span class="ssub">早期</span></button>
+      <button class="ps-stagebtn" data-ps="II" onclick="selProfileStage('II')">Ⅱ<span class="ssub">局所</span></button>
+      <button class="ps-stagebtn" data-ps="III" onclick="selProfileStage('III')">Ⅲ<span class="ssub">進行</span></button>
+      <button class="ps-stagebtn" data-ps="IV" onclick="selProfileStage('IV')">Ⅳ<span class="ssub">遠隔</span></button>
+      <button class="ps-stagebtn" data-ps="NA" onclick="selProfileStage('NA')">不明<span class="ssub">未告知</span></button>
+      <button class="ps-stagebtn" data-ps="PRE" onclick="selProfileStage('PRE')">確定前<span class="ssub">検査中</span></button>
+    </div>
+
+    <div class="ps-foot">
+      <button class="btn btn-teal" id="psCta" onclick="saveProfileSetup()">1つでも選んで、続ける</button>
+      <button class="ps-skip" onclick="skipProfileSetup()">あとで設定する</button>
+    </div>
+
+    <div class="lock" style="margin-top:8px"><i class="ti ti-lock"></i>あとからマイページで変更できます</div>
+  </div>
+</section>
+
+<!-- ============ 投資家ダッシュボード（裏モック携帯版・本番品質・BCG/ベイン世界観）★Katsu要望2026-05-28 ============ -->
+<section class="scr" id="investor">
+<style>
+#investor{background:#F5F1E8;font-family:"EB Garamond","Noto Serif JP",serif;min-height:100vh}
+#investor .inv-appbar{padding:9px 14px;display:flex;align-items:center;justify-content:space-between;font-family:Inter,sans-serif;background:#F5F1E8;border-bottom:.5px solid rgba(14,34,54,.15)}
+#investor .inv-appbar .iback{font-size:12px;color:#0E2236;background:none;border:none;cursor:pointer;font:inherit;font-weight:600}
+#investor .inv-appbar .ilogo{font-size:13px;font-weight:900;color:#0E2236;letter-spacing:.02em}
+#investor .inv-appbar .irole{font-size:9px;background:#0E2236;color:#B8954A;border:1px solid #B8954A;border-radius:999px;padding:3px 9px;font-weight:700;letter-spacing:.06em}
+#investor .inv-ticker{background:#0E2236;color:#B8954A;font-size:10px;padding:7px 0;font-family:"JetBrains Mono",monospace;white-space:nowrap;overflow:hidden;letter-spacing:.04em;position:relative}
+#investor .inv-ticker .pos{color:#7BC97B}
+#investor .inv-ticker-track{display:inline-block;padding-left:100%;animation:invTick 60s linear infinite}
+@keyframes invTick{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+#investor .inv-kpi-band{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px 14px;background:#fff;font-family:Inter,sans-serif;border-bottom:.5px solid rgba(14,34,54,.1)}
+#investor .inv-kpi-band .ikpi{padding:7px 9px;background:#F5F1E8;border-radius:6px;border-left:2px solid #B8954A}
+#investor .inv-kpi-band .ikpi .ikl{font-size:8.5px;color:#6B7280;letter-spacing:.05em;font-weight:700;text-transform:uppercase}
+#investor .inv-kpi-band .ikpi .ikv{font-family:"EB Garamond",serif;font-size:18px;font-weight:700;color:#0E2236;line-height:1;margin-top:2px}
+#investor .inv-kpi-band .ikpi .ikv small{font-size:10px;color:#6B7280;font-weight:500}
+#investor .inv-kpi-band .ikpi .ikd{font-size:8.5px;color:#5a8a5a;font-weight:700;margin-top:2px}
+#investor .inv-pad{padding:10px 14px 92px}
+#investor .inv-title{font-family:"EB Garamond",serif;font-size:16px;font-weight:600;color:#0E2236;font-style:italic;line-height:1.3;margin:8px 0 2px}
+#investor .inv-title em{color:#B8954A;font-weight:700;font-style:italic}
+#investor .inv-sub{font-size:10px;color:#4C5562;line-height:1.5;font-family:Inter,sans-serif;margin-bottom:8px}
+#investor select.inv-dd{width:100%;padding:8px 11px;background:#fff;border:.5px solid #0E2236;border-radius:6px;font-size:12px;font-family:Inter,sans-serif;font-weight:600;color:#0E2236;margin-bottom:6px;cursor:pointer}
+#investor .inv-tabs{display:flex;gap:0;font-family:"JetBrains Mono",monospace;border:.5px solid #0E2236;border-radius:6px;overflow:hidden;margin-bottom:6px;background:#fff}
+#investor .inv-tab{flex:1;font-size:10.5px;padding:7px 6px;color:#0E2236;background:#fff;border:none;text-align:center;font-weight:600;letter-spacing:.05em;border-right:.5px solid #0E2236;cursor:pointer;font:inherit}
+#investor .inv-tab:last-child{border-right:none}
+#investor .inv-tab.on{background:#0E2236;color:#B8954A}
+#investor .inv-viewmode{display:flex;gap:4px;font-family:Inter,sans-serif;font-size:10px;margin-bottom:7px}
+#investor .inv-viewmode .ivm{flex:1;padding:6px 5px;background:#fff;border:.5px solid #d1d5db;border-radius:5px;text-align:center;color:#6B7280;font-weight:600;cursor:pointer}
+#investor .inv-viewmode .ivm.on{background:#B8954A;color:#fff;border-color:#B8954A}
+#investor .inv-map-wrap{background:#fff;border:.5px solid #0E2236;border-radius:8px;padding:6px;margin-top:7px;position:relative}
+#investor #invMapContainer{width:100%;min-height:300px;position:relative}
+#investor #invMapContainer svg{display:block;width:100%;height:auto}
+#investor #invMapContainer path.pref{transition:opacity .12s,stroke-width .12s,fill .25s}
+#investor #invMapContainer path.pref:hover{opacity:.82;stroke-width:1.2!important}
+#investor .inv-loading{padding:90px 20px;text-align:center;font-size:11px;color:#0E2236;font-family:Inter,sans-serif;font-style:italic}
+#investor .inv-legend{display:flex;align-items:center;gap:4px;justify-content:center;padding:7px 0 2px;font-family:Inter,sans-serif;font-size:8.5px;color:#6B7280}
+#investor .inv-legend .iscale{display:flex;gap:0;border:.5px solid #0E2236;border-radius:2px;overflow:hidden}
+#investor .inv-legend .iscale span{width:18px;height:7px;display:block}
+#investor .inv-legend .ilbl{font-weight:600;letter-spacing:.04em}
+#investor .inv-sel-card{margin-top:9px;background:#fff;border:.5px solid #0E2236;border-radius:8px;padding:11px 13px;font-family:Inter,sans-serif;box-shadow:0 1px 0 rgba(14,34,54,.05)}
+#investor .inv-sel-card .isn{font-family:"EB Garamond",serif;font-size:18px;font-weight:600;color:#0E2236;line-height:1.2;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+#investor .inv-sel-card .isn .itag{font-size:8.5px;background:#9B2D2D;color:#fff;border-radius:999px;padding:2px 7px;letter-spacing:.05em;font-family:Inter,sans-serif;font-weight:700}
+#investor .inv-sel-card .isn .itag.jspcm{background:#0E2236;color:#B8954A;border:.5px solid #B8954A}
+#investor .inv-sel-card .iss{font-size:9px;color:#6B7280;font-family:"JetBrains Mono",monospace;letter-spacing:.04em;margin-top:3px}
+#investor .inv-sel-card .ims{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}
+#investor .inv-sel-card .im{background:#F5F1E8;border-radius:5px;padding:6px 8px}
+#investor .inv-sel-card .im .iml{font-size:8.5px;color:#6B7280;letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+#investor .inv-sel-card .im .imv{font-family:"EB Garamond",serif;font-size:15.5px;font-weight:700;color:#0E2236;line-height:1.1;margin-top:2px}
+#investor .inv-sel-card .im .imu{font-size:9px;color:#6B7280;font-weight:500}
+#investor .inv-sel-card .idrill{margin-top:8px;text-align:center;font-size:10.5px;color:#B8954A;border-top:.5px dashed #d1d5db;padding-top:7px;font-family:Inter,sans-serif;font-weight:700;letter-spacing:.04em;cursor:pointer}
+#investor .inv-insight{margin-top:8px;background:#0E2236;color:#F5F1E8;border-radius:7px;padding:10px 12px;font-size:10.5px;line-height:1.6;font-family:Inter,sans-serif}
+#investor .inv-insight .iih{font-family:"EB Garamond",serif;font-style:italic;color:#B8954A;font-size:12px;margin-bottom:4px}
+#investor .inv-insight b{color:#B8954A;font-weight:700}
+#investor .inv-arpu{margin-top:11px;background:#fff;border:.5px solid #0E2236;border-radius:8px;padding:11px 13px}
+#investor .inv-arpu-h{font-family:"EB Garamond",serif;font-size:13.5px;font-weight:600;color:#0E2236;font-style:italic;margin-bottom:4px}
+#investor .inv-arpu-bar{display:flex;height:16px;border-radius:4px;overflow:hidden;border:.5px solid #0E2236;margin-top:6px}
+#investor .inv-arpu-bar .iseg{display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;font-weight:700;font-family:Inter,sans-serif;letter-spacing:.05em}
+#investor .inv-arpu-total{font-family:"EB Garamond",serif;font-size:22px;font-weight:700;color:#B8954A;text-align:center;margin-top:7px;line-height:1}
+#investor .inv-arpu-total small{font-size:12px;color:#0E2236;font-style:italic;font-weight:500;margin-left:3px}
+#investor .inv-arpu-breakdown{display:grid;grid-template-columns:1fr;gap:3px;margin-top:7px;font-family:Inter,sans-serif;font-size:10px}
+#investor .inv-arpu-breakdown .irow{display:flex;justify-content:space-between;padding:5px 9px;background:#F5F1E8;border-radius:3px}
+#investor .inv-arpu-breakdown .irow b{color:#0E2236;font-weight:700}
+#investor .inv-modal{position:fixed;inset:0;background:rgba(14,34,54,.6);display:none;align-items:flex-end;justify-content:center;z-index:120;padding:0}
+#investor .inv-modal.show{display:flex}
+#investor .inv-modal-frame{width:100%;max-width:420px;max-height:90vh;overflow-y:auto;background:#F5F1E8;border-radius:18px 18px 0 0;padding:0 16px 40px;font-family:"EB Garamond",serif}
+#investor .inv-modal-close{position:sticky;top:0;display:flex;justify-content:flex-end;background:#F5F1E8;padding:11px 0 7px;font-family:Inter,sans-serif;z-index:5}
+#investor .inv-modal-close button{font-size:13px;color:#0E2236;background:none;border:.5px solid #0E2236;border-radius:999px;padding:5px 14px;cursor:pointer;font:inherit;font-weight:600}
+#investor .inv-modal-eyebrow{font-size:9.5px;color:#B8954A;font-family:Inter,sans-serif;letter-spacing:.1em;font-weight:700;text-transform:uppercase}
+#investor .inv-modal-title{font-size:19px;font-weight:600;color:#0E2236;line-height:1.25;margin-top:3px}
+#investor .inv-modal-sub{font-size:11px;color:#4C5562;font-family:Inter,sans-serif;margin-top:5px;line-height:1.55}
+#investor .inv-modal-section{margin-top:15px}
+#investor .inv-modal-section .imh{font-family:Inter,sans-serif;font-size:10px;color:#B8954A;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-bottom:.5px solid #B8954A;padding-bottom:4px;margin-bottom:7px}
+#investor .inv-modal-funnel{background:#fff;border:.5px solid #d1d5db;border-radius:5px;padding:9px 11px;font-family:Inter,sans-serif;font-size:10.5px;color:#0E2236;line-height:1.55}
+#investor .inv-modal-funnel b{font-weight:700;color:#0E2236}
+#investor .inv-modal-funnel .ibar{height:8px;background:#d1d5db;border-radius:3px;overflow:hidden;margin-top:5px}
+#investor .inv-modal-funnel .ibar .ifill{height:100%;background:linear-gradient(90deg,#B8954A,#9B2D2D)}
+#investor .inv-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+#investor .inv-modal-cell{background:#fff;border:.5px solid #d1d5db;border-radius:5px;padding:7px 9px}
+#investor .inv-modal-cell .icl{font-size:8.5px;color:#6B7280;font-family:Inter,sans-serif;letter-spacing:.05em;font-weight:600;text-transform:uppercase}
+#investor .inv-modal-cell .icv{font-family:"EB Garamond",serif;font-size:15px;font-weight:700;color:#0E2236;line-height:1.05;margin-top:2px}
+#investor .inv-modal-cell .icv small{font-size:9.5px;color:#6B7280;font-weight:500;font-family:Inter,sans-serif}
+#investor .inv-modal-cell.gold{border-color:#B8954A;background:#FAF3DF}
+#investor .inv-modal-cell.gold .icv{color:#9B2D2D}
+#investor .inv-modal-scen{background:#fff;border:.5px solid #d1d5db;border-radius:5px;padding:9px 10px;font-family:Inter,sans-serif;font-size:10px;color:#0E2236;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center}
+#investor .inv-modal-scen .isc b{font-weight:700;display:block;color:#0E2236;font-size:10px;letter-spacing:.04em}
+#investor .inv-modal-scen .isc .iv{font-family:"EB Garamond",serif;font-size:13.5px;font-weight:700;color:#0E2236;margin-top:2px}
+#investor .inv-modal-scen .isc.imid{border-left:.5px solid #d1d5db;border-right:.5px solid #d1d5db}
+#investor .inv-modal-scen .isc.imid .iv{color:#B8954A}
+</style>
+<div class="inv-appbar">
+  <button class="iback" onclick="invExit()">← マイページ</button>
+  <span class="ilogo">SAT<span style="color:#0D7377">●</span>I</span>
+  <span class="irole">INVESTOR</span>
+</div>
+<div class="inv-ticker">
+  <div class="inv-ticker-track">累計 132,847 <span class="pos">+127</span> &nbsp;·&nbsp; ARPU ¥22.5万 &nbsp;·&nbsp; 機会値 ¥9.8兆 &nbsp;·&nbsp; QR 2,841 <span class="pos">+38</span> &nbsp;·&nbsp; JOiNT 42施設 <span class="pos">+1</span> &nbsp;·&nbsp; つぎの道 12.0% <span class="pos">+1.2pt</span> &nbsp;·&nbsp; PV協賛 4社 &nbsp;·&nbsp; ALMEX 全国20拠点 &nbsp;·&nbsp; PRO 5領域 12,450件 &nbsp;·&nbsp; 3層同意 62% &nbsp;·&nbsp; 5言語 JP/EN/中/韓/泰 &nbsp;·&nbsp; 治療難民 推定35万人 &nbsp;·&nbsp; DATA: PITCH V2 + RWD (PLANNED) + INTERNAL &nbsp;·&nbsp;</div>
+</div>
+<div class="inv-kpi-band">
+  <div class="ikpi"><div class="ikl">ARPU</div><div class="ikv">¥22.5万 <small>/年</small></div><div class="ikd">7源積上げ</div></div>
+  <div class="ikpi"><div class="ikl">機会値 JP</div><div class="ikv">¥9.8 <small>兆</small></div><div class="ikd">未開拓市場</div></div>
+</div>
+<div class="inv-pad">
+  <h3 class="inv-title">市場を、<em>都道府県の解像度</em>で。</h3>
+  <p class="inv-sub">22 がん種 × 47 都道府県 × 3 期目 × 5 ビューモード ／ クリックで詳細展開</p>
+  <select class="inv-dd" id="invCancerSel">
+    <option value="all">全がん（22種合算）</option>
+    <optgroup label="頭頸部・胸部">
+      <option value="headneck">頭頸部がん</option><option value="lung">肺がん</option>
+    </optgroup>
+    <optgroup label="消化器・肝胆膵">
+      <option value="esophagus">食道がん</option><option value="stomach">胃がん</option><option value="colon">大腸がん</option><option value="liver">肝臓がん</option><option value="biliary">胆道がん</option><option value="pancreas">すい臓がん</option>
+    </optgroup>
+    <optgroup label="乳腺・婦人科">
+      <option value="breast">乳がん</option><option value="cervix">子宮頸がん</option><option value="endometrium">子宮体がん</option><option value="ovary">卵巣がん</option>
+    </optgroup>
+    <optgroup label="泌尿器">
+      <option value="kidney">腎臓がん</option><option value="bladder">膀胱がん</option><option value="prostate">前立腺がん</option>
+    </optgroup>
+    <optgroup label="皮膚・リンパ">
+      <option value="melanoma">皮膚がん（メラノーマ）</option><option value="lymphoma">悪性リンパ腫</option>
+    </optgroup>
+    <optgroup label="血液・骨髄">
+      <option value="leukemia">白血病</option><option value="myeloma">多発性骨髄腫</option>
+    </optgroup>
+    <optgroup label="脳・内分泌">
+      <option value="brain">脳腫瘍</option><option value="thyroid">甲状腺がん</option>
+    </optgroup>
+    <optgroup label="その他">
+      <option value="cup">原発不明がん</option>
+    </optgroup>
+  </select>
+  <div class="inv-tabs" id="invPhaseTabs">
+    <button class="inv-tab on" data-phase="2">FY26 · 2期</button>
+    <button class="inv-tab" data-phase="3">FY27 · 3期</button>
+    <button class="inv-tab" data-phase="4">FY28 · 4期</button>
+  </div>
+  <div class="inv-viewmode" id="invViewMode">
+    <div class="ivm" data-mode="incidence">罹患</div>
+    <div class="ivm" data-mode="refugee">難民</div>
+    <div class="ivm on" data-mode="opp">機会値</div>
+    <div class="ivm" data-mode="penetration">浸透率</div>
+    <div class="ivm" data-mode="nh">つぎ道</div>
+  </div>
+  <div class="inv-map-wrap">
+    <div id="invMapContainer"><div class="inv-loading">地図と都道府県データを読み込み中…</div></div>
+    <div class="inv-legend">
+      <span class="ilbl" id="invLegendLabel">機会値</span>
+      <div class="iscale">
+        <span style="background:#ECE3CC"></span><span style="background:#D8B98F"></span><span style="background:#B8954A"></span><span style="background:#8A5A2B"></span><span style="background:#6F3B22"></span><span style="background:#5B2418"></span>
+      </div>
+      <span class="ilbl">● 拠点</span>
+    </div>
+  </div>
+  <div class="inv-sel-card" id="invSelPanel">
+    <div class="isn" id="invSelName">東京都 <span class="itag">SATOI拠点</span> <span class="itag jspcm">JSPCM</span></div>
+    <div class="iss" id="invSelCtx">FY26・2期 · 全がん · 機会値ビュー</div>
+    <div class="ims" id="invSelMetrics"></div>
+    <div class="idrill" onclick="invOpenModal()">▸ タップで詳細を見る</div>
+  </div>
+  <div class="inv-insight" id="invInsight"></div>
+  <div class="inv-arpu">
+    <div class="inv-arpu-h">▸ ARPU（平均ユーザー単価）の構造</div>
+    <div class="inv-arpu-bar">
+      <div class="iseg" style="background:#8A5A2B;flex:3.6">3.6</div>
+      <div class="iseg" style="background:#9B2D2D;flex:.5"></div>
+      <div class="iseg" style="background:#B8954A;flex:1">1</div>
+      <div class="iseg" style="background:#5B2418;flex:10">10</div>
+      <div class="iseg" style="background:#0E2236;flex:5">5</div>
+      <div class="iseg" style="background:#7C6B4F;flex:2">2</div>
+      <div class="iseg" style="background:#C0892F;flex:.4"></div>
+    </div>
+    <div class="inv-arpu-total">¥22.5万 <small>／年</small></div>
+    <div class="inv-arpu-breakdown">
+      <div class="irow"><span>サブスク</span><b>¥3.6万</b></div>
+      <div class="irow"><span>安心+</span><b>¥0.48万</b></div>
+      <div class="irow"><span>Layer1（情報）</span><b>¥1.0万</b></div>
+      <div class="irow"><span>治療紹介</span><b>¥10.0万</b></div>
+      <div class="irow"><span>治験紹介</span><b>¥5.0万</b></div>
+      <div class="irow"><span>Layer2（深掘り）</span><b>¥2.0万</b></div>
+      <div class="irow"><span>FP相談</span><b>¥0.4万</b></div>
+    </div>
+  </div>
+</div>
+<div class="inv-modal" id="invModal">
+  <div class="inv-modal-frame">
+    <div class="inv-modal-close"><button onclick="invCloseModal()">閉じる ✕</button></div>
+    <div class="inv-modal-eyebrow">▸ PREFECTURE DETAIL</div>
+    <div class="inv-modal-title" id="invModalTitle">東京都 — 全がん市場</div>
+    <div class="inv-modal-sub" id="invModalSub"></div>
+    <div class="inv-modal-section">
+      <div class="imh">▸ ファネル（v9.0文脈）</div>
+      <div class="inv-modal-funnel" id="invModalFunnel"></div>
+    </div>
+    <div class="inv-modal-section">
+      <div class="imh">▸ ARPU 内訳</div>
+      <div class="inv-modal-grid" id="invModalArpu"></div>
+    </div>
+    <div class="inv-modal-section">
+      <div class="imh">▸ v9.0 文脈メトリクス</div>
+      <div class="inv-modal-grid" id="invModalV9"></div>
+    </div>
+    <div class="inv-modal-section">
+      <div class="imh">▸ シナリオ比較（保守・中央・楽観）</div>
+      <div class="inv-modal-scen" id="invModalScen"></div>
+    </div>
+  </div>
+</div>
+</section>
+<script>
+(function(){
+if(window._invInit)return;window._invInit=true;
+const PREFS=[
+{id:1,name:'北海道',pop:5.18,region:'北海道'},{id:2,name:'青森県',pop:1.21,region:'東北'},{id:3,name:'岩手県',pop:1.18,region:'東北'},{id:4,name:'宮城県',pop:2.27,region:'東北'},{id:5,name:'秋田県',pop:0.93,region:'東北'},{id:6,name:'山形県',pop:1.04,region:'東北'},{id:7,name:'福島県',pop:1.79,region:'東北'},
+{id:8,name:'茨城県',pop:2.84,region:'関東'},{id:9,name:'栃木県',pop:1.91,region:'関東'},{id:10,name:'群馬県',pop:1.91,region:'関東'},{id:11,name:'埼玉県',pop:7.34,region:'関東'},{id:12,name:'千葉県',pop:6.27,region:'関東'},{id:13,name:'東京都',pop:14.04,region:'関東'},{id:14,name:'神奈川県',pop:9.24,region:'関東'},
+{id:15,name:'新潟県',pop:2.15,region:'中部'},{id:16,name:'富山県',pop:1.02,region:'中部'},{id:17,name:'石川県',pop:1.12,region:'中部'},{id:18,name:'福井県',pop:0.75,region:'中部'},{id:19,name:'山梨県',pop:0.80,region:'中部'},{id:20,name:'長野県',pop:2.01,region:'中部'},{id:21,name:'岐阜県',pop:1.95,region:'中部'},{id:22,name:'静岡県',pop:3.58,region:'中部'},{id:23,name:'愛知県',pop:7.50,region:'中部'},
+{id:24,name:'三重県',pop:1.74,region:'近畿'},{id:25,name:'滋賀県',pop:1.41,region:'近畿'},{id:26,name:'京都府',pop:2.55,region:'近畿'},{id:27,name:'大阪府',pop:8.78,region:'近畿'},{id:28,name:'兵庫県',pop:5.40,region:'近畿'},{id:29,name:'奈良県',pop:1.31,region:'近畿'},{id:30,name:'和歌山県',pop:0.91,region:'近畿'},
+{id:31,name:'鳥取県',pop:0.54,region:'中国'},{id:32,name:'島根県',pop:0.66,region:'中国'},{id:33,name:'岡山県',pop:1.86,region:'中国'},{id:34,name:'広島県',pop:2.76,region:'中国'},{id:35,name:'山口県',pop:1.31,region:'中国'},
+{id:36,name:'徳島県',pop:0.71,region:'四国'},{id:37,name:'香川県',pop:0.93,region:'四国'},{id:38,name:'愛媛県',pop:1.31,region:'四国'},{id:39,name:'高知県',pop:0.67,region:'四国'},
+{id:40,name:'福岡県',pop:5.10,region:'九州'},{id:41,name:'佐賀県',pop:0.79,region:'九州'},{id:42,name:'長崎県',pop:1.28,region:'九州'},{id:43,name:'熊本県',pop:1.71,region:'九州'},{id:44,name:'大分県',pop:1.10,region:'九州'},{id:45,name:'宮崎県',pop:1.04,region:'九州'},{id:46,name:'鹿児島県',pop:1.55,region:'九州'},
+{id:47,name:'沖縄県',pop:1.46,region:'沖縄'}
+];
+const CANCER={
+all:{share:1.000,name:'全がん',arpu:225000},
+headneck:{share:0.025,name:'頭頸部がん',arpu:250000},lung:{share:0.127,name:'肺がん',arpu:280000},
+esophagus:{share:0.024,name:'食道がん',arpu:260000},stomach:{share:0.123,name:'胃がん',arpu:220000},colon:{share:0.158,name:'大腸がん',arpu:240000},liver:{share:0.040,name:'肝臓がん',arpu:270000},biliary:{share:0.022,name:'胆道がん',arpu:220000},pancreas:{share:0.038,name:'すい臓がん',arpu:285000},
+breast:{share:0.095,name:'乳がん',arpu:265000},cervix:{share:0.011,name:'子宮頸がん',arpu:225000},endometrium:{share:0.018,name:'子宮体がん',arpu:210000},ovary:{share:0.013,name:'卵巣がん',arpu:240000},
+kidney:{share:0.030,name:'腎臓がん',arpu:245000},bladder:{share:0.025,name:'膀胱がん',arpu:225000},prostate:{share:0.094,name:'前立腺がん',arpu:210000},
+melanoma:{share:0.005,name:'皮膚(メラノーマ)',arpu:350000},lymphoma:{share:0.036,name:'悪性リンパ腫',arpu:300000},
+leukemia:{share:0.014,name:'白血病',arpu:320000},myeloma:{share:0.008,name:'多発性骨髄腫',arpu:280000},
+brain:{share:0.006,name:'脳腫瘍',arpu:260000},thyroid:{share:0.018,name:'甲状腺がん',arpu:180000},
+cup:{share:0.008,name:'原発不明がん',arpu:240000}
+};
+const SATOI_BASES={2:[13],3:[13,27,23],4:[13,27,23,1,14,28,26,40,11,12,4,22,34,25,33,29,45,17,21,7,8,9,10,24,15,19,20,16,38,47]};
+const JSPCM=[13,27,14,23,28,4,11,12,26,40,1,22,25,33,34];
+const PHASE_PEN={2:0.05,3:0.10,4:0.15};
+const REFUGEE_RATE=0.35;
+const TOTAL_INCIDENCE=1000000;
+const TOTAL_POP=124.7;
+const state={cancer:'all',phase:2,mode:'opp',selectedId:13};
+let geo=null;
+
+function valueFor(p){
+  const c=CANCER[state.cancer];
+  const inc=TOTAL_INCIDENCE*c.share*(p.pop/TOTAL_POP);
+  const refugee=inc*REFUGEE_RATE;
+  const inPhase=SATOI_BASES[state.phase].includes(p.id);
+  const penetration=inPhase?PHASE_PEN[state.phase]:PHASE_PEN[state.phase]*0.3;
+  const opp=refugee*c.arpu*(1-penetration);
+  const nh=Math.min(0.20,penetration*1.2+(inPhase?0.05:0));
+  return{inc,refugee,penetration,opp,nh};
+}
+function curVal(p){const v=valueFor(p);return v[state.mode]}
+function fmtInt(n){if(n>=1e4)return(n/1e4).toFixed(1)+'万';return Math.round(n).toLocaleString()}
+function fmtMoney(n){if(n>=1e8)return'¥'+(n/1e8).toFixed(0)+'億';if(n>=1e4)return'¥'+(n/1e4).toFixed(0)+'万';return'¥'+Math.round(n)}
+function modeLabel(){return{incidence:'罹患',refugee:'治療難民',penetration:'浸透率',opp:'機会値',nh:'つぎの道率'}[state.mode]}
+
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('script load failed: '+src));document.head.appendChild(s)})}
+async function ensureLibs(){
+  if(!window.d3)await loadScript('https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js');
+  if(!window.topojson)await loadScript('https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js');
+}
+async function loadGeo(){
+  if(geo)return geo;
+  const res=await fetch('https://cdn.jsdelivr.net/gh/dataofjapan/land@master/japan.topojson');
+  if(!res.ok)throw new Error('topojson fetch failed: '+res.status);
+  const topo=await res.json();
+  const obj=topo.objects.japan||Object.values(topo.objects)[0];
+  geo=topojson.feature(topo,obj);
+  geo.features.forEach(f=>{if(typeof f.id==='string')f.id=parseInt(f.id,10)});
+  return geo;
+}
+
+function renderMap(){
+  if(!geo||!window.d3)return;
+  const container=document.getElementById('invMapContainer');
+  if(!container)return;
+  container.innerHTML='';
+  const w=Math.max(280,container.clientWidth||340);
+  const h=320;
+  const svg=d3.select(container).append('svg').attr('viewBox',`0 0 ${w} ${h}`).attr('width','100%');
+  const projection=d3.geoMercator().fitSize([w-8,h-8],geo);
+  const path=d3.geoPath().projection(projection);
+  const valsMap=new Map(PREFS.map(p=>[p.id,curVal(p)]));
+  const vals=PREFS.map(p=>valsMap.get(p.id)||0);
+  const maxV=Math.max(...vals),minV=Math.min(...vals);
+  const heat=['#ECE3CC','#D8B98F','#B8954A','#8A5A2B','#6F3B22','#5B2418'];
+  const scale=d3.scaleQuantize().domain([minV,maxV]).range(heat);
+  svg.selectAll('path.pref').data(geo.features).enter().append('path').attr('class','pref').attr('d',path)
+    .attr('fill',d=>{const v=valsMap.get(d.id);return v!=null?scale(v):'#ECE3CC'})
+    .attr('stroke',d=>d.id===state.selectedId?'#000':'#0E2236')
+    .attr('stroke-width',d=>d.id===state.selectedId?1.5:0.4)
+    .attr('cursor','pointer')
+    .on('click',function(ev,d){state.selectedId=d.id;renderAll()});
+  SATOI_BASES[state.phase].forEach(id=>{
+    const f=geo.features.find(x=>x.id===id);if(!f)return;
+    const c=path.centroid(f);if(!isFinite(c[0]))return;
+    const g=svg.append('g').attr('transform',`translate(${c[0]},${c[1]})`).style('pointer-events','none');
+    g.append('circle').attr('r',2.8).attr('fill','#9B2D2D').attr('stroke','#fff').attr('stroke-width',.7);
+    const ring=g.append('circle').attr('r',2.8).attr('fill','none').attr('stroke','#9B2D2D').attr('stroke-width',1.2).attr('opacity',.7);
+    ring.append('animate').attr('attributeName','r').attr('values','2.8;9').attr('dur','1.6s').attr('repeatCount','indefinite');
+    ring.append('animate').attr('attributeName','opacity').attr('values','.7;0').attr('dur','1.6s').attr('repeatCount','indefinite');
+  });
+  const lg=document.getElementById('invLegendLabel');if(lg)lg.textContent=modeLabel();
+}
+function renderPanel(){
+  const p=PREFS.find(x=>x.id===state.selectedId);if(!p)return;
+  const v=valueFor(p);const c=CANCER[state.cancer];
+  const isS=SATOI_BASES[state.phase].includes(p.id),isJ=JSPCM.includes(p.id);
+  const name=document.getElementById('invSelName');
+  if(name){let tags='';if(isS)tags+='<span class="itag">SATOI拠点</span>';if(isJ)tags+='<span class="itag jspcm">JSPCM</span>';name.innerHTML=p.name+' '+tags}
+  const ctx=document.getElementById('invSelCtx');if(ctx)ctx.textContent=`FY${24+state.phase*2}・${state.phase}期 · ${c.name} · ${modeLabel()}ビュー`;
+  const ms=document.getElementById('invSelMetrics');
+  if(ms)ms.innerHTML=`<div class="im"><div class="iml">罹患者</div><div class="imv">${fmtInt(v.inc)}<span class="imu">人</span></div></div>
+    <div class="im"><div class="iml">難民</div><div class="imv">${fmtInt(v.refugee)}<span class="imu">人</span></div></div>
+    <div class="im"><div class="iml">浸透率</div><div class="imv">${(v.penetration*100).toFixed(1)}<span class="imu">%</span></div></div>
+    <div class="im"><div class="iml">機会値</div><div class="imv">${fmtMoney(v.opp)}</div></div>`;
+}
+function renderInsight(){
+  const p=PREFS.find(x=>x.id===state.selectedId);if(!p)return;
+  const v=valueFor(p);const isS=SATOI_BASES[state.phase].includes(p.id),isJ=JSPCM.includes(p.id);
+  const sorted=PREFS.map(x=>({id:x.id,v:curVal(x)})).sort((a,b)=>b.v-a.v);
+  const rank=sorted.findIndex(x=>x.id===p.id)+1;
+  let h,b;
+  if(isS&&rank<=10){h='A. 横展開ハブ';b=`${p.name}は<b>進出済＋上位市場</b>(${rank}位)。JSPCM連携で<b>シェア深耕</b>、隣接県への波及効果に期待。機会値 ${fmtMoney(v.opp)}。`}
+  else if(isS){h='B. シェア深耕型';b=`${p.name}は<b>進出済</b>(${rank}位)。<b>シェア深耕</b>と隣接県への波及で機会値を伸ばす設計。`}
+  else if(rank<=8){h='C. 最優先候補';b=`${p.name}は<b>未進出＋上位市場</b>(${rank}位)。<b>${isJ?'JSPCM経由のソフト参入':'最優先進出候補'}</b>。機会値 ${fmtMoney(v.opp)}。`}
+  else if(rank<=20){h='D. 遠隔連携';b=`${p.name}は中位市場(${rank}位)。<b>近隣拠点からの遠隔連携</b>で機会値を取りに行く。`}
+  else{h='E. 後発検討';b=`${p.name}は下位(${rank}位)。直接進出の優先度は低く、<b>がん種別で再検証</b>推奨。`}
+  const el=document.getElementById('invInsight');if(el)el.innerHTML=`<div class="iih">${h}</div>${b}`;
+}
+function renderAll(){renderMap();renderPanel();renderInsight()}
+
+window.invOpenModal=function(){
+  const p=PREFS.find(x=>x.id===state.selectedId);if(!p)return;
+  const v=valueFor(p);const c=CANCER[state.cancer];
+  document.getElementById('invModalTitle').textContent=`${p.name} — ${c.name}市場`;
+  document.getElementById('invModalSub').textContent=`FY${24+state.phase*2}・${state.phase}期 · 罹患${fmtInt(v.inc)}人 · 機会値${fmtMoney(v.opp)} · 浸透率${(v.penetration*100).toFixed(1)}%`;
+  const isS=SATOI_BASES[state.phase].includes(p.id);
+  document.getElementById('invModalFunnel').innerHTML=`<b>登録</b> ${Math.round(v.inc*0.13).toLocaleString()}人 → <b>サブスク移行</b> 8.4% → <b>つぎの道</b> ${(v.nh*100).toFixed(1)}% → <b>JOiNT受診</b> ${isS?Math.round(p.pop*2.2):Math.max(1,Math.round(p.pop*0.5))}施設<div class="ibar"><div class="ifill" style="width:${Math.min(v.penetration*100*4,100)}%"></div></div>`;
+  const arpu=c.arpu;
+  const arr=[{l:'サブスク',v:36000},{l:'安心+',v:4800},{l:'Layer1',v:10000},{l:'治療紹介',v:Math.round(arpu*0.444)},{l:'治験紹介',v:Math.round(arpu*0.222)},{l:'Layer2',v:20000},{l:'FP相談',v:4000}];
+  document.getElementById('invModalArpu').innerHTML=arr.map(x=>`<div class="inv-modal-cell"><div class="icl">${x.l}</div><div class="icv">¥${(x.v/10000).toFixed(2)}<small>万</small></div></div>`).join('')+`<div class="inv-modal-cell gold"><div class="icl">ARPU合計</div><div class="icv">¥${(arpu/10000).toFixed(1)}<small>万/年</small></div></div><div class="inv-modal-cell gold"><div class="icl">機会値</div><div class="icv">${fmtMoney(v.opp)}</div></div>`;
+  const v9=[{l:'JOiNT施設',v:isS?Math.round(p.pop*2.2):Math.max(0,Math.round(p.pop*0.5)),u:'院'},{l:'ALMEX拠点',v:isS?Math.max(1,Math.round(p.pop/3)):0,u:'拠点'},{l:'PRO 5領域',v:Math.round(v.refugee*0.18),u:'件'},{l:'3層同意率',v:(isS?62:48),u:'%'},{l:'つぎの道率',v:(v.nh*100).toFixed(1),u:'%'},{l:'PV協賛',v:isS?Math.max(1,Math.round(p.pop/4)):1,u:'社'}];
+  document.getElementById('invModalV9').innerHTML=v9.map(x=>`<div class="inv-modal-cell"><div class="icl">${x.l}</div><div class="icv">${typeof x.v==='number'?x.v.toLocaleString():x.v}<small>${x.u}</small></div></div>`).join('');
+  document.getElementById('invModalScen').innerHTML=[{label:'保守',mult:0.65},{label:'中央',mult:1.00,mid:true},{label:'楽観',mult:1.52}].map(s=>`<div class="isc${s.mid?' imid':''}"><b>${s.label}</b><div class="iv">${fmtMoney(v.opp*s.mult)}</div></div>`).join('');
+  document.getElementById('invModal').classList.add('show');
+};
+window.invCloseModal=function(){document.getElementById('invModal').classList.remove('show')};
+window.invExit=function(){if(typeof go==='function')go('mypage')};
+
+function setupInteractions(){
+  const cs=document.getElementById('invCancerSel');
+  if(cs)cs.addEventListener('change',e=>{state.cancer=e.target.value;renderAll()});
+  document.querySelectorAll('#invPhaseTabs .inv-tab').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('#invPhaseTabs .inv-tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');state.phase=+b.dataset.phase;renderAll()})});
+  document.querySelectorAll('#invViewMode .ivm').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('#invViewMode .ivm').forEach(x=>x.classList.remove('on'));b.classList.add('on');state.mode=b.dataset.mode;renderAll()})});
+  const md=document.getElementById('invModal');if(md)md.addEventListener('click',e=>{if(e.target.id==='invModal')invCloseModal()});
+}
+
+let ready=false;
+window._oninit=window._oninit||{};
+window._oninit['investor']=async function(){
+  if(!ready){
+    try{
+      await ensureLibs();
+      await loadGeo();
+      setupInteractions();
+      ready=true;
+    }catch(e){
+      document.getElementById('invMapContainer').innerHTML=`<div class="inv-loading" style="color:#9B2D2D">読み込みエラー: ${e.message}<br>ネット接続をご確認ください</div>`;
+      return;
+    }
+  }
+  renderAll();
+};
+})();
+</script>
+
 <!-- ============ ログイン（登録済みの方）============ -->
 <section class="scr" id="signin">
   <div class="pad" style="padding-top:24px">
@@ -474,7 +989,8 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <button class="navrow" onclick="go('emergency')"><span><i class="ti ti-urgent" style="color:var(--red)"></i> 緊急時カード</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('plans')"><span><i class="ti ti-wallet" style="color:var(--teal)"></i> 会員と伴走について（料金）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('consent')"><span><i class="ti ti-shield-lock" style="color:var(--sub)"></i> データの扱い・同意</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
-      <button class="navrow" style="border-bottom:none" onclick="go('about')"><span><i class="ti ti-info-circle" style="color:var(--sub)"></i> SATOIについて</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('about')"><span><i class="ti ti-info-circle" style="color:var(--sub)"></i> SATOIについて</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="border-bottom:none;background:#F5F1E8" onclick="go('investor')"><span><i class="ti ti-presentation-analytics" style="color:#B8954A"></i> <span style="font-family:'EB Garamond',serif;font-style:italic;color:#0E2236">Investor</span> モード（裏面・関係者用）</span><i class="ti ti-chevron-right" style="color:#B8954A"></i></button>
     </div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -2633,30 +3149,78 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
       <button class="tile" onclick="svStart('self')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-user" style="font-size:24px;color:var(--rose)"></i></span><div style="font-size:14px;font-weight:600;margin-top:8px">あなた自身のこと</div><div class="note">段階・5年生存率から</div></button>
       <button class="tile" onclick="svStart('near')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-users" style="font-size:24px;color:var(--amber)"></i></span><div style="font-size:14px;font-weight:600;margin-top:8px">身近な人のこと</div><div class="note">支える側として知る</div></button>
     </div>
-    <div style="font-size:13px;font-weight:600;margin:16px 0 8px">がん種から調べる</div>
-    <div class="row2">
-      <button class="tile" onclick="go('bccare')">乳がん</button>
-      <button class="tile" onclick="openCancer('lung')">肺がん</button>
-      <button class="tile" onclick="openCancer('stomach')">胃がん</button>
-      <button class="tile" onclick="openCancer('colon')">大腸がん</button>
-      <button class="tile" onclick="openCancer('prostate')">前立腺がん</button>
-      <button class="tile" onclick="openCancer('pancreas')">すい臓がん</button>
-      <button class="tile" onclick="openCancer('liver')">肝臓がん</button>
-      <button class="tile" onclick="openCancer('esophagus')">食道がん</button>
-      <button class="tile" onclick="openCancer('cervix')">子宮頸がん</button>
-      <button class="tile" onclick="openCancer('endometrium')">子宮体がん</button>
-      <button class="tile" onclick="openCancer('ovary')">卵巣がん</button>
-      <button class="tile" onclick="openCancer('lymphoma')">悪性リンパ腫</button>
-      <button class="tile" onclick="openCancer('leukemia')">白血病</button>
-      <button class="tile" onclick="openCancer('myeloma')">多発性骨髄腫</button>
-      <button class="tile" onclick="openCancer('headneck')">頭頸部がん</button>
-      <button class="tile" onclick="openCancer('biliary')">胆道がん</button>
-      <button class="tile" onclick="openCancer('kidney')">腎臓がん</button>
-      <button class="tile" onclick="openCancer('bladder')">膀胱がん</button>
-      <button class="tile" onclick="openCancer('brain')">脳腫瘍</button>
-      <button class="tile" onclick="openCancer('thyroid')">甲状腺がん</button>
-      <button class="tile" onclick="openCancer('melanoma')">皮膚がん（メラノーマ）</button>
-      <button class="tile" onclick="openCancer('cup')">原発不明がん</button>
+    <!-- ★Katsu改修2026-05-28：22がん種を部位別8グループに分類表示（v7.3改善項目） -->
+    <style>
+    #cancer .cgrp{margin-bottom:13px}
+    #cancer .cgrp .ch{font-size:11.5px;font-weight:700;color:var(--mute);margin:0 0 5px;display:flex;align-items:center;gap:6px;letter-spacing:.02em}
+    #cancer .cgrp .ch .cd{flex:1;height:1px;background:var(--line);margin-left:4px}
+    #cancer .cgrp .ch .cc{font-size:10px;color:var(--hint);font-weight:500;background:var(--teal-bg);color:var(--teal-d);padding:1px 7px;border-radius:999px}
+    #cancer .single{margin-bottom:13px}
+    </style>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:16px 0 8px">
+      <span style="font-size:13px;font-weight:600">がん種から調べる</span>
+      <span style="font-size:11px;color:var(--mute);font-weight:500">22種・部位別8グループ</span>
+    </div>
+
+    <div class="cgrp">
+      <div class="ch">頭頸部・胸部<span class="cd"></span><span class="cc">2</span></div>
+      <div class="row2">
+        <button class="tile" onclick="openCancer('headneck')">頭頸部がん</button>
+        <button class="tile" onclick="openCancer('lung')">肺がん</button>
+      </div>
+    </div>
+    <div class="cgrp">
+      <div class="ch">消化器・肝胆膵<span class="cd"></span><span class="cc">6</span></div>
+      <div class="row2">
+        <button class="tile" onclick="openCancer('esophagus')">食道がん</button>
+        <button class="tile" onclick="openCancer('stomach')">胃がん</button>
+        <button class="tile" onclick="openCancer('colon')">大腸がん</button>
+        <button class="tile" onclick="openCancer('liver')">肝臓がん</button>
+        <button class="tile" onclick="openCancer('biliary')">胆道がん</button>
+        <button class="tile" onclick="openCancer('pancreas')">すい臓がん</button>
+      </div>
+    </div>
+    <div class="cgrp">
+      <div class="ch">乳腺・婦人科<span class="cd"></span><span class="cc">4</span></div>
+      <div class="row2">
+        <button class="tile" onclick="go('bccare')">乳がん</button>
+        <button class="tile" onclick="openCancer('cervix')">子宮頸がん</button>
+        <button class="tile" onclick="openCancer('endometrium')">子宮体がん</button>
+        <button class="tile" onclick="openCancer('ovary')">卵巣がん</button>
+      </div>
+    </div>
+    <div class="cgrp">
+      <div class="ch">泌尿器<span class="cd"></span><span class="cc">3</span></div>
+      <div class="row2">
+        <button class="tile" onclick="openCancer('kidney')">腎臓がん</button>
+        <button class="tile" onclick="openCancer('bladder')">膀胱がん</button>
+        <button class="tile" onclick="openCancer('prostate')">前立腺がん</button>
+      </div>
+    </div>
+    <div class="cgrp">
+      <div class="ch">皮膚・リンパ<span class="cd"></span><span class="cc">2</span></div>
+      <div class="row2">
+        <button class="tile" onclick="openCancer('melanoma')">皮膚がん（メラノーマ）</button>
+        <button class="tile" onclick="openCancer('lymphoma')">悪性リンパ腫</button>
+      </div>
+    </div>
+    <div class="cgrp">
+      <div class="ch">血液・骨髄<span class="cd"></span><span class="cc">2</span></div>
+      <div class="row2">
+        <button class="tile" onclick="openCancer('leukemia')">白血病</button>
+        <button class="tile" onclick="openCancer('myeloma')">多発性骨髄腫</button>
+      </div>
+    </div>
+    <div class="cgrp">
+      <div class="ch">脳・内分泌<span class="cd"></span><span class="cc">2</span></div>
+      <div class="row2">
+        <button class="tile" onclick="openCancer('brain')">脳腫瘍</button>
+        <button class="tile" onclick="openCancer('thyroid')">甲状腺がん</button>
+      </div>
+    </div>
+    <div class="cgrp">
+      <div class="ch">その他<span class="cd"></span><span class="cc">1</span></div>
+      <button class="tile single" style="width:100%" onclick="openCancer('cup')">原発不明がん</button>
     </div>
     <button class="card" style="width:100%;text-align:left;margin-top:12px;background:var(--blue-bg);border:none;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('precision')">
       <span class="ic ic46" style="background:#fff"><i class="ti ti-dna-2" style="font-size:24px;color:var(--blue)"></i></span>
@@ -6113,16 +6677,58 @@ window._oninit['hospital']=hospInit;
 <script>
 /* 無料登録フロー：仮会員→無料登録（Google/Apple/LINE/メール）→本会員。実認証はOAuth接続で稼働。 */
 function afterAuth(){var t=window._afterAuth||'mypage';window._afterAuth=null;go(t);}
+/* ★Katsu要望2026-05-28：初回ログイン時にがん種＋ステージを一画面で集める。既に設定済みならスキップ。 */
+function needsProfileSetup(){
+  try{var ls=localStorage.getItem('satoi_profile'); if(ls){var pf=JSON.parse(ls); return !pf||!(pf.cancer||pf.skipped);}}catch(e){}
+  return true;
+}
 function doRegister(p){
   window._isMember=true; window._regProvider=p;
   if(typeof toast==='function')toast(p+'で登録しました。ようこそ、SATOIへ。');
-  afterAuth();
+  if(needsProfileSetup()){go('profilesetup');}else{afterAuth();}
 }
 function doLogin(p){
   window._isMember=true; window._regProvider=p||window._regProvider||'Google';
   if(typeof toast==='function')toast('おかえりなさい。');
-  afterAuth();
+  if(needsProfileSetup()){go('profilesetup');}else{afterAuth();}
 }
+function selProfileWho(w){window._tmpWho=w; renderProfileSetupUI();}
+function selProfileCancer(c){window._tmpCancer=c||''; renderProfileSetupUI();}
+function selProfileStage(s){window._tmpStage=s||''; renderProfileSetupUI();}
+function renderProfileSetupUI(){
+  document.querySelectorAll('#profilesetup [data-pw]').forEach(function(b){b.classList.toggle('psel', b.getAttribute('data-pw')===window._tmpWho);});
+  document.querySelectorAll('#profilesetup [data-pc]').forEach(function(b){b.classList.toggle('psel', b.getAttribute('data-pc')===window._tmpCancer);});
+  document.querySelectorAll('#profilesetup [data-ps]').forEach(function(b){b.classList.toggle('psel', b.getAttribute('data-ps')===window._tmpStage);});
+  var cta=document.getElementById('psCta');
+  if(cta){
+    var any=window._tmpCancer||window._tmpStage;
+    cta.textContent=any?'保存して、続ける':'1つでも選んで、続ける';
+    cta.style.opacity=any?'1':'.65';
+  }
+}
+function saveProfileSetup(){
+  var who=window._tmpWho||'self';
+  var c=window._tmpCancer||'', s=window._tmpStage||'';
+  window._myWho=who;
+  if(c)window._myCancer=c;
+  if(s)window._myStage=s;
+  try{localStorage.setItem('satoi_profile', JSON.stringify({who:who, cancer:c, stage:s, saved:Date.now()}));}catch(e){}
+  if(typeof toast==='function')toast('保存しました。あなた向けに整えます。');
+  if(typeof afterAuth==='function')afterAuth();else go('mypage');
+}
+function skipProfileSetup(){
+  try{localStorage.setItem('satoi_profile', JSON.stringify({who:window._tmpWho||'self', cancer:'', stage:'', saved:Date.now(), skipped:true}));}catch(e){}
+  if(typeof afterAuth==='function')afterAuth();else go('mypage');
+}
+window._oninit['profilesetup']=function(){
+  window._tmpWho=window._myWho||'self';
+  window._tmpCancer='';
+  window._tmpStage=window._myStage||'';
+  try{var ls=localStorage.getItem('satoi_profile'); if(ls){var pf=JSON.parse(ls); if(pf.who)window._tmpWho=pf.who; if(pf.cancer)window._tmpCancer=pf.cancer; if(pf.stage)window._tmpStage=pf.stage;}}catch(e){}
+  /* 'cervix' はコード上のデフォルトなので、保存値が無ければ未選択扱い */
+  if(!window._tmpCancer && window._myCancer && window._myCancer!=='cervix'){window._tmpCancer=window._myCancer;}
+  renderProfileSetupUI();
+};
 window._oninit['onboarding']=function(){
   var f=document.getElementById('obForm'), d=document.getElementById('obDone'), t=document.getElementById('obTitle'), su=document.getElementById('obSub');
   if(window._isMember){
