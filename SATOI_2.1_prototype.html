@@ -446,7 +446,9 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <div class="gh">頭頸部・胸部<div class="gd"></div></div>
       <div class="ps-chips">
         <button class="ps-chip" data-pc="headneck" onclick="selProfileCancer('headneck')">頭頸部</button>
-        <button class="ps-chip" data-pc="lung" onclick="selProfileCancer('lung')">肺</button>
+        <button class="ps-chip" data-pc="lung" onclick="selProfileCancer('lung')">肺（非小細胞 NSCLC）</button>
+        <button class="ps-chip" data-pc="sclc" onclick="selProfileCancer('sclc')">肺（小細胞 SCLC）</button>
+        <button class="ps-chip" data-pc="mesothelioma" onclick="selProfileCancer('mesothelioma')">胸膜中皮腫</button>
       </div>
     </div>
     <div class="ps-cgrp">
@@ -464,6 +466,7 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <div class="gh">乳腺・婦人科<div class="gd"></div></div>
       <div class="ps-chips">
         <button class="ps-chip" data-pc="breast" onclick="selProfileCancer('breast')">乳がん</button>
+        <button class="ps-chip" data-pc="tnbc" onclick="selProfileCancer('tnbc')">乳がん（トリプルネガティブ）</button>
         <button class="ps-chip" data-pc="cervix" onclick="selProfileCancer('cervix')">子宮頸</button>
         <button class="ps-chip" data-pc="endometrium" onclick="selProfileCancer('endometrium')">子宮体</button>
         <button class="ps-chip" data-pc="ovary" onclick="selProfileCancer('ovary')">卵巣</button>
@@ -473,6 +476,7 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <div class="gh">泌尿器<div class="gd"></div></div>
       <div class="ps-chips">
         <button class="ps-chip" data-pc="kidney" onclick="selProfileCancer('kidney')">腎臓</button>
+        <button class="ps-chip" data-pc="ureter" onclick="selProfileCancer('ureter')">腎盂・尿管</button>
         <button class="ps-chip" data-pc="bladder" onclick="selProfileCancer('bladder')">膀胱</button>
         <button class="ps-chip" data-pc="prostate" onclick="selProfileCancer('prostate')">前立腺</button>
       </div>
@@ -481,7 +485,9 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <div class="gh">皮膚・リンパ<div class="gd"></div></div>
       <div class="ps-chips">
         <button class="ps-chip" data-pc="melanoma" onclick="selProfileCancer('melanoma')">皮膚（メラノーマ）</button>
-        <button class="ps-chip" data-pc="lymphoma" onclick="selProfileCancer('lymphoma')">悪性リンパ腫</button>
+        <button class="ps-chip" data-pc="lymphoma" onclick="selProfileCancer('lymphoma')">非ホジキンリンパ腫</button>
+        <button class="ps-chip" data-pc="hodgkin" onclick="selProfileCancer('hodgkin')">ホジキンリンパ腫</button>
+        <button class="ps-chip" data-pc="pmbcl" onclick="selProfileCancer('pmbcl')">PMBCL</button>
       </div>
     </div>
     <div class="ps-cgrp">
@@ -499,9 +505,12 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       </div>
     </div>
     <div class="ps-cgrp">
-      <div class="gh">その他<div class="gd"></div></div>
+      <div class="gh">バイオマーカー・その他<div class="gd"></div></div>
       <div class="ps-chips">
+        <button class="ps-chip" data-pc="msih" onclick="selProfileCancer('msih')">MSI-High 固形</button>
+        <button class="ps-chip" data-pc="tmbh" onclick="selProfileCancer('tmbh')">TMB-High 固形</button>
         <button class="ps-chip" data-pc="cup" onclick="selProfileCancer('cup')">原発不明</button>
+        <button class="ps-chip" data-pc="childhood" onclick="selProfileCancer('childhood')">こどものがん</button>
         <button class="ps-chip muted" data-pc="" onclick="selProfileCancer('')">わからない・未確定</button>
       </div>
     </div>
@@ -709,6 +718,29 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
       <div class="irow"><span>FP相談</span><b>¥0.4万</b></div>
     </div>
   </div>
+
+  <!-- 投資家ピッチ補助ナビ（v9.0文脈3要素） -->
+  <div class="inv-pitch-nav" style="margin-top:28px;padding:18px 16px;background:#FFFEFC;border:.5px solid rgba(14,34,54,.16);border-radius:2px">
+    <div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9px;letter-spacing:.18em;color:#B8954A;margin-bottom:10px">▸ PITCH SUPPLEMENT — v9.0 CONTEXT</div>
+    <div style="font-family:'EB Garamond',Georgia,'Noto Serif JP',serif;font-size:18px;color:#0E2236;line-height:1.4;margin-bottom:14px">この投資家ビューを支える、<em style="font-style:italic;color:#9B2D2D">3つの設計</em>。</div>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px">
+      <button onclick="if(typeof go==='function')go('phaseroadmap')" style="text-align:left;padding:14px 16px;background:#F5F1E8;border:.5px solid rgba(14,34,54,.18);border-radius:2px;cursor:pointer;font:inherit">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:#B8954A;margin-bottom:4px">▸ PHASE ROADMAP</div>
+        <div style="font-family:'EB Garamond',Georgia,serif;font-size:15px;color:#0E2236;font-weight:600">フェーズ 1 → 2 → 3 の段階設計</div>
+        <div style="font-size:11px;color:#5A6878;margin-top:4px;line-height:1.5">高齢者ファースト → つぎの道始動 → グローバルRWD ＋ 「今ここ」の到達点</div>
+      </button>
+      <button onclick="if(typeof go==='function')go('governance')" style="text-align:left;padding:14px 16px;background:#F5F1E8;border:.5px solid rgba(14,34,54,.18);border-radius:2px;cursor:pointer;font:inherit">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:#B8954A;margin-bottom:4px">▸ GOVERNANCE ARCHITECTURE</div>
+        <div style="font-family:'EB Garamond',Georgia,serif;font-size:15px;color:#0E2236;font-weight:600">3層分離 ＋ 別HP の構造</div>
+        <div style="font-size:11px;color:#5A6878;margin-top:4px;line-height:1.5">A 患者ケア／B 安全性／C 二次利用 を UI と同意で独立 ＋ 標準治療後の別HP線</div>
+      </button>
+      <button onclick="if(typeof go==='function')go('hospital_flow')" style="text-align:left;padding:14px 16px;background:#F5F1E8;border:.5px solid rgba(14,34,54,.18);border-radius:2px;cursor:pointer;font:inherit">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:#B8954A;margin-bottom:4px">▸ HOSPITAL TOUCHPOINT</div>
+        <div style="font-family:'EB Garamond',Georgia,serif;font-size:15px;color:#0E2236;font-weight:600">医療現場接点 — ALMEX×SATOI</div>
+        <div style="font-size:11px;color:#5A6878;margin-top:4px;line-height:1.5">KIOSK → 診察 → 医師QR → マイページ／院内導線 4 ステップ</div>
+      </button>
+    </div>
+  </div>
 </div>
 <div class="inv-modal" id="invModal">
   <div class="inv-modal-frame">
@@ -904,6 +936,418 @@ window._oninit['investor']=async function(){
 })();
 </script>
 
+<!-- ============ つぎの道 入口注釈＋同意（next_horizon_bridge）★Katsu要望2026-05-28 ============ -->
+<section class="scr" id="next_horizon_bridge">
+<style>
+#next_horizon_bridge{background:var(--bg,#fbfaf7);min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI",sans-serif;color:#26303F}
+#next_horizon_bridge .nhb-bar{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid rgba(38,48,63,.1)}
+#next_horizon_bridge .nhb-back{font-size:13px;color:var(--teal,#0D7377);background:none;border:none;font:inherit;font-weight:600;cursor:pointer}
+#next_horizon_bridge .nhb-fam{font-size:11px;color:var(--amber-t,#633806);background:var(--amber-bg,#FBEEDE);border:1px solid var(--amber-line,#E2B877);border-radius:999px;padding:3px 9px;font-weight:700;cursor:pointer}
+#next_horizon_bridge .nhb-fam.on{background:var(--amber,#B5701B);color:#fff;border-color:var(--amber,#B5701B)}
+#next_horizon_bridge .nhb-dawn{height:118px;background:linear-gradient(180deg,#FBEEDE 0%,#F7DFBE 60%,#F5F1E8 100%);position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:14px 18px 12px}
+#next_horizon_bridge .nhb-kicker{font-size:11px;color:#633806;font-weight:700;letter-spacing:.08em}
+#next_horizon_bridge .nhb-title{font-size:22px;font-weight:700;color:#26303F;line-height:1.35;margin-top:4px;font-feature-settings:"palt"}
+#next_horizon_bridge .nhb-sub{font-size:12px;color:#4C5562;line-height:1.65;margin-top:5px}
+#next_horizon_bridge .nhb-body{padding:14px 16px 100px;font-feature-settings:"palt"}
+#next_horizon_bridge .nhb-h2{font-size:14px;font-weight:700;margin:18px 0 7px;display:flex;align-items:center;gap:8px;color:#26303F}
+#next_horizon_bridge .nhb-h2:first-of-type{margin-top:10px}
+#next_horizon_bridge .nhb-h2 .nhb-n{display:inline-block;width:24px;height:24px;border-radius:50%;background:var(--teal-bg,#E1F5EE);color:var(--teal-d,#0F6E56);text-align:center;font-size:12px;font-weight:900;line-height:24px;flex-shrink:0}
+#next_horizon_bridge .nhb-block{background:#fff;border:.5px solid rgba(38,48,63,.12);border-radius:11px;padding:12px 14px;margin-bottom:9px;font-size:13.5px;line-height:1.85;color:#26303F}
+#next_horizon_bridge .nhb-block b{font-weight:700}
+#next_horizon_bridge .nhb-block.teal{background:var(--teal-bg,#E1F5EE);border-color:#cae6dd}
+#next_horizon_bridge .nhb-block.amber{background:var(--amber-bg,#FBEEDE);border-color:var(--amber-line,#E2B877)}
+#next_horizon_bridge .nhb-block .nhb-src{display:block;margin-top:6px;font-size:10.5px;color:#6B7280;font-style:italic;line-height:1.55}
+#next_horizon_bridge .nhb-consent{margin-top:9px;background:#fff;border:1.5px solid var(--teal,#0D7377);border-radius:11px;padding:12px 14px}
+#next_horizon_bridge .nhb-consent .nhb-ct{font-size:12.5px;font-weight:700;color:var(--teal-d,#0F6E56);line-height:1.55}
+#next_horizon_bridge .nhb-consent .nhb-row{display:flex;align-items:flex-start;gap:10px;margin-top:10px;cursor:pointer}
+#next_horizon_bridge .nhb-consent .nhb-row .nhb-cb{width:22px;height:22px;border:2px solid var(--teal,#0D7377);border-radius:6px;background:#fff;display:grid;place-items:center;flex-shrink:0;font-size:14px;color:#fff;transition:all .15s}
+#next_horizon_bridge .nhb-consent .nhb-row.on .nhb-cb{background:var(--teal,#0D7377);color:#fff}
+#next_horizon_bridge .nhb-consent .nhb-row.on .nhb-cb::after{content:"✓"}
+#next_horizon_bridge .nhb-consent .nhb-lbl{font-size:13px;line-height:1.55;color:#26303F;flex:1}
+#next_horizon_bridge .nhb-consent .nhb-lbl b{font-weight:700}
+#next_horizon_bridge .nhb-foot{position:fixed;left:0;right:0;bottom:0;max-width:390px;margin:0 auto;padding:10px 16px 18px;background:linear-gradient(180deg,rgba(255,255,255,0) 0%,#fff 35%);display:flex;flex-direction:column;gap:6px}
+#next_horizon_bridge .nhb-cta{width:100%;padding:14px;border-radius:14px;background:var(--teal,#0D7377);color:#fff;font-size:14px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(13,115,119,.28);transition:opacity .15s}
+#next_horizon_bridge .nhb-cta:disabled{opacity:.4;cursor:not-allowed}
+#next_horizon_bridge .nhb-cancel{text-align:center;font-size:12px;color:#6B7280;background:none;border:none;padding:7px;cursor:pointer;font:inherit}
+#next_horizon_bridge .nhb-fam-banner{background:linear-gradient(135deg,var(--amber-bg,#FBEEDE) 0%,var(--amber-bg2,#FFF7EC) 100%);border:1px solid var(--amber-line,#E2B877);border-left:3px solid var(--amber,#B5701B);border-radius:10px;padding:10px 13px;margin:10px 0 0;display:none;align-items:flex-start;gap:9px}
+#next_horizon_bridge.fam-on .nhb-fam-banner{display:flex}
+#next_horizon_bridge .nhb-fam-banner .nhb-fb-ic{font-size:18px;color:var(--amber,#B5701B);line-height:1.2;flex-shrink:0}
+#next_horizon_bridge .nhb-fam-banner .nhb-fb-h{font-size:12px;font-weight:700;color:var(--amber-t,#633806);line-height:1.35}
+#next_horizon_bridge .nhb-fam-banner .nhb-fb-s{font-size:11.5px;color:#26303F;line-height:1.6;margin-top:4px}
+#next_horizon_bridge.fam-on .nhb-fam-block{display:block}
+#next_horizon_bridge .nhb-fam-block{display:none;margin-top:9px;background:var(--amber-bg2,#FFF7EC);border:1.5px solid var(--amber,#B5701B);border-radius:11px;padding:12px 14px}
+#next_horizon_bridge .nhb-fam-block .nhb-ct{font-size:12px;font-weight:700;color:var(--amber-t,#633806);line-height:1.55}
+#next_horizon_bridge .nhb-fam-block .nhb-row{display:flex;align-items:flex-start;gap:10px;margin-top:9px;cursor:pointer}
+#next_horizon_bridge .nhb-fam-block .nhb-row .nhb-cb{width:22px;height:22px;border:2px solid var(--amber,#B5701B);border-radius:6px;background:#fff;display:grid;place-items:center;flex-shrink:0;font-size:14px;color:#fff}
+#next_horizon_bridge .nhb-fam-block .nhb-row.on .nhb-cb{background:var(--amber,#B5701B)}
+#next_horizon_bridge .nhb-fam-block .nhb-row.on .nhb-cb::after{content:"✓"}
+#next_horizon_bridge .nhb-fam-block .nhb-lbl{font-size:12.5px;line-height:1.55;color:#26303F;flex:1}
+#next_horizon_bridge.fam-on .nhb-cta{background:var(--amber,#B5701B)}
+</style>
+<div class="nhb-bar">
+  <button class="nhb-back" onclick="go('mypage')">← マイページ</button>
+  <button class="nhb-fam" id="nhbFamToggle" onclick="nhbToggleFam()">👥 家族モード</button>
+</div>
+<div class="nhb-dawn">
+  <div class="nhb-kicker">標準治療を、終えた方へ</div>
+  <div class="nhb-title">次の道を、<br>一緒に探していきましょう。</div>
+  <div class="nhb-sub">読んでから、進むかどうかゆっくり決めてください。</div>
+</div>
+<div class="nhb-body">
+  <div class="nhb-fam-banner">
+    <div class="nhb-fb-ic">👥</div>
+    <div>
+      <div class="nhb-fb-h">家族モード：ご家族と一緒に</div>
+      <div class="nhb-fb-s">大切な内容ですので、ご家族と一緒に読まれることをおすすめします。本人の意思を尊重します。</div>
+    </div>
+  </div>
+  <h3 class="nhb-h2"><span class="nhb-n">1</span>ここから先のこと</h3>
+  <div class="nhb-block">
+    ここから先は、<b>あなた自身の意思での選択</b>になります。SATOIは「自由診療」を<b>推進・推奨しません</b>。あなたが<b>次のステップに望みやすいように</b>、伴走してサポートする場所です。
+  </div>
+  <h3 class="nhb-h2"><span class="nhb-n">2</span>大切にしている3つの考え</h3>
+  <div class="nhb-block teal">
+    <b>1. 人生会議（ACP）</b>：ご本人・ご家族・医療ケアチームが、繰り返し話し合いながら、その時の最善を一緒に作っていく考え方。
+    <span class="nhb-src">出典：厚労省「人生の最終段階における医療・ケアの決定プロセスに関するガイドライン」2018年改訂</span>
+  </div>
+  <div class="nhb-block teal">
+    <b>2. 共同意思決定（SDM）</b>：医学の情報と、あなたの<b>価値観・希望</b>を協働で重ね、納得のいく治療を一緒に選んでいくプロセス。
+    <span class="nhb-src">出典：日本臨床腫瘍学会／JCOG／日本透析医会 SDMガイダンス</span>
+  </div>
+  <div class="nhb-block teal">
+    <b>3. 選択肢のひろがり</b>：標準的な道がすべてではなく、ご本人の状況や価値観によって、<b>選び方が変わる</b>ことがあります。SATOIはその選択肢を増やす場所として、そばにいます。
+  </div>
+  <h3 class="nhb-h2"><span class="nhb-n">3</span>JOiNT による安全性</h3>
+  <div class="nhb-block amber">
+    表示する施設・治療は、一般社団法人 <b>JOiNT</b> の認定を受けたものに限ります。<b>副作用報告</b>を含むガイドラインを JOiNT で策定・遵守し、これまで枠組みのなかった領域にも<b>新しい安全性のルール</b>を作りながら進めます。
+  </div>
+  <h3 class="nhb-h2"><span class="nhb-n">4</span>ご同意のお願い</h3>
+  <div class="nhb-consent" id="nhbConsentMain">
+    <div class="nhb-ct">下を読み、同意された方が次に進めます。</div>
+    <div class="nhb-row" onclick="nhbToggleConsent(this)"><div class="nhb-cb"></div><div class="nhb-lbl">上の<b>1〜3</b>を読みました。納得しました。</div></div>
+    <div class="nhb-row" onclick="nhbToggleConsent(this)"><div class="nhb-cb"></div><div class="nhb-lbl">これは<b>自分自身の意思</b>での選択であることを理解しました。</div></div>
+  </div>
+  <div class="nhb-fam-block" id="nhbConsentFam">
+    <div class="nhb-ct">★ ご家族の同意（任意・あれば、より安心）</div>
+    <div class="nhb-row" onclick="nhbToggleConsent(this)"><div class="nhb-cb"></div><div class="nhb-lbl">家族として、一緒に内容を読み、理解しました。</div></div>
+    <div class="nhb-row" onclick="nhbToggleConsent(this)"><div class="nhb-cb"></div><div class="nhb-lbl">ご本人の意思を尊重し、伴走します。</div></div>
+  </div>
+</div>
+<div class="nhb-foot">
+  <button class="nhb-cta" id="nhbCta" disabled onclick="nhbProceed()">同意して、次の道へ</button>
+  <button class="nhb-cancel" onclick="go('mypage')">いまは読まない／戻る</button>
+</div>
+<script>
+function nhbToggleFam(){
+  var s=document.getElementById('next_horizon_bridge');
+  var b=document.getElementById('nhbFamToggle');
+  s.classList.toggle('fam-on');
+  b.classList.toggle('on');
+  nhbUpdateCta();
+}
+function nhbToggleConsent(el){
+  el.classList.toggle('on');
+  nhbUpdateCta();
+}
+function nhbUpdateCta(){
+  var s=document.getElementById('next_horizon_bridge');
+  var main=document.querySelectorAll('#nhbConsentMain .nhb-row');
+  var mainOk=Array.prototype.every.call(main,function(r){return r.classList.contains('on')});
+  var famOn=s.classList.contains('fam-on');
+  var famOk=true;
+  if(famOn){var fam=document.querySelectorAll('#nhbConsentFam .nhb-row');famOk=Array.prototype.every.call(fam,function(r){return r.classList.contains('on')})}
+  var btn=document.getElementById('nhbCta');
+  btn.disabled=!(mainOk && famOk);
+  btn.textContent=famOn?'両方の同意で、次の道へ':'同意して、次の道へ';
+}
+function nhbProceed(){
+  try{localStorage.setItem('satoi_nh_consent',JSON.stringify({date:Date.now(),agreed:true,fam:document.getElementById('next_horizon_bridge').classList.contains('fam-on')}))}catch(e){}
+  if(typeof toast==='function')toast('同意ありがとうございます。次の道へ進みます。');
+  go('mypage');
+}
+window._oninit['next_horizon_bridge']=function(){
+  var s=document.getElementById('next_horizon_bridge');
+  s.classList.remove('fam-on');
+  document.getElementById('nhbFamToggle').classList.remove('on');
+  document.querySelectorAll('#next_horizon_bridge .nhb-row').forEach(function(r){r.classList.remove('on')});
+  nhbUpdateCta();
+};
+</script>
+</section>
+
+<!-- ============ フェーズロードマップ（phaseroadmap）★Katsuピッチ用2026-05-28 ============ -->
+<section class="scr" id="phaseroadmap">
+<style>
+#phaseroadmap{background:#F5F1E8;min-height:100vh;font-family:"EB Garamond","Noto Serif JP",serif;color:#0E2236}
+#phaseroadmap .pr-bar{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;font-family:Inter,sans-serif;background:#F5F1E8;border-bottom:.5px solid rgba(14,34,54,.15)}
+#phaseroadmap .pr-back{font-size:12px;color:#0E2236;background:none;border:none;cursor:pointer;font:inherit;font-weight:600}
+#phaseroadmap .pr-logo{font-size:13px;font-weight:900;color:#0E2236;letter-spacing:.02em}
+#phaseroadmap .pr-tag{font-size:9px;background:#0E2236;color:#B8954A;border:1px solid #B8954A;border-radius:999px;padding:3px 9px;font-weight:700;letter-spacing:.06em}
+#phaseroadmap .pr-head{padding:14px 14px 7px}
+#phaseroadmap .pr-eyebrow{font-family:Inter,sans-serif;font-size:9px;color:#B8954A;letter-spacing:.1em;font-weight:700;text-transform:uppercase}
+#phaseroadmap .pr-h1{font-family:"EB Garamond",serif;font-size:24px;font-weight:600;color:#0E2236;font-style:italic;line-height:1.25;margin:3px 0 4px}
+#phaseroadmap .pr-h1 em{color:#B8954A;font-weight:700}
+#phaseroadmap .pr-sub{font-size:11.5px;color:#4C5562;line-height:1.55;font-family:Inter,sans-serif}
+#phaseroadmap .pr-body{padding:8px 14px 30px}
+#phaseroadmap .pr-phase{background:#fff;border:.5px solid #0E2236;border-radius:10px;padding:12px 14px;margin-bottom:11px;position:relative}
+#phaseroadmap .pr-phase.now{border:2px solid #9B2D2D;background:linear-gradient(180deg,#FAF3DF 0%,#fff 100%)}
+#phaseroadmap .pr-phase .pr-now{position:absolute;top:-9px;right:14px;background:#9B2D2D;color:#fff;font-size:9px;font-weight:800;padding:2px 9px;border-radius:999px;font-family:Inter,sans-serif;letter-spacing:.06em}
+#phaseroadmap .pr-phase .pr-num{font-family:"EB Garamond",serif;font-size:36px;font-weight:700;color:#B8954A;line-height:1;font-style:italic}
+#phaseroadmap .pr-phase.p1 .pr-num{color:#9B2D2D}
+#phaseroadmap .pr-phase.p2 .pr-num{color:#B8954A}
+#phaseroadmap .pr-phase.p3 .pr-num{color:#0E2236}
+#phaseroadmap .pr-phase .pr-when{font-family:Inter,sans-serif;font-size:9px;color:#4C5562;letter-spacing:.06em;text-transform:uppercase;font-weight:700;margin-top:2px}
+#phaseroadmap .pr-phase .pr-pt{font-family:"EB Garamond",serif;font-size:18px;font-weight:600;color:#0E2236;line-height:1.3;margin-top:6px}
+#phaseroadmap .pr-phase .pr-ps{font-size:11px;color:#4C5562;font-family:Inter,sans-serif;line-height:1.6;margin-top:4px}
+#phaseroadmap .pr-phase .pr-kpi{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:9px}
+#phaseroadmap .pr-phase .pr-kpi .k{background:#F5F1E8;border-radius:4px;padding:5px 7px;font-family:Inter,sans-serif}
+#phaseroadmap .pr-phase .pr-kpi .k .kl{font-size:8px;color:#6B7280;letter-spacing:.05em;font-weight:700;text-transform:uppercase}
+#phaseroadmap .pr-phase .pr-kpi .k .kv{font-family:"EB Garamond",serif;font-size:14px;font-weight:700;color:#0E2236;line-height:1.05;margin-top:1px}
+#phaseroadmap .pr-arrow{text-align:center;font-size:22px;color:#B8954A;font-family:"EB Garamond",serif;margin:-2px 0}
+#phaseroadmap .pr-mabuchi{margin-top:10px;background:#0E2236;color:#F5F1E8;border-radius:9px;padding:11px 13px;font-family:Inter,sans-serif;font-size:11px;line-height:1.65}
+#phaseroadmap .pr-mabuchi b{color:#B8954A;font-weight:700}
+</style>
+<div class="pr-bar">
+  <button class="pr-back" onclick="go('investor')">← Investor</button>
+  <span class="pr-logo">SAT<span style="color:#0D7377">●</span>I</span>
+  <span class="pr-tag">PHASE MAP</span>
+</div>
+<div class="pr-head">
+  <div class="pr-eyebrow">▸ Phase 1 → 2 → 3</div>
+  <h2 class="pr-h1"><em>「今ここ」</em>から、3つの段階で。</h2>
+  <p class="pr-sub">標準治療母数 → つぎの道 → B2B&代理店。位相の連続性が、馬渕さんの不安解消の核。</p>
+</div>
+<div class="pr-body">
+  <div class="pr-phase now p1">
+    <div class="pr-now">今ここ</div>
+    <div class="pr-num">01</div>
+    <div class="pr-when">PHASE 0 → 0.5 ／ 2026 〜 2027</div>
+    <div class="pr-pt">保険診療で、母数を取りに行く</div>
+    <div class="pr-ps">標準治療カバレッジ／医師QR渡し／コメディカル経由獲得／PV協賛モデル立ち上げ。<b>保険診療終了時に医師がQRを渡す</b>瞬間が獲得の本命。</div>
+    <div class="pr-kpi">
+      <div class="k"><div class="kl">累計会員</div><div class="kv">13.2万 → 39万</div></div>
+      <div class="k"><div class="kl">JOiNT</div><div class="kv">42 → 90施設</div></div>
+      <div class="k"><div class="kl">PV協賛</div><div class="kv">4 → 12社</div></div>
+      <div class="k"><div class="kl">ARPU</div><div class="kv">¥22.5万/年</div></div>
+    </div>
+  </div>
+  <div class="pr-arrow">↓</div>
+  <div class="pr-phase p2">
+    <div class="pr-num">02</div>
+    <div class="pr-when">PHASE 2 ／ 2027 〜 2028</div>
+    <div class="pr-pt">「つぎの道」を、解放する</div>
+    <div class="pr-ps">JCPM／プレシジョン医療連携、<b>JOiNT審査ゲート</b>でガバナンス担保、別ホームページとして分離。「自由診療」とは書かない（医療法6条の5）。</div>
+    <div class="pr-kpi">
+      <div class="k"><div class="kl">つぎの道率</div><div class="kv">12% → 22%</div></div>
+      <div class="k"><div class="kl">JCPM連携</div><div class="kv">明星先生中心</div></div>
+      <div class="k"><div class="kl">海外SO</div><div class="kv">同時通訳開放</div></div>
+      <div class="k"><div class="kl">機会値</div><div class="kv">¥9.8 → 14兆</div></div>
+    </div>
+  </div>
+  <div class="pr-arrow">↓</div>
+  <div class="pr-phase p3">
+    <div class="pr-num">03</div>
+    <div class="pr-when">PHASE 3 ／ 2029 〜</div>
+    <div class="pr-pt">B2B ＋ 代理店化</div>
+    <div class="pr-ps">病院連携（鏡の原則・QR起点）／SATOIが保険代理店／長期にデータ販売。ALMEX 全国20拠点の実行部隊が活きる。</div>
+    <div class="pr-kpi">
+      <div class="k"><div class="kl">病院連携</div><div class="kv">300〜500院</div></div>
+      <div class="k"><div class="kl">保険代理店</div><div class="kv">提携3社</div></div>
+      <div class="k"><div class="kl">ALMEX</div><div class="kv">20 → 60拠点</div></div>
+      <div class="k"><div class="kl">累計売上</div><div class="kv">¥103億/期</div></div>
+    </div>
+  </div>
+  <div class="pr-mabuchi">
+    <b>★ 馬渕さん不安解消ポイント：</b>「自由診療への進み方が明確」── Phase 1（保険診療母数）から Phase 2（つぎの道）への移行は<b>跳ばない地続き</b>。JCPM・JOiNT・別HPで段階的に。Phase 3 で B2B＋代理店化が立ち上がる位相が、ピッチデッキの全体像と整合する。
+  </div>
+</div>
+</section>
+
+<!-- ============ ガバナンス分離図（governance）★Katsuピッチ用2026-05-28 ============ -->
+<section class="scr" id="governance">
+<style>
+#governance{background:#F5F1E8;min-height:100vh;font-family:"EB Garamond","Noto Serif JP",serif;color:#0E2236}
+#governance .gv-bar{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;font-family:Inter,sans-serif;background:#F5F1E8;border-bottom:.5px solid rgba(14,34,54,.15)}
+#governance .gv-back{font-size:12px;color:#0E2236;background:none;border:none;cursor:pointer;font:inherit;font-weight:600}
+#governance .gv-logo{font-size:13px;font-weight:900;color:#0E2236;letter-spacing:.02em}
+#governance .gv-tag{font-size:9px;background:#0E2236;color:#B8954A;border:1px solid #B8954A;border-radius:999px;padding:3px 9px;font-weight:700;letter-spacing:.06em}
+#governance .gv-head{padding:14px 14px 8px}
+#governance .gv-eyebrow{font-family:Inter,sans-serif;font-size:9px;color:#B8954A;letter-spacing:.1em;font-weight:700;text-transform:uppercase}
+#governance .gv-h1{font-family:"EB Garamond",serif;font-size:22px;font-weight:600;color:#0E2236;font-style:italic;line-height:1.25;margin:3px 0 4px}
+#governance .gv-h1 em{color:#B8954A;font-weight:700}
+#governance .gv-sub{font-size:11.5px;color:#4C5562;line-height:1.55;font-family:Inter,sans-serif}
+#governance .gv-body{padding:8px 14px 30px}
+#governance .gv-layer{border-radius:10px;padding:12px 14px;margin-bottom:8px;position:relative;border:.5px solid #0E2236}
+#governance .gv-layer .gv-lk{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:#B8954A;font-weight:700;letter-spacing:.1em}
+#governance .gv-layer .gv-lt{font-family:"EB Garamond",serif;font-size:17px;font-weight:600;color:#0E2236;line-height:1.25;margin-top:2px}
+#governance .gv-layer .gv-ld{font-size:11.5px;color:#4C5562;font-family:Inter,sans-serif;line-height:1.6;margin-top:5px}
+#governance .gv-layer .gv-ld b{color:#0E2236;font-weight:700}
+#governance .gv-layer .gv-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px;font-family:Inter,sans-serif}
+#governance .gv-layer .gv-grid .gc{background:#fff;border:.5px solid rgba(14,34,54,.15);border-radius:5px;padding:6px 8px}
+#governance .gv-layer .gv-grid .gc .gcl{font-size:8px;color:#6B7280;letter-spacing:.05em;font-weight:700;text-transform:uppercase}
+#governance .gv-layer .gv-grid .gc .gcv{font-family:"EB Garamond",serif;font-size:13px;font-weight:700;color:#0E2236;line-height:1.1;margin-top:2px}
+#governance .gv-layer.a{background:#E1F5EE;border-color:#0D7377;border-left:3px solid #0D7377}
+#governance .gv-layer.a .gv-lk{color:#0F6E56}
+#governance .gv-layer.b{background:#FBEEDE;border-color:#B5701B;border-left:3px solid #B5701B}
+#governance .gv-layer.b .gv-lk{color:#633806}
+#governance .gv-layer.c{background:#E7F0FA;border-color:#2C6FB0;border-left:3px solid #2C6FB0}
+#governance .gv-layer.c .gv-lk{color:#235a8c}
+#governance .gv-arrow{text-align:center;font-size:11px;color:#6B7280;font-family:Inter,sans-serif;margin:-2px 0;font-weight:700;letter-spacing:.04em}
+#governance .gv-split{margin-top:13px;background:#fff;border:1px dashed rgba(14,34,54,.3);border-radius:9px;padding:11px 13px}
+#governance .gv-split .gsh{font-family:"EB Garamond",serif;font-size:14px;font-weight:600;color:#0E2236;font-style:italic;line-height:1.3}
+#governance .gv-split .gsh em{color:#9B2D2D;font-weight:700}
+#governance .gv-split .gsb{font-size:11px;color:#4C5562;font-family:Inter,sans-serif;line-height:1.6;margin-top:4px}
+#governance .gv-split .gsb b{color:#0E2236;font-weight:700}
+#governance .gv-mabuchi{margin-top:12px;background:#0E2236;color:#F5F1E8;border-radius:9px;padding:11px 13px;font-family:Inter,sans-serif;font-size:11px;line-height:1.65}
+#governance .gv-mabuchi b{color:#B8954A;font-weight:700}
+</style>
+<div class="gv-bar">
+  <button class="gv-back" onclick="go('investor')">← Investor</button>
+  <span class="gv-logo">SAT<span style="color:#0D7377">●</span>I</span>
+  <span class="gv-tag">GOVERNANCE</span>
+</div>
+<div class="gv-head">
+  <div class="gv-eyebrow">▸ Layer Separation</div>
+  <h2 class="gv-h1">3 層分離アーキ ＋ <em>「つぎの道」</em>別 HP</h2>
+  <p class="gv-sub">薬機法・医療法・個情法に同時対応。患者の「今、自分のため」か「製薬の質問か」が毎回明確。</p>
+</div>
+<div class="gv-body">
+  <div class="gv-layer a">
+    <div class="gv-lk">▸ LAYER A ／ PATIENT CARE</div>
+    <div class="gv-lt">患者ケア層</div>
+    <div class="gv-ld">目的：本人のSDM支援／AIとの<b>自然会話</b>＝Claudeコンシェルジュ。<b>聞き出さない・誘導しない・診断しない・推奨しない</b>。同意＝サービス利用同意。</div>
+    <div class="gv-grid">
+      <div class="gc"><div class="gcl">担当AI</div><div class="gcv">Claude</div></div>
+      <div class="gc"><div class="gcl">同意</div><div class="gcv">利用同意</div></div>
+    </div>
+  </div>
+  <div class="gv-arrow">↓ 別の同意を取って</div>
+  <div class="gv-layer b">
+    <div class="gv-lk">▸ LAYER B ／ SAFETY DATA</div>
+    <div class="gv-lt">安全性情報層（PMDA向け）</div>
+    <div class="gv-ld"><b>明示フォーム別画面</b>「○○製薬の○○について、お困りごとはありますか？」と独立窓。デフォルトで「答えない／後で」が等価に選べる。スポンサー名・目的・所要時間を必ず明示。</div>
+    <div class="gv-grid">
+      <div class="gc"><div class="gcl">UI</div><div class="gcv">別画面</div></div>
+      <div class="gc"><div class="gcl">同意</div><div class="gcv">安全性提供</div></div>
+    </div>
+  </div>
+  <div class="gv-arrow">↓ さらに別の同意で</div>
+  <div class="gv-layer c">
+    <div class="gv-lk">▸ LAYER C ／ SECONDARY USE</div>
+    <div class="gv-lt">二次利用層（協賛企業ダッシュ等）</div>
+    <div class="gv-ld">集約バッチ処理（リアルタイムではない）。製薬企業に渡るのは<b>集計データ or 匿名化個別データのみ</b>。<b>生データ・個人特定情報は絶対不可</b>。</div>
+    <div class="gv-grid">
+      <div class="gc"><div class="gcl">出力</div><div class="gcv">集計/匿名化</div></div>
+      <div class="gc"><div class="gcl">同意</div><div class="gcv">二次利用</div></div>
+    </div>
+  </div>
+  <div class="gv-split">
+    <div class="gsh">＋「<em>つぎの道</em>」は<em>別ホームページ</em>で分離</div>
+    <div class="gsb">標準治療PFと一体視されない設計。<b>JOiNT認定施設のみ</b>表示。「自由診療」とは書かず、「標準治療を終えた方へ／次の道」と表現（医療法6条の5）。</div>
+  </div>
+  <div class="gv-mabuchi">
+    <b>★ 馬渕さん不安解消ポイント：</b>「ガバナンス障壁が解決済」── 薬機法66-68条・GVP省令・医療法6条の5・個情法・厚労省ガイドライン・3省2ガイドライン・製薬協コードに<b>同時対応の枠組み</b>。医療機器該当性「診断・治療推奨を言わない」線を絶対に越えない。
+  </div>
+</div>
+</section>
+
+<!-- ============ 医療現場接点フロー（hospital_flow）★Katsuピッチ用2026-05-28 ============ -->
+<section class="scr" id="hospital_flow">
+<style>
+#hospital_flow{background:#F5F1E8;min-height:100vh;font-family:"EB Garamond","Noto Serif JP",serif;color:#0E2236}
+#hospital_flow .hf-bar{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;font-family:Inter,sans-serif;background:#F5F1E8;border-bottom:.5px solid rgba(14,34,54,.15)}
+#hospital_flow .hf-back{font-size:12px;color:#0E2236;background:none;border:none;cursor:pointer;font:inherit;font-weight:600}
+#hospital_flow .hf-logo{font-size:13px;font-weight:900;color:#0E2236;letter-spacing:.02em}
+#hospital_flow .hf-tag{font-size:9px;background:#0E2236;color:#B8954A;border:1px solid #B8954A;border-radius:999px;padding:3px 9px;font-weight:700;letter-spacing:.06em}
+#hospital_flow .hf-head{padding:14px 14px 8px}
+#hospital_flow .hf-eyebrow{font-family:Inter,sans-serif;font-size:9px;color:#B8954A;letter-spacing:.1em;font-weight:700;text-transform:uppercase}
+#hospital_flow .hf-h1{font-family:"EB Garamond",serif;font-size:22px;font-weight:600;color:#0E2236;font-style:italic;line-height:1.25;margin:3px 0 4px}
+#hospital_flow .hf-h1 em{color:#B8954A;font-weight:700}
+#hospital_flow .hf-sub{font-size:11.5px;color:#4C5562;line-height:1.55;font-family:Inter,sans-serif}
+#hospital_flow .hf-body{padding:8px 14px 30px}
+#hospital_flow .hf-steps{background:#fff;border:.5px solid #0E2236;border-radius:10px;padding:13px 12px;margin-top:6px}
+#hospital_flow .hf-step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;position:relative}
+#hospital_flow .hf-step:not(:last-child)::after{content:"";position:absolute;left:18px;top:50px;bottom:-4px;width:1.5px;background:#B8954A;opacity:.4}
+#hospital_flow .hf-step .hf-icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0;font-family:"EB Garamond",serif;font-style:italic}
+#hospital_flow .hf-step.s1 .hf-icon{background:#B8954A}
+#hospital_flow .hf-step.s2 .hf-icon{background:#B5701B}
+#hospital_flow .hf-step.s3 .hf-icon{background:#0D7377}
+#hospital_flow .hf-step.s4 .hf-icon{background:#0F6E56}
+#hospital_flow .hf-step .hf-body-step{flex:1}
+#hospital_flow .hf-step .hf-title{font-family:"EB Garamond",serif;font-size:15px;font-weight:600;color:#0E2236;line-height:1.25}
+#hospital_flow .hf-step .hf-who{display:inline-block;font-size:9px;font-family:Inter,sans-serif;letter-spacing:.06em;font-weight:700;padding:2px 7px;border-radius:999px;margin-top:3px}
+#hospital_flow .hf-step .hf-who.almex{background:#FBEEDE;color:#633806;border:.5px solid #E2B877}
+#hospital_flow .hf-step .hf-who.satoi{background:#E1F5EE;color:#0F6E56;border:.5px solid #0D7377}
+#hospital_flow .hf-step .hf-desc{font-size:11px;color:#4C5562;font-family:Inter,sans-serif;line-height:1.55;margin-top:5px}
+#hospital_flow .hf-step .hf-desc b{color:#0E2236;font-weight:700}
+#hospital_flow .hf-stats{margin-top:12px;background:#FBEEDE;border:1px solid #E2B877;border-radius:9px;padding:11px 13px;font-family:Inter,sans-serif;font-size:11px;color:#633806;line-height:1.7}
+#hospital_flow .hf-stats b{color:#633806;font-weight:800;display:block;font-size:11.5px;margin-bottom:3px}
+#hospital_flow .hf-mabuchi{margin-top:11px;background:#0E2236;color:#F5F1E8;border-radius:9px;padding:11px 13px;font-family:Inter,sans-serif;font-size:11px;line-height:1.65}
+#hospital_flow .hf-mabuchi b{color:#B8954A;font-weight:700}
+#hospital_flow .hf-quote{margin-top:11px;background:#fff;border-left:3px solid #9B2D2D;border-radius:6px;padding:9px 12px;font-size:11px;color:#0E2236;font-family:Inter,sans-serif;line-height:1.6;font-style:italic}
+#hospital_flow .hf-quote b{color:#9B2D2D;font-weight:700;font-style:normal}
+</style>
+<div class="hf-bar">
+  <button class="hf-back" onclick="go('investor')">← Investor</button>
+  <span class="hf-logo">SAT<span style="color:#0D7377">●</span>I</span>
+  <span class="hf-tag">FIELD FLOW</span>
+</div>
+<div class="hf-head">
+  <div class="hf-eyebrow">▸ Hospital Touchpoints</div>
+  <h2 class="hf-h1">医療現場の <em>接点</em>と<em>共闘</em></h2>
+  <p class="hf-sub">受付KIOSK → 診察看護師 → 医師QR → マイページ。SATOI と実行部隊パートナーの役割が見える。</p>
+</div>
+<div class="hf-body">
+  <div class="hf-steps">
+    <div class="hf-step s1">
+      <div class="hf-icon">1</div>
+      <div class="hf-body-step">
+        <div class="hf-title">受付 KIOSK</div>
+        <span class="hf-who almex">実行部隊パートナー</span>
+        <div class="hf-desc">病院受付の <b>KIOSK 大手</b>として全国網のサポート。患者が受付タッチパネルからSATOIに静かに接続。</div>
+      </div>
+    </div>
+    <div class="hf-step s2">
+      <div class="hf-icon">2</div>
+      <div class="hf-body-step">
+        <div class="hf-title">診察・看護師同伴</div>
+        <span class="hf-who almex">実行部隊パートナー</span>
+        <div class="hf-desc">看護師ロールが患者の話を整理し、<b>SDMカードの素材</b>を一緒に作る。コメディカルが普及の起点。</div>
+      </div>
+    </div>
+    <div class="hf-step s3">
+      <div class="hf-icon">3</div>
+      <div class="hf-body-step">
+        <div class="hf-title">医師の QR 渡し</div>
+        <span class="hf-who satoi">SATOI</span>
+        <div class="hf-desc"><b>保険診療終了時に医師がQRを渡す</b>瞬間が獲得の本命。SDMカード起点・同意起点・診断や所見はAIが言わない。</div>
+      </div>
+    </div>
+    <div class="hf-step s4">
+      <div class="hf-icon">4</div>
+      <div class="hf-body-step">
+        <div class="hf-title">マイページ ／ 壺</div>
+        <span class="hf-who satoi">SATOI</span>
+        <div class="hf-desc">QR起点で患者の<b>マイページ</b>＝<b>壺（ナラティブ）</b>が立ち上がる。会話＝入力、受動データで「自分のがん」が整う。</div>
+      </div>
+    </div>
+  </div>
+  <div class="hf-stats">
+    <b>▸ 実行部隊パートナーの強み</b>
+    ・全国 20 拠点超のサポート網<br>
+    ・受付 KIOSK 大手<br>
+    ・医事 DX コンサル<br>
+    ・医療現場の信用と運用ノウハウ
+  </div>
+  <div class="hf-quote">
+    <b>表向きの表現：</b>我々のマネタイズの中で運営原資を作り、<b>実行部隊として共闘</b>。医療現場の信用を一気に獲得。
+  </div>
+  <div class="hf-mabuchi">
+    <b>★ 馬渕さん不安解消ポイント：</b>「医療現場の信用獲得」── 既に全国網のある実行部隊が並ぶ。SATOI は技術プラットフォーム、実行部隊は受付・運用、JOiNTは安全性ルール。<b>役割分担が明確</b>で、ピッチ時に「誰が何をやるか」が1画面で見える。
+  </div>
+</div>
+</section>
+
 <!-- ============ ログイン（登録済みの方）============ -->
 <section class="scr" id="signin">
   <div class="pad" style="padding-top:24px">
@@ -984,7 +1428,16 @@ window._oninit['investor']=async function(){
     <button class="btn btn-out" style="margin-top:14px;display:flex;align-items:center;justify-content:center;gap:7px" onclick="go('empse')"><i class="ti ti-mood-heart" style="color:var(--teal)"></i> いまの、わたしを確かめる</button>
     <button class="btn btn-teal" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> AIコンシェルジュに相談</button>
     <button class="btn btn-out" style="margin-top:10px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 相談したいこと（相談カード）</button>
-    <div style="margin-top:16px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
+    <!-- 標準治療を終えた方へ＝つぎの道入口（医療法6条の5配慮：直接表現せず注釈画面で説明） -->
+    <button class="card" style="margin-top:16px;width:100%;text-align:left;background:linear-gradient(180deg,#FBEEDE 0%,#F5F1E8 100%);border:.5px solid var(--amber-line);padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px" onclick="go('next_horizon_bridge')">
+      <span class="ic" style="width:38px;height:38px;background:#fff;color:var(--amber-t);border:.5px solid var(--amber-line);flex-shrink:0"><i class="ti ti-sun-high"></i></span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;color:var(--amber-t)">標準治療を終えた方へ — <span style="font-family:'EB Garamond',serif;font-style:italic">つぎの道</span></div>
+        <div class="note" style="font-size:11px;margin-top:2px;color:#7A5320;line-height:1.5">ACP（人生会議）・SDM（共同意思決定）の入口です。先に大切なお願いを読んでから進みます。</div>
+      </div>
+      <i class="ti ti-chevron-right" style="color:var(--amber-t)"></i>
+    </button>
+    <div style="margin-top:14px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
       <button class="navrow" onclick="go('community')"><span><i class="ti ti-headphones" style="color:var(--amber)"></i> みんなの広場（声・音楽）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('emergency')"><span><i class="ti ti-urgent" style="color:var(--red)"></i> 緊急時カード</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('plans')"><span><i class="ti ti-wallet" style="color:var(--teal)"></i> 会員と伴走について（料金）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
@@ -1904,10 +2357,27 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
       </div>
       <div class="note" style="text-align:center;margin-top:6px">出す前に、何度でも聞き返せます</div>
       <div class="card" style="margin-top:12px">
-        <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--teal-d)"><i class="ti ti-sparkles"></i> SATOIが、あなたの声を"言葉"にしました</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--teal-d)"><i class="ti ti-sparkles"></i> SATOIが、あなたの声を"言葉"にしました</div>
+          <button class="vs-listen" onclick="vsListen(this, (document.getElementById('vrTranscript')||{textContent:''}).textContent)" aria-label="読み上げで聞く" title="読み上げで聞く" style="background:var(--teal-bg);border:.5px solid var(--teal);color:var(--teal-d);border-radius:999px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;font:inherit;display:inline-flex;align-items:center;gap:4px"><i class="ti ti-volume"></i> 聞き返す</button>
+        </div>
         <div id="vrTranscript" style="font-size:13px;line-height:1.85;margin-top:7px;color:var(--ink)">「眠れない夜もあるけれど、子どもたちのそばで、自分らしく過ごしたい。」</div>
         <div class="note" style="margin-top:6px;font-size:11px;line-height:1.6">合っていれば、このまま残せます。違うところは直せます。<b>「声の物語」など他の患者さんへは、この"言葉（テキスト）"で届きます</b>（生の声は届きません）。<b>ご家族へは、あなたが選べば"声のまま"届けられます。</b>どちらも、あなたがOKした分だけ。</div>
         <button class="btn btn-out" style="margin-top:10px;padding:9px;font-size:13px" onclick="go('write')"><i class="ti ti-edit" style="vertical-align:-2px"></i> 少し直す</button>
+      </div>
+      <!-- AI要約 → 「これでいいですか？」確認 → 言葉のリレー -->
+      <div class="card" style="margin-top:12px;background:var(--amber-bg2);border:.5px solid var(--amber-line)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--amber-t)"><i class="ti ti-quote"></i> 言葉のリレーに届ける、要約（任意）</div>
+          <button class="vs-listen" onclick="vsListen(this, (document.getElementById('vrSummary')||{textContent:''}).textContent)" aria-label="要約を読み上げ" title="要約を読み上げ" style="background:#fff;border:.5px solid var(--amber-line);color:var(--amber-t);border-radius:999px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;font:inherit;display:inline-flex;align-items:center;gap:4px"><i class="ti ti-volume"></i> 聞く</button>
+        </div>
+        <div id="vrSummary" style="font-size:13px;line-height:1.9;margin-top:8px;color:#5A3A12">同じ夜を過ごしているあなたへ。眠れない夜もあるけれど、子どもたちのそばで、自分らしく過ごせる時間がある——それを伝えたい。</div>
+        <div class="note" style="margin-top:8px;font-size:11px;line-height:1.65;color:#7A5320">SATOIが、あなたの言葉から、他の患者さんに届けやすい形にやさしく整えました。<b>これでいいですか？</b> 違うときは戻ってやり直せます。</div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn" style="flex:1;background:var(--amber);color:#fff;border:none;padding:11px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;font:inherit" onclick="vrRelayConfirm()"><i class="ti ti-heart-handshake" style="vertical-align:-2px"></i> この要約で、言葉のリレーへ届ける</button>
+          <button class="btn btn-out" style="flex:0 0 auto;padding:11px 14px;font-size:13px;color:var(--amber-t);border-color:var(--amber-line)" onclick="vrRelayEdit()"><i class="ti ti-edit"></i> 直す</button>
+        </div>
+        <div class="note" style="margin-top:8px;font-size:10.5px;line-height:1.6;color:#7A5320"><i class="ti ti-info-circle" style="vertical-align:-1px"></i> 届くのは<b>このテキスト</b>だけです。あなたの生の声は届きません。匿名で、エールだけが返ってきます。</div>
       </div>
       <div class="card" style="margin-top:12px;background:#f6f7f5;border:none">
         <div style="font-size:12px;font-weight:600;margin-bottom:6px">この声は、どこに残しますか？</div>
@@ -2116,16 +2586,20 @@ window.toast=toast;
     <h1 class="h1" style="margin-top:10px">声の物語</h1>
     <div class="sub">同じ夜を過ごす誰かの言葉。無理に読まなくて大丈夫です</div>
     <div class="note" style="margin-top:10px;line-height:1.7;background:var(--amber-bg2);border-radius:12px;padding:10px 13px"><i class="ti ti-info-circle" style="vertical-align:-2px;color:var(--amber)"></i> ここに届くのは、ご本人が話した声を<b>SATOIが言葉にして、ご本人がOKしたテキスト</b>です。生の声は届きません。だから「聴く」でなく、そっと「<b>読む</b>」。</div>
-    <button class="card" style="margin-top:12px;width:100%;text-align:left;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('listen')">
+    <!-- 各カード：「読む」（詳細へ）と「聞く」（読み上げ）を両方提供。老眼配慮 -->
+    <div class="card" style="margin-top:12px;display:flex;align-items:center;gap:11px;padding:12px 14px">
       <span class="ic" style="width:40px;height:40px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-quote" style="font-size:20px;color:var(--amber)"></i></span>
-      <span style="flex:1"><span style="font-size:14px;font-weight:600;display:block">眠れない夜のこと</span><span class="note">40代・乳がん・治療中 ・ 読む</span></span>
-      <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
-    </button>
-    <button class="card" style="margin-top:10px;width:100%;text-align:left;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('listen')">
+      <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600">眠れない夜のこと</div><div class="note">40代・乳がん・治療中</div></div>
+      <button class="vs-listen" data-vsid="nemurenai" onclick="vsListen(this,'眠れない夜のことを読み上げます。 眠れない夜が続いて、誰にも言えませんでした。でも、ここに気持ちをそっと置けたら、ほんの少し軽くなった。同じ夜を過ごしているあなたへ——朝は、ちゃんと来ます。あせらず、あなたのペースで。')" aria-label="読み上げで聞く" title="読み上げで聞く" style="background:var(--amber-bg2);border:.5px solid var(--amber-line);color:var(--amber-t);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer;font:inherit;display:inline-flex;align-items:center;gap:5px"><i class="ti ti-volume"></i> 聞く</button>
+      <button onclick="go('listen')" aria-label="読む" title="読む" style="background:none;border:.5px solid var(--line2);color:var(--mute);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer;font:inherit;display:inline-flex;align-items:center;gap:5px"><i class="ti ti-eye"></i> 読む</button>
+    </div>
+    <div class="card" style="margin-top:10px;display:flex;align-items:center;gap:11px;padding:12px 14px">
       <span class="ic" style="width:40px;height:40px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-quote" style="font-size:20px;color:var(--amber)"></i></span>
-      <span style="flex:1"><span style="font-size:14px;font-weight:600;display:block">はじめての抗がん剤の前夜</span><span class="note">50代・治療中 ・ 読む</span></span>
-      <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
-    </button>
+      <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600">はじめての抗がん剤の前夜</div><div class="note">50代・治療中</div></div>
+      <button class="vs-listen" data-vsid="kounganzai" onclick="vsListen(this,'はじめての抗がん剤の前夜のことを読み上げます。 明日からはじまる治療のことが、頭をぐるぐると巡って眠れませんでした。怖いし、わからないし、髪のことも気になる。それでも朝、看護師さんが声をかけてくれて、ふっと肩の力が抜けた。怖さは消えないけれど、ひとりじゃないと思えた夜。')" aria-label="読み上げで聞く" title="読み上げで聞く" style="background:var(--amber-bg2);border:.5px solid var(--amber-line);color:var(--amber-t);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer;font:inherit;display:inline-flex;align-items:center;gap:5px"><i class="ti ti-volume"></i> 聞く</button>
+      <button onclick="go('listen')" aria-label="読む" title="読む" style="background:none;border:.5px solid var(--line2);color:var(--mute);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer;font:inherit;display:inline-flex;align-items:center;gap:5px"><i class="ti ti-eye"></i> 読む</button>
+    </div>
+    <div class="note" style="margin-top:10px;line-height:1.7;font-size:11.5px"><i class="ti ti-volume" style="vertical-align:-2px;color:var(--amber)"></i> 文字が疲れる日は、<b>「聞く」</b>で。SATOIがやさしく読み上げます。再生中は同じボタンで止まります。<br><span style="color:var(--hint);font-size:10.5px">※ 読み上げは合成音声です。生の声は届きません。</span></div>
     <button class="btn btn-out" style="margin-top:14px" onclick="go('voicerec')"><i class="ti ti-microphone" style="vertical-align:-2px;color:var(--amber)"></i> あなたの声も残す（言葉にして届ける）</button>
     <div class="lock"><i class="ti ti-lock"></i>声は本人の同意のもとで、言葉にして届けられています</div>
   </div>
@@ -2138,8 +2612,11 @@ window.toast=toast;
     <div style="margin-top:14px;background:var(--amber-bg);border-radius:16px;padding:16px">
       <span style="font-size:11px;color:var(--amber);background:var(--amber-bg2);padding:3px 9px;border-radius:999px">40代・乳がん・治療中</span>
       <div style="font-size:16px;font-weight:600;color:var(--amber-t);margin-top:10px">眠れない夜のこと</div>
-      <div style="font-size:14.5px;line-height:2;margin-top:12px;color:#3a3326"><i class="ti ti-quote" style="color:var(--amber);vertical-align:-2px"></i> 眠れない夜が続いて、誰にも言えませんでした。でも、ここに気持ちをそっと置けたら、ほんの少し軽くなった。同じ夜を過ごしているあなたへ——朝は、ちゃんと来ます。あせらず、あなたのペースで。</div>
-      <div class="note" style="margin-top:12px;font-size:11px;line-height:1.7;border-top:.5px solid var(--amber-line);padding-top:10px"><i class="ti ti-sparkles" style="vertical-align:-1px;color:var(--amber)"></i> ご本人が話した声を、SATOIが言葉にしました。ご本人がOKした言葉だけが、ここに届いています。<b>生の声は届きません</b>（聴き返せるのは、ご本人だけ）。だから、安心して読めます。</div>
+      <div id="listenBody" style="font-size:14.5px;line-height:2;margin-top:12px;color:#3a3326"><i class="ti ti-quote" style="color:var(--amber);vertical-align:-2px"></i> 眠れない夜が続いて、誰にも言えませんでした。でも、ここに気持ちをそっと置けたら、ほんの少し軽くなった。同じ夜を過ごしているあなたへ——朝は、ちゃんと来ます。あせらず、あなたのペースで。</div>
+      <!-- 大きな読み上げボタン（老眼配慮：48px以上） -->
+      <button class="vs-listen" data-vsid="listen-main" onclick="vsListen(this, (document.getElementById('listenBody')||{textContent:''}).textContent)" style="margin-top:14px;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:9px;background:var(--amber);color:#fff;border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font:inherit"><i class="ti ti-volume" style="font-size:20px"></i> <span class="vs-label">読み上げで聞く（ゆっくり）</span></button>
+      <div class="note" style="margin-top:8px;font-size:11px;line-height:1.6;text-align:center"><i class="ti ti-info-circle" style="vertical-align:-1px;color:var(--amber)"></i> 文字が疲れたら、耳でどうぞ。同じボタンで止められます。</div>
+      <div class="note" style="margin-top:12px;font-size:11px;line-height:1.7;border-top:.5px solid var(--amber-line);padding-top:10px"><i class="ti ti-sparkles" style="vertical-align:-1px;color:var(--amber)"></i> ご本人が話した声を、SATOIが言葉にしました。ご本人がOKした言葉だけが、ここに届いています。<b>生の声は届きません</b>（聴き返せるのは、ご本人だけ）。読み上げは<b>合成音声</b>です。</div>
     </div>
     <div style="display:flex;gap:10px;margin-top:14px">
       <button class="litbtn" onclick="lightUp(this)" style="flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:#B5701B;border-radius:14px;padding:12px;font-size:14px;font-weight:600;font:inherit"><i class="ti ti-flame"></i> 灯りをともす ・ <span class="lcount">128</span></button>
@@ -2222,6 +2699,86 @@ function saveVoice(){var el=document.getElementById('vrTranscript');
   var msg=(sel===1)?'家族に、声のまま届けました。お子さん・ご家族が、いつでも聞き返せます。':((sel===2)?'声を、言葉にして「声の物語」へ。あなたがOKした言葉だけが届きます。':'声を、壺に残しました');
   saveEntry('voice',el?el.textContent:'',msg);}
 function saveWoven(){var el=document.getElementById('weaveText');saveEntry('story',el?el.textContent:'','物語を、壺に残しました');}
+
+/* === 声の物語：読み上げ（合成音声）／聞く＝読むの代替 ===
+   - Web Speech API speechSynthesis を使用
+   - 同じボタンで開始/停止
+   - 日本語声をできるだけ女性ボイスから選ぶ
+   - 老眼で文字が疲れる方向け（高齢者ファースト[[satoi_two_track_plan_2_1_and_elderly]] と整合）
+*/
+window._vsBtn=null;
+function vsPickVoice(){
+  try{
+    var vs=window.speechSynthesis.getVoices()||[];
+    if(!vs.length)return null;
+    // 日本語 + 女性風を優先
+    var ja=vs.filter(function(v){return /ja|JP|Japanese/i.test(v.lang+' '+v.name);});
+    if(!ja.length)ja=vs;
+    var prefer=ja.find(function(v){return /Kyoko|Otoya|Female|Google.*Japanese/i.test(v.name);});
+    return prefer||ja[0];
+  }catch(e){return null;}
+}
+function vsUpdateBtn(btn,on){
+  if(!btn)return;
+  var ic=btn.querySelector('i.ti');
+  var lb=btn.querySelector('.vs-label');
+  if(on){
+    if(ic)ic.className='ti ti-player-stop';
+    if(lb)lb.textContent='読み上げを止める';
+    btn.setAttribute('data-on','1');
+  }else{
+    if(ic)ic.className='ti ti-volume';
+    if(lb)lb.textContent='読み上げで聞く（ゆっくり）';
+    btn.removeAttribute('data-on');
+  }
+}
+function vsStop(){
+  try{window.speechSynthesis.cancel();}catch(e){}
+  if(window._vsBtn)vsUpdateBtn(window._vsBtn,false);
+  window._vsBtn=null;
+}
+function vsListen(btn,text){
+  if(!('speechSynthesis' in window)){
+    if(typeof toast==='function')toast('お使いの端末では読み上げに対応していません。「読む」をご利用ください。');
+    return;
+  }
+  // 同じボタンを再タップ → 停止
+  if(window._vsBtn===btn){vsStop();return;}
+  // 別ボタンが押された → 旧側を止めて新側を開始
+  if(window._vsBtn)vsStop();
+  if(!text||!text.trim())return;
+  var u=new SpeechSynthesisUtterance(text);
+  u.lang='ja-JP';
+  u.rate=0.85;  // ゆっくり
+  u.pitch=1.0;
+  u.volume=1.0;
+  var v=vsPickVoice();if(v)u.voice=v;
+  u.onend=function(){if(window._vsBtn===btn){vsUpdateBtn(btn,false);window._vsBtn=null;}};
+  u.onerror=function(){if(window._vsBtn===btn){vsUpdateBtn(btn,false);window._vsBtn=null;}};
+  try{window.speechSynthesis.speak(u);}catch(e){return;}
+  window._vsBtn=btn;
+  vsUpdateBtn(btn,true);
+}
+// 画面遷移したら読み上げを止める（音が鳴り続ける問題対策）
+if(!window._vsHashWired){window._vsHashWired=true;
+  window.addEventListener('hashchange',function(){vsStop();});
+}
+// 音声リスト遅延ロード対策（一度発火させて voices をキャッシュ）
+try{window.speechSynthesis.onvoiceschanged=function(){};window.speechSynthesis.getVoices();}catch(e){}
+
+/* === 言葉のリレー：要約 → 確認 → 届ける === */
+function vrRelayConfirm(){
+  // 既存の届け先選択（ラジオ name=vd）の3番目「声の物語にも届ける」を強制ON
+  var radios=document.getElementsByName('vd');
+  for(var i=0;i<radios.length;i++){if(i===2)radios[i].checked=true;}
+  // saveVoice() 経由で既存の章生成フローに乗せる
+  if(typeof saveVoice==='function'){saveVoice();}
+  if(typeof toast==='function')toast('言葉のリレーに、そっと届けました。エールはあとで読めます。');
+}
+function vrRelayEdit(){
+  // テキストを書き直す画面へ
+  if(typeof go==='function')go('write');
+}
 /* === 読み返し：押すと、残した言葉の全文が読める === */
 var CHAPTERS={
   warau:{t:'子どもと、また笑えた',meta:'今日 ・ いまの光',voice:false,deliver:true,sdm:false,body:'下の子と、折り紙をした。髪が抜けはじめたことも、あの子は気にしない。ただ、笑ってくれた。\n\nこんなあたりまえの時間が、いまはいちばん愛おしい。「お母さん、じょうずだね」——その一言で、今日もちゃんと生きていられた。'},
@@ -3146,8 +3703,8 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
     </button>
     <div style="font-size:13px;font-weight:600;margin:16px 0 8px">どこから知りたい？</div>
     <div class="row2">
-      <button class="tile" onclick="svStart('self')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-user" style="font-size:24px;color:var(--rose)"></i></span><div style="font-size:14px;font-weight:600;margin-top:8px">あなた自身のこと</div><div class="note">段階・5年生存率から</div></button>
-      <button class="tile" onclick="svStart('near')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-users" style="font-size:24px;color:var(--amber)"></i></span><div style="font-size:14px;font-weight:600;margin-top:8px">身近な人のこと</div><div class="note">支える側として知る</div></button>
+      <button class="tile" onclick="startMyStage('self')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-user" style="font-size:24px;color:var(--rose)"></i></span><div style="font-size:14px;font-weight:600;margin-top:8px">あなた自身のこと</div><div class="note">がん種＋ステージ・段階を一画面で</div></button>
+      <button class="tile" onclick="startMyStage('family')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-users" style="font-size:24px;color:var(--amber)"></i></span><div style="font-size:14px;font-weight:600;margin-top:8px">身近な人のこと</div><div class="note">分かる範囲で、同じ画面で</div></button>
     </div>
     <!-- ★Katsu改修2026-05-28：22がん種を部位別8グループに分類表示（v7.3改善項目） -->
     <style>
@@ -3159,14 +3716,16 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
     </style>
     <div style="display:flex;align-items:center;justify-content:space-between;margin:16px 0 8px">
       <span style="font-size:13px;font-weight:600">がん種から調べる</span>
-      <span style="font-size:11px;color:var(--mute);font-weight:500">22種・部位別8グループ</span>
+      <span style="font-size:11px;color:var(--mute);font-weight:500">30種・部位別8グループ</span>
     </div>
 
     <div class="cgrp">
-      <div class="ch">頭頸部・胸部<span class="cd"></span><span class="cc">2</span></div>
+      <div class="ch">頭頸部・胸部<span class="cd"></span><span class="cc">4</span></div>
       <div class="row2">
         <button class="tile" onclick="openCancer('headneck')">頭頸部がん</button>
-        <button class="tile" onclick="openCancer('lung')">肺がん</button>
+        <button class="tile" onclick="openCancer('lung')">肺がん（非小細胞 NSCLC）</button>
+        <button class="tile" onclick="openCancer('sclc')">肺がん（小細胞 SCLC）</button>
+        <button class="tile" onclick="openCancer('mesothelioma')">胸膜中皮腫</button>
       </div>
     </div>
     <div class="cgrp">
@@ -3181,27 +3740,31 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
       </div>
     </div>
     <div class="cgrp">
-      <div class="ch">乳腺・婦人科<span class="cd"></span><span class="cc">4</span></div>
+      <div class="ch">乳腺・婦人科<span class="cd"></span><span class="cc">5</span></div>
       <div class="row2">
         <button class="tile" onclick="go('bccare')">乳がん</button>
+        <button class="tile" onclick="openCancer('tnbc')">乳がん（トリプルネガティブ）</button>
         <button class="tile" onclick="openCancer('cervix')">子宮頸がん</button>
         <button class="tile" onclick="openCancer('endometrium')">子宮体がん</button>
         <button class="tile" onclick="openCancer('ovary')">卵巣がん</button>
       </div>
     </div>
     <div class="cgrp">
-      <div class="ch">泌尿器<span class="cd"></span><span class="cc">3</span></div>
+      <div class="ch">泌尿器<span class="cd"></span><span class="cc">4</span></div>
       <div class="row2">
         <button class="tile" onclick="openCancer('kidney')">腎臓がん</button>
+        <button class="tile" onclick="openCancer('ureter')">腎盂・尿管がん</button>
         <button class="tile" onclick="openCancer('bladder')">膀胱がん</button>
         <button class="tile" onclick="openCancer('prostate')">前立腺がん</button>
       </div>
     </div>
     <div class="cgrp">
-      <div class="ch">皮膚・リンパ<span class="cd"></span><span class="cc">2</span></div>
+      <div class="ch">皮膚・リンパ<span class="cd"></span><span class="cc">4</span></div>
       <div class="row2">
         <button class="tile" onclick="openCancer('melanoma')">皮膚がん（メラノーマ）</button>
-        <button class="tile" onclick="openCancer('lymphoma')">悪性リンパ腫</button>
+        <button class="tile" onclick="openCancer('lymphoma')">非ホジキンリンパ腫</button>
+        <button class="tile" onclick="openCancer('hodgkin')">ホジキンリンパ腫</button>
+        <button class="tile" onclick="openCancer('pmbcl')">PMBCL</button>
       </div>
     </div>
     <div class="cgrp">
@@ -3219,8 +3782,13 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
       </div>
     </div>
     <div class="cgrp">
-      <div class="ch">その他<span class="cd"></span><span class="cc">1</span></div>
-      <button class="tile single" style="width:100%" onclick="openCancer('cup')">原発不明がん</button>
+      <div class="ch">バイオマーカー・その他<span class="cd"></span><span class="cc">5</span></div>
+      <div class="row2">
+        <button class="tile" onclick="openCancer('msih')">MSI-High 固形がん</button>
+        <button class="tile" onclick="openCancer('tmbh')">TMB-High 固形がん</button>
+        <button class="tile" onclick="openCancer('cup')">原発不明がん</button>
+        <button class="tile" onclick="openCancer('childhood')">こどものがん</button>
+      </div>
     </div>
     <button class="card" style="width:100%;text-align:left;margin-top:12px;background:var(--blue-bg);border:none;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('precision')">
       <span class="ic ic46" style="background:#fff"><i class="ti ti-dna-2" style="font-size:24px;color:var(--blue)"></i></span>
@@ -5704,7 +6272,7 @@ Object.assign(BC_TERMS,{
   <div class="sechd"><i class="ti ti-target-arrow"></i>あなたの何に役立つ？</div><div class="card" style="font-size:14px;line-height:1.85">診断の決め手であると同時に、<b>治療がどれだけ効いているか・再発していないかを見る“ものさし”</b>になります。数値の推移を主治医と一緒に追っていくのが基本です。</div>`},
  iss:{t:'ISS／R-ISS（骨髄腫の病期）',body:`<p style="font-size:14px;line-height:1.9">「ステージⅢ」と言われて怖くなっていませんか。骨髄腫の病期は、固形がんの病期とは意味が違います。</p>
   <div class="sechd" style="margin-top:14px"><i class="ti ti-stairs"></i>これは何？</div><div class="card" style="font-size:14px;line-height:1.85">骨髄腫の勢いを、<b>血液検査の値（β2ミクログロブリン・アルブミン）</b>などからⅠ〜Ⅲ期で表す分類がISS。近年はLDHや染色体の異常も加えた「R-ISS」が使われます。広がりの距離ではなく、全身への影響度の指標です。</div>
-  <div class="sechd"><i class="ti ti-target-arrow"></i>あなたの何に役立つ？</div><div class="card" style="font-size:14px;line-height:1.85">これは“余命の番号”ではなく、<b>どのくらいの強さで治療を組むかを決める目安</b>。同じ病期でも新しい薬で見通しは変わります。数字に支配されず、治療の地図として使ってください。</div>`},
+  <div class="sechd"><i class="ti ti-target-arrow"></i>あなたの何に役立つ？</div><div class="card" style="font-size:14px;line-height:1.9">これは“余命の番号”ではなく、<b>どのくらいの強さで治療を組むかを決める目安</b>です。新しい薬・治療法・ガイドラインの更新で、同じ病期でも<b>見えてくる景色は確実に広がってきています</b>。数字にとらわれず、これからの治療を主治医と一緒に選ぶための地図として使ってください。</div>`},
  crab:{t:'CRAB症状（骨・腎・貧血・カルシウム）',body:`<p style="font-size:14px;line-height:1.9">「腰が痛い」「だるい」——その症状、骨髄腫のサインかもしれません。治療を始める目安にもなります。</p>
   <div class="sechd" style="margin-top:14px"><i class="ti ti-alert-triangle"></i>これは何？</div><div class="card" style="font-size:14px;line-height:1.85">骨髄腫が体に影響を及ぼしているサインの頭文字をまとめた言葉。<b>C＝高カルシウム血症、R＝腎障害、A＝貧血、B＝骨病変（骨が溶ける・痛み・骨折）</b>。これらが出ているかどうかが、治療を始める大切な判断材料です。</div>
   <div class="sechd"><i class="ti ti-target-arrow"></i>あなたの何に役立つ？</div><div class="card" style="font-size:14px;line-height:1.85">症状の意味が分かると、何を主治医に伝えるべきかが見えてきます。骨の痛み・強いだるさ・尿の変化・のどの渇きなどは、早めに相談を。それぞれ和らげる手当てがあります。</div>`}
@@ -6227,7 +6795,7 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
   function detailBtn(k){var nm=NAMES[k]||'このがん';return '<button class="btn btn-out" style="margin-top:12px" onclick="'+detailCall(k)+'"><i class="ti ti-chevron-right" style="vertical-align:-2px"></i> '+nm+'の治療・病期をくわしく</button>';}
   var who='',can='',stg='';
   function chip(t,call){return '<button class="chip amber" style="margin:0 8px 8px 0" onclick="'+call+'">'+t+'</button>';}
-  function frame(){return '<div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:13px;line-height:1.9;color:var(--teal-d)"><b>これは“過去の平均”です。</b> あなたの結果は、あなただけのもの。ステージは“余命の番号”ではなく、<b>治療を決める地図</b>です。最新の治療が加わるたび、数字は上がっています。</div><div class="note" style="margin-top:8px;line-height:1.65"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター（病期別5年相対生存率の目安）。※数字は目安で、公開時に最新データ・専門医監修。あなたの見通しは主治医とご確認を。</div>';}
+  function frame(){return '<div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:13px;line-height:1.95;color:var(--teal-d)"><b>これは“過去の平均”です。</b> あなたの結果は、あなただけのもの。ステージは“余命の番号”ではなく、<b>これからの治療を一緒に選ぶための地図</b>です。<br><br>新しい薬・治療法・<b>ガイドラインの更新</b>はいま、ものすごい速さで続いています。<b>ステージⅣであっても、いまの治療で見えてくる景色は、この数字の頃よりずっと広がってきています</b>。<br><br>大切なのは、数字にとらわれないこと。<b>まず主治医に相談しながら、あなたに合う道を、一緒に選んでいきましょう。</b>これはあくまで目安——あなたの本当の見通しは、ここではなく、診察室の中にあります。</div><div class="note" style="margin-top:8px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター（病期別5年相対生存率の目安）。このデータは過去の集団の平均で、<b>最新の治療法・薬の効果はまだ反映されていません</b>。あなたの見通しは、最新ガイドラインを踏まえて主治医とご確認ください。</div>';}
   function actions(){return '<button class="btn btn-teal" style="margin-top:16px" onclick="go(\'treatment\')"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> 治療を知る</button><button class="btn btn-out" style="margin-top:10px" onclick="go(\'ai\')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュに相談する</button><button class="btn btn-out" style="margin-top:10px" onclick="svReset()"><i class="ti ti-refresh" style="vertical-align:-2px"></i> もう一度しらべる</button>';}
   function R(){var e=document.getElementById('svStep');if(!e)return;var h='';
     if(!who){
@@ -6727,8 +7295,62 @@ window._oninit['profilesetup']=function(){
   try{var ls=localStorage.getItem('satoi_profile'); if(ls){var pf=JSON.parse(ls); if(pf.who)window._tmpWho=pf.who; if(pf.cancer)window._tmpCancer=pf.cancer; if(pf.stage)window._tmpStage=pf.stage;}}catch(e){}
   /* 'cervix' はコード上のデフォルトなので、保存値が無ければ未選択扱い */
   if(!window._tmpCancer && window._myCancer && window._myCancer!=='cervix'){window._tmpCancer=window._myCancer;}
+  /* cancer等から渡された場合の上書き */
+  if(window._psForceWho){window._tmpWho=window._psForceWho;window._psForceWho=null;}
+  /* who別の見出し差し替え（身近な人/自分/関心）★Katsu要望2026-05-29 */
+  var dawn=document.querySelector('#profilesetup .dawn .t');
+  if(dawn){
+    var w=window._tmpWho;
+    var headlines={
+      self:    {t:'あなたのこと、少しだけ',          s:'登録ありがとうございます。あなた向けに整えるために'},
+      family:  {t:'身近な方のこと、分かる範囲で',    s:'分かる部分だけで大丈夫。あとから直せます'},
+      interest:{t:'関心のあるがんについて',          s:'まだ自分ごとでなくて大丈夫。読み物のおすすめが整います'}
+    };
+    var hd=headlines[w]||headlines.self;
+    var tx=dawn.querySelector('div:first-child');var sb=dawn.querySelector('.sub');
+    if(tx)tx.textContent=hd.t;
+    if(sb)sb.textContent=hd.s;
+  }
+  /* 「いま、どなたのことで？」の見出しも whoForce 来訪時に意図反映 */
+  var h1s=document.querySelectorAll('#profilesetup .h1');
+  if(h1s && h1s[0]){
+    var w2=window._tmpWho;
+    h1s[0].textContent=(w2==='family')?'どなたの「身近な方」？':(w2==='interest')?'関心のあるテーマ':'いま、どなたのことで？';
+  }
   renderProfileSetupUI();
 };
+/* cancer などから「あなた自身/身近な人」を選んで gan種＋ステージへ進む統一エントリ ★[[open_requirement_entry_cancer_stage]] */
+function startMyStage(who){
+  who=who||'self';
+  window._psForceWho=who;
+  window._psFrom='cancer'; /* 完了/スキップ後の戻り先 */
+  go('profilesetup');
+}
+window.startMyStage=startMyStage;
+/* saveProfileSetup/skipProfileSetup の戻り先を cancer 経由なら cancer/canpage に */
+(function(){
+  var origSave=window.saveProfileSetup, origSkip=window.skipProfileSetup;
+  window.saveProfileSetup=function(){
+    var who=window._tmpWho||'self';
+    var c=window._tmpCancer||'', s=window._tmpStage||'';
+    window._myWho=who;
+    if(c)window._myCancer=c;
+    if(s)window._myStage=s;
+    try{localStorage.setItem('satoi_profile', JSON.stringify({who:who, cancer:c, stage:s, saved:Date.now()}));}catch(e){}
+    if(typeof toast==='function')toast(who==='family'?'保存しました。身近な方向けに整えます。':'保存しました。あなた向けに整えます。');
+    if(window._psFrom==='cancer'){
+      window._psFrom=null;
+      if(c && typeof openCancer==='function'){openCancer(c);return;}
+      if(typeof go==='function'){go('cancer');return;}
+    }
+    if(typeof afterAuth==='function')afterAuth();else go('mypage');
+  };
+  window.skipProfileSetup=function(){
+    try{localStorage.setItem('satoi_profile', JSON.stringify({who:window._tmpWho||'self', cancer:'', stage:'', saved:Date.now(), skipped:true}));}catch(e){}
+    if(window._psFrom==='cancer'){window._psFrom=null;if(typeof go==='function'){go('cancer');return;}}
+    if(typeof afterAuth==='function')afterAuth();else go('mypage');
+  };
+})();
 window._oninit['onboarding']=function(){
   var f=document.getElementById('obForm'), d=document.getElementById('obDone'), t=document.getElementById('obTitle'), su=document.getElementById('obSub');
   if(window._isMember){
@@ -6801,7 +7423,7 @@ if(window._dialect===undefined)window._dialect='標準語';
 /* 患者の現在地（選択中のがん種・ステージ）＝迷子防止。治療の流れ等の遷移先をがん種別に紐付ける */
 if(window._myCancer===undefined)window._myCancer='cervix';
 if(window._myStage===undefined)window._myStage='';
-window.CANCER_JA={breast:'乳がん',lung:'肺がん',stomach:'胃がん',colon:'大腸がん',prostate:'前立腺がん',pancreas:'すい臓がん',liver:'肝臓がん',esophagus:'食道がん',cervix:'子宮頸がん',endometrium:'子宮体がん',ovary:'卵巣がん',lymphoma:'悪性リンパ腫',leukemia:'白血病',myeloma:'多発性骨髄腫',headneck:'頭頸部がん',biliary:'胆道がん',kidney:'腎臓がん',bladder:'膀胱がん',brain:'脳腫瘍',thyroid:'甲状腺がん',melanoma:'皮膚がん（メラノーマ）',cup:'原発不明がん'};
+window.CANCER_JA={breast:'乳がん',tnbc:'乳がん（トリプルネガティブ）',lung:'肺がん（非小細胞 NSCLC）',sclc:'肺がん（小細胞 SCLC）',mesothelioma:'胸膜中皮腫',stomach:'胃がん',colon:'大腸がん',prostate:'前立腺がん',pancreas:'すい臓がん',liver:'肝臓がん',esophagus:'食道がん',cervix:'子宮頸がん',endometrium:'子宮体がん',ovary:'卵巣がん',lymphoma:'非ホジキンリンパ腫',hodgkin:'ホジキンリンパ腫',pmbcl:'PMBCL（原発性縦隔大細胞型B細胞リンパ腫）',leukemia:'白血病',myeloma:'多発性骨髄腫',headneck:'頭頸部がん',biliary:'胆道がん',kidney:'腎臓がん',ureter:'腎盂・尿管がん',bladder:'膀胱がん',brain:'脳腫瘍',thyroid:'甲状腺がん',melanoma:'皮膚がん（メラノーマ）',msih:'MSI-High 固形がん',tmbh:'TMB-High 固形がん',childhood:'こどものがん（小児がん）',cup:'原発不明がん'};
 function myCancerJa(){return (window.CANCER_JA&&window.CANCER_JA[window._myCancer])||'あなたのがん';}
 function goMyCancer(){if(window._myCancer==='breast'){go('bccare');}else if(window._myCancer&&typeof openCancer==='function'){openCancer(window._myCancer);}else{go('cancer');}}
 function goMyStage(){if(typeof svStart==='function'){svStart('self');if(window._myCancer&&typeof svC==='function')svC(window._myCancer);}else{go('survival');}}
