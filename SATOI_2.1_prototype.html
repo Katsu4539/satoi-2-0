@@ -2589,13 +2589,13 @@ window._oninit['benefitcat']=bcatRender;
     <div class="sub">「制度を使う／使わない」で、自己負担は大きく変わります。あなたの治療で見てみましょう</div>
     <div class="card" style="margin-top:14px">
       <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px">がん種</label>
-      <select id="msCancer" onchange="msCalc()"><option value="cervix" selected>子宮頸がん</option><option value="breast">乳がん</option><option value="colon">大腸がん</option><option value="lung">肺がん</option><option value="stomach">胃がん</option></select>
+      <select id="msCancer" onchange="msOnCancerChange()"></select>
       <label style="font-size:12px;font-weight:600;display:block;margin:14px 0 6px">ステージ</label>
       <select id="msStage" onchange="msCalc()"><option value="I">I</option><option value="II" selected>II</option><option value="III">III</option><option value="IV">IV</option></select>
       <label style="font-size:12px;font-weight:600;display:block;margin:14px 0 6px">治療内容</label>
-      <select id="msTreat" onchange="msCalc()"><option value="surgery">手術のみ</option><option value="chemo">化学療法</option><option value="ccrt" selected>同時化学放射線療法（CCRT）</option><option value="molecular">分子標的薬・免疫療法（長期）</option></select>
+      <select id="msTreat" onchange="msCalc()"></select>
       <label style="font-size:12px;font-weight:600;display:block;margin:14px 0 6px">世帯年収</label>
-      <select id="msIncome" onchange="msCalc()"><option value="low">〜370万円</option><option value="mid" selected>370〜770万円</option><option value="high">770〜1160万円</option></select>
+      <select id="msIncome" onchange="msCalc()"><option value="low">〜370万円</option><option value="mid" selected>370〜770万円</option><option value="high">770〜1160万円</option><option value="vhigh">1160万円超</option></select>
     </div>
     <div id="msResult" style="margin-top:14px"></div>
     <div id="msFoot" style="margin-top:12px"></div>
@@ -2604,27 +2604,159 @@ window._oninit['benefitcat']=bcatRender;
   </div>
 </section>
 <script>
+/* ★Katsu指示2026-05-29 PM: 全がん種(31)対応・がん種別コスト連動 */
 function msYen(n){return '¥'+Math.round(n).toLocaleString('ja-JP');}
+
+/* がん種別 治療コスト特性 (0.7-1.8の倍率＋デフォルト治療) */
+window.MS_CANCER_PROFILE={
+  /* 軽め(0.7-0.9) - 早期治療中心 */
+  thyroid:{mult:0.75,def:'surgery',label:'甲状腺がん'},
+  cervix:{mult:1.0,def:'ccrt',label:'子宮頸がん'},
+  /* 標準(1.0-1.1) */
+  breast:{mult:1.1,def:'hormone',label:'乳がん'},
+  colon:{mult:1.0,def:'chemo',label:'大腸がん'},
+  stomach:{mult:1.0,def:'chemo',label:'胃がん'},
+  prostate:{mult:0.95,def:'hormone',label:'前立腺がん'},
+  kidney:{mult:1.1,def:'immune',label:'腎臓がん'},
+  ureter:{mult:1.0,def:'chemo',label:'腎盂・尿管がん'},
+  bladder:{mult:1.0,def:'immune',label:'膀胱がん'},
+  endometrium:{mult:1.0,def:'surgery',label:'子宮体がん'},
+  hodgkin:{mult:1.0,def:'chemo',label:'ホジキンリンパ腫'},
+  melanoma:{mult:1.2,def:'immune',label:'皮膚がん（メラノーマ）'},
+  /* 中重(1.2-1.4) - 進行/高額薬剤 */
+  lung:{mult:1.3,def:'molecular',label:'肺がん（非小細胞 NSCLC）'},
+  sclc:{mult:1.3,def:'ccrt',label:'肺がん（小細胞 SCLC）'},
+  liver:{mult:1.3,def:'molecular',label:'肝臓がん'},
+  pancreas:{mult:1.4,def:'chemo',label:'すい臓がん'},
+  ovary:{mult:1.3,def:'molecular',label:'卵巣がん'},
+  brain:{mult:1.3,def:'ccrt',label:'脳腫瘍'},
+  headneck:{mult:1.2,def:'ccrt',label:'頭頸部がん'},
+  esophagus:{mult:1.3,def:'ccrt',label:'食道がん'},
+  biliary:{mult:1.3,def:'chemo',label:'胆道がん'},
+  mesothelioma:{mult:1.4,def:'molecular',label:'胸膜中皮腫'},
+  lymphoma:{mult:1.3,def:'chemo',label:'非ホジキンリンパ腫'},
+  /* 重(1.5+) - ADC/CAR-T/移植/高額免疫 */
+  tnbc:{mult:1.6,def:'adc',label:'乳がん（トリプルネガティブ）'},
+  pmbcl:{mult:1.6,def:'immune',label:'PMBCL（縦隔大細胞型B細胞リンパ腫）'},
+  leukemia:{mult:1.7,def:'cart',label:'白血病'},
+  myeloma:{mult:1.6,def:'transplant',label:'多発性骨髄腫'},
+  msih:{mult:1.5,def:'immune',label:'MSI-High 固形がん'},
+  tmbh:{mult:1.5,def:'immune',label:'TMB-High 固形がん'},
+  cup:{mult:1.3,def:'chemo',label:'原発不明がん'},
+  childhood:{mult:1.2,def:'chemo',label:'こどものがん（小児がん）'}
+};
+
+/* 治療内容 ベース（年）コスト */
+window.MS_TREAT_BASE={
+  surgery:1200000, chemo:900000, ccrt:1700000, molecular:6000000,
+  hormone:600000, adc:8000000, immune:7000000, transplant:15000000, cart:35000000
+};
+window.MS_TREAT_LABEL={
+  surgery:'手術のみ', chemo:'化学療法', ccrt:'同時化学放射線療法（CCRT）',
+  molecular:'分子標的薬（長期）', hormone:'ホルモン療法（内分泌療法）',
+  adc:'抗体薬物複合体（ADC）', immune:'免疫チェックポイント阻害薬',
+  transplant:'造血幹細胞移植', cart:'CAR-T療法'
+};
+window.MS_TREAT_MONTHS={
+  surgery:2, chemo:4, ccrt:4, molecular:12,
+  hormone:12, adc:12, immune:12, transplant:6, cart:3
+};
+
+/* がん種ドロップダウン動的生成 */
+function msPopulateCancerSelect(){
+  var sel=document.getElementById('msCancer');if(!sel)return;
+  /* 8グループ順で並べる */
+  var groups=[
+    ['頭頸部・胸部',['headneck','lung','sclc','mesothelioma']],
+    ['消化器・肝胆膵',['esophagus','stomach','colon','liver','biliary','pancreas']],
+    ['乳腺・婦人科',['breast','tnbc','cervix','endometrium','ovary']],
+    ['泌尿器',['kidney','ureter','bladder','prostate']],
+    ['皮膚・リンパ',['melanoma','lymphoma','hodgkin','pmbcl']],
+    ['血液・骨髄',['leukemia','myeloma']],
+    ['脳・内分泌',['brain','thyroid']],
+    ['バイオマーカー・その他',['msih','tmbh','cup','childhood']]
+  ];
+  var html='';var def=window._myCancer||'cervix';
+  groups.forEach(function(g){
+    html+='<optgroup label="'+g[0]+'">';
+    g[1].forEach(function(k){
+      var p=window.MS_CANCER_PROFILE[k];if(!p)return;
+      html+='<option value="'+k+'"'+(k===def?' selected':'')+'>'+p.label+'</option>';
+    });
+    html+='</optgroup>';
+  });
+  sel.innerHTML=html;
+}
+
+/* 治療内容ドロップダウン更新（がん種に応じて推奨をデフォルトに） */
+function msPopulateTreatSelect(forceDef){
+  var sel=document.getElementById('msTreat');if(!sel)return;
+  var cancerSel=document.getElementById('msCancer');
+  var cancer=cancerSel?cancerSel.value:'cervix';
+  var prof=window.MS_CANCER_PROFILE[cancer]||{def:'ccrt'};
+  var def=forceDef||sel.value||prof.def||'ccrt';
+  /* 全治療を出すが、推奨デフォルトを上に */
+  var order=['surgery','chemo','ccrt','molecular','hormone','adc','immune','transplant','cart'];
+  /* 推奨を先頭に */
+  order=order.filter(function(k){return k!==prof.def;}); order.unshift(prof.def);
+  var html='';
+  order.forEach(function(k){
+    var label=window.MS_TREAT_LABEL[k]||k;
+    var isRec=(k===prof.def);
+    html+='<option value="'+k+'"'+(k===def?' selected':'')+'>'+(isRec?'★推奨：':'')+label+'</option>';
+  });
+  sel.innerHTML=html;
+}
+
+function msOnCancerChange(){
+  msPopulateTreatSelect(true); /* がん種変更時は推奨デフォルトに */
+  msCalc();
+}
+
 function msCalc(){
-  var treat=document.getElementById('msTreat').value,stage=document.getElementById('msStage').value,income=document.getElementById('msIncome').value;
-  var base={surgery:1200000,chemo:900000,ccrt:1700000,molecular:6000000}[treat]||1000000;
+  var cancer=document.getElementById('msCancer').value;
+  var treat=document.getElementById('msTreat').value;
+  var stage=document.getElementById('msStage').value;
+  var income=document.getElementById('msIncome').value;
+  var prof=window.MS_CANCER_PROFILE[cancer]||{mult:1.0,label:'がん'};
+  var base=(window.MS_TREAT_BASE[treat]||1000000)*prof.mult;
   if(stage==='III')base*=1.2;if(stage==='IV')base*=1.5;if(stage==='I')base*=0.7;
-  base=Math.round(base/10000)*10000;var self=Math.round(base*0.3);
-  var cap=income==='low'?35400:(income==='mid'?87000:167400);
-  var months=treat==='molecular'?12:(treat==='ccrt'?4:(treat==='chemo'?4:2));
+  base=Math.round(base/10000)*10000;
+  var self=Math.round(base*0.3);
+  /* 高額療養費 上限額/月（年収区分） */
+  var cap=income==='low'?35400:(income==='mid'?87000:(income==='high'?167400:252600));
+  var months=window.MS_TREAT_MONTHS[treat]||3;
   var afterH=Math.min(self,cap*months);
-  var rate=income==='low'?0.05:(income==='mid'?0.10:0.20);
+  /* 医療費控除（簡易・所得税率を年収区分でラフに） */
+  var rate=income==='low'?0.05:(income==='mid'?0.10:(income==='high'?0.20:0.33));
   var afterD=afterH-Math.round(Math.max(0,afterH-100000)*rate/10000)*10000;
-  function bar(label,val,color,note){var w=Math.max(6,Math.round(val/base*100));return '<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--sub)">'+label+'</span><b>'+msYen(val)+'</b></div><div style="height:24px;background:var(--line);border-radius:8px;overflow:hidden"><div style="height:100%;width:'+w+'%;background:'+color+';border-radius:8px"></div></div>'+(note?'<div class="note" style="font-size:10.5px;margin-top:3px">'+note+'</div>':'')+'</div>';}
-  var h=bar('① 治療費の総額（目安）',base,'rgba(184,84,80,.55)','医療機関に請求される総額（10割）')
+  function bar(label,val,color,note){
+    var w=Math.max(6,Math.round(val/base*100));
+    return '<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--sub)">'+label+'</span><b>'+msYen(val)+'</b></div><div style="height:24px;background:var(--line);border-radius:8px;overflow:hidden"><div style="height:100%;width:'+w+'%;background:'+color+';border-radius:8px"></div></div>'+(note?'<div class="note" style="font-size:10.5px;margin-top:3px">'+note+'</div>':'')+'</div>';
+  }
+  var h=bar('① 治療費の総額（目安）',base,'rgba(184,84,80,.55)',prof.label+'＋'+(window.MS_TREAT_LABEL[treat]||treat)+'＋ステージ'+stage+' の総額（10割）')
    +bar('② 自己負担（健保3割）',self,'#D4622A','窓口での自己負担の素の額')
-   +bar('③ 高額療養費のあと',afterH,'var(--teal)','月の上限が効いて、ここまで下がる')
+   +bar('③ 高額療養費のあと',afterH,'var(--teal)','月の上限('+msYen(cap)+'/月)が効いて、ここまで下がる')
    +bar('④ 医療費控除のあと＝実質',afterD,'var(--teal-d)','確定申告で税が戻ったあとの実質負担');
   document.getElementById('msResult').innerHTML='<div class="card">'+h+'</div>';
   var saved=self-afterD;
   document.getElementById('msFoot').innerHTML='<div class="card" style="background:var(--teal-bg);border:none;text-align:center;font-size:13px;line-height:1.9;color:var(--teal-d)">制度を使うと、自己負担 <b>'+msYen(self)+'</b> が、実質 <b style="font-size:17px">'+msYen(afterD)+'</b> に。<br>約 <b>'+msYen(saved)+'</b> 軽くなる試算です。<span style="font-size:11px">（がん保険・自治体の助成を加えると、さらに）</span></div>';
 }
-window._oninit['moneysim']=msCalc;
+
+window._oninit['moneysim']=function(){
+  msPopulateCancerSelect();
+  msPopulateTreatSelect();
+  /* がん種設定済みの会員はそれを既定に＋ステージも復元 */
+  try{
+    var pf=localStorage.getItem('satoi_profile');
+    if(pf){
+      var p=JSON.parse(pf);
+      if(p&&p.cancer){var sc=document.getElementById('msCancer');if(sc){sc.value=p.cancer;}msPopulateTreatSelect(true);}
+      if(p&&p.stage&&['I','II','III','IV'].indexOf(p.stage)>=0){var ss=document.getElementById('msStage');if(ss)ss.value=p.stage;}
+    }
+  }catch(e){}
+  msCalc();
+};
 </script>
 
 <!-- ============ 申請カレンダー ============ -->
@@ -9339,11 +9471,13 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
   var SV_LIST=[['breast','乳がん'],['tnbc','乳がん（トリプルネガティブ）'],['lung','肺がん（非小細胞）'],['sclc','肺がん（小細胞）'],['mesothelioma','胸膜中皮腫'],['stomach','胃がん'],['colon','大腸がん'],['prostate','前立腺がん'],['pancreas','すい臓がん'],['liver','肝臓がん'],['esophagus','食道がん'],['cervix','子宮頸がん'],['endometrium','子宮体がん'],['ovary','卵巣がん'],['lymphoma','非ホジキンリンパ腫'],['hodgkin','ホジキンリンパ腫'],['pmbcl','PMBCL'],['leukemia','白血病'],['myeloma','多発性骨髄腫'],['headneck','頭頸部がん'],['biliary','胆道がん'],['kidney','腎臓がん'],['ureter','腎盂・尿管がん'],['bladder','膀胱がん'],['brain','脳腫瘍'],['thyroid','甲状腺がん'],['melanoma','皮膚がん（メラノーマ）'],['msih','MSI-High 固形がん'],['tmbh','TMB-High 固形がん'],['childhood','こどものがん（小児）'],['cup','原発不明がん']];
   var NAMES={};SV_LIST.forEach(function(x){NAMES[x[0]]=x[1];});NAMES.other='その他・まだ分からない';
   function detailCall(k){return k==='breast'?"go('bccare')":"openCancer('"+k+"')";}
-  function detailBtn(k){var nm=NAMES[k]||'このがん';return '<button class="btn btn-out" style="margin-top:12px" onclick="'+detailCall(k)+'"><i class="ti ti-chevron-right" style="vertical-align:-2px"></i> '+nm+'の治療・病期をくわしく</button>';}
+  /* ★Katsu指示2026-05-29 PM: がん種選択済なら緑(primary)を「○○がんの治療・病期をくわしく」に。治療を知るハブはここでは不要 */
+  function detailBtn(k){var nm=NAMES[k]||'このがん';return '<button class="btn btn-teal" style="margin-top:12px" onclick="'+detailCall(k)+'"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> '+nm+'の治療・病期をくわしく</button>';}
   var who='',can='',stg='';
   function chip(t,call){return '<button class="chip amber" style="margin:0 8px 8px 0" onclick="'+call+'">'+t+'</button>';}
   function frame(){return '<div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:13px;line-height:1.95;color:var(--teal-d)">この5年相対生存率は、<b>過去に診断された患者集団のデータに基づく統計値</b>です。<b>近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療など、新しい治療選択肢の効果は、本データには反映されていません</b>。<br><br>病期（ステージ）は、予後の指標であると同時に、<b>治療方針を決めるための病期分類</b>です。集学的治療の進歩により、<b>ステージⅣの患者さんに対しても治療選択肢が拡大し、生存期間の延長やQOLの維持が報告されています</b>（国立がん研究センター 統計報告 等）。<br><br>本数値はあくまで集団としての目安です。個々の予後は、<b>組織型・分子標的の有無・全身状態・併存疾患</b>により異なります。<b>最新の診療ガイドラインを踏まえ、主治医とご相談ください</b>。SATOIは、その対話の準備と、あなたの言葉の整理を、そっとお手伝いします。</div><div class="note" style="margin-top:8px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス（病期別5年相対生存率）／各学会診療ガイドライン。本データは過去の患者集団の集計であり、最新治療の効果は十分には反映されていません。個別の予後評価は主治医にご確認ください。</div>';}
-  function actions(){return '<button class="btn btn-teal" style="margin-top:16px" onclick="go(\'treatment\')"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> 治療を知る</button><button class="btn btn-out" style="margin-top:10px" onclick="go(\'ai\')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュに相談する</button><button class="btn btn-out" style="margin-top:10px" onclick="svReset()"><i class="ti ti-refresh" style="vertical-align:-2px"></i> もう一度しらべる</button>';}
+  /* ★Katsu指示2026-05-29 PM: 「治療を知る」ハブ経由は不要・がん種別の緑バー(detailBtn)を主CTAに */
+  function actions(){return '<button class="btn btn-out" style="margin-top:10px" onclick="go(\'ai\')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュに相談する</button><button class="btn btn-out" style="margin-top:10px" onclick="svReset()"><i class="ti ti-refresh" style="vertical-align:-2px"></i> もう一度しらべる</button>';}
   function R(){var e=document.getElementById('svStep');if(!e)return;var h='';
     if(!who){
       h+='<div style="font-size:15px;font-weight:600;margin:14px 0 8px">どなたのことを、調べますか？</div><div>'+chip('わたし自身のこと',"svW('self')")+chip('身近な人のこと',"svW('near')")+'</div>';
