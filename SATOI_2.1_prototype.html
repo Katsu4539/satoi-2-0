@@ -9396,7 +9396,11 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
   window.svC=function(c){can=c;stg='';if(who==='self'&&c&&c!=='other'){window._myCancer=c;window._myStage='';}R();};
   window.svS=function(s){stg=s;if(who==='self'&&s&&s!=='NA')window._myStage=s;R();};
   window.svReset=function(){who='';can='';stg='';R();};
-  window.svStart=function(w){who=w;can='';stg='';go('survival');};
+  window.svStart=function(w){
+    /* ★Katsu指示2026-05-29 PM: がん種＋ステージは1ページ(profilesetup)で取る ─ [[open_requirement_entry_cancer_stage]] */
+    if(typeof window.startMyStage==='function'){return window.startMyStage(w||'self');}
+    who=w;can='';stg='';go('survival');
+  };
   window._oninit=window._oninit||{};
   window._oninit['survival']=function(){R();};
 })();
@@ -9690,7 +9694,7 @@ window._oninit['video']=function(){document.getElementById('vidCushion').style.d
   <button id="fab" onclick="go('ai')" aria-label="SATOIコンシェルジュに相談" style="position:fixed;bottom:72px;right:max(14px,calc(50% - 181px));z-index:50;display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:var(--teal);color:#fff;border:2px solid #fff;border-radius:50%;box-shadow:0 4px 16px rgba(13,115,119,.4);cursor:pointer"><i class="ti ti-sparkles" style="font-size:24px"></i></button>
   <nav id="tabbar" class="tabbar" aria-label="主要ナビゲーション">
     <button class="tabbtn" data-tab="home" onclick="go('home')" aria-label="ホーム"><span class="tico"><i class="ti ti-home" aria-hidden="true"></i></span><span class="tlab">ホーム</span></button>
-    <button class="tabbtn" data-tab="treatment" onclick="go('treatment')" aria-label="治療を知る"><span class="tico"><i class="ti ti-stethoscope" aria-hidden="true"></i></span><span class="tlab">治療</span></button>
+    <button class="tabbtn" data-tab="treatment" onclick="goMyCancer()" aria-label="病気を詳しく"><span class="tico"><i class="ti ti-stethoscope" aria-hidden="true"></i></span><span class="tlab">病気</span></button>
     <button class="tabbtn emp" data-tab="empse" onclick="go('empse')" aria-label="EMPSe いまの、わたし"><span class="empc"><i class="ti ti-chart-dots-3" aria-hidden="true"></i></span><span class="tlab">EMPSe</span></button>
     <button class="tabbtn" data-tab="story" onclick="go('story')" aria-label="物語"><span class="tico"><i class="ti ti-book" aria-hidden="true"></i></span><span class="tlab">物語</span></button>
     <button class="tabbtn" data-tab="mypage" onclick="go('mypage')" aria-label="マイページ"><span class="tico"><i class="ti ti-user" aria-hidden="true"></i></span><span class="tlab">マイページ</span></button>
