@@ -9845,7 +9845,7 @@ window._oninit['video']=function(){document.getElementById('vidCushion').style.d
   <button id="fab" onclick="go('ai')" aria-label="SATOIコンシェルジュに相談" style="position:fixed;bottom:72px;right:max(14px,calc(50% - 181px));z-index:50;display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:var(--teal);color:#fff;border:2px solid #fff;border-radius:50%;box-shadow:0 4px 16px rgba(13,115,119,.4);cursor:pointer"><i class="ti ti-sparkles" style="font-size:24px"></i></button>
   <nav id="tabbar" class="tabbar" aria-label="主要ナビゲーション">
     <button class="tabbtn" data-tab="home" onclick="go('home')" aria-label="ホーム"><span class="tico"><i class="ti ti-home" aria-hidden="true"></i></span><span class="tlab">ホーム</span></button>
-    <button class="tabbtn" data-tab="treatment" onclick="goMyCancer()" aria-label="病気を詳しく"><span class="tico"><i class="ti ti-stethoscope" aria-hidden="true"></i></span><span class="tlab">病気</span></button>
+    <button class="tabbtn" data-tab="treatment" onclick="go('treatment')" aria-label="治療を知る"><span class="tico"><i class="ti ti-stethoscope" aria-hidden="true"></i></span><span class="tlab">治療</span></button>
     <button class="tabbtn emp" data-tab="empse" onclick="go('empse')" aria-label="EMPSe いまの、わたし"><span class="empc"><i class="ti ti-chart-dots-3" aria-hidden="true"></i></span><span class="tlab">EMPSe</span></button>
     <button class="tabbtn" data-tab="story" onclick="go('story')" aria-label="物語"><span class="tico"><i class="ti ti-book" aria-hidden="true"></i></span><span class="tlab">物語</span></button>
     <button class="tabbtn" data-tab="mypage" onclick="go('mypage')" aria-label="マイページ"><span class="tico"><i class="ti ti-user" aria-hidden="true"></i></span><span class="tlab">マイページ</span></button>
@@ -10135,17 +10135,7 @@ function goMyStage(){
 }
 window._oninit['flow']=function(){var c=document.getElementById('flowCtx');if(c)c.textContent='あなたのがん：'+myCancerJa()+(window._myStage?(' ・ ステージ'+window._myStage):'');};
 window._oninit['treatment']=function(){
-  /* ★Katsu指示2026-05-29: がんを指定済みの会員は、そのがんの詳細ページに直接飛ばす（ループ防止） */
-  try{
-    var pf=localStorage.getItem('satoi_profile');
-    if(pf){
-      var p=JSON.parse(pf);
-      if(p && p.cancer && window._myCancer && typeof openCancer==='function'){
-        openCancer(window._myCancer);
-        return;
-      }
-    }
-  }catch(e){}
+  /* ★Katsu指示2026-05-29 PM: 自動リダイレクトは撤回(治療を知るハブを正常表示)。textContentのみ更新 */
   var t=document.getElementById('txMyCancer');if(t)t.textContent=myCancerJa();
 };
 /* 全コンテンツ画面に共通の「同じ道を歩く人の声」導線＝回遊→コミュニティ→EMPSeに還る（ログイン等は除外） */
