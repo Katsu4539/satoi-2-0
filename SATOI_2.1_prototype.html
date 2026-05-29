@@ -9536,7 +9536,14 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
     who=w;can='';stg='';go('survival');
   };
   window._oninit=window._oninit||{};
-  window._oninit['survival']=function(){R();};
+  window._oninit['survival']=function(){
+    /* ★Katsu指示2026-05-29 PM: #survival に到達したら必ず profilesetup (who+がん種+ステージ 1ページ) に飛ばす */
+    if(typeof window.startMyStage==='function'){
+      setTimeout(function(){window.startMyStage('self');},0);
+      return;
+    }
+    R();
+  };
 })();
 </script>
 
