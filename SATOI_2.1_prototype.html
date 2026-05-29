@@ -10111,7 +10111,11 @@ if(window._myStage===undefined)window._myStage='';
 window.CANCER_JA={breast:'乳がん',tnbc:'乳がん（トリプルネガティブ）',lung:'肺がん（非小細胞 NSCLC）',sclc:'肺がん（小細胞 SCLC）',mesothelioma:'胸膜中皮腫',stomach:'胃がん',colon:'大腸がん',prostate:'前立腺がん',pancreas:'すい臓がん',liver:'肝臓がん',esophagus:'食道がん',cervix:'子宮頸がん',endometrium:'子宮体がん',ovary:'卵巣がん',lymphoma:'非ホジキンリンパ腫',hodgkin:'ホジキンリンパ腫',pmbcl:'PMBCL（原発性縦隔大細胞型B細胞リンパ腫）',leukemia:'白血病',myeloma:'多発性骨髄腫',headneck:'頭頸部がん',biliary:'胆道がん',kidney:'腎臓がん',ureter:'腎盂・尿管がん',bladder:'膀胱がん',brain:'脳腫瘍',thyroid:'甲状腺がん',melanoma:'皮膚がん（メラノーマ）',msih:'MSI-High 固形がん',tmbh:'TMB-High 固形がん',childhood:'こどものがん（小児がん）',cup:'原発不明がん'};
 function myCancerJa(){return (window.CANCER_JA&&window.CANCER_JA[window._myCancer])||'あなたのがん';}
 function goMyCancer(){if(window._myCancer==='breast'){go('bccare');}else if(window._myCancer&&typeof openCancer==='function'){openCancer(window._myCancer);}else{go('cancer');}}
-function goMyStage(){if(typeof svStart==='function'){svStart('self');if(window._myCancer&&typeof svC==='function')svC(window._myCancer);}else{go('survival');}}
+function goMyStage(){
+  /* ★Katsu指示2026-05-29 PM: ガンステージ別々問題の最終解消 ─ svC呼び出しを削除しprofilesetup(1ページ)のみに */
+  if(typeof window.startMyStage==='function'){return window.startMyStage('self');}
+  if(typeof svStart==='function'){svStart('self');}else{go('survival');}
+}
 window._oninit['flow']=function(){var c=document.getElementById('flowCtx');if(c)c.textContent='あなたのがん：'+myCancerJa()+(window._myStage?(' ・ ステージ'+window._myStage):'');};
 window._oninit['treatment']=function(){
   /* ★Katsu指示2026-05-29: がんを指定済みの会員は、そのがんの詳細ページに直接飛ばす（ループ防止） */
