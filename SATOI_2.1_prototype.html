@@ -5559,9 +5559,10 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
     <button class="back" onclick="go('treatment')"><i class="ti ti-arrow-left"></i> 治療を知る</button>
     <h1 class="h1" style="margin-top:10px">がんを知る</h1>
     <div class="sub">どなたでも、やさしい言葉と出典で調べられます</div>
-    <button class="card" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('learn')">
+    <!-- ★Katsu指示2026-05-29: 学び・研究へのループ防止のため「どんながん？まず基礎から」カードを撤去（このページがその役割）→ 用語集ハブに統合 -->
+    <button class="card" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('glossary_hub')">
       <span class="ic" style="width:38px;height:38px;background:var(--blue-bg);flex-shrink:0"><i class="ti ti-help-circle" style="font-size:20px;color:var(--blue)"></i></span>
-      <span style="flex:1"><b style="font-weight:600;font-size:14px">どんながん？まず基礎から</b><span class="note" style="display:block">よく分からない方・調べはじめの方へ</span></span>
+      <span style="flex:1"><b style="font-weight:600;font-size:14px">そもそも がん・治療の用語をやさしく</b><span class="note" style="display:block">調べはじめの方は、用語の意味から</span></span>
       <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
     </button>
     <div style="font-size:13px;font-weight:600;margin:16px 0 8px">どこから知りたい？</div>
@@ -5712,7 +5713,9 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
     <button class="back" onclick="go('treatment')"><i class="ti ti-arrow-left"></i> 治療を知る</button>
     <h1 class="h1" style="margin-top:10px">学び・研究</h1>
     <div class="sub">確かな情報を、やさしく。最新の研究も</div>
-    <button class="card" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('cancer')"><span class="ic" style="width:38px;height:38px;background:var(--teal-bg);flex-shrink:0"><i class="ti ti-book-2" style="font-size:20px;color:var(--teal)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">がんの基礎を知る</b><span class="note" style="display:block">仕組み・治療の考え方</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    <!-- ★Katsu指示2026-05-29: ループ防止のため「がんの基礎を知る」を用語集ハブへ（がん種ブラウズは別カード「がん種から調べる」で別途） -->
+    <button class="card" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('glossary_hub')"><span class="ic" style="width:38px;height:38px;background:var(--teal-bg);flex-shrink:0"><i class="ti ti-book-2" style="font-size:20px;color:var(--teal)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">がん・治療の基礎用語をやさしく</b><span class="note" style="display:block">仕組み・治療の考え方の用語から</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+    <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('cancer')"><span class="ic" style="width:38px;height:38px;background:var(--rose-bg);flex-shrink:0"><i class="ti ti-stethoscope" style="font-size:20px;color:var(--rose)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">がん種から調べる</b><span class="note" style="display:block">30種を部位別グループでやさしく</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="window.open('https://www.ganjoho.jp/public/dia_tre/clinical_trial/index.html','_blank')"><span class="ic" style="width:38px;height:38px;background:var(--blue-bg);flex-shrink:0"><i class="ti ti-microscope" style="font-size:20px;color:var(--blue)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">最新の研究・治験</b><span class="note" style="display:block">参加できる治験を探す（がん情報サービス）</span></span><i class="ti ti-external-link" style="color:var(--mute)"></i></button>
     <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('glossary')"><span class="ic" style="width:38px;height:38px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-help-circle" style="font-size:20px;color:var(--amber)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">用語をやさしく</b><span class="note" style="display:block">「これは何？」辞典</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     <button class="card" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('recipes')"><span class="ic" style="width:38px;height:38px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-soup" style="font-size:20px;color:var(--amber)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">食べられたレシピ（みんなの知恵）</b><span class="note" style="display:block">つらい日でも食べられた一皿を、患者さん同士で分け合う</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
@@ -9972,7 +9975,20 @@ function myCancerJa(){return (window.CANCER_JA&&window.CANCER_JA[window._myCance
 function goMyCancer(){if(window._myCancer==='breast'){go('bccare');}else if(window._myCancer&&typeof openCancer==='function'){openCancer(window._myCancer);}else{go('cancer');}}
 function goMyStage(){if(typeof svStart==='function'){svStart('self');if(window._myCancer&&typeof svC==='function')svC(window._myCancer);}else{go('survival');}}
 window._oninit['flow']=function(){var c=document.getElementById('flowCtx');if(c)c.textContent='あなたのがん：'+myCancerJa()+(window._myStage?(' ・ ステージ'+window._myStage):'');};
-window._oninit['treatment']=function(){var t=document.getElementById('txMyCancer');if(t)t.textContent=myCancerJa();};
+window._oninit['treatment']=function(){
+  /* ★Katsu指示2026-05-29: がんを指定済みの会員は、そのがんの詳細ページに直接飛ばす（ループ防止） */
+  try{
+    var pf=localStorage.getItem('satoi_profile');
+    if(pf){
+      var p=JSON.parse(pf);
+      if(p && p.cancer && window._myCancer && typeof openCancer==='function'){
+        openCancer(window._myCancer);
+        return;
+      }
+    }
+  }catch(e){}
+  var t=document.getElementById('txMyCancer');if(t)t.textContent=myCancerJa();
+};
 /* 全コンテンツ画面に共通の「同じ道を歩く人の声」導線＝回遊→コミュニティ→EMPSeに還る（ログイン等は除外） */
 function connectStripHTML(){return '<div class="connectstrip" style="margin-top:18px;border-top:.5px solid var(--line);padding-top:14px"><div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><i class="ti ti-users-group" style="color:var(--amber)"></i><span style="font-size:14px;font-weight:600">あなたと同じ道を歩く人の声</span></div><button class="card" style="width:100%;text-align:left;cursor:pointer;display:flex;gap:10px;align-items:flex-start;background:var(--amber-bg2);border:.5px solid var(--amber-line)" onclick="go(\'match\')"><span class="ic" style="width:30px;height:30px;background:#fff;color:var(--rose);font-size:9px;flex-shrink:0">匿</span><span style="flex:1"><span style="font-size:13px;line-height:1.8;display:block;color:#5b4a2e">「同じ気持ちの夜を越えた人がいます。あなたは、ひとりじゃない。」</span><span style="font-size:11px;display:block;margin-top:4px;color:var(--amber-t);font-weight:600">似た状況の方の声を読む・エールを送る（恩送り）<i class="ti ti-chevron-right" style="vertical-align:-1px"></i></span></span></button></div>';}
 function injectConnect(id){
