@@ -181,8 +181,620 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
   setTimeout(enterApp,4400);
 })();
 </script>
-<script>window._oninit=window._oninit||{};</script>
+<script>window._oninit=window._oninit||{};
+
+/* ★Track B「SATOI ゆったり」モード切替・全画面適用・localStorage 永続化 2026-05-29 */
+window.ytEnabled=function(){return document.getElementById('app')&&document.getElementById('app').classList.contains('yuttari');};
+window.ytApply=function(on){
+  var app=document.getElementById('app');if(!app)return;
+  if(on){app.classList.add('yuttari');}else{app.classList.remove('yuttari');}
+  try{localStorage.setItem('satoi_yuttari',on?'1':'0');}catch(e){}
+  var dot=document.getElementById('ytDot');if(dot){dot.setAttribute('aria-pressed',on?'true':'false');dot.style.fontWeight=on?'900':'800';}
+  /* 読み上げを止める（モード切替時の安全） */
+  if(typeof vsStop==='function')vsStop();
+};
+window.ytToggle=function(){
+  var on=!window.ytEnabled();
+  window.ytApply(on);
+  if(typeof toast==='function')toast(on?'ゆったりモードに切り替えました。耳でも聞けます':'通常モードに戻りました');
+  /* ゆったりON時はゆったり専用ホームへ、OFF時は通常ホームへ */
+  if(typeof go==='function'){go(on?'yuttari_home':'home');}
+};
+/* 起動時：localStorageを参照してモード復元 */
+(function(){
+  try{
+    var v=localStorage.getItem('satoi_yuttari');
+    if(v==='1'){
+      /* DOMがまだ未構築なため、DOMContentLoaded で適用する */
+      document.addEventListener('DOMContentLoaded',function(){
+        window.ytApply(true);
+        /* 初回ロード時のハッシュが空なら、ゆったりホームへ */
+        if(!location.hash || location.hash==='#home'){setTimeout(function(){if(typeof go==='function')go('yuttari_home');},80);}
+      });
+    }
+  }catch(e){}
+})();
+
+/* ★話し方設定（v1.0ガバナンス対応・声/速度/方言/話しかけON-OFF/二段階確認）2026-05-29 */
+window._voiceSettings={gender:'female',rate:0.85,pitch:1.0,dialect:'auto',autoSpeak:true,confirmDelay:3,reduceAnim:true};
+(function(){
+  try{var v=localStorage.getItem('satoi_voice');if(v){var s=JSON.parse(v);for(var k in s){if(s.hasOwnProperty(k))window._voiceSettings[k]=s[k];}}}catch(e){}
+})();
+window.saveVoiceSettings=function(){
+  try{localStorage.setItem('satoi_voice',JSON.stringify(window._voiceSettings));}catch(e){}
+  if(typeof toast==='function')toast('話し方の設定を保存しました');
+};
+/* 既存 vsPickVoice を、設定の gender に応じて選び直す上書き */
+(function(){
+  var origPick=window.vsPickVoice;
+  window.vsPickVoice=function(){
+    try{
+      if(!window.speechSynthesis)return null;
+      var vs=window.speechSynthesis.getVoices()||[];
+      if(!vs.length)return null;
+      var ja=vs.filter(function(v){return /ja|JP|Japanese/i.test(v.lang+' '+v.name);});
+      if(!ja.length)ja=vs;
+      var g=(window._voiceSettings&&window._voiceSettings.gender)||'female';
+      var rxFemale=/Kyoko|Otoya|Female|Google.*Japanese.*Female|Haruka|Ayumi|Nanami|Yuna/i;
+      var rxMale=/Male|Hattori|Ichiro|Daisuke|Kenji/i;
+      var prefer=g==='male'?ja.find(function(v){return rxMale.test(v.name);}):ja.find(function(v){return rxFemale.test(v.name);});
+      return prefer||ja[0];
+    }catch(e){return origPick?origPick():null;}
+  };
+})();
+/* 既存 vsListen を、設定の rate / pitch を反映するように上書き */
+(function(){
+  var origListen=window.vsListen;
+  window.vsListen=function(btn,text){
+    if(!('speechSynthesis' in window)){if(typeof toast==='function')toast('お使いの端末では読み上げに対応していません');return;}
+    if(window._vsBtn===btn){if(typeof vsStop==='function')vsStop();return;}
+    if(window._vsBtn&&typeof vsStop==='function')vsStop();
+    if(!text||!text.trim())return;
+    var u=new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP';
+    u.rate=(window._voiceSettings&&window._voiceSettings.rate)||0.85;
+    u.pitch=(window._voiceSettings&&window._voiceSettings.pitch)||1.0;
+    u.volume=1.0;
+    var v=vsPickVoice();if(v)u.voice=v;
+    u.onend=function(){if(window._vsBtn===btn){if(typeof vsUpdateBtn==='function')vsUpdateBtn(btn,false);window._vsBtn=null;}};
+    u.onerror=function(){if(window._vsBtn===btn){if(typeof vsUpdateBtn==='function')vsUpdateBtn(btn,false);window._vsBtn=null;}};
+    try{window.speechSynthesis.speak(u);}catch(e){return;}
+    window._vsBtn=btn;
+    if(typeof vsUpdateBtn==='function')vsUpdateBtn(btn,true);
+  };
+})();
+
+/* ★未会員ゲート（v1.0ガバナンス：要配慮個情処理＋AIコスト管理のため、音声・AIアシストは会員専用） */
+window.requireMember=function(featureLabel,onAccept){
+  /* 会員判定：window._isMember または localStorage の satoi_profile/satoi_member */
+  var isMember=!!window._isMember;
+  if(!isMember){
+    try{var pf=localStorage.getItem('satoi_profile');if(pf)isMember=true;}catch(e){}
+  }
+  if(isMember){if(typeof onAccept==='function')onAccept();return true;}
+  /* 未会員：登録誘導モーダル */
+  if(typeof toast==='function')toast((featureLabel||'この機能')+'は会員登録すると使えます');
+  if(typeof go==='function')setTimeout(function(){go('onboarding');},800);
+  return false;
+};
+
+/* ★AIアシスト confirmGate（v1.0ガバナンス：二段階確認・3秒待機・30秒取消可能） */
+window.confirmGate=function(opts){
+  /* opts = {label:'xxx を実行', detail:'説明', onAccept:fn, urgency:false, reversible:true, voiceConfirm:true} */
+  opts=opts||{};
+  var modal=document.getElementById('cgModal');
+  if(!modal){
+    modal=document.createElement('div');modal.id='cgModal';
+    modal.style.cssText='position:fixed;inset:0;background:rgba(14,34,54,.55);display:none;align-items:center;justify-content:center;z-index:200;padding:20px';
+    modal.innerHTML='<div id="cgFrame" style="background:#fff;border-radius:18px;max-width:340px;width:100%;padding:22px 22px 18px;box-shadow:0 22px 60px rgba(0,0,0,.32);font-family:inherit"><div id="cgEyebrow" style="font-size:10px;font-weight:700;color:#B5701B;letter-spacing:.1em;margin-bottom:6px">▸ CONFIRM</div><div id="cgTitle" style="font-size:18px;font-weight:700;color:#1A1F2A;line-height:1.5">本当に進めますか？</div><div id="cgDetail" style="font-size:13px;color:#4C5562;line-height:1.75;margin-top:8px"></div><div id="cgCount" style="font-size:11px;color:#9B2D2D;margin-top:10px;font-weight:600;display:none">あと3秒…</div><div id="cgInfo" style="font-size:11px;color:#5a606a;background:#F1ECDF;border-radius:10px;padding:9px 12px;margin-top:12px;line-height:1.7">本人のご意思を確認するため、3秒お待ちください。実行後は30秒以内に「取り消す」で戻せます。</div><div style="display:flex;gap:10px;margin-top:14px"><button id="cgYes" style="flex:1;background:#0F6E56;color:#fff;border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit" disabled>進める</button><button id="cgNo" style="flex:0 0 auto;background:#fff;color:#26303F;border:1.5px solid #C9D1D9;border-radius:14px;padding:14px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">やめる</button></div></div>';
+    document.body.appendChild(modal);
+  }
+  var t=document.getElementById('cgTitle'),d=document.getElementById('cgDetail'),c=document.getElementById('cgCount'),y=document.getElementById('cgYes'),n=document.getElementById('cgNo'),info=document.getElementById('cgInfo');
+  t.textContent=opts.label||'本当に進めますか？';
+  d.textContent=opts.detail||'';
+  modal.style.display='flex';
+  /* 緊急時は3秒スキップ */
+  var delay=(opts.urgency===true)?0:(typeof opts.delaySec==='number'?opts.delaySec:((window._voiceSettings&&window._voiceSettings.confirmDelay)||3));
+  if(opts.urgency){
+    info.textContent='緊急時のため、すぐに実行できます。';
+    y.disabled=false;y.style.background='#9B2D2D';y.textContent='救急要請する';
+    c.style.display='none';
+  }else{
+    info.textContent='本人のご意思を確認するため、'+delay+'秒お待ちください。'+(opts.reversible!==false?' 実行後は30秒以内に「取り消す」で戻せます。':'');
+    y.disabled=true;y.style.background='#9CA3AF';y.style.cursor='not-allowed';y.textContent='進める';
+    c.style.display='block';
+    var left=delay;c.textContent='あと'+left+'秒…';
+    var iv=setInterval(function(){left--;if(left<=0){clearInterval(iv);c.style.display='none';y.disabled=false;y.style.background='#0F6E56';y.style.cursor='pointer';}else{c.textContent='あと'+left+'秒…';}},1000);
+    window._cgIv=iv;
+  }
+  /* 音声でも確認案内（読み上げ） */
+  if(opts.voiceConfirm!==false && typeof vsListen==='function'){
+    setTimeout(function(){vsListen({},'本当に進めますか。確認のため、'+delay+'秒お待ちください。');},80);
+  }
+  var done=function(execute){
+    if(window._cgIv){clearInterval(window._cgIv);window._cgIv=null;}
+    modal.style.display='none';
+    if(execute){
+      try{if(typeof opts.onAccept==='function')opts.onAccept();}catch(e){}
+      /* 30秒取消トースト */
+      if(opts.reversible!==false){
+        var undoBar=document.createElement('div');
+        undoBar.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#0E2236;color:#fff;border-radius:999px;padding:12px 20px;display:inline-flex;align-items:center;gap:14px;z-index:180;font-family:inherit;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.22)';
+        undoBar.innerHTML='<span>実行しました</span><button style="background:#B8954A;color:#fff;border:none;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">取り消す</button>';
+        var undoBtn=undoBar.querySelector('button');
+        undoBtn.onclick=function(){try{if(typeof opts.onUndo==='function')opts.onUndo();}catch(e){}undoBar.remove();};
+        document.body.appendChild(undoBar);
+        setTimeout(function(){if(undoBar&&undoBar.parentNode){undoBar.style.transition='opacity .5s';undoBar.style.opacity='0';setTimeout(function(){undoBar.remove();},520);}},30000);
+      }
+    }else{
+      try{if(typeof opts.onCancel==='function')opts.onCancel();}catch(e){}
+    }
+  };
+  y.onclick=function(){if(!y.disabled)done(true);};
+  n.onclick=function(){done(false);};
+};
+
+/* この画面の主要テキストを抽出して順に読み上げる（ゆったり時の常設FAB用） */
+window.ytReadCurrentScreen=function(btn){
+  /* ★未会員ゲート */
+  if(!window.requireMember('読み上げ機能',function(){window.ytReadCurrentScreen(btn);}))return;
+  if(!('speechSynthesis' in window)){if(typeof toast==='function')toast('お使いの端末では読み上げに対応していません');return;}
+  /* 既存のvsListenの状態と競合しないよう、まず全停止 */
+  if(typeof vsStop==='function')vsStop();
+  /* 現在のセクションを特定 */
+  var hash=(location.hash||'').slice(1)||'home';
+  var sec=document.getElementById(hash);if(!sec)sec=document.querySelector('section.scr.active')||document.querySelector('section.scr');
+  if(!sec)return;
+  /* テキスト抽出：h1/sub/sechd/cardの本文 */
+  var parts=[];
+  ['.h1','.sub','.sechd','p','.card','.note','summary'].forEach(function(sel){
+    sec.querySelectorAll(sel).forEach(function(el){
+      var t=(el.textContent||'').trim();if(t && t.length>2 && t.length<400 && parts.indexOf(t)<0)parts.push(t);
+    });
+  });
+  var text=parts.slice(0,30).join('。 ');
+  if(!text){if(typeof toast==='function')toast('この画面には読み上げる文章がありません');return;}
+  if(typeof vsListen==='function'){vsListen(btn||document.getElementById('ytListenBtn'),text);}
+};
+/* 話す＝コンシェルジュへ遷移（voicerec 経由でもよいが、ここでは ai セクションへ） */
+window.ytSpeakToConcierge=function(){
+  /* ★未会員ゲート */
+  if(!window.requireMember('SATOIコンシェルジュ',function(){window.ytSpeakToConcierge();}))return;
+  if(typeof go==='function')go('ai');
+  if(typeof toast==='function')toast('SATOIコンシェルジュに、声で話せます');
+};
+
+/* ★ペルソナ別の最初の話しかけ（profilesetup・壺データから推測）2026-05-29 */
+window.ytGreeting=function(){
+  /* 設定で autoSpeak OFF なら何もしない */
+  if(window._voiceSettings && window._voiceSettings.autoSpeak===false)return;
+  /* 未会員はゲート */
+  if(!window.requireMember('SATOIからの話しかけ',function(){window.ytGreeting();}))return;
+  /* 設定の dialect から、文体（標準語/関西弁/東北弁等）を変える */
+  var d=(window._voiceSettings&&window._voiceSettings.dialect)||'auto';
+  /* プロファイル読み込み */
+  var name='', cancerJa='', stage='', who='self';
+  try{
+    var pf=localStorage.getItem('satoi_profile');if(pf){var p=JSON.parse(pf);who=p.who||'self';if(p.cancer && window.CANCER_JA && window.CANCER_JA[p.cancer]){cancerJa=window.CANCER_JA[p.cancer];}stage=p.stage||'';}
+    var nm=localStorage.getItem('satoi_name');if(nm)name=nm;
+  }catch(e){}
+  /* 朝/昼/夜の区別 */
+  var h=new Date().getHours();
+  var aisatsu=h<11?'おはようございます':h<17?'こんにちは':'こんばんは';
+  var nameCall=name?(name+'さん'):'こんにちは';
+  /* ペルソナ別の本文 */
+  var parts=[];
+  parts.push(aisatsu+'、'+nameCall+'。SATOIです。');
+  if(cancerJa){
+    if(stage==='IV' || stage==='Ⅳ'){
+      parts.push(cancerJa+'と向き合われていますね。今日は、無理をなさらず、ゆっくりお過ごしください。');
+    }else if(stage==='PRE'||stage==='検査中'){
+      parts.push('検査の結果を待つ時間は、長く感じますね。今日できることを、一緒に整理しましょう。');
+    }else{
+      parts.push(cancerJa+'と一緒に、毎日を歩んでいらっしゃるのですね。');
+    }
+  }else{
+    parts.push('今日もご一緒に、ゆっくり進みましょう。');
+  }
+  parts.push('画面の下の「読み上げ」を押すと、この画面を私が読みます。「話す」を押すと、声でお応えします。');
+  parts.push('今日のご体調はいかがですか。');
+  var text=parts.join(' ');
+  /* 方言フィルタ（ライト：語尾と挨拶のみ） */
+  if(d==='関西弁'){text=text.replace(/ですね。/g,'ですなぁ。').replace(/ましょう。/g,'まひょか。');}
+  else if(d==='東北弁'){text=text.replace(/ですね。/g,'んだなぁ。').replace(/おはようございます/g,'おはやんし');}
+  else if(d==='九州弁'){text=text.replace(/ですね。/g,'やね。').replace(/ましょう。/g,'ましょうかね。');}
+  else if(d==='名古屋弁'){text=text.replace(/ですね。/g,'だがね。');}
+  /* 読み上げ */
+  if(typeof vsListen==='function'){vsListen({id:'ytGreetVirtual'},text);}
+};
+
+/* ★Cハイブリッド音声入力（短押し=トグル / 長押し=PTT）★Katsu要望2026-05-29
+   - 短押し：トグル開始/停止（じっくり話す）
+   - 長押し（350ms 以上ホールド）：PTT モード（離したら自動停止）
+   - Web Speech API SpeechRecognition で日本語認識
+   - 中間結果（interim）を画面下に表示しつつ、確定（final）テキストを蓄積
+   - 停止時に確認モーダル→壺に保存
+*/
+window._vtState={recognizing:false,mode:null,finalText:'',interim:'',startedAt:0,longPressTimer:null,timer:null,recognition:null,abortReason:null,longPressed:false,speaker:null};
+window.vtPressDown=function(e){
+  if(e&&e.preventDefault)e.preventDefault();
+  if(!window.requireMember('話しかけ機能',function(){}))return;
+  /* 既に録音中なら、二回目押下＝停止（トグル） */
+  if(window._vtState.recognizing){
+    /* 即停止＝トグル off */
+    window.vtStop('toggle');
+    return;
+  }
+  /* 長押し判定：350ms 押し続けたら PTT 開始 */
+  window._vtState.longPressed=false;
+  window._vtState.longPressTimer=setTimeout(function(){
+    window._vtState.longPressed=true;
+    window._vtState.mode='ptt';
+    window.vtStart('ptt');
+  },350);
+};
+window.vtPressUp=function(e){
+  if(e&&e.preventDefault)e.preventDefault();
+  if(window._vtState.longPressTimer){clearTimeout(window._vtState.longPressTimer);window._vtState.longPressTimer=null;}
+  if(window._vtState.longPressed && window._vtState.recognizing){
+    /* PTT 終了：離した瞬間に停止 */
+    window.vtStop('ptt-release');
+    window._vtState.longPressed=false;
+    return;
+  }
+  if(!window._vtState.longPressed && !window._vtState.recognizing){
+    /* 短押し（タップ）：トグル開始 */
+    window._vtState.mode='toggle';
+    window.vtStart('toggle');
+  }
+};
+window.vtPressCancel=function(e){
+  if(window._vtState.longPressTimer){clearTimeout(window._vtState.longPressTimer);window._vtState.longPressTimer=null;}
+  if(window._vtState.longPressed && window._vtState.recognizing){
+    window.vtStop('ptt-cancel');
+    window._vtState.longPressed=false;
+  }
+};
+/* ★話者選択モーダル（Katsu明示2026-05-29 SATOI Claude AI 中核）
+   音声入力前に「お話する方は？」を確認。本人/家族/一緒 を選択して以後の処理に反映。
+   一度選んだら15分間は同じ話者として続行（連続発話の利便性）。 */
+window._vtSpeakerMemo={speaker:null,setAt:0};
+function vtSpeakerRemembered(){
+  var m=window._vtSpeakerMemo;
+  if(!m||!m.speaker||!m.setAt)return null;
+  if(Date.now()-m.setAt>15*60*1000)return null;
+  return m.speaker;
+}
+window.vtAskSpeaker=function(onPick){
+  var existing=document.getElementById('vtSpeakerModal');
+  if(existing)existing.remove();
+  var m=document.createElement('div');m.id='vtSpeakerModal';
+  m.style.cssText='position:fixed;inset:0;background:rgba(14,34,54,.55);display:flex;align-items:flex-end;justify-content:center;z-index:200;padding:0';
+  m.innerHTML='<div style="background:#fff;border-radius:22px 22px 0 0;max-width:430px;width:100%;padding:18px 18px 22px;box-shadow:0 -10px 40px rgba(0,0,0,.22);font-family:inherit">'
+    +'<div style="width:42px;height:4px;background:#C9D1D9;border-radius:2px;margin:0 auto 12px"></div>'
+    +'<div style="font-size:11px;font-weight:700;color:var(--teal-d);letter-spacing:.06em">▸ お話する方を、確認します</div>'
+    +'<div style="font-size:14px;color:var(--ink);margin-top:4px;line-height:1.75">人によって受け止め方が違うので、SATOIは<b>本人/ご家族</b>を区別して記録します。間違いがないように、一度確認させてください。</div>'
+    +'<div style="border:.5px solid var(--line2);border-radius:14px;overflow:hidden;margin-top:14px">'
+    +'<button class="opt" data-sp="self" style="width:100%;text-align:left;background:none;border:none;padding:14px 16px;border-bottom:.5px solid var(--line);display:flex;align-items:center;gap:11px;cursor:pointer;font:inherit"><i class="ti ti-user" style="color:var(--teal);font-size:22px"></i><span style="flex:1"><b style="font-weight:600;font-size:14px">私（ご本人）</b><span class="note" style="display:block;font-size:11.5px">ご自身でお話されます</span></span></button>'
+    +'<button class="opt" data-sp="family-relay" style="width:100%;text-align:left;background:none;border:none;padding:14px 16px;border-bottom:.5px solid var(--line);display:flex;align-items:center;gap:11px;cursor:pointer;font:inherit"><i class="ti ti-heart-handshake" style="color:var(--rose);font-size:22px"></i><span style="flex:1"><b style="font-weight:600;font-size:14px">ご家族・付き添いの方（代弁）</b><span class="note" style="display:block;font-size:11.5px">ご本人の代わりに、状態をお伝えいただきます</span></span></button>'
+    +'<button class="opt" data-sp="family-with-self" style="width:100%;text-align:left;background:none;border:none;padding:14px 16px;display:flex;align-items:center;gap:11px;cursor:pointer;font:inherit"><i class="ti ti-users" style="color:var(--amber-t);font-size:22px"></i><span style="flex:1"><b style="font-weight:600;font-size:14px">ご一緒に（ご本人＋ご家族）</b><span class="note" style="display:block;font-size:11.5px">ご本人とご家族が交互にお話されます</span></span></button>'
+    +'</div>'
+    +'<div class="note" style="font-size:11px;line-height:1.7;margin-top:10px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> ご家族の代弁の場合、重要な決定の前に<b>ご本人への確認</b>を SATOI からお願いすることがあります。本人意思の尊重のためです（厚労省 ACPガイドライン2018／個情法 第17条）。</div>'
+    +'<button class="btn btn-out" style="margin-top:12px" onclick="document.getElementById(\'vtSpeakerModal\').remove()">やめる</button>'
+    +'</div>';
+  document.body.appendChild(m);
+  m.querySelectorAll('button.opt').forEach(function(b){
+    b.onclick=function(){
+      var sp=b.getAttribute('data-sp');
+      window._vtSpeakerMemo={speaker:sp,setAt:Date.now()};
+      m.remove();
+      if(typeof onPick==='function')onPick(sp);
+    };
+  });
+};
+
+window.vtStart=function(mode){
+  /* 既に話している（合成音声）なら止める */
+  if(typeof vsStop==='function')vsStop();
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){
+    if(typeof toast==='function')toast('お使いの端末は音声認識に対応していません。文字で入力してください');
+    return;
+  }
+  /* ★話者識別：15分以内に同じ話者なら確認をスキップ。それ以外は確認モーダル */
+  var remembered=vtSpeakerRemembered();
+  if(!remembered){
+    /* recognizing をリセットしてから確認 → 確認後に再開 */
+    window._vtState.recognizing=false;
+    window.vtAskSpeaker(function(sp){
+      window._vtState.speaker=sp;
+      vtStartInner(mode);
+    });
+    return;
+  }
+  window._vtState.speaker=remembered;
+  vtStartInner(mode);
+};
+function vtStartInner(mode){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return;
+  window._vtState.recognizing=true;
+  window._vtState.mode=mode;
+  window._vtState.finalText='';
+  window._vtState.interim='';
+  window._vtState.startedAt=Date.now();
+  window._vtState.abortReason=null;
+  /* UI 更新 */
+  var btn=document.getElementById('vtBigBtn'),icon=document.getElementById('vtBigIcon'),pulse=document.getElementById('vtPulse'),lbl=document.getElementById('vtLabel'),tm=document.getElementById('vtTime'),live=document.getElementById('vtLive');
+  if(btn){btn.setAttribute('data-on','1');btn.setAttribute('aria-pressed','true');}
+  if(icon)icon.className='ti ti-microphone';
+  if(pulse)pulse.style.display='block';
+  if(lbl)lbl.textContent=(mode==='ptt'?'押している間、話してください':'話してください（もう一度タップで終わり）');
+  if(tm){tm.style.display='block';tm.textContent='0:00';}
+  if(live){live.style.display='block';live.innerHTML='<span style="color:var(--mute)">…聴いています…</span>';}
+  /* タイマー */
+  window._vtState.timer=setInterval(function(){
+    var s=Math.floor((Date.now()-window._vtState.startedAt)/1000);
+    var mm=Math.floor(s/60),ss=s%60;if(tm)tm.textContent=mm+':'+(ss<10?'0':'')+ss;
+    /* 長すぎる録音は60秒で自動停止 */
+    if(s>=60){window.vtStop('auto-60s');}
+  },250);
+  /* 認識開始 */
+  try{
+    var r=new SR();
+    r.lang='ja-JP';r.interimResults=true;r.continuous=true;r.maxAlternatives=1;
+    r.onresult=function(ev){
+      var final='',interim='';
+      for(var i=ev.resultIndex;i<ev.results.length;i++){
+        var t=ev.results[i][0].transcript;
+        if(ev.results[i].isFinal)final+=t;else interim+=t;
+      }
+      if(final)window._vtState.finalText+=final;
+      window._vtState.interim=interim;
+      var lv=document.getElementById('vtLive');
+      if(lv){
+        var ft=window._vtState.finalText.trim();
+        var it=interim.trim();
+        lv.innerHTML='<span>'+(ft?ft+' ':'')+'</span><span style="color:var(--mute)">'+(it||'')+'</span>';
+        lv.scrollTop=lv.scrollHeight;
+      }
+    };
+    r.onerror=function(ev){
+      window._vtState.abortReason=ev&&ev.error||'error';
+      window.vtStop('err');
+    };
+    r.onend=function(){
+      /* PTT で離した直後／トグル停止で onend が来る */
+      if(window._vtState.recognizing){
+        /* まだ recognizing 状態 = 自動停止扱い */
+        window.vtStop('onend');
+      }
+    };
+    r.start();
+    window._vtState.recognition=r;
+  }catch(e){
+    if(typeof toast==='function')toast('音声認識を開始できませんでした');
+    window.vtStop('start-failed');
+  }
+}
+window.vtStop=function(reason){
+  if(!window._vtState.recognizing)return;
+  window._vtState.recognizing=false;
+  if(window._vtState.timer){clearInterval(window._vtState.timer);window._vtState.timer=null;}
+  try{if(window._vtState.recognition){window._vtState.recognition.stop();}}catch(e){}
+  var btn=document.getElementById('vtBigBtn'),icon=document.getElementById('vtBigIcon'),pulse=document.getElementById('vtPulse'),lbl=document.getElementById('vtLabel'),tm=document.getElementById('vtTime');
+  if(btn){btn.removeAttribute('data-on');btn.setAttribute('aria-pressed','false');}
+  if(icon)icon.className='ti ti-microphone';
+  if(pulse)pulse.style.display='none';
+  if(lbl)lbl.textContent='タップで開始 ／ 長押しで「押して話す」';
+  if(tm){tm.style.display='none';tm.textContent='0:00';}
+  /* 短すぎ（500ms未満）はキャンセル扱いで何もしない */
+  if((Date.now()-window._vtState.startedAt)<500){
+    var lv2=document.getElementById('vtLive');if(lv2){lv2.style.display='none';lv2.innerHTML='';}
+    return;
+  }
+  /* 確認モーダルを開いて編集→保存 */
+  var ft=(window._vtState.finalText+window._vtState.interim).trim();
+  if(!ft){
+    if(typeof toast==='function')toast('うまく聞き取れませんでした。もう一度お試しください');
+    var lv3=document.getElementById('vtLive');if(lv3){lv3.style.display='none';lv3.innerHTML='';}
+    return;
+  }
+  window.vtOpenReview(ft);
+};
+window.vtOpenReview=function(text){
+  var m=document.getElementById('vtReviewModal');
+  if(!m){
+    m=document.createElement('div');m.id='vtReviewModal';
+    m.style.cssText='position:fixed;inset:0;background:rgba(14,34,54,.55);display:flex;align-items:flex-end;justify-content:center;z-index:200;padding:0';
+    /* ★話者ラベル */
+  var sp=(window._vtState&&window._vtState.speaker)||'unknown';
+  var SPK_LBL={'self':{txt:'ご本人の発話',ic:'ti-user',c:'var(--teal)'},'family-relay':{txt:'ご家族（代弁）',ic:'ti-heart-handshake',c:'var(--rose)'},'family-with-self':{txt:'ご本人＋ご家族',ic:'ti-users',c:'var(--amber-t)'},'unknown':{txt:'話者未確認',ic:'ti-question-mark',c:'var(--mute)'}}[sp];
+  m.innerHTML='<div style="background:#fff;border-radius:22px 22px 0 0;max-width:430px;width:100%;padding:18px 18px 22px;box-shadow:0 -10px 40px rgba(0,0,0,.22);font-family:inherit;max-height:92vh;overflow-y:auto">'
+      +'<div style="width:42px;height:4px;background:#C9D1D9;border-radius:2px;margin:0 auto 12px"></div>'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">'
+      +'<div style="font-size:11px;font-weight:700;color:var(--teal-d);letter-spacing:.06em">▸ SATOI が、声を言葉にしました</div>'
+      +'<button onclick="window.vtAskSpeaker(function(s){window._vtState.speaker=s;document.getElementById(\'vtReviewModal\').remove();vtOpenReview(document.getElementById(\'vtReviewText\')?document.getElementById(\'vtReviewText\').value:\'\');})" style="background:'+SPK_LBL.c+'22;color:'+SPK_LBL.c+';border:.5px solid '+SPK_LBL.c+';border-radius:999px;padding:4px 11px;font-size:11px;font-weight:600;cursor:pointer;font:inherit;display:inline-flex;align-items:center;gap:5px"><i class="ti '+SPK_LBL.ic+'" style="font-size:13px"></i>'+SPK_LBL.txt+' <span style="font-size:10px;opacity:.7">変更</span></button>'
+      +'</div>'
+      +'<div style="font-size:13px;color:var(--mute);margin-top:4px;line-height:1.7">合っていれば、このまま残せます。違うところは直せます。</div>'
+      +(sp==='family-relay'?'<div class="note" style="margin-top:8px;padding:8px 12px;background:#FBE5E5;border-left:3px solid var(--rose);font-size:11.5px;line-height:1.7;color:#7a3b2c"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> ご家族の代弁として記録されます。<b>大切な決定はご本人の確認</b>をお願いします（厚労省ACPガイドライン）。</div>':'')
+      +'<textarea id="vtReviewText" rows="5" style="margin-top:11px;width:100%;font-size:14px;line-height:1.85;border:1px solid var(--line2);border-radius:12px;padding:11px 13px;resize:vertical;font:inherit"></textarea>'
+      +'<div style="margin-top:14px;font-size:12px;font-weight:700;color:var(--ink)">どこに、届けますか？（複数選択できます）</div>'
+      +'<div style="border:.5px solid var(--line2);border-radius:14px;overflow:hidden;margin-top:8px">'
+      +'<label class="opt" style="border-bottom:.5px solid var(--line);padding:11px 12px"><span style="display:flex;align-items:center;gap:9px;flex:1"><i class="ti ti-bowl" style="color:var(--amber-t);font-size:18px"></i><span><b style="font-weight:600">自分の壺に残す</b><span class="note" style="display:block;font-size:11px;color:var(--mute)">あなただけが読み返せる、心の記録</span></span></span><input id="vtDestKotsu" type="checkbox" checked style="width:auto"></label>'
+      +'<label class="opt" style="border-bottom:.5px solid var(--line);padding:11px 12px"><span style="display:flex;align-items:center;gap:9px;flex:1"><i class="ti ti-clipboard-heart" style="color:var(--teal);font-size:18px"></i><span><b style="font-weight:600">相談カードに入れる（SDM）</b><span class="note" style="display:block;font-size:11px;color:var(--mute)">主治医・看護師に伝える「私の声」</span></span></span><input id="vtDestSdm" type="checkbox" style="width:auto"></label>'
+      +'<label class="opt" style="border-bottom:.5px solid var(--line);padding:11px 12px"><span style="display:flex;align-items:center;gap:9px;flex:1"><i class="ti ti-heart-handshake" style="color:var(--rose);font-size:18px"></i><span><b style="font-weight:600">家族に届ける（声のまま）</b><span class="note" style="display:block;font-size:11px;color:var(--mute)">選んだ家族へ、あなたの本人の声</span></span></span><input id="vtDestFamily" type="checkbox" style="width:auto"></label>'
+      +'<label class="opt" style="border-bottom:.5px solid var(--line);padding:11px 12px"><span style="display:flex;align-items:center;gap:9px;flex:1"><i class="ti ti-quote" style="color:var(--amber);font-size:18px"></i><span><b style="font-weight:600">声の物語に届ける（匿名・言葉で）</b><span class="note" style="display:block;font-size:11px;color:var(--mute)">同じ夜を過ごす人へ、エールが返ります</span></span></span><input id="vtDestStories" type="checkbox" style="width:auto"></label>'
+      +'<label class="opt" style="padding:11px 12px"><span style="display:flex;align-items:center;gap:9px;flex:1"><i class="ti ti-video" style="color:var(--blue);font-size:18px"></i><span><b style="font-weight:600">ショート動画にする</b><span class="note" style="display:block;font-size:11px;color:var(--mute)">大切な人に届ける、やさしい動画(Gemini)</span></span></span><input id="vtDestVideo" type="checkbox" style="width:auto"></label>'
+      +'</div>'
+      +'<div class="note" style="font-size:11px;line-height:1.7;margin-top:10px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> あなたの声と記録は、SATOIの解析（副作用の傾向・インサイト・ナレッジ）にも役立てます（<b>個人特定なし</b>）。データの扱いは<a class="link" onclick="vtCancelReview();go(\'consent\')">同意ページ</a>でいつでも変更できます。</div>'
+      +'<div style="display:flex;gap:9px;margin-top:14px"><button onclick="vtSaveReview()" style="flex:1;background:var(--teal);color:#fff;border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font:inherit">届ける</button><button onclick="vtCancelReview()" style="flex:0 0 auto;background:#fff;border:1.5px solid var(--line2);color:var(--ink);border-radius:14px;padding:14px 18px;font-size:14px;font-weight:600;cursor:pointer;font:inherit">やめる</button></div>'
+      +'</div>';
+    document.body.appendChild(m);
+  }
+  document.getElementById('vtReviewText').value=text||'';
+  /* デフォルトは壺のみON */
+  ['vtDestKotsu'].forEach(function(id){var c=document.getElementById(id);if(c)c.checked=true;});
+  ['vtDestSdm','vtDestFamily','vtDestStories','vtDestVideo'].forEach(function(id){var c=document.getElementById(id);if(c)c.checked=false;});
+  m.style.display='flex';
+};
+window.vtSaveReview=function(){
+  var t=document.getElementById('vtReviewText'),v=(t&&t.value||'').trim();
+  if(!v){if(typeof toast==='function')toast('内容が空です');return;}
+  var k=document.getElementById('vtDestKotsu'),sdm=document.getElementById('vtDestSdm'),fam=document.getElementById('vtDestFamily'),st=document.getElementById('vtDestStories'),vid=document.getElementById('vtDestVideo');
+  var dest={kotsu:k&&k.checked,sdm:sdm&&sdm.checked,family:fam&&fam.checked,stories:st&&st.checked,video:vid&&vid.checked};
+  if(!dest.kotsu && !dest.sdm && !dest.family && !dest.stories && !dest.video){if(typeof toast==='function')toast('届け先を1つ以上選んでください');return;}
+  /* ★話者情報を記録 */
+  var spk=(window._vtState&&window._vtState.speaker)||'unknown';
+  /* 壺に saveEntry で章として追加 */
+  if(dest.kotsu && typeof saveEntry==='function'){
+    saveEntry('voice',v,'声を、壺に残しました');
+  }else if(dest.kotsu){
+    window._voiceLog=(window._voiceLog||[]);
+    window._voiceLog.push({at:Date.now(),text:v,speaker:spk});
+  }
+  /* ★EMPSe 自動推定：本人発話のみを反映（家族代弁は推定対象外＝本人の主観でないため） */
+  if(typeof empAutoUpdate==='function' && (spk==='self'||spk==='family-with-self')){
+    empAutoUpdate(v,'voice:'+spk);
+  }
+  /* それぞれの届け先へ（最小実装：トースト＋セクションへの後追い遷移） */
+  var msgs=[];if(dest.kotsu)msgs.push('壺');if(dest.sdm)msgs.push('相談カード');if(dest.family)msgs.push('家族');if(dest.stories)msgs.push('声の物語');if(dest.video)msgs.push('ショート動画');
+  if(typeof toast==='function')toast(msgs.join('・')+' に届けました');
+  var m=document.getElementById('vtReviewModal');if(m)m.style.display='none';
+  var lv=document.getElementById('vtLive');if(lv){lv.style.display='none';lv.innerHTML='';}
+  /* 主目的の届け先に遷移 */
+  setTimeout(function(){
+    if(dest.video && typeof go==='function'){window._pendingVideoText=v;go('imgstudio');return;}
+    if(dest.sdm && typeof go==='function'){window._pendingSdmText=v;go('sdmstart');return;}
+    if(dest.family && typeof go==='function'){go('family');return;}
+    if(dest.stories && typeof go==='function'){go('stories');return;}
+    if(dest.kotsu && typeof go==='function'){go('records');return;}
+  },300);
+  window._vtState.finalText='';window._vtState.interim='';
+};
+window.vtCancelReview=function(){
+  var m=document.getElementById('vtReviewModal');if(m)m.style.display='none';
+  var lv=document.getElementById('vtLive');if(lv){lv.style.display='none';lv.innerHTML='';}
+  window._vtState.finalText='';window._vtState.interim='';
+};
+/* モード切替（話しかけモード / 通常モード） */
+window.vtToggleMode=function(){
+  var on=document.documentElement.getAttribute('data-voicemode')==='1';
+  if(on){
+    document.documentElement.removeAttribute('data-voicemode');
+    var app=document.getElementById('app');if(app)app.removeAttribute('data-voicemode');
+    var sw=document.getElementById('vtModeSwitch');if(sw)sw.textContent='通常モード';
+    if(typeof toast==='function')toast('通常モードに戻りました。自分で探す時に。');
+    /* 話しかけ中なら止める */
+    if(window._vtState.recognizing)window.vtStop('mode-off');
+    if(typeof vsStop==='function')vsStop();
+  }else{
+    document.documentElement.setAttribute('data-voicemode','1');
+    var app2=document.getElementById('app');if(app2)app2.setAttribute('data-voicemode','1');
+    var sw2=document.getElementById('vtModeSwitch');if(sw2)sw2.textContent='話しかけモード ON';
+    if(typeof toast==='function')toast('話しかけモード。マイクで話せます。');
+  }
+  try{localStorage.setItem('satoi_voicemode',(on?'0':'1'));}catch(e){}
+};
+/* 起動時：localStorage から話しかけモードを復元 */
+(function(){
+  try{var m=localStorage.getItem('satoi_voicemode');if(m==='1'){document.addEventListener('DOMContentLoaded',function(){document.documentElement.setAttribute('data-voicemode','1');var app=document.getElementById('app');if(app)app.setAttribute('data-voicemode','1');var sw=document.getElementById('vtModeSwitch');if(sw)sw.textContent='話しかけモード ON';});}}catch(e){}
+})();
+
+/* yuttari_home に入った時に自動再生（_oninit） */
+window._oninit['yuttari_home']=function(){
+  /* 設定UIから戻ってきた時に再生しすぎないよう、簡易デバウンス（5秒以内は再生しない） */
+  var now=Date.now();if(window._ytLastGreet && (now-window._ytLastGreet)<5000)return;
+  window._ytLastGreet=now;
+  setTimeout(function(){window.ytGreeting();},600);
+};
+</script>
+
+<!-- ============ ★Track B「SATOI ゆったり」グローバルCSS（65歳以上向け全画面適用）2026-05-29 ★Katsu指示 ============ -->
+<style>
+/* ゆったりモードは body 直下 .app に .yuttari クラスを付けて全画面に適用。
+   原則：フォント拡大／余白拡大／コントラスト強化／タップ領域拡大／アニメーション抑制／音声優先。
+   既存の Track A デザインは無変更。 */
+.app.yuttari{font-size:18px}
+.app.yuttari .scr{font-size:18px;line-height:1.85}
+.app.yuttari .h1{font-size:26px !important;line-height:1.4 !important;font-weight:700}
+.app.yuttari .sub{font-size:16px !important;line-height:1.7 !important}
+.app.yuttari .sechd{font-size:20px !important;font-weight:700;margin:24px 0 12px}
+.app.yuttari .card{font-size:17px !important;line-height:1.95 !important;padding:18px !important;border-radius:18px !important}
+.app.yuttari .note{font-size:14px !important;line-height:1.75 !important}
+.app.yuttari .btn{font-size:18px !important;font-weight:700 !important;padding:18px !important;border-radius:16px !important;min-height:60px}
+.app.yuttari .btn-teal{background:#0F6E56 !important;color:#fff !important;letter-spacing:.02em}
+.app.yuttari .btn-out{border:2px solid #0F6E56 !important;color:#0F6E56 !important;background:#fff !important}
+.app.yuttari .navrow{font-size:18px !important;padding:20px 18px !important;min-height:64px;border-bottom:1px solid #C9D1D9 !important}
+.app.yuttari .chip{font-size:15px !important;padding:11px 16px !important;border-radius:14px !important;min-height:42px}
+.app.yuttari .tile{padding:20px 14px !important;min-height:104px;border-radius:18px !important;border:1.5px solid #C9D1D9 !important}
+.app.yuttari .pad{padding:18px 18px 110px !important}
+.app.yuttari .back{font-size:16px !important;font-weight:700 !important;padding:10px 14px !important;background:#F1ECDF !important;border-radius:14px !important;color:#3a3a3a !important}
+.app.yuttari .ic{transform:scale(1.18);transform-origin:center}
+.app.yuttari i.ti{font-size:1.18em !important}
+.app.yuttari input,
+.app.yuttari select,
+.app.yuttari textarea{font-size:18px !important;padding:14px 16px !important;border-radius:14px !important;border:1.5px solid #B0B7BF !important}
+/* コントラスト強化（WCAG AAA寄り） */
+.app.yuttari{color:#1A1F2A}
+.app.yuttari .sub,
+.app.yuttari .note{color:#3a3f4a !important}
+.app.yuttari .mute,
+.app.yuttari .hint{color:#5a606a !important}
+/* アニメーション抑制（高齢者は動きで疲れる） */
+.app.yuttari *,
+.app.yuttari *::before,
+.app.yuttari *::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.12s !important;scroll-behavior:auto !important}
+/* details/summary（折りたたみ）を見やすく */
+.app.yuttari details.qa>summary{font-size:18px !important;padding:14px 16px !important;font-weight:700 !important;background:#F1ECDF !important;border-radius:14px !important;line-height:1.6}
+.app.yuttari details.qa>div.note{font-size:16px !important;line-height:1.9 !important;padding:14px 18px !important;background:#fafafa;border-radius:0 0 14px 14px}
+/* ヘッダーアイコン拡大 */
+.app.yuttari .hdr{padding:10px 14px !important}
+.app.yuttari .hbtn{min-width:46px;min-height:46px;font-size:20px !important}
+/* fab（コンシェルジュ） */
+.app.yuttari #fab{width:74px !important;height:74px !important;font-size:30px !important}
+/* ゆったり専用：常設「読み上げる／話す」FAB バー（音声優先） */
+.yt-voice-fab{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:80;display:none;align-items:center;gap:10px;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border:1.5px solid #B0B7BF;border-radius:999px;padding:8px 8px 8px 16px;box-shadow:0 8px 24px rgba(0,0,0,.14)}
+.app.yuttari .yt-voice-fab{display:inline-flex}
+.yt-voice-fab .yt-label{font-size:14px;font-weight:700;color:#1A1F2A;margin-right:2px}
+.yt-voice-fab button{font:inherit;cursor:pointer;border:none;border-radius:999px;padding:0;min-width:54px;min-height:54px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;gap:5px}
+.yt-voice-fab .yt-listen{background:#0F6E56;color:#fff;padding:0 18px}
+.yt-voice-fab .yt-speak{background:#B5701B;color:#fff;padding:0 18px}
+.yt-voice-fab .yt-off{background:#E7E8EB;color:#3a3f4a;padding:0 14px;font-size:13px}
+/* トップヘッダー「ゆ」トグル */
+.hbtn-yt{background:#FBEEDE;border:1.5px solid #B5701B;color:#5A3A12;font-weight:800;font-family:"Yu Gothic UI","Hiragino Sans",sans-serif;letter-spacing:0;font-size:15px}
+.app.yuttari .hbtn-yt{background:#0F6E56;color:#fff;border-color:#0F6E56}
+
+/* ★投資家モード（id="investor"）はBCG/ベイン世界観固有CSSのため、ゆったり時の影響を打ち消す。
+   投資家モードはピッチ専用・実患者向けでないため、ゆったり対象外として扱う。 */
+.app.yuttari #investor{font-size:inherit}
+.app.yuttari #investor .inv-pad,
+.app.yuttari #investor *{animation-duration:inherit !important;transition-duration:inherit !important}
+.app.yuttari #investor .inv-title{font-size:16px !important;line-height:1.3 !important}
+.app.yuttari #investor .inv-sub{font-size:10px !important;line-height:1.5 !important;color:#4C5562 !important}
+.app.yuttari #investor .inv-tab{font-size:10.5px !important;padding:7px 6px !important;min-height:auto !important}
+.app.yuttari #investor .inv-arpu-h{font-size:13.5px !important}
+.app.yuttari #investor .inv-arpu-total{font-size:22px !important}
+.app.yuttari #investor .inv-ticker{font-size:10px !important;padding:7px 0 !important}
+.app.yuttari #investor select.inv-dd{font-size:12px !important;padding:8px 11px !important}
+.app.yuttari #investor .iback{font-size:12px !important;padding:initial !important;background:none !important;color:#0E2236 !important;border-radius:0 !important;font-weight:600 !important}
+.app.yuttari #investor i.ti{font-size:inherit !important}
+.app.yuttari #investor button{min-height:auto !important}
+
+/* 投資家モード入場時は「ゆ」トグルをグレーアウトして、誤って高齢者向けに切り替えてしまう事故を防止 */
+.app:not(.yuttari) #investor ~ * .hbtn-yt,
+.app .hbtn-yt[data-locked="investor"]{opacity:.4;pointer-events:none}
+</style>
+
 <div class="app" id="app">
+
+<!-- ★Track B 常設の音声FAB（ゆったり時のみ表示・読み上げ＋話す＋OFF）2026-05-29 -->
+<div class="yt-voice-fab" id="ytVoiceFab" role="region" aria-label="ゆったり音声操作">
+  <span class="yt-label">音声で</span>
+  <button class="yt-listen" id="ytListenBtn" onclick="ytReadCurrentScreen(this)" aria-label="この画面を読み上げる"><i class="ti ti-volume" style="font-size:22px"></i></button>
+  <button class="yt-speak" onclick="ytSpeakToConcierge()" aria-label="声で話す"><i class="ti ti-microphone" style="font-size:22px"></i></button>
+  <button class="yt-off" onclick="ytToggle()" aria-label="ゆったりモードをやめる">やめる</button>
+</div>
 
 <div class="hdr">
   <div style="display:flex;align-items:center;gap:8px">
@@ -192,6 +804,7 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
   <div style="display:flex;align-items:center;gap:8px">
     <button class="hbtn emgdot" onclick="go('emergency')" aria-label="緊急QR・救急時カード" title="緊急QR"><i class="ti ti-urgent"></i></button>
     <button id="langDot" class="hbtn" onclick="cycleLang()" aria-label="言語切替 / Language / 语言" title="言語 / Language / 语言" data-noi18n style="font-size:13px;font-weight:700;letter-spacing:0">あ</button>
+    <button id="ytDot" class="hbtn hbtn-yt" onclick="ytToggle()" aria-label="ゆったりモード切替" title="ゆったりモード（文字大きく・ゆっくり）" data-noi18n>ゆ</button>
     <button class="hbtn" onclick="go('search')" aria-label="さがす"><i class="ti ti-search"></i></button>
     <button id="hdrPts" onclick="go('points')" aria-label="ポイント" style="display:none;align-items:center;gap:4px;height:34px;padding:0 11px;border-radius:999px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:var(--amber-t);cursor:pointer;font:inherit"><i class="ti ti-gift" style="font-size:15px"></i><span id="hdrPtsNum" style="font-size:13px;font-weight:600">0</span><span style="font-size:11px">pt</span></button>
   </div>
@@ -296,6 +909,124 @@ label.opt{display:flex;align-items:center;justify-content:space-between;font-siz
     <div style="display:flex;align-items:center;gap:10px;margin:26px 0 8px"><span style="flex:1;height:.5px;background:linear-gradient(90deg,rgba(226,184,119,0),#E2B877)"></span><i class="ti ti-sun-high" style="color:#E2B877;font-size:15px"></i><span style="flex:1;height:.5px;background:linear-gradient(90deg,#E2B877,rgba(226,184,119,0))"></span></div>
     <div style="text-align:center;margin:0 0 2px;font-size:13px;color:var(--sub);letter-spacing:.03em">全てはがん患者さんのために。</div>
     <div style="text-align:center;margin:0 0 4px;font-size:15px;color:var(--teal-d);font-weight:600;letter-spacing:.04em">つながって、生きよう。</div>
+    <div style="text-align:center;margin-top:14px"><button class="btn btn-out" style="font-size:12px;padding:9px 14px;display:inline-block;width:auto;color:#5A3A12;border-color:#B5701B" onclick="go('references')"><i class="ti ti-list" style="vertical-align:-2px"></i> 参考にしているガイドライン・引用一覧</button></div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ ★Track B SATOI ゆったり 専用ホーム（65歳以上向け・男性ペルソナ「健司さん」） ============ -->
+<section class="scr" id="yuttari_home">
+  <div class="pad" style="padding-bottom:140px">
+    <div style="text-align:center;margin:8px 0 18px">
+      <div style="font-size:13px;color:#5A3A12;background:#FBEEDE;border:1px solid #B5701B;display:inline-block;padding:6px 14px;border-radius:999px;font-weight:700">SATOI ゆったり</div>
+      <h1 style="font-size:30px;line-height:1.4;font-weight:700;color:#1A1F2A;margin:14px 0 6px">こんにちは。<br>ゆっくり、進めます。</h1>
+      <div style="font-size:17px;color:#3a3f4a;line-height:1.85">文字を大きく、ボタンも大きく。<br>耳でも聞けます。</div>
+    </div>
+
+    <!-- 大型カード 6つ -->
+    <button class="card" onclick="go('cancer')" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:16px;background:#fff;border:2px solid #0F6E56;padding:22px;border-radius:20px;cursor:pointer">
+      <span class="ic" style="width:64px;height:64px;background:#E5F2EE;color:#0F6E56;flex-shrink:0;border-radius:18px"><i class="ti ti-book-2" style="font-size:36px"></i></span>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:700;color:#1A1F2A">私のがんを、知る</div>
+        <div style="font-size:15px;color:#3a3f4a;line-height:1.7;margin-top:4px">30の種類から、わかる範囲で選びます</div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:28px;color:#0F6E56"></i>
+    </button>
+
+    <button class="card" onclick="go('treatment')" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:16px;background:#fff;border:2px solid #0F6E56;padding:22px;border-radius:20px;cursor:pointer">
+      <span class="ic" style="width:64px;height:64px;background:#E5F2EE;color:#0F6E56;flex-shrink:0;border-radius:18px"><i class="ti ti-stethoscope" style="font-size:36px"></i></span>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:700;color:#1A1F2A">治療と お薬のこと</div>
+        <div style="font-size:15px;color:#3a3f4a;line-height:1.7;margin-top:4px">手術・薬・放射線、それぞれ やさしく</div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:28px;color:#0F6E56"></i>
+    </button>
+
+    <button class="card" onclick="go('symptoms')" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:16px;background:#fff;border:2px solid #9B2D2D;padding:22px;border-radius:20px;cursor:pointer">
+      <span class="ic" style="width:64px;height:64px;background:#FBE5E5;color:#9B2D2D;flex-shrink:0;border-radius:18px"><i class="ti ti-bone" style="font-size:36px"></i></span>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:700;color:#1A1F2A">痛い・つらい・眠れない</div>
+        <div style="font-size:15px;color:#3a3f4a;line-height:1.7;margin-top:4px">がまんしないで。和らげる方法があります</div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:28px;color:#9B2D2D"></i>
+    </button>
+
+    <button class="card" onclick="go('benefits_public')" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:16px;background:#fff;border:2px solid #B5701B;padding:22px;border-radius:20px;cursor:pointer">
+      <span class="ic" style="width:64px;height:64px;background:#FBEEDE;color:#B5701B;flex-shrink:0;border-radius:18px"><i class="ti ti-coin" style="font-size:36px"></i></span>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:700;color:#1A1F2A">お金と 介護のこと</div>
+        <div style="font-size:15px;color:#3a3f4a;line-height:1.7;margin-top:4px">高額療養費、年金、介護保険</div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:28px;color:#B5701B"></i>
+    </button>
+
+    <button class="card" onclick="go('hospital_search')" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:16px;background:#fff;border:2px solid #0F6E56;padding:22px;border-radius:20px;cursor:pointer">
+      <span class="ic" style="width:64px;height:64px;background:#E5F2EE;color:#0F6E56;flex-shrink:0;border-radius:18px"><i class="ti ti-search" style="font-size:36px"></i></span>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:700;color:#1A1F2A">病院と 相談先を さがす</div>
+        <div style="font-size:15px;color:#3a3f4a;line-height:1.7;margin-top:4px">地域から、病名から</div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:28px;color:#0F6E56"></i>
+    </button>
+
+    <button class="card" onclick="go('family')" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:16px;background:#fff;border:2px solid #B5701B;padding:22px;border-radius:20px;cursor:pointer">
+      <span class="ic" style="width:64px;height:64px;background:#FBEEDE;color:#B5701B;flex-shrink:0;border-radius:18px"><i class="ti ti-heart-handshake" style="font-size:36px"></i></span>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:700;color:#1A1F2A">家族と つながる</div>
+        <div style="font-size:15px;color:#3a3f4a;line-height:1.7;margin-top:4px">息子・娘・お孫さんへ</div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:28px;color:#B5701B"></i>
+    </button>
+
+    <!-- 緊急時カード（高齢者は特に重要・赤大型） -->
+    <button class="card" onclick="go('emergency')" style="width:100%;text-align:left;margin-top:18px;display:flex;align-items:center;gap:16px;background:#9B2D2D;color:#fff;border:none;padding:22px;border-radius:20px;cursor:pointer">
+      <span class="ic" style="width:64px;height:64px;background:#fff;color:#9B2D2D;flex-shrink:0;border-radius:18px"><i class="ti ti-urgent" style="font-size:36px"></i></span>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:700">緊急時カード</div>
+        <div style="font-size:15px;line-height:1.7;margin-top:4px;color:#FBE5E5">救急隊・周りの人に、QRで伝える</div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:28px"></i>
+    </button>
+
+    <!-- 困ったらコンシェルジュ -->
+    <button class="card" onclick="go('ai')" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:16px;background:#0F6E56;color:#fff;border:none;padding:22px;border-radius:20px;cursor:pointer">
+      <span class="ic" style="width:64px;height:64px;background:#fff;color:#0F6E56;flex-shrink:0;border-radius:18px"><i class="ti ti-sparkles" style="font-size:36px"></i></span>
+      <div style="flex:1">
+        <div style="font-size:22px;font-weight:700">困ったら ここに 話す</div>
+        <div style="font-size:15px;line-height:1.7;margin-top:4px;color:#D8F0E8">SATOIコンシェルジュ。声でも文字でも</div>
+      </div>
+      <i class="ti ti-chevron-right" style="font-size:28px"></i>
+    </button>
+
+    <!-- 学び・備え（14セクションへの導線） -->
+    <div style="margin-top:24px;border:1.5px solid #C9D1D9;border-radius:18px;overflow:hidden;background:#fff">
+      <div style="padding:16px 18px;background:#F1ECDF;font-size:16px;font-weight:700;color:#5A3A12">学び・備え（公的情報をSATOIが整理）</div>
+      <button class="navrow" onclick="go('aya')" style="font-size:18px;padding:20px 18px;font-weight:600">AYA世代の方へ（15〜39歳） <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('fertility')" style="font-size:18px;padding:20px 18px;font-weight:600">妊孕性温存 <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('appearance')" style="font-size:18px;padding:20px 18px;font-weight:600">アピアランスケア <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('tx_modality')" style="font-size:18px;padding:20px 18px;font-weight:600">治療の種類を知る <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('mental_care')" style="font-size:18px;padding:20px 18px;font-weight:600">心のケア <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('nutrition')" style="font-size:18px;padding:20px 18px;font-weight:600">食事・栄養 <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('work_balance')" style="font-size:18px;padding:20px 18px;font-weight:600">仕事との両立 <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('prevention')" style="font-size:18px;padding:20px 18px;font-weight:600">予防・がん検診 <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('glossary_hub')" style="font-size:18px;padding:20px 18px;font-weight:600">用語をやさしく <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('cam_caution')" style="font-size:18px;padding:20px 18px;font-weight:600">民間療法・健康食品の注意 <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('disaster_care')" style="font-size:18px;padding:20px 18px;font-weight:600">災害時のがん療養 <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+      <button class="navrow" onclick="go('next_horizon_bridge')" style="font-size:18px;padding:20px 18px;font-weight:600;border-bottom:none">標準治療を終えた方へ（つぎの道） <i class="ti ti-chevron-right" style="margin-left:auto;color:#6B7280"></i></button>
+    </div>
+
+    <!-- マイページ・通常モード切替 -->
+    <div style="display:flex;gap:10px;margin-top:24px">
+      <button class="btn btn-out" onclick="go('mypage')" style="flex:1;font-size:17px"><i class="ti ti-user" style="vertical-align:-2px"></i> マイページ</button>
+      <button class="btn btn-out" onclick="ytToggle()" style="flex:1;font-size:17px"><i class="ti ti-text-size" style="vertical-align:-2px"></i> 通常モードへ</button>
+    </div>
+    <div style="text-align:center;margin-top:14px"><button class="btn btn-out" style="font-size:14px;padding:11px 18px;display:inline-block;width:auto;color:#5A3A12;border-color:#B5701B" onclick="go('references')"><i class="ti ti-list" style="vertical-align:-2px"></i> 参考にしているガイドライン・引用一覧</button></div>
+
+    <div class="note" style="text-align:center;margin-top:14px;font-size:14px;color:#5a606a;line-height:1.7">
+      文字が小さくて読みづらいときは、上の<b>「ゆ」ボタン</b>でいつでも切り替えできます。<br>
+      画面の下に、<b>読み上げ・話す</b>のボタンがいつもあります。
+    </div>
+
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -1447,8 +2178,18 @@ window._oninit['next_horizon_bridge']=function(){
       <button class="navrow" style="border-bottom:none" onclick="go('disaster_care')"><span><i class="ti ti-alert-triangle" style="color:var(--red)"></i> 災害時のがん療養</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     </div>
 
+    <!-- ★Track B「SATOI ゆったり」モードへの入口（65歳以上向け／文字が小さい・読むのが疲れる方） -->
+    <button class="card" style="margin-top:14px;width:100%;text-align:left;background:#fff;border:1.5px solid #B5701B;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px" onclick="ytToggle()">
+      <span class="ic" style="width:42px;height:42px;background:#FBEEDE;color:#5A3A12;flex-shrink:0;font-family:'Yu Gothic UI',serif;font-size:20px;font-weight:800">ゆ</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:700;color:#5A3A12">SATOI ゆったり に切り替える</div>
+        <div class="note" style="font-size:11.5px;margin-top:2px;color:#7A5320;line-height:1.55">文字を大きく・耳でも聞ける。65歳以上の方や、目が疲れる時に。いつでも戻せます。</div>
+      </div>
+      <i class="ti ti-chevron-right" style="color:#5A3A12"></i>
+    </button>
+
     <!-- 標準治療を終えた方へ＝つぎの道入口（医療法6条の5配慮：直接表現せず注釈画面で説明） -->
-    <button class="card" style="margin-top:16px;width:100%;text-align:left;background:linear-gradient(180deg,#FBEEDE 0%,#F5F1E8 100%);border:.5px solid var(--amber-line);padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px" onclick="go('next_horizon_bridge')">
+    <button class="card" style="margin-top:14px;width:100%;text-align:left;background:linear-gradient(180deg,#FBEEDE 0%,#F5F1E8 100%);border:.5px solid var(--amber-line);padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px" onclick="go('next_horizon_bridge')">
       <span class="ic" style="width:38px;height:38px;background:#fff;color:var(--amber-t);border:.5px solid var(--amber-line);flex-shrink:0"><i class="ti ti-sun-high"></i></span>
       <div style="flex:1;min-width:0">
         <div style="font-size:13px;font-weight:700;color:var(--amber-t)">標準治療を終えた方へ — <span style="font-family:'EB Garamond',serif;font-style:italic">つぎの道</span></div>
@@ -1462,6 +2203,8 @@ window._oninit['next_horizon_bridge']=function(){
       <button class="navrow" onclick="go('plans')"><span><i class="ti ti-wallet" style="color:var(--teal)"></i> 会員と伴走について（料金）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('consent')"><span><i class="ti ti-shield-lock" style="color:var(--sub)"></i> データの扱い・同意</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('about')"><span><i class="ti ti-info-circle" style="color:var(--sub)"></i> SATOIについて</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('voice_settings')"><span><i class="ti ti-microphone" style="color:var(--teal)"></i> 話し方の設定（声・速度・方言・確認）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" onclick="go('references')"><span><i class="ti ti-list" style="color:#B5701B"></i> 参考にしているガイドライン・引用一覧（ガバナンス）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" style="border-bottom:none;background:#F5F1E8" onclick="go('investor')"><span><i class="ti ti-presentation-analytics" style="color:#B8954A"></i> <span style="font-family:'EB Garamond',serif;font-style:italic;color:#0E2236">Investor</span> モード（裏面・関係者用）</span><i class="ti ti-chevron-right" style="color:#B8954A"></i></button>
     </div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
@@ -1608,16 +2351,51 @@ async function cvAnswer(text){
   /* AIゲートウェイ(Netlify Function)があれば本物のAI、無ければローカルのルールベースにフォールバック */
   /* ★会話履歴(window._cvHistory)も渡す：これでAIが「何ターン目か」を把握でき、3ターン目に必ず具体策を返す絶対ルールが効く */
   var d=null;
-  try{var r=await fetch('/.netlify/functions/concierge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,history:(window._cvHistory||[]),dialect:(window._dialect||''),lang:(window._lang||'ja')})});if(r.ok){var j=await r.json();if(j&&j.reply)d={reply:j.reply,src:j.src||'',chips:j.chips||[]};}}catch(e){}
+  /* ★SATOI 差別化：壺要約・profile・EMPSe を context として渡す（ChatGPTとの違い） */
+  var ctx=buildSatoiContext();
+  try{var r=await fetch('/.netlify/functions/concierge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,history:(window._cvHistory||[]),dialect:((window._voiceSettings&&window._voiceSettings.dialect&&window._voiceSettings.dialect!=='auto')?window._voiceSettings.dialect:(window._dialect||'')),lang:(window._lang||'ja'),context:ctx})});if(r.ok){var j=await r.json();if(j&&j.reply)d={reply:j.reply,src:j.src||'',chips:j.chips||[]};}}catch(e){}
   if(!d)d=cvReply(text);
   cvRender(d);
   if(d&&d.reply){window._cvHistory=(window._cvHistory||[]);window._cvHistory.push({role:'assistant',content:d.reply});}
 }
-function cvSend(text){if(!text)return;document.getElementById('cvChips').style.display='none';cvBubble('me',text);window._cvHistory=(window._cvHistory||[]);window._cvHistory.push({role:'user',content:text});window._cvCount=(window._cvCount||0)+1;if(window._cvCount>8&&!window._isBansou){setTimeout(cvBansouGate,400);return;}setTimeout(function(){cvAnswer(text);},350);}
+function cvSend(text){if(!text)return;document.getElementById('cvChips').style.display='none';cvBubble('me',text);window._cvHistory=(window._cvHistory||[]);window._cvHistory.push({role:'user',content:text});window._cvCount=(window._cvCount||0)+1;
+  /* ★EMPSe 自動推定：コンシェルジュへの発話からも軸を読み取る */
+  if(typeof empAutoUpdate==='function')empAutoUpdate(text,'concierge');
+  if(window._cvCount>8&&!window._isBansou){setTimeout(cvBansouGate,400);return;}setTimeout(function(){cvAnswer(text);},350);}
 function cvBansouGate(){cvBubble('ai','今日は、無料でここまでお話ししました。もっと続けたい時は、<b>伴走</b>なら使った分だけで続けられます。あなたのペースで大丈夫ですよ。');var c=document.getElementById('cvChips');if(c){c.style.display="flex";c.innerHTML="<button class='chip amber' onclick=\"go('bansou_apply')\">伴走で続ける</button><button class='chip' onclick=\"go('support')\">つらい時の相談先</button>";}}
 function cvSendInput(){var i=document.getElementById('cvInput'),v=i.value.trim();if(!v)return;i.value='';cvSend(v);}
 /* 治療ページ等から「分からないことを聞く」で文脈を渡してコンシェルジュへ（SATOIのAI＝オーケストレーターのワンクッション＝何を読んでいたかを汲んでから応答） */
 function askAbout(topic){window._askTopic=topic;go('ai');}
+/* ★SATOI 独自 context 生成（ChatGPT との差別化＝患者さんの全てを踏まえて応える） */
+function buildSatoiContext(){
+  var ctx={};
+  try{
+    var pf=localStorage.getItem('satoi_profile');if(pf){var p=JSON.parse(pf);
+      ctx.who=p.who||'self';
+      if(p.cancer && window.CANCER_JA && window.CANCER_JA[p.cancer]){ctx.cancer=window.CANCER_JA[p.cancer];ctx.cancerKey=p.cancer;}
+      if(p.stage)ctx.stage=p.stage;
+    }
+    var nm=localStorage.getItem('satoi_name');if(nm)ctx.name=nm;
+  }catch(e){}
+  /* 壺の直近の章を要約として渡す（最新3章まで・タイトル＋body冒頭120文字） */
+  try{
+    if(window._freshEntry)ctx.lastEntry={title:window._freshEntry.title,kind:window._freshEntry.kindLabel,bodyHead:(window._freshEntry.body||'').slice(0,120)};
+    if(typeof CHAPTERS==='object'){
+      var recent=[];Object.keys(CHAPTERS).slice(0,3).forEach(function(k){var c=CHAPTERS[k];recent.push({title:c.t,bodyHead:(c.body||'').replace(/\n/g,' ').slice(0,100)});});
+      if(recent.length)ctx.kotsuRecent=recent;
+    }
+  }catch(e){}
+  /* EMPSe 最新スコア（あれば） */
+  try{
+    if(window._empseLatest){ctx.empse=window._empseLatest;}
+  }catch(e){}
+  /* 直近の声入力 */
+  try{if(window._voiceLog && window._voiceLog.length){var last=window._voiceLog[window._voiceLog.length-1];ctx.lastVoice={at:last.at,text:(last.text||'').slice(0,120),speaker:last.speaker||'unknown'};}}catch(e){}
+  /* ★現在の話者情報（Katsu明示2026-05-29 SATOI Claude AI 中核） */
+  try{if(window._vtState && window._vtState.speaker){ctx.currentSpeaker=window._vtState.speaker;}}catch(e){}
+  /* JSON 文字列化（concierge.js 側で system に織り込む） */
+  try{return JSON.stringify(ctx);}catch(e){return '';}
+}
 function cvSetChips(arr){var c=document.getElementById('cvChips');c.style.display='flex';c.innerHTML='';arr.forEach(function(t){var b=document.createElement('button');b.className='chip amber';b.textContent=t;b.onclick=function(){cvSend(t);};c.appendChild(b);});}
 window._oninit['ai']=function(){
   var l=document.getElementById('cvLog');l.innerHTML='';window._cvCount=0;window._cvHistory=[];
@@ -3556,6 +4334,52 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
     <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
     <h1 class="h1" style="margin-top:10px">いまの、わたし</h1>
     <div class="sub">EMPSe — 5つの面から、今のあなたを見つめます。スコアは競うものではなく、あなたと支える人が変化に気づくための地図です。</div>
+    <div class="card" style="margin-top:10px;background:var(--teal-bg);border:none;line-height:1.85;font-size:12.5px;color:var(--teal-d)">
+      <i class="ti ti-sparkles" style="vertical-align:-2px"></i> EMPSeは、<b>あなたの言葉と日々の行動から SATOI が読み取って</b>、ゆっくり整えていきます。診察データ・音声会話・サイト動線・行動の変化から推定します。<b>ご自身で入れたい方は</b>、下の「入力する」から。記録すると、ポイントもお戻しします。
+    </div>
+
+    <!-- ★話しかけ／通常モード切替（Katsu要望2026-05-29・Cハイブリッド：短押しトグル・長押しPTT） -->
+    <div style="margin-top:14px;background:#fff;border:1.5px solid var(--teal);border-radius:18px;padding:16px;position:relative">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:12px;font-weight:700;color:var(--teal-d);letter-spacing:.04em"><i class="ti ti-microphone-2" style="vertical-align:-2px"></i> 話しかけて、声を残す</div>
+        <button id="vtModeSwitch" onclick="vtToggleMode()" style="font-size:11px;background:var(--teal-bg);border:none;color:var(--teal-d);padding:5px 11px;border-radius:999px;cursor:pointer;font-weight:700;font:inherit">話しかけモード</button>
+      </div>
+      <div style="text-align:center;margin-top:6px">
+        <button id="vtBigBtn"
+          onpointerdown="vtPressDown(event)"
+          onpointerup="vtPressUp(event)"
+          onpointerleave="vtPressCancel(event)"
+          ontouchstart="vtPressDown(event)"
+          ontouchend="vtPressUp(event)"
+          aria-label="押して話す（長押し）または タップで開始"
+          style="width:106px;height:106px;border-radius:50%;background:var(--teal);color:#fff;border:none;cursor:pointer;font:inherit;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 12px 30px rgba(15,110,86,.32);transition:transform .12s ease,box-shadow .12s ease;-webkit-tap-highlight-color:transparent;touch-action:none">
+          <i class="ti ti-microphone" id="vtBigIcon" style="font-size:46px"></i>
+        </button>
+        <div id="vtPulse" style="display:none;width:140px;height:140px;border-radius:50%;border:2px solid var(--teal);position:absolute;left:50%;top:50%;transform:translate(-50%,-46%);animation:vtPulseRing 1.4s ease-out infinite;pointer-events:none"></div>
+        <div id="vtLabel" style="margin-top:11px;font-size:13px;color:var(--ink);font-weight:600">タップで開始 ／ 長押しで「押して話す」</div>
+        <div id="vtTime" style="margin-top:2px;font-size:14px;color:var(--teal-d);font-weight:700;font-variant-numeric:tabular-nums;display:none">0:00</div>
+      </div>
+      <div id="vtLive" style="display:none;margin-top:14px;padding:12px 14px;background:#F7F9F6;border:.5px solid var(--line);border-radius:14px;font-size:13.5px;line-height:1.85;color:#1A1F2A;min-height:48px;max-height:140px;overflow-y:auto"></div>
+      <div class="note" style="margin-top:10px;font-size:11px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 録音は<b>同時に文字起こし</b>されます。終わったら確認・編集できます。残した声は<b>あなたの壺</b>に保存され、SATOIの解析にも役立てます（個人特定なしで）。</div>
+    </div>
+
+    <!-- ★SATOI ならではの差別化（ChatGPTとここが違う）2026-05-29 -->
+    <div style="margin-top:14px;padding:14px 16px;background:linear-gradient(180deg,#F1ECDF 0%,#FFFEF7 100%);border:.5px solid var(--amber-line);border-radius:14px">
+      <div style="font-size:11px;font-weight:700;color:#B5701B;letter-spacing:.06em;margin-bottom:6px">▸ SATOI ならではの違い</div>
+      <div style="font-size:13px;color:#5A3A12;line-height:1.85">私は、あなたの<b>がん種・治療フェーズ・壺の記録・EMPSe</b>を踏まえて応えます。汎用 AI とは違い、<b>SDM カードで先生に渡せ</b><b>家族の声に変わり</b><b>思い出は動画になります</b>。話したことが、ちゃんと次の一歩につながります。</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+        <button class="chip" style="font-size:11px;padding:6px 11px;background:#fff;border:.5px solid var(--amber-line);color:#5A3A12" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-1px;color:var(--teal)"></i> SDM相談カード</button>
+        <button class="chip" style="font-size:11px;padding:6px 11px;background:#fff;border:.5px solid var(--amber-line);color:#5A3A12" onclick="go('records')"><i class="ti ti-bowl" style="vertical-align:-1px;color:var(--amber-t)"></i> 壺の振り返り</button>
+        <button class="chip" style="font-size:11px;padding:6px 11px;background:#fff;border:.5px solid var(--amber-line);color:#5A3A12" onclick="go('family')"><i class="ti ti-heart-handshake" style="vertical-align:-1px;color:var(--rose)"></i> 家族に届く</button>
+        <button class="chip" style="font-size:11px;padding:6px 11px;background:#fff;border:.5px solid var(--amber-line);color:#5A3A12" onclick="go('imgstudio')"><i class="ti ti-video" style="vertical-align:-1px;color:var(--blue)"></i> 思い出を動画に</button>
+      </div>
+    </div>
+    <style>
+    @keyframes vtPulseRing{0%{transform:translate(-50%,-46%) scale(.86);opacity:.7}100%{transform:translate(-50%,-46%) scale(1.32);opacity:0}}
+    #vtBigBtn[data-on="1"]{background:#9B2D2D;box-shadow:0 12px 30px rgba(155,45,45,.42)}
+    #vtBigBtn:active{transform:scale(.95)}
+    .app:not([data-voicemode="1"]) #vtPulse{display:none !important}
+    </style>
     <div style="margin-top:14px;border-radius:18px;overflow:hidden;position:relative;height:118px;background:radial-gradient(120% 100% at 72% 100%,#FBE4D0,#F4D6D0 45%,#E0EDE5 100%)">
       <img data-aoi="empse_hero" src="img/aoi_empse_hero.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
       <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.66))"></div>
@@ -3599,7 +4423,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
   <div class="pad">
     <button class="back" onclick="go('empse')"><i class="ti ti-arrow-left"></i> いまの、わたし</button>
     <h1 class="h1" style="margin-top:10px">今日のEMPSe</h1>
-    <div class="sub">5つの面を、数タップで。むずかしく考えなくて大丈夫。スキップもできます。</div>
+    <div class="sub">ご自身で入れたい方は、ここで。SATOI は普段は自動で読み取りますが、ご自身で残した記録はそのまま反映され、ポイントもお戻しします。</div>
     <div id="empInProg" style="display:flex;gap:6px;margin-top:16px"></div>
     <div id="empInForm" style="margin-top:16px"></div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
@@ -3674,6 +4498,61 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 
     <button class="btn btn-teal" style="margin-top:14px" onclick="go('write')"><i class="ti ti-pencil" style="vertical-align:-2px"></i> 「心づもり」を書いてみる</button>
     <button class="btn btn-out" style="margin-top:10px" onclick="go('family')"><i class="ti ti-heart-handshake" style="vertical-align:-2px;color:var(--rose)"></i> 家族と分かち合う</button>
+
+    <!-- ★遺品デジタル設計（Katsu要望2026-05-29）：壺の引き継ぎ・ポイントの扱いを事前に意思表示 -->
+    <div class="sechd" style="margin-top:24px"><i class="ti ti-feather"></i> もしもの時の、壺と思い出の引き継ぎ</div>
+    <div class="card" style="background:#FBEEDE;border:.5px solid #B5701B;line-height:1.85;font-size:12.5px;color:#5A3A12">
+      <i class="ti ti-info-circle" style="vertical-align:-2px"></i> あなたの「壺」に残した記録・声・物語・ポイントを、亡くなった後どう扱うか、<b>あなた自身が事前に選んでおく</b>ことができます。本人の意思を最も尊重します。家族・遺族の心の支えにもなります。
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;margin-top:8px">
+      <label class="opt" style="padding:14px;border-bottom:.5px solid var(--line);align-items:flex-start;gap:11px">
+        <input type="radio" name="legacy" value="bequeath" style="width:auto;margin-top:3px">
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;color:#1A1F2A"><i class="ti ti-gift" style="vertical-align:-2px;color:var(--rose)"></i> 家族へ「遺品デジタル」として贈る</div>
+          <div class="note" style="font-size:11.5px;line-height:1.7;margin-top:4px">壺の中のストーリー・声・動画を、家族のみが<b>ダウンロード・閲覧</b>できます。家族の手元に、あなたの思い出が残ります。引き継げる家族を、下で指定できます。</div>
+        </div>
+      </label>
+      <label class="opt" style="padding:14px;border-bottom:.5px solid var(--line);align-items:flex-start;gap:11px">
+        <input type="radio" name="legacy" value="erase" style="width:auto;margin-top:3px">
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;color:#1A1F2A"><i class="ti ti-trash" style="vertical-align:-2px;color:var(--mute)"></i> すべて削除する（ただし匿名データは次の人のために）</div>
+          <div class="note" style="font-size:11.5px;line-height:1.7;margin-top:4px">壺の中身は全削除します。<b>個人が特定されない形に匿名化された医療データ</b>（症状記録・治療反応・副作用パターン等）は、<b>次のがん患者さんのために役立てます</b>。あなたの経験が、誰かの希望になります。</div>
+        </div>
+      </label>
+      <label class="opt" style="padding:14px;align-items:flex-start;gap:11px">
+        <input type="radio" name="legacy" value="undecided" checked style="width:auto;margin-top:3px">
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;color:#1A1F2A"><i class="ti ti-clock" style="vertical-align:-2px;color:var(--mute)"></i> まだ決めない（後で見直す）</div>
+          <div class="note" style="font-size:11.5px;line-height:1.7;margin-top:4px">気持ちは変わります。後でいつでも変更できます。意思表示がないままお亡くなりになった場合、ご家族と相談の上、<b>30日後に自動削除</b>を初期値とします。</div>
+        </div>
+      </label>
+    </div>
+
+    <div style="margin-top:14px;font-size:13px;font-weight:600">ポイントの引き継ぎ先（任意）</div>
+    <div class="note" style="margin-bottom:8px;font-size:11.5px">未使用ポイントは、あなたの選択先へ。</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <label class="opt" style="padding:12px 14px;border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:7px;flex:1"><i class="ti ti-heart-handshake" style="color:var(--rose)"></i><span style="font-size:13px">家族（家族会員に移管）</span></span><input type="radio" name="ptLegacy" value="family" checked style="width:auto"></label>
+      <label class="opt" style="padding:12px 14px;border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:7px;flex:1"><i class="ti ti-coin" style="color:var(--amber)"></i><span style="font-size:13px">d ポイント等に還元（規約整備後）</span></span><input type="radio" name="ptLegacy" value="dpoint" style="width:auto"></label>
+      <label class="opt" style="padding:12px 14px;border-bottom:.5px solid var(--line)"><span style="display:flex;align-items:center;gap:7px;flex:1"><i class="ti ti-flame" style="color:var(--teal-d)"></i><span style="font-size:13px">次の患者支援に寄付（SATOI 基金）</span></span><input type="radio" name="ptLegacy" value="donate" style="width:auto"></label>
+      <label class="opt" style="padding:12px 14px"><span style="display:flex;align-items:center;gap:7px;flex:1"><i class="ti ti-clock" style="color:var(--mute)"></i><span style="font-size:13px">まだ決めない</span></span><input type="radio" name="ptLegacy" value="undecided" style="width:auto"></label>
+    </div>
+
+    <button class="btn btn-out" style="margin-top:12px;background:#FBEEDE;color:#5A3A12;border-color:#B5701B" onclick="saveLegacyChoice()"><i class="ti ti-device-floppy" style="vertical-align:-2px"></i> この意思を保存（いつでも変更できます）</button>
+
+    <div class="note" style="margin-top:14px;line-height:1.7;font-size:11px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 本機能は<b>本人意思を最大限尊重</b>します。法的代諾（成年後見・医療代諾代理）は扱いません。倫理的に慎重な扱いが必要なため、医療従事者・家族・遺族・厚労省の最新指針を継続して反映します。出典：厚労省 人生会議ガイドライン2018／日本ホスピス緩和ケア協会／日本サイコオンコロジー学会 グリーフケアガイドライン／個情法（死者の取り扱い）／SATOI ガバナンス v1.0 7原則。
+    </div>
+    <script>
+    window.saveLegacyChoice=function(){
+      var legacy=document.querySelector('input[name=legacy]:checked');
+      var pt=document.querySelector('input[name=ptLegacy]:checked');
+      var obj={legacy:legacy?legacy.value:'undecided',pt:pt?pt.value:'undecided',ts:Date.now()};
+      try{localStorage.setItem('satoi_legacy_choice',JSON.stringify(obj));}catch(e){}
+      if(typeof toast==='function')toast('意思を保存しました。いつでも見直せます。');
+    };
+    window._oninit['acp']=function(){
+      try{var raw=localStorage.getItem('satoi_legacy_choice');if(raw){var o=JSON.parse(raw);if(o.legacy){var r=document.querySelector('input[name=legacy][value="'+o.legacy+'"]');if(r)r.checked=true;}if(o.pt){var r2=document.querySelector('input[name=ptLegacy][value="'+o.pt+'"]');if(r2)r2.checked=true;}}}catch(e){}
+    };
+    </script>
     <div style="font-size:14px;font-weight:600;margin:20px 0 4px">ひとりで抱えない。相談できる人・窓口</div>
     <div class="note" style="margin-bottom:10px">人生会議は、専門の人と一緒に進められます。あなたに合う窓口へ。</div>
     <div class="card" style="padding:2px 14px">
@@ -3983,7 +4862,157 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
     <div class="sub">がん診療連携拠点病院／小児がん拠点／相談支援センター／希少がんセンター</div>
 
     <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
-      日本の公的ながん診療体制では、<b>がん診療連携拠点病院</b>が全国に456施設、<b>小児がん拠点病院</b>15施設・連携病院、<b>希少がん中央機関</b>等が指定されています（厚生労働省）。地域・病名・特化領域から探せます。
+      日本のがん診療体制は、<b>厚生労働省指定の4階層＋特定領域</b>で全国 <b>468施設</b>（2026年4月時点）。地域・病名・特化領域から探せます。
+    </div>
+
+    <!-- ★拠点病院ヒエラルキー（厚労省2026/04時点・正確な数字）2026-05-29 -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-hierarchy"></i> 拠点病院のヒエラルキー（全468施設）</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:13px 14px;border-bottom:.5px solid var(--line);background:#FBE5E5">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:700;color:#9B2D2D;background:#fff;border:.5px solid #9B2D2D;border-radius:999px;padding:2px 8px">① TOP</span><b style="font-weight:600">都道府県がん診療連携拠点病院</b><span style="margin-left:auto;font-size:13px;font-weight:700;color:#9B2D2D">51施設</span></div>
+        <div class="note" style="margin-top:6px;font-size:11.5px;line-height:1.7;color:#5A1A1A">県内のがん医療の指導・情報集約、高度で専門的ながん治療の提供。各都道府県に原則1施設（東京・北海道などは複数）。</div>
+      </div>
+      <div style="padding:13px 14px;border-bottom:.5px solid var(--line);background:#FBEEDE">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:700;color:#5A3A12;background:#fff;border:.5px solid #B5701B;border-radius:999px;padding:2px 8px">② 中核</span><b style="font-weight:600">地域がん診療連携拠点病院</b><span style="margin-left:auto;font-size:13px;font-weight:700;color:#5A3A12">357施設</span></div>
+        <div class="note" style="margin-top:6px;font-size:11.5px;line-height:1.7;color:#5A3A12">手術・放射線・抗がん剤の網羅的治療、緩和ケア、がん相談支援センターの設置。各二次医療圏に原則1施設。<b>うち11施設は「特例型」</b>（一部要件を一時的に満たせていないが、地域医療への影響を考慮して1年限定で指定継続）。</div>
+      </div>
+      <div style="padding:13px 14px;border-bottom:.5px solid var(--line);background:#E5F2EE">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:700;color:#0F6E56;background:#fff;border:.5px solid #0F6E56;border-radius:999px;padding:2px 8px">③ サポート</span><b style="font-weight:600">地域がん診療病院</b><span style="margin-left:auto;font-size:13px;font-weight:700;color:#0F6E56">59施設</span></div>
+        <div class="note" style="margin-top:6px;font-size:11.5px;line-height:1.7;color:#0E5740">②の拠点病院がない地域でのがん治療をサポート。標準的ながん治療と相談支援を提供。</div>
+      </div>
+      <div style="padding:13px 14px;border-bottom:.5px solid var(--line);background:#E7F0FA">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:700;color:#185FA5;background:#fff;border:.5px solid #185FA5;border-radius:999px;padding:2px 8px">④ 身近</span><b style="font-weight:600">協力病院・連携協力機関</b><span style="margin-left:auto;font-size:13px;font-weight:700;color:#185FA5">多数</span></div>
+        <div class="note" style="margin-top:6px;font-size:11.5px;line-height:1.7;color:#185FA5">拠点病院と連携した日常のフォローアップ、手術後の経過観察、在宅での緩和ケア。各都道府県が独自に登録した地元の一般病院・クリニック。<b>数千施設以上</b>。</div>
+      </div>
+      <div style="padding:13px 14px;background:#F2E7F2">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:700;color:#7F2BB6;background:#fff;border:.5px solid #7F2BB6;border-radius:999px;padding:2px 8px">特定</span><b style="font-weight:600">特定領域がん診療連携拠点病院</b><span style="margin-left:auto;font-size:13px;font-weight:700;color:#7F2BB6">1施設</span></div>
+        <div class="note" style="margin-top:6px;font-size:11.5px;line-height:1.7;color:#5A1880">特定の部位のみを専門に扱う。<b>がんセンター新潟病院</b>のみ指定。</div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:8px;font-size:11px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 合計：①51 + ②357 + ③59 + ④多数 + 特定1 = <b>指定拠点 468施設</b>（協力病院を除く）。2026年4月時点・厚生労働省。</div>
+
+    <!-- ★地方の方への寄り添い＋治療法×拠点レベル＋簡易日本地図（Katsu要望2026-05-29 NCC超え） -->
+    <div class="sechd" style="margin-top:22px"><i class="ti ti-map-pin"></i> 地方にお住まいの方へ — どこまで行けばいいか</div>
+    <div class="card" style="background:#FBEEDE;border:.5px solid #B5701B;line-height:1.85;font-size:12.5px;color:#5A3A12">
+      拠点病院は<b>都市部に集中</b>しています。地方にお住まいの方は「どこまで行けばいいの」「うちの近くで治療できるの」と不安になりますね。<br>大切なお伝え：<br>・<b>標準治療</b>（手術・薬物・放射線）は<b>②③④の多くの病院</b>で受けられます<br>・<b>高度治療</b>（陽子線・がんゲノム医療など）は限定施設で、紹介ベース<br>・<b>緩和ケア・在宅</b>は<b>④協力病院・かかりつけ</b>で十分に受けられます<br>・移動が難しい場合、<b>セカンドオピニオンや治験は遠方を訪れる</b>選択肢もあります<br>遠方への通院は、<b>付き添い・宿泊・交通費の助成</b>を使える場合があります。詳細は<a class="link" onclick="go('benefits_public')">公的制度</a>と<a class="link" onclick="go('hospital_search')">相談支援センター</a>へ。
+    </div>
+
+    <!-- 治療法×拠点レベル マップ -->
+    <div class="sechd" style="margin-top:22px"><i class="ti ti-stethoscope"></i> 治療法 × どの拠点レベルが必要か</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;font-size:11px;font-weight:700;background:#F1ECDF;color:#5A3A12;padding:9px 12px;letter-spacing:.04em">
+        <div>治療法</div><div style="text-align:center">必要な拠点</div><div style="text-align:center">通院距離</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;font-size:12.5px;padding:11px 12px;border-bottom:.5px solid var(--line);align-items:center"><div><b style="font-weight:600">標準的な手術・抗がん薬・放射線</b><div class="note" style="font-size:10.5px">最も一般的ながん治療</div></div><div style="text-align:center;color:#0F6E56;font-weight:600">②③④</div><div style="text-align:center;color:#0F6E56">お住まいの地域</div></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;font-size:12.5px;padding:11px 12px;border-bottom:.5px solid var(--line);align-items:center"><div><b style="font-weight:600">分子標的薬・免疫療法</b><div class="note" style="font-size:10.5px">遺伝子・PD-L1検査が必要</div></div><div style="text-align:center;color:#0F6E56;font-weight:600">①②③</div><div style="text-align:center;color:#0F6E56">県内・地域</div></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;font-size:12.5px;padding:11px 12px;border-bottom:.5px solid var(--line);align-items:center"><div><b style="font-weight:600">がんゲノム医療（遺伝子パネル）</b><div class="note" style="font-size:10.5px">中核拠点・拠点・連携指定病院</div></div><div style="text-align:center;color:#5A3A12;font-weight:600">指定病院（全国約240）</div><div style="text-align:center;color:#5A3A12">県内・近隣県</div></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;font-size:12.5px;padding:11px 12px;border-bottom:.5px solid var(--line);align-items:center"><div><b style="font-weight:600">陽子線・重粒子線治療</b><div class="note" style="font-size:10.5px">高度先進放射線</div></div><div style="text-align:center;color:#9B2D2D;font-weight:600">限定施設（全国約25）</div><div style="text-align:center;color:#9B2D2D">遠方移動あり</div></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;font-size:12.5px;padding:11px 12px;border-bottom:.5px solid var(--line);align-items:center"><div><b style="font-weight:600">造血幹細胞移植（白血病等）</b><div class="note" style="font-size:10.5px">骨髄バンク認定施設</div></div><div style="text-align:center;color:#9B2D2D;font-weight:600">限定施設（全国約170）</div><div style="text-align:center;color:#9B2D2D">県内・近隣県</div></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;font-size:12.5px;padding:11px 12px;border-bottom:.5px solid var(--line);align-items:center"><div><b style="font-weight:600">希少がん（年6人未満／10万人）</b><div class="note" style="font-size:10.5px">国がんセン中央機関</div></div><div style="text-align:center;color:#9B2D2D;font-weight:600">希少がんセンター</div><div style="text-align:center;color:#9B2D2D">東京・限定</div></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;font-size:12.5px;padding:11px 12px;border-bottom:.5px solid var(--line);align-items:center"><div><b style="font-weight:600">小児がん</b><div class="note" style="font-size:10.5px">15拠点＋連携病院</div></div><div style="text-align:center;color:#9B2D2D;font-weight:600">小児がん拠点15</div><div style="text-align:center;color:#9B2D2D">広域ブロック単位</div></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;font-size:12.5px;padding:11px 12px;border-bottom:.5px solid var(--line);align-items:center"><div><b style="font-weight:600">緩和ケア（症状緩和・心のケア）</b><div class="note" style="font-size:10.5px">拠点＋協力＋在宅</div></div><div style="text-align:center;color:#0F6E56;font-weight:600">②③④＋在宅</div><div style="text-align:center;color:#0F6E56">お住まいの地域</div></div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;font-size:12.5px;padding:11px 12px;align-items:center"><div><b style="font-weight:600">治験・臨床試験</b><div class="note" style="font-size:10.5px">jRCT・施設実施</div></div><div style="text-align:center;color:#5A3A12;font-weight:600">①②中心</div><div style="text-align:center;color:#5A3A12">遠方移動あり</div></div>
+    </div>
+    <div class="note" style="margin-top:8px;font-size:11px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 凡例：<span style="color:#9B2D2D;font-weight:600">①TOP</span> 都道府県／<span style="color:#5A3A12;font-weight:600">②中核</span>／<span style="color:#0F6E56;font-weight:600">③④</span> 地域・身近。あなたのがん種・状態によって変わるため、<b>主治医の紹介で適切な施設へ</b>つながります。</div>
+
+    <!-- 8地方ブロックの日本地図（簡易SVG） -->
+    <div class="sechd" style="margin-top:22px"><i class="ti ti-map-2"></i> あなたの地方の指定施設（概数）</div>
+    <div class="card" style="padding:14px">
+      <svg viewBox="0 0 360 280" style="display:block;width:100%" role="img" aria-label="日本8地方ブロック別の指定施設概数">
+        <defs>
+          <style>
+            .b{stroke:#5A3A12;stroke-width:.6;cursor:pointer;transition:opacity .15s}
+            .b:hover{opacity:.78}
+            .lbl{font:600 9.5px 'Yu Gothic UI','Hiragino Sans',sans-serif;fill:#1A1F2A;pointer-events:none}
+            .cnt{font:700 12px 'Yu Gothic UI','Hiragino Sans',sans-serif;fill:#5A3A12;pointer-events:none}
+          </style>
+        </defs>
+        <g onclick="hospShowBlock('hokkaido','北海道')"><polygon class="b" points="234,12 312,22 322,58 296,82 252,92 226,76 232,40" fill="#FBE5E5"/><text class="lbl" x="270" y="48" text-anchor="middle">北海道</text><text class="cnt" x="270" y="64" text-anchor="middle">①1 ②16</text></g>
+        <g onclick="hospShowBlock('tohoku','東北')"><polygon class="b" points="252,98 296,98 308,162 268,182 234,168 224,118" fill="#FBEEDE"/><text class="lbl" x="266" y="132" text-anchor="middle">東北</text><text class="cnt" x="266" y="148" text-anchor="middle">①6 ②25</text></g>
+        <g onclick="hospShowBlock('kanto','関東')"><polygon class="b" points="234,180 304,176 312,222 264,238 220,214" fill="#FBE5E5"/><text class="lbl" x="266" y="206" text-anchor="middle">関東</text><text class="cnt" x="266" y="222" text-anchor="middle">①6 ②74</text></g>
+        <g onclick="hospShowBlock('chubu','中部')"><polygon class="b" points="158,166 222,170 218,222 168,232 132,200" fill="#FBEEDE"/><text class="lbl" x="178" y="200" text-anchor="middle">中部</text><text class="cnt" x="178" y="216" text-anchor="middle">①8 ②57</text></g>
+        <g onclick="hospShowBlock('kinki','近畿')"><polygon class="b" points="98,200 156,196 162,234 122,246 88,228" fill="#E5F2EE"/><text class="lbl" x="124" y="224" text-anchor="middle">近畿</text><text class="cnt" x="124" y="240" text-anchor="middle">①7 ②45</text></g>
+        <g onclick="hospShowBlock('chugoku','中国')"><polygon class="b" points="44,214 96,206 102,232 60,242" fill="#E5F2EE"/><text class="lbl" x="73" y="226" text-anchor="middle">中国</text><text class="cnt" x="73" y="242" text-anchor="middle">①5 ②27</text></g>
+        <g onclick="hospShowBlock('shikoku','四国')"><polygon class="b" points="58,250 116,246 116,266 64,270" fill="#E5F2EE"/><text class="lbl" x="86" y="261" text-anchor="middle">四国</text><text class="cnt" x="120" y="261" text-anchor="middle">①4 ②16</text></g>
+        <g onclick="hospShowBlock('kyushu','九州・沖縄')"><polygon class="b" points="2,232 54,228 54,272 14,274" fill="#FBEEDE"/><text class="lbl" x="28" y="252" text-anchor="middle">九州</text><text class="cnt" x="28" y="266" text-anchor="middle">①9 ②46</text></g>
+      </svg>
+      <div class="note" style="margin-top:6px;font-size:10.5px;line-height:1.65;text-align:center">地方ブロックをタップで詳細。①都道府県拠点 / ②地域中核拠点。③地域がん診療病院・④協力病院・小児がん拠点・希少がんセンター・がんゲノム医療連携も <a class="link" href="https://hospdb.ganjoho.jp/" target="_blank" rel="noopener">国がんセン 病院検索</a> で確認できます。</div>
+      <div id="hospBlockDetail" style="margin-top:10px;font-size:12.5px;line-height:1.85;color:var(--ink)"></div>
+    </div>
+
+    <!-- 都道府県セレクト→近隣施設の目安（簡易） -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-list-search"></i> あなたの地域から、目安を見る</div>
+    <div class="card" style="padding:14px">
+      <select id="hospPrefBrief" style="width:100%;padding:11px;border-radius:12px;border:.5px solid var(--line2);font:inherit;font-size:13.5px" onchange="hospShowPrefBrief(this.value)">
+        <option value="">— お住まいの都道府県を選ぶ —</option>
+      </select>
+      <div id="hospPrefBriefBody" style="margin-top:12px;font-size:13px;line-height:1.85"></div>
+    </div>
+
+    <!-- 細かい相談はコンシェルジュへ -->
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
+      <i class="ti ti-sparkles" style="vertical-align:-2px"></i> 「<b>私の○○がん、私の住まいで、どこの病院がいい？</b>」のような具体的なご相談は、<b>SATOI コンシェルジュ</b>が、あなたの状況に合わせてお応えします。
+      <button class="btn btn-teal" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュに相談する</button>
+      <button class="btn btn-out" style="margin-top:8px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 主治医に紹介の依頼を整理</button>
+    </div>
+
+    <script>
+    /* 8地方ブロックの詳細＋都道府県の簡易ガイド（厚労省2026/04 を踏まえた概数・本番では施設DBに接続） */
+    window.HOSP_BLOCK_INFO={
+      hokkaido:{title:'北海道',body:'都道府県拠点：北海道がんセンター（札幌）／2024年指定。地域拠点約16施設。<b>面積が広く移動距離が長い</b>ため、地元の②③④で標準治療＋必要時に札幌の高度治療へ紹介、が一般的。離島・へき地は遠隔診療の活用も。'},
+      tohoku:{title:'東北',body:'都道府県拠点：宮城（東北大病院）／青森・岩手・秋田・山形・福島で各1。地域拠点約25。<b>仙台が広域中核</b>。希少がん・がんゲノム医療は東北大＋東北医科薬科大などへ紹介。豪雪地は冬季の通院計画を主治医・MSWと事前相談。'},
+      kanto:{title:'関東',body:'都道府県拠点：東京（国がんセン中央／NCC等複数）＋6県。地域拠点約74。<b>施設が最も密集</b>。希少がん中央機関・小児がん拠点・がんゲノム中核も多数。選択肢は多い反面、混雑による待機期間も。'},
+      chubu:{title:'中部',body:'都道府県拠点：愛知（愛知県がんセンター）他8県。地域拠点約57。<b>名古屋が広域中核</b>。北陸（富山・石川・福井）は北信越ブロックで連携、山梨は東京・甲府の双方を選択肢に。'},
+      kinki:{title:'近畿',body:'都道府県拠点：大阪（大阪国際がんセンター）他6府県。地域拠点約45。<b>大阪・京都・神戸が広域中核</b>。和歌山県南部は熊野・新宮地域のアクセスを主治医に相談。'},
+      chugoku:{title:'中国',body:'都道府県拠点：広島（広島大学病院）他4県。地域拠点約27。<b>広島・岡山が広域中核</b>。山陰（鳥取・島根）は施設が限られるため、近隣県との連携も。'},
+      shikoku:{title:'四国',body:'都道府県拠点：4県各1。地域拠点約16。<b>四国は瀬戸大橋・しまなみ海道で本州とも往来可能</b>。希少がんは岡山・広島・神戸も選択肢に。'},
+      kyushu:{title:'九州・沖縄',body:'都道府県拠点：福岡（九大病院）他8県。地域拠点約46。<b>福岡・熊本が広域中核</b>。沖縄は本土の特殊治療の場合、移動・宿泊費の助成や航空券割引が使える場合あり（自治体・がん相談支援センターで確認）。'}
+    };
+    window.hospShowBlock=function(k,nm){
+      var d=window.HOSP_BLOCK_INFO[k];var body=document.getElementById('hospBlockDetail');if(!body)return;
+      if(!d){body.innerHTML='';return;}
+      body.innerHTML='<div style="padding:12px 14px;background:var(--teal-bg);border-radius:14px;color:var(--teal-d)"><b style="font-size:13px">'+d.title+' のがん診療体制</b><div style="margin-top:6px;line-height:1.85;font-size:12px;color:var(--teal-d)">'+d.body+'</div><button class="btn btn-out" style="margin-top:10px;font-size:12px;padding:9px;color:var(--teal-d);border-color:var(--teal)" onclick="window.open(\'https://hospdb.ganjoho.jp/kyoten/kyotensearch\',\'_blank\')"><i class="ti ti-external-link" style="vertical-align:-2px"></i> 公的サイトで'+d.title+'の施設を見る</button></div>';
+    };
+    /* 都道府県の簡易ガイド：本番では施設DBから動的生成 */
+    window.HOSP_PREF_BRIEF={
+      '北海道':'札幌・函館・旭川・帯広・釧路・北見・苫小牧などに地域拠点。広域は道央集中。希少がん・小児・ゲノムは北海道がんセンター（札幌）／北大病院へ紹介が一般的。',
+      '東京都':'国がんセン中央／東大・慶応・東医歯大・順天堂・癌研有明など。希少がん中央機関も東京。選択肢が多いため、主治医と相談支援センターでの絞り込みが大事。',
+      '大阪府':'大阪国際がんセンター／阪大病院／関西医大／市立病院など。近畿全域からの患者も多い。',
+      '愛知県':'愛知県がんセンター／名大病院／名古屋市立大学病院。中部広域の中核。',
+      '福岡県':'九大病院／国立病院機構九州がんセンター。九州全域の中核。',
+      '宮城県':'東北大病院。東北全域からのがんゲノム医療・希少がん紹介を受ける。',
+      '広島県':'広島大学病院／広島赤十字・原爆病院。中国地方の中核。'
+    };
+    window.hospShowPrefBrief=function(p){
+      var b=document.getElementById('hospPrefBriefBody');if(!b)return;
+      if(!p){b.innerHTML='';return;}
+      var d=window.HOSP_PREF_BRIEF[p]||'お住まいの地域の都道府県拠点・地域中核拠点・地域がん診療病院・連携病院は、<a class="link" href="https://hospdb.ganjoho.jp/kyoten/kyotensearch" target="_blank" rel="noopener">国がんセン 病院検索</a>で正確に確認できます。お住まいの地域から最寄りの拠点までの距離が大きい場合は、主治医・かかりつけ医を経由して紹介を受ける流れが一般的です。';
+      b.innerHTML='<div class="card" style="padding:12px 14px;background:#F1ECDF;border:.5px solid #B5701B;border-radius:12px;color:#5A3A12"><div style="font-size:12px;font-weight:700;margin-bottom:6px"><i class="ti ti-map-pin" style="vertical-align:-2px"></i> '+p+' のあらまし</div><div style="font-size:12.5px;line-height:1.85;color:#5A3A12">'+d+'</div><button class="btn btn-out" style="margin-top:10px;font-size:12px;padding:9px;color:#5A3A12;border-color:#B5701B" onclick="window.open(\'https://hospdb.ganjoho.jp/kyoten/kyotensearch\',\'_blank\')"><i class="ti ti-external-link" style="vertical-align:-2px"></i> '+p+' の施設を国がんセン検索で見る</button><button class="btn btn-teal" style="margin-top:8px;font-size:13px" onclick="go(\'ai\')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> '+p+' で SATOI コンシェルジュに聞く</button></div>';
+    };
+    /* 都道府県セレクトの初期化（既存 hospital_search の _oninit と合流） */
+    (function(){
+      var prev=window._oninit['hospital_search'];
+      window._oninit['hospital_search']=function(){
+        if(typeof prev==='function')try{prev();}catch(e){}
+        var sel=document.getElementById('hospPrefBrief');
+        if(sel && sel.options.length<=1){
+          var PREFS=['北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県','滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'];
+          PREFS.forEach(function(n){var o=document.createElement('option');o.value=n;o.textContent=n;sel.appendChild(o);});
+        }
+      };
+    })();
+    </script>
+
+    <!-- ★SDM がどこで機能するかの説明 -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-clipboard-heart"></i> SDM（共同意思決定）はどこで機能するか</div>
+    <div class="card" style="background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
+      <b>SDM</b>は本来、<b>すべての医療機関で実施されるべき</b>プロセスですが、制度的・組織的に整備されているのは <b>①②③の拠点病院</b>（がん相談支援センター・キャンサーボードが設置）です。<br><br>
+      <b>④協力病院</b>では、日常のフォロー・在宅・緩和ケアで SDM が必要ですが、普及途上です。<br><br>
+      ★ <b>SATOI の SDM 相談カードは「患者から医師へ持ち込む形」</b>。だから <b>全468施設＋クリニック</b>のどこでも機能します。診察前にあなたが聞きたいことを整える、その役目を SATOI が担います。
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="chip" style="background:#fff;border:.5px solid var(--teal);color:var(--teal-d)" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-1px"></i> SDM 相談カードを作る</button>
+        <button class="chip" style="background:#fff;border:.5px solid var(--teal);color:var(--teal-d)" onclick="go('glossary_hub')"><i class="ti ti-vocabulary" style="vertical-align:-1px"></i> SDM とは？</button>
+      </div>
     </div>
 
     <div class="sechd" style="margin-top:18px"><i class="ti ti-stethoscope"></i> 病名から病院を探す</div>
@@ -4756,6 +5785,97 @@ var EMP_W={P:0.30,M:0.25,S:0.15,e:0.15,E:0.15};
 var empScores={P:68,M:62,S:64,e:60,E:72};
 var empTrend=[60,58,63,61,65,62,64,63,66,65,67,64,66,65];
 function empTotal(s){var t=0;for(var k in EMP_W){if(s[k]==null)continue;t+=s[k]*EMP_W[k];}return Math.round(t*10)/10;}
+
+/* ★EMPSe EWMA改修（Katsu合意2026-05-29 α=0.20・14日窓・当日点表示・看護師アラート維持）
+   - window._empHistory に raw を蓄積（最新60日保持）
+   - 表示用 empScores は平滑値（EWMA）
+   - empTrend は最新14日の平滑総合スコア
+   - 急変アラート：当日 raw < 7日前 平滑総合 - 20 で発火 */
+var EMP_ALPHA=0.20;
+var EMP_WINDOW=14;
+var EMP_HIST_KEY='satoi_emp_history';
+window._empHistory=window._empHistory||[];
+(function(){
+  try{var v=localStorage.getItem(EMP_HIST_KEY);if(v){var arr=JSON.parse(v);if(Array.isArray(arr)&&arr.length)window._empHistory=arr;}}catch(e){}
+})();
+function empSeedHistory(){
+  if(window._empHistory.length>0)return;
+  var seed=[[64,68,62,60,70],[66,70,64,58,72],[60,66,60,56,68],[68,72,66,62,74],[64,68,64,60,70],[62,66,62,58,68],[66,70,66,62,72],[68,72,68,64,74],[64,68,64,60,70],[60,64,60,56,66],[58,62,58,54,64],[62,66,62,58,68],[66,70,66,62,72],[68,72,68,64,74]];
+  var now=Date.now();
+  seed.forEach(function(s,i){window._empHistory.push({day:i+1,raw:{P:s[0],M:s[1],S:s[2],e:s[3],E:s[4]},ts:now-(seed.length-i)*86400000});});
+  try{localStorage.setItem(EMP_HIST_KEY,JSON.stringify(window._empHistory));}catch(e){}
+}
+empSeedHistory();
+function empBuildSmoothed(){
+  var hist=window._empHistory||[],sm=[];
+  hist.forEach(function(h,i){
+    var s={};EMP_ORDER.forEach(function(k){if(i===0){s[k]=h.raw[k];}else{var prev=sm[i-1][k];s[k]=Math.round((EMP_ALPHA*h.raw[k]+(1-EMP_ALPHA)*prev)*100)/100;}});
+    sm.push(s);
+  });
+  return sm;
+}
+function empUpdateScoresFromHistory(){
+  var sm=empBuildSmoothed();
+  if(!sm.length)return;
+  var last=sm[sm.length-1];
+  EMP_ORDER.forEach(function(k){empScores[k]=Math.round(last[k]*10)/10;});
+  empTrend=sm.slice(-EMP_WINDOW).map(function(s){return empTotal(s);});
+  window._empseLatest={scores:Object.assign({},empScores),total:empTotal(empScores),at:Date.now()};
+}
+function empDetectAcuteDrop(){
+  var hist=window._empHistory,sm=empBuildSmoothed();
+  if(hist.length<2||sm.length<2)return null;
+  var todayRaw=hist[hist.length-1].raw;
+  var todayRawTotal=empTotal(todayRaw);
+  var idx7=Math.max(0,sm.length-8);
+  var sevenAgo=sm[idx7];
+  var sevenAgoTotal=empTotal(sevenAgo);
+  if(todayRawTotal<sevenAgoTotal-20){
+    return {todayRaw:Math.round(todayRawTotal*10)/10,smooth7d:Math.round(sevenAgoTotal*10)/10,gap:Math.round((sevenAgoTotal-todayRawTotal)*10)/10};
+  }
+  return null;
+}
+empUpdateScoresFromHistory();
+
+/* ★Katsu追加方針 2026-05-29：EMPSe は本来「自動推定」が標準・手動は「ご自身で入れたい方」
+   音声入力／コンシェルジュ会話／サイト動線などから AI がキーワード解析して当日 raw に反映。
+   手動入力はポイント取得＝行動変容インセンティブとして維持。安っぽくしない表現で。 */
+var EMP_KW={
+  P:{ bad:['痛','だる','しんど','つらい','疲れ','眠れな','吐き気','吐い','熱が','息苦','歩けな','立てな','倦怠','胃が','頭が','しび'], good:['歩いた','散歩','動けた','体調がいい','元気','よく眠れ','よく食べ','楽に','痛みなし'] },
+  M:{ bad:['不安','怖い','落ち込','涙','泣','憂うつ','うつ','焦','イライラ','孤独','寂しい','死にた','消えたい'], good:['ほっと','安心','落ち着','穏やか','心地','嬉しい','楽しい','笑え','笑った','感謝'] },
+  S:{ bad:['お金','払えな','失職','解雇','休職','退職','保険','家賃','生活費','収入'], good:['仕事に','復職','つながり','人と会','友人','同僚','上司'] },
+  e:{ bad:['やる気が出','気力が','動けな','寝てばかり','怠け','起きられ'], good:['やる気','元気','頑張','チャレンジ','続けた','取り組ん'] },
+  E:{ bad:['ひとり','孤独','話せな','話相手','分かってくれな','理解されな'], good:['家族と','子どもと','妻と','夫と','親と','友達','話せた','分かち合','支えら'] }
+};
+function empAutoUpdate(text, source){
+  if(!text||typeof text!=='string')return;
+  var t=text,delta={P:0,M:0,S:0,e:0,E:0},matched=false;
+  for(var k in EMP_KW){
+    EMP_KW[k].bad.forEach(function(kw){if(t.indexOf(kw)>=0){delta[k]-=4;matched=true;}});
+    EMP_KW[k].good.forEach(function(kw){if(t.indexOf(kw)>=0){delta[k]+=3;matched=true;}});
+    if(delta[k]>10)delta[k]=10;if(delta[k]<-10)delta[k]=-10;
+  }
+  if(!matched)return;
+  var hist=window._empHistory;
+  if(!hist||!hist.length)return;
+  var today=hist[hist.length-1];
+  var td=new Date(today.ts),nd=new Date();
+  var sameDay=(td.getFullYear()===nd.getFullYear()&&td.getMonth()===nd.getMonth()&&td.getDate()===nd.getDate());
+  if(!sameDay){
+    var base=today.raw,fresh={};EMP_ORDER.forEach(function(k){fresh[k]=base[k];});
+    hist.push({day:hist.length+1,raw:fresh,ts:Date.now(),autoSources:[source||'auto']});
+    today=hist[hist.length-1];
+  }else{
+    today.autoSources=today.autoSources||[];if(source)today.autoSources.push(source);
+  }
+  EMP_ORDER.forEach(function(k){var nv=Math.round((today.raw[k]||50)+delta[k]);if(nv<0)nv=0;if(nv>100)nv=100;today.raw[k]=nv;});
+  try{localStorage.setItem(EMP_HIST_KEY,JSON.stringify(hist));}catch(e){}
+  empUpdateScoresFromHistory();
+  var hash=(location.hash||'').slice(1);
+  if(hash==='empse'&&typeof empRenderHome==='function')empRenderHome();
+  if(hash==='emphist'&&typeof empHistRender==='function')empHistRender();
+}
+window.empAutoUpdate=empAutoUpdate;
 function empRadarSVG(){
   var cx=150,cy=148,R=104,n=5,grid='',axes='',pts='',dots='',labels='';
   [1,0.66,0.33].forEach(function(f){var p='';for(var i=0;i<n;i++){var a=(-90+i*72)*Math.PI/180;p+=(cx+R*f*Math.cos(a)).toFixed(1)+','+(cy+R*f*Math.sin(a)).toFixed(1)+' ';}grid+='<polygon points="'+p.trim()+'" fill="none" stroke="var(--line)" stroke-width="1" opacity="'+(f===1?0.9:0.45)+'"/>';});
@@ -4805,8 +5925,23 @@ function empInStart(){empInIdx=0;empInTmp={};window._empPimported=false;empInRen
 function empInRender(){
   var prog=document.getElementById('empInProg');if(prog){var ph='';EMP_ORDER.forEach(function(k,i){ph+='<span style="flex:1;height:4px;border-radius:999px;background:'+(i<=empInIdx?EMP[k].color:'var(--line)')+';opacity:'+(i<=empInIdx?1:0.5)+'"></span>';});prog.innerHTML=ph;}
   var f=document.getElementById('empInForm');if(!f)return;
-  if(empInIdx>=EMP_ORDER.length){for(var k in empInTmp)empScores[k]=empInTmp[k];var tot=empTotal(empScores);
-    f.innerHTML='<div style="text-align:center;padding-top:10px"><div class="ic" style="width:60px;height:60px;background:var(--teal-bg);margin:0 auto"><i class="ti ti-circle-check" style="font-size:30px;color:var(--teal-d)"></i></div><div style="font-size:17px;font-weight:600;margin-top:12px">今日の、わたしを残しました</div><div style="font-size:40px;font-weight:700;color:var(--teal-d);margin-top:8px;line-height:1.1">'+tot+'<span style="font-size:16px;color:var(--mute)"> 点</span></div><div class="sub" style="margin-top:6px">この記録は物語にも残り、診察やコンシェルジュにも活かせます。</div></div><div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:12px;line-height:1.75;color:var(--teal-d)"><i class="ti ti-heart-handshake" style="vertical-align:-2px"></i> もし大きく下がった日は、担当の看護師さんにそっと届きます。ひとりで抱えなくて大丈夫。</div><button class="btn btn-teal" style="margin-top:14px" onclick="go(\'empse\')"><i class="ti ti-arrow-left" style="vertical-align:-2px"></i> いまの、わたしへ戻る</button>';return;}
+  if(empInIdx>=EMP_ORDER.length){
+    /* ★Katsu合意：今日のraw を _empHistory に追加、平滑値で empScores を再計算（ダイレクト変動禁止） */
+    var rawToday={};EMP_ORDER.forEach(function(k){rawToday[k]=(empInTmp[k]!=null?empInTmp[k]:50);});
+    window._empHistory.push({day:window._empHistory.length+1,raw:rawToday,ts:Date.now()});
+    if(window._empHistory.length>60)window._empHistory=window._empHistory.slice(-60);
+    try{localStorage.setItem(EMP_HIST_KEY,JSON.stringify(window._empHistory));}catch(e){}
+    empUpdateScoresFromHistory();
+    var rawTot=empTotal(rawToday);
+    var smTot=empTotal(empScores);
+    var acute=empDetectAcuteDrop();
+    var alertHtml='';
+    if(acute){
+      alertHtml='<div class="card" style="margin-top:14px;background:#FBE5E5;border:.5px solid #9B2D2D;font-size:12.5px;line-height:1.75;color:#5A1A1A"><i class="ti ti-bell" style="vertical-align:-2px"></i> 今日は、7日前の平均より <b>'+acute.gap+'点</b> 下がりました。担当の看護師さんに、そっとお知らせしました。ひとりで抱えなくて大丈夫です。</div>';
+    }
+    f.innerHTML='<div style="text-align:center;padding-top:10px"><div class="ic" style="width:60px;height:60px;background:var(--teal-bg);margin:0 auto"><i class="ti ti-circle-check" style="font-size:30px;color:var(--teal-d)"></i></div><div style="font-size:17px;font-weight:600;margin-top:12px">今日の、わたしを残しました</div><div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px"><div style="text-align:center"><div style="font-size:11px;color:var(--mute)">今日の点</div><div style="font-size:30px;font-weight:700;color:var(--ink);line-height:1.1">'+rawTot+'</div></div><div style="font-size:14px;color:var(--mute)">→</div><div style="text-align:center"><div style="font-size:11px;color:var(--teal-d)">表示用（平滑）</div><div style="font-size:40px;font-weight:700;color:var(--teal-d);line-height:1.1">'+smTot+'<span style="font-size:16px;color:var(--mute)"> 点</span></div></div></div><div class="sub" style="margin-top:6px">表示用は <b>過去2週間の蓄積平均</b>。今日の点は、いつもの中の「今日はこんな感じ」として残ります。</div></div>'+alertHtml+'<div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:12px;line-height:1.75;color:var(--teal-d)"><i class="ti ti-heart-handshake" style="vertical-align:-2px"></i> 大きく下がった日（7日平均より20点低い）は、担当の看護師さんにそっと届きます。日々の蓄積で星型は穏やかに動きます。</div><div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-teal" style="flex:1" onclick="go(\'empse\')"><i class="ti ti-arrow-left" style="vertical-align:-2px"></i> いまの、わたしへ</button><button class="btn btn-out" style="flex:1" onclick="go(\'emphist\')"><i class="ti ti-chart-line" style="vertical-align:-2px"></i> 推移を見る</button></div>';
+    return;
+  }
   var ck=EMP_ORDER[empInIdx],m=EMP[ck];
   var h='<div style="display:flex;align-items:center;gap:8px"><span class="ic" style="width:32px;height:32px;background:'+m.color+'22"><i class="ti ti-circle-dot" style="font-size:16px;color:'+m.color+'"></i></span><span style="font-size:13px;color:var(--mute)">'+m.label+' ・ '+(empInIdx+1)+'/5</span></div>';
   h+='<div style="font-size:17px;font-weight:600;margin-top:12px;line-height:1.55">'+m.q+'</div>';
@@ -4822,13 +5957,19 @@ function empInRender(){
   h+='<button class="btn btn-out" style="margin-top:10px;color:var(--mute)" onclick="empInSkip()">この軸は、今日はスキップ</button>';
   f.innerHTML=h;}
 function empAward(pt){
+  /* ★Katsu訂正2026-05-29：ポイントは維持。ただし「安っぽくしない」表現に。
+     チャリーンの爆発演出(ptburst)を抑制し、控えめなトーストで通知。 */
   if(window._points==null)window._points=0;
   window._points=Math.round((window._points+pt)*10)/10;
   var hn=document.getElementById('hdrPtsNum');if(hn)hn.textContent=window._points.toLocaleString();
-  var b=document.createElement('div');b.className='ptburst';document.body.appendChild(b);
-  var el=document.createElement('div');el.className='ptpop';el.innerHTML='<i class="ti ti-coin" style="vertical-align:-1px"></i> +'+pt+'pt';document.body.appendChild(el);
-  setTimeout(function(){if(b.parentNode)b.parentNode.removeChild(b);},760);
-  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},1200);
+  /* 控えめなトースト（爆発演出は使わない） */
+  var el=document.createElement('div');
+  el.style.cssText='position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:70;pointer-events:none;font-size:12.5px;font-weight:600;color:var(--amber-t);background:rgba(255,255,255,.94);border:.5px solid var(--amber-line);border-radius:999px;padding:5px 12px;box-shadow:0 4px 12px rgba(0,0,0,.08);opacity:0;transition:opacity .35s ease';
+  el.innerHTML='<i class="ti ti-coin" style="vertical-align:-1px;font-size:13px;color:var(--amber)"></i> '+pt+'pt 残しました';
+  document.body.appendChild(el);
+  setTimeout(function(){el.style.opacity='1';},20);
+  setTimeout(function(){el.style.opacity='0';},1400);
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},1900);
 }
 function empVasMove(v){var n=document.getElementById('empVasNum');if(n)n.textContent=v;}
 function empInSet(){var k=EMP_ORDER[empInIdx];var vas=document.getElementById('empVas');var v=vas?parseInt(vas.value):50;empInTmp[k]=v;empAward(0.5);empInIdx++;empInRender();}
@@ -4864,12 +6005,63 @@ function empHealthSyncHome(){
    +'<button class="btn btn-out" style="margin-top:10px" onclick="go(\'hibi\')"><i class="ti ti-flame" style="vertical-align:-2px;color:var(--amber)"></i> 心地よかったら、みんなに分け合う</button>';
 }
 window._oninit['empinput']=empInStart;
+/* ★EMPSe 履歴：Chart.js で 5軸折れ線（平滑線）＋ 当日点（薄い点）＋ 急変アラート（Katsu合意2026-05-29） */
 function empHistRender(){
   var t=document.getElementById('ehToday');if(t)t.textContent=empTotal(empScores);
-  var c=document.getElementById('ehChart');if(c)c.innerHTML=empSparkSVG(empTrend);
-  var dlt={P:4,M:-3,S:2,e:5,E:0};
-  var ax=document.getElementById('ehAxes');if(ax){var h='';EMP_ORDER.forEach(function(k,i){var m=EMP[k],sc=empScores[k]||0,dd=dlt[k]||0;var arr=dd>0?'<span style="color:#1D9E75">▲ +'+dd+'</span>':(dd<0?'<span style="color:#D85A30">▼ '+dd+'</span>':'<span style="color:var(--mute)">→ ±0</span>');h+='<div style="display:flex;align-items:center;gap:9px;padding:9px 0;'+(i?'border-top:.5px solid var(--line)':'')+'"><span style="width:40px;font-size:12px;color:var(--sub)">'+m.label+'</span><span style="flex:1;height:6px;background:var(--line);border-radius:999px;overflow:hidden"><span style="display:block;height:100%;width:'+sc+'%;background:'+m.color+'"></span></span><span style="width:30px;text-align:right;font-size:12px;color:var(--ink)">'+sc+'</span><span style="width:56px;text-align:right;font-size:11px">'+arr+'</span></div>';});ax.innerHTML=h;}
-  var log=document.getElementById('ehLog');if(log){var L=[['今日',empTotal(empScores),'子どもと折り紙。穏やかな一日。'],['昨日',64,'少し疲れたけれど、よく眠れた。'],['3日前',62,'検査結果待ちで、そわそわ。'],['1週間前',60,'退院して、家の食卓に戻れた。']];var h='';L.forEach(function(x){h+='<div class="card" style="margin-bottom:8px;display:flex;align-items:center;gap:11px;padding:11px 13px"><span style="width:52px;font-size:11px;color:var(--mute);flex-shrink:0">'+x[0]+'</span><span style="font-size:18px;font-weight:700;color:var(--teal-d);width:34px;flex-shrink:0">'+x[1]+'</span><span class="note" style="flex:1;line-height:1.5;font-size:12px">'+x[2]+'</span></div>';});log.innerHTML=h;}
+  var hist=window._empHistory||[],sm=empBuildSmoothed();
+  var rawWin=hist.slice(-EMP_WINDOW),smWin=sm.slice(-EMP_WINDOW);
+  var startDay=hist.length-rawWin.length+1;
+  /* 軸別の前週比 */
+  var dlt={};
+  EMP_ORDER.forEach(function(k){
+    if(smWin.length<=7){dlt[k]=0;return;}
+    var nowV=smWin[smWin.length-1][k]||0,prevV=smWin[smWin.length-8][k]||0;
+    dlt[k]=Math.round((nowV-prevV)*10)/10;
+  });
+  var ax=document.getElementById('ehAxes');
+  if(ax){var h='';EMP_ORDER.forEach(function(k,i){var m=EMP[k],sc=Math.round(empScores[k]||0),dd=dlt[k]||0;var arr=dd>0.1?'<span style="color:#1D9E75">▲ +'+dd.toFixed(1)+'</span>':(dd<-0.1?'<span style="color:#D85A30">▼ '+dd.toFixed(1)+'</span>':'<span style="color:var(--mute)">→ ±0</span>');h+='<div style="display:flex;align-items:center;gap:9px;padding:9px 0;'+(i?'border-top:.5px solid var(--line)':'')+'"><span style="width:40px;font-size:12px;color:var(--sub)">'+m.label+'</span><span style="flex:1;height:6px;background:var(--line);border-radius:999px;overflow:hidden"><span style="display:block;height:100%;width:'+sc+'%;background:'+m.color+'"></span></span><span style="width:30px;text-align:right;font-size:12px;color:var(--ink)">'+sc+'</span><span style="width:62px;text-align:right;font-size:11px">'+arr+'</span></div>';});ax.innerHTML=h;}
+  /* チャート：Chart.js を動的ロード（既にあれば即描画） */
+  var c=document.getElementById('ehChart');if(!c)return;
+  c.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--mute);margin-bottom:6px">'
+   +'<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:2px;background:#D85A30;display:inline-block"></span>P身体</span>'
+   +'<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:2px;background:#1D9E75;display:inline-block"></span>M精神</span>'
+   +'<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:2px;background:#BA7517;display:inline-block"></span>S社会</span>'
+   +'<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:2px;background:#639922;display:inline-block"></span>e活力</span>'
+   +'<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:14px;height:2px;background:#378ADD;display:inline-block"></span>E共感</span>'
+   +'<span style="display:inline-flex;align-items:center;gap:5px;margin-left:6px"><span style="width:7px;height:7px;border-radius:50%;background:var(--mute);opacity:.5;display:inline-block"></span>当日の点</span>'
+   +'</div><div style="position:relative;width:100%;height:230px"><canvas id="ehCanvas" role="img" aria-label="EMPSe 5軸の14日推移">14日推移</canvas></div>';
+  var go=function(){empHistDrawChart(rawWin,smWin,startDay);};
+  if(window.Chart){go();}else if(window._chartJsLoading){var t2=setInterval(function(){if(window.Chart){clearInterval(t2);go();}},120);}else{window._chartJsLoading=true;var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';s.onload=function(){window._chartJsLoading=false;go();};document.head.appendChild(s);}
+  /* 急変アラート表示 */
+  var acute=empDetectAcuteDrop();
+  var existing=document.getElementById('ehAcuteAlert');if(existing)existing.remove();
+  if(acute){var bar=document.createElement('div');bar.id='ehAcuteAlert';bar.style.cssText='margin-top:10px;padding:10px 13px;background:#FBE5E5;border:.5px solid #9B2D2D;border-radius:12px;font-size:12.5px;line-height:1.7;color:#5A1A1A';bar.innerHTML='<i class="ti ti-bell" style="vertical-align:-2px"></i> 今日の点 <b>'+acute.todayRaw+'</b> は、7日前の平滑 <b>'+acute.smooth7d+'</b> を <b>'+acute.gap+'</b>点 下回りました。看護師に通知済。';c.parentNode.insertBefore(bar,c.nextSibling);}
+  /* 入力ログ */
+  var log=document.getElementById('ehLog');
+  if(log){
+    var entries=hist.slice(-8).reverse();
+    var nowTs=Date.now();
+    var h='';
+    entries.forEach(function(e,i){
+      var rawT=empTotal(e.raw);
+      var diff=Math.round((nowTs-e.ts)/86400000);
+      var label=i===0?'今日':(diff===1?'昨日':(diff+'日前'));
+      h+='<div class="card" style="margin-bottom:8px;display:flex;align-items:center;gap:11px;padding:11px 13px"><span style="width:54px;font-size:11px;color:var(--mute);flex-shrink:0">'+label+'</span><span style="font-size:18px;font-weight:700;color:var(--teal-d);width:38px;flex-shrink:0">'+rawT.toFixed(0)+'</span><span class="note" style="flex:1;line-height:1.5;font-size:11px">P '+e.raw.P+' / M '+e.raw.M+' / S '+e.raw.S+' / e '+e.raw.e+' / E '+e.raw.E+'</span></div>';
+    });
+    log.innerHTML=h;
+  }
+}
+function empHistDrawChart(rawWin,smWin,startDay){
+  var ctx=document.getElementById('ehCanvas');if(!ctx)return;
+  var labels=rawWin.map(function(_,i){return 'Day '+(startDay+i);});
+  var COL={P:'#D85A30',M:'#1D9E75',S:'#BA7517',e:'#639922',E:'#378ADD'};
+  var datasets=[];
+  EMP_ORDER.forEach(function(k){
+    datasets.push({label:k+' 平滑',data:smWin.map(function(s){return s[k];}),borderColor:COL[k],backgroundColor:COL[k],borderWidth:2,tension:0.35,pointRadius:0,fill:false});
+    datasets.push({label:k+' 当日',data:rawWin.map(function(h){return h.raw[k];}),borderColor:COL[k]+'66',backgroundColor:COL[k]+'66',borderWidth:0,pointRadius:2.5,pointStyle:'circle',showLine:false});
+  });
+  if(window._ehChart){try{window._ehChart.destroy();}catch(e){}}
+  window._ehChart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{intersect:false,mode:'index'}},scales:{y:{min:0,max:100,grid:{color:'rgba(0,0,0,.05)'},ticks:{stepSize:20,font:{size:10}}},x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:7,font:{size:10}}}},animation:false}});
 }
 window._oninit['emphist']=empHistRender;
 </script>
@@ -5094,6 +6286,85 @@ function emgAiReport(){
 window._oninit['emergency']=function(){emgTab('medical');emgQR();};
 </script>
 
+<!-- ============ ★話し方の設定（voice_settings）★Katsu要望2026-05-29 ============ -->
+<section class="scr" id="voice_settings">
+  <div class="pad">
+    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <h1 class="h1" style="margin-top:10px">話し方の設定</h1>
+    <div class="sub">声・速度・方言・話しかけ・確認の待機時間を、あなたに合わせて</div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
+      SATOIコンシェルジュ・読み上げ・ゆったりモードの話し方を、ここで調整できます。<b>男性ユーザーでも声は女性がデフォルト</b>です。お好みで切替えてください。
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-user-voice"></i> 声</div>
+    <div class="card" style="padding:14px">
+      <label class="opt" style="border-bottom:.5px solid var(--line);padding:11px 0"><span style="display:flex;align-items:center;gap:7px"><i class="ti ti-mood-happy" style="color:var(--rose)"></i> 女性（デフォルト）</span><input type="radio" name="vsGender" value="female" onchange="vsSetGender(this.value)" style="width:auto"></label>
+      <label class="opt" style="padding:11px 0"><span style="display:flex;align-items:center;gap:7px"><i class="ti ti-mood-smile" style="color:var(--blue)"></i> 男性</span><input type="radio" name="vsGender" value="male" onchange="vsSetGender(this.value)" style="width:auto"></label>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-clock"></i> 話す速さ</div>
+    <div class="card" style="padding:14px">
+      <div style="display:flex;align-items:center;gap:10px"><i class="ti ti-player-track-prev" style="color:var(--mute)"></i><input type="range" id="vsRate" min="0.6" max="1.3" step="0.05" value="0.85" oninput="vsSetRate(this.value)" style="flex:1"><i class="ti ti-player-track-next" style="color:var(--mute)"></i></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:6px"><span>とてもゆっくり</span><span id="vsRateLbl" style="font-weight:600;color:var(--teal-d)">0.85x（ゆっくり）</span><span>はやい</span></div>
+      <button class="btn btn-out" style="margin-top:12px;padding:10px;font-size:13px" onclick="vsSpeakTest()"><i class="ti ti-volume" style="vertical-align:-2px;color:var(--teal)"></i> この速さで試し読み</button>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-message-language"></i> 方言</div>
+    <div class="card" style="padding:14px">
+      <label class="opt" style="border-bottom:.5px solid var(--line);padding:11px 0"><span>登録情報から自動判定（おすすめ）</span><input type="radio" name="vsDialect" value="auto" onchange="vsSetDialect(this.value)" style="width:auto"></label>
+      <label class="opt" style="border-bottom:.5px solid var(--line);padding:11px 0"><span>標準語</span><input type="radio" name="vsDialect" value="標準語" onchange="vsSetDialect(this.value)" style="width:auto"></label>
+      <label class="opt" style="border-bottom:.5px solid var(--line);padding:11px 0"><span>関西弁</span><input type="radio" name="vsDialect" value="関西弁" onchange="vsSetDialect(this.value)" style="width:auto"></label>
+      <label class="opt" style="border-bottom:.5px solid var(--line);padding:11px 0"><span>東北弁（やわらか）</span><input type="radio" name="vsDialect" value="東北弁" onchange="vsSetDialect(this.value)" style="width:auto"></label>
+      <label class="opt" style="border-bottom:.5px solid var(--line);padding:11px 0"><span>九州弁</span><input type="radio" name="vsDialect" value="九州弁" onchange="vsSetDialect(this.value)" style="width:auto"></label>
+      <label class="opt" style="padding:11px 0"><span>名古屋弁</span><input type="radio" name="vsDialect" value="名古屋弁" onchange="vsSetDialect(this.value)" style="width:auto"></label>
+      <div class="note" style="margin-top:8px;font-size:11px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 方言は SATOI コンシェルジュとの会話で適用されます（合成音声の発音は標準語、文体が方言になります）。</div>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-message-circle"></i> SATOI からの話しかけ</div>
+    <div class="card" style="padding:14px">
+      <label class="opt" style="padding:11px 0"><span>画面を開いたら SATOI から話しかける</span><input id="vsAutoSpeak" type="checkbox" checked onchange="vsSetAutoSpeak(this.checked)" style="width:auto"></label>
+      <div class="note" style="margin-top:4px;font-size:11px;line-height:1.7">OFFにすると、SATOIから自動で話しかけることはなくなります。あなたが必要な時に「話しかけて」のボタンを押すだけ。</div>
+    </div>
+
+    <div class="sechd" style="margin-top:16px"><i class="ti ti-shield-check"></i> 二段階確認の待機時間</div>
+    <div class="card" style="padding:14px">
+      <div style="display:flex;align-items:center;gap:10px"><i class="ti ti-clock-pause" style="color:var(--mute)"></i><input type="range" id="vsDelay" min="0" max="6" step="1" value="3" oninput="vsSetDelay(this.value)" style="flex:1"></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:6px"><span>すぐ</span><span id="vsDelayLbl" style="font-weight:600;color:var(--teal-d)">3秒</span><span>長め</span></div>
+      <div class="note" style="margin-top:8px;font-size:11px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 金銭・契約・送信・公開などの操作の前に、SATOI が「本当に進めますか？」と確認します。誤タップ防止の待機時間を変更できます。<b>緊急時はこの設定に関わらずすぐ実行</b>できます。</div>
+    </div>
+
+    <div class="card" style="margin-top:18px;background:#F1ECDF;border:1px solid #B5701B;line-height:1.85;font-size:12.5px;color:#5A3A12">
+      <i class="ti ti-shield-lock" style="vertical-align:-2px"></i> 音声機能・SATOI からの話しかけ・AIアシスト画面操作は、<b>会員登録した方が利用できます</b>（AI 利用にコストがかかるため）。未会員の方も読み物・がん種ページ・公的制度ガイド等はすべて無料でご覧いただけます。
+    </div>
+
+    <button class="btn btn-teal" style="margin-top:18px" onclick="saveVoiceSettings()"><i class="ti ti-device-floppy" style="vertical-align:-2px"></i> 設定を保存</button>
+    <button class="btn btn-out" style="margin-top:10px" onclick="go('references')"><i class="ti ti-list" style="vertical-align:-2px"></i> ガバナンス v1.0 の根拠を見る</button>
+
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+<script>
+/* 設定 UI のロジック */
+function vsSetGender(v){window._voiceSettings.gender=v;saveVoiceSettings();}
+function vsSetRate(v){var r=parseFloat(v);window._voiceSettings.rate=r;var l=document.getElementById('vsRateLbl');if(l)l.textContent=r.toFixed(2)+'x'+(r<0.8?'（とてもゆっくり）':r<1.0?'（ゆっくり）':r<1.15?'（標準）':'（はやい）');}
+function vsSetDialect(v){window._voiceSettings.dialect=v;saveVoiceSettings();}
+function vsSetAutoSpeak(b){window._voiceSettings.autoSpeak=!!b;saveVoiceSettings();}
+function vsSetDelay(v){var n=parseInt(v,10);window._voiceSettings.confirmDelay=n;var l=document.getElementById('vsDelayLbl');if(l)l.textContent=n+'秒';}
+function vsSpeakTest(){
+  var sample='こんにちは、SATOIコンシェルジュです。これは、あなたが選んだ話し方の試し読みです。落ち着いて、ゆっくり、お話しします。';
+  if(typeof vsListen==='function')vsListen({},sample);
+}
+window._oninit['voice_settings']=function(){
+  var s=window._voiceSettings||{};
+  var g=document.querySelector('input[name=vsGender][value="'+(s.gender||'female')+'"]');if(g)g.checked=true;
+  var r=document.getElementById('vsRate');if(r){r.value=s.rate||0.85;vsSetRate(r.value);}
+  var d=document.querySelector('input[name=vsDialect][value="'+(s.dialect||'auto')+'"]');if(d)d.checked=true;
+  var a=document.getElementById('vsAutoSpeak');if(a)a.checked=(s.autoSpeak!==false);
+  var dl=document.getElementById('vsDelay');if(dl){dl.value=(s.confirmDelay!=null?s.confirmDelay:3);vsSetDelay(dl.value);}
+};
+</script>
+
 <!-- ============ SATOIについて ============ -->
 <section class="scr" id="about">
   <div class="pad">
@@ -5127,6 +6398,259 @@ window._oninit['emergency']=function(){emgTab('medical');emgQR();};
     <div class="row2">
       <button class="tile" onclick="go('treatment')"><i class="ti ti-stethoscope" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">治療を知る</div></button>
       <button class="tile" onclick="go('sdm')"><i class="ti ti-clipboard-heart" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">聞きたいことを整理</div></button>
+    </div>
+    <!-- ★Track A/B共通 ガバナンス引用一覧へのリンク（about下部） -->
+    <div style="margin-top:18px;padding:14px 16px;background:#F1ECDF;border:1px solid #B5701B;border-radius:14px">
+      <div style="font-size:11px;font-weight:700;color:#B5701B;letter-spacing:.05em;margin-bottom:4px">▸ GOVERNANCE</div>
+      <div style="font-size:13px;font-weight:600;color:#5A3A12;line-height:1.7">SATOIは医療・AI・個人情報・お金など、<b>17以上のガバナンス・ガイドラインを根拠</b>に運営されています。</div>
+      <button class="btn btn-out" style="margin-top:10px;color:#5A3A12;border-color:#B5701B" onclick="go('references')"><i class="ti ti-list" style="vertical-align:-2px"></i> 参考にしているガイドライン・引用一覧</button>
+    </div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ ★参考にしているガイドライン・引用一覧（references） ★Katsu指示2026-05-29 全画面フッターから参照可能 ============ -->
+<section class="scr" id="references">
+  <div class="pad">
+    <button class="back" onclick="go('about')"><i class="ti ti-arrow-left"></i> SATOIについて</button>
+    <h1 class="h1" style="margin-top:10px">参考にしているガイドライン・引用一覧</h1>
+    <div class="sub">SATOIの全コンテンツが、どの公的情報・学会ガイドライン・国際標準を根拠としているか</div>
+
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;line-height:1.85;font-size:13px;color:var(--teal-d)">
+      SATOI のすべての解説・機能・AIアシスト・運営方針は、<b>関連する国内外の法令・学会ガイドライン・国際標準・公的情報源</b>を根拠に作成・運営されています。下記は、現時点で SATOI が参照している主なリソース一覧です（順次更新）。詳細なガバナンス方針は <b>SATOI AIアシスト 境界線ガバナンス v1.0</b> に集約されています。
+    </div>
+
+    <!-- ガバナンス文書本体 -->
+    <details class="qa" style="margin-top:14px" open><summary><b>★ SATOI ガバナンス本体（v1.0）</b></summary>
+      <div class="note" style="line-height:1.95;font-size:13px">
+      <b>SATOI AIアシスト 境界線ガバナンス v1.0</b>（2026-05-29 制定）<br>
+      17フレームワーク参照／動作カテゴリ×根拠マトリクス／SATOI 7原則／二段階確認標準仕様。<br>
+      公開時は法務確認・JOiNT理事会承認を経た正式版を本ページに掲載予定。
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>① AI ガバナンス・規制</b>（17件）</summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・<b>医療法 第6条の5</b>（医療広告ガイドライン）— <a class="link" href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/kokokukisei/index.html" target="_blank" rel="noopener">厚生労働省</a><br>
+      ・<b>医薬品医療機器等法（薬機法）</b> — <a class="link" href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iyakuhin/yakubutsuranyou/index.html" target="_blank" rel="noopener">厚生労働省</a><br>
+      ・<b>個人情報保護法</b>／個情委「医療・介護関係事業者ガイダンス」 — <a class="link" href="https://www.ppc.go.jp/personalinfo/legal/" target="_blank" rel="noopener">個情委</a><br>
+      ・<b>PMDA「医療用人工知能（AI）の取り扱いに関する報告」</b> — <a class="link" href="https://www.pmda.go.jp/" target="_blank" rel="noopener">PMDA</a><br>
+      ・<b>金融商品取引法／保険業法／銀行法</b> — 金融庁<br>
+      ・<b>特定商取引法／景品表示法</b> — <a class="link" href="https://www.caa.go.jp/" target="_blank" rel="noopener">消費者庁</a><br>
+      ・<b>電子契約法／電子署名法</b> — 経済産業省・法務省<br>
+      ・<b>電気通信事業法</b> — 総務省<br>
+      ・<b>経済産業省「AI 事業者ガイドライン（第1.0版）」2024年</b> — <a class="link" href="https://www.meti.go.jp/shingikai/mono_info_service/ai_shakai_jisso/index.html" target="_blank" rel="noopener">経産省</a><br>
+      ・<b>総務省「AI ガバナンスガイドライン」</b>／内閣府「人間中心のAI社会原則」<br>
+      ・<b>ISO/IEC 42001 AI管理システム</b>（国際標準・2023年12月）<br>
+      ・<b>NIST AI Risk Management Framework</b> — <a class="link" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST</a><br>
+      ・<b>EU AI Act</b>（欧州AI法）<br>
+      ・<b>OECD AI Principles</b><br>
+      ・<b>WHO「Ethics and governance of AI for health」</b>（2021）— <a class="link" href="https://www.who.int/publications/i/item/9789240029200" target="_blank" rel="noopener">WHO</a><br>
+      ・<b>FDA「Software as a Medical Device (SaMD)」</b>／IMDRF<br>
+      ・<b>日本医師会「医療における AI の活用について」</b>／JOiNT（SATOI関連自主規制）
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>② がん全般・統計・基礎情報</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・<b>国立がん研究センター がん情報サービス</b> — <a class="link" href="https://ganjoho.jp/public/index.html" target="_blank" rel="noopener">ganjoho.jp</a><br>
+      ・<b>国立がん研究センター がん統計</b>（病期別5年相対生存率・全国がん登録・院内がん登録）<br>
+      ・<b>UICC TNM分類 第8版</b><br>
+      ・<b>NCCN ガイドライン</b>（国際）<br>
+      ・<b>WHO がん統計</b>
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>③ がん種別 学会ガイドライン（30種網羅）</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・日本乳癌学会「乳癌診療ガイドライン2022年版」<br>
+      ・日本肺癌学会「肺癌診療ガイドライン」「悪性胸膜中皮腫診療ガイドライン」<br>
+      ・日本臨床腫瘍学会（化学療法レジメン参照体系／がんゲノム医療ガイダンス第2版／がん免疫療法ガイドライン2023年版／発熱性好中球減少症FN診療ガイドライン／AYA WG／用語集）<br>
+      ・日本血液学会「造血器腫瘍診療ガイドライン2023年版」<br>
+      ・日本泌尿器科学会「腎盂・尿管癌診療ガイドライン2018年版」<br>
+      ・日本胃癌学会「胃癌治療ガイドライン」<br>
+      ・大腸癌研究会「大腸癌治療ガイドライン」<br>
+      ・日本肝臓学会「肝癌診療ガイドライン」<br>
+      ・日本婦人科腫瘍学会（子宮頸／子宮体／卵巣）<br>
+      ・日本頭頸部癌学会「頭頸部癌診療ガイドライン」<br>
+      ・日本小児血液・がん学会／JPLSGプロトコル<br>
+      ・国立成育医療研究センター 小児がん中央機関<br>
+      ・小児がん拠点病院（厚生労働省指定15施設）<br>
+      ・主要試験：KEYNOTE-522/355/177/158/204/170/045, CheckMate 743/274/142/205/142, IMpower133, CASPIAN, ECHELON-1, JAVELIN Bladder 100, POUT, DeLLphi-301, ASCENT, EV-301, THOR
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>④ がんゲノム医療・バイオマーカー</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・<b>C-CAT（がんゲノム情報管理センター）</b><br>
+      ・厚生労働省「がんゲノム医療提供体制」<br>
+      ・日本臨床腫瘍学会「がんゲノム医療ガイダンス第2版」<br>
+      ・FoundationOne CDx／OncoGuide NCC オンコパネル／GenMineTOP（保険適用パネル）<br>
+      ・FDA Pembrolizumab labels（TMB-H 臓器横断的承認）
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑤ 緩和ケア・症状管理</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・日本緩和医療学会「がん疼痛の薬物療法に関するガイドライン2020年版」「がん患者の精神症状に対する向精神薬適正使用ガイドライン2017年版」<br>
+      ・日本癌治療学会「制吐薬適正使用ガイドライン2023年版」<br>
+      ・日本がんサポーティブケア学会（がん関連倦怠感ガイドライン／がん悪液質ガイドライン／末梢神経障害ガイドライン）<br>
+      ・日本がん口腔支持療法学会／日本歯科医師会 周術期口腔機能管理<br>
+      ・<b>WHO 疼痛ラダー</b><br>
+      ・日本リンパ浮腫学会「リンパ浮腫診療ガイドライン2018年版」
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑥ 心理・精神・スピリチュアルケア</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・日本サイコオンコロジー学会「がん患者の精神症状ガイドライン」「抑うつ診療ガイドライン」<br>
+      ・日本睡眠学会<br>
+      ・日本ホスピス緩和ケア協会<br>
+      ・日本臨床宗教師会<br>
+      ・よりそいホットライン／いのちの電話
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑦ AYA世代・妊孕性温存</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・国立がん研究センター AYAサポートチーム／AYA世代のがん罹患統計<br>
+      ・日本臨床腫瘍学会 AYA WG／日本癌治療学会「AYAがんガイドブック」<br>
+      ・<b>日本がん・生殖医療学会（JSFP）「妊孕性温存療法ガイドライン2024年版」</b><br>
+      ・日本生殖医学会「生殖医療ガイドライン2021年版」<br>
+      ・日本産科婦人科学会 生殖補助医療実施登録施設一覧（JOFR）<br>
+      ・<b>厚生労働省「小児・AYA世代がん患者等の妊孕性温存療法研究促進事業実施要綱」</b><br>
+      ・厚労省「小児・AYAがん長期フォローアップガイドライン2022」<br>
+      ・文部科学省「高等学校等就学支援制度」
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑧ アピアランスケア・外見</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・<b>国立がん研究センター 中央病院 アピアランス支援センター</b><br>
+      ・日本サイコオンコロジー学会／日本がんサポーティブケア学会
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑨ 食事・栄養・運動</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・日本臨床腫瘍学会「がん患者の栄養療法ガイドライン」<br>
+      ・日本静脈経腸栄養学会「静脈経腸栄養ガイドライン」<br>
+      ・日本がんサポーティブケア学会「がん悪液質に対する治療指針」<br>
+      ・厚生労働省「e-ヘルスネット」<br>
+      ・国立がん研究センター「健康食品の安全性・有効性情報」
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑩ お金・公的制度・就労支援</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・<b>厚生労働省「高額療養費制度を利用される皆さまへ」</b> — <a class="link" href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryouhoken/juuyou/kougakuiryou/index.html" target="_blank" rel="noopener">厚労省</a><br>
+      ・<b>全国健康保険協会「傷病手当金」</b> — <a class="link" href="https://www.kyoukaikenpo.or.jp/g3/cat310/sb3030/sbb30301/" target="_blank" rel="noopener">協会けんぽ</a><br>
+      ・<b>日本年金機構「障害年金」</b> — <a class="link" href="https://www.nenkin.go.jp/service/jukyu/shougainenkin/" target="_blank" rel="noopener">日本年金機構</a><br>
+      ・<b>厚生労働省「介護保険制度」</b><br>
+      ・<b>厚生労働省「事業場における治療と仕事の両立支援のためのガイドライン」2023年改訂</b><br>
+      ・国税庁「医療費控除」<br>
+      ・日本社会保険労務士会連合会<br>
+      ・<b>ハローワーク 長期療養者就職支援事業</b>（がん患者就職支援）<br>
+      ・自治体ごとの「がん患者ウィッグ購入費助成」「在宅療養支援」「医療用補整具助成」
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑪ 病院・相談支援センター・治験検索</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・厚生労働省「がん診療連携拠点病院等の指定について」<br>
+      ・<b>国立がん研究センター がん情報サービス「病院をさがす」</b> — <a class="link" href="https://hospdb.ganjoho.jp/" target="_blank" rel="noopener">hospdb.ganjoho.jp</a><br>
+      ・国立がん研究センター「院内がん登録生存率閲覧システム」<br>
+      ・<b>国立がん研究センター 希少がんセンター</b> — <a class="link" href="https://www.ncc.go.jp/jp/rcc/index.html" target="_blank" rel="noopener">希少がんセンター</a><br>
+      ・厚労省「小児がん拠点病院」（全国15施設）<br>
+      ・<b>jRCT 臨床研究実施計画・研究概要公開システム</b> — <a class="link" href="https://jrct.niph.go.jp/" target="_blank" rel="noopener">jRCT</a><br>
+      ・国立がん研究センター「がん臨床試験を探す」<br>
+      ・全国がん診療連携拠点病院 がん相談支援センター 相談員研修プログラム
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑫ 予防・がん検診</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・<b>国立がん研究センター「科学的根拠に基づくがん予防」</b>／日本人のためのがん予防法（5+1）<br>
+      ・厚生労働省「がん予防重点健康教育及びがん検診実施のための指針」<br>
+      ・国がんセン「有効性評価に基づく各がん検診ガイドライン」2024年改訂版（胃・大腸・肺・乳・子宮頸）<br>
+      ・日本ヘリコバクター学会「H. pylori 感染の診断と治療のガイドライン」<br>
+      ・厚生労働省「肝炎総合対策」<br>
+      ・日本産科婦人科学会／HPVワクチン関連情報
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑬ ACP（人生会議）・SDM（共同意思決定）</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・<b>厚生労働省「人生の最終段階における医療・ケアの決定プロセスに関するガイドライン」2018年改訂</b>（ACP）<br>
+      ・日本臨床腫瘍学会「SDM普及プロジェクト」<br>
+      ・国立長寿医療研究センター「MCIハンドブック」<br>
+      ・日本透析医会（SDM定義）<br>
+      ・JCOG（PRO-CTCAE 日本語版）
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑭ 民間療法・健康食品の注意</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・<b>厚生労働省「統合医療情報発信サイト eJIM」</b><br>
+      ・<b>国立がん研究センター「健康食品の安全性・有効性情報」</b><br>
+      ・消費者庁「景品表示法」<br>
+      ・厚生労働省「医薬品医療機器等法（薬機法）」<br>
+      ・日本緩和医療学会 補完代替療法に関する記述
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑮ 災害時のがん療養</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・日本臨床腫瘍学会「災害時のがん診療継続のための備え」<br>
+      ・日本がん看護学会「がん患者の災害支援に関する提言」<br>
+      ・日本災害医療学会<br>
+      ・<b>DMAT 日本災害医療支援機構</b><br>
+      ・日本透析医会「災害時情報ネットワーク」<br>
+      ・厚生労働省「災害時の医療情報」
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑯ 治療モダリティ別 学会</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・日本外科学会 外科専門医制度共通教育<br>
+      ・<b>日本放射線腫瘍学会（JASTRO）「放射線治療計画ガイドライン」</b><br>
+      ・日本造血・免疫細胞療法学会<br>
+      ・日本リハビリ医学会<br>
+      ・日本骨髄バンク／臍帯血バンク<br>
+      ・日本胸部外科学会／日本呼吸器外科学会
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑰ アスベスト・職業性曝露関連</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・<b>厚生労働省「アスベスト健康被害救済制度」</b><br>
+      ・<b>独立行政法人 環境再生保全機構</b>
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑱ 遺伝性腫瘍・がん素因症候群</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・NCCN「Genetic/Familial High-Risk Assessment」<br>
+      ・日本遺伝性腫瘍学会／JOHBOC（日本HBOCコンソーシアム）<br>
+      ・Li-Fraumeni症候群／神経線維腫症／Beckwith-Wiedemann／DICER1<br>
+      ・リンチ症候群スクリーニング（IHC MMR、MSI）
+      </div>
+    </details>
+
+    <details class="qa" style="margin-top:8px"><summary><b>⑲ 用語・教育・統計</b></summary>
+      <div class="note" style="line-height:2;font-size:13px">
+      ・国立がん研究センター がん情報サービス「がんに関する用語集」<br>
+      ・日本臨床腫瘍学会 用語集<br>
+      ・<b>JCOG CTCAE v5.0 日本語訳JCOG版</b>（有害事象共通用語規準）<br>
+      ・国立がん研究センター「全国がん登録」「院内がん登録症例集計」
+      </div>
+    </details>
+
+    <div class="card" style="margin-top:18px;background:var(--amber-bg);border:none;line-height:1.85;font-size:13px;color:var(--amber-t)">
+      上記は SATOI が現時点で参照している主要な公的情報源・学会ガイドライン・国際標準の一覧です。<b>各コンテンツの個別出典は、該当ページ末尾の「出典：」セクション</b>に明示しています。新たな関連ガイドラインが発行された場合は、定期的に追加・更新します。
+    </div>
+
+    <div class="note" style="margin-top:12px;line-height:1.7;font-size:11.5px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 本一覧は SATOI のコンテンツ作成・運営の根拠を明示する目的で公開しています。リンクは公的サイト・学会公式へのリンクのみ。商品・サービスへの誘導は含みません。最新の指針改定状況は各団体公式情報をご確認ください。
     </div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
