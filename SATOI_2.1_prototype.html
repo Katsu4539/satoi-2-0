@@ -9478,22 +9478,27 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
   function frame(){return '<div class="card" style="margin-top:14px;background:var(--teal-bg);border:none;font-size:13px;line-height:1.95;color:var(--teal-d)">この5年相対生存率は、<b>過去に診断された患者集団のデータに基づく統計値</b>です。<b>近年承認された免疫チェックポイント阻害薬・分子標的薬・がんゲノム医療など、新しい治療選択肢の効果は、本データには反映されていません</b>。<br><br>病期（ステージ）は、予後の指標であると同時に、<b>治療方針を決めるための病期分類</b>です。集学的治療の進歩により、<b>ステージⅣの患者さんに対しても治療選択肢が拡大し、生存期間の延長やQOLの維持が報告されています</b>（国立がん研究センター 統計報告 等）。<br><br>本数値はあくまで集団としての目安です。個々の予後は、<b>組織型・分子標的の有無・全身状態・併存疾患</b>により異なります。<b>最新の診療ガイドラインを踏まえ、主治医とご相談ください</b>。SATOIは、その対話の準備と、あなたの言葉の整理を、そっとお手伝いします。</div><div class="note" style="margin-top:8px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス（病期別5年相対生存率）／各学会診療ガイドライン。本データは過去の患者集団の集計であり、最新治療の効果は十分には反映されていません。個別の予後評価は主治医にご確認ください。</div>';}
   /* ★Katsu指示2026-05-29 PM: 「治療を知る」ハブ経由は不要・がん種別の緑バー(detailBtn)を主CTAに */
   function actions(){return '<button class="btn btn-out" style="margin-top:10px" onclick="go(\'ai\')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> コンシェルジュに相談する</button><button class="btn btn-out" style="margin-top:10px" onclick="svReset()"><i class="ti ti-refresh" style="vertical-align:-2px"></i> もう一度しらべる</button>';}
+  /* ★Katsu指示2026-05-29 PM: who+がん種+ステージを必ず1ページで選択＋下に結果(5年生存率) */
+  function selPill(label,selected,onclick){
+    var st=selected?'background:#0F6E56;color:#fff;border-color:#0F6E56;font-weight:700':'background:#fff;color:#1E293B';
+    return '<button onclick="'+onclick+'" style="font-size:12px;padding:7px 11px;border:.5px solid var(--line2);border-radius:999px;'+st+';cursor:pointer;font:inherit;line-height:1.2;margin:0 5px 5px 0">'+label+'</button>';
+  }
   function R(){var e=document.getElementById('svStep');if(!e)return;var h='';
-    if(!who){
-      h+='<div style="font-size:15px;font-weight:600;margin:14px 0 8px">どなたのことを、調べますか？</div><div>'+chip('わたし自身のこと',"svW('self')")+chip('身近な人のこと',"svW('near')")+'</div>';
-    }else if(!can){
-      h+='<button class="back" style="margin-top:10px" onclick="svW(\'\')"><i class="ti ti-arrow-left"></i> 戻る</button>';
-      h+='<div style="font-size:15px;font-weight:600;margin:12px 0 8px">どのがんについて？</div><div class="note" style="margin-bottom:8px;line-height:1.65">どのがんも、選ぶと見通しと、出典つきの詳しい説明へつながります。</div><div>';
-      SV_LIST.forEach(function(x){h+=chip(x[1],"svC('"+x[0]+"')");});
-      h+=chip('その他・まだ分からない',"svC('other')")+'</div>';
-    }else if(can!=='other' && !stg){
-      var nmS=NAMES[can]||'このがん';
-      h+='<button class="back" style="margin-top:10px" onclick="svC(\'\')"><i class="ti ti-arrow-left"></i> 戻る</button>';
-      h+='<div style="font-size:15px;font-weight:600;margin:12px 0 6px">'+nmS+'の、ステージ（広がり）は？</div><div class="note" style="margin-bottom:8px;line-height:1.65">わからなくて大丈夫。「まだ分からない」でも、これから何があるかをご案内します。検査がそろうと、先生が説明してくれます。</div><div>';
-      ['I','II','III','IV'].forEach(function(s){h+=chip('ステージ'+s,"svS('"+s+"')");});
-      h+=chip('まだ分からない',"svS('NA')")+'</div>';
-    }else{
-      h+='<button class="back" style="margin-top:10px" onclick="'+(can==='other'?"svC('')":"svS('')")+'"><i class="ti ti-arrow-left"></i> 戻る</button>';
+    /* === 1ページ選択UI（who+がん種+ステージを常に同時表示） === */
+    h+='<div class="card" style="margin-top:14px">';
+    h+='<div style="font-size:13px;font-weight:700;margin-bottom:6px">① どなたのこと？</div><div style="margin-bottom:14px">';
+    h+=selPill('わたし自身',who==='self',"svW('self')")+selPill('身近な人',who==='near',"svW('near')")+'</div>';
+    h+='<div style="font-size:13px;font-weight:700;margin-bottom:6px">② どのがんについて？</div><div style="margin-bottom:14px">';
+    SV_LIST.forEach(function(x){h+=selPill(x[1],can===x[0],"svC('"+x[0]+"')");});
+    h+=selPill('その他・まだ分からない',can==='other',"svC('other')")+'</div>';
+    if(can && can!=='other'){
+      h+='<div style="font-size:13px;font-weight:700;margin-bottom:6px">③ ステージ（広がり）</div><div>';
+      ['I','II','III','IV'].forEach(function(s){h+=selPill('ステージ'+s,stg===s,"svS('"+s+"')");});
+      h+=selPill('まだ分からない',stg==='NA',"svS('NA')")+'</div>';
+    }
+    h+='</div>';
+    /* === 結果（who+がん種+ステージが揃ったら表示） === */
+    if(who && can && (can==='other' || stg)){
       if(can==='other'){
         h+='<div class="card" style="margin-top:16px;background:#f6f7f5;border:none;font-size:13px;line-height:1.9">数字は、がん種・病期・性質で大きく異なります。がん種が決まったら、もう一度ここから選べます。あなたの場合は、主治医に確認するのがいちばん確かです。</div>';
       }else{
@@ -9537,11 +9542,16 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
   };
   window._oninit=window._oninit||{};
   window._oninit['survival']=function(){
-    /* ★Katsu指示2026-05-29 PM: #survival に到達したら必ず profilesetup (who+がん種+ステージ 1ページ) に飛ばす */
-    if(typeof window.startMyStage==='function'){
-      setTimeout(function(){window.startMyStage('self');},0);
-      return;
-    }
+    /* ★Katsu指示2026-05-29 PM: who+がん種+ステージを1ページUIで描画＋下に結果(5年生存率) */
+    /* satoi_profileから自動復元 */
+    try{
+      var pf=localStorage.getItem('satoi_profile');
+      if(pf){var p=JSON.parse(pf);
+        if(p.who&&!who)who=(p.who==='self'?'self':'near');
+        if(p.cancer&&!can)can=p.cancer;
+        if(p.stage&&['I','II','III','IV','NA'].indexOf(p.stage)>=0&&!stg)stg=p.stage;
+      }
+    }catch(e){}
     R();
   };
 })();
