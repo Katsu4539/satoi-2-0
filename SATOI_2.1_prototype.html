@@ -10024,8 +10024,21 @@ window._oninit['profilesetup']=function(){
 /* cancer などから「あなた自身/身近な人」を選んで gan種＋ステージへ進む統一エントリ ★[[open_requirement_entry_cancer_stage]] */
 function startMyStage(who){
   who=who||'self';
+  /* ★Katsu指示2026-05-29 PM: profile完成済(がん種+ステージあり)なら survival(5年生存率+治療フロー)に直接 */
+  try{
+    var pf=localStorage.getItem('satoi_profile');
+    if(pf){
+      var p=JSON.parse(pf);
+      if(p && p.cancer && p.stage && p.cancer!==''){
+        /* 完成済 → #survival で 5年生存率＋治療フロー表示 */
+        go('survival');
+        return;
+      }
+    }
+  }catch(e){}
+  /* 未設定 → profilesetup で入力 */
   window._psForceWho=who;
-  window._psFrom='cancer'; /* 完了/スキップ後の戻り先 */
+  window._psFrom='survival'; /* 保存後は #survival に直行 */
   go('profilesetup');
 }
 window.startMyStage=startMyStage;
@@ -10040,6 +10053,11 @@ window.startMyStage=startMyStage;
     if(s)window._myStage=s;
     try{localStorage.setItem('satoi_profile', JSON.stringify({who:who, cancer:c, stage:s, saved:Date.now()}));}catch(e){}
     if(typeof toast==='function')toast(who==='family'?'保存しました。身近な方向けに整えます。':'保存しました。あなた向けに整えます。');
+    /* ★Katsu指示2026-05-29 PM: 「あなた自身のこと」→profilesetup→保存 後は #survival(5年生存率＋治療フロー)に直行 */
+    if(window._psFrom==='survival'){
+      window._psFrom=null;
+      if(typeof go==='function'){go('survival');return;}
+    }
     if(window._psFrom==='cancer'){
       window._psFrom=null;
       if(c && typeof openCancer==='function'){openCancer(c);return;}
@@ -10049,6 +10067,7 @@ window.startMyStage=startMyStage;
   };
   window.skipProfileSetup=function(){
     try{localStorage.setItem('satoi_profile', JSON.stringify({who:window._tmpWho||'self', cancer:'', stage:'', saved:Date.now(), skipped:true}));}catch(e){}
+    if(window._psFrom==='survival'){window._psFrom=null;if(typeof go==='function'){go('survival');return;}}
     if(window._psFrom==='cancer'){window._psFrom=null;if(typeof go==='function'){go('cancer');return;}}
     if(typeof afterAuth==='function')afterAuth();else go('mypage');
   };
