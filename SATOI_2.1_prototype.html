@@ -1962,7 +1962,12 @@ function buildMap(){
   });
 }
 function pickColor(v,vals){
-  const heat=['#ECE3CC','#D8B98F','#B8954A','#8A5A2B','#6F3B22','#5B2418'];
+  /* ★罹患モードは人口差が小さく、全県が中〜濃色になり「真っ黒」化する。
+     最低色を背景色寄り(#FFFCF6)にして、罹患のような正規化が浅い場合は白〜薄ベージュ域から始まる。
+     最濃も #8A5A2B にトーンダウン（前 #5B2418 は地図塗りつぶしには黒く見えすぎ）。 */
+  const heat=state.mode==='incidence'
+    ? ['#FFFCF6','#F5E9CC','#E2C896','#C8A05E','#A77B3D','#8A5A2B']
+    : ['#FFFCF6','#ECE3CC','#D8B98F','#B8954A','#8A5A2B','#6F3B22'];
   const mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);
   if(mx===mn)return heat[2];
   const idx=Math.min(heat.length-1,Math.floor((v-mn)/(mx-mn)*heat.length));
@@ -3071,6 +3076,108 @@ window._oninit['next_horizon_bridge']=function(){
       <div class="note" style="margin-top:11px;font-size:11px;line-height:1.7"><i class="ti ti-shield-lock" style="vertical-align:-2px"></i> 4軸統合データはSATOI独占。NTT ABEで暗号化・JOiNT諮問委員会の監督下・契約者同意の範囲のみ。</div>
     </div>
 
+    <!-- ★契約者プール検索（地域×年齢×がん種×期間） -->
+    <div class="sechd" style="margin-top:22px"><i class="ti ti-search" style="color:var(--teal)"></i> 契約者プール 検索・フィルター</div>
+    <div class="sub" style="margin-bottom:10px;font-size:12px">匿名集計で契約者プールをセグメント分析。個別契約者情報は表示されません</div>
+    <div class="card" style="padding:13px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <select id="corpFltCancer" class="inp" style="padding:8px 10px;border:.5px solid var(--ink);border-radius:5px;font-size:12px;font-family:inherit">
+          <option value="">がん種（全件）</option>
+          <option>乳がん</option><option>肺がん</option><option>大腸がん</option><option>胃がん</option><option>子宮頸がん</option><option>すい臓がん</option><option>悪性リンパ腫</option><option>白血病</option>
+        </select>
+        <select id="corpFltRegion" class="inp" style="padding:8px 10px;border:.5px solid var(--ink);border-radius:5px;font-size:12px;font-family:inherit">
+          <option value="">地域（全件）</option>
+          <option>北海道</option><option>東北</option><option>関東</option><option>中部</option><option>近畿</option><option>中国</option><option>四国</option><option>九州沖縄</option>
+        </select>
+        <select id="corpFltAge" class="inp" style="padding:8px 10px;border:.5px solid var(--ink);border-radius:5px;font-size:12px;font-family:inherit">
+          <option value="">年齢層（全件）</option>
+          <option>AYA（20-30代）</option><option>40-50代</option><option>60-70代</option><option>80代以上</option>
+        </select>
+        <select id="corpFltStage" class="inp" style="padding:8px 10px;border:.5px solid var(--ink);border-radius:5px;font-size:12px;font-family:inherit">
+          <option value="">ステージ（全件）</option>
+          <option>Ⅰ-Ⅱ</option><option>Ⅲ</option><option>Ⅳ</option>
+        </select>
+        <select id="corpFltContract" class="inp" style="padding:8px 10px;border:.5px solid var(--ink);border-radius:5px;font-size:12px;font-family:inherit">
+          <option value="">商品（全件）</option>
+          <option>がん診断一時金</option><option>がん入院給付</option><option>先進医療特約</option><option>診断後収入保障</option>
+        </select>
+        <select id="corpFltPeriod" class="inp" style="padding:8px 10px;border:.5px solid var(--ink);border-radius:5px;font-size:12px;font-family:inherit">
+          <option value="">期間（全件）</option>
+          <option>過去30日</option><option>過去90日</option><option>過去1年</option><option>過去3年</option>
+        </select>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:11.5px;color:var(--mute)">
+        <span>該当 <b id="corpResultCount" style="font-family:'EB Garamond',serif;font-size:14px;color:var(--ink)">12,847</b> 人 ／ 全 <b style="font-family:'EB Garamond',serif;color:var(--ink)">12,847</b> 人</span>
+        <div style="display:flex;gap:4px">
+          <button onclick="corpExport('csv')" style="padding:5px 10px;background:#fff;border:.5px solid var(--teal);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--teal-d);font-weight:700;cursor:pointer;letter-spacing:.06em">CSV ⬇</button>
+          <button onclick="corpExport('pdf')" style="padding:5px 10px;background:#fff;border:.5px solid var(--teal);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--teal-d);font-weight:700;cursor:pointer;letter-spacing:.06em">PDF ⬇</button>
+          <button onclick="corpExport('json')" style="padding:5px 10px;background:#fff;border:.5px solid var(--teal);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--teal-d);font-weight:700;cursor:pointer;letter-spacing:.06em">JSON ⬇</button>
+        </div>
+      </div>
+      <button onclick="corpRunSearch()" style="margin-top:10px;width:100%;padding:10px;background:var(--teal-d);color:#fff;border:none;border-radius:5px;font-family:'EB Garamond',serif;font-size:13px;font-weight:600;cursor:pointer">▸ セグメント分析を実行</button>
+      <div id="corpResultPanel" style="margin-top:10px;padding:10px;background:var(--teal-bg);border-radius:6px;display:none">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--teal-d);letter-spacing:.08em;font-weight:700;margin-bottom:6px">▸ SEGMENT SUMMARY</div>
+        <div id="corpResultDetail" style="font-size:11.5px;color:var(--teal-d);line-height:1.8"></div>
+      </div>
+    </div>
+
+    <!-- ★コホート比較分析（SATOI契約者 vs 全SATOI会員） -->
+    <div class="sechd" style="margin-top:22px"><i class="ti ti-chart-bar" style="color:var(--teal)"></i> コホート比較分析</div>
+    <div class="sub" style="margin-bottom:10px;font-size:12px">自社契約者 vs 全SATOI会員 のパターン比較・自社の特徴を抽出</div>
+    <div class="card" style="padding:13px">
+      <div style="display:grid;grid-template-columns:1fr 90px 90px 60px;gap:8px;align-items:center;padding:7px 10px;background:var(--teal-d);border-radius:5px;margin-bottom:5px"><span style="font-size:9px;color:#F0C97A;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.06em">指標</span><span style="font-size:9px;color:#F0C97A;font-family:'JetBrains Mono',monospace;font-weight:700;text-align:right">自社契約者</span><span style="font-size:9px;color:#F0C97A;font-family:'JetBrains Mono',monospace;font-weight:700;text-align:right">全会員</span><span style="font-size:9px;color:#F0C97A;font-family:'JetBrains Mono',monospace;font-weight:700;text-align:right">差</span></div>
+      <div id="corpCohList" style="display:flex;flex-direction:column;gap:4px"></div>
+      <div class="note" style="margin-top:8px;font-size:11px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 自社契約者のリテンション・NPS・治療継続性・自由診療検討率を全会員平均と比較。優位/劣位パターンが見える</div>
+    </div>
+
+    <!-- ★4軸データ取得サイクル可視化（Tier1/2/3） -->
+    <div class="sechd" style="margin-top:22px"><i class="ti ti-stack-2" style="color:var(--teal)"></i> データ取得サイクル（Tier 1/2/3）</div>
+    <div class="sub" style="margin-bottom:10px;font-size:12px">4軸データがどのサイクルで取得されているか。商品設計の確実性担保</div>
+    <div class="card" style="padding:13px">
+      <div style="display:grid;grid-template-columns:60px 1fr 70px 90px;gap:10px;align-items:center;padding:8px 10px;background:var(--teal-bg);border-radius:5px;margin-bottom:5px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;background:var(--teal-d);color:#fff;text-align:center">TIER 1</div>
+        <div><div style="font-size:11px;color:var(--ink);font-weight:600">日次取得</div><div style="font-size:9.5px;color:var(--mute);margin-top:1px">PRO-CTCAE / 心理タグ / 副作用即時</div></div>
+        <div style="height:8px;background:#fff;border:.5px solid var(--line2);border-radius:4px;overflow:hidden"><div style="width:82%;height:100%;background:linear-gradient(90deg,var(--teal),var(--teal-d))"></div></div>
+        <div style="font-family:'EB Garamond',serif;font-size:13px;font-weight:700;color:var(--ink);text-align:right">82<small style="font-size:9px;color:var(--mute)">%</small></div>
+      </div>
+      <div style="display:grid;grid-template-columns:60px 1fr 70px 90px;gap:10px;align-items:center;padding:8px 10px;background:var(--amber-bg);border-radius:5px;margin-bottom:5px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;background:var(--amber-t);color:#fff;text-align:center">TIER 2</div>
+        <div><div style="font-size:11px;color:var(--ink);font-weight:600">週次取得</div><div style="font-size:9.5px;color:var(--mute);margin-top:1px">SDMカード / 治療継続意向 / 自由診療検討</div></div>
+        <div style="height:8px;background:#fff;border:.5px solid var(--line2);border-radius:4px;overflow:hidden"><div style="width:61%;height:100%;background:linear-gradient(90deg,var(--amber),var(--amber-t))"></div></div>
+        <div style="font-family:'EB Garamond',serif;font-size:13px;font-weight:700;color:var(--ink);text-align:right">61<small style="font-size:9px;color:var(--mute)">%</small></div>
+      </div>
+      <div style="display:grid;grid-template-columns:60px 1fr 70px 90px;gap:10px;align-items:center;padding:8px 10px;background:var(--rose-bg);border-radius:5px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;background:#9B2D2D;color:#fff;text-align:center">TIER 3</div>
+        <div><div style="font-size:11px;color:var(--ink);font-weight:600">月次取得</div><div style="font-size:9.5px;color:var(--mute);margin-top:1px">縦断的予後 / 就労状況 / 家族影響</div></div>
+        <div style="height:8px;background:#fff;border:.5px solid var(--line2);border-radius:4px;overflow:hidden"><div style="width:38%;height:100%;background:linear-gradient(90deg,#993556,#9B2D2D)"></div></div>
+        <div style="font-family:'EB Garamond',serif;font-size:13px;font-weight:700;color:var(--ink);text-align:right">38<small style="font-size:9px;color:var(--mute)">%</small></div>
+      </div>
+    </div>
+
+    <!-- ★保険会社業務ワークフロー（アクション待ち） -->
+    <div class="sechd" style="margin-top:22px"><i class="ti ti-clipboard-list" style="color:var(--teal)"></i> 保険会社業務 アクション待ち</div>
+    <div class="sub" style="margin-bottom:10px;font-size:12px">SATOI付帯価値を活かす実務フロー。クリックで詳細</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div onclick="corpWfOpen('product')" style="padding:11px 12px;background:var(--teal-bg);border-left:3px solid var(--teal-d);border-radius:5px;cursor:pointer;transition:all .15s"><span style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:999px;background:var(--teal-d);color:#fff;letter-spacing:.06em">商品開発</span><div style="font-size:12px;color:var(--ink);font-weight:700;margin-top:5px">新商品設計 素材レポート</div><div style="font-size:10px;color:var(--mute);margin-top:2px;line-height:1.5">4軸データから新商品の必要性を導出。MASS市場向け／ニッチ層向け別の提案</div></div>
+      <div onclick="corpWfOpen('retention')" style="padding:11px 12px;background:var(--teal-bg);border-left:3px solid var(--teal-d);border-radius:5px;cursor:pointer;transition:all .15s"><span style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:999px;background:var(--teal-d);color:#fff;letter-spacing:.06em">リテンション</span><div style="font-size:12px;color:var(--ink);font-weight:700;margin-top:5px">継続契約率分析</div><div style="font-size:10px;color:var(--mute);margin-top:2px;line-height:1.5">SATOI付帯による継続率向上効果＋離脱予兆セグメント</div></div>
+      <div onclick="corpWfOpen('claim')" style="padding:11px 12px;background:var(--amber-bg);border-left:3px solid var(--amber-t);border-radius:5px;cursor:pointer;transition:all .15s"><span style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:999px;background:var(--amber-t);color:#fff;letter-spacing:.06em">給付タイミング</span><div style="font-size:12px;color:var(--ink);font-weight:700;margin-top:5px">給付タイミング最適化</div><div style="font-size:10px;color:var(--mute);margin-top:2px;line-height:1.5">告知→治療→給付のラグを分析・遅延要因の特定</div></div>
+      <div onclick="corpWfOpen('agency')" style="padding:11px 12px;background:var(--amber-bg);border-left:3px solid var(--amber-t);border-radius:5px;cursor:pointer;transition:all .15s"><span style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:999px;background:var(--amber-t);color:#fff;letter-spacing:.06em">代理店</span><div style="font-size:12px;color:var(--ink);font-weight:700;margin-top:5px">SATOI代理店オプション</div><div style="font-size:10px;color:var(--mute);margin-top:2px;line-height:1.5">QR付帯型・少額短期保険の組成提案・営業所別ROI試算</div></div>
+      <div onclick="corpWfOpen('actuary')" style="padding:11px 12px;background:var(--rose-bg);border-left:3px solid #9B2D2D;border-radius:5px;cursor:pointer;transition:all .15s"><span style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:999px;background:#9B2D2D;color:#fff;letter-spacing:.06em">アクチュアリー</span><div style="font-size:12px;color:var(--ink);font-weight:700;margin-top:5px">リスクモデル精緻化データ</div><div style="font-size:10px;color:var(--mute);margin-top:2px;line-height:1.5">4軸統合データから保険数理向けリスク係数を再計算</div></div>
+      <div onclick="corpWfOpen('quarterly')" style="padding:11px 12px;background:#EEEDFE;border-left:3px solid #3C3489;border-radius:5px;cursor:pointer;transition:all .15s"><span style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:999px;background:#3C3489;color:#fff;letter-spacing:.06em">四半期</span><div style="font-size:12px;color:var(--ink);font-weight:700;margin-top:5px">四半期 ROIレポート</div><div style="font-size:10px;color:var(--mute);margin-top:2px;line-height:1.5">SATOI付帯価値・契約者NPS・新規見込み層を1枚PDFで</div></div>
+    </div>
+
+    <!-- ★ライブインジケーター（リアルタイム動向） -->
+    <div class="sechd" style="margin-top:22px"><i class="ti ti-broadcast" style="color:var(--teal)"></i> リアルタイム動向</div>
+    <div class="card" style="padding:13px;background:linear-gradient(135deg,#0B1736,#1A2548);color:#F0C97A">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><span style="width:8px;height:8px;border-radius:50%;background:#7BC97B;box-shadow:0 0 0 0 rgba(123,201,123,.7);animation:invLiveDot 1.8s infinite;display:inline-block"></span><span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;font-weight:700">▸ LIVE — INSURANCE PORTAL</span><span id="corpLiveTime" style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8.5px;color:rgba(245,241,232,.6)">--:--:--</span></div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px">
+        <div style="background:rgba(245,241,232,.06);border-left:2px solid #B8954A;border-radius:5px;padding:8px 9px"><div style="font-size:8.5px;color:#D4A95E;letter-spacing:.08em;font-family:Inter,sans-serif;font-weight:700;text-transform:uppercase">SATOI契約者</div><div style="font-family:'EB Garamond',serif;font-size:18px;font-weight:700;color:#F0C97A;line-height:1;margin-top:3px"><span id="corpLcCust">12,847</span><small style="font-size:10px;color:rgba(245,241,232,.7)"> 人</small></div></div>
+        <div style="background:rgba(245,241,232,.06);border-left:2px solid #B8954A;border-radius:5px;padding:8px 9px"><div style="font-size:8.5px;color:#D4A95E;letter-spacing:.08em;font-family:Inter,sans-serif;font-weight:700;text-transform:uppercase">今日の請求前検知</div><div style="font-family:'EB Garamond',serif;font-size:18px;font-weight:700;color:#F0C97A;line-height:1;margin-top:3px"><span id="corpLcAlert">12</span><small style="font-size:10px;color:rgba(245,241,232,.7)"> 件</small></div></div>
+        <div style="background:rgba(245,241,232,.06);border-left:2px solid #B8954A;border-radius:5px;padding:8px 9px"><div style="font-size:8.5px;color:#D4A95E;letter-spacing:.08em;font-family:Inter,sans-serif;font-weight:700;text-transform:uppercase">今日のSDM作成</div><div style="font-family:'EB Garamond',serif;font-size:18px;font-weight:700;color:#F0C97A;line-height:1;margin-top:3px"><span id="corpLcSdm">47</span><small style="font-size:10px;color:rgba(245,241,232,.7)"> 件</small></div></div>
+        <div style="background:rgba(245,241,232,.06);border-left:2px solid #B8954A;border-radius:5px;padding:8px 9px"><div style="font-size:8.5px;color:#D4A95E;letter-spacing:.08em;font-family:Inter,sans-serif;font-weight:700;text-transform:uppercase">家族追加見込み</div><div style="font-family:'EB Garamond',serif;font-size:18px;font-weight:700;color:#F0C97A;line-height:1;margin-top:3px"><span id="corpLcFam">3</span><small style="font-size:10px;color:rgba(245,241,232,.7)"> 件</small></div></div>
+      </div>
+    </div>
+
     <!-- ⑤ 新規見込み層（家族・職場経由） -->
     <div class="sechd" style="margin-top:22px"><i class="ti ti-users-plus" style="color:var(--teal)"></i> 新規見込み層（家族・職場経由）</div>
     <div class="card" style="padding:13px">
@@ -3099,6 +3206,97 @@ window._oninit['next_horizon_bridge']=function(){
     <div class="lock"><i class="ti ti-lock"></i>契約者データは、契約者のもの</div>
   </div>
 </section>
+<script>
+(function(){
+  if(window._corpInit)return;window._corpInit=true;
+  /* ★契約者プール検索（簡易シミュ） */
+  window.corpRunSearch=function(){
+    var cancer=document.getElementById('corpFltCancer').value;
+    var region=document.getElementById('corpFltRegion').value;
+    var age=document.getElementById('corpFltAge').value;
+    var stage=document.getElementById('corpFltStage').value;
+    var contract=document.getElementById('corpFltContract').value;
+    var period=document.getElementById('corpFltPeriod').value;
+    /* フィルター応じて人数を仮算出 */
+    var base=12847;
+    if(cancer)base=Math.round(base*0.18);
+    if(region)base=Math.round(base*0.14);
+    if(age)base=Math.round(base*0.25);
+    if(stage)base=Math.round(base*0.30);
+    if(contract)base=Math.round(base*0.40);
+    if(period)base=Math.round(base*0.55);
+    document.getElementById('corpResultCount').textContent=base.toLocaleString();
+    var panel=document.getElementById('corpResultPanel');
+    var detail=document.getElementById('corpResultDetail');
+    var filters=[];
+    if(cancer)filters.push('がん種：<b>'+cancer+'</b>');
+    if(region)filters.push('地域：<b>'+region+'</b>');
+    if(age)filters.push('年齢：<b>'+age+'</b>');
+    if(stage)filters.push('ステージ：<b>'+stage+'</b>');
+    if(contract)filters.push('商品：<b>'+contract+'</b>');
+    if(period)filters.push('期間：<b>'+period+'</b>');
+    if(filters.length===0){detail.innerHTML='全契約者プール <b>12,847人</b> ／ 平均年齢 58歳 ／ がん種上位：乳がん18%・肺がん12%・大腸がん16%';}
+    else{detail.innerHTML=filters.join(' ／ ')+'<br>該当人数：<b>'+base.toLocaleString()+'人</b> ／ 平均NPS +'+Math.round(35+Math.random()*15)+' ／ 継続率 '+(90+Math.random()*5).toFixed(1)+'%';}
+    panel.style.display='block';
+  };
+  window.corpExport=function(fmt){
+    if(typeof toast==='function')toast(document.getElementById('corpResultCount').textContent+'人分を '+fmt.toUpperCase()+' エクスポート（デモ）');
+  };
+  /* ★コホート比較分析 */
+  const CORP_COH=[
+    {l:'継続契約率',a:'94.2%',b:'86.4%',diff:'+7.8pt',up:true},
+    {l:'NPS（がん診断後）',a:'+47',b:'+12',diff:'+35',up:true},
+    {l:'家族追加加入率',a:'18.4%',b:'7.2%',diff:'+11.2pt',up:true},
+    {l:'公的制度活用率',a:'89%',b:'62%',diff:'+27pt',up:true},
+    {l:'治療継続率（6か月）',a:'92.1%',b:'84.6%',diff:'+7.5pt',up:true},
+    {l:'自由診療検討率',a:'17%',b:'12%',diff:'+5pt',up:true},
+    {l:'告知→治療開始日数',a:'42日',b:'58日',diff:'-16日',up:false},
+    {l:'SDMカード作成率',a:'68%',b:'31%',diff:'+37pt',up:true}
+  ];
+  function corpCohRender(){
+    var el=document.getElementById('corpCohList');if(!el)return;
+    el.innerHTML=CORP_COH.map(function(c){
+      var diffColor=c.up?'#1d6841':(c.l.indexOf('日数')>=0?'#1d6841':'#9B2D2D');
+      return '<div style="display:grid;grid-template-columns:1fr 90px 90px 60px;gap:8px;align-items:center;padding:7px 10px;background:var(--teal-bg);border-radius:5px"><span style="font-size:11px;color:var(--ink);font-weight:600">'+c.l+'</span><span style="font-family:\'EB Garamond\',serif;font-size:13px;font-weight:700;color:var(--teal-d);text-align:right">'+c.a+'</span><span style="font-family:\'EB Garamond\',serif;font-size:12px;color:var(--mute);text-align:right">'+c.b+'</span><span style="font-size:10.5px;font-weight:700;text-align:right;font-family:\'EB Garamond\',serif;color:'+diffColor+'">'+c.diff+'</span></div>';
+    }).join('');
+  }
+  /* ★業務ワークフロー */
+  const CORP_WF={
+    product:'新商品設計の素材レポートを生成しました。4軸データから示唆される未充足ニーズ（先進医療上限引き上げ・心理サポート特約・家族包括プラン等）の詳細マトリクス付き。',
+    retention:'継続契約率分析を開きます。SATOI付帯契約者の継続率94.2% vs 非付帯86.4%。離脱予兆セグメント（治療継続率低下・NPS悪化等）の早期警告アラート機能付き。',
+    claim:'給付タイミング最適化レポート。告知から治療開始まで平均42日。SATOIで「やるべきことリスト」を踏んだ契約者は28日に短縮（給付遅延-14日）。',
+    agency:'SATOI代理店オプションの組成提案。QR付帯型救急搬送サポート・少額短期保険。営業所別ROI試算・初期投資・運用コスト・期待CV率を含む。',
+    actuary:'保険数理向け4軸統合データ。リスク係数の再計算用パラメータ・心理状態×治療継続性の相関データ・家族影響モデル素材。',
+    quarterly:'四半期 ROIレポートPDF生成。契約者NPS・継続率・家族追加・公的制度活用率の前期比トレンド。経営層向け1枚サマリ＋詳細50ページ。'
+  };
+  window.corpWfOpen=function(key){
+    var d=CORP_WF[key];if(!d)return;
+    if(typeof toast==='function')toast(d.slice(0,80)+'…（デモ）');
+  };
+  /* ★ライブカウンター */
+  let CORP_LIVE={cust:12847,alert:12,sdm:47,fam:3};
+  function corpLiveTick(){
+    var r=Math.random();
+    if(r<0.5){CORP_LIVE.cust+=Math.floor(Math.random()*2)+1;document.getElementById('corpLcCust').textContent=CORP_LIVE.cust.toLocaleString();}
+    else if(r<0.78){CORP_LIVE.alert+=1;document.getElementById('corpLcAlert').textContent=CORP_LIVE.alert;}
+    else if(r<0.93){CORP_LIVE.sdm+=1;document.getElementById('corpLcSdm').textContent=CORP_LIVE.sdm;}
+    else{CORP_LIVE.fam+=1;document.getElementById('corpLcFam').textContent=CORP_LIVE.fam;}
+    var t=new Date();
+    document.getElementById('corpLiveTime').textContent=t.toTimeString().slice(0,8)+' JST';
+  }
+  let CORP_TIMER=null;
+  window._oninit=window._oninit||{};
+  window._oninit['signin_corp_dash']=function(){
+    /* 既存 _oninit['signin_corp_dash'] があれば共存 */
+    var myIns=document.getElementById('moneyMyIns');var invite=document.getElementById('moneyInsInvite');/* 互換 */
+    corpCohRender();
+    if(CORP_TIMER){clearInterval(CORP_TIMER);}
+    CORP_TIMER=setInterval(corpLiveTick,2500);
+    corpLiveTick();
+    window.addEventListener('hashchange',function(){if(!location.hash.endsWith('signin_corp_dash')){if(CORP_TIMER){clearInterval(CORP_TIMER);CORP_TIMER=null;}}else if(!CORP_TIMER){CORP_TIMER=setInterval(corpLiveTick,2500);}});
+  };
+})();
+</script>
 
 <!-- ============ 製薬会社向けポータル（PV協賛・限定PV報告閲覧・データ抽出）============ -->
 <section class="scr" id="signin_pharma_dash">
@@ -3423,31 +3621,115 @@ window._oninit['next_horizon_bridge']=function(){
 <script>
 (function(){
   if(window._phInit)return;window._phInit=true;
-  /* ★模擬症例データ（製薬向けPV報告サンプル）*/
-  const DRUGS=['自社薬A（オンコロジー）','自社薬B（婦人科）','自社薬C（血液腫瘍）','自社薬D（希少がん）'];
-  const CANCERS=['乳がん','肺がん','大腸がん','胃がん','子宮頸がん','すい臓がん','悪性リンパ腫','白血病','卵巣がん','前立腺がん'];
-  const ADVERSE=['脱毛','倦怠感','悪心嘔吐','末梢神経障害','間質性肺炎','発熱性好中球減少症','下痢','口内炎','皮膚障害','心毒性','肝機能異常','腎機能障害'];
+  /* ★模擬症例データ（製薬向けPV報告サンプル・薬剤×がん種を整合させる）*/
+  /* 薬剤ごとに「適応がん種」「典型レジメン」「重大な副作用」を定義 */
+  const DRUG_PROFILES={
+    'A':{name:'自社薬A（オンコロジー）',cancers:['肺がん','大腸がん','胃がん'],regimens:['Aドラッグ単剤','Aドラッグ＋プラチナ製剤','Aドラッグ＋FOLFOX'],ae:['間質性肺炎','下痢','倦怠感','悪心嘔吐','末梢神経障害','肝機能異常','発熱性好中球減少症','皮膚障害']},
+    'B':{name:'自社薬B（婦人科）',cancers:['乳がん','卵巣がん','子宮頸がん','子宮体がん'],regimens:['Bドラッグ単剤','Bドラッグ＋パクリタキセル','Bドラッグ＋カルボプラチン'],ae:['脱毛','末梢神経障害','倦怠感','悪心嘔吐','口内炎','心毒性','骨髄抑制','皮膚障害']},
+    'C':{name:'自社薬C（血液腫瘍）',cancers:['悪性リンパ腫','白血病','多発性骨髄腫'],regimens:['Cドラッグ単剤','Cドラッグ＋R-CHOP','Cドラッグ＋デキサメタゾン'],ae:['発熱性好中球減少症','感染症','倦怠感','口内炎','末梢神経障害','腫瘍崩壊症候群','肝機能異常','心毒性']},
+    'D':{name:'自社薬D（希少がん）',cancers:['すい臓がん','胆道がん','希少がん'],regimens:['Dドラッグ単剤','Dドラッグ＋ゲムシタビン','Dドラッグ＋FOLFIRINOX'],ae:['倦怠感','心毒性','間質性肺炎','悪心嘔吐','腎機能障害','肝機能異常','末梢神経障害','下痢']}
+  };
   const REGIONS=['北海道','東北','関東','中部','近畿','中国','四国','九州沖縄'];
-  const AGES=['AYA(20代)','30代','40代','50代','60代','70代','80代'];
+  const AGE_BUCKETS=[{lab:'AYA(20代)',min:20,max:29},{lab:'30代',min:30,max:39},{lab:'40代',min:40,max:49},{lab:'50代',min:50,max:59},{lab:'60代',min:60,max:69},{lab:'70代',min:70,max:79},{lab:'80代',min:80,max:89}];
+  const STAGES=['Ⅰ','Ⅱ','Ⅲ','Ⅳ'];
+  const PS_LEVELS=['PS 0','PS 1','PS 2','PS 3'];
+  /* がん種ごとのバイオマーカー候補 */
+  const BIOMARKERS={
+    '肺がん':['EGFR陽性','EGFR陰性','ALK融合陽性','ROS1陽性','KRAS G12C','PD-L1 ≥50%','PD-L1 1-49%','PD-L1 <1%','BRAF V600E'],
+    '大腸がん':['RAS野生型','RAS変異型','BRAF V600E','MSI-High','MSS','HER2陽性'],
+    '胃がん':['HER2陽性','HER2陰性','MSI-High','PD-L1 CPS≥1','CPS<1','Claudin18.2陽性'],
+    '乳がん':['HR陽性 HER2陰性','HR陽性 HER2陽性','HR陰性 HER2陽性','トリプルネガティブ','BRCA1変異','BRCA2変異','PD-L1陽性'],
+    '卵巣がん':['BRCA1変異','BRCA2変異','HRD陽性','HRD陰性','PD-L1陽性'],
+    '子宮頸がん':['HPV16/18陽性','PD-L1陽性','PD-L1陰性'],
+    '子宮体がん':['MSI-High','POLE変異','HER2陽性','HRD陽性'],
+    '悪性リンパ腫':['DLBCL GCB型','DLBCL non-GCB型','MYC再構成','BCL2/BCL6再構成','CD20陽性'],
+    '白血病':['Ph+','Ph-','FLT3-ITD','FLT3-TKD','IDH1/2変異','TP53変異'],
+    '多発性骨髄腫':['t(11;14)','del(17p)','t(4;14)','標準リスク'],
+    'すい臓がん':['BRCA変異陽性','BRCA野生型','NTRK融合陽性'],
+    '胆道がん':['FGFR2融合陽性','IDH1変異','HER2陽性'],
+    '希少がん':['NTRK融合陽性','BRAF変異','MSI-High']
+  };
   function rand(arr){return arr[Math.floor(Math.random()*arr.length)];}
   function rangeRand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
-  /* 80件の模擬症例を生成（id・薬剤・がん種・副作用・重症度・地域・年齢・日付）*/
-  const ALL_CASES=[];
-  for(let i=1;i<=80;i++){
+  function fmtDate(d){return d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0');}
+  function shiftDate(d,days){var nd=new Date(d.getTime()+days*86400000);return fmtDate(nd);}
+  /* 併用薬・併存疾患・前治療プール */
+  const COMORBID=['なし','高血圧','糖尿病（2型）','脂質異常症','慢性腎臓病 G2','慢性腎臓病 G3','虚血性心疾患','心房細動','COPD（軽度）','間質性肺疾患（陳旧性）','慢性肝炎（B型）','慢性肝炎（C型）','骨粗鬆症','うつ病','甲状腺機能低下'];
+  const CONCOMITANT=['制吐薬（オランザピン）','ステロイド（デキサメタゾン）','G-CSF（ペグフィルグラスチム）','ビスホスホネート','プロトンポンプ阻害薬','降圧薬（ARB）','SSRI（抗うつ）','睡眠導入薬','便秘薬（マグミット）','整腸剤','鎮痛薬（NSAIDs）','医療用麻薬（オキシコドン）'];
+  const PREV_TX=['未治療（1次）','術後補助化療歴あり','術前化療歴あり','放射線治療歴あり','分子標的薬で進行','免疫CPで進行','再発後の治療歴あり'];
+  const ROUTES=['経口（PO）','点滴静注（IV）','皮下注（SC）','点滴静注 30分以上','点滴静注 2時間'];
+  const IMAGING=['原発巣の部分縮小（PR）','原発巣の縮小傾向','原発巣のSD（安定）','一部リンパ節の縮小','新規病変なし','骨転移の安定','肝転移の縮小'];
+  const FAMILY_HX=['特記なし','母：乳がん','父：胃がん','母：卵巣がん','父：肺がん','姉妹：乳がん','BRCA1/2変異キャリア家族あり','Lynch症候群家族歴','特記なし','特記なし'];
+  function genCase(i){
+    const drugKey=drugKeys[i%drugKeys.length];
+    const prof=DRUG_PROFILES[drugKey];
+    const cancer=rand(prof.cancers);
+    const regimen=rand(prof.regimens);
+    const ae=rand(prof.ae);
     const sev=rangeRand(1,3);
-    const baseDate=new Date(2026,4,1); /* 5/1 base */
-    const offset=rangeRand(0,30);
+    const baseDate=new Date(2026,4,1);
+    const offset=rangeRand(0,90);
     const d=new Date(baseDate.getTime()-offset*86400000);
-    ALL_CASES.push({
+    const ageB=rand(AGE_BUCKETS);
+    const age=rangeRand(ageB.min,ageB.max);
+    const gender=(cancer==='乳がん'||cancer==='卵巣がん'||cancer==='子宮頸がん'||cancer==='子宮体がん')?'女性':((cancer==='前立腺がん')?'男性':rand(['男性','女性']));
+    const bmList=BIOMARKERS[cancer]||['未測定'];
+    const subtype=rand(bmList);
+    /* 投与量（mg/m² または mg/kg）— 薬剤ごとの目安 */
+    const dose=drugKey==='A'?(rand(['200mg/m² 3週毎','150mg 1日2回 経口']))
+             :drugKey==='B'?(rand(['175mg/m² 3週毎','75mg/m² 3週毎','AUC5 3週毎']))
+             :drugKey==='C'?(rand(['375mg/m² 3週毎','40mg/週 経口','10mg/kg 2週毎']))
+             :(rand(['1000mg/m² 週1回','60mg/m² 隔週','100mg/日 経口']));
+    /* 既往3つまでランダム */
+    const cmCount=rangeRand(0,3);const cm=[];
+    for(let j=0;j<cmCount;j++){var x=rand(COMORBID);if(x!=='なし'&&cm.indexOf(x)<0)cm.push(x);}
+    if(cm.length===0)cm.push('なし');
+    /* 併用薬 2-4件 */
+    const ccCount=rangeRand(2,4);const cc=[];
+    for(let j=0;j<ccCount;j++){var y=rand(CONCOMITANT);if(cc.indexOf(y)<0)cc.push(y);}
+    return {
       id:'CASE-2026-'+String(1247-i+1).padStart(6,'0'),
-      drug:rand(DRUGS),cancer:rand(CANCERS),ae:rand(ADVERSE),sev:sev,
-      reg:rand(REGIONS),age:rand(AGES),
-      date:d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0'),
+      drugKey:drugKey,drug:prof.name,
+      regimen:regimen,line:rand(['1次治療','2次治療','3次治療','維持療法']),
+      dose:dose,route:rand(ROUTES),cycles:rangeRand(1,8)+'クール目',
+      cancer:cancer,stage:rand(STAGES),subtype:subtype,
+      prevTx:rand(PREV_TX),comorbid:cm,concomitant:cc,familyHx:rand(FAMILY_HX),
+      ae:ae,sev:sev,
+      onsetDay:rangeRand(3,42),duration:rangeRand(2,21),
+      intervention:rand(['対症療法のみ','休薬（5-7日）','減量（25%）','減量（50%）','投与中止','支持療法強化']),
+      outcome:rand(['軽快','回復','未回復・継続','後遺症','評価中','評価中']),
+      reg:rand(REGIONS),ageBucket:ageB.lab,age:age,gender:gender,
+      ps:rand(PS_LEVELS),
+      date:fmtDate(d),dateObj:d,
       psy:rand(['不安強','希望保持','諦め傾向','安定','上向き']),
       sdm:Math.random()<0.7?'作成済':'未作成',
-      free:Math.random()<0.18?'検討あり':'なし'
-    });
+      free:Math.random()<0.18?'検討あり':'なし',
+      labs:{
+        wbc:rangeRand(2000,9000),hb:(rangeRand(80,150)/10).toFixed(1),plt:rangeRand(80,300),
+        ast:rangeRand(15,120),alt:rangeRand(15,120),cr:(rangeRand(60,200)/100).toFixed(2),
+        marker:cancer==='大腸がん'?'CEA '+(rangeRand(20,400)/10).toFixed(1)+' ng/mL':cancer==='肺がん'?'CYFRA '+(rangeRand(10,80)/10).toFixed(1)+' ng/mL':cancer==='胃がん'?'CA19-9 '+rangeRand(20,500)+' U/mL':cancer==='乳がん'?'CA15-3 '+rangeRand(15,80)+' U/mL':cancer==='卵巣がん'?'CA125 '+rangeRand(30,800)+' U/mL':cancer==='子宮頸がん'?'SCC '+(rangeRand(5,50)/10).toFixed(1)+' ng/mL':cancer==='すい臓がん'?'CA19-9 '+rangeRand(50,2000)+' U/mL':cancer==='前立腺がん'?'PSA '+(rangeRand(20,500)/10).toFixed(1)+' ng/mL':'—'
+      },
+      imaging:rand(IMAGING),
+      pro:{symptom:rangeRand(1,4),symAe:rangeRand(1,4),overall:rangeRand(1,4),physical:rangeRand(1,4),role:rangeRand(1,4)},
+      sdmContent:rand([
+        '次の選択肢を具体的に知りたい・家族と決めたい',
+        '副作用の見通しと対処を整理したい',
+        '仕事と治療の両立について相談したい',
+        'お金の不安が大きい・公的制度を一緒に確認したい',
+        'セカンドオピニオンの取り方を相談したい',
+        '妊孕性温存について話したい（AYA世代）',
+        '家族（子ども・配偶者）にどう伝えるか',
+        '緩和ケアと並行する選択肢を知りたい',
+        '自由診療や治験の検討を整理したい'
+      ]),
+      similar:rangeRand(12,128),
+      signal:Math.random()<0.12?'要対応':(Math.random()<0.30?'要監視':'通常')
+    };
   }
+  /* ★500件の症例データを生成 */
+  const ALL_CASES=[];
+  const drugKeys=Object.keys(DRUG_PROFILES);
+  for(let i=1;i<=500;i++){ALL_CASES.push(genCase(i));}
   let FILTERED=ALL_CASES.slice();
 
   function phRenderCases(){
@@ -3494,10 +3776,60 @@ window._oninit['next_horizon_bridge']=function(){
   window.phOpenCase=function(id){
     const c=ALL_CASES.find(function(x){return x.id===id;});if(!c)return;
     document.getElementById('phModalTitle').textContent=c.id;
-    document.getElementById('phModalSub').textContent=c.drug+' ／ '+c.cancer+' ／ '+c.reg+' ／ '+c.age+' ／ 報告日 '+c.date;
-    document.getElementById('phModalInfo').innerHTML='<div class="pmrow"><span>主訴 副作用</span><b>'+c.ae+'</b></div><div class="pmrow"><span>重症度（CTCAE）</span><b>G'+c.sev+'</b></div><div class="pmrow"><span>がん種</span><b>'+c.cancer+'</b></div>';
-    document.getElementById('phModal4axis').innerHTML='<div class="pmrow"><span>PRO-CTCAE</span><b>取得済（5領域）</b></div><div class="pmrow"><span>心理タグ</span><b>'+c.psy+'</b></div><div class="pmrow"><span>SDMカード</span><b>'+c.sdm+'</b></div><div class="pmrow"><span>自由診療検討</span><b>'+c.free+'</b></div>';
-    document.getElementById('phModalTL').innerHTML='<div class="pmrow"><span>'+c.date+'</span><b>初発症状を本人入力</b></div><div class="pmrow"><span>'+c.date+' +1日</span><b>AIコンシェルジュ受領</b></div><div class="pmrow"><span>'+c.date+' +2日</span><b>主治医SDMで相談</b></div><div class="pmrow"><span>'+c.date+' +5日</span><b>本人同意取得 → PV報告化</b></div>';
+    document.getElementById('phModalSub').textContent=c.drug+' ／ '+c.cancer+' '+c.stage+'期 ／ '+c.age+'歳 '+c.gender+' ／ '+c.reg+' ／ 報告日 '+c.date;
+    /* ① 患者属性・臨床背景 */
+    document.getElementById('phModalInfo').innerHTML=
+      '<div class="pmrow"><span>性別 / 年齢</span><b>'+c.gender+' / '+c.age+'歳 ('+c.ageBucket+')</b></div>'
+      +'<div class="pmrow"><span>がん種 / ステージ</span><b>'+c.cancer+' / '+c.stage+'期</b></div>'
+      +'<div class="pmrow"><span>サブタイプ / バイオマーカー</span><b style="color:#3C3489">'+c.subtype+'</b></div>'
+      +'<div class="pmrow"><span>パフォーマンスステータス</span><b>'+c.ps+'</b></div>'
+      +'<div class="pmrow"><span>地域</span><b>'+c.reg+'</b></div>'
+      +'<div class="pmh" style="margin-top:14px">▸ 投薬・治療</div>'
+      +'<div class="pmrow"><span>薬剤</span><b>'+c.drug+'</b></div>'
+      +'<div class="pmrow"><span>レジメン</span><b>'+c.regimen+'</b></div>'
+      +'<div class="pmrow"><span>治療ライン</span><b>'+c.line+'</b></div>'
+      +'<div class="pmh" style="margin-top:14px">▸ 副作用詳細（PRO-CTCAE）</div>'
+      +'<div class="pmrow"><span>主訴</span><b style="color:'+(c.sev===3?'#9B2D2D':(c.sev===2?'#BA7517':'#1d6841'))+'">'+c.ae+'</b></div>'
+      +'<div class="pmrow"><span>重症度（CTCAE）</span><b style="color:'+(c.sev===3?'#9B2D2D':(c.sev===2?'#BA7517':'#1d6841'))+'">G'+c.sev+'</b></div>'
+      +'<div class="pmrow"><span>発現タイミング</span><b>投与開始 '+c.onsetDay+'日目</b></div>'
+      +'<div class="pmrow"><span>持続期間</span><b>'+c.duration+'日</b></div>'
+      +'<div class="pmrow"><span>対処</span><b>'+c.intervention+'</b></div>'
+      +'<div class="pmrow"><span>転帰</span><b>'+c.outcome+'</b></div>';
+    /* ② 4軸データ詳細＋検査値 */
+    var proBars=[
+      {l:'症状の強さ',v:c.pro.symptom},
+      {l:'症状性AE',v:c.pro.symAe},
+      {l:'総合影響',v:c.pro.overall},
+      {l:'身体機能',v:c.pro.physical},
+      {l:'役割機能',v:c.pro.role}
+    ];
+    var proHtml=proBars.map(function(p){var w=(p.v/4)*100;return '<div style="margin-bottom:4px"><div style="display:flex;justify-content:space-between;font-family:Inter,sans-serif;font-size:10px;color:#0E2236;margin-bottom:2px"><span>'+p.l+'</span><b>'+p.v+'/4</b></div><div style="height:5px;background:#fff;border:.5px solid #d1d5db;border-radius:3px;overflow:hidden"><div style="height:100%;width:'+w+'%;background:linear-gradient(90deg,#185FA5,#9B2D2D)"></div></div></div>';}).join('');
+    document.getElementById('phModal4axis').innerHTML=
+      '<div style="background:#F5F1E8;border-radius:6px;padding:9px 11px;margin-bottom:9px"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#185FA5;letter-spacing:.06em;font-weight:700;margin-bottom:6px">▸ PRO-CTCAE 5領域スコア</div>'+proHtml+'</div>'
+      +'<div class="pmrow"><span>心理タグ</span><b style="color:'+(c.psy.indexOf('不安')>=0||c.psy.indexOf('諦め')>=0?'#9B2D2D':'#1d6841')+'">'+c.psy+'</b></div>'
+      +'<div class="pmrow"><span>SDMカード</span><b style="color:'+(c.sdm==='作成済'?'#185FA5':'#6B7280')+'">'+c.sdm+(c.sdm==='作成済'?'（'+c.sdmContent+'）':'')+'</b></div>'
+      +'<div class="pmrow"><span>自由診療検討</span><b>'+c.free+'</b></div>'
+      +'<div class="pmh" style="margin-top:14px">▸ 直近検査値</div>'
+      +'<div class="pmrow"><span>WBC</span><b style="color:'+(c.labs.wbc<3000?'#9B2D2D':(c.labs.wbc<4000?'#BA7517':'#0E2236'))+'">'+c.labs.wbc.toLocaleString()+' /μL '+(c.labs.wbc<3000?'(低)':(c.labs.wbc<4000?'(やや低)':''))+'</b></div>'
+      +'<div class="pmrow"><span>Hb</span><b style="color:'+(c.labs.hb<10?'#9B2D2D':(c.labs.hb<12?'#BA7517':'#0E2236'))+'">'+c.labs.hb+' g/dL '+(c.labs.hb<10?'(低)':(c.labs.hb<12?'(やや低)':''))+'</b></div>'
+      +'<div class="pmrow"><span>Plt</span><b style="color:'+(c.labs.plt<100?'#9B2D2D':'#0E2236')+'">'+c.labs.plt+' ×10³/μL '+(c.labs.plt<100?'(低)':'')+'</b></div>'
+      +'<div class="pmrow"><span>AST/ALT</span><b style="color:'+(c.labs.ast>50||c.labs.alt>50?'#BA7517':'#0E2236')+'">'+c.labs.ast+' / '+c.labs.alt+' U/L</b></div>'
+      +'<div class="pmrow"><span>クレアチニン</span><b style="color:'+(parseFloat(c.labs.cr)>1.5?'#BA7517':'#0E2236')+'">'+c.labs.cr+' mg/dL</b></div>'
+      +'<div class="pmh" style="margin-top:14px">▸ シグナル検出・類似症例</div>'
+      +'<div class="pmrow"><span>シグナル該当</span><b style="color:'+(c.signal==='要対応'?'#9B2D2D':(c.signal==='要監視'?'#BA7517':'#1d6841'))+'">'+c.signal+'</b></div>'
+      +'<div class="pmrow"><span>類似症例（同薬剤・同副作用）</span><b style="color:#185FA5">'+c.similar+'件</b></div>'
+      +'<div class="pmrow"><span>添付文書記載</span><b>'+(c.signal==='要対応'?'要改訂検討（観察3倍乖離）':'記載範囲内')+'</b></div>';
+    /* ③ 経過タイムライン詳細 */
+    var d=c.dateObj;
+    document.getElementById('phModalTL').innerHTML=
+      '<div class="pmrow"><span>'+shiftDate(d,-c.onsetDay)+'</span><b>'+c.regimen+' 投与開始（'+c.line+'）</b></div>'
+      +'<div class="pmrow"><span>'+shiftDate(d,-Math.floor(c.onsetDay/2))+'</span><b>定期検査・PRO-CTCAE 記録開始</b></div>'
+      +'<div class="pmrow"><span>'+c.date+'</span><b style="color:'+(c.sev===3?'#9B2D2D':'#BA7517')+'">「'+c.ae+'」発現（G'+c.sev+'）・本人入力</b></div>'
+      +'<div class="pmrow"><span>'+shiftDate(d,1)+'</span><b>AIコンシェルジュが受領・対処サジェッション</b></div>'
+      +'<div class="pmrow"><span>'+shiftDate(d,2)+'</span><b>主治医に SDM カードで相談（'+c.sdmContent.slice(0,20)+'…）</b></div>'
+      +'<div class="pmrow"><span>'+shiftDate(d,3)+'</span><b>'+c.intervention+'</b></div>'
+      +'<div class="pmrow"><span>'+shiftDate(d,c.duration)+'</span><b>転帰確定：'+c.outcome+'</b></div>'
+      +'<div class="pmrow"><span>'+shiftDate(d,c.duration+1)+'</span><b style="color:#0F6E56">本人同意取得 → PV報告化（匿名）</b></div>';
     document.getElementById('phModal').classList.add('show');
   };
   window.phCloseModal=function(){document.getElementById('phModal').classList.remove('show');};
@@ -3637,10 +3969,45 @@ window._oninit['next_horizon_bridge']=function(){
       <div style="flex:1"><div style="font-size:16px;font-weight:600">おかえりなさい、葵さん</div><div class="note" id="myStatus">会員 ・ 子宮頸がんと、あなたのペースで</div></div>
       <button id="myReg" class="btn btn-out" style="width:auto;padding:8px 12px;font-size:13px;flex-shrink:0" onclick="go('account')"><i class="ti ti-settings" style="vertical-align:-2px"></i> 設定</button>
     </div>
-    <button id="myEmpseCard" class="card" style="width:100%;text-align:left;margin-top:14px;background:var(--teal-bg);border:none;cursor:pointer;padding:14px" onclick="go('empse')"></button>
-    <button class="card" style="width:100%;text-align:left;margin-top:12px;background:var(--teal-bg);border:1px solid var(--teal);display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('search')">
-      <span class="ic ic46" style="background:#fff;flex-shrink:0"><i class="ti ti-search" style="font-size:23px;color:var(--teal)"></i></span>
-      <span style="flex:1"><span style="font-size:15px;font-weight:600;color:var(--teal-d)">気になることを調べる<span style="display:inline-block;font-size:10px;font-weight:600;color:#fff;background:var(--teal);border-radius:8px;padding:1px 7px;margin-left:6px;vertical-align:1px">無料</span></span><span class="note" style="display:block;color:var(--teal-d);opacity:.85;margin-top:2px">がん種・治療・お金・暮らし、何でも</span></span>
+
+    <!-- ★★★治療ダッシュボード（最上段・SATOIの一丁目一番地）★★★ -->
+    <div id="myTreatDash" style="margin-top:14px"></div>
+
+<!-- EMPSe（折りたたみ・大きめアイコン付き） -->
+    <details id="myEmpseDetails" style="margin-top:12px;background:var(--teal-bg);border-radius:14px;border:none;padding:0">
+      <summary style="cursor:pointer;list-style:none;padding:12px 14px;display:flex;align-items:center;gap:11px;font-size:13px;font-weight:600;color:var(--teal-d)">
+        <span class="ic ic46" style="background:#fff;border:1.5px solid var(--teal);flex-shrink:0;position:relative">
+          <svg viewBox="0 0 40 40" width="28" height="28" style="display:block" aria-hidden="true">
+            <polygon points="20,5 36,15 30,33 10,33 4,15" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linejoin="round"/>
+            <polygon points="20,11 30,18 27,29 13,29 9,18" fill="var(--teal)" opacity=".18"/>
+            <circle cx="20" cy="5" r="2.2" fill="var(--teal)"/>
+            <circle cx="36" cy="15" r="2.2" fill="var(--teal)"/>
+            <circle cx="30" cy="33" r="2.2" fill="var(--teal)"/>
+            <circle cx="10" cy="33" r="2.2" fill="var(--teal)"/>
+            <circle cx="4" cy="15" r="2.2" fill="var(--teal)"/>
+          </svg>
+        </span>
+        <span style="flex:1;min-width:0">
+          <span style="display:block;font-size:14px;font-weight:700;color:var(--teal-d)">EMPSe ・ いまの、わたし</span>
+          <span class="note" style="display:block;font-size:11px;color:var(--teal-d);opacity:.8;margin-top:2px">身体／精神／社会／活力／共感の5軸</span>
+        </span>
+        <span id="myEmpsePeek" style="font-family:'EB Garamond',serif;font-size:18px;font-weight:700;color:var(--teal-d);flex-shrink:0"></span>
+        <i class="ti ti-chevron-down" style="color:var(--teal-d);transition:transform .2s;font-size:18px;flex-shrink:0"></i>
+      </summary>
+      <div id="myEmpseCard" style="padding:0 14px 14px"></div>
+      <button class="btn btn-out" style="margin:0 14px 12px;width:calc(100% - 28px);padding:9px;font-size:13px" onclick="go('empse')"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> くわしく入力する</button>
+    </details>
+
+    <!-- AIコンシェルジュ（治療文脈・直接動線・向こうから話しかけ） -->
+    <button class="card" style="width:100%;text-align:left;margin-top:12px;background:linear-gradient(135deg,var(--teal-bg),#E1F5EE);border:1px solid var(--teal);display:flex;align-items:center;gap:12px;cursor:pointer" onclick="goConcierge()">
+      <span class="ic ic46" style="background:#fff;flex-shrink:0"><i class="ti ti-sparkles" style="font-size:23px;color:var(--teal)"></i></span>
+      <span style="flex:1"><span style="font-size:15px;font-weight:600;color:var(--teal-d)">気になることを相談する<span style="display:inline-block;font-size:10px;font-weight:600;color:#fff;background:var(--teal);border-radius:8px;padding:1px 7px;margin-left:6px;vertical-align:1px">AI</span></span><span class="note" style="display:block;color:var(--teal-d);opacity:.85;margin-top:2px">何でもいいから相談してください — SATOIから話しかけます</span></span>
+      <i class="ti ti-chevron-right" style="color:var(--teal-d)"></i>
+    </button>
+
+    <button class="card" style="width:100%;text-align:left;margin-top:10px;background:var(--teal-bg);border:none;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('search')">
+      <span class="ic ic46" style="background:#fff;flex-shrink:0"><i class="ti ti-search" style="font-size:22px;color:var(--teal)"></i></span>
+      <span style="flex:1"><span style="font-size:14px;font-weight:600;color:var(--teal-d)">自分で調べる</span><span class="note" style="display:block;color:var(--teal-d);opacity:.85;margin-top:1px">がん種・治療・お金・暮らし</span></span>
       <i class="ti ti-chevron-right" style="color:var(--teal-d)"></i>
     </button>
     <div class="card" style="margin-top:14px;background:var(--amber-bg);border:none;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('story')">
@@ -3657,11 +4024,6 @@ window._oninit['next_horizon_bridge']=function(){
       <span class="ic ic46" style="background:#fff"><i class="ti ti-archive" style="font-size:24px;color:var(--teal)"></i></span>
       <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--teal-d)">壺（わたしの記録）</div><div style="font-size:12px;color:var(--teal-d)">残した声・言葉が、光になってたまる場所</div></div>
       <i class="ti ti-chevron-right" style="color:var(--teal)"></i>
-    </button>
-    <button class="card" style="width:100%;text-align:left;margin-top:12px;background:var(--teal-bg);border:none;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="goMyCancer()">
-      <span class="ic ic46" style="background:#fff"><i class="ti ti-heartbeat" style="font-size:24px;color:var(--teal)"></i></span>
-      <span style="flex:1"><b style="font-weight:600;color:var(--teal-d)">あなたのがん：<span id="myCancerName">子宮頸がん</span></b><span class="note" style="display:block;color:var(--teal-d)">あなた用の治療情報を見る</span></span>
-      <span onclick="event.stopPropagation();svStart('self')" style="font-size:12px;color:var(--teal);text-decoration:underline;flex-shrink:0">変更</span>
     </button>
     <div style="font-size:14px;font-weight:600;margin:18px 0 4px">今できること</div>
     <div class="sub" style="margin-bottom:12px">気になっていることから、ひらいてください</div>
@@ -3886,11 +4248,19 @@ function askAbout(topic){window._askTopic=topic;go('ai');}
 function buildSatoiContext(){
   var ctx={};
   try{
-    var pf=localStorage.getItem('satoi_profile');if(pf){var p=JSON.parse(pf);
-      ctx.who=p.who||'self';
-      if(p.cancer && window.CANCER_JA && window.CANCER_JA[p.cancer]){ctx.cancer=window.CANCER_JA[p.cancer];ctx.cancerKey=p.cancer;}
-      if(p.stage)ctx.stage=p.stage;
+    var pf=localStorage.getItem('satoi_profile');var p=pf?JSON.parse(pf):null;
+    if(p){ctx.who=p.who||'self';if(p.stage)ctx.stage=p.stage;}
+    /* ★いま閲覧中のがん種(CAN_CUR)を最優先・なければprofileのcancer
+       これでユーザーが「がんを知る→頭頸部」で開いた時に profile=旧データでも
+       コンシェルジュは「現在閲覧中=頭頸部」を正しく受け取る */
+    var viewingKey=(typeof CAN_CUR!=='undefined'&&CAN_CUR)?CAN_CUR:(p&&p.cancer)||null;
+    if(viewingKey && window.CANCER_JA && window.CANCER_JA[viewingKey]){
+      ctx.cancer=window.CANCER_JA[viewingKey];
+      ctx.cancerKey=viewingKey;
+      ctx.cancerSource=(typeof CAN_CUR!=='undefined'&&CAN_CUR&&p&&p.cancer&&CAN_CUR!==p.cancer)?'viewing':'profile';
     }
+    /* 現在のセクションIDも送る（コンシェルジュが「いまどこから来たか」を把握） */
+    try{var act=document.querySelector('section.scr.active');if(act&&act.id)ctx.fromScreen=act.id;}catch(_e){}
     var nm=localStorage.getItem('satoi_name');if(nm)ctx.name=nm;
   }catch(e){}
   /* 壺の直近の章を要約として渡す（最新3章まで・タイトル＋body冒頭120文字） */
@@ -3915,6 +4285,17 @@ function buildSatoiContext(){
 function cvSetChips(arr){var c=document.getElementById('cvChips');c.style.display='flex';c.innerHTML='';arr.forEach(function(t){var b=document.createElement('button');b.className='chip amber';b.textContent=t;b.onclick=function(){cvSend(t);};c.appendChild(b);});}
 window._oninit['ai']=function(){
   var l=document.getElementById('cvLog');l.innerHTML='';window._cvCount=0;window._cvHistory=[];
+  /* ★マイページ側から goConcierge() で仕込まれた挨拶＋チップを優先（AIから話しかけ動線） */
+  if(window._cvOpening){
+    var op=window._cvOpening;window._cvOpening=null;
+    cvBubble('ai',op);
+    if(window._cvChips&&window._cvChips.length){
+      var c=document.getElementById('cvChips');c.style.display='flex';c.innerHTML='';
+      window._cvChips.forEach(function(ch){var b=document.createElement('button');b.className='chip amber';b.textContent=ch.label;b.onclick=function(){cvSend(ch.q);};c.appendChild(b);});
+      window._cvChips=null;
+    }
+    return;
+  }
   if(window._askTopic){
     var topic=window._askTopic;window._askTopic=null;
     cvBubble('ai','「'+topic+'」について、ですね。いま読んでいた内容をふまえて、できるだけやさしくお話しします。<br>どんなことが気になっていますか？　言葉にしづらければ、下から選んでも大丈夫です。');
@@ -4043,6 +4424,48 @@ window._oninit['ai']=function(){
       <span style="flex:1"><b style="font-weight:600;font-size:14px">お金の専門家（FP・社労士）に相談</b><span class="note" style="display:block">治療費の設計・傷病手当金・障害年金まで。初回は無料相談から</span></span>
       <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
     </button>
+
+    <!-- ★地域包括ケアシステム連携（壁打ち反映・自治体×介護×医療×生活支援） -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-map-2" style="color:var(--teal)"></i> 地域で、支えあう</div>
+    <div class="sub" style="margin-bottom:10px;font-size:12px">住み慣れた地域で暮らし続けるための、医療・介護・生活支援のつながり</div>
+    <div class="card" style="background:linear-gradient(135deg,var(--teal-bg),#E1F5EE);border:1px solid var(--teal);padding:14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span class="ic" style="width:32px;height:32px;background:var(--teal);color:#fff;flex-shrink:0"><i class="ti ti-map-pin-heart" style="font-size:18px"></i></span><div style="flex:1"><b style="font-size:13.5px;color:var(--teal-d);display:block">地域包括ケアシステム</b><span class="note" style="font-size:10.5px;color:var(--teal-d);opacity:.85">医療×介護×予防×住まい×生活支援の包括連携</span></div></div>
+
+      <div style="background:#fff;border-radius:8px;padding:11px 13px;font-size:12px;line-height:1.75;color:var(--teal-d)">
+        がんと暮らすあなたを、<b>病院だけでなく地域全体で支える</b>仕組みです。<br>
+        SATOIは、お住まいの自治体や地域包括支援センターと連携し、訪問看護・介護保険・レスパイトケアまで、必要な時に必要な支援につなぎます。
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:10px">
+        <button class="card" style="padding:11px 9px;background:#fff;border:.5px solid var(--teal);cursor:pointer;text-align:left" onclick="go('houkatsucenter')">
+          <span class="ic" style="width:30px;height:30px;background:var(--teal-bg);color:var(--teal-d)"><i class="ti ti-building-community" style="font-size:16px"></i></span>
+          <div style="font-size:11.5px;font-weight:700;color:var(--teal-d);margin-top:5px">地域包括支援センター</div>
+          <div style="font-size:10px;color:var(--mute);margin-top:1px;line-height:1.5">お住まいの相談窓口・無料</div>
+        </button>
+        <button class="card" style="padding:11px 9px;background:#fff;border:.5px solid var(--teal);cursor:pointer;text-align:left" onclick="go('kaigohoken')">
+          <span class="ic" style="width:30px;height:30px;background:var(--amber-bg);color:var(--amber-t)"><i class="ti ti-wheelchair" style="font-size:16px"></i></span>
+          <div style="font-size:11.5px;font-weight:700;color:var(--amber-t);margin-top:5px">介護保険（40-64歳含む）</div>
+          <div style="font-size:10px;color:var(--mute);margin-top:1px;line-height:1.5">がん末期は40歳から対象</div>
+        </button>
+        <button class="card" style="padding:11px 9px;background:#fff;border:.5px solid var(--teal);cursor:pointer;text-align:left" onclick="go('homecare')">
+          <span class="ic" style="width:30px;height:30px;background:var(--rose-bg);color:var(--rose)"><i class="ti ti-home-heart" style="font-size:16px"></i></span>
+          <div style="font-size:11.5px;font-weight:700;color:#993556;margin-top:5px">訪問看護・訪問診療</div>
+          <div style="font-size:10px;color:var(--mute);margin-top:1px;line-height:1.5">在宅で医療・看護を受ける</div>
+        </button>
+        <button class="card" style="padding:11px 9px;background:#fff;border:.5px solid var(--teal);cursor:pointer;text-align:left" onclick="go('respite')">
+          <span class="ic" style="width:30px;height:30px;background:#EEEDFE;color:#3C3489"><i class="ti ti-coffee" style="font-size:16px"></i></span>
+          <div style="font-size:11.5px;font-weight:700;color:#3C3489;margin-top:5px">レスパイトケア</div>
+          <div style="font-size:10px;color:var(--mute);margin-top:1px;line-height:1.5">介護する家族の休息支援</div>
+        </button>
+      </div>
+
+      <div style="background:#FFFCF6;border-radius:8px;padding:9px 11px;margin-top:10px;font-size:11px;line-height:1.7;color:var(--ink)">
+        <b style="color:var(--teal-d)"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> SATOIからの提案</b><br>
+        あなたの状況（子宮頸がん Ⅲ期・CCRT中・お子様あり）から、<b>ケアマネジャー連携</b>・<b>家事支援サービス</b>・<b>緩和ケア外来</b>が早めに相談できる候補です。
+      </div>
+
+      <button class="btn btn-teal" style="margin-top:11px;padding:11px;font-size:13px" onclick="go('houkatsucenter')"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> お住まいの地域包括支援センターを探す</button>
+    </div>
 
     <!-- ★保険（SATOIが代理店・検討中） -->
     <div class="card" style="margin-top:14px;background:var(--amber-bg2);border:.5px solid var(--amber-line)">
@@ -11756,7 +12179,331 @@ window._oninit['onboarding']=function(){
     if(t)t.textContent='はじめる'; if(su)su.textContent='登録は無料。まずはお試しで、すぐ使えます';
   }
 };
+/* ★葵さんペルソナ固定：子宮頸がん ステージⅢ（CCRT 5週目）
+   ログイン時のがん種選択はデモ機能。マイページではペルソナ固定。 */
+var AOI_PERSONA={
+  cancer:'cervix',
+  cancerName:'子宮頸がん',
+  stage:'Ⅲ',
+  age:42,
+  job:'広告代理店勤務（休職中）',
+  family:'夫・子1人（8歳）',
+  diagnosedAt:'2026年3月',
+  current:{
+    label:'同時化学放射線療法（CCRT）',
+    detail:'シスプラチン週1回点滴 ＋ 外部照射（骨盤）＋ 密封小線源療法',
+    cycle:'5週目／7週予定',
+    progress:71
+  },
+  symptoms:[
+    {label:'倦怠感',grade:'Grade 2',color:'var(--amber-t)',recorded:'昨日 19:42'},
+    {label:'吐き気',grade:'Grade 1',color:'var(--teal-d)',recorded:'今日 8:15'},
+    {label:'下痢',grade:'Grade 2',color:'var(--amber-t)',recorded:'昨日 14:20'},
+    {label:'膀胱炎症状（頻尿）',grade:'Grade 1',color:'var(--teal-d)',recorded:'2日前'},
+    {label:'皮膚反応（照射部位）',grade:'Grade 1',color:'var(--teal-d)',recorded:'2日前'}
+  ],
+  phr:{
+    visit:'2026/5/30（金）9:30  ／  〇〇病院 放射線治療科',
+    labs:[
+      {k:'WBC',v:'3,200',u:'/μL',flag:'低',color:'var(--amber-t)'},
+      {k:'Hb',v:'10.8',u:'g/dL',flag:'低',color:'var(--amber-t)'},
+      {k:'Plt',v:'18.4',u:'万/μL',flag:'正常',color:'var(--teal-d)'},
+      {k:'クレアチニン',v:'0.78',u:'mg/dL',flag:'正常',color:'var(--teal-d)'},
+      {k:'AST/ALT',v:'24/22',u:'U/L',flag:'正常',color:'var(--teal-d)'},
+      {k:'SCC',v:'1.2',u:'ng/mL',flag:'改善傾向',color:'var(--teal-d)'}
+    ],
+    image:'骨盤MRI：原発巣の縮小（治療前比 約40%減）／傍大動脈リンパ節 縮小傾向',
+    plan:'CCRT 残り2週継続予定。次回（6/13）密封小線源療法 第1回'
+  },
+  next:[
+    {key:'observe',cond:'CCRT 完了後',rec:'経過観察（3ヶ月ごとの内診・MRI・SCC測定）。再発兆候の早期発見へ',color:'var(--teal-d)'},
+    {key:'pdl1',cond:'PD-L1 陽性で再発',rec:'ペムブロリズマブ＋化学療法（パクリタキセル＋シスプラチン±ベバシズマブ）',color:'var(--blue-d)'},
+    {key:'salvage',cond:'局所再発のみ',rec:'救済手術（広汎子宮全摘）の検討',color:'var(--amber-t)'},
+    {key:'systemic',cond:'遠隔転移あり',rec:'化学療法＋分子標的（ベバシズマブ）／免疫CP併用',color:'#993556'},
+    {key:'fertility',cond:'妊孕性温存 検討',rec:'AYA世代向け：治療前の卵子・卵巣組織凍結保存',color:'#3C3489'}
+  ],
+  /* ★各選択肢の深掘りデータ（適用条件・期待効果・副作用・期間・費用・経過事例） */
+  nextDetail:{
+    observe:{
+      title:'経過観察（CCRT完了後）',
+      summary:'治療を完遂した後の再発・転移の早期発見を目的とした定期的な検査・診察。',
+      conditions:['CCRT 7週間を完遂','腫瘍マーカー（SCC）の低下確認','治療後の画像で残存病変なし'],
+      effects:['再発の早期発見で5年生存率の改善','症状出現前に介入可能','心理的安心の支え'],
+      adverse:['採血の負担','検査ストレス','偽陽性での再検査負担'],
+      duration:'5年以上（リスクに応じて間隔調整）',
+      cost:'保険適用：3割負担で1回 約3,000〜8,000円。高額療養費の対象外になることが多い',
+      cases:[
+        {persona:'40代女性 ／ Ⅱ期 ／ CCRT完了',body:'1年経過。3ヶ月ごとの検査でSCC安定。仕事復帰し、子どもとの時間が戻ってきました。',outcome:'再発なし'},
+        {persona:'50代女性 ／ Ⅲ期 ／ CCRT完了',body:'2年経過。一度SCCがわずかに上がりMRI追加検査。経過観察で安定。「定期検査の安心感が大きい」',outcome:'再発なし'},
+        {persona:'30代女性 ／ Ⅲ期 ／ CCRT完了',body:'6ヶ月後の検査で局所再発が見つかり救済手術へ。早期発見で根治可能でした。',outcome:'再発→救済手術で根治'}
+      ]
+    },
+    pdl1:{
+      title:'ペムブロリズマブ＋化学療法',
+      summary:'再発・転移時の標準治療。免疫チェックポイント阻害薬と化学療法の組み合わせ。',
+      conditions:['CPS≥1（PD-L1陽性）','遠隔転移または再発','PS 0-1（全身状態良好）'],
+      effects:['全生存期間の延長（中央値 約24ヶ月）','奏効率 約50-65%','長期生存例の報告あり'],
+      adverse:['免疫関連有害事象（甲状腺・肺・腸・皮膚）','倦怠感','末梢神経障害（パクリタキセル）','骨髄抑制'],
+      duration:'3週ごとに点滴。最長2年（病勢進行・耐えられない副作用まで）',
+      cost:'保険適用：高額療養費で月8〜25万円（年収による）。先進医療給付の対象になることがあります',
+      cases:[
+        {persona:'50代女性 ／ Ⅳ期 再発',body:'8クール継続中。倦怠感はあるが日常生活は維持。MRIで縮小確認。',outcome:'病勢制御中'},
+        {persona:'40代女性 ／ 再発',body:'6クール後に間質性肺炎で休薬。ステロイドで回復し、化学療法のみ継続。',outcome:'免疫関連有害事象あり・治療調整'},
+        {persona:'60代女性 ／ Ⅳ期',body:'1年継続で完全奏効。維持療法に移行。「免疫の力ってすごい」',outcome:'完全奏効'}
+      ]
+    },
+    salvage:{
+      title:'救済手術（広汎子宮全摘）',
+      summary:'CCRT後の局所再発に対する根治を目指した手術。',
+      conditions:['再発が骨盤内に限局','遠隔転移なし','手術耐術能あり（PS良好・心肺機能保持）'],
+      effects:['局所再発の根治可能性','再再発リスクの低減'],
+      adverse:['手術合併症（出血・感染・尿路系障害）','排尿・性機能への影響','術後の長期療養'],
+      duration:'手術 5-8時間／入院 2-3週間／回復 3-6ヶ月',
+      cost:'保険適用：高額療養費で月8〜25万円。先進医療が選択肢になる場合あり',
+      cases:[
+        {persona:'40代女性 ／ Ⅱ期 → 再発',body:'CCRT完遂後8ヶ月で局所再発。広汎子宮全摘術＋骨盤リンパ節郭清。術後2年経過し再再発なし。',outcome:'救済手術で根治'},
+        {persona:'50代女性',body:'手術後に尿路系症状あり、リハビリで改善。「術後つらかったが、再発リスクを下げられた安心は大きい」',outcome:'根治・後遺症あり'}
+      ]
+    },
+    systemic:{
+      title:'化学療法＋分子標的（ベバシズマブ）',
+      summary:'遠隔転移ありの場合の標準治療。化学療法に血管新生阻害薬を追加。',
+      conditions:['遠隔転移確認','PS 0-1','血管新生阻害薬の禁忌（消化管穿孔リスク等）がない'],
+      effects:['全生存期間 約17ヶ月（化療単独より延長）','奏効率 約45%'],
+      adverse:['高血圧','蛋白尿','出血・血栓','消化管穿孔（稀）','骨髄抑制','末梢神経障害'],
+      duration:'3週ごとに点滴。病勢進行まで継続',
+      cost:'保険適用：高額療養費対象。月の負担8〜25万円',
+      cases:[
+        {persona:'50代女性 ／ Ⅳ期 肺転移',body:'6クール継続。肺転移巣の縮小。日常生活維持し旅行も行けた。',outcome:'病勢制御'},
+        {persona:'60代女性 ／ 骨盤外再発',body:'3クール後に高血圧。降圧剤で対応し継続。',outcome:'治療調整・継続'}
+      ]
+    },
+    fertility:{
+      title:'妊孕性温存（AYA世代向け）',
+      summary:'治療前に卵子・受精卵・卵巣組織を凍結し、将来の妊娠の可能性を残す。',
+      conditions:['AYA世代（15-39歳）','治療開始まで2-4週間の猶予','本人＋パートナーの希望'],
+      effects:['治療後の妊娠可能性を残す','人生設計の選択肢を保持'],
+      adverse:['排卵誘発剤の副作用','採卵時の侵襲','治療開始の遅延（最大2-4週）'],
+      duration:'採卵まで2-4週間。凍結保存は数年単位',
+      cost:'助成あり：自治体により上限あり（10-40万円程度）。総額40-100万円が多い',
+      cases:[
+        {persona:'30代女性 ／ Ⅰb期 ／ AYA',body:'CCRT前に卵子凍結保存。治療完遂後、3年経過で凍結卵子を使用し妊娠成立。',outcome:'妊娠成立'},
+        {persona:'20代女性 ／ AYA',body:'パートナーと相談し受精卵凍結。「未来の選択肢があると、今治療に集中できる」',outcome:'凍結保存中'}
+      ]
+    }
+  },
+  source:'日本婦人科腫瘍学会 子宮頸癌治療ガイドライン2025年版／国立がん研究センター がん情報サービス',
+  prep:[
+    {what:'前日21時以降の絶食',due:'6/13 前夜'},
+    {what:'痛み止め（処方分）を持参',due:'当日'},
+    {what:'下着・タオル・ナプキン持参',due:'当日'}
+  ]
+};
+function buildTreatDash(){
+  var el=document.getElementById('myTreatDash');if(!el)return;
+  var p=AOI_PERSONA;
+  var nextOptionsHtml=p.next.map(function(n){return '<div onclick="openTreatOption(\''+n.key+'\')" style="padding:9px 11px;background:#fff;border-left:3px solid '+n.color+';border-radius:6px;margin-bottom:5px;font-size:11.5px;line-height:1.55;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:8px"><div style="flex:1"><span style="color:var(--mute);font-size:10px;font-weight:600">'+n.cond+'</span><br><b style="color:'+n.color+';font-size:12px">'+n.rec+'</b></div><i class="ti ti-chevron-right" style="color:'+n.color+';flex-shrink:0"></i></div>';}).join('');
+  var sympHtml=p.symptoms.map(function(s){return '<div style="display:flex;align-items:center;gap:8px;padding:7px 9px;background:#fff;border-radius:6px;margin-bottom:4px"><span style="font-size:11.5px;color:var(--ink);flex:1;font-weight:600">'+s.label+'</span><span style="font-size:10px;font-weight:700;color:'+s.color+';background:rgba(0,0,0,0.04);padding:2px 7px;border-radius:999px">'+s.grade+'</span><span style="font-size:9.5px;color:var(--mute)">'+s.recorded+'</span></div>';}).join('');
+  var prepHtml=p.prep.map(function(pr){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 9px;background:#fff;border-radius:5px;margin-bottom:3px"><span style="font-size:11px;color:var(--ink)">'+pr.what+'</span><span style="font-size:9.5px;color:var(--amber-t);font-weight:600">'+pr.due+'</span></div>';}).join('');
+  el.innerHTML=
+    '<div class="card" style="background:linear-gradient(135deg,#FFFCF6,#F5F1E8);border:1.5px solid var(--teal);padding:14px;border-radius:14px">'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span class="ic" style="width:32px;height:32px;background:var(--teal);color:#fff;flex-shrink:0"><i class="ti ti-stethoscope" style="font-size:18px"></i></span><div style="flex:1"><b style="font-size:14px;color:var(--teal-d);display:block">あなたの治療ダッシュボード</b><span style="font-size:10.5px;color:var(--mute)">'+p.cancerName+' ／ ステージ '+p.stage+' ／ 診断 '+p.diagnosedAt+'</span></div></div>'
+      /* 今の治療 */
+      +'<div style="background:var(--teal-bg);border-radius:10px;padding:11px 13px;margin-bottom:9px">'
+        +'<div style="font-size:10px;color:var(--teal-d);letter-spacing:.04em;font-weight:700">▸ 今、受けている治療</div>'
+        +'<div style="font-size:14px;font-weight:700;color:var(--ink);margin-top:3px">'+p.current.label+'</div>'
+        +'<div style="font-size:11.5px;color:var(--teal-d);margin-top:3px;line-height:1.55">'+p.current.detail+'</div>'
+        +'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:9px"><span style="font-size:11px;color:var(--mute);font-weight:600">'+p.current.cycle+'</span><span style="font-size:11px;color:var(--teal-d);font-weight:700">'+p.current.progress+'% 完了</span></div>'
+        +'<div style="height:6px;background:#fff;border-radius:3px;overflow:hidden;margin-top:4px;border:.5px solid var(--line2)"><div style="width:'+p.current.progress+'%;height:100%;background:linear-gradient(90deg,var(--teal),var(--teal-d))"></div></div>'
+      +'</div>'
+      /* 次回受診＋準備 */
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:9px">'
+        +'<div style="background:#fff;border-radius:8px;padding:9px 10px;border:.5px solid var(--line2)"><div style="font-size:9.5px;color:var(--mute);font-weight:700;letter-spacing:.04em">次回受診</div><div style="font-size:13px;font-weight:700;color:var(--ink);margin-top:3px">6/13（金）</div><div style="font-size:10px;color:var(--mute);margin-top:1px">密封小線源 第1回</div></div>'
+        +'<details style="background:#fff;border-radius:8px;padding:0;border:.5px solid var(--line2)"><summary style="cursor:pointer;list-style:none;padding:9px 10px"><div style="font-size:9.5px;color:var(--mute);font-weight:700;letter-spacing:.04em">準備すること</div><div style="font-size:13px;font-weight:700;color:var(--amber-t);margin-top:3px">3項目 <i class="ti ti-chevron-down" style="font-size:11px;vertical-align:-1px"></i></div></summary><div style="padding:0 10px 10px">'+prepHtml+'</div></details>'
+      +'</div>'
+      /* 3アクションボタン（本番品質・大きめアイコン） */
+      +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">'
+        +'<button class="card" style="padding:11px 6px;background:var(--rose-bg);border:1px solid var(--rose);cursor:pointer;text-align:center" onclick="openSymptomModal()"><span class="ic" style="width:34px;height:34px;background:#fff;color:var(--rose);margin:0 auto"><i class="ti ti-mood-sad-squint" style="font-size:18px"></i></span><div style="font-size:11px;font-weight:700;color:#993556;margin-top:5px;line-height:1.3">副作用<br>記録</div></button>'
+        +'<button class="card" style="padding:11px 6px;background:var(--blue-bg);border:1px solid var(--blue);cursor:pointer;text-align:center" onclick="openPhrModal()"><span class="ic" style="width:34px;height:34px;background:#fff;color:var(--blue-d);margin:0 auto"><i class="ti ti-file-stack" style="font-size:18px"></i></span><div style="font-size:11px;font-weight:700;color:var(--blue-d);margin-top:5px;line-height:1.3">PHR<br>読込</div></button>'
+        +'<button class="card" style="padding:11px 6px;background:var(--teal-bg);border:1px solid var(--teal);cursor:pointer;text-align:center" onclick="go(\'sdmstart\')"><span class="ic" style="width:34px;height:34px;background:#fff;color:var(--teal-d);margin:0 auto"><i class="ti ti-clipboard-heart" style="font-size:18px"></i></span><div style="font-size:11px;font-weight:700;color:var(--teal-d);margin-top:5px;line-height:1.3">SDM<br>相談</div></button>'
+      +'</div>'
+      /* 副作用 直近5件 */
+      +'<details style="margin-bottom:6px;background:var(--rose-bg);border-radius:8px"><summary style="cursor:pointer;list-style:none;padding:9px 11px;display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:#993556"><i class="ti ti-bone"></i> 直近の副作用記録（5件） <i class="ti ti-chevron-down" style="margin-left:auto"></i></summary><div style="padding:0 11px 10px">'+sympHtml+'<button class="btn btn-out" style="margin-top:6px;padding:7px;font-size:11px;border-color:var(--rose);color:#993556" onclick="openSymptomModal()">＋ 新しく記録する</button></div></details>'
+      /* 今後の選択肢 */
+      +'<details style="background:var(--amber-bg);border-radius:8px"><summary style="cursor:pointer;list-style:none;padding:9px 11px;display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--amber-t)"><i class="ti ti-route-2"></i> 今後の選択肢を見る（標準治療サジェッション）<i class="ti ti-chevron-down" style="margin-left:auto"></i></summary>'
+        +'<div style="padding:0 11px 10px">'+nextOptionsHtml
+          +'<div class="note" style="margin-top:6px;font-size:10px;line-height:1.5"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：'+p.source+'。最終的な治療方針は主治医とご相談ください。</div>'
+        +'</div>'
+      +'</details>'
+    +'</div>';
+}
+/* ★PHRデータ読み込みモーダル（葵さんペルソナのリアルな検査結果を表示） */
+window.openPhrModal=function(){
+  var p=AOI_PERSONA;
+  /* 既存モーダルを使い回し or 動的生成 */
+  var ex=document.getElementById('phrSheet');
+  if(!ex){
+    ex=document.createElement('div');ex.id='phrSheet';
+    ex.style.cssText='position:fixed;inset:0;background:rgba(14,34,54,.6);display:flex;align-items:flex-end;justify-content:center;z-index:9000';
+    document.body.appendChild(ex);
+  }
+  var labsHtml=p.phr.labs.map(function(l){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:#F5F1E8;border-radius:5px;margin-bottom:3px"><span style="font-size:11px;color:var(--ink);font-weight:600">'+l.k+'</span><span style="font-family:\'EB Garamond\',serif;font-size:14px;font-weight:700;color:var(--ink)">'+l.v+'<small style="font-size:9px;color:var(--mute);margin-left:2px">'+l.u+'</small></span><span style="font-size:9.5px;font-weight:700;color:'+l.color+';background:#fff;padding:2px 7px;border-radius:999px">'+l.flag+'</span></div>';}).join('');
+  ex.innerHTML=
+    '<div style="background:var(--bg,#fbfaf7);max-width:420px;width:100%;max-height:85vh;overflow-y:auto;border-radius:18px 18px 0 0;padding:0 16px 24px">'
+      +'<div style="position:sticky;top:0;background:var(--bg,#fbfaf7);padding:12px 0 8px;display:flex;justify-content:space-between;align-items:center;z-index:5">'
+        +'<div style="display:flex;align-items:center;gap:7px"><div style="width:8px;height:8px;border-radius:50%;background:#1d6841;box-shadow:0 0 0 0 rgba(29,104,65,.7);animation:phLiveDot 1.8s infinite"></div><b style="font-size:13px;color:var(--teal-d)">PHR データ取込完了</b></div>'
+        +'<button onclick="document.getElementById(\'phrSheet\').remove()" style="font-size:12px;color:var(--ink);background:none;border:.5px solid var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer">閉じる ✕</button>'
+      +'</div>'
+      +'<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:.18em;color:var(--teal-d);font-weight:700;margin-top:6px">▸ DIRECT IMPORT — 〇〇病院 PHR</div>'
+      +'<div style="font-size:15px;font-weight:700;color:var(--ink);margin-top:3px">直近受診の検査結果</div>'
+      +'<div style="font-size:11px;color:var(--mute);margin-top:2px">'+p.phr.visit+'</div>'
+      /* 血液検査 */
+      +'<div style="font-family:Inter,sans-serif;font-size:10px;color:var(--teal-d);font-weight:700;letter-spacing:.06em;margin:14px 0 7px;border-bottom:.5px solid var(--line2);padding-bottom:4px">▸ 血液検査</div>'
+      +labsHtml
+      /* 画像所見 */
+      +'<div style="font-family:Inter,sans-serif;font-size:10px;color:var(--teal-d);font-weight:700;letter-spacing:.06em;margin:14px 0 7px;border-bottom:.5px solid var(--line2);padding-bottom:4px">▸ 画像所見</div>'
+      +'<div style="padding:9px 11px;background:var(--teal-bg);border-radius:6px;font-size:11.5px;line-height:1.7;color:var(--teal-d)">'+p.phr.image+'</div>'
+      /* 治療計画 */
+      +'<div style="font-family:Inter,sans-serif;font-size:10px;color:var(--teal-d);font-weight:700;letter-spacing:.06em;margin:14px 0 7px;border-bottom:.5px solid var(--line2);padding-bottom:4px">▸ 治療計画</div>'
+      +'<div style="padding:9px 11px;background:var(--amber-bg);border-radius:6px;font-size:11.5px;line-height:1.7;color:var(--amber-t)">'+p.phr.plan+'</div>'
+      /* インサイト */
+      +'<div style="margin-top:14px;padding:11px 12px;background:#0E2236;color:#F0C97A;border-radius:8px;font-size:11px;line-height:1.7"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> <b>SATOIからのインサイト</b><br>白血球とヘモグロビンが下がっています（化学療法の影響）。<b>感染予防</b>と<b>休息</b>を意識して。SCC（腫瘍マーカー）は改善傾向で、画像も縮小傾向。治療がよく効いています。</div>'
+      /* CTA */
+      +'<div style="display:flex;gap:6px;margin-top:14px">'
+        +'<button class="btn btn-teal" style="flex:1;padding:11px;font-size:13px" onclick="document.getElementById(\'phrSheet\').remove();goConcierge(\'phr\');"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> AIに相談する</button>'
+        +'<button class="btn btn-out" style="flex:1;padding:11px;font-size:13px" onclick="document.getElementById(\'phrSheet\').remove();go(\'sdmstart\');"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> SDMカード作成</button>'
+      +'</div>'
+      +'<div class="note" style="margin-top:10px;font-size:10px;line-height:1.5;text-align:center"><i class="ti ti-shield-lock" style="vertical-align:-2px"></i> PHRデータは本人同意の範囲のみ。SATOI暗号化保管・JOiNT諮問監督下</div>'
+    +'</div>';
+};
+
+/* ★副作用記録モーダル（葵さんペルソナ：CCRT典型副作用） */
+window.openSymptomModal=function(){
+  var ex=document.getElementById('sympSheet');
+  if(!ex){
+    ex=document.createElement('div');ex.id='sympSheet';
+    ex.style.cssText='position:fixed;inset:0;background:rgba(14,34,54,.6);display:flex;align-items:flex-end;justify-content:center;z-index:9000';
+    document.body.appendChild(ex);
+  }
+  var SYMPTOMS=[
+    {key:'fatigue',label:'倦怠感',ic:'ti-zzz',c:'var(--amber-t)'},
+    {key:'nausea',label:'吐き気',ic:'ti-mood-sad-squint',c:'var(--rose)'},
+    {key:'diarrhea',label:'下痢',ic:'ti-toilet-paper',c:'var(--blue-d)'},
+    {key:'bladder',label:'頻尿・膀胱症状',ic:'ti-droplet',c:'var(--blue-d)'},
+    {key:'skin',label:'皮膚反応（照射部位）',ic:'ti-bandage',c:'#993556'},
+    {key:'pain',label:'痛み',ic:'ti-bolt',c:'var(--rose)'},
+    {key:'sleep',label:'眠れない',ic:'ti-moon',c:'var(--teal-d)'},
+    {key:'anxiety',label:'不安・気持ちのつらさ',ic:'ti-cloud',c:'#3C3489'}
+  ];
+  var grid=SYMPTOMS.map(function(s){return '<button class="card" style="padding:11px 6px;text-align:center;cursor:pointer;background:#fff;border:.5px solid var(--line2)" onclick="recordSymptom(\''+s.key+'\',\''+s.label+'\')"><span class="ic" style="width:36px;height:36px;background:rgba(0,0,0,0.04);color:'+s.c+';margin:0 auto"><i class="ti '+s.ic+'" style="font-size:20px"></i></span><div style="font-size:11px;font-weight:600;color:var(--ink);margin-top:5px">'+s.label+'</div></button>';}).join('');
+  ex.innerHTML=
+    '<div style="background:var(--bg,#fbfaf7);max-width:420px;width:100%;max-height:85vh;overflow-y:auto;border-radius:18px 18px 0 0;padding:0 16px 24px">'
+      +'<div style="position:sticky;top:0;background:var(--bg,#fbfaf7);padding:12px 0 8px;display:flex;justify-content:space-between;align-items:center;z-index:5">'
+        +'<b style="font-size:14px;color:#993556"><i class="ti ti-bone" style="vertical-align:-2px"></i> 副作用を記録する</b>'
+        +'<button onclick="document.getElementById(\'sympSheet\').remove()" style="font-size:12px;color:var(--ink);background:none;border:.5px solid var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer">閉じる ✕</button>'
+      +'</div>'
+      +'<div class="note" style="font-size:11.5px;line-height:1.7;margin-top:4px">気になる症状をタップ。記録は <b>PRO-CTCAE 準拠</b> で、主治医にも共有できます。</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:11px">'+grid+'</div>'
+      +'<div style="margin-top:12px;padding:10px;background:linear-gradient(135deg,var(--teal-bg),#E1F5EE);border-radius:8px;border:.5px solid var(--teal)">'
+        +'<div style="display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--teal-d)"><i class="ti ti-sparkles" style="color:var(--teal)"></i><b>声で記録するなら、SATOIに話しかけて</b></div>'
+        +'<button class="btn btn-teal" style="margin-top:7px;padding:10px;font-size:13px" onclick="document.getElementById(\'sympSheet\').remove();goConcierge(\'symptom\');"><i class="ti ti-microphone" style="vertical-align:-2px"></i> AIコンシェルジュに話す</button>'
+      +'</div>'
+    +'</div>';
+};
+window.recordSymptom=function(key,label){
+  if(typeof toast==='function')toast('「'+label+'」を記録しました（PRO-CTCAE）');
+  setTimeout(function(){document.getElementById('sympSheet')&&document.getElementById('sympSheet').remove();},1000);
+};
+
+/* ★治療選択肢の詳細モーダル（同じ道を歩いた人の経過事例つき） */
+window.openTreatOption=function(key){
+  var p=AOI_PERSONA;var d=p.nextDetail&&p.nextDetail[key];if(!d)return;
+  var ex=document.getElementById('treatOptSheet');
+  if(!ex){ex=document.createElement('div');ex.id='treatOptSheet';ex.style.cssText='position:fixed;inset:0;background:rgba(14,34,54,.6);display:flex;align-items:flex-end;justify-content:center;z-index:9000';document.body.appendChild(ex);}
+  var condHtml=d.conditions.map(function(c){return '<li style="font-size:11px;line-height:1.6;color:var(--ink);padding:2px 0;display:flex;align-items:flex-start;gap:6px"><span style="color:var(--teal);font-size:9px;margin-top:3px;flex-shrink:0">●</span>'+c+'</li>';}).join('');
+  var effHtml=d.effects.map(function(c){return '<li style="font-size:11px;line-height:1.6;color:var(--teal-d);padding:2px 0;display:flex;align-items:flex-start;gap:6px"><span style="color:var(--teal);font-size:9px;margin-top:3px;flex-shrink:0">▲</span>'+c+'</li>';}).join('');
+  var aeHtml=d.adverse.map(function(c){return '<li style="font-size:11px;line-height:1.6;color:#993556;padding:2px 0;display:flex;align-items:flex-start;gap:6px"><span style="color:#9B2D2D;font-size:9px;margin-top:3px;flex-shrink:0">▼</span>'+c+'</li>';}).join('');
+  var casesHtml=d.cases.map(function(c){return '<div style="background:var(--amber-bg);border-left:3px solid var(--amber-t);border-radius:6px;padding:10px 12px;margin-bottom:6px"><div style="font-size:10px;color:var(--mute);font-weight:600">'+c.persona+'</div><div style="font-size:11.5px;color:var(--ink);line-height:1.7;margin-top:4px">'+c.body+'</div><div style="font-size:10px;color:var(--amber-t);font-weight:700;margin-top:5px">▸ 経過：'+c.outcome+'</div></div>';}).join('');
+  ex.innerHTML=
+    '<div style="background:var(--bg,#fbfaf7);max-width:420px;width:100%;max-height:90vh;overflow-y:auto;border-radius:18px 18px 0 0;padding:0 16px 32px">'
+      +'<div style="position:sticky;top:0;background:var(--bg,#fbfaf7);padding:12px 0 8px;display:flex;justify-content:space-between;align-items:center;z-index:5">'
+        +'<b style="font-size:14px;color:var(--teal-d)"><i class="ti ti-route-2" style="vertical-align:-2px"></i> 治療の選択肢</b>'
+        +'<button onclick="document.getElementById(\'treatOptSheet\').remove()" style="font-size:12px;color:var(--ink);background:none;border:.5px solid var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer">閉じる ✕</button>'
+      +'</div>'
+      +'<div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:.18em;color:var(--teal-d);font-weight:700;margin-top:6px">▸ TREATMENT OPTION DETAIL</div>'
+      +'<div style="font-size:18px;font-weight:700;color:var(--ink);margin-top:3px">'+d.title+'</div>'
+      +'<div style="font-size:12px;color:var(--mute);margin-top:5px;line-height:1.65">'+d.summary+'</div>'
+      /* 適用条件 */
+      +'<div style="font-family:Inter,sans-serif;font-size:10px;color:var(--teal-d);font-weight:700;letter-spacing:.06em;margin:14px 0 6px;border-bottom:.5px solid var(--line2);padding-bottom:4px">▸ 適用される条件</div>'
+      +'<ul style="list-style:none;padding:0;margin:0">'+condHtml+'</ul>'
+      /* 期待される効果 */
+      +'<div style="font-family:Inter,sans-serif;font-size:10px;color:var(--teal-d);font-weight:700;letter-spacing:.06em;margin:14px 0 6px;border-bottom:.5px solid var(--line2);padding-bottom:4px">▸ 期待される効果</div>'
+      +'<ul style="list-style:none;padding:0;margin:0">'+effHtml+'</ul>'
+      /* 起こりうる副作用 */
+      +'<div style="font-family:Inter,sans-serif;font-size:10px;color:#993556;font-weight:700;letter-spacing:.06em;margin:14px 0 6px;border-bottom:.5px solid var(--line2);padding-bottom:4px">▸ 起こりうる副作用・負担</div>'
+      +'<ul style="list-style:none;padding:0;margin:0">'+aeHtml+'</ul>'
+      /* 治療期間・費用 */
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:13px">'
+        +'<div style="background:var(--teal-bg);border-radius:6px;padding:9px 11px"><div style="font-size:9.5px;color:var(--mute);font-weight:700">治療期間</div><div style="font-size:12px;color:var(--teal-d);font-weight:700;margin-top:3px;line-height:1.5">'+d.duration+'</div></div>'
+        +'<div style="background:var(--amber-bg);border-radius:6px;padding:9px 11px"><div style="font-size:9.5px;color:var(--mute);font-weight:700">費用目安</div><div style="font-size:11px;color:var(--amber-t);font-weight:600;margin-top:3px;line-height:1.5">'+d.cost+'</div></div>'
+      +'</div>'
+      /* 同じ道を歩いた人の経過 */
+      +'<div style="font-family:Inter,sans-serif;font-size:10px;color:var(--amber-t);font-weight:700;letter-spacing:.06em;margin:16px 0 6px;border-bottom:.5px solid var(--line2);padding-bottom:4px">▸ 同じ道を歩いた人の経過（仮想ペルソナ）</div>'
+      +casesHtml
+      +'<button class="btn btn-out" style="margin-top:6px;padding:9px;font-size:12px;border-color:var(--amber-line);color:var(--amber-t)" onclick="document.getElementById(\'treatOptSheet\').remove();go(\'match\');"><i class="ti ti-users-group" style="vertical-align:-2px"></i> もっと同じ道の方の経過を見る・声を聞く</button>'
+      /* AIサジェッション免責 */
+      +'<div class="note" style="margin-top:14px;padding:10px 11px;background:#FFF8EC;border:.5px solid var(--amber-line);border-radius:6px;font-size:11px;line-height:1.65;color:#5A3A12"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 上記は <b>AIによる情報提供（公的ガイドライン由来）</b> で、すべてではありません。気になることは必ず主治医にご相談ください。最終的な治療方針は、ご本人と医師の対話で決めます。</div>'
+      /* CTAs */
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:11px">'
+        +'<button class="btn btn-teal" style="padding:11px;font-size:13px" onclick="document.getElementById(\'treatOptSheet\').remove();goConcierge(\'option\');"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> AIに相談</button>'
+        +'<button class="btn btn-out" style="padding:11px;font-size:13px" onclick="document.getElementById(\'treatOptSheet\').remove();go(\'sdmstart\');"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> SDMカード作成</button>'
+      +'</div>'
+      /* 自由診療動線 */
+      +'<button class="card" style="margin-top:10px;width:100%;text-align:left;background:linear-gradient(135deg,#FBEEDE,#F5F1E8);border:.5px solid var(--amber-line);padding:11px 13px;cursor:pointer;display:flex;align-items:center;gap:11px" onclick="document.getElementById(\'treatOptSheet\').remove();go(\'next_horizon_bridge\');">'
+        +'<span class="ic" style="width:36px;height:36px;background:#fff;color:var(--amber-t);border:.5px solid var(--amber-line);flex-shrink:0"><i class="ti ti-sun-high"></i></span>'
+        +'<div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700;color:var(--amber-t)">もっと他の治療を探したい場合</div><div class="note" style="font-size:10.5px;line-height:1.55;margin-top:2px;color:#7A5320">標準治療を終えた方への <span style="font-family:\'EB Garamond\',serif;font-style:italic">つぎの道</span>（自由診療・治験・先進医療）</div></div>'
+        +'<i class="ti ti-chevron-right" style="color:var(--amber-t);flex-shrink:0"></i>'
+      +'</button>'
+    +'</div>';
+};
+
+/* ★AIコンシェルジュへ「向こうから話しかける」プリセット遷移 */
+window.goConcierge=function(presetKey){
+  var p=AOI_PERSONA;
+  /* プリセットに応じて最初のAI挨拶を仕込む */
+  var openings={
+    default:'葵さん、おかえりなさい。'+p.current.label+'の'+p.current.cycle+'、ここまで本当によく頑張っていますね。今日、気になっていることはありますか？　体のこと、心のこと、これからのこと——どれでも大丈夫です。下のチップから選んでも、自由にお話しいただいても。',
+    phr:'検査結果、お疲れさまでした。白血球とヘモグロビンが下がっていますが、これは治療がしっかり効いているからこそ起きていることでもあります。腫瘍マーカー（SCC）は改善傾向、画像も縮小傾向で、いま治療がよく効いている時期です。気になることはありますか？',
+    symptom:'今日の体調、お話を聞かせてください。「倦怠感」「吐き気」「下痢」など、強くつらいのはどれですか？　声でも、文字でも、ゆっくりで大丈夫です。記録すると、主治医にも整理して伝えられます。'
+  };
+  window._cvOpening=openings[presetKey]||openings.default;
+  window._cvChips=[
+    {label:'副作用がつらい',q:'今、倦怠感と吐き気がつらいです'},
+    {label:'次の治療を知りたい',q:'CCRTの後はどうなりますか？'},
+    {label:'家族にどう伝えたい',q:'夫と子どもへの伝え方を相談したい'},
+    {label:'お金が心配',q:'治療費の負担を軽くする制度は？'}
+  ];
+  go('ai');
+};
+/* ★EMPSe peek（折りたたみ時の概要表示） */
+function buildEmpsePeek(){
+  var peek=document.getElementById('myEmpsePeek');if(!peek)return;
+  try{
+    if(typeof empTotal==='function'&&window.empScores){
+      var tot=empTotal(empScores);peek.textContent=tot+' /100';
+    }else{
+      peek.textContent='タップで開く';
+    }
+  }catch(e){peek.textContent='タップで開く';}
+}
+
 window._oninit['mypage']=function(){
+  /* ★葵さんペルソナ固定（ログイン時のがん種選択はデモ機能・マイページは葵さん子宮頸がんで動く） */
+  window._myCancer='cervix';window._myStage='Ⅲ';window._myName='葵';
+  /* ★治療ダッシュボード生成（最優先） */
+  buildTreatDash();
+  /* EMPSe peek＋カード本体 */
+  buildEmpsePeek();
   var ec=document.getElementById('myEmpseCard');if(ec&&typeof empMypageHTML==='function')ec.innerHTML=empMypageHTML();
   var mc=document.getElementById('myCancerName');if(mc&&typeof myCancerJa==='function')mc.textContent=myCancerJa();
   var s=document.getElementById('myStatus'), r=document.getElementById('myReg'), av=document.getElementById('myAvatar');
@@ -11767,6 +12514,8 @@ window._oninit['mypage']=function(){
     if(s)s.textContent='仮会員 ・ いつでも無料登録できます';
     if(r){r.innerHTML='<i class="ti ti-user-plus" style="vertical-align:-2px"></i> 無料登録';r.classList.remove('btn-out');r.classList.add('btn-teal');r.onclick=function(){go('onboarding');};}
   }
+  /* 保険加入者なら money 連携も */
+  try{var isIns=(localStorage.getItem('satoi_ins_member')==='1');if(isIns){/* 何かのフラグ表示余地 */}}catch(e){}
 };
 window._oninit['home']=function(){
   var g=document.getElementById('homeGreet'), s=document.getElementById('homeSub'), c=document.getElementById('homeCta');
