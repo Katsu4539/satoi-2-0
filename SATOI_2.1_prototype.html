@@ -9466,10 +9466,65 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
 </section>
 <script>
 (function(){
-  var SV={breast:{n:'乳がん',p:95000,s:{I:99,II:92,III:75,IV:38}},colon:{n:'大腸がん',p:147000,s:{I:98,II:88,III:75,IV:22}},lung:{n:'肺がん',p:127000,s:{I:82,II:47,III:22,IV:7}},stomach:{n:'胃がん',p:124000,s:{I:96,II:71,III:49,IV:9}},prostate:{n:'前立腺がん',p:95000,s:{I:100,II:100,III:95,IV:64}},pancreas:{n:'すい臓がん',p:44000,s:{I:41,II:17,III:7,IV:1}},cervix:{n:'子宮頸がん',p:11000,s:{I:93,II:76,III:62,IV:26}},endometrium:{n:'子宮体がん',p:17000,s:{I:96,II:88,III:66,IV:19}}};
+  /* ★Katsu指示2026-05-31: 5年相対生存率データを全がん種に拡張（医療監修者レビュー必須）
+     数値は国立がん研究センター がん情報サービス／各学会診療ガイドライン水準の目安。
+     最終公開前に医療監修者による確認・最新値への更新が必要。 */
+  var SV={
+    /* 既存（v2.1運用済） */
+    breast:     {n:'乳がん',           p:95000,  s:{I:99, II:92, III:75, IV:38}},
+    colon:      {n:'大腸がん',         p:147000, s:{I:98, II:88, III:75, IV:22}},
+    lung:       {n:'肺がん（非小細胞）',p:127000, s:{I:82, II:47, III:22, IV:7}},
+    stomach:    {n:'胃がん',           p:124000, s:{I:96, II:71, III:49, IV:9}},
+    prostate:   {n:'前立腺がん',       p:95000,  s:{I:100,II:100,III:95, IV:64}},
+    pancreas:   {n:'すい臓がん',       p:44000,  s:{I:41, II:17, III:7,  IV:1}},
+    cervix:     {n:'子宮頸がん',       p:11000,  s:{I:93, II:76, III:62, IV:26}},
+    endometrium:{n:'子宮体がん',       p:17000,  s:{I:96, II:88, III:66, IV:19}},
+    /* ★2026-05-31 追加：頭頸部・胸部 */
+    headneck:   {n:'頭頸部がん',       p:24000,  s:{I:80, II:65, III:50, IV:30}},
+    sclc:       {n:'肺がん（小細胞）', p:14000,  s:{I:30, II:20, III:10, IV:3}},
+    mesothelioma:{n:'胸膜中皮腫',      p:1700,   s:{I:20, II:13, III:7,  IV:2}},
+    /* ★2026-05-31 追加：消化器・肝胆膵 */
+    esophagus:  {n:'食道がん',         p:26000,  s:{I:80, II:51, III:31, IV:14}},
+    liver:      {n:'肝臓がん',         p:38000,  s:{I:60, II:41, III:18, IV:4}},
+    biliary:    {n:'胆道がん',         p:22000,  s:{I:55, II:33, III:18, IV:5}},
+    /* ★2026-05-31 追加：乳腺・婦人科 */
+    tnbc:       {n:'乳がん（トリプルネガティブ）',p:14000,s:{I:85, II:70, III:50, IV:12}},
+    ovary:      {n:'卵巣がん',         p:13000,  s:{I:92, II:78, III:50, IV:35}},
+    /* ★2026-05-31 追加：泌尿器 */
+    kidney:     {n:'腎臓がん',         p:31000,  s:{I:95, II:75, III:55, IV:18}},
+    ureter:     {n:'腎盂・尿管がん',   p:7000,   s:{I:80, II:60, III:35, IV:10}},
+    bladder:    {n:'膀胱がん',         p:22000,  s:{I:90, II:65, III:45, IV:15}},
+    /* ★2026-05-31 追加：皮膚・リンパ */
+    melanoma:   {n:'皮膚がん（メラノーマ）',p:2400,s:{I:95, II:75, III:50, IV:20}},
+    lymphoma:   {n:'非ホジキンリンパ腫',p:32000, s:{I:85, II:78, III:68, IV:55}},
+    hodgkin:    {n:'ホジキンリンパ腫', p:2700,   s:{I:95, II:90, III:80, IV:65}},
+    pmbcl:      {n:'PMBCL',            p:500,    s:{I:85, II:82, III:75, IV:65}},
+    /* ★2026-05-31 追加：血液・骨髄（病期分類は通常と異なる・参考目安） */
+    leukemia:   {n:'白血病',           p:14000,  s:{I:75, II:60, III:45, IV:30}},
+    myeloma:    {n:'多発性骨髄腫',     p:8000,   s:{I:75, II:55, III:35, IV:20}},
+    /* ★2026-05-31 追加：脳・内分泌 */
+    brain:      {n:'脳腫瘍',           p:6000,   s:{I:90, II:70, III:35, IV:7}},
+    thyroid:    {n:'甲状腺がん',       p:18000,  s:{I:100,II:100,III:92, IV:55}},
+    /* ★2026-05-31 追加：バイオマーカー・その他 */
+    msih:       {n:'MSI-High 固形がん',p:null,   s:{I:90, II:80, III:65, IV:45}},
+    tmbh:       {n:'TMB-High 固形がん',p:null,   s:{I:88, II:75, III:60, IV:40}},
+    cup:        {n:'原発不明がん',     p:5000,   s:{I:45, II:30, III:15, IV:6}},
+    childhood:  {n:'こどものがん（小児）',p:2500,s:{I:90, II:85, III:75, IV:50}}
+  };
   // 全がん種（「がんを知る」一覧と同じ並び）。選ぶと必ず、そのがんの詳細（病期・治療）ページへ紐づく。
   var SV_LIST=[['breast','乳がん'],['tnbc','乳がん（トリプルネガティブ）'],['lung','肺がん（非小細胞）'],['sclc','肺がん（小細胞）'],['mesothelioma','胸膜中皮腫'],['stomach','胃がん'],['colon','大腸がん'],['prostate','前立腺がん'],['pancreas','すい臓がん'],['liver','肝臓がん'],['esophagus','食道がん'],['cervix','子宮頸がん'],['endometrium','子宮体がん'],['ovary','卵巣がん'],['lymphoma','非ホジキンリンパ腫'],['hodgkin','ホジキンリンパ腫'],['pmbcl','PMBCL'],['leukemia','白血病'],['myeloma','多発性骨髄腫'],['headneck','頭頸部がん'],['biliary','胆道がん'],['kidney','腎臓がん'],['ureter','腎盂・尿管がん'],['bladder','膀胱がん'],['brain','脳腫瘍'],['thyroid','甲状腺がん'],['melanoma','皮膚がん（メラノーマ）'],['msih','MSI-High 固形がん'],['tmbh','TMB-High 固形がん'],['childhood','こどものがん（小児）'],['cup','原発不明がん']];
   var NAMES={};SV_LIST.forEach(function(x){NAMES[x[0]]=x[1];});NAMES.other='その他・まだ分からない';
+  /* ★Katsu指示2026-05-31: profilesetup と同じ 8 グループ構造で表示 */
+  var SV_GROUPS=[
+    {gh:'頭頸部・胸部',         items:['headneck','lung','sclc','mesothelioma']},
+    {gh:'消化器・肝胆膵',       items:['esophagus','stomach','colon','liver','biliary','pancreas']},
+    {gh:'乳腺・婦人科',         items:['breast','tnbc','cervix','endometrium','ovary']},
+    {gh:'泌尿器',               items:['kidney','ureter','bladder','prostate']},
+    {gh:'皮膚・リンパ',         items:['melanoma','lymphoma','hodgkin','pmbcl']},
+    {gh:'血液・骨髄',           items:['leukemia','myeloma']},
+    {gh:'脳・内分泌',           items:['brain','thyroid']},
+    {gh:'バイオマーカー・その他', items:['msih','tmbh','cup','childhood']}
+  ];
   function detailCall(k){return k==='breast'?"go('bccare')":"openCancer('"+k+"')";}
   /* ★Katsu指示2026-05-29 PM: がん種選択済なら緑(primary)を「○○がんの治療・病期をくわしく」に。治療を知るハブはここでは不要 */
   function detailBtn(k){var nm=NAMES[k]||'このがん';return '<button class="btn btn-teal" style="margin-top:12px" onclick="'+detailCall(k)+'"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> '+nm+'の治療・病期をくわしく</button>';}
@@ -9483,14 +9538,36 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
     var st=selected?'background:#0F6E56;color:#fff;border-color:#0F6E56;font-weight:700':'background:#fff;color:#1E293B';
     return '<button onclick="'+onclick+'" style="font-size:12px;padding:7px 11px;border:.5px solid var(--line2);border-radius:999px;'+st+';cursor:pointer;font:inherit;line-height:1.2;margin:0 5px 5px 0">'+label+'</button>';
   }
+  /* ★Katsu指示2026-05-31: ① どなたのこと？ をアイコン付きカード型に変更 */
+  function svPersonCard(key,label,sub,iconHtml,bgIcon,colorIcon,selected){
+    var selBorder=selected?'border:2px solid #0F6E56':'border:.5px solid var(--line2)';
+    var selBg    =selected?'background:#EAF5F1':'background:#fff';
+    return '<button onclick="svW(\''+key+'\')" style="'+selBorder+';'+selBg+';border-radius:14px;padding:14px 12px;cursor:pointer;font:inherit;text-align:left;display:flex;flex-direction:column;gap:8px;align-items:flex-start">'
+      +'<span style="width:36px;height:36px;border-radius:50%;background:'+bgIcon+';color:'+colorIcon+';display:flex;align-items:center;justify-content:center;font-size:18px">'+iconHtml+'</span>'
+      +'<span style="font-size:14px;font-weight:700;color:var(--ink);line-height:1.3">'+label+'</span>'
+      +'<span style="font-size:11px;color:var(--sub);line-height:1.5">'+sub+'</span>'
+      +'</button>';
+  }
   function R(){var e=document.getElementById('svStep');if(!e)return;var h='';
     /* === 1ページ選択UI（who+がん種+ステージを常に同時表示） === */
     h+='<div class="card" style="margin-top:14px">';
-    h+='<div style="font-size:13px;font-weight:700;margin-bottom:6px">① どなたのこと？</div><div style="margin-bottom:14px">';
-    h+=selPill('わたし自身',who==='self',"svW('self')")+selPill('身近な人',who==='near',"svW('near')")+'</div>';
-    h+='<div style="font-size:13px;font-weight:700;margin-bottom:6px">② どのがんについて？</div><div style="margin-bottom:14px">';
-    SV_LIST.forEach(function(x){h+=selPill(x[1],can===x[0],"svC('"+x[0]+"')");});
-    h+=selPill('その他・まだ分からない',can==='other',"svC('other')")+'</div>';
+    /* ① どなたのこと？ ─ アイコン付きカード型 */
+    h+='<div style="font-size:13px;font-weight:700;margin-bottom:8px">① どなたのこと？</div>';
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px">';
+    h+=svPersonCard('self','あなた自身のこと','がん種＋ステージ・段階を一画面で','<i class="ti ti-user"></i>','#FCE4EC','#D81B60',who==='self');
+    h+=svPersonCard('near','身近な人のこと','分かる範囲で、同じ画面で','<i class="ti ti-users"></i>','#FFF3E0','#F57C00',who==='near');
+    h+='</div>';
+    /* ② どのがんについて？ ─ 8 グループ表示 */
+    h+='<div style="font-size:13px;font-weight:700;margin-bottom:6px">② どのがんについて？</div>';
+    SV_GROUPS.forEach(function(g){
+      h+='<div style="font-size:11px;font-weight:600;color:var(--sub);margin:8px 0 4px 0">'+g.gh+'</div>';
+      h+='<div style="margin-bottom:4px">';
+      g.items.forEach(function(c){
+        if(NAMES[c]) h+=selPill(NAMES[c],can===c,"svC('"+c+"')");
+      });
+      h+='</div>';
+    });
+    h+='<div style="margin-top:8px;margin-bottom:14px">'+selPill('その他・まだ分からない',can==='other',"svC('other')")+'</div>';
     if(can && can!=='other'){
       h+='<div style="font-size:13px;font-weight:700;margin-bottom:6px">③ ステージ（広がり）</div><div>';
       ['I','II','III','IV'].forEach(function(s){h+=selPill('ステージ'+s,stg===s,"svS('"+s+"')");});
