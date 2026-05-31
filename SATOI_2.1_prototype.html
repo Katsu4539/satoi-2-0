@@ -803,10 +803,149 @@ window._oninit['yuttari_home']=function(){
   </div>
   <div style="display:flex;align-items:center;gap:8px">
     <button class="hbtn emgdot" onclick="go('emergency')" aria-label="緊急QR・救急時カード" title="緊急QR"><i class="ti ti-urgent"></i></button>
-    <button id="langDot" class="hbtn" onclick="cycleLang()" aria-label="言語切替 / Language / 语言" title="言語 / Language / 语言" data-noi18n style="font-size:13px;font-weight:700;letter-spacing:0">あ</button>
-    <button id="ytDot" class="hbtn hbtn-yt" onclick="ytToggle()" aria-label="ゆったりモード切替" title="ゆったりモード（文字大きく・ゆっくり）" data-noi18n>ゆ</button>
-    <button class="hbtn" onclick="go('search')" aria-label="さがす"><i class="ti ti-search"></i></button>
+    <!-- ★Katsu指示2026-05-31: ヘッダー4アイコン構成（緊急/検索/ログイン/3本線）に整理。「あ」「ゆ」はハンバーガー内に移動 -->
+    <button class="hbtn" onclick="hdrSearchOpen()" aria-label="さがす" title="さがす"><i class="ti ti-search"></i></button>
+    <button class="hbtn" onclick="hdrLoginClick()" aria-label="ログイン / マイページ" title="ログイン / マイページ"><i class="ti ti-user-circle"></i></button>
+    <button class="hbtn" onclick="hdrMenuOpen()" aria-label="メニュー" title="メニュー"><i class="ti ti-menu-2"></i></button>
+    <!-- 既存「あ」「ゆ」「検索」ボタンはハンバーガー側に統合。互換のためID/関数は残し非表示 -->
+    <button id="langDot" onclick="cycleLang()" data-noi18n style="display:none">あ</button>
+    <button id="ytDot" onclick="ytToggle()" data-noi18n style="display:none">ゆ</button>
     <button id="hdrPts" onclick="go('points')" aria-label="ポイント" style="display:none;align-items:center;gap:4px;height:34px;padding:0 11px;border-radius:999px;border:.5px solid var(--amber-line);background:var(--amber-bg2);color:var(--amber-t);cursor:pointer;font:inherit"><i class="ti ti-gift" style="font-size:15px"></i><span id="hdrPtsNum" style="font-size:13px;font-weight:600">0</span><span style="font-size:11px">pt</span></button>
+  </div>
+</div>
+
+<!-- ★Katsu指示2026-05-31: ハンバーガーメニュー モーダル -->
+<div id="hdrMenu" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.4);backdrop-filter:blur(2px)" onclick="hdrMenuClose(event)">
+  <div style="position:absolute;top:0;right:0;width:78%;max-width:340px;height:100%;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.12);overflow-y:auto;display:flex;flex-direction:column" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:.5px solid var(--line)">
+      <div style="font-size:14px;font-weight:700;color:var(--ink)">メニュー</div>
+      <button onclick="hdrMenuClose()" aria-label="閉じる" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--mute);padding:4px 8px">×</button>
+    </div>
+    <div style="padding:6px 0;flex:1">
+      <button class="hdrMenuRow" onclick="hdrMenuGo('home')"><i class="ti ti-home" style="color:var(--teal)"></i><span>ホーム</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('cancer')"><i class="ti ti-grid-dots" style="color:var(--teal)"></i><span>がん種一覧</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('treatment')"><i class="ti ti-stethoscope" style="color:var(--teal)"></i><span>治療を知る</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('hospital_search')"><i class="ti ti-building-hospital" style="color:var(--teal)"></i><span>病院・相談先を探す</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('stories')"><i class="ti ti-message-circle-heart" style="color:var(--teal)"></i><span>患者の物語・体験談</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('ai')"><i class="ti ti-sparkles" style="color:var(--teal)"></i><span>コンシェルジュに相談</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <div style="height:.5px;background:var(--line);margin:6px 18px"></div>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('mypage')"><i class="ti ti-user" style="color:#6B5B95"></i><span>マイページ</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('points')"><i class="ti ti-gift" style="color:var(--amber)"></i><span>ポイント・特典</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <div style="height:.5px;background:var(--line);margin:6px 18px"></div>
+      <!-- ★Katsu指示2026-05-31: 言語切替・ゆったりモードをハンバーガー内に -->
+      <button class="hdrMenuRow" onclick="hdrMenuCycleLang()"><i class="ti ti-language" style="color:#6B5B95"></i><span>言語</span><span id="hdrMenuLangCur" style="margin-left:auto;font-size:12px;color:var(--mute);background:var(--teal-bg);color:var(--teal-d);padding:3px 10px;border-radius:999px;font-weight:600">あ</span></button>
+      <button class="hdrMenuRow" onclick="hdrMenuToggleYt()"><i class="ti ti-eyeglass" style="color:#6B5B95"></i><span>ゆったりモード（文字大きめ・ゆっくり）</span><span id="hdrMenuYtCur" style="margin-left:auto;font-size:12px;color:var(--mute);background:#F3F4F6;padding:3px 10px;border-radius:999px;font-weight:600">OFF</span></button>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('voice_settings')"><i class="ti ti-settings" style="color:#6B5B95"></i><span>話し方・表示の詳細設定</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <div style="height:.5px;background:var(--line);margin:6px 18px"></div>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('about')"><i class="ti ti-info-circle" style="color:#6B5B95"></i><span>SATOI について</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('references')"><i class="ti ti-book" style="color:#6B5B95"></i><span>引用・参考文献</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+      <button class="hdrMenuRow" onclick="hdrMenuGo('emergency')"><i class="ti ti-urgent" style="color:#E5704A"></i><span>緊急時カード</span><i class="ti ti-chevron-right" style="color:var(--mute);margin-left:auto"></i></button>
+    </div>
+    <div style="padding:14px 18px;border-top:.5px solid var(--line);font-size:10px;color:var(--mute);text-align:center">SATOI Platform / YH2.1</div>
+  </div>
+</div>
+<style>
+.hdrMenuRow{display:flex;align-items:center;gap:12px;width:100%;padding:13px 20px;background:none;border:none;cursor:pointer;font:inherit;font-size:13.5px;color:var(--ink);text-align:left}
+.hdrMenuRow:hover{background:#F6F7F5}
+.hdrMenuRow i.ti{font-size:18px;flex-shrink:0}
+</style>
+<script>
+window.hdrMenuOpen=function(){
+  var m=document.getElementById('hdrMenu');if(!m)return;
+  /* 現在の言語・ゆったり状態を反映 */
+  try{
+    var lc=document.getElementById('hdrMenuLangCur');
+    if(lc){var lang=(localStorage.getItem('satoi_lang')||'ja');lc.textContent=(lang==='ja'?'あ':lang==='en'?'A':'中');}
+    var yc=document.getElementById('hdrMenuYtCur');
+    if(yc){var yt=(localStorage.getItem('satoi_yuttari')==='1');yc.textContent=yt?'ON':'OFF';yc.style.background=yt?'var(--amber-bg2)':'#F3F4F6';yc.style.color=yt?'var(--amber-t)':'var(--mute)';}
+  }catch(e){}
+  m.style.display='block';document.body.style.overflow='hidden';
+};
+window.hdrMenuClose=function(e){if(e&&e.target!==e.currentTarget)return;var m=document.getElementById('hdrMenu');if(m){m.style.display='none';document.body.style.overflow='';}};
+window.hdrMenuGo=function(id){hdrMenuClose();setTimeout(function(){go(id);},150);};
+window.hdrLoginClick=function(){
+  /* 既会員ならマイページ、未会員ならログイン画面へ */
+  var isMember=false;
+  try{isMember=!!(window._isMember||localStorage.getItem('satoi_profile'));}catch(e){}
+  if(isMember){go('mypage');}else{go('signin');}
+};
+/* ★Katsu指示2026-05-31: ハンバーガー内で言語切替・ゆったりモード切替（メニュー閉じずにその場で反映） */
+window.hdrMenuCycleLang=function(){
+  if(typeof window.cycleLang==='function'){window.cycleLang();}
+  setTimeout(function(){
+    var lc=document.getElementById('hdrMenuLangCur');
+    if(lc){var lang=(localStorage.getItem('satoi_lang')||'ja');lc.textContent=(lang==='ja'?'あ':lang==='en'?'A':'中');}
+  },100);
+};
+window.hdrMenuToggleYt=function(){
+  if(typeof window.ytToggle==='function'){window.ytToggle();}
+  setTimeout(function(){
+    var yc=document.getElementById('hdrMenuYtCur');
+    if(yc){var yt=(localStorage.getItem('satoi_yuttari')==='1');yc.textContent=yt?'ON':'OFF';yc.style.background=yt?'var(--amber-bg2)':'#F3F4F6';yc.style.color=yt?'var(--amber-t)':'var(--mute)';}
+  },100);
+};
+/* ★Katsu指示2026-05-31: 検索バーをモーダル化（文字入力＋音声入力） */
+window.hdrSearchOpen=function(){
+  var m=document.getElementById('hdrSearch');if(!m)return;
+  m.style.display='block';document.body.style.overflow='hidden';
+  setTimeout(function(){var inp=document.getElementById('hdrSearchInput');if(inp)inp.focus();},100);
+};
+window.hdrSearchClose=function(e){
+  if(e&&e.target!==e.currentTarget)return;
+  var m=document.getElementById('hdrSearch');if(m){m.style.display='none';document.body.style.overflow='';}
+  /* 音声入力中なら停止 */
+  try{if(window._hdrSearchRec){window._hdrSearchRec.stop();window._hdrSearchRec=null;}}catch(e){}
+  var mb=document.getElementById('hdrSearchMicBtn');if(mb)mb.style.background='';
+};
+window.hdrSearchSubmit=function(){
+  var inp=document.getElementById('hdrSearchInput');if(!inp)return;
+  var q=(inp.value||'').trim();if(!q)return;
+  /* 既存 search 画面に検索ワードを引き渡す */
+  try{sessionStorage.setItem('satoi_search_q',q);}catch(e){}
+  hdrSearchClose();
+  setTimeout(function(){go('search');},150);
+};
+window.hdrSearchKey=function(e){
+  if(e.key==='Enter'){e.preventDefault();hdrSearchSubmit();}
+};
+window.hdrSearchVoice=function(){
+  /* Web Speech API での音声入力 */
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('お使いのブラウザは音声入力に対応していません');return;}
+  var mb=document.getElementById('hdrSearchMicBtn');
+  if(window._hdrSearchRec){
+    /* 録音中なら停止 */
+    try{window._hdrSearchRec.stop();}catch(e){}
+    window._hdrSearchRec=null;
+    if(mb){mb.style.background='';mb.style.color='';}
+    return;
+  }
+  var rec=new SR();rec.lang='ja-JP';rec.continuous=false;rec.interimResults=true;
+  window._hdrSearchRec=rec;
+  if(mb){mb.style.background='#FCE4EC';mb.style.color='#D81B60';}
+  rec.onresult=function(ev){
+    var s='';for(var i=ev.resultIndex;i<ev.results.length;i++){s+=ev.results[i][0].transcript;}
+    var inp=document.getElementById('hdrSearchInput');if(inp)inp.value=s;
+  };
+  rec.onend=function(){window._hdrSearchRec=null;if(mb){mb.style.background='';mb.style.color='';}};
+  rec.onerror=function(){window._hdrSearchRec=null;if(mb){mb.style.background='';mb.style.color='';}};
+  try{rec.start();}catch(e){window._hdrSearchRec=null;}
+};
+</script>
+
+<!-- ★Katsu指示2026-05-31: モーダル検索バー（文字入力＋音声入力） -->
+<div id="hdrSearch" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.35)" onclick="hdrSearchClose(event)">
+  <div style="background:#fff;padding:12px 14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.12)" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;gap:8px">
+      <button onclick="hdrSearchClose()" aria-label="閉じる" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--mute);padding:4px 6px;flex-shrink:0">×</button>
+      <div style="flex:1;display:flex;align-items:center;gap:6px;background:#F3F4F6;border-radius:999px;padding:8px 14px">
+        <i class="ti ti-search" style="color:var(--mute);font-size:18px"></i>
+        <input id="hdrSearchInput" type="text" placeholder="がん種・症状・機能をさがす" onkeydown="hdrSearchKey(event)" style="flex:1;border:none;background:none;font-size:14px;outline:none;color:var(--ink);font:inherit">
+        <button id="hdrSearchMicBtn" onclick="hdrSearchVoice()" aria-label="音声入力" title="音声で入力" style="background:none;border:none;cursor:pointer;padding:6px;border-radius:50%;color:var(--mute);display:flex;align-items:center"><i class="ti ti-microphone" style="font-size:18px"></i></button>
+      </div>
+      <button onclick="hdrSearchSubmit()" style="background:var(--teal);color:#fff;border:none;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;font:inherit">検索</button>
+    </div>
+    <div style="font-size:11px;color:var(--mute);margin-top:8px;padding-left:8px"><i class="ti ti-info-circle" style="vertical-align:-1px"></i> Enter で検索／マイクで音声入力</div>
   </div>
 </div>
 
