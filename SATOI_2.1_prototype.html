@@ -1431,10 +1431,34 @@ window.hdrSearchVoice=function(){
 #investor .inv-data4 .id4bar{width:50px;height:5px;background:#fff;border:.5px solid rgba(14,34,54,.2);border-radius:3px;overflow:hidden;flex-shrink:0}
 #investor .inv-data4 .id4bar div{height:100%;background:linear-gradient(90deg,#0E2236,#B8954A)}
 #investor .inv-data4 .id4val{font-size:11px;color:#9B2D2D;font-weight:700;font-family:"EB Garamond",serif;min-width:42px;text-align:right;flex-shrink:0}
-#investor .inv-map-svg{width:100%;height:auto;display:block;background:#FFFCF6;border-radius:6px;border:.5px solid rgba(14,34,54,.12)}
-#investor .inv-region{cursor:pointer;transition:opacity .12s,stroke-width .15s}
-#investor .inv-region:hover{opacity:.85;stroke-width:1.5}
-#investor .inv-region.sel{stroke:#0E2236;stroke-width:1.8}
+#investor .inv-map-svg{width:100%;height:auto;display:block;background:#FFFCF6;border-radius:6px;border:.5px solid rgba(14,34,54,.12);aspect-ratio:1/1}
+#investor .inv-pref{cursor:pointer;stroke:#FFFCF6;stroke-width:0.8;stroke-linejoin:round;transition:fill .35s,opacity .12s,stroke-width .15s}
+#investor .inv-pref:hover{opacity:.82;stroke:#F0C97A;stroke-width:1.6}
+#investor .inv-pref.sel{stroke:#9B2D2D;stroke-width:2.4}
+#investor .inv-pref-label{font-family:Inter,sans-serif;font-size:11px;fill:#0E2236;font-weight:600;pointer-events:none;text-shadow:0 0 2px rgba(255,255,255,0.9)}
+#investor .inv-livebox{margin-top:10px;background:#fff;border:.5px solid rgba(14,34,54,.18);border-radius:8px;padding:12px 13px}
+#investor .inv-livehead{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+#investor .inv-livedot{width:8px;height:8px;border-radius:50%;background:#7BC97B;box-shadow:0 0 0 0 rgba(123,201,123,.7);animation:invLiveDot 1.8s infinite}
+@keyframes invLiveDot{0%{box-shadow:0 0 0 0 rgba(123,201,123,.7)}70%{box-shadow:0 0 0 8px rgba(123,201,123,0)}100%{box-shadow:0 0 0 0 rgba(123,201,123,0)}}
+#investor .inv-livelab{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.18em;color:#B8954A;font-weight:700;text-transform:uppercase}
+#investor .inv-livegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+#investor .inv-livecell{background:#F5F1E8;border-radius:5px;padding:8px 10px;border-left:2px solid #B8954A;position:relative;overflow:hidden}
+#investor .inv-livecell .lcl{font-size:9px;color:#6B7280;letter-spacing:.06em;font-family:Inter,sans-serif;font-weight:700;text-transform:uppercase}
+#investor .inv-livecell .lcv{font-family:"EB Garamond",serif;font-size:20px;font-weight:700;color:#0E2236;line-height:1;margin-top:3px;transition:color .4s}
+#investor .inv-livecell .lcv small{font-size:11px;color:#6B7280;font-weight:500;font-style:italic}
+#investor .inv-livecell .lcd{font-size:9px;color:#1d6841;font-weight:700;margin-top:2px;font-family:Inter,sans-serif;display:flex;align-items:center;gap:3px}
+#investor .inv-livecell.flash .lcv{color:#9B2D2D;animation:invFlash 0.6s ease-out}
+@keyframes invFlash{0%{transform:scale(1.18);color:#9B2D2D}100%{transform:scale(1);color:#0E2236}}
+#investor .inv-feed{margin-top:10px;background:#0E2236;color:#F5F1E8;border-radius:8px;padding:11px 13px;font-family:Inter,sans-serif;border:.5px solid #B8954A;overflow:hidden}
+#investor .inv-feedhead{display:flex;align-items:center;gap:7px;margin-bottom:8px;font-size:9px;color:#D4A95E;letter-spacing:.16em;font-family:"JetBrains Mono",monospace;font-weight:700}
+#investor .inv-feedlist{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow:hidden;position:relative}
+#investor .inv-feedlist::after{content:"";position:absolute;bottom:0;left:0;right:0;height:24px;background:linear-gradient(to bottom,transparent,#0E2236);pointer-events:none}
+#investor .inv-feeditem{display:grid;grid-template-columns:36px 1fr;gap:9px;align-items:start;font-size:10.5px;line-height:1.5;animation:invFeedSlide .5s ease-out}
+@keyframes invFeedSlide{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
+#investor .inv-feeditem .ift{font-family:"JetBrains Mono",monospace;font-size:9px;color:#D4A95E;font-weight:700;letter-spacing:.04em}
+#investor .inv-feeditem .ifb{color:rgba(245,241,232,.92)}
+#investor .inv-feeditem .ifb b{color:#F0C97A;font-weight:700}
+#investor .inv-feeditem .ifb .ifbk{display:inline-block;font-size:8.5px;background:rgba(212,169,94,.18);color:#F0C97A;border-radius:999px;padding:1px 6px;margin-left:4px;font-weight:700;letter-spacing:.04em}
 #investor .inv-base{fill:#9B2D2D;stroke:#fff;stroke-width:.7}
 #investor .inv-base-ring{fill:none;stroke:#9B2D2D;stroke-width:1.2;animation:invPulse 1.8s infinite}
 @keyframes invPulse{0%{r:3;opacity:.7}100%{r:9;opacity:0}}
@@ -1576,6 +1600,23 @@ window.hdrSearchVoice=function(){
     </div>
   </div>
 
+  <!-- ★リアルタイム会員動向（ライブカウンター・投資家ワクワク要素①） -->
+  <div class="inv-livebox">
+    <div class="inv-livehead"><span class="inv-livedot"></span><span class="inv-livelab">▸ LIVE — MEMBER ACTIVITY (UPDATING)</span><span class="inv-mono" style="margin-left:auto;font-size:8.5px;color:#6B7280" id="invLiveTime">--:--:--</span></div>
+    <div class="inv-livegrid">
+      <div class="inv-livecell" id="lcMember"><div class="lcl">累計会員</div><div class="lcv"><span id="lcMemberV">12,847</span><small> 人</small></div><div class="lcd"><span id="lcMemberD">▲ +1,204 (30日)</span></div></div>
+      <div class="inv-livecell" id="lc4axis"><div class="lcl">4軸取得</div><div class="lcv"><span id="lc4axisV">28,271</span><small> 件</small></div><div class="lcd"><span id="lc4axisD">▲ +186 (今日)</span></div></div>
+      <div class="inv-livecell" id="lcSdm"><div class="lcl">SDM作成</div><div class="lcv"><span id="lcSdmV">8,736</span><small> 件</small></div><div class="lcd"><span id="lcSdmD">▲ +47 (今日)</span></div></div>
+      <div class="inv-livecell" id="lcAlert"><div class="lcl">請求前アラート</div><div class="lcv"><span id="lcAlertV">386</span><small> 件</small></div><div class="lcd"><span id="lcAlertD">▲ +12 (今日)</span></div></div>
+    </div>
+  </div>
+
+  <!-- ★アクティビティフィード（投資家ワクワク要素②） -->
+  <div class="inv-feed">
+    <div class="inv-feedhead"><span class="inv-livedot"></span>▸ ACTIVITY FEED — ANONYMIZED</div>
+    <div class="inv-feedlist" id="invFeedList"></div>
+  </div>
+
   <!-- ★4軸データ取得率（エンジンの源泉） -->
   <div class="inv-card" style="margin-bottom:11px">
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="inv-eyebrow">▸ DATA ENGINE — 4-AXIS COVERAGE</div><div style="font-family:'EB Garamond',serif;font-size:15px;color:#0E2236;font-style:italic;font-weight:600;margin-top:3px">4軸統合データ <em style="color:#B8954A">SATOI独占</em></div></div><div style="text-align:right"><div class="inv-hero-num" style="font-size:22px;font-weight:700;color:#0E2236;line-height:1">74<span style="font-size:11px;color:#B8954A">%</span></div><div class="inv-mono" style="font-size:8.5px;color:#6B7280">取得率（30日）</div></div></div>
@@ -1588,9 +1629,9 @@ window.hdrSearchVoice=function(){
     <div class="inv-mono" style="font-size:9px;color:#6B7280;margin-top:7px;line-height:1.5">▸ 取得サイクル Tier1 日次 / Tier2 週次 / Tier3 月次。本人同意の範囲・JOiNT諮問監督下</div>
   </div>
 
-  <!-- ★47都道府県地図（インラインSVG・CDN依存ゼロ・8地方ブロック簡素化） -->
+  <!-- ★47都道府県地図（インラインSVG・CDN依存ゼロ・インタラクティブ） -->
   <div class="inv-card" style="margin-bottom:11px">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><div class="inv-eyebrow">▸ NATIONAL COVERAGE — 47 PREFECTURES</div><div style="font-family:'EB Garamond',serif;font-size:15px;color:#0E2236;font-style:italic;font-weight:600;margin-top:3px">市場を、<em style="color:#B8954A">8地方の解像度</em>で</div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><div class="inv-eyebrow">▸ NATIONAL COVERAGE — 47 PREFECTURES</div><div style="font-family:'EB Garamond',serif;font-size:15px;color:#0E2236;font-style:italic;font-weight:600;margin-top:3px">市場を、<em style="color:#B8954A">47都道府県の解像度</em>で</div></div></div>
     <select class="inv-dd" id="invCancerSel" style="margin-bottom:6px">
       <option value="all">全がん（22種合算）</option>
       <optgroup label="頭頸部・胸部"><option value="headneck">頭頸部がん</option><option value="lung">肺がん</option></optgroup>
@@ -1604,44 +1645,17 @@ window.hdrSearchVoice=function(){
     </select>
     <div class="inv-tabs" id="invPhaseTabs"><button class="inv-tab on" data-phase="2">2期</button><button class="inv-tab" data-phase="3">3期</button><button class="inv-tab" data-phase="4">4期</button><button class="inv-tab" data-phase="5">5期</button></div>
     <div class="inv-viewmode" id="invViewMode"><div class="ivm" data-mode="incidence">罹患</div><div class="ivm" data-mode="refugee">難民</div><div class="ivm on" data-mode="opp">機会値</div><div class="ivm" data-mode="penetration">浸透率</div></div>
-    <svg id="invMapSvg" class="inv-map-svg" viewBox="0 0 360 290" preserveAspectRatio="xMidYMid meet" aria-label="日本8地方ブロック地図">
-      <!-- 北海道 -->
-      <path id="reg_hokkaido" class="inv-region" d="M240,12 L295,8 L335,28 L340,62 L325,90 L275,92 L228,82 L218,55 L222,28 Z"></path>
-      <text x="278" y="55" font-size="9" font-family="Inter,sans-serif" fill="#fff" text-anchor="middle" pointer-events="none" font-weight="600">北海道</text>
-      <!-- 東北 -->
-      <path id="reg_tohoku" class="inv-region" d="M225,92 L275,92 L283,118 L280,152 L268,168 L240,170 L222,148 L218,118 Z"></path>
-      <text x="250" y="135" font-size="9" font-family="Inter,sans-serif" fill="#fff" text-anchor="middle" pointer-events="none" font-weight="600">東北</text>
-      <!-- 関東 -->
-      <path id="reg_kanto" class="inv-region" d="M240,170 L290,168 L298,195 L285,212 L250,210 L235,192 Z"></path>
-      <text x="266" y="194" font-size="9" font-family="Inter,sans-serif" fill="#fff" text-anchor="middle" pointer-events="none" font-weight="600">関東</text>
-      <!-- 中部 -->
-      <path id="reg_chubu" class="inv-region" d="M155,165 L240,170 L235,195 L228,218 L195,225 L168,215 L150,195 Z"></path>
-      <text x="195" y="195" font-size="9" font-family="Inter,sans-serif" fill="#fff" text-anchor="middle" pointer-events="none" font-weight="600">中部</text>
-      <!-- 近畿 -->
-      <path id="reg_kinki" class="inv-region" d="M132,195 L195,225 L200,250 L155,255 L128,232 Z"></path>
-      <text x="162" y="232" font-size="9" font-family="Inter,sans-serif" fill="#fff" text-anchor="middle" pointer-events="none" font-weight="600">近畿</text>
-      <!-- 中国 -->
-      <path id="reg_chugoku" class="inv-region" d="M52,200 L132,195 L128,232 L60,228 L45,215 Z"></path>
-      <text x="92" y="215" font-size="9" font-family="Inter,sans-serif" fill="#fff" text-anchor="middle" pointer-events="none" font-weight="600">中国</text>
-      <!-- 四国 -->
-      <path id="reg_shikoku" class="inv-region" d="M90,238 L155,238 L160,265 L100,268 L85,255 Z"></path>
-      <text x="122" y="255" font-size="9" font-family="Inter,sans-serif" fill="#fff" text-anchor="middle" pointer-events="none" font-weight="600">四国</text>
-      <!-- 九州 -->
-      <path id="reg_kyushu" class="inv-region" d="M30,222 L85,228 L88,260 L75,282 L40,278 L20,255 Z"></path>
-      <text x="55" y="255" font-size="9" font-family="Inter,sans-serif" fill="#fff" text-anchor="middle" pointer-events="none" font-weight="600">九州</text>
-      <!-- 沖縄（プレースホルダ・小） -->
-      <path id="reg_okinawa" class="inv-region" d="M3,263 L22,260 L25,275 L5,278 Z"></path>
-      <text x="14" y="273" font-size="7" font-family="Inter,sans-serif" fill="#fff" text-anchor="middle" pointer-events="none" font-weight="600">沖縄</text>
-      <!-- 拠点ピン（描画はJS）  -->
+    <svg id="invMapSvg" class="inv-map-svg" viewBox="0 0 720 720" preserveAspectRatio="xMidYMid meet" aria-label="日本47都道府県地図・SATOI Investor">
+      <g id="invPrefLayer"></g>
+      <g id="invLabelLayer"></g>
       <g id="invBaseLayer"></g>
-      <!-- ラベル：レジェンド -->
-      <text x="6" y="14" font-size="8" font-family="JetBrains Mono,monospace" fill="#0E2236" font-weight="700">▸ 8 REGION HEAT</text>
-      <text x="354" y="287" text-anchor="end" font-size="7" font-family="Inter,sans-serif" fill="#6B7280">SATOI internal</text>
+      <text x="14" y="22" font-size="14" font-family="JetBrains Mono,monospace" fill="#0E2236" font-weight="700">▸ 47 PREFECTURES</text>
+      <text x="706" y="710" text-anchor="end" font-size="11" font-family="Inter,sans-serif" fill="#6B7280">SATOI internal · CDN-free</text>
     </svg>
     <div class="inv-legend"><span class="ilbl" id="invLegendLabel">機会値</span><div class="iscale"><span style="background:#ECE3CC"></span><span style="background:#D8B98F"></span><span style="background:#B8954A"></span><span style="background:#8A5A2B"></span><span style="background:#6F3B22"></span><span style="background:#5B2418"></span></div><span class="ilbl">● 拠点</span></div>
     <select class="inv-dd" id="invPrefSel" style="margin-top:8px"><option value="">▸ 都道府県でドリルダウン（47県）</option></select>
     <div class="inv-sel-card" id="invSelPanel">
-      <div class="isn" id="invSelName">東京都 <span class="itag">SATOI拠点</span> <span class="itag jspcm">JSPCM</span></div>
+      <div class="isn" id="invSelName">東京都 <span class="itag">SATOI拠点</span></div>
       <div class="iss" id="invSelCtx">2期 · 全がん · 機会値ビュー</div>
       <div class="ims" id="invSelMetrics"></div>
       <div class="idrill" onclick="invOpenModal()">▸ タップで詳細・シナリオを見る</div>
@@ -1649,23 +1663,56 @@ window.hdrSearchVoice=function(){
     <div class="inv-insight" id="invInsight"></div>
   </div>
 
-  <!-- ★拠点10展開（自由診療9＋直営1） -->
+  <!-- ★ARPU 7源積上げ（タップで源別詳細・1人あたり年間単価¥22.5万の構造） -->
   <div class="inv-card" style="margin-bottom:11px">
-    <div class="inv-eyebrow">▸ CLINIC NETWORK — 10 BASES BY 5Y</div>
-    <div style="font-family:'EB Garamond',serif;font-size:15px;color:#0E2236;font-style:italic;font-weight:600;margin-top:3px">拠点 <em style="color:#B8954A">10</em>（自由診療 <em>9</em> ＋ 直営 <em>1</em>）</div>
-    <div class="inv-bases-10">
-      <div class="ibs live">B1<small>東京 直営</small></div>
-      <div class="ibs">B2<small>東京FR</small></div>
-      <div class="ibs">B3<small>大阪FR</small></div>
-      <div class="ibs">B4<small>名古屋FR</small></div>
-      <div class="ibs">B5<small>福岡FR</small></div>
-      <div class="ibs">B6<small>札幌FR</small></div>
-      <div class="ibs">B7<small>仙台FR</small></div>
-      <div class="ibs">B8<small>広島FR</small></div>
-      <div class="ibs">B9<small>京都FR</small></div>
-      <div class="ibs">B10<small>横浜FR</small></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div class="inv-eyebrow">▸ ARPU STRUCTURE — 7 REVENUE SOURCES</div><div style="font-family:'EB Garamond',serif;font-size:15px;color:#0E2236;font-style:italic;font-weight:600;margin-top:3px">1人あたり年間単価 <em style="color:#B8954A">¥22.5万</em></div></div><div style="text-align:right"><div class="inv-hero-num" style="font-size:24px;font-weight:700;color:#9B2D2D;line-height:1">¥22.5<small style="font-size:11px;color:#0E2236">万</small></div><div class="inv-mono" style="font-size:8.5px;color:#6B7280">7源積上げ</div></div></div>
+    <div class="inv-arpu-bar" style="margin-top:8px;cursor:pointer" onclick="invArpuOpen('all')" title="タップで全源詳細">
+      <div class="iseg" style="background:#8A5A2B;flex:3.6">3.6</div>
+      <div class="iseg" style="background:#9B2D2D;flex:.5"></div>
+      <div class="iseg" style="background:#B8954A;flex:1">1</div>
+      <div class="iseg" style="background:#5B2418;flex:10">10</div>
+      <div class="iseg" style="background:#0E2236;flex:5">5</div>
+      <div class="iseg" style="background:#7C6B4F;flex:2">2</div>
+      <div class="iseg" style="background:#C0892F;flex:.4"></div>
     </div>
-    <div class="inv-mono" style="font-size:9px;color:#6B7280;margin-top:7px;line-height:1.5">▸ FR=自由診療フランチャイズ／萬先生＋JSPCM 主軸／明星先生 補完</div>
+    <div class="inv-arpu-breakdown" style="margin-top:8px">
+      <div class="irow" style="cursor:pointer" onclick="invArpuOpen('sub')"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#8A5A2B;border-radius:2px;display:inline-block"></span>サブスク（伴走会員）</span><b>¥3.6万 <span style="font-size:9px;color:#B8954A">▸</span></b></div>
+      <div class="irow" style="cursor:pointer" onclick="invArpuOpen('peace')"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#9B2D2D;border-radius:2px;display:inline-block"></span>安心+（緊急QR付帯）</span><b>¥0.48万 <span style="font-size:9px;color:#B8954A">▸</span></b></div>
+      <div class="irow" style="cursor:pointer" onclick="invArpuOpen('layer1')"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#B8954A;border-radius:2px;display:inline-block"></span>Layer1（基本情報パネル）</span><b>¥1.0万 <span style="font-size:9px;color:#B8954A">▸</span></b></div>
+      <div class="irow" style="cursor:pointer" onclick="invArpuOpen('intro')"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#5B2418;border-radius:2px;display:inline-block"></span>治療紹介手数料</span><b>¥10.0万 <span style="font-size:9px;color:#B8954A">▸</span></b></div>
+      <div class="irow" style="cursor:pointer" onclick="invArpuOpen('trial')"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#0E2236;border-radius:2px;display:inline-block"></span>治験マッチング紹介</span><b>¥5.0万 <span style="font-size:9px;color:#B8954A">▸</span></b></div>
+      <div class="irow" style="cursor:pointer" onclick="invArpuOpen('layer2')"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#7C6B4F;border-radius:2px;display:inline-block"></span>Layer2（深掘り・遺伝子）</span><b>¥2.0万 <span style="font-size:9px;color:#B8954A">▸</span></b></div>
+      <div class="irow" style="cursor:pointer" onclick="invArpuOpen('fp')"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#C0892F;border-radius:2px;display:inline-block"></span>FP・社労士相談</span><b>¥0.4万 <span style="font-size:9px;color:#B8954A">▸</span></b></div>
+    </div>
+    <div class="inv-mono" style="font-size:9px;color:#6B7280;margin-top:7px;line-height:1.5">▸ 行をタップで源別の単価ロジック・想定根拠を展開</div>
+  </div>
+
+  <!-- ★拠点展開ロードマップ（期スライダー連動・拠点が増えるアニメ） -->
+  <div class="inv-card" style="margin-bottom:11px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="inv-eyebrow">▸ CLINIC ROLLOUT — INTERACTIVE</div><div style="font-family:'EB Garamond',serif;font-size:15px;color:#0E2236;font-style:italic;font-weight:600;margin-top:3px">拠点展開 <em style="color:#B8954A">2期 → 5期</em></div></div><div style="text-align:right"><div class="inv-hero-num" style="font-size:20px;font-weight:700;color:#9B2D2D;line-height:1"><span id="invBaseCount">1</span><small style="font-size:11px;color:#0E2236"> / 10拠点</small></div><div class="inv-mono" style="font-size:8.5px;color:#6B7280">5期目標まで</div></div></div>
+    <div style="margin-top:10px;padding:9px 10px;background:#F5F1E8;border-radius:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span class="inv-mono" style="font-size:9px;color:#6B7280">▸ フェーズスライダー（地図と連動）</span><span id="invPhaseLabel" class="inv-mono" style="font-size:10px;color:#9B2D2D;font-weight:700">2期</span></div>
+      <input type="range" id="invPhaseSlider" min="2" max="5" step="1" value="2" style="width:100%;accent-color:#9B2D2D;cursor:pointer">
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:#6B7280;font-family:'JetBrains Mono',monospace;margin-top:2px"><span>2期</span><span>3期</span><span>4期</span><span>5期</span></div>
+    </div>
+    <div id="invBaseGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:9px"></div>
+    <div class="inv-mono" style="font-size:9px;color:#6B7280;margin-top:7px;line-height:1.5">▸ スライドで各期の拠点が点灯／地図上の拠点ピンも連動。直営1拠点＋自由診療パートナークリニック網9拠点で構成</div>
+  </div>
+
+  <!-- ★浸透率シミュレーター（投資家いじれる感の核心） -->
+  <div class="inv-card" style="margin-bottom:11px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="inv-eyebrow">▸ PENETRATION SIMULATOR</div><div style="font-family:'EB Garamond',serif;font-size:15px;color:#0E2236;font-style:italic;font-weight:600;margin-top:3px">浸透率を動かす <em style="color:#B8954A">→ 機会値が変化</em></div></div><div style="text-align:right"><div class="inv-hero-num" style="font-size:22px;font-weight:700;color:#9B2D2D;line-height:1"><span id="invSimOpp">¥0</span></div><div class="inv-mono" style="font-size:8.5px;color:#6B7280">機会値（全国合算）</div></div></div>
+    <div style="margin-top:10px;padding:9px 10px;background:#F5F1E8;border-radius:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span class="inv-mono" style="font-size:9px;color:#6B7280">▸ 浸透率を仮定（拠点県）</span><span id="invSimLabel" class="inv-mono" style="font-size:10px;color:#9B2D2D;font-weight:700">5%</span></div>
+      <input type="range" id="invSimSlider" min="0" max="30" step="1" value="5" style="width:100%;accent-color:#B8954A;cursor:pointer">
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:#6B7280;font-family:'JetBrains Mono',monospace;margin-top:2px"><span>0%</span><span>10%</span><span>20%</span><span>30%</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:9px">
+      <div style="padding:7px 8px;background:#F5F1E8;border-radius:5px;border-left:2px solid #6B7280"><div style="font-size:8.5px;color:#6B7280;font-family:Inter,sans-serif">保守シナリオ</div><div style="font-family:'EB Garamond',serif;font-size:13px;font-weight:700;color:#0E2236" id="invSimCons">¥0</div></div>
+      <div style="padding:7px 8px;background:#FAF3DF;border-radius:5px;border-left:2px solid #B8954A"><div style="font-size:8.5px;color:#5A3A12;font-family:Inter,sans-serif">中央シナリオ</div><div style="font-family:'EB Garamond',serif;font-size:13px;font-weight:700;color:#9B2D2D" id="invSimMid">¥0</div></div>
+      <div style="padding:7px 8px;background:#F5F1E8;border-radius:5px;border-left:2px solid #1d6841"><div style="font-size:8.5px;color:#1d6841;font-family:Inter,sans-serif">楽観シナリオ</div><div style="font-family:'EB Garamond',serif;font-size:13px;font-weight:700;color:#0E2236" id="invSimOpt">¥0</div></div>
+    </div>
+    <div class="inv-mono" style="font-size:9px;color:#6B7280;margin-top:7px;line-height:1.5">▸ 浸透率（拠点県の登録患者比率）を仮定 → 全国の機会値合計を即時再計算。3シナリオ並列表示</div>
   </div>
 
   <!-- ★T1パイプライン（製薬PV協賛） -->
@@ -1732,7 +1779,107 @@ window.hdrSearchVoice=function(){
 <script>
 (function(){
 if(window._invInit)return;window._invInit=true;
-/* ★Investor v11 — CDN依存ゼロ・8地方ブロックSVG＋47県プルダウン */
+/* ★Investor v11.2 — 47都道府県インラインSVG + ライブカウンター + アクティビティフィード */
+/* 47都道府県 SVG path data (出典: github.com/dataofjapan/land, ローカル変換, CDN依存ゼロ) */
+const PREF_PATHS={
+1:"M584,70l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-0l1,-1l1,-0l1,-0l1,0l1,1l-0,1l-1,1l1,1l-0,1l-1,1l-1,0l-1,0l-1,0l-1,1l-1,1l-1,1l-1,0l-1,1l-1,0l-1,1l-1,1l-1,1l-1,1l-1,1l-1,1l-1,1l-1,1l-1,1l-1,0l-1,0l-1,-0l-1,-1l-1,0l-1,1l1,1l-1,1l-1,1l-1,1l-1,1l-1,0l-1,1l-1,1l-1,1l-1,1l-0,1l-1,1l-1,0l-2,0l-1,1l-1,1l-1,1l-1,-0l-1,-1l0,-1l2,-1l-0,-1l0,-1l1,1l1,-0l-0,-1l1,0l1,-0l1,-1l0,-1l-1,-1l-1,-0l0,-1l1,1l1,-0l0,-1l1,-1l1,-1l1,-1l1,-1l1,-1l0,-1l0,-1l2,0l1,-0l1,-1l0,-1l1,-1l1,-0l1,-0l-0,-1l-0,-1l0,-1l1,-1l1,-0l0,1l1,1l0,1l1,1l1,0l1,-0l2,-0l2,-0ZM431,74l-0,-2l1,-1l1,-2l-0,-2l0,-1l1,1l1,0l2,-0l1,-1l0,-1l1,-1l1,1l1,1l1,1l1,1l2,1l1,1l1,1l2,2l1,1l1,1l1,1l1,1l1,1l1,1l0,2l1,1l1,1l1,1l1,1l1,1l1,1l1,1l1,1l1,1l2,1l1,1l2,1l1,1l1,1l1,1l1,1l1,1l2,1l1,1l1,1l3,1l2,1l1,0l2,1l2,0l1,0l1,0l1,-0l0,1l0,1l1,1l1,1l3,1l1,0l2,0l2,-0l2,-0l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,1l-0,1l-0,1l-1,1l-1,1l-0,1l-0,1l-1,1l-1,1l-1,1l-0,1l-0,1l-0,1l1,1l1,1l0,1l1,0l2,1l1,1l-1,0l1,-1l-1,-1l-1,-0l-1,1l0,1l0,2l0,1l1,2l1,1l1,1l1,0l1,-1l1,-1l1,-1l1,-1l1,0l1,-0l0,1l-1,0l-1,1l-1,-0l-1,1l-1,1l-1,1l-1,1l-1,-1l-1,0l-1,0l-2,0l-1,1l-1,0l-0,1l-1,1l-1,0l-1,1l-1,0l-1,-0l-1,-1l-1,-1l-1,0l-1,1l0,1l-2,0l-1,-0l-2,0l-1,0l-1,-0l-1,-0l-1,-1l-2,-0l-2,0l-1,1l-1,1l-1,1l-2,1l-1,1l-1,1l-1,1l-2,1l-1,1l-1,1l-1,2l-1,1l-1,1l-1,2l-1,1l-1,2l-0,1l0,1l0,1l-0,2l-0,1l-0,1l-1,2l0,1l-1,-1l-1,-1l-1,-1l-1,-1l-1,-1l-1,-1l-1,-0l-1,-0l-1,-0l-1,-1l-1,-0l-1,-1l-1,-1l-2,-1l-1,-1l-1,-0l-1,-1l-1,-1l-1,-1l-1,-1l-1,-1l-2,-0l-1,-0l-1,-1l-1,-1l-1,-1l-2,-1l-2,-0l-2,-0l-1,0l-2,0l-2,1l-2,1l-1,1l-2,1l-1,1l-2,1l-2,2l-1,1l-1,-0l1,-1l-1,-0l-1,-2l-1,-1l-1,-1l-1,-1l-1,-1l-1,-1l-1,0l-1,0l-1,-0l-1,-0l-1,1l-1,1l-1,2l-0,1l-0,2l0,2l1,1l1,0l1,1l1,1l1,1l1,0l1,-0l1,-0l1,1l1,1l1,1l1,1l1,1l1,1l1,1l1,0l1,0l1,1l1,1l-1,1l-1,1l-1,1l-1,0l-1,-1l-1,-0l-1,-0l-2,-0l-1,1l0,-1l-1,-1l-1,0l-0,1l-1,1l-1,1l-1,0l-1,2l-0,1l0,1l-1,1l-1,0l-2,1l-1,1l-1,1l-1,-1l-1,0l-1,-1l-0,-1l-0,-1l-0,-1l0,-1l0,-1l1,-2l1,-2l1,-1l-0,-1l0,-1l-0,-1l-0,-1l-1,-1l-1,-1l-1,-1l-2,-0l-1,-1l-0,-1l-1,-0l-1,-1l-0,-1l0,-2l1,-1l1,-2l0,-1l-0,-1l-0,-1l0,-1l1,-1l1,-0l1,-0l1,-0l1,-1l1,-0l1,-1l1,-0l1,1l1,-1l0,-1l1,-1l1,-1l1,-1l1,-1l1,-1l-1,-1l-1,-1l-0,-1l-1,-1l-1,-1l-1,-1l0,-1l0,-1l1,-1l1,-0l1,-1l1,1l1,1l1,0l1,1l1,0l1,1l1,0l1,-0l1,-0l1,-0l0,1l1,0l1,0l1,0l1,-1l1,-1l2,-2l1,-2l0,-1l0,-2l-1,-1l-1,-1l0,-1l0,-1l-1,-1l-0,-1l0,-1l1,-1l1,-1l1,-1l1,-1l1,-0l1,-1l1,-1l0,-1l0,-1l-0,-1l-0,-2l0,-2l-0,-2l1,-1l1,-1l1,-1l1,-2l0,-1l0,-2l-0,-2l-0,-2l-0,-1l-1,-2l-1,-2l-1,-2l-1,-2ZM418,71l-0,-1l-0,-1l-0,-1l-0,-1l1,0l1,1l-0,1l-0,1ZM421,72l1,-1l1,1l1,0l1,1l-1,1l-1,1l-1,-1l-1,-1l-0,-1ZM525,104l0,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l0,-1l1,-1l1,-2l1,-1l1,-0l1,1l1,1l1,0l1,0l1,-0l1,-0l1,-0l-0,1l-1,1l-1,-0l-1,0l-1,1l-1,1l-1,1l-1,0l-1,0l-1,0l-1,1l-1,1l-1,1l-1,1l-1,1l-1,2l-1,0l-1,2l-1,1l-1,0l-1,0l-1,1l-0,1l0,1l-0,2l-1,-1l-1,0l-1,-1l-0,-2l0,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1ZM546,114l-1,-1l-1,-1l1,-1l1,-0l1,0l0,-1l1,-0l1,0l1,1l-1,1l-1,1l-1,1l-1,0l-1,1ZM382,160l-1,-1l-0,-1l0,-1l1,-1l1,-0l-0,1l0,1l-0,1l-1,1Z",
+2:"M433,204l-1,1l-1,1l-1,1l-1,-0l-1,-0l-1,0l-1,1l-1,-1l-1,1l-1,0l-1,0l-1,1l-1,1l-1,0l-1,0l-1,-1l0,-1l0,-1l1,-1l-0,-1l-1,0l-1,-0l0,-2l-1,0l-0,1l-1,0l-1,0l-1,1l-1,-1l-1,1l-1,-1l-1,-1l-1,-1l-1,0l-1,1l-1,-0l-1,0l-1,-0l-1,0l-1,-1l-1,1l-1,0l-1,-1l0,-1l-0,-1l-1,-1l0,-1l1,-1l1,-1l1,-1l1,-1l1,1l1,-1l1,-0l1,-2l1,-2l0,-2l0,-1l-0,-1l-1,-1l1,-1l0,-1l0,-1l1,0l1,1l1,0l1,-1l1,-0l1,1l0,1l-0,1l0,2l0,1l0,1l0,2l1,1l1,0l1,-0l1,-1l0,-1l0,-1l1,-0l1,1l1,1l1,1l1,1l2,-1l1,-1l0,-2l0,-2l1,-1l-1,-2l-1,-1l-1,0l-1,1l-1,1l-1,-0l-1,1l-1,0l-1,0l-1,0l-0,-2l0,-1l0,-1l0,-1l0,-1l0,-1l1,-1l1,-1l0,-1l1,1l1,1l1,0l1,1l1,1l1,1l1,1l1,0l2,-0l1,-1l1,-1l0,1l-1,1l-1,2l-0,2l-0,2l0,2l-0,2l0,2l0,2l0,1l0,2l0,2l0,1l0,1l1,1l1,0l1,0l1,1Z",
+3:"M433,204l1,1l1,1l0,1l1,1l0,1l-1,1l1,1l-0,1l0,1l1,1l1,1l1,1l-0,1l0,1l0,1l0,1l0,1l-0,1l-0,1l-0,1l1,-1l0,1l1,1l-1,1l-0,1l-1,0l1,1l1,-1l0,1l-1,1l-1,0l-0,1l1,-0l-1,1l-1,0l1,1l0,1l-1,1l-0,1l-1,0l1,1l-1,0l0,1l0,1l-1,0l-1,0l-0,-1l-0,1l1,1l-1,1l-1,-1l-1,-1l-1,0l-1,-0l-1,1l-0,1l-0,1l-1,1l-1,0l-1,-0l-1,1l-1,1l-1,-1l-1,-0l-1,-1l1,-1l-1,-1l-1,0l-1,0l-1,-1l-1,-0l-1,-1l-1,-0l-1,-1l1,-1l-1,-1l0,-1l0,-1l-0,-1l-0,-1l-1,-1l-0,-1l-1,-1l0,-2l1,-1l0,-1l0,-1l1,-1l1,-1l0,-1l-1,-1l0,-1l1,-1l-1,-0l-0,-1l1,-0l1,-1l-0,-1l0,-1l0,-1l1,-1l0,-1l0,-1l1,-1l1,0l1,-0l1,-1l1,-1l1,-0l1,-1l1,-0l1,0l1,-1l1,-0l1,0l1,0l0,-1l1,-1Z",
+4:"M432,245l0,1l0,1l-1,0l-0,1l-1,1l-1,1l1,1l-0,1l-1,0l-1,0l1,1l0,1l-1,1l1,1l1,1l-1,-0l0,1l-1,1l0,1l1,-0l0,1l0,1l-1,0l-0,-1l-1,-0l0,-1l-1,0l-1,-1l-1,-0l-2,1l-1,1l0,1l-1,-0l-0,-1l-1,0l-0,1l1,1l-1,1l-1,1l-1,1l-0,1l-0,1l-0,1l-0,1l0,2l-1,1l-0,1l-0,1l-1,0l-1,0l-1,-1l0,-1l-1,-1l-1,-0l-1,-0l-1,0l-1,-1l-1,-1l-1,0l-1,-0l-1,-1l0,-1l1,-0l1,-0l1,-1l1,-1l0,-1l-0,-1l0,-1l1,-1l1,-1l0,-1l1,-1l-1,-1l-1,-1l0,-1l-1,-1l1,-1l0,-1l0,-1l0,-1l-1,-1l-0,-1l-1,-1l1,-0l1,-0l1,-1l1,-1l1,-0l1,0l1,1l1,0l1,1l1,0l1,-0l1,0l-1,1l1,1l1,0l1,1l1,-1l1,-1l1,0l1,1l1,-1l-0,-1l1,-1l0,-1l0,-1l1,0l1,1Z",
+5:"M417,210l-1,1l-1,1l-0,1l-0,1l-0,1l-0,2l0,1l0,1l-1,0l-1,1l1,1l-0,1l-1,1l1,1l0,1l-0,1l-1,1l-0,1l-0,1l-1,1l-0,1l0,1l1,1l0,1l1,1l0,1l1,1l-1,1l-0,2l1,1l-0,1l-0,1l-1,1l-1,1l-1,1l-1,0l-1,-0l-1,-0l-1,-1l-1,-1l-1,-0l-1,-1l-1,-0l-1,0l-1,-0l-1,-1l-1,-1l-1,-0l-1,0l-2,-0l1,-1l-0,-1l0,-1l1,-1l1,-1l0,-1l1,-3l0,-2l0,-2l-0,-2l-0,-1l-1,-2l-1,-1l-2,-1l-1,1l-1,0l-1,-0l-0,-1l-0,-1l-1,-1l1,0l1,1l2,-1l1,-1l1,-1l1,-1l0,-1l0,-1l0,-1l0,-2l-0,-1l-1,-1l1,-1l1,-1l1,1l1,0l1,0l1,-0l1,0l1,-1l1,-0l1,1l1,1l1,1l1,-1l1,1l1,-0l1,-1l1,-0l0,-1l1,-0l-0,2l1,0l1,-0l0,1l-0,1l-1,1l-0,1Z",
+6:"M392,241l2,0l1,-0l1,-0l0,1l1,1l1,0l1,1l1,0l2,0l1,1l1,0l0,1l1,1l1,0l0,1l1,1l1,1l-0,1l0,1l-1,1l-1,-0l0,1l0,1l0,1l1,1l-1,1l-0,1l-1,1l-0,1l-1,1l0,1l0,1l-1,1l-1,1l-1,1l-1,-0l-1,1l0,1l0,1l-0,1l-0,1l1,1l-1,1l-1,1l-1,-0l-1,0l-1,-1l-1,0l-1,-1l-1,-0l-1,-0l-1,-0l-1,-0l-1,-0l-1,-1l-0,-1l0,-1l0,-1l1,-1l0,-2l0,-1l0,-1l1,0l1,-0l1,-1l1,-1l-1,-1l-1,-1l-1,-0l-1,-1l-0,-1l0,-1l-1,-1l-1,-0l-1,-1l-1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-2l1,-2l0,-1l1,-1l1,-2l0,-1Z",
+7:"M401,272l1,1l1,-0l1,0l1,1l1,0l1,-0l1,0l1,1l-0,1l1,1l1,0l1,-1l0,-1l0,-1l1,-0l1,1l1,1l0,2l0,1l0,2l0,1l0,1l0,2l0,1l0,1l0,1l-0,1l-0,2l-0,2l-0,1l-0,1l-0,1l0,1l-1,1l-1,0l-1,1l-1,1l-1,0l-1,-1l-1,-0l-1,-1l-0,1l-1,1l-1,1l-1,1l-1,-1l-1,-1l-0,-1l-1,-1l-1,-0l-0,-1l-1,-1l-1,-1l-1,-1l-1,-1l-1,-0l-1,-0l-1,-0l-2,0l-1,1l-1,1l-1,0l-1,0l-1,1l-1,1l-1,1l-1,1l-1,1l-1,1l-1,-0l-1,-0l-1,0l0,-1l-0,-1l0,-1l-0,-1l0,-1l-1,-1l-1,-1l1,-1l1,-1l0,-1l-1,-1l0,-1l1,-0l1,-0l1,-0l1,-1l1,-0l1,-0l1,0l-0,-1l-0,-1l0,-1l1,-1l1,-1l1,-1l1,-1l0,-1l1,0l1,1l1,-1l1,0l1,1l1,1l1,0l1,1l1,-1l1,0l1,-1l0,-1l0,-1l-0,-1l0,-1Z",
+8:"M413,303l-1,1l-1,2l-0,2l-0,1l-1,1l-1,1l-0,1l-0,1l0,1l0,1l-1,1l-1,2l0,2l1,3l1,2l1,1l0,1l-0,1l0,-1l1,1l1,1l1,2l-2,-1l-1,-1l-2,-1l-1,-1l-1,-1l-1,-1l-0,1l-1,0l-1,0l-1,1l-1,0l-1,0l-1,1l-1,-1l-1,-0l-1,-1l-1,-1l-1,-1l-1,-1l-1,-2l-1,-1l-1,0l-1,-1l-0,-2l1,-1l2,-1l0,-2l1,-1l1,-1l1,-1l1,0l1,-1l1,-0l1,0l1,-1l0,-1l1,-1l-0,-1l0,-1l-0,-1l-0,-1l1,-0l-1,-1l0,-2l-0,-1l-0,-1l1,-1l1,1l1,1l1,1l1,1l1,-0l1,-1l1,-0l-0,-1l1,0l1,0l1,1l1,0Z",
+9:"M401,301l-0,1l0,1l0,1l-0,1l0,1l-1,1l0,1l0,1l0,1l-0,1l-1,1l-0,1l-1,-0l-1,0l-1,1l-1,-0l-1,1l-1,1l-1,-0l-0,1l-1,1l-1,1l-1,-0l-1,-1l-1,-0l-1,-0l-1,0l-1,-1l-1,-1l-1,-1l1,-1l1,-1l0,-1l0,-1l1,-1l-1,-1l-1,-0l-1,-1l0,-1l1,-1l-0,-1l1,-1l-0,-1l0,-1l1,-1l1,-1l1,-1l1,-1l1,-0l1,-1l1,-1l1,-0l1,-0l1,-1l1,-0l1,0l1,0l1,0l1,0l1,1l1,1l1,0l-0,1l0,1Z",
+10:"M365,306l1,-1l1,-0l0,-1l1,-0l1,-0l-0,-1l1,-0l-0,-1l1,-1l1,-0l1,-1l1,0l1,1l1,0l1,0l1,0l1,1l-1,1l1,1l-0,1l-0,1l-1,1l-0,1l1,1l1,0l1,0l-0,1l-1,1l0,1l-1,1l-1,1l1,1l1,1l1,1l1,-0l1,0l1,0l0,1l-1,1l-1,-0l-1,0l-1,0l-1,-1l-1,-1l-1,1l-1,-0l-1,-0l-2,-0l-1,1l-1,1l-0,1l-1,1l-1,1l-1,0l-1,1l-1,1l-1,-0l-1,1l-1,-0l-1,-1l-0,-1l-1,-1l-1,-1l1,0l-0,-1l-1,-1l1,-1l0,-1l0,-1l-1,-1l-1,0l-1,0l-1,-0l-1,-0l0,-1l0,-1l0,-1l0,-1l1,-1l1,-1l1,-1l1,-0l1,-0Z",
+11:"M387,321l1,1l1,1l1,1l1,1l1,2l0,1l1,1l1,1l-0,1l-1,1l-1,-0l-1,1l-1,-0l-1,1l-1,0l-1,-1l-1,1l-1,0l-1,0l-1,-1l-1,-1l-1,-0l-1,-0l-1,-1l-1,-0l-1,-0l-1,0l-1,1l-1,0l-1,-0l-1,-1l-1,-0l-0,-1l0,-1l1,-1l1,0l1,-1l1,-0l1,-1l1,-0l1,-1l0,-2l1,-1l1,-1l1,1l1,0l1,0l1,-0l1,1l1,1l2,-0l1,-0l1,-0Z",
+12:"M390,324l1,1l1,1l1,1l1,1l1,1l1,0l1,1l1,0l1,1l1,-0l1,-1l2,-0l1,-1l1,-0l1,0l0,-1l1,1l1,1l1,1l1,0l1,1l2,2l1,0l0,1l-1,-0l-1,0l-1,-0l-1,0l-1,1l-1,1l-1,1l-1,1l-1,1l-0,1l-0,1l0,2l0,2l0,1l-0,1l-1,1l-1,1l-1,0l-1,0l-1,0l-1,1l-1,1l-1,1l-1,1l-0,1l-1,1l-2,0l-1,-1l-1,-0l1,-0l1,-1l-1,-1l0,-1l-0,-1l-0,-1l1,-1l0,-1l-1,-1l-1,-0l1,-1l1,-1l0,-1l1,-1l1,-1l1,-1l1,-1l1,-0l-1,-1l-1,-2l-1,-1l-1,0l-1,1l-0,-2l1,-1l-1,-1l-0,-1l0,-1l-0,-1l-1,-1l-1,-1l-0,-1l-1,-1Z",
+13:"M371,331l1,-1l1,0l2,0l1,0l1,0l1,0l1,1l1,0l1,0l1,-0l1,-1l-1,1l1,0l1,-0l1,-1l1,0l1,-0l1,0l1,1l1,1l-1,1l-1,1l-1,1l-1,-1l-0,1l0,1l1,1l-1,-0l-1,0l-1,-1l-1,-1l-1,-0l-1,0l-1,0l1,1l-0,1l-1,-0l-1,-1l-1,-0l-1,-0l-1,0l-1,-1l-1,-0l-1,-1l-1,-0l-1,-1l-1,-1l-0,-1l-1,-1ZM382,363l-1,-0l-1,-1l-0,-1l1,-0l1,1l0,1Z",
+14:"M375,336l1,1l1,1l1,0l1,0l1,0l1,1l1,1l0,-1l-0,-1l1,-1l1,0l1,0l1,1l1,1l1,0l-1,0l-1,1l-1,0l1,1l-1,1l0,1l-1,1l0,1l1,1l1,1l-1,1l0,1l-1,0l-0,-1l-0,-1l-1,-1l-0,-1l-1,0l-1,-0l-1,0l-1,0l-2,0l-1,1l-1,1l-0,1l1,1l-1,0l-1,-0l-1,-1l-0,-1l0,-1l1,-1l-0,-1l-1,-1l-0,-1l1,-1l1,-1l1,-1l1,-1l0,-2l-0,-1Z",
+15:"M385,256l1,1l1,0l1,0l0,1l-0,1l0,1l1,1l1,0l1,1l-0,1l-1,1l-1,1l-1,-0l-1,1l0,2l0,1l-1,1l-0,1l-0,1l-0,1l1,1l1,1l-1,1l-1,1l-1,1l-0,1l-1,1l0,1l0,1l-0,1l-1,-0l-1,-0l-1,1l-1,1l-1,0l-1,0l-1,1l0,1l0,1l-0,2l-1,1l0,1l1,1l0,2l0,1l0,1l-0,1l-0,1l-1,-1l-1,-1l-1,-1l-1,1l-1,1l-1,0l-0,1l-1,1l-0,1l-1,1l-1,1l-1,1l-1,-0l-1,-0l0,-1l0,-1l-1,-0l-1,-1l-0,-1l-0,-1l-1,-1l-1,0l-1,0l-1,1l-1,1l-1,1l-0,1l-1,-0l-1,0l-1,0l-1,1l-1,-0l0,-1l-1,-1l-1,-0l-1,0l0,1l-1,1l-1,1l-1,-1l-0,-1l-0,-1l-0,-1l-1,-1l1,-1l1,-0l1,-0l1,-1l1,-0l1,-1l1,-1l1,-1l1,-0l1,-0l1,-0l1,-1l1,-1l2,-2l1,-1l1,-0l2,-2l1,-1l1,-1l1,-1l1,-1l1,-1l0,-1l0,-1l1,-2l1,-1l1,-1l2,-1l1,-1l1,-0l2,-1l2,-1l2,-2l1,-2l0,-1l0,-1l0,-1l0,-1l0,-1l0,-1l1,-1l1,-2ZM355,277l0,-1l1,-1l0,-1l1,-1l-1,-1l-1,1l-0,-1l0,-1l0,-1l1,-1l1,-1l1,-1l1,-1l1,-1l0,-1l1,-1l0,1l-0,1l-0,1l-1,1l-0,1l1,1l1,-0l0,1l-1,1l-1,1l-1,1l-1,1l-1,1l-1,0l-1,0Z",
+16:"M341,300l1,1l1,1l0,1l0,1l0,1l-0,1l0,1l-0,1l-1,1l-1,1l-0,1l-0,1l-1,1l-1,1l-1,-0l-1,-1l-1,0l-1,-1l-1,1l-1,-1l-1,0l-1,-0l-1,1l-1,1l-1,1l-0,1l-1,1l-1,-1l-1,-1l-1,0l-1,1l-1,-1l0,-1l-1,-1l1,-1l-0,-1l0,-1l-1,-1l0,-1l0,-1l-1,-1l1,-1l0,-1l0,-1l1,-1l0,-1l1,-1l1,-0l1,0l-1,1l-1,1l0,1l1,1l1,1l1,0l1,0l1,-0l1,0l1,-1l1,-1l0,-2l1,-1l1,-1l2,-0l1,-0Z",
+17:"M328,300l-1,-0l-1,0l-1,1l-0,1l-1,1l-0,1l-0,1l-1,1l1,1l-0,1l-0,1l1,1l-0,1l0,1l-1,1l1,1l-0,1l0,1l1,1l-0,1l-1,1l-0,1l-1,1l-1,0l-1,-0l-1,-1l-1,-1l-1,0l-1,0l-1,-1l-1,-0l-1,-1l-1,-1l-1,-1l0,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-2l1,-1l1,-1l1,-1l1,-1l1,-2l0,-2l-0,-1l0,-1l-1,-1l-0,-1l0,-1l-1,-0l0,-1l1,-1l1,-1l-0,-1l1,-1l1,-0l1,-1l1,0l1,-0l1,-1l1,-1l1,-1l1,-0l1,-0l1,-0l1,0l0,1l0,1l-2,0l-0,1l0,1l-0,1l-1,0l-1,0l-1,1l-1,1l-1,1l-1,-0l-1,-1l-1,1l-1,1l-0,1l0,1l1,-0l1,1l1,-1l1,-1l-0,1l-0,1l0,1Z",
+18:"M310,319l1,1l1,1l0,1l1,0l1,1l1,-0l1,0l1,1l1,1l1,1l1,-0l0,1l0,2l1,1l1,1l0,1l-1,1l-1,0l-1,0l-1,-0l-1,1l-1,0l-1,-0l-1,-0l-1,0l-0,1l-1,1l-1,0l-1,-1l-1,0l0,1l0,1l-1,0l-0,1l-1,-0l-1,1l-1,-0l-1,1l-0,1l-1,1l-1,-0l-1,1l-1,1l-1,-0l-1,-0l-1,-0l-1,-1l-1,-1l-0,-1l-0,-1l1,-0l-0,1l1,0l1,-1l1,-1l-0,1l-1,0l1,0l1,-0l1,-0l-1,-1l1,0l1,0l1,-1l-0,-1l1,0l1,-0l1,-1l-0,-1l1,-1l1,1l0,1l1,-1l0,-1l-0,-1l-1,-1l-1,-1l-0,-1l-1,-1l0,-1l1,-1l0,-1l1,-1l1,-1l0,-1l0,-1l1,-0l1,-1Z",
+19:"M366,329l1,0l1,1l1,0l1,-0l1,1l0,1l1,1l1,1l1,0l0,1l0,1l-0,1l-1,1l-1,1l-1,1l-1,1l-0,1l-1,0l-1,0l-1,0l-1,-1l-1,-0l-0,-1l-1,1l-0,2l-0,1l0,1l0,1l-1,1l-1,0l-1,-1l-0,-1l-0,-1l-1,-1l-1,1l-1,-1l-0,-1l0,-1l0,-2l0,-1l-0,-1l-1,-1l-1,-1l0,-1l0,-1l-0,-1l1,-1l1,0l1,-1l1,-1l1,-0l1,1l1,1l1,-0l1,-0l0,1l1,0l1,-1Z",
+20:"M365,306l-1,0l-1,0l-1,0l-0,1l-1,0l-1,1l-0,1l-0,2l0,1l1,1l1,0l1,-0l1,0l1,1l0,1l-0,1l-1,1l0,1l0,1l-1,-0l0,1l1,1l-0,1l0,1l1,1l1,1l-1,1l-1,1l-1,-0l-1,-1l-1,0l-1,-0l-1,-1l-1,-0l-1,1l-1,2l-1,-0l-1,1l-1,1l1,1l-1,1l0,1l0,2l-0,1l-1,1l0,1l0,1l-0,1l0,1l-1,1l-1,0l-1,1l-1,1l-1,0l-1,1l-2,0l-1,-0l-1,-0l-1,1l-1,0l-1,-1l0,-1l0,-1l0,-1l0,-1l0,-1l0,-1l-1,-1l-0,-1l-1,-0l0,-1l-1,-1l-0,-1l-1,-1l-1,-0l-1,-1l-0,-1l1,-1l1,-1l1,0l1,-1l1,-1l1,-1l0,-1l-1,-1l-0,-1l1,-1l-0,-1l1,-1l1,-1l-0,-1l-1,-1l0,-1l1,-1l0,-1l1,-1l0,-1l1,-1l0,-1l-0,-2l0,-1l1,-1l1,-1l0,-1l1,-1l1,0l1,0l0,1l0,1l1,-1l1,-0l1,-0l1,-0l1,-1l1,-1l1,-1l1,-1l1,-1l1,-0l1,1l0,1l0,1l1,1l1,1l0,1l-0,1Z",
+21:"M340,316l1,1l0,1l-1,1l-1,1l0,1l-1,1l0,1l1,1l-0,1l-1,1l-1,1l-1,1l-1,0l-1,1l-0,1l-0,1l1,0l1,1l1,1l1,1l1,1l-0,1l1,1l0,1l1,1l0,1l-0,1l-1,1l0,1l-1,1l-1,1l-1,1l-1,1l-1,-1l-1,-1l-1,-0l-1,1l-1,-0l-1,-1l-1,-0l-1,-1l-1,-1l-1,-1l-1,1l-1,0l-1,0l-1,0l-1,1l-1,1l-0,1l-0,1l-1,0l-1,-1l-1,-1l-1,-0l-1,1l-1,-0l0,-1l0,-1l0,-1l0,-1l0,-1l-1,-1l-0,-1l-1,0l-0,-2l-1,-1l0,-1l1,-1l-0,-1l1,-1l1,0l1,0l1,-0l1,-0l1,-0l1,0l1,-0l1,-1l0,-1l-1,-1l-1,-1l-1,-1l0,-1l0,-1l0,-1l0,-1l1,-1l1,-1l-1,-1l1,-1l1,-1l1,0l1,1l0,1l1,-1l1,-1l0,-1l1,-1l1,-1l1,0l1,-1l1,-0l1,1l1,-1l1,1l1,0l1,1Z",
+22:"M355,337l1,1l0,1l-0,2l0,1l-0,1l0,1l1,1l1,-1l1,1l0,1l0,1l1,1l1,-0l0,-1l-0,-1l0,-1l-0,-1l0,-1l1,1l1,-0l0,1l2,-0l1,-0l1,-0l1,-0l1,-0l1,1l0,1l-1,1l0,1l1,1l1,1l1,0l-1,1l-0,1l1,1l-0,1l1,0l-0,1l-0,1l-1,1l-0,1l-1,1l-1,1l-0,1l-1,0l-1,1l-1,0l-1,-1l-0,-1l-1,-1l1,-1l-0,-1l0,-1l0,-1l0,-1l-0,-1l1,-1l1,0l-0,-1l-1,-1l-2,-1l-1,-0l-1,1l-1,0l-1,1l-1,1l-0,1l-2,1l-1,0l-1,1l0,1l-1,2l-1,1l-1,1l-0,1l0,1l-1,0l-2,-1l-2,-0l-2,-0l-1,0l-1,0l-1,-1l-1,-0l-1,-0l-2,-0l-1,-1l-0,-1l0,-1l1,-1l1,-0l1,-1l1,-1l1,-1l0,-1l1,-1l1,-1l1,-1l1,-1l-0,-1l1,-0l1,-1l1,-0l1,-1l1,-1l1,-0l1,-1l-0,-1l0,-1l-0,-1l0,-1l1,-1l0,-1Z",
+23:"M340,347l-0,1l1,1l1,-0l1,-1l1,0l1,0l1,-0l-1,1l-0,1l-1,1l-1,1l-1,1l0,1l-1,1l-0,1l-1,1l-1,1l-1,1l-0,1l-0,1l0,1l-1,1l-1,0l-1,0l-2,1l-1,0l-1,0l-2,0l0,-2l1,0l1,-1l1,-0l1,-1l1,1l0,-1l0,-1l-1,-1l-1,-0l-1,0l-1,0l-1,0l-1,0l-1,-1l-1,-1l1,-1l0,-2l-0,1l-1,1l-0,1l-0,2l1,1l0,1l-1,-0l-1,-1l-0,-2l0,-1l-1,-1l0,-1l0,-1l1,-1l0,-1l-1,1l-1,-0l-1,-1l-1,-1l-1,-1l0,-1l0,-1l1,-1l1,-1l1,-1l1,0l1,-1l2,-1l1,0l1,1l1,1l1,0l1,1l1,0l1,-1l1,0l1,1l1,1l1,-1l1,-1Z",
+24:"M319,351l1,1l1,1l-1,1l-1,1l-0,1l-0,1l-0,1l-1,1l-1,1l-1,1l-0,2l1,1l-0,1l1,0l1,0l1,1l1,1l1,0l1,1l1,1l1,1l-1,1l-1,0l1,0l0,1l-0,1l-1,1l-1,-0l1,-0l1,-1l-1,0l-1,0l-1,0l0,-1l-1,-0l-0,1l-1,1l-1,-1l-1,0l-0,1l-1,-1l-1,1l-1,1l-1,0l-1,1l0,1l-1,0l-1,0l1,0l1,1l-0,1l-1,-1l0,1l-1,0l-1,1l-1,1l-1,1l-1,1l-0,1l-1,-0l-1,-1l-1,-1l-1,-1l1,-1l1,-1l1,-1l0,-1l0,-1l1,0l0,-1l0,-1l0,-1l0,-1l0,-1l-1,-1l0,-1l-1,-1l1,-1l1,-0l1,-0l0,-1l-1,-1l-1,-1l-1,0l-1,-1l0,-1l-1,-1l1,-1l-0,-1l-0,-1l1,-1l1,-1l-0,-1l1,0l1,0l1,0l1,-1l1,-0l1,-1l1,-1l0,-1l1,-1l-0,-1l-0,-1l0,-1l1,-0l1,-0l1,1l1,1l1,1Z",
+25:"M311,336l1,1l0,2l1,0l1,1l0,1l-0,1l1,1l-0,1l-0,1l-0,1l1,1l1,1l0,1l-0,1l-0,1l-0,1l-1,1l-0,1l-1,1l-1,0l-1,-0l-1,-0l-1,1l-1,1l-1,0l-1,-1l-1,-0l-1,-1l-1,-1l-0,-1l-1,-1l-0,-1l0,-1l0,-1l-0,-1l-0,-1l0,-1l-1,-1l-1,-1l0,-1l1,-1l1,0l1,-1l0,-1l1,-0l1,-1l1,-0l1,-1l1,0l0,-1l-0,-1l1,-1l1,1l1,1Z",
+26:"M279,336l1,0l1,-1l1,-0l1,-1l1,-1l1,-0l1,-0l1,1l1,1l-1,1l-1,1l-1,1l-0,1l1,-1l1,1l1,1l0,1l1,-1l-1,-1l1,-1l1,-1l1,1l-1,1l0,1l1,1l1,1l1,1l1,0l1,0l1,-0l1,1l1,1l0,1l0,2l0,1l-0,1l-0,1l-0,1l1,1l0,1l0,1l1,-0l0,1l1,1l0,1l1,1l-1,1l-1,-1l-1,-0l-1,1l-1,-0l-1,-0l-1,-1l0,-1l-1,-1l-1,-1l-1,-1l-1,-0l0,-1l-1,0l-0,1l-1,-1l-0,-1l-1,-0l-1,-0l-0,-1l1,-1l-1,-1l-1,-0l-1,-1l-1,0l-1,-1l-1,-1l-1,-1l-1,1l-1,-1l-1,-1l-1,-0l-0,-1l0,-1l1,0l1,-0l0,-1l0,-1l-1,-1l-1,1l-1,-1l-1,-1l0,-1Z",
+27:"M290,353l1,1l1,0l0,1l1,1l1,0l-0,-1l1,1l1,0l1,1l1,1l1,1l-1,1l-0,1l-0,1l-0,1l0,1l-1,1l0,1l0,1l-0,1l-1,1l-1,0l-1,1l-1,0l-1,0l-1,0l-1,1l-1,0l-1,1l-1,0l-1,-0l0,-1l1,-0l1,-0l1,-1l1,-1l1,-1l0,-1l1,-1l1,-1l-1,-1l1,1l-1,-1l1,-1l-1,-1l1,-1l0,-1l-1,-1l-0,-1l1,-1l0,-1l-1,-0l-1,-1l0,-1Z",
+28:"M279,336l-0,1l0,1l1,1l1,0l1,-0l0,1l0,1l-1,1l-1,-0l-1,1l0,1l1,1l1,1l1,1l1,-0l1,1l1,1l1,1l1,-0l1,1l1,0l1,1l-1,1l-0,1l0,1l1,0l1,0l-0,1l-0,1l0,1l0,2l-1,1l-1,0l-1,-1l-1,0l-1,0l-1,1l-1,0l-1,0l-1,-0l-1,-1l-1,-1l-1,-1l-1,-1l-1,-1l-1,-0l-1,0l-1,0l-1,-1l-1,1l-0,-1l-0,1l-1,1l-1,-0l-1,-1l-1,-1l-1,-1l1,-1l-1,-1l0,-1l-0,-1l1,-1l0,-1l1,-1l1,-1l-0,-1l0,-1l1,0l1,-1l0,-1l-0,-1l-0,-1l-1,-1l-0,-1l-0,-1l-0,-1l1,-1l1,-1l1,-1l1,0l1,0l1,-0l1,-0l1,-0l1,1ZM277,370l1,-1l1,-1l1,-1l1,-1l1,-1l0,1l-1,1l-1,1l-1,1l-0,2l0,1l1,1l-1,1l-1,1l-1,1l-1,0l-1,-1l-1,-1l0,-2l1,-0l1,-1l1,-1Z",
+29:"M298,361l1,1l1,0l1,0l1,-1l1,-0l1,1l1,-1l0,1l-0,1l-0,1l0,1l1,1l1,1l1,0l-0,1l-1,0l-1,0l-1,1l1,1l1,1l-0,1l-0,1l-0,1l0,1l0,1l-0,1l-1,0l-1,1l-1,1l-1,1l-0,1l-0,1l-1,-1l-1,0l-1,-0l-1,0l-1,1l-0,-1l1,-1l-0,-1l-1,-1l-1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l-1,-1l-0,-1l-0,-1l1,-1l0,-1l-0,-1l-0,-1l1,-1l-0,-1l0,-1l0,-1l0,-1Z",
+30:"M296,372l0,1l0,1l1,1l-0,1l-1,0l-1,1l-1,1l-1,1l0,1l1,1l1,1l-0,1l0,2l1,-0l1,0l1,0l1,0l0,2l1,1l1,1l1,1l0,1l-1,1l-0,1l-0,1l-1,1l-1,1l-1,1l-1,-0l-1,-0l-1,-1l-1,-0l-1,-0l-1,-1l-1,-0l-1,-1l-0,-1l-1,-0l1,-1l-0,-1l-1,-1l-1,-0l-1,-1l-1,-1l-1,-1l-1,-0l-1,-1l1,-1l0,-1l1,-1l-1,-1l-1,-0l1,-1l1,-1l1,-0l-1,-1l-1,-1l-1,-1l-1,-1l1,0l1,-0l1,-1l1,-0l1,-0l1,-0l1,-0l1,-0l1,-0l1,-1Z",
+31:"M267,338l1,1l0,1l0,2l1,1l0,1l1,1l0,1l-1,1l-1,1l-1,-0l-1,1l-1,1l-1,0l-1,1l-0,-1l-0,-1l-1,-1l-1,-0l-1,-0l-1,-1l-1,1l-1,0l-1,1l-1,-1l-1,-1l-1,-0l-1,-0l-1,0l-0,1l-0,1l-1,0l0,1l-1,0l-1,0l-0,1l-1,0l-1,0l-1,1l-1,-0l-1,0l-1,-1l1,-1l-0,-1l1,-1l1,-1l1,-0l-0,-1l0,-2l0,-1l-2,-1l-1,-1l0,-1l1,1l1,1l1,0l1,-0l1,-1l1,-1l1,-0l1,0l1,0l1,0l2,0l1,-0l1,-0l1,-0l2,0l1,-0l1,-0l1,-0l1,-1l1,-0Z",
+32:"M242,322l-1,-1l-0,-1l-0,-1l1,-1l1,-1l1,1l1,1l0,1l-1,1l-1,1ZM242,339l-1,1l1,1l1,1l1,1l-1,2l0,1l-0,1l-1,0l-1,0l-0,1l-1,1l-0,1l-1,1l-1,0l-1,-1l-1,0l-1,-1l-1,1l-1,1l-1,1l-1,1l-1,0l-1,1l1,1l-0,1l-1,-0l-1,1l-1,0l-1,0l-1,0l-1,-0l-1,0l-1,-1l-1,1l-1,1l-1,1l0,1l-1,1l-0,1l-1,1l-1,1l1,1l-1,0l-1,1l0,1l-1,1l-1,0l-1,1l-1,0l-1,-1l-0,-1l1,-1l-1,-0l-1,-1l-0,-1l1,-1l0,-1l-1,-1l-0,-1l1,-0l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-0l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-0l1,-1l0,-2l-1,-0l1,-1l1,-0l1,-1l1,-1l1,-0l1,-0l1,0l1,-1l1,-1l1,-1l1,1l1,-0l1,0l1,-0l-1,1Z",
+33:"M268,348l-0,1l1,1l-1,0l-0,1l-1,1l-1,1l-0,1l0,1l-0,1l-0,1l1,1l1,1l-0,1l-1,-0l-1,0l1,1l-1,1l-0,1l-1,1l-1,0l-1,-1l-1,0l1,0l-0,1l-1,1l-1,1l-1,1l-1,-0l-1,0l-1,-0l-0,-1l-1,1l-0,-1l-1,0l-1,1l-1,1l-1,-1l0,1l-1,0l-1,-1l0,-1l-1,-1l-1,-1l0,-1l-0,-1l-0,-1l0,-1l-0,-1l-1,-1l-0,-1l0,-1l0,-1l-1,-1l0,-1l1,-1l1,-0l-0,-1l1,-0l1,-1l0,-1l1,-1l0,-1l0,-1l1,0l1,0l1,0l1,1l1,0l1,-1l1,-1l1,-0l0,1l1,0l1,0l0,1l0,1l1,0l1,-0l1,0l1,-1Z",
+34:"M239,352l1,0l1,-0l1,1l1,1l-0,1l0,1l0,1l1,1l1,1l-0,1l0,1l0,1l-0,1l1,1l1,1l-0,1l-0,1l-1,1l-0,1l-1,-0l-1,-0l-0,-1l-1,1l-1,0l-1,0l-0,1l-1,0l-1,-0l-1,0l-1,1l-1,-0l-1,1l-1,1l-1,0l-1,1l-1,-0l-1,1l0,-1l-1,-1l-0,-1l0,-1l-1,0l-1,-0l-1,0l-1,1l-1,1l-1,1l0,1l-1,-1l-1,-1l-0,-1l-1,-1l-1,-1l-0,-1l-0,-1l-0,-1l1,-1l1,-1l0,-1l0,-1l-0,-1l1,-1l1,-1l1,-1l1,0l1,0l1,-1l1,1l1,-0l1,-1l1,-0l1,-0l-0,-1l0,-1l1,-0l1,-1l1,-1l1,-1l1,-1l1,1l1,-0l1,1l1,-0ZM223,379l0,-1l-1,-1l-1,-1l1,0l-0,-1l1,0l0,1l-0,1l0,1l-1,0Z",
+35:"M207,363l0,1l0,1l-0,1l-1,1l1,1l1,1l1,-0l-0,1l0,1l1,1l1,-0l1,-1l1,1l1,-1l0,-1l0,-1l1,-1l0,1l-0,1l1,1l0,1l1,1l1,1l1,0l0,1l-1,1l0,1l0,1l-0,1l-1,1l-0,1l0,1l-1,-0l-1,-1l-1,-0l-1,-1l-1,-1l-1,-1l-1,0l0,-1l-1,-1l-1,-0l-1,0l-1,0l-1,1l-1,0l-1,-1l-0,1l-1,-1l-1,-1l-0,1l-1,1l-1,1l-1,0l-1,-0l-1,-1l-1,-1l-1,-1l-1,-0l-0,1l-1,1l-1,1l-1,-0l1,-1l-0,-1l-0,-1l-1,-1l1,-1l0,-1l-0,-1l-1,-1l-0,-1l0,-1l1,0l1,-0l-1,-1l1,-0l1,-0l1,0l0,1l1,-1l1,0l1,-0l1,-1l1,-0l1,-1l0,-1l1,-1l1,-1l0,-1l1,-1l1,0l1,-1ZM218,386l-1,-1l0,-1l1,-1l1,0l0,1l1,-0l1,-1l1,-0l-1,1l-1,0l-1,1l-1,-1l-1,1Z",
+36:"M269,376l1,-0l1,0l1,1l0,1l-0,2l-0,1l0,1l1,1l1,1l-0,1l-1,1l1,0l1,0l-1,1l-1,1l-1,1l-1,1l-1,1l-1,1l-1,0l-1,1l-0,1l-1,0l-1,1l-2,-0l-1,-1l0,-1l-1,-1l-1,-0l-1,-1l-0,-1l-1,-1l-1,-0l-1,1l-1,-0l-1,-1l-1,0l-1,-0l-1,-0l-0,-1l0,-1l-0,-1l1,-1l1,-1l1,-0l1,-1l1,-0l1,1l1,-0l1,-1l1,0l1,-1l1,-0l1,-0l1,0l1,-0l1,1l1,-1Z",
+37:"M266,367l1,1l-0,1l-1,0l-1,1l-0,-1l-1,-0l-0,-1l1,-0l1,-1l1,-0ZM252,382l-1,-1l0,-1l0,-1l0,-1l-1,-1l-1,-1l1,0l1,0l1,-1l1,-1l1,-1l0,-1l1,1l1,-1l1,0l1,1l1,0l1,-1l1,-0l0,1l1,-0l1,1l-0,1l1,1l1,1l1,0l1,1l-0,1l-1,-1l-1,0l-1,-0l-1,0l-1,0l-0,1l-1,0l-1,1l-1,0l-1,-1l-1,0l-1,0l-1,1l-1,1l-1,1Z",
+38:"M250,381l1,0l0,1l0,1l-0,1l-1,1l-1,0l-1,1l-1,0l-1,-0l-1,0l-1,-0l-1,1l-1,0l-1,1l-1,1l-0,1l-1,1l-0,1l-0,2l-1,1l-1,1l-1,0l-1,-0l-1,0l0,1l0,1l1,1l-0,1l-1,1l-1,1l-0,1l-1,1l-1,1l-1,-1l-0,1l1,1l0,1l0,1l0,1l-1,1l-1,-1l-1,-0l-0,1l-1,-1l0,-1l1,0l-1,-1l-0,-1l-1,-0l-1,1l0,-1l1,0l1,-1l-0,-1l-0,-1l1,0l1,-1l0,-1l-1,-0l1,-1l-1,-0l-1,0l-1,-1l1,-1l-0,-1l1,-1l-1,-1l-1,0l-1,0l-1,1l-1,1l-1,1l-1,-0l-1,1l1,-1l1,-1l1,-0l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l1,-1l2,-1l1,-1l1,-1l1,-1l-0,-1l0,-1l0,-1l1,-1l0,-1l0,-1l1,-1l1,-1l1,-0l0,-1l1,-0l1,1l1,1l0,1l1,1l1,1l1,-0l1,-0l1,-1l1,0l1,-0l1,0l1,0l1,-1l1,-1Z",
+39:"M251,385l1,1l1,0l1,-0l1,1l1,0l1,-1l1,0l1,1l0,1l-0,1l1,-0l1,0l0,1l-0,1l1,1l1,0l0,1l-1,1l-0,1l-0,1l-0,1l-0,2l-1,-1l-1,-1l-1,-1l-1,-1l-1,-1l-1,-1l-1,-1l-2,-0l-1,-0l-1,-0l-2,0l-1,1l-0,-1l-0,1l-1,1l-1,1l-1,0l-1,1l1,-0l-1,1l-1,1l-1,-1l-1,1l-1,1l0,1l0,1l-0,1l-0,1l-1,1l-1,1l-1,1l-1,1l-1,1l-0,1l0,1l-1,1l-0,1l1,1l0,1l-1,0l0,-1l-1,-0l-1,0l-1,1l-1,0l-1,-1l-1,0l-0,-1l1,-1l1,-1l-1,-1l0,-1l-0,-1l-0,-1l0,-1l-1,-1l1,0l1,-1l1,-1l0,-1l1,-1l1,-1l1,-1l-1,-1l-0,-1l-1,-1l1,-0l1,0l1,0l1,-1l1,-1l-0,-1l0,-1l1,-1l1,-1l0,-1l1,-1l1,0l1,-1l1,0l1,-0l1,-0l1,-0l1,-1l1,-0l1,0Z",
+40:"M195,393l-0,1l-0,1l-1,1l-1,-0l-1,0l-1,1l-1,1l-0,1l-1,1l-0,1l0,1l-0,1l1,1l-0,1l-1,1l-1,-1l-1,-1l-1,-1l-1,1l-1,0l-1,1l-1,1l0,1l-1,0l-1,0l1,-1l-1,-1l-0,-1l-0,-1l1,-1l0,-1l1,-1l1,-1l1,-1l0,-1l-0,-1l-1,0l-1,1l-1,-1l-1,-0l-1,-1l-1,-0l-1,0l-1,-0l-1,0l1,-1l1,-1l-0,-1l1,-1l1,-1l1,1l1,1l1,-0l1,-0l0,-1l0,-1l-1,1l-1,0l1,-0l1,-1l1,-1l0,-1l0,-1l1,-1l1,-0l1,-0l1,-1l1,0l2,-0l-0,1l1,-1l1,1l1,-0l1,-1l1,-0l-0,1l-0,1l-0,1l0,1l0,1l1,1l1,1l1,1l1,0Z",
+41:"M169,397l1,-0l1,-0l1,-0l1,0l1,0l1,1l1,0l1,-0l1,-1l1,1l-0,1l-1,0l-1,1l-1,1l-1,1l-1,1l0,1l-2,-0l-1,-1l-1,1l-1,1l0,1l1,1l1,1l-1,1l-1,-0l-1,-1l-1,-1l-1,-1l-1,-1l1,-1l-1,-1l-1,-0l-1,-0l-0,-1l-1,-1l-0,-1l1,0l0,-1l1,-1l-1,-1l-1,-1l1,-1l0,1l-0,-1l0,-1l1,-0l1,0l-0,1l1,1Z",
+42:"M154,370l-1,1l1,-1l-0,1l0,1l-1,1l0,-1l-1,-0l-1,-0l1,-1l0,-1l0,-1l1,-1l-0,-1l0,-1l1,-1l1,-0l1,-1l1,1l-0,1l-1,0l1,1l-0,1l-1,1l-1,1ZM150,380l-1,-1l0,-1l0,-2l0,-1l0,-1l1,-0l1,1l-0,-1l1,1l0,1l-0,1l-0,1l-1,1ZM162,390l-1,-1l-1,-1l1,-1l0,-1l1,0l0,1l1,1l-1,1ZM154,405l0,-1l1,-0l-0,-1l1,-1l1,-1l1,-1l1,0l-1,1l-0,1l-1,1l-1,1l-1,1ZM163,400l-1,1l1,1l0,1l1,1l1,0l1,-0l0,1l-0,1l1,1l1,1l1,1l1,0l1,0l0,1l-1,1l-1,1l1,0l1,0l1,-1l1,0l1,1l1,1l0,1l-1,1l-0,1l-1,0l-1,1l-1,0l-1,-1l-0,-1l1,-1l0,-1l-1,-1l-1,0l-2,0l-1,1l-1,-0l-0,1l-1,1l-1,1l-1,1l-1,1l0,-1l1,-1l1,-1l1,-1l-1,1l-0,-1l-1,-1l-1,-1l-1,-1l-0,-1l-1,-1l-0,-1l0,-1l0,-1l1,-0l1,1l-1,1l1,0l1,1l-0,1l-0,1l1,1l1,-1l1,0l1,1l-0,-1l-1,-1l-0,-1l0,-1l-1,-1l-1,-0l-1,-0l-1,-1l-0,1l-1,-1l1,-1l-1,-0l-1,0l0,-1l-1,-1l-1,-0l-1,-1l1,-1l-1,-1l0,-1l1,0l1,-1l0,1l1,-0l1,-0ZM147,415l-0,-1l-0,-1l-1,-1l1,-1l-0,-1l1,-1l1,-1l-0,-1l0,1l-0,1l-0,1l1,1l1,1l-1,1l-1,0l0,1l-1,1ZM140,421l-1,-1l-1,0l-1,-0l1,-1l0,-1l0,-1l1,-1l1,1l1,-1l1,0l0,1l1,1l-1,1l-1,-0l0,1Z",
+43:"M198,414l-1,0l-1,1l-0,1l-1,1l-1,1l-1,1l0,1l-1,0l-1,1l-0,1l0,1l1,1l1,1l1,1l-0,1l-1,1l1,1l1,1l-1,0l-1,-0l-1,1l-1,-0l-1,1l-1,0l-1,-0l-2,-0l-1,-1l-1,-1l-1,1l-1,0l-1,1l-1,-0l-1,-1l0,-1l1,-1l1,-1l0,-1l1,-1l1,-2l1,-1l-0,-1l0,-1l1,-1l1,-1l-1,0l-1,0l-1,0l0,-1l1,-1l1,-1l-0,-1l0,-1l-1,-1l-1,-1l-1,-1l-1,-1l-0,-1l1,-0l0,-1l1,-1l1,-1l1,0l1,-1l1,-0l1,1l1,0l1,0l1,1l1,1l1,-0l0,-1l-1,-1l-0,-1l1,-1l1,0l1,1l0,1l0,1l1,2l1,1l-0,1l0,2l1,1ZM176,426l-1,0l-1,0l-1,-1l-0,1l0,1l-1,0l0,1l-1,1l-1,1l-1,1l-0,-1l-0,-1l1,-0l-1,-0l-0,-1l0,-1l0,-1l1,-1l-1,-1l1,0l1,-1l1,-0l1,1l0,1l1,-0l1,-1l1,-1l1,0l0,1l-1,1l-0,1Z",
+44:"M211,417l-1,-1l0,-1l-1,-0l-1,-0l-1,1l-1,0l-1,-0l-1,0l-0,-1l-1,-1l-1,1l-1,0l-1,-1l-1,-1l-1,-1l-0,-1l-0,-1l-1,-1l-1,-1l-0,-1l-1,-1l-1,-1l-1,0l-1,1l0,1l0,1l-0,1l-1,-1l-1,-0l-1,-1l0,-1l0,-1l-1,-1l-0,-1l1,-1l-0,-1l0,-1l1,-1l1,-1l1,-1l1,-0l1,0l1,0l1,-0l0,-1l-0,-1l1,0l1,1l1,0l1,-0l1,-1l1,-1l1,-1l1,-0l1,0l1,1l1,1l1,1l-0,1l0,1l-1,1l-1,0l0,1l-1,1l-1,-0l-1,1l0,2l1,1l1,-0l1,0l1,-0l1,0l1,0l1,-0l-0,1l-1,1l-0,1l1,0l0,1l1,0l1,-0l1,0l-1,0l-1,1l-0,1l1,1l1,0l1,-0l-1,1l-0,1l-1,1l0,1l-1,0l-1,0Z",
+45:"M211,417l-1,1l-1,1l-1,1l-0,1l-1,1l-1,1l1,1l-1,1l-0,1l-0,1l-0,1l-1,1l-0,1l-0,1l-0,1l-0,1l-1,2l-0,1l-0,2l-0,1l-0,2l1,1l-0,1l-0,1l0,1l-1,1l-1,1l0,1l-0,1l-0,1l0,1l-1,-0l-1,-0l-1,-1l-1,-0l0,-1l0,-1l0,-1l-1,-1l-1,0l-1,-1l-1,-0l-0,-1l-1,-1l-1,-1l-1,-1l-0,-1l0,-1l-1,-1l-1,-0l-1,-1l-0,-1l-1,-1l0,-1l1,0l1,-0l1,-1l1,0l1,-1l1,-1l1,0l0,-1l-1,-1l-0,-1l1,-1l-1,-1l-0,-1l-1,-1l-0,-1l0,-2l0,-1l1,0l0,-1l0,-1l1,-1l1,-1l0,-1l1,-1l1,-0l1,1l1,-0l1,-0l0,1l1,1l1,-0l1,0l1,-1l1,-1l1,0l1,1l-0,1Z",
+46:"M172,435l-1,-1l-0,-1l0,-1l1,1l1,1l-1,1ZM185,435l-0,1l1,1l1,1l0,1l1,0l1,1l-0,1l-0,1l1,1l1,0l1,1l0,1l1,1l1,-0l1,0l1,1l-0,1l-0,1l-0,1l-1,-0l-1,1l-1,1l1,1l1,0l-1,1l1,0l-1,1l-1,1l-1,1l-1,1l-1,1l-1,1l-1,0l-1,1l-1,1l-1,1l-0,-1l0,-1l1,-1l1,-1l-0,-1l1,-1l0,-1l0,-1l-1,-1l-1,-1l-1,-1l0,-1l-1,-0l-1,-1l0,-1l1,-0l1,1l1,1l1,-1l0,-1l-0,-1l-1,-1l-1,-1l-1,0l-0,1l-0,1l-1,1l-0,1l-1,1l-0,1l0,1l1,2l1,1l1,1l0,1l-1,1l-1,1l-1,-0l-0,-1l-1,-1l-1,-0l-1,0l-1,-0l-1,0l-1,-1l-1,-1l-0,-1l-1,-1l1,-0l1,-0l1,-1l1,-1l0,-2l0,-2l-0,-1l-1,-1l-1,-1l-1,-0l-0,-1l0,-1l1,-1l0,-1l-0,-1l-1,-1l1,-1l-1,-1l1,-1l1,1l1,-0l0,-1l1,1l1,0l1,-1l1,-0l1,-1l1,1l1,1ZM190,475l0,-1l0,-1l1,-1l0,-1l1,0l-0,2l0,1l-1,1l0,1l-0,1l-1,1l-0,1l0,1l-0,2l-1,1l-1,-1l-0,-1l1,-1l1,-2l0,-1l0,-1ZM180,486l-1,-0l-1,-1l-0,-1l-0,-1l0,-1l1,-1l1,-1l1,0l1,0l1,1l1,1l-0,1l-1,1l-1,1l-1,0ZM160,536l0,-1l0,-1l1,1l0,1l-1,1l-1,0l-1,1l-1,1l-1,1l-1,1l-1,1l1,1l-1,1l-1,1l-1,-1l0,1l-1,-0l-1,-1l-0,-1l-1,-0l-1,-0l1,-0l1,-0l-1,-1l1,-1l1,-1l1,-0l1,-1l1,-1l1,1l0,-1l1,-1l1,-1l-0,1ZM153,546l-1,-0l-1,-0l0,-1l-1,-1l1,-1l0,1l1,1l1,0ZM143,555l-0,-1l-0,-1l0,-1l1,0l0,1l0,1l1,1l-0,1l-0,1l-1,1l-1,-1l-0,-1ZM136,564l1,-0l1,-1l-0,1l-1,1l-1,1l-1,-1l0,-1Z",
+47:"M126,583l1,-1l1,-1l0,-1l1,-0l0,1l0,1l-1,1l-1,1l-1,1l-1,0l-1,1l0,1l-1,0l-1,-1l-0,1l-1,1l-1,0l-1,0l-1,0l1,1l0,1l1,1l-1,-1l-1,1l-1,1l-0,1l-0,1l1,0l-1,1l-1,1l-1,1l-0,-1l-0,-1l-0,-1l1,-1l1,-1l1,-1l-0,-1l-1,-1l1,-1l1,-1l1,-1l1,-0l1,-1l1,-1l-1,-1l-1,-1l0,-1l1,-1l1,0l0,1l1,0l1,-1l0,-1ZM62,639l-1,-1l0,-1l0,-1l-0,-1l1,1l1,1l1,1l1,1l-1,1l-1,0ZM36,649l-1,-1l0,-1l-1,-1l0,-1l1,1l1,-0l0,-1l1,-1l0,-1l0,-1l0,1l-1,1l-1,1l-1,1l-0,1l-0,1l-1,0ZM29,651l-1,-0l-1,-0l-1,-0l-0,-1l1,0l0,-1l0,-1l1,0l1,0l1,0l0,1l-1,1l-0,1Z",
+};
+const PREF_CENTROIDS={
+1:[480,112],
+2:[415,194],
+3:[428,225],
+4:[418,258],
+5:[407,224],
+6:[396,258],
+7:[397,289],
+8:[403,314],
+9:[392,307],
+10:[370,313],
+11:[383,328],
+12:[399,339],
+13:[380,337],
+14:[380,343],
+15:[368,283],
+16:[330,308],
+17:[325,301],
+18:[308,334],
+19:[364,337],
+20:[350,322],
+21:[327,332],
+22:[358,352],
+23:[332,353],
+24:[313,367],
+25:[310,346],
+26:[289,346],
+27:[293,363],
+28:[278,353],
+29:[303,371],
+30:[292,384],
+31:[255,345],
+32:[228,348],
+33:[258,357],
+34:[232,366],
+35:[206,374],
+36:[263,386],
+37:[259,375],
+38:[235,393],
+39:[243,397],
+40:[186,395],
+41:[169,400],
+42:[158,401],
+43:[184,420],
+44:[202,406],
+45:[199,431],
+46:[174,482],
+47:[86,612],
+};
+
 const PREFS=[
 {id:1,name:'北海道',pop:5.18,reg:'hokkaido'},{id:2,name:'青森県',pop:1.21,reg:'tohoku'},{id:3,name:'岩手県',pop:1.18,reg:'tohoku'},{id:4,name:'宮城県',pop:2.27,reg:'tohoku'},{id:5,name:'秋田県',pop:0.93,reg:'tohoku'},{id:6,name:'山形県',pop:1.04,reg:'tohoku'},{id:7,name:'福島県',pop:1.79,reg:'tohoku'},
 {id:8,name:'茨城県',pop:2.84,reg:'kanto'},{id:9,name:'栃木県',pop:1.91,reg:'kanto'},{id:10,name:'群馬県',pop:1.91,reg:'kanto'},{id:11,name:'埼玉県',pop:7.34,reg:'kanto'},{id:12,name:'千葉県',pop:6.27,reg:'kanto'},{id:13,name:'東京都',pop:14.04,reg:'kanto'},{id:14,name:'神奈川県',pop:9.24,reg:'kanto'},
@@ -1745,8 +1892,8 @@ const PREFS=[
 ];
 const REGIONS=['hokkaido','tohoku','kanto','chubu','kinki','chugoku','shikoku','kyushu','okinawa'];
 const REGION_LABEL={hokkaido:'北海道',tohoku:'東北',kanto:'関東',chubu:'中部',kinki:'近畿',chugoku:'中国',shikoku:'四国',kyushu:'九州',okinawa:'沖縄'};
-/* 拠点ピン座標（SVG viewBox 0 0 360 290 内） */
-const BASE_PINS={hokkaido:[278,55],tohoku:[250,135],kanto:[266,194],chubu:[195,195],kinki:[162,232],chugoku:[92,215],shikoku:[122,255],kyushu:[55,255],okinawa:[14,273]};
+/* 大都市の都道府県ラベル表示用 */
+const LABEL_PREFS=[1,4,11,13,14,23,27,28,34,40,47]; /* 北海道,宮城,埼玉,東京,神奈川,愛知,大阪,兵庫,広島,福岡,沖縄 */
 const CANCER={
 all:{share:1.000,name:'全がん',arpu:225000},
 headneck:{share:0.025,name:'頭頸部がん',arpu:250000},lung:{share:0.127,name:'肺がん',arpu:280000},
@@ -1758,9 +1905,11 @@ leukemia:{share:0.014,name:'白血病',arpu:320000},myeloma:{share:0.008,name:'�
 brain:{share:0.006,name:'脳腫瘍',arpu:260000},thyroid:{share:0.018,name:'甲状腺がん',arpu:180000},
 cup:{share:0.008,name:'原発不明がん',arpu:240000}
 };
-/* SATOI拠点（5期で10）：B1東京直営＋自由診療B2東京/大阪/名古屋/福岡/札幌/仙台/広島/京都/横浜 */
-const SATOI_BASES={2:[13],3:[13,27,23],4:[13,27,23,40,1],5:[13,27,23,40,1,4,34,26,14]};
+const SATOI_BASES={2:[13],3:[13,27,23],4:[13,27,23,40,1],5:[13,27,23,40,1,4,34,26,14,28]};
+/* 拠点ラベル（個人名・固有名NG・カテゴリ表現） */
+const BASE_LABELS={13:'直営',27:'関西旗艦',23:'中部旗艦',40:'九州旗艦',1:'北海道',4:'東北',34:'中国',26:'近畿補強',14:'神奈川',28:'兵庫'};
 const PHASE_PEN={2:0.05,3:0.10,4:0.15,5:0.20};
+/* 浸透率シミュレーター用：state.simPen がセットされたら優先 */
 const REFUGEE_RATE=0.35;
 const TOTAL_INCIDENCE=1000000;
 const TOTAL_POP=124.7;
@@ -1771,7 +1920,9 @@ function valueFor(p){
   const inc=TOTAL_INCIDENCE*c.share*(p.pop/TOTAL_POP);
   const refugee=inc*REFUGEE_RATE;
   const inPhase=SATOI_BASES[state.phase].includes(p.id);
-  const penetration=inPhase?PHASE_PEN[state.phase]:PHASE_PEN[state.phase]*0.3;
+  /* state.simPen が設定されていたら浸透率仮定を優先 */
+  const basePen=(typeof state.simPen==='number')?state.simPen:PHASE_PEN[state.phase];
+  const penetration=inPhase?basePen:basePen*0.3;
   const opp=refugee*c.arpu*(1-penetration);
   const nh=Math.min(0.20,penetration*1.2+(inPhase?0.05:0));
   return{inc,refugee,penetration,opp,nh};
@@ -1781,53 +1932,77 @@ function fmtInt(n){if(n>=1e4)return(n/1e4).toFixed(1)+'万';return Math.round(n)
 function fmtMoney(n){if(n>=1e8)return'¥'+(n/1e8).toFixed(0)+'億';if(n>=1e4)return'¥'+(n/1e4).toFixed(0)+'万';return'¥'+Math.round(n)}
 function modeLabel(){return{incidence:'罹患',refugee:'治療難民',penetration:'浸透率',opp:'機会値'}[state.mode]}
 
-/* 地方ごとに代表値（pref合算）→ 色塗り */
-function regionValue(regKey){
-  return PREFS.filter(p=>p.reg===regKey).reduce((acc,p)=>acc+curVal(p),0);
+function buildMap(){
+  /* 47都道府県のpathを一度だけ生成 */
+  const layer=document.getElementById('invPrefLayer');if(!layer)return;
+  if(layer.childElementCount>0)return; /* 二回呼ばれ防止 */
+  const ns='http://www.w3.org/2000/svg';
+  PREFS.forEach(function(p){
+    const d=PREF_PATHS[p.id];if(!d)return;
+    const path=document.createElementNS(ns,'path');
+    path.setAttribute('id','pref_'+p.id);
+    path.setAttribute('class','inv-pref');
+    path.setAttribute('d',d);
+    path.setAttribute('data-id',p.id);
+    path.addEventListener('click',function(){state.selectedId=p.id; const ps=document.getElementById('invPrefSel');if(ps)ps.value=p.id; renderAll();});
+    layer.appendChild(path);
+  });
+  /* 大都市ラベル */
+  const lab=document.getElementById('invLabelLayer');
+  LABEL_PREFS.forEach(function(id){
+    const c=PREF_CENTROIDS[id];if(!c)return;
+    const p=PREFS.find(function(x){return x.id===id;});if(!p)return;
+    const t=document.createElementNS(ns,'text');
+    t.setAttribute('class','inv-pref-label');
+    t.setAttribute('x',c[0]);t.setAttribute('y',c[1]);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('pointer-events','none');
+    t.textContent=p.name.replace(/[県府都道]$/,'');
+    lab.appendChild(t);
+  });
 }
-function pickColor(val,allVals){
+function pickColor(v,vals){
   const heat=['#ECE3CC','#D8B98F','#B8954A','#8A5A2B','#6F3B22','#5B2418'];
-  const mn=Math.min(...allVals),mx=Math.max(...allVals);
+  const mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);
   if(mx===mn)return heat[2];
-  const idx=Math.min(heat.length-1,Math.floor((val-mn)/(mx-mn)*heat.length));
+  const idx=Math.min(heat.length-1,Math.floor((v-mn)/(mx-mn)*heat.length));
   return heat[idx];
 }
-
 function renderMap(){
-  const svg=document.getElementById('invMapSvg');if(!svg)return;
-  const allVals=REGIONS.map(r=>regionValue(r));
-  REGIONS.forEach((r,i)=>{
-    const el=svg.querySelector('#reg_'+r);if(!el)return;
-    el.setAttribute('fill',pickColor(allVals[i],allVals));
-    el.setAttribute('stroke','#0E2236');
-    el.setAttribute('stroke-width','0.5');
-    /* 選択中地方 */
-    const selPref=PREFS.find(p=>p.id===state.selectedId);
-    if(selPref && selPref.reg===r){
-      el.setAttribute('stroke','#0E2236');el.setAttribute('stroke-width','2.2');
+  buildMap();
+  const vals=PREFS.map(function(p){return curVal(p);});
+  PREFS.forEach(function(p,i){
+    const el=document.getElementById('pref_'+p.id);if(!el)return;
+    el.setAttribute('fill',pickColor(vals[i],vals));
+    if(p.id===state.selectedId){
+      el.classList.add('sel');
+      el.parentNode.appendChild(el); /* bring to front */
+    }else{
+      el.classList.remove('sel');
     }
   });
   /* 拠点ピン */
-  const layer=svg.querySelector('#invBaseLayer');if(layer){
-    layer.innerHTML='';
-    const baseRegs=new Set(SATOI_BASES[state.phase].map(id=>{const p=PREFS.find(x=>x.id===id);return p?p.reg:null}).filter(Boolean));
-    baseRegs.forEach(r=>{
-      const c=BASE_PINS[r];if(!c)return;
-      const ns='http://www.w3.org/2000/svg';
-      const g=document.createElementNS(ns,'g');g.setAttribute('transform','translate('+c[0]+','+c[1]+')');g.style.pointerEvents='none';
-      const dot=document.createElementNS(ns,'circle');dot.setAttribute('r','3.2');dot.setAttribute('fill','#9B2D2D');dot.setAttribute('stroke','#fff');dot.setAttribute('stroke-width','0.8');g.appendChild(dot);
-      const ring=document.createElementNS(ns,'circle');ring.setAttribute('class','inv-base-ring');g.appendChild(ring);
-      layer.appendChild(g);
-    });
-  }
+  const layer=document.getElementById('invBaseLayer');if(!layer)return;
+  layer.innerHTML='';
+  const ns='http://www.w3.org/2000/svg';
+  SATOI_BASES[state.phase].forEach(function(id){
+    const c=PREF_CENTROIDS[id];if(!c)return;
+    const g=document.createElementNS(ns,'g');g.setAttribute('transform','translate('+c[0]+','+c[1]+')');g.style.pointerEvents='none';
+    const dot=document.createElementNS(ns,'circle');dot.setAttribute('r','6');dot.setAttribute('fill','#9B2D2D');dot.setAttribute('stroke','#fff');dot.setAttribute('stroke-width','1.5');g.appendChild(dot);
+    const ring=document.createElementNS(ns,'circle');ring.setAttribute('r','6');ring.setAttribute('fill','none');ring.setAttribute('stroke','#9B2D2D');ring.setAttribute('stroke-width','2');ring.setAttribute('opacity','0.6');
+    const a1=document.createElementNS(ns,'animate');a1.setAttribute('attributeName','r');a1.setAttribute('values','6;22');a1.setAttribute('dur','1.8s');a1.setAttribute('repeatCount','indefinite');ring.appendChild(a1);
+    const a2=document.createElementNS(ns,'animate');a2.setAttribute('attributeName','opacity');a2.setAttribute('values','0.6;0');a2.setAttribute('dur','1.8s');a2.setAttribute('repeatCount','indefinite');ring.appendChild(a2);
+    g.appendChild(ring);
+    layer.appendChild(g);
+  });
   const lg=document.getElementById('invLegendLabel');if(lg)lg.textContent=modeLabel();
 }
 function renderPanel(){
-  const p=PREFS.find(x=>x.id===state.selectedId);if(!p)return;
+  const p=PREFS.find(function(x){return x.id===state.selectedId;});if(!p)return;
   const v=valueFor(p);const c=CANCER[state.cancer];
   const isS=SATOI_BASES[state.phase].includes(p.id);
   const name=document.getElementById('invSelName');
-  if(name){let tags='';if(isS)tags+='<span class="itag">SATOI拠点</span>';if(p.reg==='kanto'||p.reg==='kinki'||p.reg==='chubu')tags+='<span class="itag jspcm">JSPCM圏</span>';name.innerHTML=p.name+' <span class="inv-mono" style="font-size:9px;color:#6B7280;font-weight:400">('+REGION_LABEL[p.reg]+')</span> '+tags}
+  if(name){var tags='';if(isS)tags+='<span class="itag">SATOI拠点</span>';name.innerHTML=p.name+' <span class="inv-mono" style="font-size:9px;color:#6B7280;font-weight:400">('+REGION_LABEL[p.reg]+')</span> '+tags;}
   const ctx=document.getElementById('invSelCtx');if(ctx)ctx.textContent=state.phase+'期 · '+c.name+' · '+modeLabel()+'ビュー';
   const ms=document.getElementById('invSelMetrics');
   if(ms)ms.innerHTML='<div class="im"><div class="iml">罹患者</div><div class="imv">'+fmtInt(v.inc)+'<span class="imu">人</span></div></div>'
@@ -1836,22 +2011,56 @@ function renderPanel(){
     +'<div class="im"><div class="iml">機会値</div><div class="imv">'+fmtMoney(v.opp)+'</div></div>';
 }
 function renderInsight(){
-  const p=PREFS.find(x=>x.id===state.selectedId);if(!p)return;
+  const p=PREFS.find(function(x){return x.id===state.selectedId;});if(!p)return;
   const v=valueFor(p);const isS=SATOI_BASES[state.phase].includes(p.id);
-  const sorted=PREFS.map(x=>({id:x.id,v:curVal(x)})).sort((a,b)=>b.v-a.v);
-  const rank=sorted.findIndex(x=>x.id===p.id)+1;
+  const sorted=PREFS.map(function(x){return{id:x.id,v:curVal(x)};}).sort(function(a,b){return b.v-a.v;});
+  const rank=sorted.findIndex(function(x){return x.id===p.id;})+1;
   var h,b;
-  if(isS&&rank<=10){h='A. 横展開ハブ';b=p.name+'は<b>進出済＋上位市場</b>('+rank+'位)。JSPCM連携で<b>シェア深耕</b>、隣接県への波及効果に期待。機会値 '+fmtMoney(v.opp)+'。'}
-  else if(isS){h='B. シェア深耕型';b=p.name+'は<b>進出済</b>('+rank+'位)。<b>シェア深耕</b>と隣接県への波及で機会値を伸ばす設計。'}
-  else if(rank<=8){h='C. 最優先候補';b=p.name+'は<b>未進出＋上位市場</b>('+rank+'位)。<b>JSPCM経由のソフト参入</b>を最優先で検討。機会値 '+fmtMoney(v.opp)+'。'}
-  else if(rank<=20){h='D. 遠隔連携';b=p.name+'は中位市場('+rank+'位)。<b>近隣拠点からの遠隔連携</b>で機会値を取りに行く。'}
-  else{h='E. 後発検討';b=p.name+'は下位('+rank+'位)。直接進出の優先度は低く、<b>がん種別で再検証</b>推奨。'}
+  if(isS&&rank<=10){h='A. 横展開ハブ';b=p.name+'は<b>進出済＋上位市場</b>('+rank+'位)。<b>シェア深耕</b>と隣接県への波及効果に期待。機会値 '+fmtMoney(v.opp)+'。';}
+  else if(isS){h='B. シェア深耕型';b=p.name+'は<b>進出済</b>('+rank+'位)。<b>シェア深耕</b>と隣接県への波及で機会値を伸ばす設計。';}
+  else if(rank<=8){h='C. 最優先候補';b=p.name+'は<b>未進出＋上位市場</b>('+rank+'位)。<b>パートナークリニック経由のソフト参入</b>を最優先で検討。機会値 '+fmtMoney(v.opp)+'。';}
+  else if(rank<=20){h='D. 遠隔連携';b=p.name+'は中位市場('+rank+'位)。<b>近隣拠点からの遠隔連携</b>で機会値を取りに行く。';}
+  else{h='E. 後発検討';b=p.name+'は下位('+rank+'位)。直接進出の優先度は低く、<b>がん種別で再検証</b>推奨。';}
   const el=document.getElementById('invInsight');if(el)el.innerHTML='<div class="iih">'+h+'</div>'+b;
 }
-function renderAll(){renderMap();renderPanel();renderInsight()}
+/* ★拠点ロードマップ：期スライダーに連動して10拠点が点灯 */
+function renderBaseRoadmap(){
+  const grid=document.getElementById('invBaseGrid');if(!grid)return;
+  const activeIds=SATOI_BASES[state.phase];
+  /* 全10拠点（5期構成）の順序 */
+  const allBases=[13,27,23,40,1,4,34,26,14,28];
+  grid.innerHTML=allBases.map(function(id,i){
+    const p=PREFS.find(function(x){return x.id===id;});
+    const isActive=activeIds.includes(id);
+    const label=BASE_LABELS[id]||'';
+    return '<div style="padding:7px 4px;border-radius:4px;text-align:center;font-size:9.5px;font-family:Inter,sans-serif;font-weight:700;transition:all .4s;'
+      +(isActive?'background:#0E2236;color:#F0C97A;border:.5px solid #B8954A;box-shadow:0 0 8px rgba(184,149,74,.4);':'background:#fff;color:#9099A8;border:.5px dashed #d1d5db;')
+      +'">'+(p?p.name.replace(/[県府都道]$/,''):'-')+'<small style="font-size:8px;color:'+(isActive?'#D4A95E':'#aaa')+';display:block;font-weight:500">'+(label||(i===0?'直営':'パートナー'))+'</small></div>';
+  }).join('');
+  const bc=document.getElementById('invBaseCount');if(bc)bc.textContent=activeIds.length;
+  const pl=document.getElementById('invPhaseLabel');if(pl)pl.textContent=state.phase+'期';
+}
+/* ★浸透率シミュレーター：全国機会値を即時再計算 */
+function renderSim(){
+  const slider=document.getElementById('invSimSlider');if(!slider)return;
+  const pen=parseInt(slider.value,10)/100;
+  document.getElementById('invSimLabel').textContent=pen*100+'%';
+  /* simPenを設定して valueFor から呼ばれる時に効くようにする */
+  state.simPen=pen;
+  /* 全国合算機会値 */
+  let total=0;
+  PREFS.forEach(function(p){total+=valueFor(p).opp;});
+  document.getElementById('invSimOpp').textContent=fmtMoney(total);
+  document.getElementById('invSimCons').textContent=fmtMoney(total*0.65);
+  document.getElementById('invSimMid').textContent=fmtMoney(total);
+  document.getElementById('invSimOpt').textContent=fmtMoney(total*1.52);
+  /* simPenはクリーン：シミュ表示後はPHASE_PENに戻す（地図/パネル汚さない）*/
+  state.simPen=undefined;
+}
+function renderAll(){renderMap();renderPanel();renderInsight();renderBaseRoadmap();renderSim();}
 
 window.invOpenModal=function(){
-  const p=PREFS.find(x=>x.id===state.selectedId);if(!p)return;
+  const p=PREFS.find(function(x){return x.id===state.selectedId;});if(!p)return;
   const v=valueFor(p);const c=CANCER[state.cancer];
   document.getElementById('invModalTitle').textContent=p.name+' — '+c.name+'市場';
   document.getElementById('invModalSub').textContent=state.phase+'期 · 罹患'+fmtInt(v.inc)+'人 · 機会値'+fmtMoney(v.opp)+' · 浸透率'+(v.penetration*100).toFixed(1)+'%';
@@ -1865,8 +2074,76 @@ window.invOpenModal=function(){
   document.getElementById('invModalScen').innerHTML=[{label:'保守',mult:0.65},{label:'中央',mult:1.00,mid:true},{label:'楽観',mult:1.52}].map(function(s){return '<div class="isc'+(s.mid?' imid':'')+'"><b>'+s.label+'</b><div class="iv">'+fmtMoney(v.opp*s.mult)+'</div></div>';}).join('');
   document.getElementById('invModal').classList.add('show');
 };
-window.invCloseModal=function(){document.getElementById('invModal').classList.remove('show')};
-window.invExit=function(){if(typeof go==='function')go('mypage')};
+window.invCloseModal=function(){document.getElementById('invModal').classList.remove('show');};
+window.invExit=function(){if(typeof go==='function')go('mypage');};
+
+/* ★ARPU源別詳細モーダル */
+const ARPU_DETAIL={
+  all:{title:'ARPU 全体構造',sub:'1人あたり年間単価 ¥22.5万 ／ 7源積上げ',logic:'<b>計算式：</b> ¥3.6万 + ¥0.48万 + ¥1.0万 + ¥10.0万 + ¥5.0万 + ¥2.0万 + ¥0.4万 = <b>¥22.48万</b>',rationale:'<b>根拠：</b>会員1人あたり年間期待値。5期目標¥205億はARPU×継続会員91,000人で達成。'},
+  sub:{title:'サブスク（伴走会員）',sub:'¥3.6万／年 ・ 月額¥3,000 × 12ヶ月',logic:'<b>料金体系：</b>無料お試し→月額¥3,000の伴走プラン。AIコンシェルジュ・SDM作成・記録保管・家族共有が解放。',rationale:'<b>根拠：</b>橋谷さんMTGで月額100〜200円も検討された安価帯と、深い伴走を求める層の二段階構造。継続率94.2%目標。'},
+  peace:{title:'安心+（緊急QR付帯）',sub:'¥0.48万／年 ・ 月額¥400 オプション',logic:'<b>料金体系：</b>緊急QR利用時の救急搬送サポート・家族通知・差額ベッド支援等。SATOIが保険代理店として組成。',rationale:'<b>根拠：</b>橋谷さん×Konno氏方向性。少額短期保険業として組成・低所得層への支えを意図。'},
+  layer1:{title:'Layer1（基本情報パネル）',sub:'¥1.0万／年 ・ 同意ベースの基本情報',logic:'<b>提供データ：</b>属性・がん種・治療段階・PRO 5領域・基本副作用。本人同意の範囲。',rationale:'<b>根拠：</b>3軸モデルのうち Path B（製薬以外）¥10億規模の基本層。'},
+  intro:{title:'治療紹介手数料',sub:'¥10.0万／年 ・ 拠点クリニック紹介',logic:'<b>料金体系：</b>パートナークリニック・先進医療施設への紹介成功時の手数料。',rationale:'<b>根拠：</b>SATOI拠点10展開（5期）×自由診療検討者17%×ARPU構成中の最大源。'},
+  trial:{title:'治験マッチング紹介',sub:'¥5.0万／年 ・ 製薬治験への登録支援',logic:'<b>料金体系：</b>本人同意の上、適格患者を製薬企業の治験プログラムへマッチング。',rationale:'<b>根拠：</b>T1メガファーマ4社のオンコロジー・希少がん領域への紹介。PV協賛とは別の窓口。'},
+  layer2:{title:'Layer2（深掘り・遺伝子）',sub:'¥2.0万／年 ・ 高粒度データ',logic:'<b>提供データ：</b>4軸統合（副作用×心理×自由診療×SDM）+ 韓国経由の全遺伝子データ。Path A製薬向け¥45億の主軸。',rationale:'<b>根拠：</b>4軸統合データはSATOI独占。NTT ABE暗号化・JOiNT諮問監督下。'},
+  fp:{title:'FP・社労士相談',sub:'¥0.4万／年 ・ 初回無料／継続有料',logic:'<b>料金体系：</b>傷病手当金・障害年金・治療費設計の専門家相談。初回無料・継続は応相談。',rationale:'<b>根拠：</b>橋谷さんMTG評価項目。給付金請求漏れ防止ではなく「やるべきこと一項目」として運用。'}
+};
+window.invArpuOpen=function(key){
+  const d=ARPU_DETAIL[key];if(!d)return;
+  document.getElementById('invModalTitle').textContent=d.title;
+  document.getElementById('invModalSub').textContent=d.sub;
+  document.getElementById('invModalFunnel').innerHTML=d.logic;
+  document.getElementById('invModalArpu').innerHTML='<div class="inv-modal-cell" style="grid-column:span 2"><div class="icl">想定根拠</div><div style="font-size:11.5px;font-family:Inter,sans-serif;line-height:1.7;color:#0E2236;margin-top:4px">'+d.rationale+'</div></div>';
+  document.getElementById('invModalV9').innerHTML='<div class="inv-modal-cell"><div class="icl">対象 5期会員</div><div class="icv">91,000<small>人</small></div></div><div class="inv-modal-cell gold"><div class="icl">5期 売上目標</div><div class="icv">¥205<small>億</small></div></div>';
+  document.getElementById('invModalScen').innerHTML='<div class="isc"><b>保守</b><div class="iv">×0.65</div></div><div class="isc imid"><b>中央</b><div class="iv">×1.00</div></div><div class="isc"><b>楽観</b><div class="iv">×1.52</div></div>';
+  document.getElementById('invModal').classList.add('show');
+};
+
+/* ★ライブカウンター（投資家ワクワク要素①）：数秒ごとに会員指標が動く演出 */
+const LIVE_STATE={members:12847,fourAxis:28271,sdm:8736,alert:386};
+function flashCell(id){
+  const el=document.getElementById(id);if(!el)return;
+  el.classList.add('flash');setTimeout(function(){el.classList.remove('flash');},800);
+}
+function tickLive(){
+  /* 自然な伸び：会員1-3 / 4軸0-2 / SDM 0-1 / アラート 0-1 (確率重み) */
+  const r=Math.random();
+  if(r<0.55){LIVE_STATE.members+=Math.floor(Math.random()*3)+1; document.getElementById('lcMemberV').textContent=LIVE_STATE.members.toLocaleString(); flashCell('lcMember');}
+  else if(r<0.82){LIVE_STATE.fourAxis+=Math.floor(Math.random()*2)+1; document.getElementById('lc4axisV').textContent=LIVE_STATE.fourAxis.toLocaleString(); flashCell('lc4axis');}
+  else if(r<0.95){LIVE_STATE.sdm+=1; document.getElementById('lcSdmV').textContent=LIVE_STATE.sdm.toLocaleString(); flashCell('lcSdm');}
+  else{LIVE_STATE.alert+=1; document.getElementById('lcAlertV').textContent=LIVE_STATE.alert.toLocaleString(); flashCell('lcAlert');}
+  const t=new Date(); document.getElementById('invLiveTime').textContent=t.toTimeString().slice(0,8)+' JST';
+}
+
+/* ★アクティビティフィード（投資家ワクワク要素②）：イベントログを流す */
+const FEED_EVENTS=[
+  {pref:'東京',type:'SDM作成',tag:'SDM'},{pref:'大阪',type:'治療紹介完了',tag:'INTRO'},{pref:'神奈川',type:'保険加入者ログイン',tag:'INS'},
+  {pref:'愛知',type:'4軸データ取得',tag:'DATA'},{pref:'福岡',type:'PV協賛閲覧',tag:'PV'},{pref:'兵庫',type:'セカンドオピニオン依頼',tag:'2ND'},
+  {pref:'埼玉',type:'家族ビュー登録',tag:'FAM'},{pref:'千葉',type:'やるべきことリスト達成',tag:'TODO'},{pref:'北海道',type:'自由診療検討開始',tag:'FREE'},
+  {pref:'広島',type:'拠点クリニック予約',tag:'CLINIC'},{pref:'宮城',type:'PRO-CTCAE記録',tag:'PRO'},{pref:'京都',type:'心理タグ記録',tag:'PSY'},
+  {pref:'静岡',type:'SDMカード送信',tag:'SDM'},{pref:'熊本',type:'保険給付金請求',tag:'CLAIM'},{pref:'新潟',type:'公的制度申請',tag:'PUB'}
+];
+function fmtTime(d){return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+':'+('0'+d.getSeconds()).slice(-2);}
+function pushFeed(){
+  const list=document.getElementById('invFeedList');if(!list)return;
+  const ev=FEED_EVENTS[Math.floor(Math.random()*FEED_EVENTS.length)];
+  const item=document.createElement('div');item.className='inv-feeditem';
+  const t=new Date();
+  item.innerHTML='<span class="ift">'+fmtTime(t)+'</span><span class="ifb"><b>'+ev.pref+'</b> ／ '+ev.type+'<span class="ifbk">'+ev.tag+'</span></span>';
+  list.insertBefore(item,list.firstChild);
+  while(list.children.length>6)list.removeChild(list.lastChild);
+}
+
+let LIVE_TIMER=null,FEED_TIMER=null;
+function startLive(){
+  if(LIVE_TIMER)return;
+  LIVE_TIMER=setInterval(tickLive,2200);
+  /* 初回即時 */tickLive();
+  FEED_TIMER=setInterval(pushFeed,3500);
+  /* 初回ロード時に過去3件を仕込む */
+  for(var i=0;i<4;i++)pushFeed();
+}
+function stopLive(){if(LIVE_TIMER){clearInterval(LIVE_TIMER);LIVE_TIMER=null;}if(FEED_TIMER){clearInterval(FEED_TIMER);FEED_TIMER=null;}}
 
 function fillPrefSelector(){
   const sel=document.getElementById('invPrefSel');if(!sel||sel.options.length>1)return;
@@ -1878,29 +2155,28 @@ function fillPrefSelector(){
     sel.appendChild(og);
   });
 }
-
 function setupInteractions(){
   if(window._invSetup)return;window._invSetup=true;
-  /* 地方ブロックのクリック→該当地方の最大県を選択 */
-  REGIONS.forEach(function(r){
-    const el=document.getElementById('reg_'+r);if(!el)return;
-    el.addEventListener('click',function(){
-      const top=PREFS.filter(function(p){return p.reg===r;}).sort(function(a,b){return b.pop-a.pop;})[0];
-      if(top){state.selectedId=top.id; const ps=document.getElementById('invPrefSel'); if(ps)ps.value=top.id; renderAll();}
-    });
-  });
-  /* 47県プルダウン */
   const ps=document.getElementById('invPrefSel');
   if(ps)ps.addEventListener('change',function(e){const id=parseInt(e.target.value,10);if(id){state.selectedId=id;renderAll();}});
-  /* がん種 */
   const cs=document.getElementById('invCancerSel');
   if(cs)cs.addEventListener('change',function(e){state.cancer=e.target.value;renderAll();});
-  /* 期 */
   document.querySelectorAll('#invPhaseTabs .inv-tab').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#invPhaseTabs .inv-tab').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.phase=parseInt(b.dataset.phase,10);renderAll();});});
-  /* モード */
   document.querySelectorAll('#invViewMode .ivm').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#invViewMode .ivm').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.mode=b.dataset.mode;renderAll();});});
-  /* モーダル外側クリックで閉じる */
   const md=document.getElementById('invModal');if(md)md.addEventListener('click',function(e){if(e.target.id==='invModal')invCloseModal();});
+  /* ★期スライダー（地図・拠点ロードマップ連動） */
+  const phSl=document.getElementById('invPhaseSlider');
+  if(phSl)phSl.addEventListener('input',function(e){
+    state.phase=parseInt(e.target.value,10);
+    /* 既存タブUIも同期 */
+    document.querySelectorAll('#invPhaseTabs .inv-tab').forEach(function(x){x.classList.toggle('on',parseInt(x.dataset.phase,10)===state.phase);});
+    renderAll();
+  });
+  /* ★浸透率シミュレーター */
+  const simSl=document.getElementById('invSimSlider');
+  if(simSl)simSl.addEventListener('input',function(){renderSim();});
+  /* 画面離脱時にタイマー停止（_oninitと共に） */
+  window.addEventListener('hashchange',function(){if(!location.hash.endsWith('investor')){stopLive();}else{startLive();}});
 }
 
 window._oninit=window._oninit||{};
@@ -1908,6 +2184,7 @@ window._oninit['investor']=function(){
   fillPrefSelector();
   setupInteractions();
   renderAll();
+  startLive();
 };
 })();
 </script>
@@ -2007,7 +2284,7 @@ window._oninit['investor']=function(){
       <div class="iw-spk-row"><div><div class="iw-spk-lab">T1製薬・商談中</div><div class="iw-spk-sub">PV協賛 LOI 2026 Q4 着地計画</div></div><svg class="iw-spark" viewBox="0 0 60 22"><polyline points="0,18 10,16 20,14 30,12 40,10 50,7 60,5" fill="none" stroke="#9B2D2D" stroke-width="1.5"/></svg><div class="iw-spk-val">3<small>社</small></div></div>
       <div class="iw-spk-row"><div><div class="iw-spk-lab">拠点クリニック</div><div class="iw-spk-sub">自由診療9＋直営1（5期目標）</div></div><svg class="iw-spark" viewBox="0 0 60 22"><polyline points="0,20 10,20 20,18 30,18 40,16 50,16 60,14" fill="none" stroke="#0E2236" stroke-width="1.5"/></svg><div class="iw-spk-val">1<small>/10</small></div></div>
       <div class="iw-spk-row"><div><div class="iw-spk-lab">韓国遺伝子検査メーカー</div><div class="iw-spk-sub">Layer 2 全項目取得提携</div></div><svg class="iw-spark" viewBox="0 0 60 22"><polyline points="0,21 12,19 24,18 36,15 48,12 60,8" fill="none" stroke="#B8954A" stroke-width="1.5"/></svg><div class="iw-spk-val">交渉中</div></div>
-      <div class="iw-spk-row"><div><div class="iw-spk-lab">JSPCM 萬先生連携</div><div class="iw-spk-sub">主軸の自由診療クリニック網</div></div><svg class="iw-spark" viewBox="0 0 60 22"><polyline points="0,15 10,13 20,12 30,11 40,10 50,9 60,8" fill="none" stroke="#0E2236" stroke-width="1.5"/></svg><div class="iw-spk-val">主軸</div></div>
+      <div class="iw-spk-row"><div><div class="iw-spk-lab">学会パートナー連携</div><div class="iw-spk-sub">自由診療クリニック網の主軸</div></div><svg class="iw-spark" viewBox="0 0 60 22"><polyline points="0,15 10,13 20,12 30,11 40,10 50,9 60,8" fill="none" stroke="#0E2236" stroke-width="1.5"/></svg><div class="iw-spk-val">主軸</div></div>
     </div>
   </div>
 
@@ -2041,7 +2318,7 @@ window._oninit['investor']=function(){
     <div class="iw-event-row" style="border-bottom:.5px dashed rgba(14,34,54,.1)"><span class="iw-date">6/02</span><div class="iw-event-body"><b>三井JA投資家ピッチ後フォローアップ</b><span>v11資料反映・追加質問への回答整理</span></div></div>
     <div class="iw-event-row" style="border-bottom:.5px dashed rgba(14,34,54,.1)"><span class="iw-date">6/03</span><div class="iw-event-body"><b>T1製薬2社目商談</b><span>PV協賛LOI提案・限定PV閲覧の独占性訴求</span></div></div>
     <div class="iw-event-row" style="border-bottom:.5px dashed rgba(14,34,54,.1)"><span class="iw-date">6/04</span><div class="iw-event-body"><b>D2 PWA 設計開始</b><span>8月リアル患者リサーチに向けたDesignSpec着手</span></div></div>
-    <div class="iw-event-row"><span class="iw-date">6/05</span><div class="iw-event-body"><b>拠点クリニックB2候補確認</b><span>東京自由診療枠の最終候補・JSPCM経由</span></div></div>
+    <div class="iw-event-row"><span class="iw-date">6/05</span><div class="iw-event-body"><b>拠点クリニックB2候補確認</b><span>東京自由診療枠の最終候補・パートナー学会経由</span></div></div>
   </div>
 
   <!-- フッターCTA -->
@@ -2277,10 +2554,10 @@ window._oninit['next_horizon_bridge']=function(){
     <div class="pr-num">02</div>
     <div class="pr-when">PHASE 2 ／ 2027 〜 2028</div>
     <div class="pr-pt">「つぎの道」を、解放する</div>
-    <div class="pr-ps">JCPM／プレシジョン医療連携、<b>JOiNT審査ゲート</b>でガバナンス担保、別ホームページとして分離。「自由診療」とは書かない（医療法6条の5）。</div>
+    <div class="pr-ps">プレシジョン医療パートナー連携、<b>JOiNT審査ゲート</b>でガバナンス担保、別ホームページとして分離。「自由診療」とは書かない（医療法6条の5）。</div>
     <div class="pr-kpi">
       <div class="k"><div class="kl">つぎの道率</div><div class="kv">12% → 22%</div></div>
-      <div class="k"><div class="kl">JCPM連携</div><div class="kv">明星先生中心</div></div>
+      <div class="k"><div class="kl">学会連携</div><div class="kv">主要医師ネットワーク</div></div>
       <div class="k"><div class="kl">海外SO</div><div class="kv">同時通訳開放</div></div>
       <div class="k"><div class="kl">機会値</div><div class="kv">¥9.8 → 14兆</div></div>
     </div>
@@ -2299,7 +2576,7 @@ window._oninit['next_horizon_bridge']=function(){
     </div>
   </div>
   <div class="pr-mabuchi">
-    <b>★ 馬渕さん不安解消ポイント：</b>「自由診療への進み方が明確」── Phase 1（保険診療母数）から Phase 2（つぎの道）への移行は<b>跳ばない地続き</b>。JCPM・JOiNT・別HPで段階的に。Phase 3 で B2B＋代理店化が立ち上がる位相が、ピッチデッキの全体像と整合する。
+    <b>★ Phase 1→2 移行ポイント：</b>「自由診療への進み方が明確」── Phase 1（保険診療母数）から Phase 2（つぎの道）への移行は<b>跳ばない地続き</b>。プレシジョン医療パートナー・JOiNT・別HPで段階的に。Phase 3 で B2B＋代理店化が立ち上がる位相が、ピッチデッキの全体像と整合する。
   </div>
 </div>
 </section>
@@ -2823,6 +3100,520 @@ window._oninit['next_horizon_bridge']=function(){
   </div>
 </section>
 
+<!-- ============ 製薬会社向けポータル（PV協賛・限定PV報告閲覧・データ抽出）============ -->
+<section class="scr" id="signin_pharma_dash">
+<style>
+#signin_pharma_dash{background:#F5F1E8;font-family:"EB Garamond","Noto Serif JP",serif;min-height:100vh}
+#signin_pharma_dash *{box-sizing:border-box}
+#signin_pharma_dash .ph-bar{padding:9px 14px;display:flex;align-items:center;justify-content:space-between;font-family:Inter,sans-serif;background:#F5F1E8;border-bottom:.5px solid rgba(14,34,54,.15);position:sticky;top:0;z-index:5}
+#signin_pharma_dash .ph-back{font-size:12px;color:#0E2236;background:none;border:none;cursor:pointer;font:inherit;font-weight:600}
+#signin_pharma_dash .ph-tag{font-size:9px;background:#0E2236;color:#85B7EB;border:1px solid #85B7EB;border-radius:999px;padding:3px 9px;font-weight:700;letter-spacing:.06em;font-family:Inter,sans-serif}
+#signin_pharma_dash .ph-pad{padding:14px 14px 80px}
+#signin_pharma_dash .ph-eyebrow{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.18em;color:#185FA5;font-weight:700;text-transform:uppercase}
+#signin_pharma_dash .ph-mono{font-family:"JetBrains Mono",monospace;font-size:9px;color:#6B7280;letter-spacing:.04em}
+#signin_pharma_dash .ph-hero{background:linear-gradient(135deg,#0E2236 0%,#12345E 60%,#185FA5);color:#F5F1E8;padding:16px;border-radius:8px;margin-bottom:12px;position:relative;overflow:hidden}
+#signin_pharma_dash .ph-hero::after{content:"";position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(133,183,235,.25),transparent 70%);pointer-events:none}
+#signin_pharma_dash .ph-card{background:#fff;border:.5px solid rgba(14,34,54,.18);border-radius:8px;padding:12px 13px;margin-bottom:11px}
+#signin_pharma_dash .ph-title{font-family:"EB Garamond",serif;font-size:15px;color:#0E2236;font-style:italic;font-weight:600;margin-top:3px}
+#signin_pharma_dash .ph-title em{color:#185FA5;font-style:italic}
+#signin_pharma_dash .ph-kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:9px}
+#signin_pharma_dash .ph-kpi{background:rgba(245,241,232,.07);border:.5px solid rgba(133,183,235,.3);border-radius:6px;padding:9px 10px}
+#signin_pharma_dash .ph-kpi .l{font-size:9px;color:#85B7EB;letter-spacing:.08em;font-family:Inter,sans-serif;font-weight:700;text-transform:uppercase}
+#signin_pharma_dash .ph-kpi .v{font-family:"EB Garamond",serif;font-size:19px;font-weight:700;color:#F0C97A;line-height:1;margin-top:3px}
+#signin_pharma_dash .ph-kpi .v small{font-size:10px;color:rgba(245,241,232,.65);font-weight:500}
+#signin_pharma_dash .ph-kpi .d{font-size:9px;color:#7BC97B;font-weight:700;margin-top:3px;font-family:Inter,sans-serif}
+#signin_pharma_dash .ph-filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+#signin_pharma_dash .ph-filter-grid select,#signin_pharma_dash .ph-filter-grid input{width:100%;padding:8px 10px;background:#fff;border:.5px solid #0E2236;border-radius:5px;font-size:12px;font-family:Inter,sans-serif;font-weight:500;color:#0E2236;cursor:pointer}
+#signin_pharma_dash .ph-search{display:flex;gap:6px;margin-top:8px}
+#signin_pharma_dash .ph-search input{flex:1;padding:9px 11px;background:#fff;border:.5px solid #0E2236;border-radius:5px;font-size:13px;font-family:Inter,sans-serif}
+#signin_pharma_dash .ph-search input:focus{outline:none;border-color:#185FA5}
+#signin_pharma_dash .ph-search button{padding:9px 14px;background:#0E2236;color:#85B7EB;border:none;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.06em}
+#signin_pharma_dash .ph-search button:hover{background:#185FA5;color:#fff}
+#signin_pharma_dash .ph-resultmeta{display:flex;justify-content:space-between;align-items:center;font-family:Inter,sans-serif;font-size:11px;color:#6B7280;margin:8px 2px 6px}
+#signin_pharma_dash .ph-resultmeta b{color:#0E2236;font-weight:700;font-family:'EB Garamond',serif;font-size:14px}
+#signin_pharma_dash .ph-export{display:flex;gap:4px}
+#signin_pharma_dash .ph-export button{padding:5px 10px;background:#fff;border:.5px solid #185FA5;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#185FA5;font-weight:700;cursor:pointer;letter-spacing:.06em}
+#signin_pharma_dash .ph-export button:hover{background:#185FA5;color:#fff}
+#signin_pharma_dash .ph-case-list{display:flex;flex-direction:column;gap:6px;max-height:520px;overflow-y:auto;border-top:.5px solid rgba(14,34,54,.1);padding-top:8px}
+#signin_pharma_dash .ph-case{display:grid;grid-template-columns:48px 1fr auto;gap:9px;align-items:center;padding:9px 11px;background:#F5F1E8;border-left:3px solid #185FA5;border-radius:5px;cursor:pointer;transition:all .15s}
+#signin_pharma_dash .ph-case:hover{background:#E6F1FB;transform:translateX(2px)}
+#signin_pharma_dash .ph-case.sev-3{border-left-color:#9B2D2D}
+#signin_pharma_dash .ph-case.sev-2{border-left-color:#BA7517}
+#signin_pharma_dash .ph-case.sev-1{border-left-color:#1d6841}
+#signin_pharma_dash .ph-case .cid{font-family:'JetBrains Mono',monospace;font-size:10px;color:#185FA5;font-weight:700;letter-spacing:.04em}
+#signin_pharma_dash .ph-case .cmain{flex:1}
+#signin_pharma_dash .ph-case .cmain b{font-size:12.5px;color:#0E2236;font-weight:600;display:block}
+#signin_pharma_dash .ph-case .cmain span{font-size:10.5px;color:#6B7280;display:block;margin-top:1px;line-height:1.5}
+#signin_pharma_dash .ph-case .csev{font-size:9.5px;font-weight:700;padding:3px 7px;border-radius:999px;background:#fff;font-family:Inter,sans-serif;text-align:center;white-space:nowrap}
+#signin_pharma_dash .ph-case.sev-3 .csev{color:#9B2D2D;border:.5px solid #9B2D2D}
+#signin_pharma_dash .ph-case.sev-2 .csev{color:#BA7517;border:.5px solid #BA7517}
+#signin_pharma_dash .ph-case.sev-1 .csev{color:#1d6841;border:.5px solid #1d6841}
+#signin_pharma_dash .ph-signal{display:grid;grid-template-columns:1fr 60px 60px;gap:8px;align-items:center;padding:9px 11px;background:#F5F1E8;border-radius:5px;margin-bottom:5px;font-family:Inter,sans-serif}
+#signin_pharma_dash .ph-signal .sg-lab{font-size:11.5px;color:#0E2236;font-weight:600}
+#signin_pharma_dash .ph-signal .sg-sub{font-size:9.5px;color:#6B7280;margin-top:1px}
+#signin_pharma_dash .ph-signal .sg-bar{height:6px;background:#fff;border-radius:3px;overflow:hidden;border:.5px solid #d1d5db}
+#signin_pharma_dash .ph-signal .sg-bar div{height:100%;background:linear-gradient(90deg,#185FA5,#9B2D2D)}
+#signin_pharma_dash .ph-signal .sg-val{font-family:"EB Garamond",serif;font-size:13px;color:#0E2236;font-weight:700;text-align:right}
+#signin_pharma_dash .ph-signal .sg-flag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;text-align:center;font-family:'JetBrains Mono',monospace}
+#signin_pharma_dash .ph-signal .sg-flag.high{background:#9B2D2D;color:#fff}
+#signin_pharma_dash .ph-signal .sg-flag.mid{background:#FAF3DF;color:#9B2D2D;border:.5px solid #BA7517}
+#signin_pharma_dash .ph-signal .sg-flag.low{background:#E1F5EE;color:#0F6E56}
+#signin_pharma_dash .ph-timeline{position:relative;padding:8px 0 4px 14px;border-left:.5px solid rgba(14,34,54,.2);margin-top:8px}
+#signin_pharma_dash .ph-tlitem{position:relative;padding-bottom:9px;font-family:Inter,sans-serif}
+#signin_pharma_dash .ph-tlitem::before{content:"";position:absolute;left:-18px;top:5px;width:7px;height:7px;border-radius:50%;background:#185FA5;border:1.5px solid #F5F1E8}
+#signin_pharma_dash .ph-tlitem .tld{font-family:'JetBrains Mono',monospace;font-size:9px;color:#185FA5;font-weight:700}
+#signin_pharma_dash .ph-tlitem .tlt{font-size:11.5px;color:#0E2236;font-weight:600;margin-top:1px}
+#signin_pharma_dash .ph-tlitem .tls{font-size:10px;color:#6B7280;margin-top:1px;line-height:1.5}
+#signin_pharma_dash .ph-modal{position:fixed;inset:0;background:rgba(14,34,54,.6);display:none;align-items:flex-end;justify-content:center;z-index:200;padding:0}
+#signin_pharma_dash .ph-modal.show{display:flex;animation:phFade .3s}
+@keyframes phFade{from{opacity:0}to{opacity:1}}
+#signin_pharma_dash .ph-modal-frame{width:100%;max-width:420px;max-height:88vh;overflow-y:auto;background:#F5F1E8;border-radius:18px 18px 0 0;padding:0 16px 36px;font-family:"EB Garamond",serif}
+#signin_pharma_dash .ph-modal-close{position:sticky;top:0;display:flex;justify-content:flex-end;background:#F5F1E8;padding:11px 0 7px;font-family:Inter,sans-serif;z-index:5}
+#signin_pharma_dash .ph-modal-close button{font-size:13px;color:#0E2236;background:none;border:.5px solid #0E2236;border-radius:999px;padding:5px 14px;cursor:pointer;font:inherit;font-weight:600}
+#signin_pharma_dash .ph-modal h2{font-family:"EB Garamond",serif;font-size:19px;color:#0E2236;font-weight:600}
+#signin_pharma_dash .ph-modal .pmh{font-family:Inter,sans-serif;font-size:10px;color:#185FA5;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-bottom:.5px solid #185FA5;padding-bottom:4px;margin:14px 0 7px}
+#signin_pharma_dash .ph-modal .pmrow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px dashed rgba(14,34,54,.1);font-family:Inter,sans-serif;font-size:11.5px;color:#0E2236}
+#signin_pharma_dash .ph-modal .pmrow b{color:#185FA5;font-weight:700;font-family:'EB Garamond',serif;font-size:13px}
+#signin_pharma_dash .ph-roi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:9px}
+#signin_pharma_dash .ph-roi{background:#F5F1E8;border-left:2px solid #185FA5;border-radius:5px;padding:8px 10px;font-family:Inter,sans-serif}
+#signin_pharma_dash .ph-roi .l{font-size:9px;color:#6B7280;letter-spacing:.06em;font-weight:700;text-transform:uppercase}
+#signin_pharma_dash .ph-roi .v{font-family:"EB Garamond",serif;font-size:18px;font-weight:700;color:#0E2236;line-height:1;margin-top:3px}
+#signin_pharma_dash .ph-livedot{width:8px;height:8px;border-radius:50%;background:#7BC97B;box-shadow:0 0 0 0 rgba(123,201,123,.7);animation:phLiveDot 1.8s infinite;display:inline-block;vertical-align:-1px;margin-right:6px}
+@keyframes phLiveDot{0%{box-shadow:0 0 0 0 rgba(123,201,123,.7)}70%{box-shadow:0 0 0 8px rgba(123,201,123,0)}100%{box-shadow:0 0 0 0 rgba(123,201,123,0)}}
+/* Layer1/Layer2 */
+#signin_pharma_dash .ph-layer-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+#signin_pharma_dash .ph-layer{padding:10px 11px;border-radius:6px;font-family:Inter,sans-serif}
+#signin_pharma_dash .ph-layer.l1{background:linear-gradient(135deg,#FAF3DF,#F5F1E8);border:.5px solid #B8954A}
+#signin_pharma_dash .ph-layer.l2{background:linear-gradient(135deg,#E6F1FB,#F5F1E8);border:.5px solid #185FA5}
+#signin_pharma_dash .ph-layer .ll-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+#signin_pharma_dash .ph-layer .ll-tag{font-family:"JetBrains Mono",monospace;font-size:8px;font-weight:700;padding:2px 7px;border-radius:999px;letter-spacing:.06em}
+#signin_pharma_dash .ph-layer.l1 .ll-tag{background:#B8954A;color:#fff}
+#signin_pharma_dash .ph-layer.l2 .ll-tag{background:#185FA5;color:#fff}
+#signin_pharma_dash .ph-layer .ll-price{font-family:"EB Garamond",serif;font-size:13px;font-weight:700}
+#signin_pharma_dash .ph-layer.l1 .ll-price{color:#854F0B}
+#signin_pharma_dash .ph-layer.l2 .ll-price{color:#0C447C}
+#signin_pharma_dash .ph-layer .ll-title{font-family:"EB Garamond",serif;font-size:14px;font-weight:600;color:#0E2236;margin-bottom:5px}
+#signin_pharma_dash .ph-layer ul{list-style:none;padding:0;margin:0}
+#signin_pharma_dash .ph-layer li{font-size:10.5px;color:#0E2236;line-height:1.55;padding:2px 0;display:flex;align-items:flex-start;gap:5px}
+#signin_pharma_dash .ph-layer li::before{content:"●";color:#B8954A;font-size:8px;flex-shrink:0;margin-top:2px}
+#signin_pharma_dash .ph-layer.l2 li::before{color:#185FA5}
+/* Tier取得サイクル */
+#signin_pharma_dash .ph-tier-row{display:grid;grid-template-columns:60px 1fr 70px 90px;gap:10px;align-items:center;padding:8px 10px;background:#F5F1E8;border-radius:5px;margin-bottom:5px;font-family:Inter,sans-serif}
+#signin_pharma_dash .ph-tier-row .tier-tag{font-family:"JetBrains Mono",monospace;font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;text-align:center}
+#signin_pharma_dash .ph-tier-row.t1 .tier-tag{background:#0F6E56;color:#fff}
+#signin_pharma_dash .ph-tier-row.t2 .tier-tag{background:#B8954A;color:#fff}
+#signin_pharma_dash .ph-tier-row.t3 .tier-tag{background:#9B2D2D;color:#fff}
+#signin_pharma_dash .ph-tier-row .tier-lab{font-size:11px;color:#0E2236;font-weight:600}
+#signin_pharma_dash .ph-tier-row .tier-sub{font-size:9.5px;color:#6B7280;margin-top:1px}
+#signin_pharma_dash .ph-tier-row .tier-bar{height:8px;background:#fff;border:.5px solid #d1d5db;border-radius:4px;overflow:hidden}
+#signin_pharma_dash .ph-tier-row .tier-bar div{height:100%;background:linear-gradient(90deg,#185FA5,#0F6E56)}
+#signin_pharma_dash .ph-tier-row .tier-val{font-family:"EB Garamond",serif;font-size:13px;font-weight:700;color:#0E2236;text-align:right}
+/* コホート比較 */
+#signin_pharma_dash .ph-coh-tabs{display:flex;gap:0;border:.5px solid #185FA5;border-radius:5px;overflow:hidden;margin-top:8px;font-family:"JetBrains Mono",monospace}
+#signin_pharma_dash .ph-coh-tab{flex:1;padding:7px 6px;background:#fff;color:#185FA5;border:none;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:.04em;font:inherit}
+#signin_pharma_dash .ph-coh-tab.on{background:#185FA5;color:#fff}
+#signin_pharma_dash .ph-coh-tab:not(:last-child){border-right:.5px solid #185FA5}
+#signin_pharma_dash .ph-coh-row{display:grid;grid-template-columns:1fr 90px 90px 60px;gap:8px;align-items:center;padding:7px 10px;background:#F5F1E8;border-radius:5px;margin-bottom:4px;font-family:Inter,sans-serif}
+#signin_pharma_dash .ph-coh-row.head{background:#0E2236;color:#F0C97A;font-size:9px;letter-spacing:.06em;font-weight:700;text-transform:uppercase}
+#signin_pharma_dash .ph-coh-row .cr-lab{font-size:11px;color:#0E2236;font-weight:600}
+#signin_pharma_dash .ph-coh-row .cr-a{font-family:"EB Garamond",serif;font-size:13px;font-weight:700;color:#185FA5;text-align:right}
+#signin_pharma_dash .ph-coh-row .cr-b{font-family:"EB Garamond",serif;font-size:13px;color:#6B7280;text-align:right}
+#signin_pharma_dash .ph-coh-row .cr-diff{font-size:10.5px;font-weight:700;text-align:right;font-family:"EB Garamond",serif}
+#signin_pharma_dash .ph-coh-row .cr-diff.up{color:#9B2D2D}
+#signin_pharma_dash .ph-coh-row .cr-diff.dn{color:#1d6841}
+/* バイオマーカー/遺伝子 */
+#signin_pharma_dash .ph-bm-row{display:grid;grid-template-columns:1fr 70px 70px 50px;gap:8px;align-items:center;padding:7px 10px;background:#F5F1E8;border-radius:5px;margin-bottom:4px;font-family:Inter,sans-serif}
+#signin_pharma_dash .ph-bm-row.head{background:#3C3489;color:#fff;font-size:9px;letter-spacing:.06em;font-weight:700;text-transform:uppercase}
+#signin_pharma_dash .ph-bm-row .bm-lab{font-size:11px;color:#0E2236;font-weight:600}
+#signin_pharma_dash .ph-bm-row .bm-sub{font-size:9px;color:#6B7280;margin-top:1px}
+#signin_pharma_dash .ph-bm-row .bm-pos{font-family:"EB Garamond",serif;font-size:13px;font-weight:700;color:#3C3489;text-align:right}
+#signin_pharma_dash .ph-bm-row .bm-neg{font-family:"EB Garamond",serif;font-size:12px;color:#6B7280;text-align:right}
+#signin_pharma_dash .ph-bm-row .bm-n{font-size:10px;color:#6B7280;text-align:right;font-family:"JetBrains Mono",monospace}
+/* 業務フロー */
+#signin_pharma_dash .ph-wf-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+#signin_pharma_dash .ph-wf{padding:11px 12px;background:#F5F1E8;border-left:3px solid #185FA5;border-radius:5px;font-family:Inter,sans-serif;cursor:pointer;transition:all .15s}
+#signin_pharma_dash .ph-wf:hover{background:#E6F1FB;transform:translateX(2px)}
+#signin_pharma_dash .ph-wf.urgent{border-left-color:#9B2D2D}
+#signin_pharma_dash .ph-wf .wf-tag{font-family:"JetBrains Mono",monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:999px;background:#185FA5;color:#fff;display:inline-block;letter-spacing:.06em}
+#signin_pharma_dash .ph-wf.urgent .wf-tag{background:#9B2D2D}
+#signin_pharma_dash .ph-wf .wf-title{font-size:12px;color:#0E2236;font-weight:700;margin-top:5px}
+#signin_pharma_dash .ph-wf .wf-sub{font-size:10px;color:#6B7280;margin-top:2px;line-height:1.5}
+#signin_pharma_dash .ph-wf .wf-cta{font-family:"JetBrains Mono",monospace;font-size:9px;color:#185FA5;font-weight:700;margin-top:6px;letter-spacing:.06em}
+#signin_pharma_dash .ph-wf.urgent .wf-cta{color:#9B2D2D}
+</style>
+
+<div class="ph-bar">
+  <button class="ph-back" onclick="go('signin')">← ログイン入口へ戻る</button>
+  <span style="font-size:13px;font-weight:900;color:#0E2236;letter-spacing:.02em;font-family:Inter,sans-serif">SAT<span style="color:#0D7377">●</span>I</span>
+  <span class="ph-tag">PHARMA PORTAL</span>
+</div>
+
+<div class="ph-pad">
+  <!-- ヒーロー -->
+  <div class="ph-hero">
+    <div class="ph-eyebrow" style="color:#85B7EB">▸ PHARMACEUTICAL PARTNER PORTAL — v11</div>
+    <div style="display:flex;align-items:baseline;gap:8px;margin-top:6px"><span style="font-family:'EB Garamond',serif;font-size:24px;font-weight:600;color:#F0C97A">限定PV報告閲覧</span><span style="font-size:13px;color:rgba(245,241,232,.75);font-style:italic;font-family:'EB Garamond',serif">— 自社薬の市販後リアルワールド</span></div>
+    <div style="font-size:12px;color:rgba(245,241,232,.78);margin-top:8px;line-height:1.7">本人同意ベースで取得した <b style="color:#F0C97A">PRO×心理×SDM×自由診療</b> の4軸統合データを、製薬パートナー向けに <b style="color:#F0C97A">検索・抽出・シグナル検出</b> できるダッシュボード。</div>
+    <div class="ph-kpi-grid">
+      <div class="ph-kpi"><div class="l">自社薬 PV報告</div><div class="v"><span id="phKpiReports">1,247</span><small> 件</small></div><div class="d"><span class="ph-livedot"></span><span id="phKpiReportsD">▲ +14 (今日)</span></div></div>
+      <div class="ph-kpi"><div class="l">新規シグナル</div><div class="v"><span id="phKpiSignals">3</span><small> 件</small></div><div class="d" style="color:#F0C97A">⚠ 要確認</div></div>
+      <div class="ph-kpi"><div class="l">4軸取得済</div><div class="v">74<small> %</small></div><div class="d">PRO/PSY/SDM/FRE</div></div>
+      <div class="ph-kpi"><div class="l">契約残期間</div><div class="v">182<small> 日</small></div><div class="d">FY26 PV協賛</div></div>
+    </div>
+  </div>
+
+  <!-- ★Layer1/Layer2 明示（契約内容で見える項目を視覚的に分離） -->
+  <div class="ph-card">
+    <div class="ph-eyebrow">▸ CONTRACT ACCESS — LAYER 1 / LAYER 2</div>
+    <div class="ph-title">契約に応じて <em>見られるデータが変わる</em></div>
+    <div class="ph-layer-grid">
+      <div class="ph-layer l1">
+        <div class="ll-h"><span class="ll-tag">PV協賛 LAYER 1</span><span class="ll-price">¥7.5億/年</span></div>
+        <div class="ll-title">基本パネル（同意ベース）</div>
+        <ul>
+          <li>属性（年齢・性別・地域）</li>
+          <li>がん種・治療段階（ステージ）</li>
+          <li>PRO-CTCAE 5領域 副作用報告</li>
+          <li>基本投薬履歴・既往歴</li>
+          <li>限定PV報告 全社一律閲覧</li>
+        </ul>
+      </div>
+      <div class="ph-layer l2">
+        <div class="ll-h"><span class="ll-tag">データ販売 LAYER 2</span><span class="ll-price">+¥3.0万/件</span></div>
+        <div class="ll-title">深掘りパネル（追加同意）</div>
+        <ul>
+          <li>4軸統合（心理×自由診療×SDM×PRO）</li>
+          <li>遺伝子データ全項目（韓国経由）</li>
+          <li>バイオマーカー陽性/陰性別</li>
+          <li>縦断的予後・経済影響</li>
+          <li>個別症例ドリルダウン詳細</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ph-mono" style="margin-top:8px;line-height:1.55">▸ Layer 1 は契約期間中フリーアクセス／Layer 2 は症例単位の追加同意が前提。本人同意の範囲のみ・JOiNT諮問監督下</div>
+  </div>
+
+  <!-- ★データ取得サイクル Tier1-3（絵に描いた餅化防止のKPI実測） -->
+  <div class="ph-card">
+    <div class="ph-eyebrow">▸ DATA ACQUISITION CYCLE — TIER 1/2/3</div>
+    <div class="ph-title">取得サイクル <em>3階層</em>の実測（30日）</div>
+    <div style="margin-top:9px">
+      <div class="ph-tier-row t1"><div class="tier-tag">TIER 1</div><div><div class="tier-lab">日次取得（AIコンシェル会話）</div><div class="tier-sub">PRO-CTCAE / 心理タグ / 副作用即時</div></div><div class="tier-bar"><div style="width:82%"></div></div><div class="tier-val">82<small style="font-size:9px;color:#6B7280">%</small></div></div>
+      <div class="ph-tier-row t2"><div class="tier-tag">TIER 2</div><div><div class="tier-lab">週次取得（SDM・自由診療検討）</div><div class="tier-sub">SDMカード / 治療継続意向 / セカンドオピニオン</div></div><div class="tier-bar"><div style="width:61%"></div></div><div class="tier-val">61<small style="font-size:9px;color:#6B7280">%</small></div></div>
+      <div class="ph-tier-row t3"><div class="tier-tag">TIER 3</div><div><div class="tier-lab">月次取得（縦断的予後・経済影響）</div><div class="tier-sub">就労状況 / 家族影響 / 受診継続</div></div><div class="tier-bar"><div style="width:38%"></div></div><div class="tier-val">38<small style="font-size:9px;color:#6B7280">%</small></div></div>
+    </div>
+    <div class="ph-mono" style="margin-top:7px;line-height:1.55">▸ AIコンシェルジュ起点の自然取得＋本ダッシュボード実測KPIで「データが取れていない」を可視化</div>
+  </div>
+
+  <!-- ★PV報告検索・フィルター -->
+  <div class="ph-card">
+    <div class="ph-eyebrow">▸ PV REPORT SEARCH — MULTI-FILTER</div>
+    <div class="ph-title">PV報告を <em>検索・抽出</em></div>
+    <div class="ph-filter-grid" style="margin-top:9px">
+      <select id="phFltDrug"><option value="">薬剤名（全件）</option><option>自社薬A（オンコロジー）</option><option>自社薬B（婦人科）</option><option>自社薬C（血液腫瘍）</option><option>自社薬D（希少がん）</option></select>
+      <select id="phFltCancer"><option value="">がん種（全件）</option><option>乳がん</option><option>肺がん</option><option>大腸がん</option><option>胃がん</option><option>子宮頸がん</option><option>すい臓がん</option><option>悪性リンパ腫</option><option>白血病</option></select>
+      <select id="phFltSev"><option value="">重症度（全件）</option><option value="3">Grade 3-4（重症）</option><option value="2">Grade 2（中等度）</option><option value="1">Grade 1（軽度）</option></select>
+      <select id="phFltRegion"><option value="">地域（全件）</option><option>北海道</option><option>東北</option><option>関東</option><option>中部</option><option>近畿</option><option>中国</option><option>四国</option><option>九州沖縄</option></select>
+      <select id="phFltAge"><option value="">年齢層（全件）</option><option>30未満（AYA）</option><option>30-49</option><option>50-64</option><option>65-74</option><option>75以上</option></select>
+      <select id="phFltPeriod"><option value="">期間（全件）</option><option value="7">過去7日</option><option value="30">過去30日</option><option value="90">過去90日</option><option value="365">過去1年</option></select>
+    </div>
+    <div class="ph-search"><input id="phSearchKw" type="text" placeholder="副作用・症状でフリーワード検索（例：脱毛、倦怠感、間質性肺炎）"><button onclick="phRunSearch()">SEARCH</button></div>
+    <div class="ph-resultmeta"><span>該当 <b id="phResultCount">1,247</b> 件 ／ 全 <b>1,247</b> 件</span><div class="ph-export"><button onclick="phExport('csv')">CSV ⬇</button><button onclick="phExport('pdf')">PDF ⬇</button><button onclick="phExport('json')">JSON ⬇</button></div></div>
+    <div class="ph-case-list" id="phCaseList"></div>
+  </div>
+
+  <!-- ★シグナル検出ダッシュボード -->
+  <div class="ph-card">
+    <div class="ph-eyebrow">▸ SIGNAL DETECTION</div>
+    <div class="ph-title">シグナル検出 <em>（標準頻度との乖離）</em></div>
+    <div style="margin-top:9px" id="phSignalList"></div>
+    <div class="ph-mono" style="margin-top:7px;line-height:1.5">▸ 自社薬の副作用報告頻度を、添付文書の予測頻度と比較。乖離が大きい項目を自動アラート</div>
+  </div>
+
+  <!-- ★コホート比較分析（自社薬群 vs 全症例 副作用パターン比較） -->
+  <div class="ph-card">
+    <div class="ph-eyebrow">▸ COHORT ANALYSIS — DRUG vs ALL</div>
+    <div class="ph-title">コホート比較 <em>自社薬使用群 vs 全症例</em></div>
+    <div class="ph-coh-tabs" id="phCohTabs">
+      <button class="ph-coh-tab on" data-coh="age">年齢層</button>
+      <button class="ph-coh-tab" data-coh="cancer">がん種</button>
+      <button class="ph-coh-tab" data-coh="psy">心理状態</button>
+      <button class="ph-coh-tab" data-coh="combo">併用薬</button>
+    </div>
+    <div style="margin-top:9px" id="phCohList"></div>
+    <div class="ph-mono" style="margin-top:7px;line-height:1.55">▸ 自社薬A使用群（n=1,247）vs 全症例（n=12,847）の副作用発現率を層別化。乖離が大きい層を即特定</div>
+  </div>
+
+  <!-- ★バイオマーカー・遺伝子パネル（Layer 2 核） -->
+  <div class="ph-card">
+    <div class="ph-eyebrow">▸ BIOMARKER / GENOMIC — LAYER 2</div>
+    <div class="ph-title">バイオマーカー・遺伝子データ <em>陽性 vs 陰性別</em></div>
+    <div style="margin-top:9px">
+      <div class="ph-bm-row head"><div>マーカー</div><div style="text-align:right">陽性 効果</div><div style="text-align:right">陰性 効果</div><div style="text-align:right">n</div></div>
+      <div class="ph-bm-row"><div><div class="bm-lab">EGFR変異</div><div class="bm-sub">肺がん／自社薬A</div></div><div class="bm-pos">68.4%</div><div class="bm-neg">22.1%</div><div class="bm-n">428</div></div>
+      <div class="ph-bm-row"><div><div class="bm-lab">HER2陽性</div><div class="bm-sub">乳がん／自社薬B</div></div><div class="bm-pos">74.2%</div><div class="bm-neg">31.5%</div><div class="bm-n">312</div></div>
+      <div class="ph-bm-row"><div><div class="bm-lab">BRCA1/2変異</div><div class="bm-sub">卵巣・乳・前立腺</div></div><div class="bm-pos">52.8%</div><div class="bm-neg">18.4%</div><div class="bm-n">186</div></div>
+      <div class="ph-bm-row"><div><div class="bm-lab">PD-L1高発現</div><div class="bm-sub">複数がん種／免疫CP</div></div><div class="bm-pos">61.3%</div><div class="bm-neg">24.7%</div><div class="bm-n">524</div></div>
+      <div class="ph-bm-row"><div><div class="bm-lab">MSI-High</div><div class="bm-sub">大腸・子宮体／免疫CP</div></div><div class="bm-pos">71.5%</div><div class="bm-neg">15.2%</div><div class="bm-n">147</div></div>
+      <div class="ph-bm-row"><div><div class="bm-lab">TMB-High</div><div class="bm-sub">複数がん種</div></div><div class="bm-pos">58.9%</div><div class="bm-neg">21.6%</div><div class="bm-n">89</div></div>
+      <div class="ph-bm-row"><div><div class="bm-lab">KRAS G12C</div><div class="bm-sub">肺・大腸</div></div><div class="bm-pos">45.2%</div><div class="bm-neg">12.3%</div><div class="bm-n">73</div></div>
+    </div>
+    <div class="ph-mono" style="margin-top:7px;line-height:1.55">▸ 韓国遺伝子検査メーカー経由で取得・本人同意の範囲のみ。Layer 2契約で症例レベルドリルダウン可能</div>
+  </div>
+
+  <!-- ★製薬実務ワークフロー（添付文書改訂提案・学会発表素材） -->
+  <div class="ph-card">
+    <div class="ph-eyebrow">▸ PHARMA WORKFLOW — ACTION QUEUE</div>
+    <div class="ph-title">製薬実務フロー <em>アクション待ち</em></div>
+    <div class="ph-wf-grid">
+      <div class="ph-wf urgent" onclick="phWfOpen('insert')"><span class="wf-tag">URGENT</span><div class="wf-title">添付文書改訂提案 ドラフト</div><div class="wf-sub">自社薬A／間質性肺炎 観察3倍乖離・要対応シグナル。PMDA報告材料を自動生成</div><div class="wf-cta">▸ ドラフトを開く  →</div></div>
+      <div class="ph-wf urgent" onclick="phWfOpen('pmda')"><span class="wf-tag">PMDA</span><div class="wf-title">PMDA安全性情報報告</div><div class="wf-sub">自社薬D／心毒性 観察3.4% vs 予測0.8%・期限15日以内</div><div class="wf-cta">▸ 報告フォームを開く  →</div></div>
+      <div class="ph-wf" onclick="phWfOpen('paper')"><span class="wf-tag">学会発表</span><div class="wf-title">学会発表素材 自動生成</div><div class="wf-sub">自社薬A／コホート分析  ──  要約PDF・グラフ画像・引用準備データを1クリックで</div><div class="wf-cta">▸ 素材を生成  →</div></div>
+      <div class="ph-wf" onclick="phWfOpen('mr')"><span class="wf-tag">MR向け</span><div class="wf-title">MR営業向けインサイト</div><div class="wf-sub">自社薬A コホート別効果データ・医師向け説明資料（コンプライアンスチェック済）</div><div class="wf-cta">▸ 資料パッケージ  →</div></div>
+      <div class="ph-wf" onclick="phWfOpen('package')"><span class="wf-tag">月次パッケージ</span><div class="wf-title">月次安全性レポート</div><div class="wf-sub">自社薬全種／PRO-CTCAE集計・シグナル更新・予測モデル更新</div><div class="wf-cta">▸ 月次PDF生成  →</div></div>
+      <div class="ph-wf" onclick="phWfOpen('audit')"><span class="wf-tag">監査</span><div class="wf-title">アクセス監査ログ</div><div class="wf-sub">過去30日のアクセス／検索／抽出履歴。SOC2・ISO27001準拠の完全ログ</div><div class="wf-cta">▸ 監査ログ閲覧  →</div></div>
+    </div>
+  </div>
+
+  <!-- ★PV協賛 ROI レポート -->
+  <div class="ph-card">
+    <div class="ph-eyebrow">▸ PV SPONSORSHIP ROI — Q SUMMARY</div>
+    <div class="ph-title">PV協賛 <em>提供価値レポート</em>（四半期）</div>
+    <div class="ph-roi-grid">
+      <div class="ph-roi"><div class="l">閲覧可能 PV報告</div><div class="v">1,247<span style="font-size:10px;color:#6B7280"> 件</span></div></div>
+      <div class="ph-roi"><div class="l">検索クエリ実行</div><div class="v">426<span style="font-size:10px;color:#6B7280"> 回</span></div></div>
+      <div class="ph-roi"><div class="l">データ抽出</div><div class="v">38<span style="font-size:10px;color:#6B7280"> 回 (CSV/PDF)</span></div></div>
+      <div class="ph-roi"><div class="l">シグナル検出 早期</div><div class="v">3<span style="font-size:10px;color:#6B7280"> 件</span></div></div>
+      <div class="ph-roi"><div class="l">添付文書改訂提案</div><div class="v">1<span style="font-size:10px;color:#6B7280"> 件</span></div></div>
+      <div class="ph-roi"><div class="l">学会発表 引用準備</div><div class="v">2<span style="font-size:10px;color:#6B7280"> 件</span></div></div>
+    </div>
+    <div class="ph-mono" style="margin-top:8px;line-height:1.55">▸ 契約金 ¥7.5億／年（T1ベース＋限定PV）に対する四半期の利用実績</div>
+  </div>
+
+  <!-- ★アクティビティタイムライン（製薬向けイベント） -->
+  <div class="ph-card">
+    <div class="ph-eyebrow">▸ ACTIVITY TIMELINE — RECENT</div>
+    <div class="ph-title">最近の <em>取得アクティビティ</em></div>
+    <div class="ph-timeline" id="phTimeline"></div>
+  </div>
+
+  <!-- 戻る -->
+  <button onclick="go('signin')" style="width:100%;margin-top:14px;padding:12px;background:#0E2236;color:#F0C97A;border:none;border-radius:6px;font-family:'EB Garamond',serif;font-size:14px;font-weight:600;cursor:pointer">← ログイン入口へ戻る</button>
+  <div class="ph-mono" style="margin-top:10px;line-height:1.65;padding:9px 11px;background:#0E2236;color:#D4A95E;border-radius:6px"><b style="color:#F0C97A">▸ DATA NOTE.</b> 本ポータルは v11 開発前提・社内検証中の数値含む。個別患者情報は表示されません（全件匿名集計）。本人同意の範囲のみ・JOiNT諮問監督下・SOC2/ISO27001準拠。</div>
+</div>
+
+<!-- 個別症例モーダル -->
+<div class="ph-modal" id="phModal">
+  <div class="ph-modal-frame">
+    <div class="ph-modal-close"><button onclick="phCloseModal()">閉じる ✕</button></div>
+    <div class="ph-eyebrow">▸ CASE DETAIL</div>
+    <h2 id="phModalTitle">CASE-2026-001247</h2>
+    <div style="font-size:11px;color:#6B7280;font-family:Inter,sans-serif;margin-top:5px" id="phModalSub"></div>
+    <div class="pmh">▸ 症例基本情報</div>
+    <div id="phModalInfo"></div>
+    <div class="pmh">▸ 4軸データ</div>
+    <div id="phModal4axis"></div>
+    <div class="pmh">▸ 経過タイムライン</div>
+    <div id="phModalTL"></div>
+    <div class="pmh">▸ アクション</div>
+    <div style="display:flex;gap:6px;margin-top:6px"><button onclick="phExport('case-csv')" style="flex:1;padding:9px;background:#fff;border:.5px solid #185FA5;border-radius:5px;font-family:Inter,sans-serif;font-size:11px;color:#185FA5;font-weight:700;cursor:pointer">この症例をCSVに</button><button onclick="phMarkReview()" style="flex:1;padding:9px;background:#185FA5;border:none;border-radius:5px;font-family:Inter,sans-serif;font-size:11px;color:#fff;font-weight:700;cursor:pointer">レビュー済にマーク</button></div>
+  </div>
+</div>
+</section>
+<script>
+(function(){
+  if(window._phInit)return;window._phInit=true;
+  /* ★模擬症例データ（製薬向けPV報告サンプル）*/
+  const DRUGS=['自社薬A（オンコロジー）','自社薬B（婦人科）','自社薬C（血液腫瘍）','自社薬D（希少がん）'];
+  const CANCERS=['乳がん','肺がん','大腸がん','胃がん','子宮頸がん','すい臓がん','悪性リンパ腫','白血病','卵巣がん','前立腺がん'];
+  const ADVERSE=['脱毛','倦怠感','悪心嘔吐','末梢神経障害','間質性肺炎','発熱性好中球減少症','下痢','口内炎','皮膚障害','心毒性','肝機能異常','腎機能障害'];
+  const REGIONS=['北海道','東北','関東','中部','近畿','中国','四国','九州沖縄'];
+  const AGES=['AYA(20代)','30代','40代','50代','60代','70代','80代'];
+  function rand(arr){return arr[Math.floor(Math.random()*arr.length)];}
+  function rangeRand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+  /* 80件の模擬症例を生成（id・薬剤・がん種・副作用・重症度・地域・年齢・日付）*/
+  const ALL_CASES=[];
+  for(let i=1;i<=80;i++){
+    const sev=rangeRand(1,3);
+    const baseDate=new Date(2026,4,1); /* 5/1 base */
+    const offset=rangeRand(0,30);
+    const d=new Date(baseDate.getTime()-offset*86400000);
+    ALL_CASES.push({
+      id:'CASE-2026-'+String(1247-i+1).padStart(6,'0'),
+      drug:rand(DRUGS),cancer:rand(CANCERS),ae:rand(ADVERSE),sev:sev,
+      reg:rand(REGIONS),age:rand(AGES),
+      date:d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0'),
+      psy:rand(['不安強','希望保持','諦め傾向','安定','上向き']),
+      sdm:Math.random()<0.7?'作成済':'未作成',
+      free:Math.random()<0.18?'検討あり':'なし'
+    });
+  }
+  let FILTERED=ALL_CASES.slice();
+
+  function phRenderCases(){
+    const list=document.getElementById('phCaseList');if(!list)return;
+    const show=FILTERED.slice(0,30);
+    list.innerHTML=show.map(function(c){
+      const sevLab=c.sev===3?'重症 G3-4':c.sev===2?'中等度 G2':'軽度 G1';
+      return '<div class="ph-case sev-'+c.sev+'" onclick="phOpenCase(\''+c.id+'\')">'
+        +'<div class="cid">'+c.id.split('-')[2]+'</div>'
+        +'<div class="cmain"><b>'+c.ae+' ／ '+c.cancer+'</b><span>'+c.drug+' ／ '+c.reg+' ／ '+c.age+' ／ '+c.date+'</span></div>'
+        +'<div class="csev">'+sevLab+'</div>'
+        +'</div>';
+    }).join('');
+    document.getElementById('phResultCount').textContent=FILTERED.length.toLocaleString();
+    if(FILTERED.length>30){
+      list.innerHTML+='<div style="text-align:center;padding:10px;font-family:Inter,sans-serif;font-size:11px;color:#6B7280">…他 '+(FILTERED.length-30)+' 件（スクロール/エクスポートで全件）</div>';
+    }
+  }
+  window.phRunSearch=function(){
+    const drug=document.getElementById('phFltDrug').value;
+    const cancer=document.getElementById('phFltCancer').value;
+    const sev=document.getElementById('phFltSev').value;
+    const reg=document.getElementById('phFltRegion').value;
+    const age=document.getElementById('phFltAge').value;
+    const kw=document.getElementById('phSearchKw').value.trim();
+    FILTERED=ALL_CASES.filter(function(c){
+      if(drug && !c.drug.startsWith(drug))return false;
+      if(cancer && c.cancer!==cancer)return false;
+      if(sev && c.sev!==parseInt(sev,10))return false;
+      if(reg && c.reg!==reg)return false;
+      if(age){if(age==='30未満（AYA）'&&!c.age.includes('20'))return false;
+        if(age==='30-49'&&!(c.age.includes('30')||c.age.includes('40')))return false;
+        if(age==='50-64'&&!(c.age.includes('50')||c.age.includes('60')))return false;
+        if(age==='65-74'&&!c.age.includes('70'))return false;
+        if(age==='75以上'&&!c.age.includes('80'))return false;}
+      if(kw && !(c.ae.indexOf(kw)>=0))return false;
+      return true;
+    });
+    phRenderCases();
+  };
+  window.phExport=function(fmt){
+    if(typeof toast==='function')toast(FILTERED.length+'件を '+fmt.toUpperCase()+' エクスポートしました（デモ）');
+  };
+  window.phOpenCase=function(id){
+    const c=ALL_CASES.find(function(x){return x.id===id;});if(!c)return;
+    document.getElementById('phModalTitle').textContent=c.id;
+    document.getElementById('phModalSub').textContent=c.drug+' ／ '+c.cancer+' ／ '+c.reg+' ／ '+c.age+' ／ 報告日 '+c.date;
+    document.getElementById('phModalInfo').innerHTML='<div class="pmrow"><span>主訴 副作用</span><b>'+c.ae+'</b></div><div class="pmrow"><span>重症度（CTCAE）</span><b>G'+c.sev+'</b></div><div class="pmrow"><span>がん種</span><b>'+c.cancer+'</b></div>';
+    document.getElementById('phModal4axis').innerHTML='<div class="pmrow"><span>PRO-CTCAE</span><b>取得済（5領域）</b></div><div class="pmrow"><span>心理タグ</span><b>'+c.psy+'</b></div><div class="pmrow"><span>SDMカード</span><b>'+c.sdm+'</b></div><div class="pmrow"><span>自由診療検討</span><b>'+c.free+'</b></div>';
+    document.getElementById('phModalTL').innerHTML='<div class="pmrow"><span>'+c.date+'</span><b>初発症状を本人入力</b></div><div class="pmrow"><span>'+c.date+' +1日</span><b>AIコンシェルジュ受領</b></div><div class="pmrow"><span>'+c.date+' +2日</span><b>主治医SDMで相談</b></div><div class="pmrow"><span>'+c.date+' +5日</span><b>本人同意取得 → PV報告化</b></div>';
+    document.getElementById('phModal').classList.add('show');
+  };
+  window.phCloseModal=function(){document.getElementById('phModal').classList.remove('show');};
+  window.phMarkReview=function(){if(typeof toast==='function')toast('レビュー済にマークしました（デモ）'); phCloseModal();};
+
+  /* シグナル検出（標準頻度との乖離） */
+  const SIGNALS=[
+    {lab:'間質性肺炎',sub:'自社薬A／肺がん 60代男性',obs:6.2,exp:2.1,flag:'high'},
+    {lab:'発熱性好中球減少症',sub:'自社薬C／白血病 全年齢',obs:14.8,exp:9.4,flag:'mid'},
+    {lab:'末梢神経障害 Grade2+',sub:'自社薬A／乳がん 50代',obs:18.3,exp:15.2,flag:'low'},
+    {lab:'心毒性',sub:'自社薬D／希少がん 60代',obs:3.4,exp:0.8,flag:'high'},
+    {lab:'肝機能異常 Grade3+',sub:'自社薬B／婦人科 40-60代',obs:4.8,exp:4.1,flag:'low'},
+    {lab:'下痢',sub:'自社薬A／大腸がん 全年齢',obs:21.5,exp:18.0,flag:'low'}
+  ];
+  function phRenderSignals(){
+    const el=document.getElementById('phSignalList');if(!el)return;
+    el.innerHTML=SIGNALS.map(function(s){
+      const ratio=Math.min(1,s.obs/(s.exp*3));
+      const flagLab=s.flag==='high'?'要対応':(s.flag==='mid'?'要監視':'正常範囲');
+      return '<div class="ph-signal"><div><div class="sg-lab">'+s.lab+'</div><div class="sg-sub">'+s.sub+'</div></div><div><div class="sg-bar"><div style="width:'+(ratio*100)+'%"></div></div><div class="sg-val">'+s.obs+'<small style="font-size:9px">%</small></div></div><div class="sg-flag '+s.flag+'">'+flagLab+'</div></div>';
+    }).join('');
+  }
+
+  /* タイムライン */
+  const PH_TL=[
+    {d:'06/01 14:23',t:'CSV エクスポート',s:'自社薬A／間質性肺炎フィルター 12件 → ダウンロード'},
+    {d:'06/01 11:08',t:'シグナル検出アラート',s:'自社薬D／心毒性 観察3.4% vs 予測0.8% — 要対応'},
+    {d:'05/31 18:45',t:'新規PV報告 14件',s:'うち自社薬A 8件・自社薬B 4件・自社薬C 2件'},
+    {d:'05/31 09:30',t:'検索クエリ',s:'「末梢神経障害 50代 乳がん」抽出 → 37件'},
+    {d:'05/30 16:12',t:'PDF レポート出力',s:'四半期 PV協賛 ROIレポート（FY26 Q1）'},
+    {d:'05/30 10:55',t:'添付文書改訂提案',s:'自社薬A／間質性肺炎 観察3倍乖離 → 安全性情報部に共有'}
+  ];
+  function phRenderTL(){
+    const el=document.getElementById('phTimeline');if(!el)return;
+    el.innerHTML=PH_TL.map(function(t){return '<div class="ph-tlitem"><div class="tld">'+t.d+'</div><div class="tlt">'+t.t+'</div><div class="tls">'+t.s+'</div></div>';}).join('');
+  }
+
+  /* モーダル外側クリックで閉じる */
+  document.addEventListener('click',function(e){if(e.target.id==='phModal')phCloseModal();});
+
+  /* ★コホート比較分析 */
+  const COHORT={
+    age:[
+      {l:'AYA（20-30代）',a:8.4,b:14.2},
+      {l:'40-50代',a:18.7,b:21.3},
+      {l:'60-70代',a:32.4,b:28.6},
+      {l:'80代以上',a:14.8,b:11.5}
+    ],
+    cancer:[
+      {l:'乳がん',a:24.6,b:18.3},
+      {l:'肺がん（NSCLC）',a:18.2,b:14.7},
+      {l:'大腸がん',a:12.4,b:15.8},
+      {l:'すい臓がん',a:8.6,b:5.2},
+      {l:'希少がん',a:4.8,b:1.7}
+    ],
+    psy:[
+      {l:'不安強',a:42.1,b:31.5},
+      {l:'希望保持',a:28.4,b:35.8},
+      {l:'諦め傾向',a:14.2,b:18.7},
+      {l:'安定',a:15.3,b:14.0}
+    ],
+    combo:[
+      {l:'免疫CP併用',a:18.4,b:8.2},
+      {l:'分子標的併用',a:14.2,b:12.6},
+      {l:'放射線併用',a:11.8,b:9.4},
+      {l:'手術後補助',a:24.6,b:28.3},
+      {l:'モノ療法',a:31.0,b:41.5}
+    ]
+  };
+  let cohTab='age';
+  function phRenderCoh(){
+    const list=document.getElementById('phCohList');if(!list)return;
+    const rows=COHORT[cohTab]||[];
+    let html='<div class="ph-coh-row head"><div>層</div><div style="text-align:right">自社薬A</div><div style="text-align:right">全症例</div><div style="text-align:right">乖離</div></div>';
+    rows.forEach(function(r){
+      const diff=r.a-r.b;
+      const sign=diff>0?'+':'';
+      const cls=Math.abs(diff)<2?'':(diff>0?'up':'dn');
+      html+='<div class="ph-coh-row"><div class="cr-lab">'+r.l+'</div><div class="cr-a">'+r.a+'<small style="font-size:9px;color:#6B7280">%</small></div><div class="cr-b">'+r.b+'<small style="font-size:9px;color:#6B7280">%</small></div><div class="cr-diff '+cls+'">'+sign+diff.toFixed(1)+'pt</div></div>';
+    });
+    list.innerHTML=html;
+  }
+  function phSetupCohTabs(){
+    document.querySelectorAll('#phCohTabs .ph-coh-tab').forEach(function(b){
+      b.addEventListener('click',function(){
+        document.querySelectorAll('#phCohTabs .ph-coh-tab').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');cohTab=b.dataset.coh;phRenderCoh();
+      });
+    });
+  }
+
+  /* ★業務ワークフロー（ドラフト/PMDA/学会/MR/月次/監査） */
+  const WF_DETAIL={
+    insert:{title:'添付文書改訂提案ドラフト',body:'自社薬A／間質性肺炎の改訂案ドラフトを生成しました。観察頻度3.2% vs 添付文書記載1.0%。Grade3-4症例6件分のサマリ付き。PMDA安全性情報部への提出フォーマットに整形済み。'},
+    pmda:{title:'PMDA安全性情報報告',body:'自社薬D／心毒性の重篤副作用報告フォームを開きます。観察頻度3.4% vs 予測0.8%。期限まで15日。Grade3-4症例3件のCASE-REPORT形式ドラフト同梱。'},
+    paper:{title:'学会発表素材',body:'自社薬A／コホート分析の要約PDF＋グラフ画像（PNG/SVG）＋引用準備データセットを生成しました。日本臨床腫瘍学会・ASCO発表向けテンプレに最適化。'},
+    mr:{title:'MR向けインサイトパッケージ',body:'医師向け説明資料／コホート別効果データ／競合比較カード／FAQ集を生成しました。法務・コンプライアンスチェック済。営業所別配布も対応。'},
+    package:{title:'月次安全性レポート',body:'自社薬全種のPRO-CTCAE集計・シグナル検出更新・予測モデル更新を月次PDFとして生成。社内安全性情報委員会・PMDA定期報告に直接利用可能。'},
+    audit:{title:'アクセス監査ログ',body:'過去30日のアクセス／検索／抽出履歴を表示します。ユーザー別・部門別・操作種別でフィルター可能。SOC2・ISO27001監査対応。'}
+  };
+  window.phWfOpen=function(key){
+    const d=WF_DETAIL[key];if(!d)return;
+    if(typeof toast==='function')toast(d.title+' / '+d.body.slice(0,40)+'…（デモ）');
+  };
+
+  window._oninit=window._oninit||{};
+  window._oninit['signin_pharma_dash']=function(){
+    phRenderCases();
+    phRenderSignals();
+    phRenderTL();
+    phRenderCoh();
+    phSetupCohTabs();
+  };
+})();
+</script>
+
 <!-- ============ 会員登録のお願い（個人機能ゲート）============ -->
 <section class="scr" id="memberwall">
   <div class="pad" style="padding-top:24px">
@@ -2929,7 +3720,8 @@ window._oninit['next_horizon_bridge']=function(){
       <button class="navrow" onclick="go('about')"><span><i class="ti ti-info-circle" style="color:var(--sub)"></i> SATOIについて</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('voice_settings')"><span><i class="ti ti-microphone" style="color:var(--teal)"></i> 話し方の設定（声・速度・方言・確認）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
       <button class="navrow" onclick="go('references')"><span><i class="ti ti-list" style="color:#B5701B"></i> 参考にしているガイドライン・引用一覧（ガバナンス）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
-      <button class="navrow" style="border-bottom:none;background:#F5F1E8" onclick="go('investor')"><span><i class="ti ti-presentation-analytics" style="color:#B8954A"></i> <span style="font-family:'EB Garamond',serif;font-style:italic;color:#0E2236">Investor</span> モード（裏面・関係者用）</span><i class="ti ti-chevron-right" style="color:#B8954A"></i></button>
+      <button class="navrow" onclick="go('investor')"><span><i class="ti ti-presentation-analytics" style="color:#B8954A"></i> <span style="font-family:'EB Garamond',serif;font-style:italic;color:#0E2236">Investor</span> モード（裏面・関係者用）</span><i class="ti ti-chevron-right" style="color:#B8954A"></i></button>
+      <button class="navrow" style="border-bottom:none;background:#FBF7F0" onclick="signoutDemo()"><span><i class="ti ti-logout" style="color:var(--mute)"></i> ログイン入口に戻る（サインアウト・デモ用）</span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
     </div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -8047,7 +8839,7 @@ function openPillar(n){var p=PILLARS[n];document.getElementById('tdTitle').textC
 <script>
 /* ===== 乳がん：章まるごと級コンテンツ（インサイト起点のwow声 ＋ 用語ノード ＋ 下部に専門モード／ログインの扉） =====
    各種診療ガイドライン・公開情報（国立がん研究センター等）を参照し、
-   出典は公開ソース（国立がん研究センター／日本乳癌学会GL／JCPM）に紐づけてSATOIが独自に再構成。
+   出典は公開ソース（国立がん研究センター／日本乳癌学会ガイドライン／各種プレシジョン医療公開資料）に紐づけてSATOIが独自に再構成。
    図表の転載ではなく、SATOIの言葉による要約・再構成。 */
 var BC_LVL='n';
 var BC_SRC='出典：国立がん研究センター がん情報サービス「乳がん」／日本乳癌学会「乳癌診療ガイドライン2022年版」「患者さんのための乳がん診療ガイドライン2023年版」／UICC TNM分類 第8版。各種診療ガイドラインを参照し、SATOIが独自に再構成しました。最終的な診断・治療は必ず担当医にご確認ください（公開時に専門医監修を入れます）。';
@@ -8343,7 +9135,7 @@ window._oninit['bccare']=function(){BC_PRO_OPEN=false;bccLvl('n');};
 </section>
 <script>
 /* 多がん種エンジン：CAN_DATA駆動。乳がん(bccare)と同じ型（wow声・2層・用語ノード・専門モード）。
-   出典は公開ソース（国立がん研究センター／各学会GL／JCPM）。各種診療ガイドライン・公開情報を参照しSATOIが独自再構成。
+   出典は公開ソース（国立がん研究センター／各学会ガイドライン／各種プレシジョン医療公開資料）。各種診療ガイドライン・公開情報を参照しSATOIが独自再構成。
    tlink() は bccare スクリプトで定義済（先に実行されるため利用可）。 */
 var CAN_LVL='n', CAN_CUR='lung', CAN_PRO_OPEN=false;
 var CAN_DATA={
@@ -9937,7 +10729,7 @@ function drJump(id){var e=document.getElementById(id);if(e)e.scrollIntoView({beh
     <button class="btn btn-out" style="margin-top:10px" onclick="openHospGenome()"><i class="ti ti-building-hospital" style="vertical-align:-2px;color:var(--blue)"></i> 病院をさがす（がんゲノム医療 対応）</button>
     <button class="btn btn-out" style="margin-top:10px" onclick="go('precfac')"><i class="ti ti-dna-2" style="vertical-align:-2px;color:var(--blue)"></i> プレシジョンに取り組む医療機関を見る</button>
 
-    <div class="note" style="margin-top:16px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：一般社団法人 日本がん臨床プレシジョンメディシン研究会（JCPM）／国立がん研究センター「がんゲノム医療」／厚生労働省。本ページはSATOIがやさしく要約したものです（公開時に専門医監修）。判断は主治医とご相談ください。</div>
+    <div class="note" style="margin-top:16px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター「がんゲノム医療」／厚生労働省／プレシジョン医療学会公開資料。本ページはSATOIがやさしく要約したものです（公開時に専門医監修）。判断は主治医とご相談ください。</div>
 
     <div style="font-size:14px;font-weight:600;margin:18px 0 10px">次の一歩</div>
     <div class="row2">
@@ -9963,7 +10755,7 @@ function drJump(id){var e=document.getElementById(id);if(e)e.scrollIntoView({beh
     <div style="font-size:15px;font-weight:600;margin:22px 0 8px;color:#26303F"><i class="ti ti-leaf" style="vertical-align:-2px;color:var(--amber)"></i> 自由診療（保険外）の精密医療に取り組む医療機関</div>
     <div class="info" style="margin-bottom:10px"><i class="ti ti-info-circle" style="font-size:17px;color:var(--blue)"></i><div>以下は保険外（自由診療）の例です。費用やエビデンスはさまざまです。まず保険の標準治療・がんゲノム医療を主治医とご相談のうえ、慎重にご検討ください。</div></div>
     <div id="precfacList"></div>
-    <div class="note" style="margin-top:12px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：JCPM（日本がん臨床プレシジョンメディシン研究会）実施医療機関 一覧 等の公開情報。掲載は情報提供で、特定の医療機関を推奨するものではありません。</div>
+    <div class="note" style="margin-top:12px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：プレシジョン医療実施医療機関の公開情報。掲載は情報提供で、特定の医療機関を推奨するものではありません。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -10795,6 +11587,19 @@ function doLogin(p){
   if(typeof toast==='function')toast('おかえりなさい。');
   if(needsProfileSetup()){go('profilesetup');}else{afterAuth();}
 }
+/* ★サインアウト（デモ用）：localStorageクリア＋signinピッカーへ戻る */
+function signoutDemo(){
+  window._isMember=false;
+  try{
+    localStorage.removeItem('satoi_ins_member');
+    /* プロファイル等は残す：再ログイン時の体験継続のため。完全消去したい場合は下記を有効化
+    localStorage.removeItem('satoi_profile');
+    localStorage.removeItem('satoi_name');
+    */
+  }catch(e){}
+  if(typeof toast==='function')toast('ログイン入口に戻りました（デモ）');
+  go('signin');
+}
 /* ★signinピッカー：5入口の切替＋遷移（投資家向けデモ用） */
 function signinPick(kind, el){
   /* 選択ハイライト更新 */
@@ -10824,8 +11629,8 @@ function signinPick(kind, el){
     if(hint){hint.innerHTML='<i class="ti ti-presentation-analytics" style="vertical-align:-2px;color:#3C3489"></i> <b>Investorモード</b>（関係者用ダッシュボード）へ移動します。';}
     setTimeout(function(){go('investor');}, 500);
   }else if(kind==='pharma'){
-    if(hint){hint.innerHTML='<i class="ti ti-pill" style="vertical-align:-2px;color:var(--blue-d)"></i> <b>製薬企業向けポータル</b>は準備中です。PV協賛・データ販売の窓口は順次公開予定。';}
-    if(typeof toast==='function')toast('製薬企業向けポータルは準備中です');
+    if(hint){hint.innerHTML='<i class="ti ti-pill" style="vertical-align:-2px;color:var(--blue-d)"></i> <b>製薬企業向けポータル</b>へ移動します。PV報告検索・シグナル検出・データ抽出が開きます。';}
+    setTimeout(function(){go('signin_pharma_dash');}, 500);
   }else if(kind==='corporate'){
     if(hint){hint.innerHTML='<i class="ti ti-briefcase" style="vertical-align:-2px;color:#72243E"></i> <b>保険会社業務用ポータル</b>へ移動します。請求前動向・4軸データ・パートナー価値レポートが開きます。';}
     setTimeout(function(){go('signin_corp_dash');}, 500);
