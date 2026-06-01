@@ -4409,16 +4409,16 @@ window._oninit['ai']=function(){
       </div>
       <div id="txBodyWrap" style="position:relative;background:#FFFCF6;border-radius:10px;overflow:hidden;aspect-ratio:3/4;max-width:300px;margin:0 auto;border:.5px solid var(--teal)">
         <img src="img/001_図.png" alt="体の部位図"
-             style="position:absolute;left:-12%;top:0;width:124%;height:100%;object-fit:cover;display:block"
+             style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"
              onerror="this.style.display='none';document.getElementById('txBodyFallback').style.display='flex'">
         <div style="position:absolute;inset:0" id="txBodyZones">
-          <button class="tx-zone" data-z="5" onclick="txBodyZone(this,5)" style="position:absolute;left:36%;top:2%;width:28%;height:9%" aria-label="脳"></button>
-          <button class="tx-zone" data-z="1" onclick="txBodyZone(this,1)" style="position:absolute;left:30%;top:11%;width:40%;height:12%" aria-label="頭頸部"></button>
-          <button class="tx-zone" data-z="2" onclick="txBodyZone(this,2)" style="position:absolute;left:30%;top:24%;width:40%;height:14%" aria-label="胸"></button>
-          <button class="tx-zone" data-z="3" onclick="txBodyZone(this,3)" style="position:absolute;left:30%;top:39%;width:40%;height:16%" aria-label="お腹"></button>
-          <button class="tx-zone" data-z="4" onclick="txBodyZone(this,4)" style="position:absolute;left:30%;top:56%;width:40%;height:14%" aria-label="骨盤"></button>
-          <button class="tx-zone" data-z="6" onclick="txBodyZone(this,6)" style="position:absolute;left:5%;top:30%;width:18%;height:22%" aria-label="皮膚"></button>
-          <button class="tx-zone" data-z="7" onclick="txBodyZone(this,7)" style="position:absolute;left:77%;top:30%;width:18%;height:22%" aria-label="血液リンパ"></button>
+          <button class="tx-zone" data-z="5" onclick="txBodyZone(this,5)" style="position:absolute;left:40%;top:6%;width:20%;height:8%" aria-label="脳"></button>
+          <button class="tx-zone" data-z="1" onclick="txBodyZone(this,1)" style="position:absolute;left:36%;top:14%;width:28%;height:9%" aria-label="頭頸部"></button>
+          <button class="tx-zone" data-z="2" onclick="txBodyZone(this,2)" style="position:absolute;left:22%;top:23%;width:56%;height:13%" aria-label="胸"></button>
+          <button class="tx-zone" data-z="3" onclick="txBodyZone(this,3)" style="position:absolute;left:32%;top:36%;width:36%;height:11%" aria-label="お腹"></button>
+          <button class="tx-zone" data-z="4" onclick="txBodyZone(this,4)" style="position:absolute;left:32%;top:47%;width:36%;height:12%" aria-label="骨盤"></button>
+          <button class="tx-zone" data-z="6" onclick="txBodyZone(this,6)" style="position:absolute;left:6%;top:30%;width:14%;height:35%" aria-label="皮膚"></button>
+          <button class="tx-zone" data-z="7" onclick="txBodyZone(this,7)" style="position:absolute;left:80%;top:30%;width:14%;height:35%" aria-label="血液リンパ"></button>
         </div>
         <div id="txBodyFallback" style="display:none;align-items:center;justify-content:center;position:absolute;inset:0;background:var(--teal-bg);color:var(--teal-d);font-size:12px;line-height:1.7;padding:20px;text-align:center"><div><i class="ti ti-photo-off" style="font-size:30px"></i><div style="margin-top:6px"><b>体の部位図画像を準備中</b></div></div></div>
       </div>
@@ -11997,17 +11997,17 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
       </div>
       <div id="stepCBodyWrap" style="position:relative;background:#FFFCF6;border-radius:10px;overflow:hidden;aspect-ratio:3/4;max-width:340px;margin:0 auto">
         <img id="stepCBodyImg" src="img/001_図.png" alt="体の部位図"
-             style="position:absolute;left:-12%;top:0;width:124%;height:100%;object-fit:cover;object-position:center;display:block"
+             style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block"
              onerror="this.style.display='none';document.getElementById('stepCBodyFallback').style.display='flex'">
-        <!-- クリック領域オーバーレイ（A案と同位置） -->
+        <!-- クリック領域オーバーレイ（新画像 001_図.png 基準） -->
         <div style="position:absolute;inset:0">
-          <button class="ec-zone" style="position:absolute;left:36%;top:2%;width:28%;height:9%" onclick="entryCBodyZone('brain')" aria-label="脳"></button>
-          <button class="ec-zone" style="position:absolute;left:30%;top:11%;width:40%;height:12%" onclick="entryCBodyZone('headneck')" aria-label="頭頸部"></button>
-          <button class="ec-zone" style="position:absolute;left:30%;top:24%;width:40%;height:14%" onclick="entryCBodyZone('chest')" aria-label="胸"></button>
-          <button class="ec-zone" style="position:absolute;left:30%;top:39%;width:40%;height:16%" onclick="entryCBodyZone('abdomen')" aria-label="お腹"></button>
-          <button class="ec-zone" style="position:absolute;left:30%;top:56%;width:40%;height:14%" onclick="entryCBodyZone('pelvis')" aria-label="骨盤"></button>
-          <button class="ec-zone" style="position:absolute;left:5%;top:30%;width:18%;height:22%" onclick="entryCBodyZone('skin')" aria-label="皮膚"></button>
-          <button class="ec-zone" style="position:absolute;left:77%;top:30%;width:18%;height:22%" onclick="entryCBodyZone('blood')" aria-label="血液・リンパ"></button>
+          <button class="ec-zone" style="position:absolute;left:40%;top:6%;width:20%;height:8%" onclick="entryCBodyZone('brain')" aria-label="脳"></button>
+          <button class="ec-zone" style="position:absolute;left:36%;top:14%;width:28%;height:9%" onclick="entryCBodyZone('headneck')" aria-label="頭頸部"></button>
+          <button class="ec-zone" style="position:absolute;left:22%;top:23%;width:56%;height:13%" onclick="entryCBodyZone('chest')" aria-label="胸"></button>
+          <button class="ec-zone" style="position:absolute;left:32%;top:36%;width:36%;height:11%" onclick="entryCBodyZone('abdomen')" aria-label="お腹"></button>
+          <button class="ec-zone" style="position:absolute;left:32%;top:47%;width:36%;height:12%" onclick="entryCBodyZone('pelvis')" aria-label="骨盤"></button>
+          <button class="ec-zone" style="position:absolute;left:6%;top:30%;width:14%;height:35%" onclick="entryCBodyZone('skin')" aria-label="皮膚"></button>
+          <button class="ec-zone" style="position:absolute;left:80%;top:30%;width:14%;height:35%" onclick="entryCBodyZone('blood')" aria-label="血液・リンパ"></button>
         </div>
         <!-- フォールバック（画像が無い時） -->
         <div id="stepCBodyFallback" style="display:none;align-items:center;justify-content:center;position:absolute;inset:0;background:var(--teal-bg);color:var(--teal-d);font-size:13px;line-height:1.8;padding:24px;text-align:center">
