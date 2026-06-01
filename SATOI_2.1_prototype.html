@@ -34,7 +34,7 @@ html,body{margin:0;padding:0;background:#cfd6df;font-family:-apple-system,BlinkM
 .scr{display:none;animation:fade .25s ease}
 .scr.active{display:block}
 @keyframes fade{from{opacity:.4}to{opacity:1}}
-.pad{padding:16px 16px 92px}
+.pad{padding:16px 16px 130px}
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:46;max-width:390px;margin:0 auto;height:64px;display:flex;align-items:stretch;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);border-top:.5px solid var(--line);box-shadow:0 -3px 18px rgba(38,48,63,.07)}
 .tabbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;cursor:pointer;color:var(--mute);font:inherit;padding:7px 0;transition:color .15s}
 .tabbtn .tico{display:flex;align-items:center;justify-content:center;width:42px;height:28px;border-radius:999px;transition:background .15s}
@@ -48,11 +48,12 @@ html,body{margin:0;padding:0;background:#cfd6df;font-family:-apple-system,BlinkM
 .tabbtn.emp .empc i{font-size:25px}
 .tabbtn.emp .tlab{font-weight:600}
 .tabbtn.emp.on .empc{box-shadow:0 6px 22px rgba(13,115,119,.6)}
-.newstk{display:flex;align-items:center;gap:8px;margin-bottom:12px;background:var(--amber-bg2);border:.5px solid var(--amber-line);border-radius:10px;padding:7px 10px;overflow:hidden;cursor:pointer}
-.newstk .nt-badge{flex-shrink:0;font-size:10px;font-weight:600;color:#fff;background:var(--amber);border-radius:6px;padding:2px 7px}
+.newstk{display:flex;align-items:center;gap:9px;margin-bottom:12px;background:var(--amber-bg2);border:1px solid var(--amber-line);border-radius:12px;padding:9px 12px;overflow:hidden;cursor:pointer;box-shadow:0 2px 8px rgba(186,117,23,.08)}
+.newstk .nt-badge{flex-shrink:0;font-size:11px;font-weight:700;color:#fff;background:var(--amber);border-radius:8px;padding:3px 9px;letter-spacing:.04em}
 .newstk .nt-win{flex:1;overflow:hidden;white-space:nowrap;position:relative}
-.newstk .nt-track{display:inline-block;white-space:nowrap;padding-left:100%;animation:ntscroll 22s linear infinite;font-size:12px;color:var(--amber-t)}
+.newstk .nt-track{display:inline-block;white-space:nowrap;padding-left:100%;animation:ntscroll 18s linear infinite;font-size:13px;color:var(--amber-t);font-weight:500}
 .newstk:hover .nt-track{animation-play-state:paused}
+.newstk:active .nt-track{animation-play-state:paused}
 @keyframes ntscroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 .sponsorrow{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 6px;-webkit-overflow-scrolling:touch}
 .sponsorrow::-webkit-scrollbar{height:0}
@@ -784,6 +785,12 @@ window._oninit['yuttari_home']=function(){
 /* 投資家モード入場時は「ゆ」トグルをグレーアウトして、誤って高齢者向けに切り替えてしまう事故を防止 */
 .app:not(.yuttari) #investor ~ * .hbtn-yt,
 .app .hbtn-yt[data-locked="investor"]{opacity:.4;pointer-events:none}
+
+/* ★体の部位図ゾーンボタン（A案：治療ページ＆new_entry_c 共通） */
+.tx-zone,.ec-zone{background:transparent;border:1.4px dashed transparent;cursor:pointer;border-radius:8px;padding:0;transition:all .2s}
+.tx-zone:hover,.tx-zone.active,.tx-zone:focus,
+.ec-zone:hover,.ec-zone.active,.ec-zone:focus{background:rgba(155,45,45,.22);border-color:#9B2D2D;outline:none}
+.tx-zone:focus-visible,.ec-zone:focus-visible{outline:2px solid #9B2D2D;outline-offset:2px}
 </style>
 
 <div class="app" id="app">
@@ -805,7 +812,7 @@ window._oninit['yuttari_home']=function(){
     <button class="hbtn emgdot" onclick="go('emergency')" aria-label="緊急QR・救急時カード" title="緊急QR"><i class="ti ti-urgent"></i></button>
     <!-- ★Katsu指示2026-05-31: ヘッダー4アイコン構成（緊急/検索/ログイン/3本線）に整理。「あ」「ゆ」はハンバーガー内に移動 -->
     <button class="hbtn" onclick="hdrSearchOpen()" aria-label="さがす" title="さがす"><i class="ti ti-search"></i></button>
-    <button class="hbtn" onclick="hdrLoginClick()" aria-label="ログイン / マイページ" title="ログイン / マイページ"><i class="ti ti-user-circle"></i></button>
+    <button class="hbtn" id="hdrMypageBtn" onclick="hdrLoginClick()" aria-label="ログイン / マイページ" title="ログイン / マイページ" style="background:var(--teal-bg);color:var(--teal-d);border:1.5px solid var(--teal);position:relative"><i class="ti ti-user-circle"></i><span style="position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--teal-d);font-weight:700;white-space:nowrap">マイページ</span></button>
     <button class="hbtn" onclick="hdrMenuOpen()" aria-label="メニュー" title="メニュー"><i class="ti ti-menu-2"></i></button>
     <!-- 既存「あ」「ゆ」「検索」ボタンはハンバーガー側に統合。互換のためID/関数は残し非表示 -->
     <button id="langDot" onclick="cycleLang()" data-noi18n style="display:none">あ</button>
@@ -966,57 +973,58 @@ window.hdrSearchVoice=function(){
     </svg>
     <img data-aoi="hero_home" src="img/aoi_hero_home.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
     <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,.3) 48%,rgba(255,255,255,.12))"></div>
-    <div class="t" style="top:34px">
-      <div id="homeGreet" style="font-size:23px;font-weight:600;line-height:1.35;color:#26303F">ようこそ、SATOIへ</div>
-      <div id="homeSub" class="sub" style="margin-top:7px;line-height:1.6">はじめての方も、調べるだけでも大丈夫。<br>あなたのペースで、ゆっくりで。</div>
-      <div id="homeCta" style="display:flex;gap:8px;margin-top:16px">
-        <button class="btn btn-teal" style="width:auto;padding:10px 16px" onclick="go('onboarding')">無料ではじめる</button>
-        <button class="btn btn-out" style="width:auto;padding:10px 16px;background:rgba(255,255,255,.65)" onclick="go('treatment')">まず調べてみる</button>
-      </div>
+    <div class="t" style="top:30px">
+      <div id="homeGreet" style="font-size:24px;font-weight:600;line-height:1.35;color:#26303F">ようこそ、SATOIへ</div>
+      <div id="homeSub" class="sub" style="margin-top:7px;line-height:1.65;font-size:13.5px">はじめての方も、調べるだけでも大丈夫。<br>あなたのペースで、ゆっくりで。</div>
     </div>
   </div>
   <div class="pad">
-    <div class="newstk" onclick="go('news')"><span class="nt-badge"><i class="ti ti-bell" style="vertical-align:-1px"></i> 新着</span><span class="nt-win"><span class="nt-track">子宮頸がんとHPVワクチン：検診の考え方をやさしく更新　・　免疫チェックポイント阻害薬とは？仕組みをやさしく解説　・　高額療養費制度の上限額、知っておきたい基本　・　がんゲノム医療（パネル検査）は保険で受けられる？</span></span><i class="ti ti-chevron-right" style="color:var(--amber);flex-shrink:0"></i></div>
+    <!-- ★最優先CTA：知りたいことから、聞いてみる（告知の確定感なし・コンテンツファースト） -->
+    <button class="card" id="homeEntryCta" style="width:100%;text-align:left;margin-top:4px;margin-bottom:10px;padding:14px 14px;background:#FFFCF6;border:1.5px solid var(--teal);box-shadow:0 4px 12px rgba(13,115,119,.15);cursor:pointer;display:block" onclick="go('new_entry_a')">
+      <div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:.16em;color:var(--teal-d);font-weight:700;margin-bottom:3px">▸ まず、はじめる</div>
+      <div style="font-size:18px;font-weight:600;color:var(--teal-d);line-height:1.4">知りたいことから、聞いてみる</div>
+      <div class="note" style="font-size:12.5px;color:var(--mute);margin-top:3px;line-height:1.55">治療・副作用・お金・家族のこと、何でも</div>
+    </button>
+
+    <!-- 1分でわかる、SATOI 紺バナー -->
+    <button class="card" id="prmovieHome" style="width:100%;text-align:left;cursor:pointer;margin-bottom:10px;padding:0;overflow:hidden;display:block;border:.5px solid var(--teal-bg)" onclick="go('prmovie')">
+      <div style="position:relative;height:104px;background:linear-gradient(120deg,#0B1736,#1A2548 58%,#0F6E56)">
+        <img data-aoi="hero_prmovie" src="img/aoi_hero_prmovie.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.6">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,23,54,.35),rgba(11,23,54,.65))"></div>
+        <span style="position:absolute;left:18px;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.96);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.35)"><i class="ti ti-player-play-filled" style="font-size:22px;color:var(--teal-d);margin-left:2px"></i></span>
+        <div style="position:absolute;left:72px;top:50%;transform:translateY(-50%);color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.55)">
+          <div style="font-size:16px;font-weight:600">1分でわかる、SATOI</div>
+          <div style="font-size:11.5px;opacity:.85;margin-top:2px">なぜ私たちは、つながって生きるのか</div>
+        </div>
+      </div>
+    </button>
+
+    <!-- ゆったり / ログイン（大型・「ゆ」削除） -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <button class="card" style="padding:18px 14px;text-align:center;cursor:pointer;background:#fff;border:.5px solid var(--line2)" onclick="ytToggle()">
+        <div style="font-size:16px;font-weight:700;color:#5A3A12">ゆったり</div>
+        <div class="note" style="font-size:12px;margin-top:3px">大きく聞ける</div>
+      </button>
+      <button class="card" style="padding:18px 14px;text-align:center;cursor:pointer;background:#fff;border:.5px solid var(--line2)" onclick="go('signin')">
+        <div style="font-size:16px;font-weight:700;color:var(--teal-d)">ログイン</div>
+        <div class="note" style="font-size:12px;margin-top:3px">続きから</div>
+      </button>
+    </div>
+
+    <!-- 新着ティッカー（既存維持） -->
+    <div class="newstk" onclick="go('news')"><span class="nt-badge"><i class="ti ti-bell" style="vertical-align:-1px"></i> 新着</span><span class="nt-win"><span class="nt-track">【治療】免疫チェックポイント阻害薬の仕組みをやさしく　／　【副作用】PRO-CTCAE 5領域の記録機能を更新　／　【お金】高額療養費制度の上限額・申請のコツ　／　【家族】子どもへの伝え方ガイド更新　／　【介護・緩和】地域包括ケアセンター連絡カード機能　／　【ゲノム】がんゲノム医療（パネル検査）は保険で受けられる？</span></span><i class="ti ti-chevron-right" style="color:var(--amber);flex-shrink:0"></i></div>
+
+    <!-- 検索・chip（既存維持・「がんと言われた方へ」より下に配置） -->
     <button class="card" style="width:100%;text-align:left;display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px" onclick="go('search')"><i class="ti ti-search" style="font-size:20px;color:var(--teal)"></i><span style="font-size:14px;color:var(--mute)">がん種・用語・機能をさがす…</span></button>
     <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
       <button class="chip" style="background:var(--blue-bg);color:var(--blue);border-color:transparent;font-weight:600" onclick="go('hospital')"><i class="ti ti-building-hospital" style="vertical-align:-2px"></i> 病院をさがす</button>
       <button class="chip" onclick="go('treatment')"><i class="ti ti-stethoscope" style="vertical-align:-2px"></i> 治療を知る</button>
     </div>
-    <button class="card" id="prmovieHome" style="width:100%;text-align:left;cursor:pointer;margin-bottom:14px;padding:0;overflow:hidden;display:block;border:.5px solid var(--teal-bg)" onclick="go('prmovie')">
-      <div style="position:relative;height:130px;background:linear-gradient(120deg,#10303a,#0F6E56 58%,#C0892F)">
-        <img data-aoi="hero_prmovie" src="img/aoi_hero_prmovie.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92">
-        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.5))"></div>
-        <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.35)"><i class="ti ti-player-play-filled" style="font-size:26px;color:var(--teal-d);margin-left:3px"></i></span>
-        <span style="position:absolute;right:12px;top:11px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;padding:2px 9px;font-size:10px;font-weight:600">紹介ムービー</span>
-        <div style="position:absolute;left:14px;bottom:11px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.55)"><div style="font-size:16px;font-weight:700">1分でわかる、SATOI</div><div style="font-size:11px;opacity:.92;margin-top:2px">なぜ私たちは、つながって生きるのか</div></div>
-      </div>
-    </button>
-    <button class="card" style="width:100%;text-align:left;margin:2px 0 16px;display:flex;align-items:flex-start;gap:11px;cursor:pointer;background:var(--teal-bg);border:1px solid var(--teal)" onclick="svStart('self')">
-      <span class="ic ic46" style="background:#fff;flex-shrink:0"><i class="ti ti-compass" style="font-size:24px;color:var(--teal)"></i></span>
-      <span style="flex:1"><span style="font-size:15px;font-weight:700;display:block;color:var(--teal-d)">「がんです」と言われた方へ</span><span class="note" style="display:block;margin-top:2px;line-height:1.6">いま何が起きているか、これからの流れを、順番に。あなたのペースで。</span></span>
-      <i class="ti ti-chevron-right" style="color:var(--teal);align-self:center"></i>
-    </button>
-    <div style="font-size:15px;font-weight:600;margin-top:8px">今日、できること</div>
-    <div class="sub" style="margin-bottom:12px">気になることから、ひらいて進めます</div>
-    <div class="row2">
-      <button class="tile" onclick="go('treatment')"><span class="ic ic46" style="background:var(--teal-bg)"><i class="ti ti-stethoscope" style="font-size:26px;color:var(--teal)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">治療のこと</div><div class="note">標準治療・がんを知る</div></button>
-      <button class="tile" onclick="go('money')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-coin" style="font-size:26px;color:var(--amber)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">お金・暮らし</div><div class="note">給付金・公的制度</div></button>
-      <button class="tile" onclick="go('story')"><span class="ic ic46" style="background:var(--amber-bg2)"><i class="ti ti-book" style="font-size:26px;color:#C0892F"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">物語を続ける</div><div class="note">声・記録・あなたの軌跡</div></button>
-      <button class="tile" onclick="go('family')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-users" style="font-size:26px;color:var(--rose)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">心と家族</div><div class="note">支え合う・伝える</div></button>
-    </div>
-
-    <div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;margin-top:14px;cursor:pointer" onclick="go('empse')">
-      <span style="font-size:13px;color:var(--sub)">今の気持ちは？　タップで確かめる</span>
-      <span style="display:flex;gap:12px;font-size:22px"><i class="ti ti-mood-happy" style="color:var(--teal)"></i><i class="ti ti-mood-neutral" style="color:var(--amber)"></i><i class="ti ti-mood-sad" style="color:var(--rose)"></i></span>
-    </div>
-
-    <button class="btn btn-teal" style="margin-top:14px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> AIコンシェルジュに相談する</button>
-
     <div style="display:flex;align-items:center;gap:8px;margin:22px 0 10px"><i class="ti ti-news" style="color:var(--teal)"></i><span style="font-size:15px;font-weight:600">新着ニュース</span><a class="link" style="margin-left:auto;font-size:12px" onclick="go('news')">すべて見る</a></div>
     <div style="border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
-      <button class="navrow" onclick="go('cancer')"><span style="display:flex;align-items:center;gap:8px;flex:1;min-width:0"><span style="font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:6px;padding:2px 7px;flex-shrink:0">学び</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">子宮頸がんとHPVワクチン：検診の考え方を更新</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
-      <button class="navrow" onclick="go('money')"><span style="display:flex;align-items:center;gap:8px;flex:1;min-width:0"><span style="font-size:10px;color:var(--amber-t);background:var(--amber-bg);border-radius:6px;padding:2px 7px;flex-shrink:0">お金</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">高額療養費制度の上限額、知っておきたい基本</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
-      <button class="navrow" style="border-bottom:none" onclick="go('offers')"><span style="display:flex;align-items:center;gap:8px;flex:1;min-width:0"><span style="font-size:10px;color:var(--blue-d);background:var(--blue-bg);border-radius:6px;padding:2px 7px;flex-shrink:0">提供</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">学び・お役立ち（スポンサード）を見る</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
+      <button class="navrow" style="padding:14px 14px;align-items:flex-start" onclick="go('cancer')"><span style="display:flex;align-items:flex-start;gap:10px;flex:1;min-width:0"><span style="font-size:12px;color:var(--teal-d);background:var(--teal-bg);border-radius:8px;padding:4px 11px;flex-shrink:0;font-weight:700;border:.5px solid var(--teal);align-self:flex-start;margin-top:2px">学び</span><span style="flex:1;min-width:0;font-size:13.5px;line-height:1.55;color:var(--ink);white-space:normal;word-break:break-word">子宮頸がんとHPVワクチン：検診の考え方を更新</span></span><i class="ti ti-chevron-right" style="color:var(--mute);align-self:center;flex-shrink:0"></i></button>
+      <button class="navrow" style="padding:14px 14px;align-items:flex-start" onclick="go('money')"><span style="display:flex;align-items:flex-start;gap:10px;flex:1;min-width:0"><span style="font-size:12px;color:var(--amber-t);background:var(--amber-bg);border-radius:8px;padding:4px 11px;flex-shrink:0;font-weight:700;border:.5px solid var(--amber-line);align-self:flex-start;margin-top:2px">お金</span><span style="flex:1;min-width:0;font-size:13.5px;line-height:1.55;color:var(--ink);white-space:normal;word-break:break-word">高額療養費制度の上限額、知っておきたい基本</span></span><i class="ti ti-chevron-right" style="color:var(--mute);align-self:center;flex-shrink:0"></i></button>
+      <button class="navrow" style="padding:14px 14px;align-items:flex-start;border-bottom:none" onclick="go('offers')"><span style="display:flex;align-items:flex-start;gap:10px;flex:1;min-width:0"><span style="font-size:12px;color:var(--blue-d);background:var(--blue-bg);border-radius:8px;padding:4px 11px;flex-shrink:0;font-weight:700;border:.5px solid var(--blue);align-self:flex-start;margin-top:2px">提供</span><span style="flex:1;min-width:0;font-size:13.5px;line-height:1.55;color:var(--ink);white-space:normal;word-break:break-word">学び・お役立ち（スポンサード）を見る</span></span><i class="ti ti-chevron-right" style="color:var(--mute);align-self:center;flex-shrink:0"></i></button>
     </div>
 
     <div style="font-size:15px;font-weight:600;margin:22px 0 8px">はじめての方へ</div>
@@ -1176,11 +1184,11 @@ window.hdrSearchVoice=function(){
     <button class="back" onclick="go('home')"><i class="ti ti-arrow-left"></i> ホーム</button>
     <h1 class="h1" style="margin-top:10px">新着ニュース</h1>
     <div class="sub">コンテンツの更新や、知っておきたい最新情報を。すべて出典つき・専門家監修で。</div>
-    <button class="card" style="width:100%;text-align:left;margin-top:14px;cursor:pointer" onclick="go('cancer')"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:6px;padding:2px 7px">学び・更新</span><span class="note" style="margin-left:auto;font-size:11px">5月25日</span></div><div style="font-size:14px;font-weight:600;margin-top:6px">子宮頸がんとHPVワクチン：検診の考え方をやさしく更新</div><div class="note" style="line-height:1.6;margin-top:3px">予防・検診・ワクチンの基礎を、中立に・出典つきで整理しました。</div></button>
-    <button class="card" style="width:100%;text-align:left;margin-top:10px;cursor:pointer" onclick="go('learn')"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:10px;color:var(--teal-d);background:var(--teal-bg);border-radius:6px;padding:2px 7px">学び</span><span class="note" style="margin-left:auto;font-size:11px">5月23日</span></div><div style="font-size:14px;font-weight:600;margin-top:6px">免疫チェックポイント阻害薬とは？仕組みをやさしく解説</div><div class="note" style="line-height:1.6;margin-top:3px">「自分の免疫でがんを攻撃する」とはどういうことか、絵で。</div></button>
-    <button class="card" style="width:100%;text-align:left;margin-top:10px;cursor:pointer" onclick="go('money')"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:10px;color:var(--amber-t);background:var(--amber-bg);border-radius:6px;padding:2px 7px">お金・制度</span><span class="note" style="margin-left:auto;font-size:11px">5月22日</span></div><div style="font-size:14px;font-weight:600;margin-top:6px">高額療養費制度の上限額、知っておきたい基本</div><div class="note" style="line-height:1.6;margin-top:3px">1か月の自己負担には上限があります。まず知っておくと安心。</div></button>
-    <button class="card" style="width:100%;text-align:left;margin-top:10px;cursor:pointer" onclick="go('precision')"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:10px;color:var(--blue-d);background:var(--blue-bg);border-radius:6px;padding:2px 7px">プレシジョン</span><span class="note" style="margin-left:auto;font-size:11px">5月20日</span></div><div style="font-size:14px;font-weight:600;margin-top:6px">がんゲノム医療（パネル検査）は保険で受けられる？</div><div class="note" style="line-height:1.6;margin-top:3px">遺伝子から効く薬を探す検査。保険で受けられる条件をやさしく。</div></button>
-    <button class="card" style="width:100%;text-align:left;margin-top:10px;background:var(--blue-bg);border:none;cursor:pointer" onclick="go('offers')"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:10px;color:#fff;background:var(--blue);border-radius:6px;padding:2px 7px">提供 / PR</span></div><div style="font-size:14px;font-weight:600;margin-top:6px;color:var(--blue-d)">学び・お役立ち（スポンサード）を見る</div><div class="note" style="line-height:1.6;margin-top:3px;color:var(--blue-d)">企業の協力でお届けする教育コンテンツ。見るとポイントが貯まります。</div></button>
+    <button class="card" style="width:100%;text-align:left;margin-top:14px;cursor:pointer;padding:14px" onclick="go('cancer')"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--teal-d);background:var(--teal-bg);border-radius:8px;padding:4px 12px;font-weight:700;border:.5px solid var(--teal)">学び・更新</span><span class="note" style="margin-left:auto;font-size:12px">5月25日</span></div><div style="font-size:15px;font-weight:600;margin-top:9px;line-height:1.55">子宮頸がんとHPVワクチン：検診の考え方をやさしく更新</div><div class="note" style="line-height:1.65;margin-top:4px;font-size:13px">予防・検診・ワクチンの基礎を、中立に・出典つきで整理しました。</div></button>
+    <button class="card" style="width:100%;text-align:left;margin-top:10px;cursor:pointer;padding:14px" onclick="go('learn')"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--teal-d);background:var(--teal-bg);border-radius:8px;padding:4px 12px;font-weight:700;border:.5px solid var(--teal)">学び</span><span class="note" style="margin-left:auto;font-size:12px">5月23日</span></div><div style="font-size:15px;font-weight:600;margin-top:9px;line-height:1.55">免疫チェックポイント阻害薬とは？仕組みをやさしく解説</div><div class="note" style="line-height:1.65;margin-top:4px;font-size:13px">「自分の免疫でがんを攻撃する」とはどういうことか、絵で。</div></button>
+    <button class="card" style="width:100%;text-align:left;margin-top:10px;cursor:pointer;padding:14px" onclick="go('money')"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--amber-t);background:var(--amber-bg);border-radius:8px;padding:4px 12px;font-weight:700;border:.5px solid var(--amber-line)">お金・制度</span><span class="note" style="margin-left:auto;font-size:12px">5月22日</span></div><div style="font-size:15px;font-weight:600;margin-top:9px;line-height:1.55">高額療養費制度の上限額、知っておきたい基本</div><div class="note" style="line-height:1.65;margin-top:4px;font-size:13px">1か月の自己負担には上限があります。まず知っておくと安心。</div></button>
+    <button class="card" style="width:100%;text-align:left;margin-top:10px;cursor:pointer;padding:14px" onclick="go('precision')"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--blue-d);background:var(--blue-bg);border-radius:8px;padding:4px 12px;font-weight:700;border:.5px solid var(--blue)">プレシジョン</span><span class="note" style="margin-left:auto;font-size:12px">5月20日</span></div><div style="font-size:15px;font-weight:600;margin-top:9px;line-height:1.55">がんゲノム医療（パネル検査）は保険で受けられる？</div><div class="note" style="line-height:1.65;margin-top:4px;font-size:13px">遺伝子から効く薬を探す検査。保険で受けられる条件をやさしく。</div></button>
+    <button class="card" style="width:100%;text-align:left;margin-top:10px;background:var(--blue-bg);border:none;cursor:pointer;padding:14px" onclick="go('offers')"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:#fff;background:var(--blue);border-radius:8px;padding:4px 12px;font-weight:700">提供 / PR</span></div><div style="font-size:15px;font-weight:600;margin-top:9px;color:var(--blue-d);line-height:1.55">学び・お役立ち（スポンサード）を見る</div><div class="note" style="line-height:1.65;margin-top:4px;color:var(--blue-d);font-size:13px">企業の協力でお届けする教育コンテンツ。見るとポイントが貯まります。</div></button>
     <div class="note" style="margin-top:12px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 「提供／PR」はスポンサード。医療情報とはっきり区別し、JOiNTが審査・専門家監修で掲載します。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
@@ -1575,7 +1583,7 @@ window.hdrSearchVoice=function(){
 #investor .inv-modal-scen .isc.imid .iv{color:#B8954A}
 </style>
 <div class="inv-appbar">
-  <button class="iback" onclick="invExit()">← マイページ</button>
+  <button class="iback" onclick="invExit()">← ログイン入口へ戻る</button>
   <span class="ilogo">SAT<span style="color:#0D7377">●</span>I</span>
   <span class="irole">INVESTOR</span>
 </div>
@@ -1748,6 +1756,7 @@ window.hdrSearchVoice=function(){
     <button onclick="if(typeof go==='function')go('governance')"><span class="ictl">▸ GOVERNANCE</span><span>3層分離</span></button>
     <button onclick="if(typeof go==='function')go('hospital_flow')"><span class="ictl">▸ TOUCHPOINT</span><span>院内導線</span></button>
   </div>
+  <button onclick="if(typeof go==='function')go('signin')" style="margin-top:11px;width:100%;padding:12px;background:#0E2236;color:#F0C97A;border:none;border-radius:6px;font-family:'EB Garamond',serif;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.04em">← ログイン入口へ戻る</button>
 
   <div class="inv-mono" style="margin-top:14px;padding:10px 12px;background:#0E2236;color:#D4A95E;border-radius:6px;font-size:9.5px;line-height:1.65"><b style="color:#F0C97A">▸ DATA NOTE.</b> 本ビューは v11 内部前提（FY26想定）。数値は社内検証中・公開時に正式版に置換。本人同意の範囲のみ・JOiNT諮問監督下。</div>
 </div>
@@ -2080,7 +2089,7 @@ window.invOpenModal=function(){
   document.getElementById('invModal').classList.add('show');
 };
 window.invCloseModal=function(){document.getElementById('invModal').classList.remove('show');};
-window.invExit=function(){if(typeof go==='function')go('mypage');};
+window.invExit=function(){if(typeof go==='function')go('signin');};
 
 /* ★ARPU源別詳細モーダル */
 const ARPU_DETAIL={
@@ -2371,7 +2380,7 @@ window._oninit['investor']=function(){
 #next_horizon_bridge .nhb-kicker{font-size:11px;color:#633806;font-weight:700;letter-spacing:.08em}
 #next_horizon_bridge .nhb-title{font-size:22px;font-weight:700;color:#26303F;line-height:1.35;margin-top:4px;font-feature-settings:"palt"}
 #next_horizon_bridge .nhb-sub{font-size:12px;color:#4C5562;line-height:1.65;margin-top:5px}
-#next_horizon_bridge .nhb-body{padding:14px 16px 100px;font-feature-settings:"palt"}
+#next_horizon_bridge .nhb-body{padding:14px 16px 160px;font-feature-settings:"palt"}
 #next_horizon_bridge .nhb-h2{font-size:14px;font-weight:700;margin:18px 0 7px;display:flex;align-items:center;gap:8px;color:#26303F}
 #next_horizon_bridge .nhb-h2:first-of-type{margin-top:10px}
 #next_horizon_bridge .nhb-h2 .nhb-n{display:inline-block;width:24px;height:24px;border-radius:50%;background:var(--teal-bg,#E1F5EE);color:var(--teal-d,#0F6E56);text-align:center;font-size:12px;font-weight:900;line-height:24px;flex-shrink:0}
@@ -2408,7 +2417,7 @@ window._oninit['investor']=function(){
 #next_horizon_bridge.fam-on .nhb-cta{background:var(--amber,#B5701B)}
 </style>
 <div class="nhb-bar">
-  <button class="nhb-back" onclick="go('mypage')">← マイページ</button>
+  <button class="nhb-back" onclick="goBack()">← 戻る</button>
   <button class="nhb-fam" id="nhbFamToggle" onclick="nhbToggleFam()">👥 家族モード</button>
 </div>
 <div class="nhb-dawn">
@@ -2417,6 +2426,17 @@ window._oninit['investor']=function(){
   <div class="nhb-sub">読んでから、進むかどうかゆっくり決めてください。</div>
 </div>
 <div class="nhb-body">
+  <!-- ★統一Hero：SATOIで、できること -->
+  <div class="card" style="margin-top:8px;padding:16px;background:linear-gradient(135deg,#FBEEDE,#FFFCF6);border:1.5px solid #BA7517;box-shadow:0 4px 14px rgba(186,117,23,.12)">
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+      <span class="ic" style="width:38px;height:38px;background:#BA7517;color:#fff"><i class="ti ti-sun-high" style="font-size:20px"></i></span>
+      <div style="flex:1"><b style="font-size:14px;color:#854F0B;display:block">SATOIで、できること</b><span style="font-size:11px;color:#854F0B;opacity:.8">次の道を、ゆっくり一緒に探す</span></div>
+    </div>
+    <div style="font-size:12.5px;line-height:1.85;color:#633806">
+      標準治療を終えた方への <em style="font-family:'EB Garamond',serif;font-style:italic">つぎの道</em>。<b>先進医療・治験・自由診療</b>の選択肢を中立に整理。SATOIは<b>「自由診療」を推進・推奨しません</b>。あなたが<b>納得のいく次のステップ</b>を選べるよう、伴走サポートします。
+    </div>
+  </div>
+
   <div class="nhb-fam-banner">
     <div class="nhb-fb-ic">👥</div>
     <div>
@@ -3973,26 +3993,28 @@ window._oninit['next_horizon_bridge']=function(){
     <!-- ★★★治療ダッシュボード（最上段・SATOIの一丁目一番地）★★★ -->
     <div id="myTreatDash" style="margin-top:14px"></div>
 
-<!-- EMPSe（折りたたみ・大きめアイコン付き） -->
+<!-- EMPSe（折りたたみ・大きめアイコン付き・段ズレ修正版） -->
     <details id="myEmpseDetails" style="margin-top:12px;background:var(--teal-bg);border-radius:14px;border:none;padding:0">
-      <summary style="cursor:pointer;list-style:none;padding:12px 14px;display:flex;align-items:center;gap:11px;font-size:13px;font-weight:600;color:var(--teal-d)">
-        <span class="ic ic46" style="background:#fff;border:1.5px solid var(--teal);flex-shrink:0;position:relative">
-          <svg viewBox="0 0 40 40" width="28" height="28" style="display:block" aria-hidden="true">
-            <polygon points="20,5 36,15 30,33 10,33 4,15" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linejoin="round"/>
-            <polygon points="20,11 30,18 27,29 13,29 9,18" fill="var(--teal)" opacity=".18"/>
-            <circle cx="20" cy="5" r="2.2" fill="var(--teal)"/>
-            <circle cx="36" cy="15" r="2.2" fill="var(--teal)"/>
-            <circle cx="30" cy="33" r="2.2" fill="var(--teal)"/>
-            <circle cx="10" cy="33" r="2.2" fill="var(--teal)"/>
-            <circle cx="4" cy="15" r="2.2" fill="var(--teal)"/>
-          </svg>
-        </span>
-        <span style="flex:1;min-width:0">
-          <span style="display:block;font-size:14px;font-weight:700;color:var(--teal-d)">EMPSe ・ いまの、わたし</span>
-          <span class="note" style="display:block;font-size:11px;color:var(--teal-d);opacity:.8;margin-top:2px">身体／精神／社会／活力／共感の5軸</span>
-        </span>
-        <span id="myEmpsePeek" style="font-family:'EB Garamond',serif;font-size:18px;font-weight:700;color:var(--teal-d);flex-shrink:0"></span>
-        <i class="ti ti-chevron-down" style="color:var(--teal-d);transition:transform .2s;font-size:18px;flex-shrink:0"></i>
+      <summary style="cursor:pointer;list-style:none;padding:12px 14px">
+        <div style="display:grid;grid-template-columns:48px 1fr auto auto;gap:11px;align-items:center">
+          <span style="width:46px;height:46px;background:#fff;border:1.5px solid var(--teal);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg viewBox="0 0 40 40" width="28" height="28" style="display:block" aria-hidden="true">
+              <polygon points="20,5 36,15 30,33 10,33 4,15" fill="none" stroke="#0D7377" stroke-width="2" stroke-linejoin="round"/>
+              <polygon points="20,11 30,18 27,29 13,29 9,18" fill="#0D7377" opacity=".18"/>
+              <circle cx="20" cy="5" r="2.2" fill="#0D7377"/>
+              <circle cx="36" cy="15" r="2.2" fill="#0D7377"/>
+              <circle cx="30" cy="33" r="2.2" fill="#0D7377"/>
+              <circle cx="10" cy="33" r="2.2" fill="#0D7377"/>
+              <circle cx="4" cy="15" r="2.2" fill="#0D7377"/>
+            </svg>
+          </span>
+          <span style="min-width:0">
+            <span style="display:block;font-size:14px;font-weight:700;color:var(--teal-d);line-height:1.35">EMPSe ・ いまの、わたし</span>
+            <span style="display:block;font-size:11px;color:var(--teal-d);opacity:.8;margin-top:3px;line-height:1.5">身体／精神／社会／活力／共感の5軸</span>
+          </span>
+          <span id="myEmpsePeek" style="font-family:'EB Garamond',serif;font-size:20px;font-weight:700;color:var(--teal-d);line-height:1;white-space:nowrap"></span>
+          <i class="ti ti-chevron-down" style="color:var(--teal-d);font-size:18px"></i>
+        </div>
       </summary>
       <div id="myEmpseCard" style="padding:0 14px 14px"></div>
       <button class="btn btn-out" style="margin:0 14px 12px;width:calc(100% - 28px);padding:9px;font-size:13px" onclick="go('empse')"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> くわしく入力する</button>
@@ -4005,12 +4027,19 @@ window._oninit['next_horizon_bridge']=function(){
       <i class="ti ti-chevron-right" style="color:var(--teal-d)"></i>
     </button>
 
-    <button class="card" style="width:100%;text-align:left;margin-top:10px;background:var(--teal-bg);border:none;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('search')">
-      <span class="ic ic46" style="background:#fff;flex-shrink:0"><i class="ti ti-search" style="font-size:22px;color:var(--teal)"></i></span>
-      <span style="flex:1"><span style="font-size:14px;font-weight:600;color:var(--teal-d)">自分で調べる</span><span class="note" style="display:block;color:var(--teal-d);opacity:.85;margin-top:1px">がん種・治療・お金・暮らし</span></span>
-      <i class="ti ti-chevron-right" style="color:var(--teal-d)"></i>
-    </button>
-    <div class="card" style="margin-top:14px;background:var(--amber-bg);border:none;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('story')">
+    <!-- ★調べたいこと（旧「今できること」・自分で調べるカードと統合） -->
+    <div style="font-size:14px;font-weight:600;margin:18px 0 4px">調べたいこと</div>
+    <div class="sub" style="margin-bottom:12px">気になっていることから、ひらいてください</div>
+    <div class="row2">
+      <button class="tile" onclick="go('treatment')"><span class="ic ic46" style="background:var(--teal-bg)"><i class="ti ti-stethoscope" style="font-size:26px;color:var(--teal)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">治療のこと</div><div class="note">別の先生にも聞きたい 等</div></button>
+      <button class="tile" onclick="go('money')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-coin" style="font-size:26px;color:var(--amber)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">お金・暮らし</div><div class="note">使える制度を知る</div></button>
+      <button class="tile" onclick="go('body')"><span class="ic ic46" style="background:var(--teal-bg)"><i class="ti ti-heartbeat" style="font-size:26px;color:var(--teal)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">からだの記録</div><div class="note">今日の調子を残す</div></button>
+      <button class="tile" onclick="go('family')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-heart-handshake" style="font-size:26px;color:var(--rose)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">心と家族</div><div class="note">支え合う</div></button>
+    </div>
+
+    <!-- 物語・つながる・壺（調べたいことの後に配置） -->
+    <div style="font-size:14px;font-weight:600;margin:18px 0 8px">あなたの場所</div>
+    <div class="card" style="margin-top:0;background:var(--amber-bg);border:none;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('story')">
       <span class="ic ic46" style="background:#fff;position:relative;overflow:hidden"><img data-aoi="story_path" src="img/aoi_story_path.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><i class="ti ti-route-2" style="font-size:24px;color:#B5701B;position:relative"></i></span>
       <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--amber-t)">物語を続ける</div><div style="font-size:12px;color:var(--amber)">今ここを歩いています ・ 12のかけら</div></div>
       <i class="ti ti-chevron-right" style="color:var(--amber)"></i>
@@ -4025,14 +4054,6 @@ window._oninit['next_horizon_bridge']=function(){
       <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--teal-d)">壺（わたしの記録）</div><div style="font-size:12px;color:var(--teal-d)">残した声・言葉が、光になってたまる場所</div></div>
       <i class="ti ti-chevron-right" style="color:var(--teal)"></i>
     </button>
-    <div style="font-size:14px;font-weight:600;margin:18px 0 4px">今できること</div>
-    <div class="sub" style="margin-bottom:12px">気になっていることから、ひらいてください</div>
-    <div class="row2">
-      <button class="tile" onclick="go('treatment')"><span class="ic ic46" style="background:var(--teal-bg)"><i class="ti ti-stethoscope" style="font-size:26px;color:var(--teal)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">治療のこと</div><div class="note">別の先生にも聞きたい 等</div></button>
-      <button class="tile" onclick="go('money')"><span class="ic ic46" style="background:var(--amber-bg)"><i class="ti ti-coin" style="font-size:26px;color:var(--amber)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">お金・暮らし</div><div class="note">使える制度を知る</div></button>
-      <button class="tile" onclick="go('body')"><span class="ic ic46" style="background:var(--teal-bg)"><i class="ti ti-heartbeat" style="font-size:26px;color:var(--teal)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">からだの記録</div><div class="note">今日の調子を残す</div></button>
-      <button class="tile" onclick="go('family')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-heart-handshake" style="font-size:26px;color:var(--rose)"></i></span><div style="font-size:15px;font-weight:600;margin-top:10px">心と家族</div><div class="note">支え合う</div></button>
-    </div>
     <button class="btn btn-out" style="margin-top:14px;display:flex;align-items:center;justify-content:center;gap:7px" onclick="go('empse')"><i class="ti ti-mood-heart" style="color:var(--teal)"></i> いまの、わたしを確かめる</button>
     <button class="btn btn-teal" style="margin-top:10px" onclick="go('ai')"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> AIコンシェルジュに相談</button>
     <button class="btn btn-out" style="margin-top:10px" onclick="go('sdmstart')"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 相談したいこと（相談カード）</button>
@@ -4092,7 +4113,7 @@ window._oninit['next_horizon_bridge']=function(){
 <!-- ============ 登録情報・ステータス（account） ============ -->
 <section class="scr" id="account">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">登録情報</h1>
     <div class="sub">いまの、あなたの状態です</div>
     <div class="card" style="margin-top:14px;display:flex;gap:12px;align-items:center">
@@ -4160,7 +4181,7 @@ window._oninit['account']=function(){
 <!-- ============ SATOIコンシェルジュ（チャット・API連携対応） ============ -->
 <section class="scr" id="ai">
   <div class="pad" style="padding-bottom:92px">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
       <span class="ic" style="width:38px;height:38px;background:var(--teal-bg)"><i class="ti ti-sparkles" style="font-size:20px;color:var(--teal)"></i></span>
       <div><h1 class="h1">SATOIコンシェルジュ</h1><div class="sub">何も決めない夜も、そばにいます</div></div>
@@ -4310,45 +4331,106 @@ window._oninit['ai']=function(){
 <!-- ============ 治療を知る ============ -->
 <section class="scr" id="treatment">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">治療を知る</h1>
     <div class="sub">確かめられた治療を、やさしく整理しました</div>
-    <div style="margin-top:12px;border-radius:14px;overflow:hidden;height:92px;position:relative;background:linear-gradient(120deg,#EAF0F6,#E7F1E8 60%,#FBEEDE)"><img data-aoi="hero_treatment" src="img/aoi_hero_treatment.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
-    <button class="card" style="width:100%;text-align:left;margin-top:14px;background:var(--teal);border:none;display:flex;align-items:center;gap:12px;cursor:pointer;padding:14px" onclick="goMyCancer()">
+
+    <!-- ★統一Hero：SATOIで、できること（コンテンツ解説起点） -->
+    <div class="card" style="margin-top:14px;padding:16px;background:linear-gradient(135deg,#E1F5EE,#FFFCF6);border:1.5px solid var(--teal);box-shadow:0 4px 14px rgba(13,115,119,.12)">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+        <span class="ic" style="width:38px;height:38px;background:var(--teal);color:#fff"><i class="ti ti-stethoscope" style="font-size:20px"></i></span>
+        <div style="flex:1"><b style="font-size:14px;color:var(--teal-d);display:block">SATOIで、できること</b><span style="font-size:11px;color:var(--teal-d);opacity:.8">治療の全体像を、やさしく理解する</span></div>
+      </div>
+      <div style="font-size:12.5px;line-height:1.85;color:var(--teal-d)">
+        がんの治療は<b>「4つの柱」</b>（薬物療法・手術・放射線・緩和ケア）が基本。<b>検査の結果</b>からあなたに合う組み合わせを決めます。SATOIでは、それぞれを<b>やさしく</b>整理して、主治医との対話の準備までお手伝いします。
+      </div>
+    </div>
+
+    <!-- ★標準治療の4本柱（最優先・すぐ見られる） -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-list-check" style="color:var(--teal)"></i> 標準治療の4つの柱</div>
+    <div class="row2" style="margin-top:10px">
+      <button class="tile" style="padding:14px" onclick="openPillar(0)"><i class="ti ti-pill" style="font-size:26px;color:var(--teal)"></i><div style="font-size:14px;font-weight:600;margin-top:8px">薬物療法</div><div class="note">抗がん剤・分子標的薬・免疫CP</div></button>
+      <button class="tile" style="padding:14px" onclick="openPillar(1)"><i class="ti ti-scalpel" style="font-size:26px;color:var(--teal)"></i><div style="font-size:14px;font-weight:600;margin-top:8px">手術</div><div class="note">病巣を取り除く</div></button>
+      <button class="tile" style="padding:14px" onclick="openPillar(2)"><i class="ti ti-radioactive" style="font-size:26px;color:var(--teal)"></i><div style="font-size:14px;font-weight:600;margin-top:8px">放射線治療</div><div class="note">照射でがんを叩く</div></button>
+      <button class="tile" style="padding:14px" onclick="openPillar(3)"><i class="ti ti-heart-plus" style="font-size:26px;color:var(--teal)"></i><div style="font-size:14px;font-weight:600;margin-top:8px">緩和ケア</div><div class="note">つらさをやわらげる</div></button>
+    </div>
+    <div class="note" style="margin-top:8px;line-height:1.65"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス。詳しい適応は主治医にご確認ください。</div>
+
+    <!-- ★こんなことが分かります（治療の流れ・検査結果・プレシジョン） -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-route-2" style="color:var(--teal)"></i> こんなことが分かります</div>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px">
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('flow')">
+        <span class="ic" style="width:36px;height:36px;background:var(--teal-bg);color:var(--teal-d);flex-shrink:0"><i class="ti ti-timeline-event" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:var(--teal-d)">治療の流れ・スケジュール</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">告知→検査→診断→治療開始 までの流れ</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('precision')">
+        <span class="ic" style="width:36px;height:36px;background:var(--blue-bg);color:var(--blue-d);flex-shrink:0"><i class="ti ti-dna-2" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:var(--blue-d)">検査結果・遺伝子検査の見方</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">パネル検査・バイオマーカー（保険でも）</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('drugs')">
+        <span class="ic" style="width:36px;height:36px;background:var(--amber-bg);color:var(--amber-t);flex-shrink:0"><i class="ti ti-vaccine-bottle" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:var(--amber-t)">抗がん剤の薬剤一覧</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">よく使う薬・併用パターン・副作用プロファイル</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('sdm')">
+        <span class="ic" style="width:36px;height:36px;background:var(--rose-bg);color:var(--rose);flex-shrink:0"><i class="ti ti-clipboard-heart" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:#993556">先生に聞きたいことを整理（SDM）</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">相談カードで、伝えたいことを言葉に</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('sopinion')">
+        <span class="ic" style="width:36px;height:36px;background:var(--blue-bg);color:var(--blue-d);flex-shrink:0"><i class="ti ti-messages" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:var(--blue-d)">セカンドオピニオン</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">別の先生にも聞きたい時の流れ</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('hospital')">
+        <span class="ic" style="width:36px;height:36px;background:var(--teal-bg);color:var(--teal-d);flex-shrink:0"><i class="ti ti-building-hospital" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:var(--teal-d)">病院をさがす</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">がん診療連携拠点・ゲノム医療施設</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+    </div>
+
+    <!-- がん種から調べる -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-books" style="color:var(--teal)"></i> がん種から調べる</div>
+    <button class="card" style="width:100%;text-align:left;margin-top:10px;background:var(--teal);border:none;display:flex;align-items:center;gap:12px;cursor:pointer;padding:14px" onclick="goMyCancer()">
       <span class="ic ic46" style="background:rgba(255,255,255,.22);width:46px;height:46px;flex-shrink:0"><i class="ti ti-heartbeat" style="font-size:24px;color:#fff"></i></span>
       <span style="flex:1"><b style="font-weight:600;color:#fff;font-size:15px">あなたのがん：<span id="txMyCancer">子宮頸がん</span> をくわしく</b><span style="display:block;color:rgba(255,255,255,.88);font-size:12px;margin-top:2px">病期・治療・お金まで、あなた用に</span></span>
       <i class="ti ti-chevron-right" style="color:#fff"></i>
     </button>
-    <button class="card" style="width:100%;text-align:left;margin-top:10px;background:var(--teal-bg);border:1px solid var(--teal);display:flex;align-items:center;gap:13px;cursor:pointer;padding:16px" onclick="go('cancer')">
-      <span class="ic ic46" style="background:#fff;width:52px;height:52px;flex-shrink:0"><i class="ti ti-books" style="font-size:28px;color:var(--teal)"></i></span>
-      <span style="flex:1"><b style="font-weight:600;color:var(--teal-d);font-size:16px">ほかのがん種から調べる</b><span class="note" style="display:block;color:var(--teal-d);margin-top:3px;line-height:1.6">乳がん・肺がん…どのがんも、やさしく詳しく読めます</span></span>
+
+    <!-- ★A案：体の部位図インライン埋込・タップでがん種一覧がその場展開 -->
+    <div class="card" style="width:100%;margin-top:10px;background:linear-gradient(135deg,#FFFCF6,#F5F1E8);border:1.5px solid var(--teal);padding:14px;box-shadow:0 4px 12px rgba(13,115,119,.12);position:relative">
+      <span style="position:absolute;top:-8px;right:-4px;background:#9B2D2D;color:#fff;font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:9px;letter-spacing:.05em">NEW</span>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span class="ic ic46" style="background:#fff;width:42px;height:42px;flex-shrink:0;border:1px solid var(--teal)"><i class="ti ti-body-scan" style="font-size:24px;color:var(--teal-d)"></i></span>
+        <div style="flex:1"><div style="font-size:14.5px;font-weight:600;color:var(--teal-d);line-height:1.4">体の部位図から調べる</div><div class="note" style="font-size:11px;margin-top:2px;line-height:1.5;color:var(--teal-d)">気になる場所をタップ → がん種が出ます</div></div>
+      </div>
+      <div id="txBodyWrap" style="position:relative;background:#FFFCF6;border-radius:10px;overflow:hidden;aspect-ratio:3/4;max-width:300px;margin:0 auto;border:.5px solid var(--teal)">
+        <img src="img/001_図.png" alt="体の部位図"
+             style="position:absolute;left:-12%;top:0;width:124%;height:100%;object-fit:cover;display:block"
+             onerror="this.style.display='none';document.getElementById('txBodyFallback').style.display='flex'">
+        <div style="position:absolute;inset:0" id="txBodyZones">
+          <button class="tx-zone" data-z="5" onclick="txBodyZone(this,5)" style="position:absolute;left:36%;top:2%;width:28%;height:9%" aria-label="脳"></button>
+          <button class="tx-zone" data-z="1" onclick="txBodyZone(this,1)" style="position:absolute;left:30%;top:11%;width:40%;height:12%" aria-label="頭頸部"></button>
+          <button class="tx-zone" data-z="2" onclick="txBodyZone(this,2)" style="position:absolute;left:30%;top:24%;width:40%;height:14%" aria-label="胸"></button>
+          <button class="tx-zone" data-z="3" onclick="txBodyZone(this,3)" style="position:absolute;left:30%;top:39%;width:40%;height:16%" aria-label="お腹"></button>
+          <button class="tx-zone" data-z="4" onclick="txBodyZone(this,4)" style="position:absolute;left:30%;top:56%;width:40%;height:14%" aria-label="骨盤"></button>
+          <button class="tx-zone" data-z="6" onclick="txBodyZone(this,6)" style="position:absolute;left:5%;top:30%;width:18%;height:22%" aria-label="皮膚"></button>
+          <button class="tx-zone" data-z="7" onclick="txBodyZone(this,7)" style="position:absolute;left:77%;top:30%;width:18%;height:22%" aria-label="血液リンパ"></button>
+        </div>
+        <div id="txBodyFallback" style="display:none;align-items:center;justify-content:center;position:absolute;inset:0;background:var(--teal-bg);color:var(--teal-d);font-size:12px;line-height:1.7;padding:20px;text-align:center"><div><i class="ti ti-photo-off" style="font-size:30px"></i><div style="margin-top:6px"><b>体の部位図画像を準備中</b></div></div></div>
+      </div>
+      <div class="note" style="font-size:10.5px;color:var(--mute);margin-top:8px;text-align:center;line-height:1.6"><i class="ti ti-hand-finger" style="vertical-align:-2px"></i> 頭頸部／胸／お腹／骨盤／脳／皮膚／血液リンパ の7ゾーン</div>
+      <div id="txBodyResults" style="display:none;margin-top:12px;border-radius:10px;background:#F5F9F9;border:.5px solid var(--teal);padding:10px"></div>
+    </div>
+
+    <button class="card" style="width:100%;text-align:left;margin-top:8px;background:var(--teal-bg);border:1px solid var(--teal);display:flex;align-items:center;gap:13px;cursor:pointer;padding:14px" onclick="go('cancer')">
+      <span class="ic ic46" style="background:#fff;width:44px;height:44px;flex-shrink:0"><i class="ti ti-list" style="font-size:24px;color:var(--teal)"></i></span>
+      <span style="flex:1"><b style="font-weight:600;color:var(--teal-d);font-size:14px">がん種の一覧から選ぶ</b><span class="note" style="display:block;color:var(--teal-d);margin-top:2px;line-height:1.55">31がん種・8グループ表示</span></span>
       <i class="ti ti-chevron-right" style="color:var(--teal)"></i>
     </button>
     <div class="note" style="margin-top:8px;line-height:1.6"><i class="ti ti-lock-open" style="vertical-align:-2px"></i> 調べるのは登録なしで自由にできます。登録（無料）すると、自分用に記録・保存できます。</div>
-    <div style="font-size:13px;font-weight:600;margin:18px 0 10px">標準治療の4つの柱</div>
-    <div class="row2">
-      <button class="tile" style="padding:12px" onclick="openPillar(0)"><i class="ti ti-pill" style="font-size:22px;color:var(--teal)"></i><div style="font-size:14px;font-weight:600;margin-top:6px">薬物療法</div><div class="note">抗がん剤・分子標的薬 等</div></button>
-      <button class="tile" style="padding:12px" onclick="openPillar(1)"><i class="ti ti-scalpel" style="font-size:22px;color:var(--teal)"></i><div style="font-size:14px;font-weight:600;margin-top:6px">手術</div><div class="note">病巣を取り除く</div></button>
-      <button class="tile" style="padding:12px" onclick="openPillar(2)"><i class="ti ti-radioactive" style="font-size:22px;color:var(--teal)"></i><div style="font-size:14px;font-weight:600;margin-top:6px">放射線治療</div><div class="note">照射でがんを叩く</div></button>
-      <button class="tile" style="padding:12px" onclick="openPillar(3)"><i class="ti ti-heart-plus" style="font-size:22px;color:var(--teal)"></i><div style="font-size:14px;font-weight:600;margin-top:6px">緩和ケア</div><div class="note">つらさをやわらげる</div></button>
-    </div>
-    <div class="note" style="margin:12px 0"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：国立がん研究センター がん情報サービス。詳しい適応は主治医にご確認ください。</div>
-    <button class="btn btn-out" style="margin-bottom:10px" onclick="go('drugs')"><i class="ti ti-pill" style="vertical-align:-2px;color:var(--teal)"></i> 抗がん剤の薬剤一覧</button>
-    <button class="card" style="width:100%;text-align:left;margin-bottom:10px;background:var(--blue-bg);border:none;display:flex;align-items:center;gap:10px;cursor:pointer;padding:11px 13px" onclick="go('precision')">
-      <i class="ti ti-dna-2" style="font-size:21px;color:var(--blue);flex-shrink:0"></i>
-      <span style="flex:1"><b style="font-weight:600;font-size:13px;color:var(--blue-d)">プレシジョンメディシン</b><span class="note" style="display:block;color:var(--blue-d);line-height:1.55">標準治療の、その先の選択肢。遺伝子から効く薬を（保険でも）。</span></span>
-      <i class="ti ti-chevron-right" style="color:var(--blue)"></i>
-    </button>
-    <div class="row2" style="margin-bottom:10px">
-      <button class="tile" style="padding:12px" onclick="go('cancer')"><i class="ti ti-book-2" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">がんを知る</div></button>
-      <button class="tile" style="padding:12px" onclick="go('flow')"><i class="ti ti-timeline-event" style="font-size:20px;color:var(--teal)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">治療の流れ</div></button>
-      <button class="tile" style="padding:12px" onclick="go('learn')"><i class="ti ti-microscope" style="font-size:20px;color:var(--blue)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">学び・研究</div></button>
-      <button class="tile" style="padding:12px" onclick="go('freecare')"><i class="ti ti-leaf" style="font-size:20px;color:var(--amber)"></i><div style="font-size:13px;font-weight:600;margin-top:6px">自由診療をさがす</div></button>
-    </div>
-    <button class="btn btn-out" onclick="go('hospital')" style="margin-top:4px"><i class="ti ti-building-hospital" style="vertical-align:-2px;color:var(--blue)"></i> 病院をさがす</button>
-    <button class="btn btn-out" onclick="go('sopinion')" style="margin-top:10px"><i class="ti ti-messages" style="vertical-align:-2px;color:var(--blue)"></i> 別の先生にも聞きたい（セカンドオピニオン）</button>
-    <button class="btn btn-teal" onclick="go('sdm')" style="margin-top:10px"><i class="ti ti-clipboard-heart" style="vertical-align:-2px"></i> 聞きたいことを整理する</button>
-
     <!-- ★Tier4 既存ハブから新コンテンツへの誘導（網羅性完璧化・Katsu要望2026-05-29） -->
     <div style="margin-top:18px;border:.5px solid var(--line2);border-radius:14px;overflow:hidden">
       <div style="padding:11px 14px;background:var(--teal-bg);font-size:12px;font-weight:700;color:var(--teal-d)"><i class="ti ti-book-2" style="vertical-align:-2px"></i> 治療に関する深掘り</div>
@@ -4366,9 +4448,20 @@ window._oninit['ai']=function(){
 <!-- ============ お金と暮らし（ハブ） ============ -->
 <section class="scr" id="money">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">お金と暮らし</h1>
     <div class="sub">お金の不安で、治療も暮らしも、あきらめないために</div>
+
+    <!-- ★統一Hero：SATOIで、できること -->
+    <div class="card" style="margin-top:14px;padding:16px;background:linear-gradient(135deg,#FAEEDA,#FFFCF6);border:1.5px solid var(--amber);box-shadow:0 4px 14px rgba(186,117,23,.12)">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+        <span class="ic" style="width:38px;height:38px;background:var(--amber);color:#fff"><i class="ti ti-coin" style="font-size:20px"></i></span>
+        <div style="flex:1"><b style="font-size:14px;color:var(--amber-t);display:block">SATOIで、できること</b><span style="font-size:11px;color:var(--amber-t);opacity:.8">お金の不安を、見える化して整える</span></div>
+      </div>
+      <div style="font-size:12.5px;line-height:1.85;color:#5b4a2e">
+        がん治療には<b>使える公的制度がたくさん</b>あります。SATOIは、<b>高額療養費・傷病手当・医療費控除</b>などの「使えそうな制度」を整理し、<b>実質いくら？</b>のシミュレーション、<b>申請カレンダー</b>、<b>FP・社労士相談</b>、<b>地域包括ケア</b>まで、お金と暮らしの全てを一元化します。
+      </div>
+    </div>
 
     <!-- ★私の民間保険（加入者だけ表示・signin_ins_mypageと相互リンク・橋谷MTG指摘反映） -->
     <div id="moneyMyIns" style="margin-top:14px;display:none">
@@ -4490,6 +4583,309 @@ window._oninit['ai']=function(){
     </div>
 
     <div class="note" style="margin-top:14px"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：厚生労働省・国税庁・各保険者・各自治体。制度の詳細・条件は窓口でご確認ください。SATOIは特定の金融機関へ誘導しません。</div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ 地域包括支援センター連絡カード（AIサポート） ============ -->
+<section class="scr" id="houkatsucenter">
+  <div class="pad">
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
+    <h1 class="h1" style="margin-top:10px">介護・緩和ケアの相談</h1>
+    <div class="sub">がんと暮らす方・ご家族を、医療×介護×生活支援で支える「地域包括ケアシステム」と、SATOIが連携してサポートします</div>
+
+    <!-- ★ヒーロー：SATOIで何ができるか（解説起点） -->
+    <div class="card" style="margin-top:14px;padding:16px;background:linear-gradient(135deg,#EEEDFE,#FFFCF6);border:1.5px solid #534AB7;box-shadow:0 4px 14px rgba(83,74,183,.12)">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+        <span class="ic" style="width:38px;height:38px;background:#534AB7;color:#fff"><i class="ti ti-hand-heart" style="font-size:20px"></i></span>
+        <div style="flex:1"><b style="font-size:14px;color:#3C3489;display:block">SATOIで、できること</b><span style="font-size:11px;color:#3C3489;opacity:.8">在宅・介護・緩和ケアの伴走</span></div>
+      </div>
+      <div style="font-size:12.5px;line-height:1.85;color:#26215C">
+        「<b>標準治療を続ける／続けない</b>に関わらず」、「<b>がん末期の方</b>」「<b>PS（パフォーマンス）が下がってきた方</b>」「<b>ご高齢で介護も必要になってきた方</b>」、ご本人・ご家族のどちらでも、SATOIが**お住まいの地域包括支援センターと連携**してサポートします。
+      </div>
+    </div>
+
+    <!-- ★SATOIで受けられるサービス4つ（解説リスト） -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-list-check" style="color:#534AB7"></i> こんなサポートが受けられます</div>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px">
+      <div class="card" style="padding:13px;display:flex;align-items:flex-start;gap:11px">
+        <span class="ic" style="width:36px;height:36px;background:var(--teal-bg);color:var(--teal-d);flex-shrink:0;margin-top:2px"><i class="ti ti-sparkles" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13px;color:var(--teal-d)">① AIが「連絡カード」を作ります</b><div class="note" style="font-size:11.5px;margin-top:3px;line-height:1.7;color:var(--ink)">困りごと・家族の状況・希望サポートをタップで選ぶだけ。SATOIが整理して<b>地域包括支援センターに渡せる1枚のカード</b>に。電話・訪問のとき、話がスムーズに伝わります。</div></div>
+      </div>
+      <div class="card" style="padding:13px;display:flex;align-items:flex-start;gap:11px">
+        <span class="ic" style="width:36px;height:36px;background:var(--amber-bg);color:var(--amber-t);flex-shrink:0;margin-top:2px"><i class="ti ti-wheelchair" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13px;color:var(--amber-t)">② 介護保険の申請を伴走</b><div class="note" style="font-size:11.5px;margin-top:3px;line-height:1.7;color:var(--ink)">がん末期は<b>40歳から対象</b>（第2号被保険者）。申請の5ステップ・主治医意見書のもらい方・暫定ケアプランで先行利用までSATOIが順番に案内。</div></div>
+      </div>
+      <div class="card" style="padding:13px;display:flex;align-items:flex-start;gap:11px">
+        <span class="ic" style="width:36px;height:36px;background:var(--rose-bg);color:var(--rose);flex-shrink:0;margin-top:2px"><i class="ti ti-home-heart" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13px;color:#993556">③ 訪問看護・訪問診療をつなぎます</b><div class="note" style="font-size:11.5px;margin-top:3px;line-height:1.7;color:var(--ink)">通院がつらい・自宅で治療を続けたい時。<b>病院MSWと地域包括の3者連携</b>でSATOIが間に立って情報を渡します。緩和ケアもこの動線で。</div></div>
+      </div>
+      <div class="card" style="padding:13px;display:flex;align-items:flex-start;gap:11px">
+        <span class="ic" style="width:36px;height:36px;background:#EEEDFE;color:#3C3489;flex-shrink:0;margin-top:2px"><i class="ti ti-coffee" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13px;color:#3C3489">④ 介護するご家族の休息も</b><div class="note" style="font-size:11.5px;margin-top:3px;line-height:1.7;color:var(--ink)">ご家族（夫・親・きょうだい）の疲労を見逃さない。<b>レスパイトケア・介護者カウンセリング・介護者の集い</b>まで案内します。</div></div>
+      </div>
+    </div>
+
+    <!-- ★相談したくなったら → 連絡カード生成へ -->
+    <div class="card" style="margin-top:16px;padding:14px;background:#FFFCF6;border:1.5px solid var(--teal);text-align:center">
+      <div style="font-size:13px;color:var(--ink);line-height:1.7;margin-bottom:9px">相談したくなったら、<b>SATOIが連絡カードを整えます</b>。<br>必要な情報をタップで選ぶだけで完成します。</div>
+      <button class="btn btn-teal" style="padding:13px;font-size:14px" onclick="document.getElementById('hkCardArea').scrollIntoView({behavior:'smooth',block:'start'})"><i class="ti ti-arrow-down" style="vertical-align:-2px"></i> AI連絡カードを作る</button>
+    </div>
+
+    <div id="hkCardArea"></div>
+
+    <!-- 自治体検索（簡易プルダウン・葵さん想定で東京デフォルト） -->
+    <div class="card" style="margin-top:14px;background:var(--teal-bg);border:none">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span class="ic ic34" style="background:#fff"><i class="ti ti-map-pin" style="font-size:18px;color:var(--teal-d)"></i></span><b style="font-size:13.5px;color:var(--teal-d)">お住まいの自治体</b></div>
+      <select id="hkPref" style="width:100%;padding:9px 11px;border:.5px solid var(--teal);border-radius:8px;font-size:13px;background:#fff" onchange="hkRender()">
+        <option value="tokyo_setagaya">東京都 世田谷区</option>
+        <option value="tokyo_minato">東京都 港区</option>
+        <option value="tokyo_shinjuku">東京都 新宿区</option>
+        <option value="osaka_kita">大阪府 大阪市北区</option>
+        <option value="aichi_nagoya">愛知県 名古屋市中区</option>
+        <option value="other">その他の地域（手動入力）</option>
+      </select>
+      <div id="hkCenterInfo" style="margin-top:10px;padding:10px 12px;background:#fff;border-radius:8px;font-size:12px;line-height:1.7;color:var(--ink)"></div>
+    </div>
+
+    <!-- ★AIサポート連絡カード生成（中核機能） -->
+    <div class="sechd" style="margin-top:20px"><i class="ti ti-clipboard-heart" style="color:var(--rose)"></i> AIが、連絡カードを整えます</div>
+    <div class="sub" style="margin-bottom:10px;font-size:12px">あなたの状況をSATOIが整理して、相談員さんに伝わりやすい1枚のカードに。電話・訪問の前に持っていくと話がスムーズです</div>
+
+    <div class="card" style="background:linear-gradient(135deg,#fff,var(--teal-bg));border:1px solid var(--teal);padding:14px">
+      <!-- ① 患者状況（プロファイルから自動） -->
+      <div style="margin-bottom:11px">
+        <div style="font-size:11px;color:var(--teal-d);letter-spacing:.04em;font-weight:700;margin-bottom:5px"><i class="ti ti-user" style="vertical-align:-2px"></i> ① 患者さんの状況（自動入力）</div>
+        <div style="background:#fff;border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.75;color:var(--ink)">
+          <div><b>葵さん（42歳・女性）</b></div>
+          <div style="color:var(--mute);font-size:11px;margin-top:2px">子宮頸がん ステージⅢ／CCRT 5週目・残り2週／治療中</div>
+        </div>
+      </div>
+
+      <!-- ② 介護・生活の困りごと（チェック式） -->
+      <div style="margin-bottom:11px">
+        <div style="font-size:11px;color:var(--teal-d);letter-spacing:.04em;font-weight:700;margin-bottom:5px"><i class="ti ti-list-check" style="vertical-align:-2px"></i> ② 今、困っていること（タップで選択・複数OK）</div>
+        <div id="hkNeeds" style="display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+
+      <!-- ③ 家族構成 -->
+      <div style="margin-bottom:11px">
+        <div style="font-size:11px;color:var(--teal-d);letter-spacing:.04em;font-weight:700;margin-bottom:5px"><i class="ti ti-users" style="vertical-align:-2px"></i> ③ ご家族の状況</div>
+        <div style="background:#fff;border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.75;color:var(--ink)">
+          夫（45歳・会社員）・お子様1人（8歳）／同居3人<br>
+          <span style="color:var(--mute);font-size:11px">主介護者：夫（平日日中は不在）</span>
+        </div>
+      </div>
+
+      <!-- ④ 希望するサポート -->
+      <div style="margin-bottom:11px">
+        <div style="font-size:11px;color:var(--teal-d);letter-spacing:.04em;font-weight:700;margin-bottom:5px"><i class="ti ti-heart" style="vertical-align:-2px"></i> ④ 受けたいサポート（タップで選択）</div>
+        <div id="hkWants" style="display:flex;flex-wrap:wrap;gap:5px"></div>
+      </div>
+
+      <!-- 生成ボタン -->
+      <button class="btn btn-teal" style="margin-top:9px;padding:12px;font-size:14px" onclick="hkGenerateCard()"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> SATOIが連絡カードを生成</button>
+    </div>
+
+    <!-- 生成された連絡カード（初期は非表示） -->
+    <div id="hkGenCard" style="display:none;margin-top:14px"></div>
+
+    <!-- 連絡先・関連動線 -->
+    <div class="sechd" style="margin-top:20px"><i class="ti ti-phone" style="color:var(--teal)"></i> 連絡先・関連サポート</div>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px">
+      <button class="card" style="text-align:left;padding:12px 14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="hkCallCenter()">
+        <span class="ic ic46" style="background:var(--teal-bg);flex-shrink:0"><i class="ti ti-phone-call" style="font-size:22px;color:var(--teal-d)"></i></span>
+        <span style="flex:1"><b style="font-size:14px;color:var(--teal-d)">電話で相談</b><span class="note" style="display:block;font-size:11px;margin-top:1px">平日 9:00〜17:00 ／ 無料</span></span>
+        <span style="font-size:11px;color:var(--teal);font-weight:700">タップ</span>
+      </button>
+      <button class="card" style="text-align:left;padding:12px 14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="if(typeof toast==='function')toast('訪問相談を予約しました（デモ）。後日センターから連絡が来ます')">
+        <span class="ic ic46" style="background:var(--amber-bg);flex-shrink:0"><i class="ti ti-home-heart" style="font-size:22px;color:var(--amber-t)"></i></span>
+        <span style="flex:1"><b style="font-size:14px;color:var(--amber-t)">訪問相談を予約</b><span class="note" style="display:block;font-size:11px;margin-top:1px">相談員がご自宅へ訪問（無料）</span></span>
+        <i class="ti ti-chevron-right" style="color:var(--amber)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:12px 14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('kaigohoken')">
+        <span class="ic ic46" style="background:var(--blue-bg);flex-shrink:0"><i class="ti ti-wheelchair" style="font-size:22px;color:var(--blue-d)"></i></span>
+        <span style="flex:1"><b style="font-size:14px;color:var(--blue-d)">介護保険の申請（40-64歳含む）</b><span class="note" style="display:block;font-size:11px;margin-top:1px">がん末期は40歳から対象（第2号被保険者）</span></span>
+        <i class="ti ti-chevron-right" style="color:var(--blue)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:12px 14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('homecare')">
+        <span class="ic ic46" style="background:var(--rose-bg);flex-shrink:0"><i class="ti ti-home-2" style="font-size:22px;color:var(--rose)"></i></span>
+        <span style="flex:1"><b style="font-size:14px;color:#993556">訪問看護・訪問診療</b><span class="note" style="display:block;font-size:11px;margin-top:1px">在宅で医療・看護を受ける</span></span>
+        <i class="ti ti-chevron-right" style="color:var(--rose)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:12px 14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('respite')">
+        <span class="ic ic46" style="background:#EEEDFE;flex-shrink:0"><i class="ti ti-coffee" style="font-size:22px;color:#3C3489"></i></span>
+        <span style="flex:1"><b style="font-size:14px;color:#3C3489">レスパイトケア</b><span class="note" style="display:block;font-size:11px;margin-top:1px">介護するご家族の休息支援</span></span>
+        <i class="ti ti-chevron-right" style="color:#534AB7"></i>
+      </button>
+    </div>
+
+    <!-- よくある相談内容 -->
+    <div class="sechd" style="margin-top:20px"><i class="ti ti-message-circle" style="color:var(--amber)"></i> よくある相談</div>
+    <div style="margin-top:8px;border:.5px solid var(--line2);border-radius:12px;overflow:hidden">
+      <details class="navrow" style="border-bottom:.5px solid var(--line2);padding:11px 14px"><summary style="cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;font-size:12.5px"><i class="ti ti-circle-dot" style="color:var(--teal)"></i> 治療中で家事ができないとき<i class="ti ti-chevron-down" style="margin-left:auto;color:var(--mute)"></i></summary><div class="note" style="margin-top:6px;line-height:1.7;font-size:11.5px">介護保険認定（要支援1-2）でホームヘルパー利用可。自治体独自の家事支援サービスもあります。SATOIから直接申請動線へ。</div></details>
+      <details class="navrow" style="border-bottom:.5px solid var(--line2);padding:11px 14px"><summary style="cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;font-size:12.5px"><i class="ti ti-circle-dot" style="color:var(--teal)"></i> 通院の付き添いが必要<i class="ti ti-chevron-down" style="margin-left:auto;color:var(--mute)"></i></summary><div class="note" style="margin-top:6px;line-height:1.7;font-size:11.5px">介護タクシー・福祉有償運送・通院介助のサービスがあります。要介護認定後に利用可。</div></details>
+      <details class="navrow" style="border-bottom:.5px solid var(--line2);padding:11px 14px"><summary style="cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;font-size:12.5px"><i class="ti ti-circle-dot" style="color:var(--teal)"></i> 病院から在宅へ移行したい<i class="ti ti-chevron-down" style="margin-left:auto;color:var(--mute)"></i></summary><div class="note" style="margin-top:6px;line-height:1.7;font-size:11.5px">退院支援看護師・病院MSW・地域包括支援センターの3者連携。SATOIが間に立って情報をつなぎます。</div></details>
+      <details class="navrow" style="border-bottom:none;padding:11px 14px"><summary style="cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;font-size:12.5px"><i class="ti ti-circle-dot" style="color:var(--teal)"></i> 家族（介護者）が疲れてしまった<i class="ti ti-chevron-down" style="margin-left:auto;color:var(--mute)"></i></summary><div class="note" style="margin-top:6px;line-height:1.7;font-size:11.5px">レスパイトケア（短期入所）・介護者の集い・カウンセリングがあります。介護者ご自身の健康相談も無料で受けられます。</div></details>
+    </div>
+
+    <div class="note" style="margin-top:14px;line-height:1.7"><i class="ti ti-shield-lock" style="vertical-align:-2px"></i> 連絡カードの送信は本人同意の範囲のみ。情報はSATOI暗号化保管・JOiNT諮問監督下。</div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+<script>
+(function(){
+  if(window._hkInit)return;window._hkInit=true;
+  var CENTERS={
+    tokyo_setagaya:{name:'世田谷区 高齢福祉部 地域包括支援センター（モデル）',tel:'03-5432-XXXX',hours:'平日 9:00〜17:00',area:'世田谷区内 28箇所'},
+    tokyo_minato:{name:'港区 高齢者相談センター（モデル）',tel:'03-3578-XXXX',hours:'平日 8:30〜17:15',area:'港区内 5箇所'},
+    tokyo_shinjuku:{name:'新宿区 高齢者総合相談センター（モデル）',tel:'03-5273-XXXX',hours:'平日 9:00〜17:00',area:'新宿区内 10箇所'},
+    osaka_kita:{name:'大阪市北区 地域包括支援センター（モデル）',tel:'06-6313-XXXX',hours:'平日 9:00〜17:30',area:'北区内 5箇所'},
+    aichi_nagoya:{name:'名古屋市中区 いきいき支援センター（モデル）',tel:'052-265-XXXX',hours:'平日 9:00〜17:00',area:'中区内 3箇所'},
+    other:{name:'お住まいの地域包括支援センター',tel:'お住まいの自治体HPで検索',hours:'平日が一般的',area:'各自治体に複数箇所'}
+  };
+  var NEEDS=['通院の付き添いが必要','家事（買い物・調理・掃除）','育児サポート（子8歳）','服薬管理','排泄・入浴の介助','夜間の見守り','家族（夫）が疲れている','医療機器の使い方','住宅改修・福祉用具','金銭管理'];
+  var WANTS=['ホームヘルパー','介護タクシー','訪問看護','訪問診療','デイサービス','配食サービス','ショートステイ（家族の休息）','ケアマネ紹介','医療MSW連携','カウンセリング'];
+  var sel={needs:[],wants:[]};
+  function renderChips(host,arr,key){
+    var el=document.getElementById(host);if(!el)return;
+    el.innerHTML=arr.map(function(t){
+      var on=sel[key].indexOf(t)>=0;
+      return '<button onclick="hkToggle(\''+key+'\',\''+t+'\')" style="font-size:11.5px;padding:7px 11px;border:.5px solid '+(on?'var(--teal)':'var(--line2)')+';border-radius:999px;background:'+(on?'var(--teal)':'#fff')+';color:'+(on?'#fff':'var(--ink)')+';cursor:pointer;font:inherit;font-weight:'+(on?'700':'500')+'">'+t+'</button>';
+    }).join('');
+  }
+  window.hkToggle=function(key,val){
+    var idx=sel[key].indexOf(val);
+    if(idx>=0)sel[key].splice(idx,1);else sel[key].push(val);
+    renderChips(key==='needs'?'hkNeeds':'hkWants',key==='needs'?NEEDS:WANTS,key);
+  };
+  window.hkRender=function(){
+    var key=document.getElementById('hkPref').value;
+    var c=CENTERS[key]||CENTERS.other;
+    document.getElementById('hkCenterInfo').innerHTML=
+      '<b style="color:var(--teal-d)">'+c.name+'</b><br>'
+      +'<span style="color:var(--mute);font-size:11px">電話：'+c.tel+' ／ '+c.hours+' ／ '+c.area+'</span>';
+  };
+  window.hkCallCenter=function(){
+    var key=document.getElementById('hkPref').value;
+    var c=CENTERS[key]||CENTERS.other;
+    if(typeof satoiNotify==='function')satoiNotify('☎ '+c.tel+' に発信します（デモ）\n'+c.name+'\n'+c.hours,{kind:'info',duration:5000});
+    else if(typeof toast==='function')toast(c.name+' '+c.tel+' に発信（デモ）');
+  };
+  window.hkGenerateCard=function(){
+    var key=document.getElementById('hkPref').value;
+    var c=CENTERS[key]||CENTERS.other;
+    var needs=sel.needs.length?sel.needs.join('・'):'未選択';
+    var wants=sel.wants.length?sel.wants.join('・'):'未選択';
+    var d=new Date();var dStr=d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0');
+    var html=
+      '<div class="card" style="background:linear-gradient(180deg,#FFFCF6,#F5F1E8);border:1.5px solid var(--teal-d);padding:14px;border-radius:14px">'
+        +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><i class="ti ti-clipboard-check" style="font-size:20px;color:var(--teal-d)"></i><b style="font-size:14px;color:var(--teal-d)">地域包括支援センター 連絡カード</b><span style="margin-left:auto;font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--mute)">'+dStr+' 生成</span></div>'
+        +'<div style="background:#fff;border-radius:8px;padding:11px 13px;font-size:11.5px;line-height:1.8;color:var(--ink)">'
+          +'<div style="font-size:10px;color:var(--mute);font-weight:700;letter-spacing:.04em">▸ 連絡先</div>'
+          +'<div style="margin-bottom:8px"><b>'+c.name+'</b><br><span style="font-size:11px;color:var(--mute)">'+c.tel+' ／ '+c.hours+'</span></div>'
+          +'<div style="font-size:10px;color:var(--mute);font-weight:700;letter-spacing:.04em;border-top:.5px dashed var(--line2);padding-top:7px">▸ 患者さんの状況</div>'
+          +'<div style="margin-bottom:6px">葵さん（42歳・女性）／子宮頸がん ステージⅢ／CCRT 5週目（残り2週）</div>'
+          +'<div style="font-size:10px;color:var(--mute);font-weight:700;letter-spacing:.04em">▸ 困りごと</div>'
+          +'<div style="margin-bottom:6px">'+needs+'</div>'
+          +'<div style="font-size:10px;color:var(--mute);font-weight:700;letter-spacing:.04em">▸ ご家族</div>'
+          +'<div style="margin-bottom:6px">夫（45歳・会社員・平日日中不在）・お子様（8歳）／同居3人</div>'
+          +'<div style="font-size:10px;color:var(--mute);font-weight:700;letter-spacing:.04em">▸ 希望サポート</div>'
+          +'<div style="margin-bottom:6px">'+wants+'</div>'
+          +'<div style="font-size:10px;color:var(--mute);font-weight:700;letter-spacing:.04em">▸ SATOIからの補足</div>'
+          +'<div style="background:var(--teal-bg);padding:7px 9px;border-radius:6px;color:var(--teal-d);line-height:1.7"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> 葵さんは治療中で、ご主人が日中不在のため育児・家事支援が早めに必要です。介護保険認定（がん末期該当の場合は40歳から第2号被保険者として対象）の検討と、子どもの一時保育・学校送迎の地域資源を、優先的にご相談ください。</div>'
+        +'</div>'
+        +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:11px">'
+          +'<button class="btn btn-teal" style="padding:10px;font-size:12px" onclick="hkCallCenter()"><i class="ti ti-phone" style="vertical-align:-2px"></i> このカードで電話</button>'
+          +'<button class="btn btn-out" style="padding:10px;font-size:12px" onclick="if(typeof toast===&quot;function&quot;)toast(&quot;PDFとして保存（デモ）&quot;)"><i class="ti ti-download" style="vertical-align:-2px"></i> PDF保存</button>'
+        +'</div>'
+        +'<button class="btn btn-out" style="margin-top:6px;padding:10px;font-size:12px" onclick="if(typeof toast===&quot;function&quot;)toast(&quot;訪問予約フォームを開きます（デモ）&quot;)"><i class="ti ti-calendar" style="vertical-align:-2px"></i> このカードを持って訪問予約</button>'
+      +'</div>';
+    var gen=document.getElementById('hkGenCard');gen.innerHTML=html;gen.style.display='block';
+    gen.scrollIntoView({behavior:'smooth',block:'start'});
+  };
+  window._oninit=window._oninit||{};
+  window._oninit['houkatsucenter']=function(){
+    renderChips('hkNeeds',NEEDS,'needs');
+    renderChips('hkWants',WANTS,'wants');
+    hkRender();
+  };
+})();
+</script>
+
+<!-- ============ 介護保険（40-64歳含む） ============ -->
+<section class="scr" id="kaigohoken">
+  <div class="pad">
+    <button class="back" onclick="go('houkatsucenter')"><i class="ti ti-arrow-left"></i> 地域包括支援センター</button>
+    <h1 class="h1" style="margin-top:10px">介護保険の申請</h1>
+    <div class="sub">がん末期に該当する場合、<b>40〜64歳でも対象</b>（第2号被保険者）。要支援1〜要介護5まで7段階</div>
+    <div class="info" style="margin-top:12px"><i class="ti ti-info-circle" style="font-size:17px;color:var(--blue)"></i><div>葵さんの場合：CCRT 5週目・治療中。第2号被保険者の対象になるか、地域包括支援センターと主治医に相談してください。</div></div>
+    <div class="card" style="margin-top:12px"><b style="font-size:13.5px">申請の流れ（5ステップ）</b>
+      <div style="margin-top:9px;display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;gap:9px;align-items:flex-start"><span class="ic" style="width:26px;height:26px;background:var(--teal-bg);color:var(--teal-d);font-size:13px;font-weight:700;flex-shrink:0">1</span><div style="flex:1;font-size:12px;line-height:1.7">市区町村窓口 or 地域包括支援センターで申請（無料）</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span class="ic" style="width:26px;height:26px;background:var(--teal-bg);color:var(--teal-d);font-size:13px;font-weight:700;flex-shrink:0">2</span><div style="flex:1;font-size:12px;line-height:1.7">調査員の訪問（74項目の聞き取り・30分〜1時間）</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span class="ic" style="width:26px;height:26px;background:var(--teal-bg);color:var(--teal-d);font-size:13px;font-weight:700;flex-shrink:0">3</span><div style="flex:1;font-size:12px;line-height:1.7">主治医意見書（市区町村が主治医に依頼）</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span class="ic" style="width:26px;height:26px;background:var(--teal-bg);color:var(--teal-d);font-size:13px;font-weight:700;flex-shrink:0">4</span><div style="flex:1;font-size:12px;line-height:1.7">介護認定審査会（要支援1-2／要介護1-5 のいずれかを判定）</div></div>
+        <div style="display:flex;gap:9px;align-items:flex-start"><span class="ic" style="width:26px;height:26px;background:var(--teal-bg);color:var(--teal-d);font-size:13px;font-weight:700;flex-shrink:0">5</span><div style="flex:1;font-size:12px;line-height:1.7">ケアマネジャー（ケアプラン）→ サービス開始</div></div>
+      </div>
+      <div class="note" style="margin-top:9px;line-height:1.7"><i class="ti ti-clock" style="vertical-align:-2px"></i> 申請から認定まで約30日。やむを得ない場合は<b>暫定ケアプラン</b>で先行利用可能</div>
+    </div>
+    <button class="btn btn-teal" style="margin-top:12px" onclick="go('houkatsucenter')"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> 地域包括支援センターで申請を相談</button>
+    <div class="note" style="margin-top:12px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：厚生労働省 介護保険制度 ／ 各自治体のパンフレット。第2号被保険者（40〜64歳）の特定疾病：「がん末期（医師が一般に認められた医学的知見に基づき回復の見込みがない状態に至ったと判断したもの）」など16疾病。</div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ 訪問看護・訪問診療 ============ -->
+<section class="scr" id="homecare">
+  <div class="pad">
+    <button class="back" onclick="go('houkatsucenter')"><i class="ti ti-arrow-left"></i> 地域包括支援センター</button>
+    <h1 class="h1" style="margin-top:10px">訪問看護・訪問診療</h1>
+    <div class="sub">病院に行かなくても、医師や看護師が自宅に来てくれます</div>
+    <div class="card" style="margin-top:12px;background:var(--rose-bg);border:none">
+      <b style="font-size:13.5px;color:#993556">こんなとき・こんな方に</b>
+      <div style="margin-top:8px;font-size:12px;line-height:1.85;color:#7a3b2c">
+        ・通院がつらい／体力が落ちている<br>
+        ・在宅で点滴・投薬管理が必要<br>
+        ・痛みや症状のコントロールが必要<br>
+        ・緩和ケアを自宅で続けたい<br>
+        ・ご家族だけでは医療的なケアが不安
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+      <div class="card" style="padding:12px"><b style="font-size:13px;color:var(--teal-d)">訪問看護</b><div class="note" style="margin-top:5px;font-size:11.5px;line-height:1.7">看護師が自宅へ。医療処置・服薬管理・症状観察・家族支援</div><div class="note" style="margin-top:5px;font-size:10.5px"><b>保険適用</b>：医療保険／介護保険</div></div>
+      <div class="card" style="padding:12px"><b style="font-size:13px;color:var(--rose)">訪問診療</b><div class="note" style="margin-top:5px;font-size:11.5px;line-height:1.7">医師が定期的に自宅へ。診察・処方・往診</div><div class="note" style="margin-top:5px;font-size:10.5px"><b>保険適用</b>：医療保険</div></div>
+    </div>
+    <button class="btn btn-teal" style="margin-top:14px" onclick="go('houkatsucenter')"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> 地域包括支援センターに相談する</button>
+    <div class="note" style="margin-top:10px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 出典：厚生労働省 在宅医療・介護連携推進事業 ／ 日本訪問看護財団。最寄りのサービスは病院の医療相談室（MSW）・地域包括支援センターで紹介してもらえます。</div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ レスパイトケア（介護家族の休息） ============ -->
+<section class="scr" id="respite">
+  <div class="pad">
+    <button class="back" onclick="go('houkatsucenter')"><i class="ti ti-arrow-left"></i> 地域包括支援センター</button>
+    <h1 class="h1" style="margin-top:10px">レスパイトケア</h1>
+    <div class="sub">介護するご家族（夫・親・きょうだい）の<b>休息</b>を支える仕組みです。介護する人の健康も大切に</div>
+    <div class="card" style="margin-top:12px;background:#EEEDFE;border:none">
+      <b style="font-size:13.5px;color:#3C3489">こんなとき、使ってください</b>
+      <div style="margin-top:8px;font-size:12px;line-height:1.85;color:#26215C">
+        ・介護で疲れがたまっている<br>
+        ・自分の通院・用事で家を空けたい<br>
+        ・気持ちの整理がつかない・眠れない<br>
+        ・冠婚葬祭・出張で数日離れる必要がある<br>
+        ・「介護する人」が倒れる前に
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px">
+      <div class="card" style="padding:12px"><b style="font-size:13px;color:#3C3489">ショートステイ</b><div class="note" style="margin-top:5px;font-size:11.5px;line-height:1.7">数日〜2週間まで施設で過ごす。介護保険の対象。要介護認定が必要</div></div>
+      <div class="card" style="padding:12px"><b style="font-size:13px;color:#3C3489">レスパイト入院</b><div class="note" style="margin-top:5px;font-size:11.5px;line-height:1.7">病院に短期入院。医療的ケアが必要な方向け。緩和ケア病棟や訪問診療医と連携</div></div>
+      <div class="card" style="padding:12px"><b style="font-size:13px;color:#3C3489">介護者カウンセリング</b><div class="note" style="margin-top:5px;font-size:11.5px;line-height:1.7">家族介護者向けの心理相談。地域包括支援センターで無料相談可</div></div>
+      <div class="card" style="padding:12px"><b style="font-size:13px;color:#3C3489">介護者の集い</b><div class="note" style="margin-top:5px;font-size:11.5px;line-height:1.7">同じ立場の家族同士で話せる場。各自治体や患者会が運営</div></div>
+    </div>
+    <button class="btn btn-teal" style="margin-top:14px" onclick="go('houkatsucenter')"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> 地域包括支援センターに相談する</button>
+    <div class="note" style="margin-top:10px;line-height:1.7"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 「介護する人」の健康と心が守られて初めて、長く支え合えます。お一人で抱え込まないでください。</div>
     <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
   </div>
 </section>
@@ -4912,7 +5308,7 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
 <!-- ============ 同意・プライバシー ============ -->
 <section class="scr" id="consent">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">データの扱い</h1>
     <div class="sub">あなたが見られるものは、私たちも同じだけ。これが「鏡の原則」です</div>
     <div class="card" style="margin-top:14px">
@@ -4937,7 +5333,7 @@ window._oninit['fp']=function(){document.getElementById('fpForm').style.display=
 <!-- ============ 物語を続ける（あなたの育つ世界） ============ -->
 <section class="scr" id="story">
   <div style="padding:14px 16px 2px">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
   </div>
   <div style="margin:6px 16px 0;border-radius:20px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 8px 24px rgba(38,48,63,.12)">
     <div id="storyCover" style="height:172px;position:relative;background:radial-gradient(120% 95% at 78% 100%, #FFE9C0 0%, #F3C892 22%, #E0A45E 42%, #C98B6E 64%, #EAEFF4 100%)">
@@ -5599,9 +5995,11 @@ window.prSelectMovie=prSelectMovie;
 window._oninit['prmovie']=function(){var v=document.getElementById('prmovieVid');if(!v)return;
   prRenderTabs();
   var s=v.querySelector('source');if(s)s.setAttribute('src',window.PRMOVIES[window._prmovieIdx].src);
-  v.onloadeddata=prShowReal;v.oncanplay=prShowReal;v.onerror=prShowPlaceholder;
+  /* ★Katsu指示：本動画フレームを最初から表示（30秒ダイジェスト非表示）。再生はユーザーがタップしてから */
+  v.onerror=prShowPlaceholder;
   if(s)s.onerror=prShowPlaceholder;
-  prShowPlaceholder();try{v.load();}catch(e){}
+  prShowReal();
+  try{v.load();}catch(e){}
 };
 /* prmovie画面から離れたら動画を停止（戻るボタン後も音が鳴り続ける問題の対策）。リスナーは一度だけ登録。 */
 if(!window._prmovieStopWired){window._prmovieStopWired=true;
@@ -5812,7 +6210,7 @@ function lToggle(){lplay=!lplay;document.getElementById('lIcon').className=lplay
 <!-- ============ 相談カード：はじめに（説明＋例＋つくる） ============ -->
 <section class="scr" id="sdmstart">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">相談カードって？</h1>
     <div class="sub">あなたの気持ちと聞きたいことを、相手に伝わる一枚にします</div>
     <style>#sdmExpl>summary::-webkit-details-marker{display:none}#sdmExpl[open]>summary .dc{transform:rotate(180deg)}</style>
@@ -6088,7 +6486,7 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
 <!-- ============ からだの記録 ============ -->
 <section class="scr" id="body">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">からだの記録</h1>
     <div class="sub">今日の調子を、かんたんに残せます</div>
     <div style="font-size:13px;font-weight:600;margin:16px 0 10px">今日の調子は？</div>
@@ -6136,9 +6534,21 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
 <!-- ============ 家族と支え合う ============ -->
 <section class="scr" id="family">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">心と家族</h1>
     <div class="sub">支え合い、伝えることを、やさしくお手伝いします</div>
+
+    <!-- ★統一Hero：SATOIで、できること -->
+    <div class="card" style="margin-top:14px;padding:16px;background:linear-gradient(135deg,#FAECE7,#FFFCF6);border:1.5px solid #D85A30;box-shadow:0 4px 14px rgba(216,90,48,.12)">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+        <span class="ic" style="width:38px;height:38px;background:#D85A30;color:#fff"><i class="ti ti-heart-handshake" style="font-size:20px"></i></span>
+        <div style="flex:1"><b style="font-size:14px;color:#993C1D;display:block">SATOIで、できること</b><span style="font-size:11px;color:#993C1D;opacity:.8">家族への伝え方を、一緒に考える</span></div>
+      </div>
+      <div style="font-size:12.5px;line-height:1.85;color:#712B13">
+        告知の後、<b>家族にどう話せばいいか</b>。子ども・親・配偶者、それぞれにふさわしい言葉があります。SATOIは、<b>伝え方サポート</b>、<b>声で気持ちを残す</b>、<b>家族と分かち合うファミリービュー</b>、<b>こども向けのやさしい見え方</b>まで、家族の物語を一緒に紡ぎます。
+      </div>
+    </div>
+
     <div style="margin-top:12px;border-radius:14px;overflow:hidden;height:92px;position:relative;background:linear-gradient(120deg,#F7E6EC,#FBEEDE 60%,#E7F1E8)"><img data-aoi="hero_family" src="img/aoi_hero_family.jpg" alt="" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
     <div class="row2" style="margin-top:14px">
       <button class="tile" onclick="go('sdm')"><span class="ic ic46" style="background:var(--rose-bg)"><i class="ti ti-message-2-heart" style="font-size:24px;color:var(--rose)"></i></span><div style="font-size:14px;font-weight:600;margin-top:9px">伝え方サポート</div><div class="note">家族にどう話す？</div></button>
@@ -6384,7 +6794,7 @@ function docJob(b){var ps=b.parentNode.querySelectorAll('.chip');for(var i=0;i<p
 <!-- ============ つらい時の相談先 ============ -->
 <section class="scr" id="support">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">つらい時の相談先</h1>
     <div class="sub">ひとりで抱えなくて大丈夫。話せる場所があります。</div>
     <div class="card" style="margin-top:14px">
@@ -6434,7 +6844,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 <!-- ============ EMPSe 多軸チェックイン ============ -->
 <section class="scr" id="empse">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">いまの、わたし</h1>
     <div class="sub">EMPSe — 5つの面から、今のあなたを見つめます。スコアは競うものではなく、あなたと支える人が変化に気づくための地図です。</div>
     <div class="card" style="margin-top:10px;background:var(--teal-bg);border:none;line-height:1.85;font-size:12.5px;color:var(--teal-d)">
@@ -6681,7 +7091,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 </style>
 <section class="scr" id="records">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">わたしの記録</h1>
     <div class="sub">残してきた声・言葉・からだの記録を、見返せます</div>
     <div id="tsuboCard" style="margin-top:14px;border-radius:18px;overflow:hidden;border:.5px solid var(--line2);box-shadow:0 6px 20px rgba(38,48,63,.1)">
@@ -6766,7 +7176,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 <!-- ============ Tier1-① AYA世代（15-39歳）特化 ★Katsu要望2026-05-29／NCC「AYA世代の方へ」を踏まえSATOI再構成 ============ -->
 <section class="scr" id="aya">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">AYA世代のあなたへ</h1>
     <div class="sub">15歳から39歳。学校・仕事・恋愛・家族——あなたの時間軸で、整える</div>
 
@@ -6860,7 +7270,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 <!-- ============ Tier1-③ アピアランスケア（appearance） ============ -->
 <section class="scr" id="appearance">
   <div class="pad">
-    <button class="back" onclick="go('support')"><i class="ti ti-arrow-left"></i> 緩和ケア・こころ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">アピアランスケア</h1>
     <div class="sub">脱毛・爪・皮膚・むくみ——治療と外見の変化と、向き合い方</div>
 
@@ -7266,13 +7676,52 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 <!-- ============ Tier2-⑦ 症状管理・支持療法（symptoms） ============ -->
 <section class="scr" id="symptoms">
   <div class="pad">
-    <button class="back" onclick="go('support')"><i class="ti ti-arrow-left"></i> 緩和ケア・こころ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">症状・副作用と向き合う</h1>
     <div class="sub">痛み・吐き気・倦怠感・しびれ・口内炎・発熱・便秘・下痢——記録し、伝え、和らげる</div>
 
-    <div class="card" style="margin-top:14px;background:var(--rose-bg);border:none;line-height:1.85;font-size:13px;color:#7a3b2c">
-      症状は「我慢するもの」ではなく、<b>治療と一緒に整えていくもの</b>です。多くの症状には<b>有効な対処法</b>が示されています。<b>がまんしない・記録する・早めに伝える</b>の3つが基本です（出典：日本緩和医療学会 がん疼痛の薬物療法に関するガイドライン2020年版／日本がんサポーティブケア学会）。
+    <!-- ★統一Hero：SATOIで、できること -->
+    <div class="card" style="margin-top:14px;padding:16px;background:linear-gradient(135deg,#FBEAF0,#FFFCF6);border:1.5px solid var(--rose);box-shadow:0 4px 14px rgba(199,107,127,.12)">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+        <span class="ic" style="width:38px;height:38px;background:var(--rose);color:#fff"><i class="ti ti-mood-sad" style="font-size:20px"></i></span>
+        <div style="flex:1"><b style="font-size:14px;color:#993556;display:block">SATOIで、できること</b><span style="font-size:11px;color:#993556;opacity:.8">副作用を記録し、伝え、和らげる</span></div>
+      </div>
+      <div style="font-size:12.5px;line-height:1.85;color:#7a3b2c">
+        症状は「我慢するもの」ではなく、<b>治療と一緒に整えていくもの</b>。SATOIは<b>PRO-CTCAE準拠</b>で記録を支え、<b>主治医に伝わる言葉</b>に整理。「がまんしない・記録する・早めに伝える」を一緒に。
+      </div>
     </div>
+
+    <!-- ★こんなことが分かります／できます -->
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-list-check" style="color:var(--rose)"></i> こんなことが分かります／できます</div>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px">
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('body')">
+        <span class="ic" style="width:36px;height:36px;background:var(--rose-bg);color:var(--rose);flex-shrink:0"><i class="ti ti-pencil" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:#993556">からだの記録（PRO-CTCAE）</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">8症状を5段階で・声でも文字でも</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('sdmstart')">
+        <span class="ic" style="width:36px;height:36px;background:var(--teal-bg);color:var(--teal-d);flex-shrink:0"><i class="ti ti-clipboard-heart" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:var(--teal-d)">相談カードに整理</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">主治医に伝わる言葉に・SATOIが整理</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('emergency')">
+        <span class="ic" style="width:36px;height:36px;background:#FCEBEB;color:#A32D2D;flex-shrink:0"><i class="ti ti-urgent" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:#A32D2D">緊急時カード（発熱・出血等）</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">発熱性好中球減少症など、すぐ連絡</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('mental_care')">
+        <span class="ic" style="width:36px;height:36px;background:#EEEDFE;color:#3C3489;flex-shrink:0"><i class="ti ti-cloud" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:#3C3489">心のケア</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">不安・抑うつ・眠れない時</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="text-align:left;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;border:.5px solid var(--line2)" onclick="go('appearance')">
+        <span class="ic" style="width:36px;height:36px;background:var(--amber-bg);color:var(--amber-t);flex-shrink:0"><i class="ti ti-cut" style="font-size:19px"></i></span>
+        <div style="flex:1"><b style="font-size:13.5px;color:var(--amber-t)">アピアランスケア</b><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">脱毛・爪・皮膚の変化への対処</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+    </div>
+
+    <div class="sechd" style="margin-top:18px"><i class="ti ti-book-2" style="color:var(--rose)"></i> 症状別 ・ やさしい解説（出典付き）</div>
 
     <details class="qa" style="margin-top:14px"><summary><i class="ti ti-bone" style="vertical-align:-2px;color:var(--rose)"></i> 痛み</summary>
       <div class="note" style="line-height:1.9;font-size:13px">非オピオイド・<b>弱オピオイド（コデイン等）・強オピオイド（モルヒネ・オキシコドン・フェンタニル等）</b>・鎮痛補助薬を段階的に組み合わせる治療体系が確立しています。<b>「中毒になる・命を縮める」は誤解</b>で、医療用麻薬は適切に使えば安全です。痛みは<b>数値（NRS 0-10）</b>で表すと医療者に伝わりやすくなります。〔出典：日本緩和医療学会 がん疼痛の薬物療法に関するガイドライン2020年版／WHO 疼痛ラダー〕</div>
@@ -7322,7 +7771,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 <!-- ============ Tier2-⑧ 心のケア体系（mental_care） ============ -->
 <section class="scr" id="mental_care">
   <div class="pad">
-    <button class="back" onclick="go('support')"><i class="ti ti-arrow-left"></i> 緩和ケア・こころ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">心のケア</h1>
     <div class="sub">不安・抑うつ・眠れない・死の不安——気持ちを整えるための選択肢</div>
 
@@ -7407,7 +7856,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 <!-- ============ Tier2-⑩ 食事・栄養（nutrition） ============ -->
 <section class="scr" id="nutrition">
   <div class="pad">
-    <button class="back" onclick="go('support')"><i class="ti ti-arrow-left"></i> 緩和ケア・こころ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">食事・栄養</h1>
     <div class="sub">食欲低下・味覚変化・体重減少——治療を支える、毎日のごはん</div>
 
@@ -7455,7 +7904,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 <!-- ============ Tier3-⑪ 予防・検診（prevention） ============ -->
 <section class="scr" id="prevention">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">予防と検診</h1>
     <div class="sub">科学的根拠に基づくがん予防5本の柱と、5つの検診</div>
 
@@ -7517,7 +7966,7 @@ function bTog(el){var on=el.dataset.on==='1';el.dataset.on=on?'0':'1';el.style.b
 <!-- ============ Tier3-⑫ 用語集（glossary_hub） ============ -->
 <section class="scr" id="glossary_hub">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">がんに関する用語集</h1>
     <div class="sub">告知・診察・パンフレットで出てくる言葉を、やさしく</div>
 
@@ -8199,7 +8648,7 @@ window._oninit['emphist']=empHistRender;
 <!-- ============ 緊急時カード（救急現場での即時開示） ============ -->
 <section class="scr" id="emergency">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
 
     <!-- 緊急ヒーロー -->
     <div style="margin-top:10px;border-radius:18px;padding:16px 16px;background:linear-gradient(135deg,#B85450,#D4622A);color:#fff;display:flex;gap:13px;align-items:center;box-shadow:0 10px 28px rgba(184,84,80,.32)">
@@ -8395,7 +8844,7 @@ window._oninit['emergency']=function(){emgTab('medical');emgQR();};
 <!-- ============ ★話し方の設定（voice_settings）★Katsu要望2026-05-29 ============ -->
 <section class="scr" id="voice_settings">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">話し方の設定</h1>
     <div class="sub">声・速度・方言・話しかけ・確認の待機時間を、あなたに合わせて</div>
 
@@ -8984,7 +9433,7 @@ window._oninit['search']=function(){var i=document.getElementById('searchInput')
 <!-- ============ ポイント（概要・運用・dポイント） ============ -->
 <section class="scr" id="points">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">SATOIポイント</h1>
     <div class="sub">あなたのがんばりと、恩送りのつながりから、そっとたまる灯り</div>
 
@@ -9147,7 +9596,7 @@ window._oninit['bansou_apply']=function(){var b=document.getElementById('bansouB
 <!-- ============ みんなの広場（コミュニティ・音楽） ============ -->
 <section class="scr" id="community">
   <div class="pad">
-    <button class="back" onclick="go('mypage')"><i class="ti ti-arrow-left"></i> マイページ</button>
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 戻る</button>
     <h1 class="h1" style="margin-top:10px">みんなの広場</h1>
     <div class="sub">同じ夜を過ごす人の声と、寄りそう音楽</div>
     <button class="card" style="width:100%;text-align:left;margin-top:14px;display:flex;align-items:center;gap:11px;cursor:pointer" onclick="go('stories')"><span class="ic" style="width:38px;height:38px;background:var(--amber-bg);flex-shrink:0"><i class="ti ti-headphones" style="font-size:19px;color:var(--amber)"></i></span><span style="flex:1"><b style="font-weight:600;font-size:14px">声の物語を読む</b><span class="note" style="display:block">匿名の声・無理に聴かなくて大丈夫</span></span><i class="ti ti-chevron-right" style="color:var(--mute)"></i></button>
@@ -9527,7 +9976,18 @@ window._oninit['bccare']=function(){BC_PRO_OPEN=false;bccLvl('n');};
   </div>
   <div class="pad">
     <button class="back" onclick="go('cancer')"><i class="ti ti-arrow-left"></i> がんを知る</button>
-    <div class="lvlbar">
+
+    <!-- ★ステージ切替バー（canpageから常時アクセス可能） -->
+    <div id="canStageBar" style="margin-top:11px;background:var(--teal-bg);border:.5px solid var(--teal);border-radius:10px;padding:9px 12px;display:flex;align-items:center;gap:9px">
+      <i class="ti ti-target" style="font-size:18px;color:var(--teal-d);flex-shrink:0"></i>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10.5px;color:var(--teal-d);font-weight:700;letter-spacing:.04em">あなたのステージ</div>
+        <div id="canStageLab" style="font-size:13.5px;font-weight:700;color:var(--ink);margin-top:1px">ステージ Ⅲ</div>
+      </div>
+      <button class="btn btn-out" style="padding:6px 12px;font-size:11.5px;flex-shrink:0;border-color:var(--teal);color:var(--teal-d);width:auto" onclick="goCanpageStage()"><i class="ti ti-edit" style="vertical-align:-2px;font-size:13px"></i> 変更</button>
+    </div>
+
+    <div class="lvlbar" style="margin-top:9px">
       <div class="seg" id="canSeg">
         <button class="on" id="canBn" onclick="canLvl('n')"><i class="ti ti-book-2"></i>ふつう</button>
         <button id="canBy" onclick="canLvl('y')"><i class="ti ti-mood-smile"></i>やさしく</button>
@@ -9818,9 +10278,18 @@ function canJump(id){var e=document.getElementById(id);if(e)e.scrollIntoView({be
   }
 })();
 function openCancer(k){CAN_CUR=k;CAN_PRO_OPEN=false;go('canpage');}
+/* ★canpageからステージを変更したい時：survival画面（who+がん種+ステージ選択UI）へ */
+window.goCanpageStage=function(){if(typeof svStart==='function'){svStart('self');}else{go('survival');}};
+function updateCanStageLabel(){
+  var el=document.getElementById('canStageLab');if(!el)return;
+  var s=window._myStage||'';
+  var stageMap={I:'Ⅰ（早期）',II:'Ⅱ（局所）',III:'Ⅲ（進行）',IV:'Ⅳ（遠隔）',NA:'未確定／検査中'};
+  if(s && stageMap[s]){el.textContent='ステージ '+stageMap[s];}
+  else{el.innerHTML='<span style="color:var(--mute);font-weight:500">未設定</span> <span style="font-size:11px;color:var(--teal-d);text-decoration:underline">タップで選ぶ</span>';}
+}
 function openTerm(key){var t=BC_TERMS[key];if(!t)return;var h=(location.hash||'').slice(1);if(h!=='term')window._termBack=(h||'bccare');document.getElementById('termTitle').textContent=t.t;document.getElementById('termBody').innerHTML=t.body;go('term');}
 function termBack(){go(window._termBack||'bccare');}
-window._oninit['canpage']=function(){var c=CAN_DATA[CAN_CUR];if(c){document.getElementById('canTitle').textContent=c.title;document.getElementById('canSub').textContent=c.sub;document.getElementById('canHero').style.background=c.grad;var im=document.getElementById('canHeroImg');if(im&&typeof imgSrc==='function'){im.style.display='block';im.src=imgSrc('can_'+CAN_CUR);}}CAN_PRO_OPEN=false;canLvl('n');};
+window._oninit['canpage']=function(){var c=CAN_DATA[CAN_CUR];if(c){document.getElementById('canTitle').textContent=c.title;document.getElementById('canSub').textContent=c.sub;document.getElementById('canHero').style.background=c.grad;var im=document.getElementById('canHeroImg');if(im&&typeof imgSrc==='function'){im.style.display='block';im.src=imgSrc('can_'+CAN_CUR);}}CAN_PRO_OPEN=false;canLvl('n');updateCanStageLabel();};
 </script>
 
 <script>
@@ -11366,10 +11835,6 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
           <div style="position:absolute;left:15px;bottom:13px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.55)"><div style="font-size:17px;font-weight:700">いま見られる：動くダイジェスト</div><div style="font-size:11px;opacity:.92;margin-top:2px">タップで再生 ・ SATOIの世界を30秒で</div></div>
         </div>
       </button>
-      <div style="margin-top:10px;border:.5px dashed var(--teal);border-radius:12px;background:var(--teal-bg);padding:12px 14px">
-        <div style="font-size:13px;font-weight:600;color:var(--teal-d)"><i class="ti ti-sparkles" style="vertical-align:-2px"></i> 本編（実写PR）は準備中です</div>
-        <div class="note" style="line-height:1.7;margin-top:5px">本編はGeminiで生成します。できあがった動画を <b>movie/satoi_pr.mp4</b> に置くと、自動でここで再生されます。台本・絵コンテ・生成プロンプトは「SATOI_紹介ムービー_ブリーフ.md」に用意しました。</div>
-      </div>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -11426,6 +11891,309 @@ window._oninit['glossary']=function(){var i=document.getElementById('glq');if(i)
 </section>
 
 <!-- ============ あなたの段階を知る（5年生存率フロー） ============ -->
+<!-- ============ Step A：何について話したい？（やさしい色使い・大型アイコン）============ -->
+<section class="scr" id="new_entry_a" style="background:linear-gradient(180deg,#FFFCF6 0%,#F5F1E8 60%,#FBEEDE 100%)">
+  <div class="pad" style="padding-top:24px">
+    <button class="back" onclick="go('home')"><i class="ti ti-arrow-left"></i> SATOIホーム</button>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--teal);font-weight:700;margin-top:14px">STEP A ／ 1 of 3</div>
+    <h1 class="h1" style="margin-top:5px;font-size:22px;line-height:1.4">今、まず何について<br>知りたいですか？</h1>
+    <div class="sub" style="margin-top:6px;font-size:13px;line-height:1.7">どれを選んでも、あとで変えられます。順番もありません。気になることから、どうぞ。</div>
+    <div style="margin-top:10px;padding:9px 12px;background:#fff;border-radius:10px;border:.5px solid var(--teal);font-size:12px;color:var(--teal-d);line-height:1.65"><i class="ti ti-users" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i><b>ご本人・ご家族・お知り合い、どなたでも</b>。立場が決まっていなくても大丈夫です</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px">
+      <button class="card" style="padding:18px 12px;text-align:center;cursor:pointer;border:none;background:linear-gradient(135deg,#E1F5EE,#FFFCF6);box-shadow:0 4px 12px rgba(13,115,119,.10)" onclick="entryAPick('treatment')">
+        <span style="display:inline-flex;width:54px;height:54px;border-radius:50%;background:#fff;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(13,115,119,.18)"><i class="ti ti-stethoscope" style="font-size:30px;color:var(--teal-d)"></i></span>
+        <div style="font-size:15px;font-weight:700;margin-top:10px;color:var(--teal-d)">治療のこと</div>
+        <div class="note" style="font-size:12px;margin-top:3px;color:var(--teal-d);opacity:.78">選択肢／流れ</div>
+      </button>
+      <button class="card" style="padding:18px 12px;text-align:center;cursor:pointer;border:none;background:linear-gradient(135deg,#FBEAF0,#FFFCF6);box-shadow:0 4px 12px rgba(153,53,86,.10)" onclick="entryAPick('symptom')">
+        <span style="display:inline-flex;width:54px;height:54px;border-radius:50%;background:#fff;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(153,53,86,.18)"><i class="ti ti-mood-sad" style="font-size:30px;color:#993556"></i></span>
+        <div style="font-size:15px;font-weight:700;margin-top:10px;color:#993556">副作用・つらさ</div>
+        <div class="note" style="font-size:12px;margin-top:3px;color:#993556;opacity:.78">からだ・心</div>
+      </button>
+      <button class="card" style="padding:18px 12px;text-align:center;cursor:pointer;border:none;background:linear-gradient(135deg,#FAEEDA,#FFFCF6);box-shadow:0 4px 12px rgba(186,117,23,.10)" onclick="entryAPick('money')">
+        <span style="display:inline-flex;width:54px;height:54px;border-radius:50%;background:#fff;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(186,117,23,.18)"><i class="ti ti-coin" style="font-size:30px;color:#BA7517"></i></span>
+        <div style="font-size:15px;font-weight:700;margin-top:10px;color:var(--amber-t)">お金・暮らし</div>
+        <div class="note" style="font-size:12px;margin-top:3px;color:var(--amber-t);opacity:.78">制度／仕事／介護</div>
+      </button>
+      <button class="card" style="padding:18px 12px;text-align:center;cursor:pointer;border:none;background:linear-gradient(135deg,#FAECE7,#FFFCF6);box-shadow:0 4px 12px rgba(216,90,48,.10)" onclick="entryAPick('family')">
+        <span style="display:inline-flex;width:54px;height:54px;border-radius:50%;background:#fff;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(216,90,48,.18)"><i class="ti ti-heart-handshake" style="font-size:30px;color:#D85A30"></i></span>
+        <div style="font-size:15px;font-weight:700;margin-top:10px;color:#993C1D">家族・伝え方</div>
+        <div class="note" style="font-size:12px;margin-top:3px;color:#993C1D;opacity:.78">子ども／親</div>
+      </button>
+      <button class="card" style="padding:18px 12px;text-align:center;cursor:pointer;border:none;background:linear-gradient(135deg,#EEEDFE,#FFFCF6);box-shadow:0 4px 12px rgba(83,74,183,.10)" onclick="go('houkatsucenter')">
+        <span style="display:inline-flex;width:54px;height:54px;border-radius:50%;background:#fff;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(83,74,183,.18)"><i class="ti ti-hand-heart" style="font-size:30px;color:#534AB7"></i></span>
+        <div style="font-size:15px;font-weight:700;margin-top:10px;color:#3C3489">介護・緩和ケア</div>
+        <div class="note" style="font-size:12px;margin-top:3px;color:#3C3489;opacity:.78">在宅／ACP／支え合い</div>
+      </button>
+      <button class="card" style="padding:18px 12px;text-align:center;cursor:pointer;border:2px solid var(--teal);background:linear-gradient(135deg,#9FE1CB,#E1F5EE);box-shadow:0 6px 18px rgba(13,115,119,.25)" onclick="entryAPick('talk')">
+        <span style="display:inline-flex;width:54px;height:54px;border-radius:50%;background:#fff;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(13,115,119,.3)"><i class="ti ti-sparkles" style="font-size:30px;color:var(--teal-d)"></i></span>
+        <div style="font-size:15px;font-weight:700;margin-top:10px;color:var(--teal-d)">ただ話したい</div>
+        <div class="note" style="font-size:12px;margin-top:3px;color:var(--teal-d);opacity:.78">AIに聞く</div>
+      </button>
+    </div>
+
+    <!-- 標準治療を終えた方の「つぎの道」（緩和とは別軸：自由診療・治験等） -->
+    <button class="card" style="margin-top:14px;width:100%;text-align:left;padding:14px 16px;cursor:pointer;background:linear-gradient(135deg,#FBEEDE,#FFFCF6);border:.5px solid var(--amber-line);display:flex;align-items:center;gap:12px" onclick="go('next_horizon_bridge')">
+      <span class="ic" style="width:46px;height:46px;background:#fff;color:var(--amber-t);border:.5px solid var(--amber-line);flex-shrink:0"><i class="ti ti-sun-high" style="font-size:22px"></i></span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:700;color:var(--amber-t)">標準治療を終えた方へ ─ <span style="font-family:'EB Garamond',serif;font-style:italic">つぎの道</span></div>
+        <div class="note" style="font-size:11.5px;margin-top:3px;color:#7A5320;line-height:1.55">先進医療・治験・自由診療の検討</div>
+      </div>
+      <i class="ti ti-chevron-right" style="color:var(--amber-t);flex-shrink:0"></i>
+    </button>
+
+    <button class="btn btn-out" style="margin-top:11px;padding:12px;background:rgba(255,255,255,.75)" onclick="go('new_entry_b')"><i class="ti ti-arrow-right" style="vertical-align:-2px"></i> 選ばずに次へ進む</button>
+    <div class="note" style="margin-top:14px;line-height:1.7;text-align:center"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> どれを選んでも、AIコンシェルジュが寄り添います</div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Step B：どなたのお話？（立場の選択）============ -->
+<section class="scr" id="new_entry_b">
+  <div class="pad" style="padding-top:24px">
+    <button class="back" onclick="go('new_entry_a')"><i class="ti ti-arrow-left"></i> 前に戻る</button>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--teal);font-weight:700;margin-top:14px">STEP B ／ 2 of 3</div>
+    <h1 class="h1" style="margin-top:5px;font-size:22px;line-height:1.4">どなたのお話を、<br>聞かせてくれますか？</h1>
+    <div class="sub" style="margin-top:6px;font-size:13px;line-height:1.7">立場が分からなくても、伝えなくても、続けられます。</div>
+
+    <div style="display:flex;flex-direction:column;gap:9px;margin-top:18px">
+      <button class="card" style="padding:15px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:.5px solid var(--line2);text-align:left" onclick="entryBPick('self')">
+        <span class="ic ic46" style="background:var(--rose-bg);flex-shrink:0"><i class="ti ti-user" style="font-size:22px;color:#D85A30"></i></span>
+        <div style="flex:1"><div style="font-size:15px;font-weight:600">あなた自身のこと</div><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">ご本人として、聞きたい・話したい</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="padding:15px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:.5px solid var(--line2);text-align:left" onclick="entryBPick('near')">
+        <span class="ic ic46" style="background:var(--amber-bg);flex-shrink:0"><i class="ti ti-users" style="font-size:22px;color:var(--amber-t)"></i></span>
+        <div style="flex:1"><div style="font-size:15px;font-weight:600">身近な人のこと</div><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">家族・友人・パートナーのことを調べたい</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+      <button class="card" style="padding:15px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;border:.5px solid var(--line2);text-align:left;background:#FBF7F0" onclick="entryBPick('unsure')">
+        <span class="ic ic46" style="background:#fff;flex-shrink:0;border:.5px solid var(--line2)"><i class="ti ti-help" style="font-size:22px;color:var(--mute)"></i></span>
+        <div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--mute);font-style:italic">まだ言えない／決めていない</div><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">立場を選ばずに、進めます</div></div>
+        <i class="ti ti-chevron-right" style="color:var(--mute)"></i>
+      </button>
+    </div>
+
+    <div class="note" style="margin-top:18px;line-height:1.7;text-align:center"><i class="ti ti-info-circle" style="vertical-align:-2px"></i> 「身近な人」を選んでも、SATOIは寄り添います</div>
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+
+<!-- ============ Step C：がんの場所（任意・スキップ可）============ -->
+<section class="scr" id="new_entry_c">
+  <div class="pad" style="padding-top:24px">
+    <button class="back" onclick="goBack()"><i class="ti ti-arrow-left"></i> 前に戻る</button>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--teal-d);font-weight:700;margin-top:14px">気になる場所から、がん種を選ぶ</div>
+    <h1 class="h1" style="margin-top:5px;font-size:22px;line-height:1.4">体の部位から、<br>がん種をさがす</h1>
+    <div class="sub" style="margin-top:6px;font-size:13px;line-height:1.7">人型をタップしてもOK・プルダウンでもOK・分からなければスキップしてAIに話しかけてください。</div>
+
+    <!-- ① 体の部位図（img/001_図.png を配置すると自動表示・脳→マーカーは left部分のクロップで隠す） -->
+    <div class="card" style="margin-top:16px;padding:14px;border:.5px solid var(--teal)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <span class="ic ic46" style="background:var(--teal-bg);flex-shrink:0"><i class="ti ti-body-scan" style="font-size:22px;color:var(--teal-d)"></i></span>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--teal-d)">① 体の部位図でタップ</div><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">気になる場所をタップ</div></div>
+      </div>
+      <div id="stepCBodyWrap" style="position:relative;background:#FFFCF6;border-radius:10px;overflow:hidden;aspect-ratio:3/4;max-width:340px;margin:0 auto">
+        <img id="stepCBodyImg" src="img/001_図.png" alt="体の部位図"
+             style="position:absolute;left:-12%;top:0;width:124%;height:100%;object-fit:cover;object-position:center;display:block"
+             onerror="this.style.display='none';document.getElementById('stepCBodyFallback').style.display='flex'">
+        <!-- クリック領域オーバーレイ（A案と同位置） -->
+        <div style="position:absolute;inset:0">
+          <button class="ec-zone" style="position:absolute;left:36%;top:2%;width:28%;height:9%" onclick="entryCBodyZone('brain')" aria-label="脳"></button>
+          <button class="ec-zone" style="position:absolute;left:30%;top:11%;width:40%;height:12%" onclick="entryCBodyZone('headneck')" aria-label="頭頸部"></button>
+          <button class="ec-zone" style="position:absolute;left:30%;top:24%;width:40%;height:14%" onclick="entryCBodyZone('chest')" aria-label="胸"></button>
+          <button class="ec-zone" style="position:absolute;left:30%;top:39%;width:40%;height:16%" onclick="entryCBodyZone('abdomen')" aria-label="お腹"></button>
+          <button class="ec-zone" style="position:absolute;left:30%;top:56%;width:40%;height:14%" onclick="entryCBodyZone('pelvis')" aria-label="骨盤"></button>
+          <button class="ec-zone" style="position:absolute;left:5%;top:30%;width:18%;height:22%" onclick="entryCBodyZone('skin')" aria-label="皮膚"></button>
+          <button class="ec-zone" style="position:absolute;left:77%;top:30%;width:18%;height:22%" onclick="entryCBodyZone('blood')" aria-label="血液・リンパ"></button>
+        </div>
+        <!-- フォールバック（画像が無い時） -->
+        <div id="stepCBodyFallback" style="display:none;align-items:center;justify-content:center;position:absolute;inset:0;background:var(--teal-bg);color:var(--teal-d);font-size:13px;line-height:1.8;padding:24px;text-align:center">
+          <div>
+            <i class="ti ti-photo-off" style="font-size:32px"></i>
+            <div style="margin-top:8px"><b>体の部位図画像を準備中</b></div>
+            <div class="note" style="font-size:11px;margin-top:6px">satoi_mock_v2/img/001_図.png を配置すると自動で表示されます</div>
+          </div>
+        </div>
+      </div>
+      <div class="note" style="font-size:11px;color:var(--mute);margin-top:7px;line-height:1.6;text-align:center"><i class="ti ti-hand-finger" style="vertical-align:-2px"></i> 頭頸部／胸／お腹／骨盤／脳／皮膚／血液・リンパ の7ゾーンをタップ</div>
+    </div>
+
+    <!-- ② プルダウンで選ぶ -->
+    <div class="card" style="margin-top:10px;padding:14px;border:.5px solid var(--line2)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <span class="ic ic46" style="background:var(--blue-bg);flex-shrink:0"><i class="ti ti-list-search" style="font-size:22px;color:var(--blue-d)"></i></span>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--blue-d)">② プルダウンで選ぶ</div><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">カテゴリ → がん種の2段階で</div></div>
+      </div>
+      <select id="entryCancerSel" style="width:100%;padding:10px 12px;border:.5px solid var(--blue);border-radius:8px;font-size:13.5px;background:#fff" onchange="entryCSelect(this.value)">
+        <option value="">▸ がん種を選ぶ</option>
+        <optgroup label="頭頸部・胸部">
+          <option value="headneck">頭頸部がん</option><option value="lung">肺がん（非小細胞）</option><option value="sclc">肺がん（小細胞）</option><option value="mesothelioma">胸膜中皮腫</option>
+        </optgroup>
+        <optgroup label="消化器・肝胆膵">
+          <option value="esophagus">食道がん</option><option value="stomach">胃がん</option><option value="colon">大腸がん</option><option value="liver">肝臓がん</option><option value="biliary">胆道がん</option><option value="pancreas">すい臓がん</option>
+        </optgroup>
+        <optgroup label="乳腺・婦人科">
+          <option value="breast">乳がん</option><option value="tnbc">トリプルネガティブ乳がん</option><option value="cervix">子宮頸がん</option><option value="endometrium">子宮体がん</option><option value="ovary">卵巣がん</option>
+        </optgroup>
+        <optgroup label="泌尿器">
+          <option value="kidney">腎臓がん</option><option value="ureter">腎盂・尿管がん</option><option value="bladder">膀胱がん</option><option value="prostate">前立腺がん</option>
+        </optgroup>
+        <optgroup label="皮膚・リンパ">
+          <option value="melanoma">皮膚がん（メラノーマ）</option><option value="lymphoma">非ホジキンリンパ腫</option><option value="hodgkin">ホジキンリンパ腫</option>
+        </optgroup>
+        <optgroup label="血液・骨髄">
+          <option value="leukemia">白血病</option><option value="myeloma">多発性骨髄腫</option>
+        </optgroup>
+        <optgroup label="脳・内分泌">
+          <option value="brain">脳腫瘍</option><option value="thyroid">甲状腺がん</option>
+        </optgroup>
+        <optgroup label="その他">
+          <option value="msih">MSI-High 固形がん</option><option value="tmbh">TMB-High 固形がん</option><option value="cup">原発不明がん</option><option value="childhood">こどものがん（小児）</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <!-- ③ フリーワード検索 -->
+    <div class="card" style="margin-top:10px;padding:14px;border:.5px solid var(--line2)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <span class="ic ic46" style="background:var(--amber-bg);flex-shrink:0"><i class="ti ti-search" style="font-size:22px;color:var(--amber-t)"></i></span>
+        <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--amber-t)">③ フリーワードで検索</div><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6">知っている言葉で（例：乳房、胃、肺）</div></div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <input type="text" id="entryFreeKw" placeholder="例：乳房、胃、肺" style="flex:1;padding:10px 12px;border:.5px solid var(--amber-line);border-radius:8px;font-size:13.5px;background:#fff">
+        <button class="btn btn-out" style="width:auto;padding:9px 14px;font-size:13px;border-color:var(--amber-line);color:var(--amber-t)" onclick="entryCFreeSearch()">検索</button>
+      </div>
+    </div>
+
+    <!-- スキップ -->
+    <button class="card" style="margin-top:14px;width:100%;text-align:left;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;background:#FBF7F0;border:.5px dashed var(--amber-line)" onclick="entryCSkip()">
+      <span class="ic ic46" style="background:#fff;flex-shrink:0;border:.5px solid var(--amber-line)"><i class="ti ti-zzz" style="font-size:22px;color:var(--amber-t)"></i></span>
+      <div style="flex:1"><div style="font-size:14px;font-weight:600;color:#854F0B">分からない／スキップ</div><div class="note" style="font-size:11.5px;margin-top:2px;line-height:1.6;color:#854F0B">いまは選ばずに、AIに話しかけて続けます</div></div>
+      <i class="ti ti-chevron-right" style="color:var(--amber-t)"></i>
+    </button>
+
+    <div class="lock"><i class="ti ti-lock"></i>あなたの情報は、あなたのもの</div>
+  </div>
+</section>
+<script>
+(function(){
+  if(window._entryInit)return;window._entryInit=true;
+  /* Step A/B の選択を一時保持してAIコンシェルジュへ渡す */
+  window._entryState={topic:'',who:''};
+  var TOPIC_LABEL={treatment:'治療のこと',symptom:'副作用・つらさ',money:'お金・暮らし',family:'家族・伝え方',node:'治療の節目',talk:'ただ話したい'};
+  var WHO_LABEL={self:'ご自身のこと',near:'身近な人のこと',unsure:'まだ立場を決めていない'};
+  /* ★コンテンツファースト：Step Aタップで該当コンテンツに即遷移（立場・がん種は後で入力） */
+  window.entryAPick=function(topic){
+    window._entryState.topic=topic;
+    var routes={
+      treatment:'treatment',
+      symptom:'symptoms',
+      money:'money',
+      family:'family',
+      node:'houkatsucenter',
+      talk:'ai'
+    };
+    var dest=routes[topic]||'new_entry_b';
+    if(dest==='ai'){
+      /* AIに直接行く時はパーソナライズ挨拶を仕込む */
+      entryCSkip();return;
+    }
+    go(dest);
+  };
+  window.entryBPick=function(who){
+    window._entryState.who=who;
+    /* 「ただ話したい」を選んでいたら Step C スキップして即AIへ */
+    if(window._entryState.topic==='talk'){entryCSkip();return;}
+    go('new_entry_c');
+  };
+  window.entryCSelect=function(key){
+    if(!key)return;
+    /* がん種が選ばれた場合：プロファイル更新（任意）→ survival 画面で生存率＋治療フロー */
+    if(window._entryState.who==='self'){window._myCancer=key;}
+    if(typeof CAN_CUR!=='undefined'){CAN_CUR=key;}
+    /* Step A のトピックに応じて遷移先を最適化 */
+    var topic=window._entryState.topic;
+    if(topic==='treatment'||topic==='node'||!topic){
+      /* 治療系 → survival画面（5年生存率＋治療フロー） */
+      try{if(typeof svStart==='function'){return svStart(window._entryState.who||'self');}}catch(e){}
+      go('survival');
+    }else if(topic==='money'){go('money');}
+    else if(topic==='family'){go('family');}
+    else if(topic==='symptom'){go('symptoms');}
+    else{entryCSkip();}
+  };
+  window.entryCFreeSearch=function(){
+    var kw=document.getElementById('entryFreeKw').value.trim();
+    if(!kw){if(typeof toast==='function')toast('キーワードを入力してください');return;}
+    /* 簡易マッチング（実装サンプル） */
+    var map={'乳房':'breast','胸':'breast','肺':'lung','大腸':'colon','胃':'stomach','肝':'liver','膵':'pancreas','すい':'pancreas','子宮頸':'cervix','子宮':'endometrium','卵巣':'ovary','前立腺':'prostate','腎':'kidney','膀胱':'bladder','頭頸':'headneck','脳':'brain','甲状腺':'thyroid','皮膚':'melanoma','メラノーマ':'melanoma','リンパ':'lymphoma','白血病':'leukemia','骨髄':'myeloma','食道':'esophagus','胆':'biliary'};
+    var hit=null;
+    Object.keys(map).forEach(function(k){if(kw.indexOf(k)>=0)hit=map[k];});
+    if(hit){entryCSelect(hit);}else{
+      /* マッチなし → コンシェルジュに渡す */
+      if(typeof toast==='function')toast('「'+kw+'」について、SATOIに相談します');
+      entryCSkip();
+    }
+  };
+  /* ★体の部位図のゾーンタップ → 該当がん種に絞り込み（Step C 入口用・互換維持） */
+  window.entryCBodyZone=function(zone){
+    var firstCancer={headneck:'headneck',chest:'breast',abdomen:'stomach',pelvis:'cervix',brain:'brain',skin:'melanoma',blood:'lymphoma'}[zone];
+    if(firstCancer){
+      if(typeof toast==='function')toast(zone+'ゾーンから絞り込み中…');
+      entryCSelect(firstCancer);
+    }
+  };
+  /* ★A案：治療ページの体の部位図インライン展開（タップで該当ゾーンのがん種カードを下に出す） */
+  window.txBodyZone=function(btn, z){
+    var ZONE = {
+      1:{title:'頭頸部', sub:'頭頸部がん・甲状腺がん', cancers:[['headneck','頭頸部がん','咽頭・喉頭・口腔・舌など'],['thyroid','甲状腺がん','分化型・髄様型・未分化型']]},
+      2:{title:'胸',     sub:'乳がん・肺がん・中皮腫', cancers:[['breast','乳がん','HER2・ホルモン受容体別'],['tnbc','乳がん（トリプルネガティブ）','TNBC'],['lung','肺がん（非小細胞）','NSCLC・EGFR/ALK/KRAS'],['sclc','肺がん（小細胞）','SCLC'],['mesothelioma','胸膜中皮腫','石綿関連']]},
+      3:{title:'お腹',   sub:'消化器・肝胆膵',         cancers:[['esophagus','食道がん','扁平上皮・腺がん'],['stomach','胃がん','HER2・MSI-H'],['colon','大腸がん','RAS/BRAF・MSI-H'],['liver','肝臓がん','HCC'],['biliary','胆道がん','胆管／胆嚢／乳頭部'],['pancreas','すい臓がん','膵頭部／体尾部']]},
+      4:{title:'骨盤',   sub:'婦人科・泌尿器・前立腺',  cancers:[['cervix','子宮頸がん','扁平上皮・腺がん'],['endometrium','子宮体がん','類内膜・漿液性'],['ovary','卵巣がん','上皮性／胚細胞'],['prostate','前立腺がん','ホルモン感受性／去勢抵抗性'],['bladder','膀胱がん','筋層浸潤／非浸潤'],['kidney','腎臓がん','RCC'],['ureter','腎盂・尿管がん','上部尿路上皮がん']]},
+      5:{title:'脳',     sub:'脳腫瘍',                 cancers:[['brain','脳腫瘍','膠芽腫・髄膜腫・転移性']]},
+      6:{title:'皮膚',   sub:'メラノーマ・皮膚がん',    cancers:[['melanoma','皮膚がん（メラノーマ）','BRAF・NRAS']]},
+      7:{title:'血液リンパ', sub:'白血病・リンパ腫・骨髄腫', cancers:[['leukemia','白血病','AML／ALL／CML／CLL'],['lymphoma','非ホジキンリンパ腫','DLBCL・濾胞性ほか'],['hodgkin','ホジキンリンパ腫','古典型／結節性リンパ球優位型'],['myeloma','多発性骨髄腫','形質細胞腫瘍']]}
+    };
+    var data = ZONE[z]; if(!data) return;
+    /* アクティブ切替 */
+    document.querySelectorAll('.tx-zone').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    /* インライン展開エリア描画 */
+    var box = document.getElementById('txBodyResults');
+    if(!box) return;
+    var html = '<div style="margin-bottom:10px"><span style="display:inline-block;background:#9B2D2D;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:11px;letter-spacing:.05em">'+data.title+'</span><span style="font-size:11px;color:#666;margin-left:8px">'+data.sub+'</span></div>';
+    html += data.cancers.map(function(c){
+      return '<button onclick="openCancer(\''+c[0]+'\')" style="width:100%;text-align:left;background:#fff;border:.5px solid var(--teal);border-radius:9px;padding:10px 12px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:6px"><span style="flex:1"><span style="display:block;font-size:13px;font-weight:600;color:var(--teal-d);line-height:1.35">'+c[1]+'</span><span class="note" style="display:block;font-size:10.5px;color:#666;margin-top:1px;line-height:1.5">'+c[2]+'</span></span><i class="ti ti-chevron-right" style="color:var(--teal);font-size:16px"></i></button>';
+    }).join('');
+    box.innerHTML = html;
+    box.style.display='block';
+    setTimeout(function(){ box.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 100);
+  };
+  window.entryCSkip=function(){
+    var s=window._entryState;
+    var topicLab=s.topic?TOPIC_LABEL[s.topic]:'';var whoLab=s.who?WHO_LABEL[s.who]:'';
+    var open='お話しいただきありがとうございます。';
+    if(whoLab)open+=whoLab+'について、';
+    if(topicLab)open+='「'+topicLab+'」を一緒に整理しましょう。';
+    open+='<br>言葉にしづらいことも、ゆっくりで大丈夫です。下のチップから選んでも、自由にお話しいただいても。';
+    window._cvOpening=open;
+    /* トピック別チップを仕込む */
+    var chipMap={
+      treatment:[{label:'治療の流れを知りたい',q:'治療の大きな流れを教えてください'},{label:'選択肢はある？',q:'治療の選択肢にはどんなものがありますか'},{label:'先生に何を聞けば？',q:'主治医に聞いておくべきことは何ですか'}],
+      symptom:[{label:'副作用がつらい',q:'副作用がつらいです。対処法を教えてください'},{label:'眠れない',q:'夜眠れません'},{label:'気持ちが沈む',q:'気持ちが落ち込んでいます'}],
+      money:[{label:'高額療養費って？',q:'高額療養費制度について教えてください'},{label:'仕事との両立',q:'仕事と治療の両立について相談したい'},{label:'介護・生活支援',q:'地域包括ケアの相談先を教えてください'}],
+      family:[{label:'子どもにどう伝える',q:'子どもにどう伝えればいいか'},{label:'親にどう伝える',q:'親にどう伝えればいいか'},{label:'配偶者と話したい',q:'配偶者と話す前に整理したい'}],
+      node:[{label:'つぎの道を考える',q:'標準治療の後の選択肢を知りたい'},{label:'緩和ケアって',q:'緩和ケアについて教えてください'},{label:'家族と話したい',q:'これからのことを家族と話したい'}],
+      talk:[{label:'今日つらかった',q:'今日、ちょっとつらかったです'},{label:'不安が大きい',q:'なんとなく不安が大きいです'},{label:'希望がほしい',q:'希望がほしいです'}]
+    };
+    window._cvChips=chipMap[s.topic]||[{label:'はじめての方',q:'はじめてです。何から話したらいいか分かりません'},{label:'まず流れを知りたい',q:'がん治療の流れを教えてください'}];
+    go('ai');
+  };
+})();
+</script>
+
 <section class="scr" id="survival">
   <div class="pad">
     <button class="back" onclick="go('cancer')"><i class="ti ti-arrow-left"></i> がんを知る</button>
@@ -11890,13 +12658,15 @@ window._oninit['video']=function(){document.getElementById('vidCushion').style.d
 
 <!--MORE-->
 
-  <button id="fab" onclick="go('ai')" aria-label="SATOIコンシェルジュに相談" style="position:fixed;bottom:72px;right:max(14px,calc(50% - 181px));z-index:50;display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:var(--teal);color:#fff;border:2px solid #fff;border-radius:50%;box-shadow:0 4px 16px rgba(13,115,119,.4);cursor:pointer"><i class="ti ti-sparkles" style="font-size:24px"></i></button>
   <nav id="tabbar" class="tabbar" aria-label="主要ナビゲーション">
     <button class="tabbtn" data-tab="home" onclick="go('home')" aria-label="ホーム"><span class="tico"><i class="ti ti-home" aria-hidden="true"></i></span><span class="tlab">ホーム</span></button>
     <button class="tabbtn" data-tab="treatment" onclick="go('treatment')" aria-label="治療を知る"><span class="tico"><i class="ti ti-stethoscope" aria-hidden="true"></i></span><span class="tlab">治療</span></button>
-    <button class="tabbtn emp" data-tab="empse" onclick="go('empse')" aria-label="EMPSe いまの、わたし"><span class="empc"><i class="ti ti-chart-dots-3" aria-hidden="true"></i></span><span class="tlab">EMPSe</span></button>
+    <button class="tabbtn" data-tab="ai" onclick="goConcierge()" aria-label="AIコンシェルジュに相談" style="position:relative">
+      <span style="position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--teal),#14A6AB);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(13,115,119,.5);border:3px solid #fff;animation:nudgePulse 2.2s ease-in-out infinite"><i class="ti ti-sparkles" style="font-size:24px" aria-hidden="true"></i><span style="font-size:11px;font-weight:800;margin-top:-2px;letter-spacing:.02em">押す</span></span>
+      <span class="tlab" style="margin-top:42px;color:var(--teal-d);font-weight:700">相談</span>
+    </button>
+    <button class="tabbtn" data-tab="empse" onclick="go('empse')" aria-label="EMPSe いまの、わたし"><span class="tico"><i class="ti ti-chart-dots-3" aria-hidden="true"></i></span><span class="tlab">EMPSe</span></button>
     <button class="tabbtn" data-tab="story" onclick="go('story')" aria-label="物語"><span class="tico"><i class="ti ti-book" aria-hidden="true"></i></span><span class="tlab">物語</span></button>
-    <button class="tabbtn" data-tab="mypage" onclick="go('mypage')" aria-label="マイページ"><span class="tico"><i class="ti ti-user" aria-hidden="true"></i></span><span class="tlab">マイページ</span></button>
   </nav>
 </div>
 <script>
@@ -12535,7 +13305,8 @@ window._navStack=window._navStack||[];
 function go(id){var cur=(location.hash||'').slice(1);if(cur&&cur!==id)window._navStack.push(cur);location.hash=id;}
 function goSection(scr,el){window._pending=el;go(scr);}
 function goBack(){var s=window._navStack;if(s&&s.length){location.hash=s.pop();}else{location.hash='home';}}
-var MEMBER_ONLY={mypage:1,account:1,points:1,records:1,family:1,famview:1,famchild:1,bansou_apply:1};
+/* ★Katsu指示：Step A経由のコンテンツ閲覧は非会員でも可能に。family は閲覧フリー、個人機能（記録・送信）は個別にゲート */
+var MEMBER_ONLY={mypage:1,account:1,points:1,records:1,famview:1,famchild:1,bansou_apply:1};
 function render(){
   var id=(location.hash||'#home').slice(1);
   var el=document.getElementById(id);
